@@ -2,6 +2,7 @@
 
 **This repository contains the source of the JS frontend in order to allow its use with different backends.**
 
+
 #### A great looking and easy-to-use photo-management-system.
 
 *Since the 1st of April 2018 this project has moved to it's own Organisation (https://github.com/LycheeOrg) where people are able to submit their fixes to it. We, the Organisation owners, want to thank electerious (Tobias Reich) for the opportunity to make this project live on.*
@@ -14,6 +15,10 @@ Lychee is a free photo-management tool, which runs on your server or web-space. 
 ## Installation
 
 To run Lychee, everything you need is a web-server with PHP 5.5 or later and a MySQL-Database. Follow the instructions to install Lychee on your server. [Installation &#187;](https://github.com/LycheeOrg/Lychee/wiki/Installation)
+
+## API
+
+The frontend send POST requests to the server through. Calls are described in [API &#187;](API.md).
 
 ## How to build
 
