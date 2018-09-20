@@ -10,7 +10,7 @@
 ![Lychee](https://camo.githubusercontent.com/b9010f02c634219795950e034f511f4cf4af5c60/68747470733a2f2f732e656c6563746572696f75732e636f6d2f696d616765732f6c79636865652f312e6a706567)
 ![Lychee](https://camo.githubusercontent.com/5484591f0b15b6ba27d4845b292cc5d3a988b3b9/68747470733a2f2f732e656c6563746572696f75732e636f6d2f696d616765732f6c79636865652f322e6a706567)
 
-Lychee is a free photo-management tool, which runs on your server or web-space. Installing is a matter of seconds. Upload, manage and share photos like from a native application. Lychee comes with everything you need and all your photos are stored securely. Try the [Live Demo](https://ld.electerious.com) or read more on our [Website](https://lychee.electerious.com).
+Lychee is a free photo-management tool, which runs on your server or web-space. Installing is a matter of seconds. Upload, manage and share photos like from a native application. Lychee comes with everything you need and all your photos are stored securely. Try the [Live Demo](https://ld.electerious.com) or read more on our [Website](https://LycheeOrg.github.io).
 
 ## Installation
 
@@ -35,10 +35,10 @@ git submodule init
 git submodule update docs
 
 # Get the frontend
-git submodule update src
+git submodule update Lychee-front
 
 # Go into the frontend
-cd src
+cd Lychee-front
 ```
 
 ### Dependencies
@@ -56,7 +56,7 @@ npm install
 
 ### Build and Generated Files
 
-The Gulpfile is located in `<path to lychee>/src/` and can be executed using the `npm run compile` command.
+The Gulpfile is located in `<path to lychee>/Lychee-front/` and can be executed using the `npm run compile` command.
 The generated files will placed into `../dist/` or `<path to lychee>/dist/`.
 
 ### Watch for changes

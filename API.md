@@ -1,5 +1,7 @@
 # API Functions
 
+**This might change in the future**
+
 The current API provide the following calls to `php/index.php` as `POST` requests
 
 |      Function           |  Arguments  |   Action    |
