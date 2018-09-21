@@ -9,11 +9,12 @@ lychee = {
 	versionCode     : '030106',
 
 	updatePath      : '//update.electerious.com/index.json',
-	updateURL       : 'https://github.com/electerious/Lychee',
-	website         : 'http://lychee.electerious.com',
+	updateURL       : 'https://github.com/LycheeOrg/Lychee',
+	website         : 'https://LycheeOrg.github.io',
 
 	publicMode      : false,
 	viewMode        : false,
+    api_V2			: false,
 
 	checkForUpdates : '1',
 	sortingPhotos   : '',
@@ -36,6 +37,8 @@ lychee.init = function() {
 		// 0 = No configuration
 		// 1 = Logged out
 		// 2 = Logged in
+
+        lychee.api_V2          = data.api_V2 || false;
 
 		if (data.status===2) {
 

@@ -15,6 +15,17 @@ api.post = function(fn, params, callback) {
 
 	params = $.extend({ function: fn }, params)
 
+	if(lychee.api_V2)
+	{
+        // because the api is defined directly by the function called in the route.php
+		api_url = 'api/';
+        api_url = api_url.concat(fn);
+	}
+	else
+	{
+        api_url = api.path;
+	}
+
 	const success = (data) => {
 
 		setTimeout(loadingBar.hide, 100)
@@ -37,7 +48,7 @@ api.post = function(fn, params, callback) {
 
 	$.ajax({
 		type: 'POST',
-		url: api.path,
+		url: api_url,
 		data: params,
 		dataType: 'json',
 		success,
