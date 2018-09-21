@@ -56,13 +56,13 @@ albums.load = function() {
 albums.parse = function(album) {
 
 	if (album.password==='1' && lychee.publicMode===true) {
-		album.thumbs[0] = 'src/images/password.svg'
-		album.thumbs[1] = 'src/images/password.svg'
-		album.thumbs[2] = 'src/images/password.svg'
+		album.thumbs[0] = 'Lychee-front/images/password.svg'
+		album.thumbs[1] = 'Lychee-front/images/password.svg'
+		album.thumbs[2] = 'Lychee-front/images/password.svg'
 	} else {
-		if (!album.thumbs[0]) album.thumbs[0] = 'src/images/no_images.svg'
-		if (!album.thumbs[1]) album.thumbs[1] = 'src/images/no_images.svg'
-		if (!album.thumbs[2]) album.thumbs[2] = 'src/images/no_images.svg'
+		if (!album.thumbs[0]) album.thumbs[0] = 'Lychee-front/images/no_images.svg'
+		if (!album.thumbs[1]) album.thumbs[1] = 'Lychee-front/images/no_images.svg'
+		if (!album.thumbs[2]) album.thumbs[2] = 'Lychee-front/images/no_images.svg'
 	}
 
 }

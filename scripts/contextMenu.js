@@ -98,7 +98,7 @@ contextMenu.albumTitle = function(albumID, e) {
 			// Generate list of albums
 			$.each(data.albums, function() {
 
-				if (!this.thumbs[0]) this.thumbs[0] = 'src/images/no_cover.svg'
+				if (!this.thumbs[0]) this.thumbs[0] = 'Lychee-front/images/no_cover.svg'
 				if (this.title==='') this.title = 'Untitled'
 
 				let html = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
@@ -132,7 +132,7 @@ contextMenu.mergeAlbum = function(albumID, e) {
 
 			$.each(data.albums, function() {
 
-				if (!this.thumbs[0]) this.thumbs[0] = 'src/images/no_cover.svg'
+				if (!this.thumbs[0]) this.thumbs[0] = 'Lychee-front/images/no_cover.svg'
 				if (this.title==='') this.title = 'Untitled'
 
 				let html = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
@@ -264,7 +264,7 @@ contextMenu.move = function(photoIDs, e) {
 			// Generate list of albums
 			$.each(data.albums, function() {
 
-				if (!this.thumbs[0]) this.thumbs[0] = 'src/images/no_cover.svg'
+				if (!this.thumbs[0]) this.thumbs[0] = 'Lychee-front/images/no_cover.svg'
 				if (this.title==='') this.title = 'Untitled'
 
 				let html = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
