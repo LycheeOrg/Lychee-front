@@ -88,7 +88,18 @@ upload.start = {
 			formData.append('albumID', albumID)
 			formData.append(0, file)
 
-			xhr.open('POST', api.path)
+            if(lychee.api_V2)
+            {
+                // because the api is defined directly by the function called in the route.php
+                api_url = 'api/';
+                api_url = api_url.concat('Photo::add');
+            }
+            else
+            {
+                api_url = api.path;
+            }
+
+			xhr.open('POST', api_url)
 
 			xhr.onload = function() {
 
