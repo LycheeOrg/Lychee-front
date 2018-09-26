@@ -71,32 +71,32 @@ albums._createSmartAlbums = function(data) {
 
 	data.unsorted = {
 		id       : 0,
-		title    : 'Unsorted',
-		sysdate  : data.unsorted.num + ' photos',
+		title    : lychee.locale['UNSORTED'],
+		sysdate  : data.unsorted.num + ' ' + lychee.locale['NUM_PHOTOS'],
 		unsorted : '1',
 		thumbs   : data.unsorted.thumbs
 	}
 
 	data.starred = {
 		id      : 'f',
-		title   : 'Starred',
-		sysdate : data.starred.num + ' photos',
+		title   : lychee.locale['STARED'],
+		sysdate : data.starred.num + ' ' + lychee.locale['NUM_PHOTOS'],
 		star    : '1',
 		thumbs  : data.starred.thumbs
 	}
 
 	data.public = {
 		id      : 's',
-		title   : 'Public',
-		sysdate : data.public.num + ' photos',
+		title   : lychee.locale['PUBLIC'],
+		sysdate : data.public.num + ' ' + lychee.locale['NUM_PHOTOS'],
 		public  : '1',
 		thumbs  : data.public.thumbs
 	}
 
 	data.recent = {
 		id      : 'r',
-		title   : 'Recent',
-		sysdate : data.recent.num + ' photos',
+		title   : lychee.locale['RECENT'],
+		sysdate : data.recent.num + ' ' + lychee.locale['NUM_PHOTOS'],
 		recent  : '1',
 		thumbs  : data.recent.thumbs
 	}

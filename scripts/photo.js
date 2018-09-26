@@ -94,7 +94,7 @@ photo.preloadNext = function(photoID) {
 
 photo.parse = function() {
 
-	if (!photo.json.title) photo.json.title = 'Untitled'
+	if (!photo.json.title) photo.json.title = lychee.locale['UNTITLED']
 
 }
 
@@ -197,7 +197,7 @@ photo.delete = function(photoIDs) {
 		else                 photoTitle = album.json.content[photoIDs].title
 
 		// Fallback for photos without a title
-		if (photoTitle==='') photoTitle = 'Untitled'
+		if (photoTitle==='') photoTitle = lychee.locale['UNTITLED']
 
 	}
 

@@ -127,14 +127,14 @@ album.add = function() {
 	}
 
 	basicModal.show({
-		body: `<p>Enter a title for the new album: <input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'></p>`,
+		body: `<p>` + lychee.locale['TITLE_NEW_ALBUM'] + ` <input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'></p>`,
 		buttons: {
 			action: {
-				title: 'Create Album',
+				title: lychee.locale['CREATE_ALBUM'],
 				fn: action
 			},
 			cancel: {
-				title: 'Cancel',
+				title: lychee.locale['CANCEL'],
 				fn: basicModal.close
 			}
 		}
@@ -288,18 +288,19 @@ album.setTitle = function(albumIDs) {
 
 	let input = lychee.html`<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='$${ oldTitle }'>`
 
-	if (albumIDs.length===1) msg = lychee.html`<p>Enter a new title for this album: ${ input }</p>`
+	if (albumIDs.length===1) msg = lychee.html`<p>` + lychee.locale['ALBUM_NEW_TITLE'] + ` ${ input }</p>`
+	// else                     msg = lychee.html`<p>Enter a title for all $${ albumIDs.length } selected albums: ${ input }</p>`
 	else                     msg = lychee.html`<p>Enter a title for all $${ albumIDs.length } selected albums: ${ input }</p>`
 
 	basicModal.show({
 		body: msg,
 		buttons: {
 			action: {
-				title: 'Set Title',
+				title: lychee.locale['ALBUM_SET_TITLE'],
 				fn: action
 			},
 			cancel: {
-				title: 'Cancel',
+				title: lychee.locale['CANCEL'],
 				fn: basicModal.close
 			}
 		}
@@ -336,14 +337,14 @@ album.setDescription = function(albumID) {
 	}
 
 	basicModal.show({
-		body: lychee.html`<p>Please enter a description for this album: <input class='text' name='description' type='text' maxlength='800' placeholder='Description' value='$${ oldDescription }'></p>`,
+		body: lychee.html`<p>` + lychee.locale['ALBUM_NEW_DESCRIPTION'] + ` <input class='text' name='description' type='text' maxlength='800' placeholder='Description' value='$${ oldDescription }'></p>`,
 		buttons: {
 			action: {
-				title: 'Set Description',
+				title: lychee.locale['ALBUM_SET_DESCRIPTION'],
 				fn: action
 			},
 			cancel: {
-				title: 'Cancel',
+				title: lychee.locale['CANCEL'],
 				fn: basicModal.close
 			}
 		}
