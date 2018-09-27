@@ -77,7 +77,7 @@ contextMenu.albumMulti = function(albumIDs, e) {
 	let items = [
 		{ title: build.iconic('pencil') + lychee.locale['RENAME_ALL'], fn: () => album.setTitle(albumIDs) },
 		{ title: build.iconic('collapse-left') + lychee.locale['MERGE_ALL'], visible: showMerge && autoMerge, fn: () => album.merge(albumIDs) },
-		{ title: build.iconic('collapse-left') + lycee.locale['MERGE'], visible: showMerge && !autoMerge, fn: () => { basicContext.close(); contextMenu.mergeAlbum(albumIDs[0], e) } },
+		{ title: build.iconic('collapse-left') + lychee.locale['MERGE'], visible: showMerge && !autoMerge, fn: () => { basicContext.close(); contextMenu.mergeAlbum(albumIDs[0], e) } },
 		{ title: build.iconic('trash') + lychee.locale['DELETE_ALL'], fn: () => album.delete(albumIDs) }
 	]
 
@@ -101,7 +101,7 @@ contextMenu.albumTitle = function(albumID, e) {
 				if (!this.thumbs[0]) this.thumbs[0] = 'Lychee-front/images/no_cover.svg'
 				if (this.title==='') this.title = lychee.locale['UNTITLED']
 
-				let html = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
+				let html = lychee.html`<img class='cover' width='16' height='16' src='${ this.thumbs[0] }'><div class='title'>${ this.title }</div>`
 
 				if (this.id!=albumID) items.push({
 					title: html,
@@ -135,7 +135,7 @@ contextMenu.mergeAlbum = function(albumID, e) {
 				if (!this.thumbs[0]) this.thumbs[0] = 'Lychee-front/images/no_cover.svg'
 				if (this.title==='') this.title = lychee.locale['UNTITLED']
 
-				let html = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
+				let html = lychee.html`<img class='cover' width='16' height='16' src='${ this.thumbs[0] }'><div class='title'>${ this.title }</div>`
 
 				if (this.id!=albumID) items.push({
 					title: html,
@@ -165,7 +165,7 @@ contextMenu.photo = function(photoID, e) {
 		{ title: build.iconic('tag') + lychee.locale['TAGS'], fn: () => photo.editTags([ photoID ]) },
 		{ },
 		{ title: build.iconic('pencil') + lychee.locale['RENAME'], fn: () => photo.setTitle([ photoID ]) },
-		{ title: build.iconic('layers') + lychee.localte['DUPLICATE'], fn: () => photo.duplicate([ photoID ]) },
+		{ title: build.iconic('layers') + lychee.locale['DUPLICATE'], fn: () => photo.duplicate([ photoID ]) },
 		{ title: build.iconic('folder') + lychee.locale['MOVE'], fn: () => { basicContext.close(); contextMenu.move([ photoID ], e) } },
 		{ title: build.iconic('trash') + lychee.locale['DELETE'], fn: () => photo.delete([ photoID ]) }
 	]
@@ -215,7 +215,7 @@ contextMenu.photoTitle = function(albumID, photoID, e) {
 
 			if (this.title==='') this.title = lychee.locale['UNTITLED']
 
-			let html = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbUrl }'><div class='title'>$${ this.title }</div>`
+			let html = lychee.html`<img class='cover' width='16' height='16' src='${ this.thumbUrl }'><div class='title'>${ this.title }</div>`
 
 			if (this.id!=photoID) items.push({
 				title: html,
@@ -267,7 +267,7 @@ contextMenu.move = function(photoIDs, e) {
 				if (!this.thumbs[0]) this.thumbs[0] = 'Lychee-front/images/no_cover.svg'
 				if (this.title==='') this.title = lychee.locale['UNTITLED']
 
-				let html = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
+				let html = lychee.html`<img class='cover' width='16' height='16' src='${ this.thumbs[0] }'><div class='title'>${ this.title }</div>`
 
 				if (this.id!=album.getID()) items.push({
 					title: html,
@@ -304,7 +304,7 @@ contextMenu.sharePhoto = function(photoID, e) {
 		{ title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => photo.share(photoID, 'facebook') },
 		{ title: build.iconic('envelope-closed') + 'Mail', fn: () => photo.share(photoID, 'mail') },
 		{ title: build.iconic('dropbox', iconClass) + 'Dropbox', visible: lychee.publicMode===false, fn: () => photo.share(photoID, 'dropbox') },
-		{ title: build.iconic('link-intact') + 'Direct Link', fn: () => window.open(photo.getDirectLink()) },
+		{ title: build.iconic('link-intact') + lychee.locale['DIRECT_LINK'], fn: () => window.open(photo.getDirectLink()) },
 		{ },
 		{ title: build.iconic('ban') + lychee.locale['MAKE_PRIVATE'], visible: lychee.publicMode===false, fn: () => photo.setPublic(photoID) }
 	]
@@ -327,8 +327,8 @@ contextMenu.shareAlbum = function(albumID, e) {
 		{ title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => album.share('facebook') },
 		{ title: build.iconic('envelope-closed') + 'Mail', fn: () => album.share('mail') },
 		{ },
-		{ title: build.iconic('pencil') + 'Edit Sharing', visible: lychee.publicMode===false, fn: () => album.setPublic(albumID, true, e) },
-		{ title: build.iconic('ban') + 'Make Private', visible: lychee.publicMode===false, fn: () => album.setPublic(albumID, false) }
+		{ title: build.iconic('pencil') + lychee.locale['EDIT_SHARING'], visible: lychee.publicMode===false, fn: () => album.setPublic(albumID, true, e) },
+		{ title: build.iconic('ban') + lychee.locale['MAKE_PRIVATE'], visible: lychee.publicMode===false, fn: () => album.setPublic(albumID, false) }
 	]
 
 	if (lychee.publicMode===true) items.splice(5, 1)

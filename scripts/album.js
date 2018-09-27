@@ -95,7 +95,7 @@ album.load = function(albumID, refresh = false) {
 
 album.parse = function() {
 
-	if (!album.json.title) album.json.title = 'Untitled'
+	if (!album.json.title) album.json.title = lychee.locale['UNTITLED']
 
 }
 
@@ -184,33 +184,33 @@ album.delete = function(albumIDs) {
 
 	if (albumIDs.toString()==='0') {
 
-		action.title = 'Clear Unsorted'
-		cancel.title = 'Keep Unsorted'
+		action.title = lychee.locale['CLEAR_UNSORTED']
+		cancel.title = lychee.locale['KEEP_UNSORTED']
 
-		msg = `<p>Are you sure you want to delete all photos from 'Unsorted'?<br>This action can't be undone!</p>`
+		msg = `<p>` + lychee.locale['DELETE_UNSORTED_CONFIRM'] + `</p>`
 
 	} else if (albumIDs.length===1) {
 
 		let albumTitle = ''
 
-		action.title = 'Delete Album and Photos'
-		cancel.title = 'Keep Album'
+		action.title = lychee.locale['DELETE_ALBUM_QUESTION']
+		cancel.title = lychee.locale['KEEP_ALBUM']
 
 		// Get title
 		if (album.json)       albumTitle = album.json.title
 		else if (albums.json) albumTitle = albums.getByID(albumIDs).title
 
 		// Fallback for album without a title
-		if (albumTitle==='') albumTitle = 'Untitled'
+		if (albumTitle==='') albumTitle = lychee.locale['UNTITLED']
 
-		msg = lychee.html`<p>Are you sure you want to delete the album '$${ albumTitle }' and all of the photos it contains? This action can't be undone!</p>`
+		msg = lychee.html`<p>` + lychee.locale['DELETE_ALBUM_CONFIRMATION_1'] + ` '${ albumTitle }' ` + lychee.locale['DELETE_ALBUM_CONFIRMATION_2'] + `</p>`
 
 	} else {
 
-		action.title = 'Delete Albums and Photos'
-		cancel.title = 'Keep Albums'
+		action.title = lychee.locale['DELETE_ALBUMS_QUESTION']
+		cancel.title = lychee.locale['KEEP_ALBUMS']
 
-		msg = lychee.html`<p>Are you sure you want to delete all $${ albumIDs.length } selected albums and all of the photos they contain? This action can't be undone!</p>`
+		msg = lychee.html`<p>` + lychee.locale['DELETE_ALBUMS_CONFIRMATION_1'] + ` ${ albumIDs.length } ` + lychee.locale['DELETE_ALBUMS_CONFIRMATION_2'] + `</p>`
 
 	}
 
@@ -286,11 +286,11 @@ album.setTitle = function(albumIDs) {
 
 	}
 
-	let input = lychee.html`<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='$${ oldTitle }'>`
+	let input = lychee.html`<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='${ oldTitle }'>`
 
 	if (albumIDs.length===1) msg = lychee.html`<p>` + lychee.locale['ALBUM_NEW_TITLE'] + ` ${ input }</p>`
-	// else                     msg = lychee.html`<p>Enter a title for all $${ albumIDs.length } selected albums: ${ input }</p>`
-	else                     msg = lychee.html`<p>Enter a title for all $${ albumIDs.length } selected albums: ${ input }</p>`
+	// else                     msg = lychee.html`<p>Enter a title for all ${ albumIDs.length } selected albums: ${ input }</p>`
+	else                     msg = lychee.html`<p>` + lychee.locale['ALBUMS_NEW_TITLE_1'] + ` ${ albumIDs.length } ` + lychee.locale['ALBUMS_NEW_TITLE_2'] + ` ${ input }</p>`
 
 	basicModal.show({
 		body: msg,
@@ -337,7 +337,7 @@ album.setDescription = function(albumID) {
 	}
 
 	basicModal.show({
-		body: lychee.html`<p>` + lychee.locale['ALBUM_NEW_DESCRIPTION'] + ` <input class='text' name='description' type='text' maxlength='800' placeholder='Description' value='$${ oldDescription }'></p>`,
+		body: lychee.html`<p>` + lychee.locale['ALBUM_NEW_DESCRIPTION'] + ` <input class='text' name='description' type='text' maxlength='800' placeholder='Description' value='${ oldDescription }'></p>`,
 		buttons: {
 			action: {
 				title: lychee.locale['ALBUM_SET_DESCRIPTION'],
@@ -373,13 +373,13 @@ album.setPublic = function(albumID, modal, e) {
 		// Album public = Editing a shared album
 		if (album.json.public==='1') {
 
-			action.title = 'Edit Sharing'
-			text         = 'The sharing-properties of this album will be changed to the following:'
+			action.title = lychee.locale['EDIT_SHARING_TITLE']
+			text         = lychee.locale['EDIT_SHARING_TEXT']
 
 		} else {
 
-			action.title = 'Share Album'
-			text         = 'This album will be shared with the following properties:'
+			action.title = lychee.locale['SHARE_ALBUM']
+			text         = lychee.locale['SHARE_ALBUM_TEXT']
 
 		}
 
@@ -390,25 +390,25 @@ album.setPublic = function(albumID, modal, e) {
 		                  <label>
 		                      <input type='checkbox' name='hidden'>
 		                      <span class='checkbox'>${ build.iconic('check') }</span>
-		                      <span class='label'>Hidden</span>
+		                      <span class='label'>` + lychee.locale['ALBUM_HIDDEN'] + `</span>
 		                  </label>
-		                  <p>Only people with the direct link can view this album.</p>
+		                  <p>` + lychee.locale['ALBUM_HIDDEN_EXPL'] + `</p>
 		              </div>
 		              <div class='choice'>
 		                  <label>
 		                      <input type='checkbox' name='downloadable'>
 		                      <span class='checkbox'>${ build.iconic('check') }</span>
-		                      <span class='label'>Downloadable</span>
+		                      <span class='label'>` + lychee.locale['ALBUM_DOWNLOADABLE'] + `</span>
 		                  </label>
-		                  <p>Visitors of your Lychee can download this album.</p>
+		                  <p>` + lychee.locale['ALBUM_DOWNLOADABLE_EXPL'] + `</p>
 		              </div>
 		              <div class='choice'>
 		                  <label>
 		                      <input type='checkbox' name='password'>
 		                      <span class='checkbox'>${ build.iconic('check') }</span>
-		                      <span class='label'>Password protected</span>
+		                      <span class='label'>` + lychee.locale['ALBUM_PASSWORD_PROT'] + `</span>
 		                  </label>
-		                  <p>Album only accessible with a valid password.</p>
+		                  <p>` + lychee.locale['ALBUM_PASSWORD_PROT_EXPL'] + `</p>
 		                  <input class='text' name='passwordtext' type='password' placeholder='password' value=''>
 		              </div>
 		          </form>
@@ -422,7 +422,7 @@ album.setPublic = function(albumID, modal, e) {
 					fn: action.fn
 				},
 				cancel: {
-					title: 'Cancel',
+					title: lychee.locale['CANCEL'],
 					fn: basicModal.close
 				}
 			}
@@ -552,7 +552,7 @@ album.merge = function(albumIDs) {
 	if (albums.json) title = albums.getByID(albumIDs[0]).title
 
 	// Fallback for first album without a title
-	if (title==='') title = 'Untitled'
+	if (title==='') title = lychee.locale['UNTITLED']
 
 	if (albumIDs.length===2) {
 
@@ -560,13 +560,13 @@ album.merge = function(albumIDs) {
 		if (albums.json) sTitle = albums.getByID(albumIDs[1]).title
 
 		// Fallback for second album without a title
-		if (sTitle==='') sTitle = 'Untitled'
+		if (sTitle==='') sTitle = lychee.locale['UNTITLED']
 
-		msg = lychee.html`<p>Are you sure you want to merge the album '$${ sTitle }' into the album '$${ title }'?</p>`
+		msg = lychee.html`<p>` + lychee.locale['ALBUM_MERGE_1'] + ` '${ sTitle }' ` + lychee.locale['ALBUM_MERGE_2'] + ` '${ title }'?</p>`
 
 	} else {
 
-		msg = lychee.html`<p>Are you sure you want to merge all selected albums into the album '$${ title }'?</p>`
+		msg = lychee.html`<p>` + lychee.locale['ALBUMS_MERGE'] + ` '${ title }'?</p>`
 
 	}
 
@@ -595,12 +595,12 @@ album.merge = function(albumIDs) {
 		body: msg,
 		buttons: {
 			action: {
-				title: 'Merge Albums',
+				title: lychee.locale['MERGE_ALBUM'],
 				fn: action,
 				class: 'red'
 			},
 			cancel: {
-				title: "Don't Merge",
+				title: lychee.locale['DONT_MERGE'],
 				fn: basicModal.close
 			}
 		}

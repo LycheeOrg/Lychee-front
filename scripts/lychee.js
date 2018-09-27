@@ -31,7 +31,8 @@ lychee = {
 
 		'USERNAME'	: 'username',
 		'PASSWORD'	: 'password',
-		'CANCEL'		: 'cancel',
+		'ENTER'			:	'Enter',
+		'CANCEL'		: 'Cancel',
 		'SIGN_IN'		: 'Sign In',
 
 		'CHANGE_LOGIN'		: 'Change Login',
@@ -54,6 +55,20 @@ lychee = {
 		'DOWNLOAD_ALBUM'	: 'Download Album',
 		'ABOUT_ALBUM'			: 'About Album',
 		'DELETE_ALBUM'		: 'Delete Album',
+
+		'DELETE_ALBUM_QUESTION' : 'Delete Album and Photos',
+		'KEEP_ALBUM'			: 'Keep Album',
+		'DELETE_ALBUM_CONFIRMATION_1' : 'Are you sure you want to delete the album',
+		'DELETE_ALBUM_CONFIRMATION_2'	: 'and all of the photos it contains? This action can\'t be undone!',
+
+		'DELETE_ALBUMS_QUESTION' : 'Delete Albums and Photos',
+		'KEEP_ALBUMS'			: 'Keep Albums',
+		'DELETE_ALBUMS_CONFIRMATION_1' : 'Are you sure you want to delete all',
+		'DELETE_ALBUMS_CONFIRMATION_2'	: 'selected albums and all of the photos they contain? This action can\'t be undone!',
+
+		'DELETE_UNSORTED_CONFIRM' : 'Are you sure you want to delete all photos from \'Unsorted\'?<br>This action can\'t be undone!',
+		'CLEAR_UNSORTED'	: 'Clear Unsorted',
+		'KEEP_UNSORTED'		: 'Keep Unsorted',
 
 		'EDIT_SHARING'		: 'Edit Sharing',
 		'MAKE_PRIVATE'		: 'Make Private',
@@ -94,11 +109,14 @@ lychee = {
 
 		'FULL_PHOTO'			: 'Full Photo',
 		'ABOUT_PHOTO'			:	'About Photo',
+		'DIRECT_LINK'			: 'Direct Link',
 
 		'ALBUM_ABOUT'						:	'About',
 		'ALBUM_BASICS'					: 'Basics',
 		'ALBUM_TITLE'						: 'Title',
 		'ALBUM_NEW_TITLE'				: 'Enter a new title for this album:',
+		'ALBUMS_NEW_TITLE_1'		: 'Enter a title for all',
+		'ALBUMS_NEW_TITLE_2'		: 'selected albums:',
 		'ALBUM_SET_TITLE'				: 'Set Title',
 		'ALBUM_DESCRIPTION'			: 'Description',
 		'ALBUM_NEW_DESCRIPTION'	: 'Enter a new description for this album:',
@@ -111,9 +129,18 @@ lychee = {
 		'ALBUM_SHR_NO'					: 'No',
 		'ALBUM_PUBLIC'					: 'Public',
 		'ALBUM_HIDDEN'					: 'Hidden',
+		'ALBUM_HIDDEN_EXPL'			: 'Only people with the direct link can view this album.',
 		'ALBUM_DOWNLOADABLE'		: 'Downloadable',
+		'ALBUM_DOWNLOADABLE_EXPL'	: 'Visitors of your Lychee can download this album.',
 		'ALBUM_PASSWORD'				: 'Password',
-
+		'ALBUM_PASSWORD_PROT'		: 'Password protected',
+		'ALBUM_PASSWORD_PROT_EXPL'	: 'Album only accessible with a valid password.',
+		'ALBUM_PASSWORD_REQUIRED' : 'This album is protected by a password. Enter the password below to view the photos of this album:',
+		'ALBUM_MERGE_1'					: 'Are you sure you want to merge the album',
+		'ALBUM_MERGE_2'					: 'into the album',
+		'ALBUMS_MERGE'					: 'Are you sure you want to merge all selected albums into the album',
+		'MERGE_ALBUM'						: 'Merge Albums',
+		'DONT_MERGE'						: "Don't Merge",
 
 		'PHOTO_ABOUT'						:	'About',
 		'PHOTO_BASICS'					: 'Basics',
@@ -148,6 +175,67 @@ lychee = {
 		'LOADING'								: 'Loading',
 		'ERROR'									: 'Error',
 		'ERROR_TEXT'						: 'Whoops, it looks like something went wrong. Please reload the site and try again!',
+		'ERROR_DB_1'						: 'Unable to connect to host database because access was denied. Double-check your host, username and password and ensure that access from your current location is permitted.',
+		'ERROR_DB_2'						: 'Unable to create the database. Double-check your host, username and password and ensure that the specified user has the rights to modify and add content to the database.',
+		'ERROR_CONFIG_FILE'			: "Unable to save this configuration. Permission denied in <b>'data/'</b>. Please set the read, write and execute rights for others in <b>'data/'</b> and <b>'uploads/'</b>. Take a look at the readme for more information.",
+		'ERROR_UNKNOWN'					: 'Something unexpected happened. Please try again and check your installation and server. Take a look at the readme for more information.',
+		'ERROR_LOGIN'						: 'Unable to save login. Please try again with another username and password!',
+		'RETRY'									: 'Retry',
+
+		'DB_INFO_TITLE'					: 'Enter your database connection details below:',
+		'DB_INFO_HOST'					: 'Database Host (optional)',
+		'DB_INFO_USER'					: 'Database Username',
+		'DB_INFO_PASSWORD'			: 'Database Password',
+		'DB_INFO_TEXT'					: 'Lychee will create its own database. If required, you can enter the name of an existing database instead:',
+		'DB_NAME'								: 'Database Name (optional)',
+		'DB_PREFIX'							: 'Table prefix (optional)',
+		'DB_CONNECT'						: 'Connect',
+
+		'LOGIN_TITLE'						:	'Enter a username and password for your installation:',
+		'LOGIN_USERNAME' 				: 'New Username',
+		'LOGIN_PASSWORD' 				: 'New Password',
+		'LOGIN_CREATE'					: 'Create Login',
+
+		'PASSWORD_TITLE'				: 'Enter your current password:',
+		'PASSWORD_CURRENT'			: 'Current Password',
+		'PASSWORD_TEXT'					: 'Your username and password will be changed to the following:',
+		'PASSWORD_CHANGE'				: 'Change Login',
+
+
+		'EDIT_SHARING_TITLE'		: 'Edit Sharing',
+		'EDIT_SHARING_TEXT'			: 'The sharing-properties of this album will be changed to the following:',
+		'SHARE_ALBUM_TEXT'			: 'This album will be shared with the following properties:',
+
+		'SORT_ALBUM_BY_1'					: 'Sort albums by',
+		'SORT_ALBUM_BY_2'					: 'in an',
+		'SORT_ALBUM_BY_3'					: 'order.',
+
+		'SORT_ALBUM_SELECT_1'			: 'Creation Time',
+		'SORT_ALBUM_SELECT_2'			: 'Title',
+		'SORT_ALBUM_SELECT_3'			: 'Description',
+		'SORT_ALBUM_SELECT_4'			: 'Public',
+		'SORT_ALBUM_SELECT_5'			: 'Latest Take Date',
+		'SORT_ALBUM_SELECT_5'			: 'Oldest Take Date',
+
+
+		'SORT_PHOTO_BY_1'					: 'Sort photos by',
+		'SORT_PHOTO_BY_2'					: 'in an',
+		'SORT_PHOTO_BY_3'					: 'order.',
+
+		'SORT_PHOTO_SELECT_1'			: 'Upload Time',
+		'SORT_PHOTO_SELECT_2'			: 'Take Date',
+		'SORT_PHOTO_SELECT_3'			: 'Title',
+		'SORT_PHOTO_SELECT_4'			: 'Description',
+		'SORT_PHOTO_SELECT_5'			: 'Public',
+		'SORT_PHOTO_SELECT_6'			: 'Star',
+		'SORT_PHOTO_SELECT_7'			: 'Photo Format',
+
+		'SORT_ASCENDING'					: 'Ascending',
+		'SORT_DESCENDING'					: 'Descending',
+		'SORT_CHANGE'							: 'Change Sorting',
+
+		'DROPBOX_TITLE'						: 'Set Dropbox Key',
+		'DROPBOX_TEXT'						: "In order to import photos from your Dropbox, you need a valid drop-ins app key from <a href='https://www.dropbox.com/developers/apps/create'>their website</a>. Generate yourself a personal key and enter it below:",
 
 	}
 

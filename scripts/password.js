@@ -64,7 +64,7 @@ password.getDialog = function(albumID, callback) {
 
 	let msg = `
 	          <p>
-	              This album is protected by a password. Enter the password below to view the photos of this album:
+	              ` + lychee.locale['ALBUM_PASSWORD_REQUIRED'] + `
 	              <input name='password' class='text' type='password' placeholder='password' value=''>
 	          </p>
 	          `
@@ -73,11 +73,11 @@ password.getDialog = function(albumID, callback) {
 		body: msg,
 		buttons: {
 			action: {
-				title: 'Enter',
+				title: lychee.locale['ENTER'],
 				fn: action
 			},
 			cancel: {
-				title: 'Cancel',
+				title: lychee.locale['CANCEL'],
 				fn: cancel
 			}
 		}
