@@ -289,7 +289,6 @@ album.setTitle = function(albumIDs) {
 	let input = lychee.html`<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='${ oldTitle }'>`
 
 	if (albumIDs.length===1) msg = lychee.html`<p>` + lychee.locale['ALBUM_NEW_TITLE'] + ` ${ input }</p>`
-	// else                     msg = lychee.html`<p>Enter a title for all ${ albumIDs.length } selected albums: ${ input }</p>`
 	else                     msg = lychee.html`<p>` + lychee.locale['ALBUMS_NEW_TITLE_1'] + ` ${ albumIDs.length } ` + lychee.locale['ALBUMS_NEW_TITLE_2'] + ` ${ input }</p>`
 
 	basicModal.show({
