@@ -10,7 +10,7 @@ upload.show = function(title, files, callback) {
 		body: build.uploadModal(title, files),
 		buttons: {
 			action: {
-				title: 'Close',
+				title: lychee.locale['CLOSE'],
 				class: 'hidden',
 				fn: basicModal.close
 			}
@@ -22,7 +22,7 @@ upload.show = function(title, files, callback) {
 
 upload.notify = function(title, text) {
 
-	if (text==null||text==='') text = 'You can now manage your new photo(s).'
+	if (text==null||text==='') text = lychee.locale['UPLOAD_MANAGE_NEW_PHOTOS']
 
 	if (!window.webkitNotifications) return false
 
@@ -61,19 +61,19 @@ upload.start = {
 
 					// Success
 					basicModal.close()
-					upload.notify('Upload complete')
+					upload.notify(lychee.locale['UPLOAD_COMPLETE'])
 
 				} else if (error===false && warning===true) {
 
 					// Warning
 					$('.basicModal #basicModal__action.hidden').show()
-					upload.notify('Upload complete')
+					upload.notify(lychee.locale['UPLOAD_COMPLETE'])
 
 				} else {
 
 					// Error
 					$('.basicModal #basicModal__action.hidden').show()
-					upload.notify('Upload complete', 'Failed to upload one or more photos.')
+					upload.notify(lychee.locale['UPLOAD_COMPLETE'], lychee.locale['UPLOAD_COMPLETE_FAILED'])
 
 				}
 
@@ -88,16 +88,7 @@ upload.start = {
 			formData.append('albumID', albumID)
 			formData.append(0, file)
 
-            if(lychee.api_V2)
-            {
-                // because the api is defined directly by the function called in the route.php
-                api_url = 'api/';
-                api_url = api_url.concat('Photo::add');
-            }
-            else
-            {
-                api_url = api.path;
-            }
+			var api_url = api.get_url('Photo::add');
 
 			xhr.open('POST', api_url)
 
@@ -122,23 +113,23 @@ upload.start = {
 
 					// Success
 					$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status')
-						.html('Finished')
+						.html(lychee.locale['UPLOAD_FINISHED'])
 						.addClass('success')
 
 				} else {
 
 					if (data.substr(0, 6)==='Error:') {
 
-						errorText = data.substr(6) + ' Please take a look at the console of your browser for further details.'
+						errorText = data.substr(6) + ' ' + lychee.locale['UPLOAD_ERROR_CONSOLE']
 						error     = true
 
 						// Error Status
 						$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status')
-							.html('Failed')
+							.html(lychee.locale['UPLOAD_FAILED'])
 							.addClass('error')
 
 						// Throw error
-						if (error===true) lychee.error('Upload failed. Server returned an error!', xhr, data)
+						if (error===true) lychee.error(lychee.locale['UPLOAD_FAILED_ERROR'], xhr, data)
 
 					} else if (data.substr(0, 8)==='Warning:') {
 
@@ -147,24 +138,24 @@ upload.start = {
 
 						// Warning Status
 						$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status')
-							.html('Skipped')
+							.html(lychee.locale['UPLOAD_SKIPPED'])
 							.addClass('warning')
 
 						// Throw error
-						if (error===true) lychee.error('Upload failed. Server returned a warning!', xhr, data)
+						if (error===true) lychee.error(lychee.locale['UPLOAD_FAILED_WARNING'], xhr, data)
 
 					} else {
 
-						errorText = 'Server returned an unknown response. Please take a look at the console of your browser for further details.'
+						errorText = lychee.locale['UPLOAD_UNKNOWN']
 						error     = true
 
 						// Error Status
 						$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status')
-							.html('Failed')
+							.html(lychee.locale['UPLOAD_FAILED'])
 							.addClass('error')
 
 						// Throw error
-						if (error===true) lychee.error('Upload failed. Server returned an unkown error!', xhr, data)
+						if (error===true) lychee.error(lychee.locale['UPLOAD_ERROR_UNKNOWN'], xhr, data)
 
 					}
 
@@ -210,7 +201,7 @@ upload.start = {
 					$('.basicModal .rows').scrollTop(scrollPos)
 
 					// Set status to processing
-					$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status').html('Processing')
+					$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status').html(lychee.locale['UPLOAD_PROCESSING'])
 
 					// Upload next file
 					if (file.next!=null) {
@@ -239,9 +230,9 @@ upload.start = {
 
 		}
 
-		window.onbeforeunload = function() { return 'Lychee is currently uploading!' }
+		window.onbeforeunload = function() { return lychee.locale['UPLOAD_IN_PROGRESS'] }
 
-		upload.show('Uploading', files, function() {
+		upload.show(lychee.locale['UPLOAD_UPLOADING'], files, function() {
 
 			// Upload first file
 			process(files, files[0])
@@ -270,9 +261,9 @@ upload.start = {
 					name: data.link
 				}
 
-				upload.show('Importing URL', files, function() {
+				upload.show(lychee.locale['UPLOAD_IMPORTING_URL'], files, function() {
 
-					$('.basicModal .rows .row .status').html('Importing')
+					$('.basicModal .rows .row .status').html(lychee.locale['UPLOAD_IMPORTING'])
 
 					let params = {
 						url: data.link,
@@ -286,11 +277,11 @@ upload.start = {
 						if (data!==true) {
 
 							$('.basicModal .rows .row p.notice')
-								.html('The import has been finished, but returned warnings or errors. Please take a look at the log (Settings -> Show Log) for further details.')
+								.html(lychee.locale['UPLOAD_IMPORT_WARN_ERR'])
 								.show()
 
 							$('.basicModal .rows .row .status')
-								.html('Finished')
+								.html(lychee.locale['UPLOAD_FINISHED'])
 								.addClass('warning')
 
 							// Show close button
@@ -305,7 +296,7 @@ upload.start = {
 
 						}
 
-						upload.notify('Import complete')
+						upload.notify(lychee.locale['UPLOAD_IMPORT_COMPLETE'])
 
 						albums.refresh()
 
@@ -321,14 +312,14 @@ upload.start = {
 		}
 
 		basicModal.show({
-			body: lychee.html`<p>Please enter the direct link to a photo to import it: <input class='text' name='link' type='text' placeholder='http://' value='$${ url }'></p>`,
+			body: lychee.html`<p>` + lychee.locale['UPLOAD_IMPORT_INSTR'] + ` <input class='text' name='link' type='text' placeholder='http://' value='$${ url }'></p>`,
 			buttons: {
 				action: {
-					title: 'Import',
+					title: lychee.locale['UPLOAD_IMPORT'],
 					fn: action
 				},
 				cancel: {
-					title: 'Cancel',
+					title: lychee.locale['CANCEL'],
 					fn: basicModal.close
 				}
 			}
@@ -349,9 +340,9 @@ upload.start = {
 				name: data.path
 			}
 
-			upload.show('Importing from server', files, function() {
+			upload.show(lychee.locale['UPLOAD_IMPORT_SERVER'], files, function() {
 
-				$('.basicModal .rows .row .status').html('Importing')
+				$('.basicModal .rows .row .status').html(lychee.locale['UPLOAD_IMPORTING'])
 
 				let params = {
 					albumID,
@@ -361,7 +352,7 @@ upload.start = {
 				api.post('Import::server', params, function(data) {
 
 					albums.refresh()
-					upload.notify('Import complete')
+					upload.notify(lychee.locale['UPLOAD_IMPORT_COMPLETE'])
 
 					if (data==='Notice: Import only contained albums!') {
 
@@ -380,26 +371,26 @@ upload.start = {
 						// Error because the import could not start
 
 						$('.basicModal .rows .row p.notice')
-							.html('Folder empty or no readable files to process. Please take a look at the log (Settings -> Show Log) for further details.')
+							.html(lychee.locale['UPLOAD_IMPORT_SERVER_FOLD'])
 							.show()
 
 						$('.basicModal .rows .row .status')
-							.html('Failed')
+							.html(lychee.locale['UPLOAD_FAILED'])
 							.addClass('error')
 
 						// Log error
-						lychee.error('Could not start import because the folder was empty!', params, data)
+						lychee.error(lychee.locale['UPLOAD_IMPORT_SERVER_EMPT'], params, data)
 
 					} else if (data!==true) {
 
 						// Maybe an error, maybe just some skipped photos
 
 						$('.basicModal .rows .row p.notice')
-							.html('The import has been finished, but returned warnings or errors. Please take a look at the log (Settings -> Show Log) for further details.')
+							.html(lychee.locale['UPLOAD_IMPORT_WARN_ERR'])
 							.show()
 
 						$('.basicModal .rows .row .status')
-							.html('Finished')
+							.html(lychee.locale['UPLOAD_FINISHED'])
 							.addClass('warning')
 
 						// Log error
@@ -426,14 +417,14 @@ upload.start = {
 		}
 
 		basicModal.show({
-			body: lychee.html`<p>This action will import all photos, folders and sub-folders which are located in the following directory. The <b>original files will be deleted</b> after the import when possible. <input class='text' name='path' type='text' maxlength='100' placeholder='Absolute path to directory' value='$${ lychee.location }uploads/import/'></p>`,
+			body: lychee.html`<p>` + lychee.locale['UPLOAD_IMPORT_SERVER_INSTR'] + ` <input class='text' name='path' type='text' maxlength='100' placeholder='` + lychee.locale['UPLOAD_ABSOLUTE_PATH'] + `' value='$${ lychee.location }uploads/import/'></p>`,
 			buttons: {
 				action: {
-					title: 'Import',
+					title: lychee.locale['UPLOAD_IMPORT'],
 					fn: action
 				},
 				cancel: {
-					title: 'Cancel',
+					title: lychee.locale['CANCEL'],
 					fn: basicModal.close
 				}
 			}
@@ -465,7 +456,7 @@ upload.start = {
 
 			upload.show('Importing from Dropbox', files, function() {
 
-				$('.basicModal .rows .row .status').html('Importing')
+				$('.basicModal .rows .row .status').html(lychee.locale['UPLOAD_IMPORTING'])
 
 				let params = {
 					url: links,
@@ -479,11 +470,11 @@ upload.start = {
 					if (data!==true) {
 
 						$('.basicModal .rows .row p.notice')
-							.html('The import has been finished, but returned warnings or errors. Please take a look at the log (Settings -> Show Log) for further details.')
+							.html(lychee.locale['UPLOAD_IMPORT_WARN_ERR'])
 							.show()
 
 						$('.basicModal .rows .row .status')
-							.html('Finished')
+							.html(lychee.locale['UPLOAD_FINISHED'])
 							.addClass('warning')
 
 						// Show close button
@@ -498,7 +489,7 @@ upload.start = {
 
 					}
 
-					upload.notify('Import complete')
+					upload.notify(lychee.locale['UPLOAD_IMPORT_COMPLETE'])
 
 					albums.refresh()
 

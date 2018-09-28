@@ -94,7 +94,7 @@ photo.preloadNext = function(photoID) {
 
 photo.parse = function() {
 
-	if (!photo.json.title) photo.json.title = 'Untitled'
+	if (!photo.json.title) photo.json.title = lychee.locale['UNTITLED']
 
 }
 
@@ -197,7 +197,7 @@ photo.delete = function(photoIDs) {
 		else                 photoTitle = album.json.content[photoIDs].title
 
 		// Fallback for photos without a title
-		if (photoTitle==='') photoTitle = 'Untitled'
+		if (photoTitle==='') photoTitle = lychee.locale['UNTITLED']
 
 	}
 
@@ -247,17 +247,17 @@ photo.delete = function(photoIDs) {
 
 	if (photoIDs.length===1) {
 
-		action.title = 'Delete Photo'
-		cancel.title = 'Keep Photo'
+		action.title = lychee.locale['PHOTO_DELETE']
+		cancel.title = lychee.locale['PHOTO_KEEP']
 
-		msg = lychee.html`<p>Are you sure you want to delete the photo '$${ photoTitle }'? This action can't be undone!</p>`
+		msg = lychee.html`<p>` + lychee.locale['PHOTO_DELETE_1'] + ` '${ photoTitle }'` + lychee.locale['PHOTO_DELETE_2'] + `</p>`
 
 	} else {
 
-		action.title = 'Delete Photo'
-		cancel.title = 'Keep Photo'
+		action.title = lychee.locale['PHOTO_DELETE']
+		cancel.title = lychee.locale['PHOTO_KEEP']
 
-		msg = lychee.html`<p>Are you sure you want to delete all $${ photoIDs.length } selected photo? This action can't be undone!</p>`
+		msg = lychee.html`<p>` + lychee.locale['PHOTO_DELETE_ALL_1'] + ` ${ photoIDs.length } ` + lychee.locale['PHOTO_DELETE_ALL_2'] + `</p>`
 
 	}
 
@@ -323,20 +323,20 @@ photo.setTitle = function(photoIDs) {
 
 	}
 
-	let input = lychee.html`<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='$${ oldTitle }'>`
+	let input = lychee.html`<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='${ oldTitle }'>`
 
-	if (photoIDs.length===1) msg = lychee.html`<p>Enter a new title for this photo: ${ input }</p>`
-	else                     msg = lychee.html`<p>Enter a title for all $${ photoIDs.length } selected photos: ${ input }</p>`
+	if (photoIDs.length===1) msg = lychee.html`<p>` + lychee.locale['PHOTO_NEW_TITLE'] + ` ${ input }</p>`
+	else                     msg = lychee.html`<p>` + lychee.locale['PHOTOS_NEW_TITLE_1'] + ` ${ photoIDs.length } ` + lychee.locale['PHOTOS_NEW_TITLE_2'] + ` ${ input }</p>`
 
 	basicModal.show({
 		body: msg,
 		buttons: {
 			action: {
-				title: 'Set title',
+				title: lychee.locale['PHOTO_SET_TITLE'],
 				fn: action
 			},
 			cancel: {
-				title: 'Cancel',
+				title: lychee.locale['CANCEL'],
 				fn: basicModal.close
 			}
 		}
@@ -430,14 +430,14 @@ photo.setPublic = function(photoID, e) {
 		}
 
 		basicModal.show({
-			body: '<p>This photo is located in a public album. To make this photo private or public, edit the visibility of the associated album.</p>',
+			body: '<p>' + lychee.locale['PHOTO_MAKE_PRIVATE_ALBUM'] + '</p>',
 			buttons: {
 				action: {
-					title: 'Show Album',
+					title: lychee.locale['PHOTO_SHOW_ALBUM'],
 					fn: action
 				},
 				cancel: {
-					title: 'Cancel',
+					title: lychee.locale['CANCEL'],
 					fn: basicModal.close
 				}
 			}
@@ -497,14 +497,14 @@ photo.setDescription = function(photoID) {
 	}
 
 	basicModal.show({
-		body: lychee.html`<p>Enter a description for this photo: <input class='text' name='description' type='text' maxlength='800' placeholder='Description' value='$${ oldDescription }'></p>`,
+		body: lychee.html`<p>` + lychee.locale['PHOTO_NEW_DESCRIPTION'] + ` <input class='text' name='description' type='text' maxlength='800' placeholder='` + lychee.locale['PHOTO_DESCRIPTION']+ `' value='$${ oldDescription }'></p>`,
 		buttons: {
 			action: {
-				title: 'Set Description',
+				title: lychee.locale['PHOTO_SET_DESCRIPTION'],
 				fn: action
 			},
 			cancel: {
-				title: 'Cancel',
+				title: lychee.locale['CANCEL'],
 				fn: basicModal.close
 			}
 		}
@@ -545,18 +545,18 @@ photo.editTags = function(photoIDs) {
 
 	let input = lychee.html`<input class='text' name='tags' type='text' maxlength='800' placeholder='Tags' value='$${ oldTags }'>`
 
-	if (photoIDs.length===1) msg = lychee.html`<p>Enter your tags for this photo. You can add multiple tags by separating them with a comma: ${ input }</p>`
-	else                     msg = lychee.html`<p>Enter your tags for all $${ photoIDs.length } selected photos. Existing tags will be overwritten. You can add multiple tags by separating them with a comma: ${ input }</p>`
+	if (photoIDs.length===1) msg = lychee.html`<p>` + lychee.locale['PHOTO_NEW_TAGS'] + ` ${ input }</p>`
+	else                     msg = lychee.html`<p>` + lychee.locale['PHOTO_NEW_TAGS_1'] + ` ${ photoIDs.length } ` + lychee.locale['PHOTO_NEW_TAGS_2'] + ` ${ input }</p>`
 
 	basicModal.show({
 		body: msg,
 		buttons: {
 			action: {
-				title: 'Set Tags',
+				title: lychee.locale['PHOTO_SET_TAGS'],
 				fn: action
 			},
 			cancel: {
-				title: 'Cancel',
+				title: lychee.locale['CANCEL'],
 				fn: basicModal.close
 			}
 		}

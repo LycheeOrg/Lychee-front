@@ -38,10 +38,10 @@ settings.createConfig = function() {
 				if (data==='Warning: Connection failed!') {
 
 					basicModal.show({
-						body: '<p>Unable to connect to host database because access was denied. Double-check your host, username and password and ensure that access from your current location is permitted.</p>',
+						body: '<p>' + lychee.locale['ERROR_DB_1'] + '</p>',
 						buttons: {
 							action: {
-								title: 'Retry',
+								title: lychee.locale['RETRY'],
 								fn: settings.createConfig
 							}
 						}
@@ -55,10 +55,10 @@ settings.createConfig = function() {
 				if (data==='Warning: Creation failed!') {
 
 					basicModal.show({
-						body: '<p>Unable to create the database. Double-check your host, username and password and ensure that the specified user has the rights to modify and add content to the database.</p>',
+						body: '<p>' + lychee.locale['ERROR_DB_2'] + '</p>',
 						buttons: {
 							action: {
-								title: 'Retry',
+								title: lychee.locale['RETRY'],
 								fn: settings.createConfig
 							}
 						}
@@ -72,10 +72,10 @@ settings.createConfig = function() {
 				if (data==='Warning: Could not create file!') {
 
 					basicModal.show({
-						body: "<p>Unable to save this configuration. Permission denied in <b>'data/'</b>. Please set the read, write and execute rights for others in <b>'data/'</b> and <b>'uploads/'</b>. Take a look at the readme for more information.</p>",
+						body: "<p>" + lychee.locale['ERROR_CONFIG_FILE'] + "</p>",
 						buttons: {
 							action: {
-								title: 'Retry',
+								title: lychee.locale['RETRY'],
 								fn: settings.createConfig
 							}
 						}
@@ -87,10 +87,10 @@ settings.createConfig = function() {
 
 				// Something went wrong
 				basicModal.show({
-					body: '<p>Something unexpected happened. Please try again and check your installation and server. Take a look at the readme for more information.</p>',
+					body: '<p>' + lychee.locale['ERROR_UNKNOWN'] + '</p>',
 					buttons: {
 						action: {
-							title: 'Retry',
+							title: lychee.locale['RETRY'],
 							fn: settings.createConfig
 						}
 					}
@@ -111,15 +111,15 @@ settings.createConfig = function() {
 
 	let msg = `
 	          <p>
-	              Enter your database connection details below:
-	              <input name='dbHost' class='text' type='text' placeholder='Database Host (optional)' value=''>
-	              <input name='dbUser' class='text' type='text' placeholder='Database Username' value=''>
-	              <input name='dbPassword' class='text' type='password' placeholder='Database Password' value=''>
+	              ` + lychee.locale['DB_INFO_TITLE'] + `
+	              <input name='dbHost' class='text' type='text' placeholder='` + lychee.locale['DB_INFO_HOST']+ `' value=''>
+	              <input name='dbUser' class='text' type='text' placeholder='` + lychee.locale['DB_INFO_USER'] + `' value=''>
+	              <input name='dbPassword' class='text' type='password' placeholder='` + lychee.locale['DB_INFO_PASSWORD'] + `' value=''>
 	          </p>
 	          <p>
-	              Lychee will create its own database. If required, you can enter the name of an existing database instead:
-	              <input name='dbName' class='text' type='text' placeholder='Database Name (optional)' value=''>
-	              <input name='dbTablePrefix' class='text' type='text' placeholder='Table prefix (optional)' value=''>
+	              ` + lychee.locale['DB_INFO_TEXT'] + `
+	              <input name='dbName' class='text' type='text' placeholder='` + lychee.locale['DB_NAME'] + `' value=''>
+	              <input name='dbTablePrefix' class='text' type='text' placeholder='` + lychee.locale['DB_PREFIX'] + `' value=''>
 	          </p>
 	          `
 
@@ -127,7 +127,7 @@ settings.createConfig = function() {
 		body: msg,
 		buttons: {
 			action: {
-				title: 'Connect',
+				title: lychee.locale['DB_CONNECT'],
 				fn: action
 			}
 		}
@@ -164,10 +164,10 @@ settings.createLogin = function() {
 			if (data!==true) {
 
 				basicModal.show({
-					body: '<p>Unable to save login. Please try again with another username and password!</p>',
+					body: '<p>' + lychee.locale['ERROR_LOGIN'] + '</p>',
 					buttons: {
 						action: {
-							title: 'Retry',
+							title: lychee.locale['RETRY'],
 							fn: settings.createLogin
 						}
 					}
@@ -181,9 +181,9 @@ settings.createLogin = function() {
 
 	let msg = `
 	          <p>
-	              Enter a username and password for your installation:
-	              <input name='username' class='text' type='text' placeholder='New Username' value=''>
-	              <input name='password' class='text' type='password' placeholder='New Password' value=''>
+	              ` + lychee.locale['LOGIN_TITLE'] + `
+	              <input name='username' class='text' type='text' placeholder='` + lychee.locale['LOGIN_USERNAME'] + `' value=''>
+	              <input name='password' class='text' type='password' placeholder='` + lychee.locale['LOGIN_PASSWORD'] + `' value=''>
 	          </p>
 	          `
 
@@ -191,7 +191,7 @@ settings.createLogin = function() {
 		body: msg,
 		buttons: {
 			action: {
-				title: 'Create Login',
+				title: lychee.locale['LOGIN_CREATE'],
 				fn: action
 			}
 		}
@@ -240,13 +240,13 @@ settings.setLogin = function() {
 
 	let msg = `
 	          <p>
-	              Enter your current password:
-	              <input name='oldPassword' class='text' type='password' placeholder='Current Password' value=''>
+	              ` + lychee.locale['PASSWORD_TITLE'] + `
+	              <input name='oldPassword' class='text' type='password' placeholder='` + lychee.locale['PASSWORD_CURRENT'] + `' value=''>
 	          </p>
 	          <p>
-	              Your username and password will be changed to the following:
-	              <input name='username' class='text' type='text' placeholder='New Username' value=''>
-	              <input name='password' class='text' type='password' placeholder='New Password' value=''>
+	              ` + lychee.locale['PASSWORD_TEXT'] + `
+	              <input name='username' class='text' type='text' placeholder='` + lychee.locale['LOGIN_USERNAME'] + `' value=''>
+	              <input name='password' class='text' type='password' placeholder='` + lychee.locale['LOGIN_PASSWORD'] + `' value=''>
 	          </p>
 	          `
 
@@ -254,11 +254,11 @@ settings.setLogin = function() {
 		body: msg,
 		buttons: {
 			action: {
-				title: 'Change Login',
+				title: lychee.locale['PASSWORD_CHANGE'],
 				fn: action
 			},
 			cancel: {
-				title: 'Cancel',
+				title: lychee.locale['CANCEL'],
 				fn: basicModal.close
 			}
 		}
@@ -303,47 +303,47 @@ settings.setSorting = function() {
 
 	let msg = `
 	          <p>
-	              Sort albums by
+	              ` + lychee.locale['SORT_ALBUM_BY_1'] + `
 	              <span class="select">
 	                  <select id='settings_albums_type'>
-	                      <option value='id'>Creation Time</option>
-	                      <option value='title'>Title</option>
-	                      <option value='description'>Description</option>
-	                      <option value='public'>Public</option>
-	                      <option value='max_takestamp'>Latest Take Date</option>
-	                      <option value='min_takestamp'>Oldest Take Date</option>
+	                      <option value='id'>` + lychee.locale['SORT_ALBUM_SELECT_1'] + `</option>
+	                      <option value='title'>` + lychee.locale['SORT_ALBUM_SELECT_2'] + `</option>
+	                      <option value='description'>` + lychee.locale['SORT_ALBUM_SELECT_3'] + `</option>
+	                      <option value='public'>` + lychee.locale['SORT_ALBUM_SELECT_4'] + `</option>
+	                      <option value='max_takestamp'>` + lychee.locale['SORT_ALBUM_SELECT_5'] + `</option>
+	                      <option value='min_takestamp'>` + lychee.locale['SORT_ALBUM_SELECT_6'] + `</option>
 	                  </select>
 	              </span>
-	              in an
+	              ` + lychee.locale['SORT_ALBUM_BY_2'] + `
 	              <span class="select">
 	                  <select id='settings_albums_order'>
-	                      <option value='ASC'>Ascending</option>
-	                      <option value='DESC'>Descending</option>
+	                      <option value='ASC'>` + lychee.locale['SORT_ASCENDING'] + `</option>
+	                      <option value='DESC'>` + lychee.locale['SORT_DESCENDING'] + `</option>
 	                  </select>
 	              </span>
-	              order.
+	              ` + lychee.locale['SORT_ALBUM_BY_3'] + `
 	          </p>
 	          <p>
-	              Sort photos by
+	              ` + lychee.locale['SORT_PHOTO_BY_1'] + `
 	              <span class="select">
 	                  <select id='settings_photos_type'>
-	                      <option value='id'>Upload Time</option>
-	                      <option value='takestamp'>Take Date</option>
-	                      <option value='title'>Title</option>
-	                      <option value='description'>Description</option>
-	                      <option value='public'>Public</option>
-	                      <option value='star'>Star</option>
-	                      <option value='type'>Photo Format</option>
+	                      <option value='id'>` + lychee.locale['SORT_PHOTO_SELECT_1'] + `</option>
+	                      <option value='takestamp'>` + lychee.locale['SORT_PHOTO_SELECT_2'] + `</option>
+	                      <option value='title'>` + lychee.locale['SORT_PHOTO_SELECT_3'] + `</option>
+	                      <option value='description'>` + lychee.locale['SORT_PHOTO_SELECT_4'] + `</option>
+	                      <option value='public'>` + lychee.locale['SORT_PHOTO_SELECT_5'] + `</option>
+	                      <option value='star'>` + lychee.locale['SORT_PHOTO_SELECT_6'] + `</option>
+	                      <option value='type'>` + lychee.locale['SORT_PHOTO_SELECT_7'] + `</option>
 	                  </select>
 	              </span>
-	              in an
+	              ` + lychee.locale['SORT_PHOTO_BY_2'] + `
 	              <span class="select">
 	                  <select id='settings_photos_order'>
-	                      <option value='ASC'>Ascending</option>
-	                      <option value='DESC'>Descending</option>
+	                      <option value='ASC'>` + lychee.locale['SORT_ASCENDING'] + `</option>
+	                      <option value='DESC'>` + lychee.locale['SORT_DESCENDING'] + `</option>
 	                  </select>
 	              </span>
-	              order.
+	              ` + lychee.locale['SORT_PHOTO_BY_3'] + `
 	          </p>
 	          `
 
@@ -351,11 +351,11 @@ settings.setSorting = function() {
 		body: msg,
 		buttons: {
 			action: {
-				title: 'Change Sorting',
+				title: lychee.locale['SORT_CHANGE'],
 				fn: action
 			},
 			cancel: {
-				title: 'Cancel',
+				title: lychee.locale['CANCEL'],
 				fn: basicModal.close
 			}
 		}
@@ -407,7 +407,7 @@ settings.setDropboxKey = function(callback) {
 
 	let msg = lychee.html`
 	          <p>
-	              In order to import photos from your Dropbox, you need a valid drop-ins app key from <a href='https://www.dropbox.com/developers/apps/create'>their website</a>. Generate yourself a personal key and enter it below:
+	              ` + lychee.locale['DROPBOX_TEXT'] + `
 	              <input class='text' name='key' type='text' placeholder='Dropbox API Key' value='$${ lychee.dropboxKey }'>
 	          </p>
 	          `
@@ -416,11 +416,11 @@ settings.setDropboxKey = function(callback) {
 		body: msg,
 		buttons: {
 			action: {
-				title: 'Set Dropbox Key',
+				title: lychee.locale['DROPBOX_TITLE'],
 				fn: action
 			},
 			cancel: {
-				title: 'Cancel',
+				title: lychee.locale['CANCEL'],
 				fn: basicModal.close
 			}
 		}

@@ -116,16 +116,16 @@ view.album = {
 
 			switch (album.getID()) {
 				case 'f':
-					lychee.setTitle('Starred', false)
+					lychee.setTitle(lychee.locale['STARED'], false)
 					break
 				case 's':
-					lychee.setTitle('Public', false)
+					lychee.setTitle(lychee.locale['PUBLIC'], false)
 					break
 				case 'r':
-					lychee.setTitle('Recent', false)
+					lychee.setTitle(lychee.locale['RECENT'], false)
 					break
 				case '0':
-					lychee.setTitle('Unsorted', false)
+					lychee.setTitle(lychee.locale['UNSORTED'], false)
 					break
 				default:
 					if (album.json.init) sidebar.changeAttr('title', album.json.title)
@@ -227,19 +227,19 @@ view.album = {
 
 			$('#button_share_album')
 				.addClass('active')
-				.attr('title', 'Share Album')
+				.attr('title', lychee.locale['SHARE_ALBUM'])
 
 			$('.photo .iconic-share').remove()
 
-			if (album.json.init) sidebar.changeAttr('public', 'Yes')
+			if (album.json.init) sidebar.changeAttr('public', lychee.locale['ALBUM_SHR_YES'])
 
 		} else {
 
 			$('#button_share_album')
 				.removeClass('active')
-				.attr('title', 'Make Public')
+				.attr('title', lychee.locale['MAKE_PUBLIC'])
 
-			if (album.json.init) sidebar.changeAttr('public', 'No')
+			if (album.json.init) sidebar.changeAttr('public', lychee.locale['ALBUM_SHR_NO'])
 
 		}
 
@@ -247,22 +247,22 @@ view.album = {
 
 	hidden: function() {
 
-		if (album.json.visible==='1') sidebar.changeAttr('hidden', 'No')
-		else                          sidebar.changeAttr('hidden', 'Yes')
+		if (album.json.visible==='1') sidebar.changeAttr('hidden', lychee.locale['ALBUM_SHR_NO'])
+		else                          sidebar.changeAttr('hidden', lychee.locale['ALBUM_SHR_YES'])
 
 	},
 
 	downloadable: function() {
 
-		if (album.json.downloadable==='1') sidebar.changeAttr('downloadable', 'Yes')
-		else                               sidebar.changeAttr('downloadable', 'No')
+		if (album.json.downloadable==='1') sidebar.changeAttr('downloadable', lychee.locale['ALBUM_SHR_YES'])
+		else                               sidebar.changeAttr('downloadable', lychee.locale['ALBUM_SHR_NO'])
 
 	},
 
 	password: function() {
 
-		if (album.json.password==='1') sidebar.changeAttr('password', 'Yes')
-		else                           sidebar.changeAttr('password', 'No')
+		if (album.json.password==='1') sidebar.changeAttr('password', lychee.locale['ALBUM_SHR_YES'])
+		else                           sidebar.changeAttr('password', lychee.locale['ALBUM_SHR_NO'])
 
 	},
 
@@ -361,13 +361,13 @@ view.photo = {
 			// Starred
 			$('#button_star')
 				.addClass('active')
-				.attr('title', 'Unstar Photo')
+				.attr('title', lychee.locale['UNSTAR_PHOTO'])
 
 		} else {
 
 			// Unstarred
 			$('#button_star').removeClass('active')
-			$('#button_star').attr('title', 'Star Photo')
+			$('#button_star').attr('title', lychee.locale['STAR_PHOTO'])
 
 		}
 
@@ -380,9 +380,9 @@ view.photo = {
 			// Photo public
 			$('#button_share')
 				.addClass('active')
-				.attr('title', 'Share Photo')
+				.attr('title', lychee.locale['SHARE_PHOTO'])
 
-			if (photo.json.init) sidebar.changeAttr('public', 'Yes')
+			if (photo.json.init) sidebar.changeAttr('public', lychee.locale['PHOTO_SHR_YES'])
 
 		} else {
 

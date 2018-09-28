@@ -9,22 +9,31 @@ api = {
 
 }
 
+api.get_url = function(fn) {
+
+		var api_url = ''
+
+		if(lychee.api_V2)
+		{
+      	// because the api is defined directly by the function called in the route.php
+				api_url = 'api/' + fn;
+		}
+		else
+		{
+	        api_url = api.path;
+		}
+
+		return api_url;
+
+}
+
 api.post = function(fn, params, callback) {
 
 	loadingBar.show()
 
 	params = $.extend({ function: fn }, params)
 
-	if(lychee.api_V2)
-	{
-        // because the api is defined directly by the function called in the route.php
-		api_url = 'api/';
-        api_url = api_url.concat(fn);
-	}
-	else
-	{
-        api_url = api.path;
-	}
+	var api_url = api.get_url(fn);
 
 	const success = (data) => {
 

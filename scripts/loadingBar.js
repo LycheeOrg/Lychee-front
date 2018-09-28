@@ -25,7 +25,7 @@ loadingBar.show = function(status, errorText) {
 
 		// Parse text
 		if (errorText)  errorText = errorText.replace('<br>', '')
-		if (!errorText) errorText = 'Whoops, it looks like something went wrong. Please reload the site and try again!'
+		if (!errorText) errorText = lychee.locale['ERROR_TEXT']
 
 		// Move header down
 		if (visible.header()) header.dom().addClass('header--error')
@@ -33,7 +33,7 @@ loadingBar.show = function(status, errorText) {
 		// Modify loading
 		loadingBar.dom()
 			.removeClass('loading uploading error')
-			.html(`<h1>Error: <span>${ errorText }</span></h1>`)
+			.html(`<h1>` + lychee.locale['ERROR'] + `: <span>${ errorText }</span></h1>`)
 			.addClass(status)
 			.show()
 
@@ -48,7 +48,7 @@ loadingBar.show = function(status, errorText) {
 	if (loadingBar.status===null) {
 
 		// Set status
-		loadingBar.status = 'loading'
+		loadingBar.status = lychee.locale['LOADING']
 
 		// Set timeout
 		clearTimeout(loadingBar._timeout)

@@ -157,16 +157,16 @@ build.no_content = function(typ) {
 
 	switch (typ) {
 		case 'magnifying-glass':
-			html += `<p>No results</p>`
+			html += `<p>` + lychee.locale['VIEW_NO_RESULT'] + `</p>`
 			break
 		case 'eye':
-			html += `<p>No public albums</p>`
+			html += `<p>` + lychee.locale['VIEW_NO_PUBLIC_ALBUMS'] + `</p>`
 			break
 		case 'cog':
-			html += `<p>No configuration</p>`
+			html += `<p>` + lychee.locale['VIEW_NO_CONFIGURATION'] + `</p>`
 			break
 		case 'question-mark':
-			html += `<p>Photo not found</p>`
+			html += `<p>` + lychee.locale['VIEW_PHOTO_NOT_FOUND'] + `</p>`
 			break
 	}
 
@@ -225,7 +225,7 @@ build.tags = function(tags) {
 
 	} else {
 
-		html = `<div class='empty'>No Tags</div>`
+		html = `<div class='empty'>` + lychee.locale['NO_TAGS'] + `</div>`
 
 	}
 

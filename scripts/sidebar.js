@@ -124,11 +124,11 @@ sidebar.createStructure.photo = function(data) {
 	// Set value for public
 	switch (data.public) {
 
-		case '0' : _public = 'No'
+		case '0' : _public = lychee.locale['PHOTO_SHR_NO']
 		           break
-		case '1' : _public = 'Yes'
+		case '1' : _public = lychee.locale['PHOTO_SHR_YES']
 		           break
-		case '2' : _public = 'Yes (Album)'
+		case '2' : _public = lychee.locale['PHOTO_SHR_ALB']
 		           break
 		default :  _public = '-'
 		           break
@@ -136,22 +136,22 @@ sidebar.createStructure.photo = function(data) {
 	}
 
 	structure.basics = {
-		title : 'Basics',
+		title : lychee.locale['PHOTO_BASICS'],
 		type  : sidebar.types.DEFAULT,
 		rows  : [
-			{ title: 'Title',       value: data.title, editable },
-			{ title: 'Uploaded',    value: data.sysdate },
-			{ title: 'Description', value: data.description, editable }
+			{ title: lychee.locale['PHOTO_TITLE'],       value: data.title, editable },
+			{ title: lychee.locale['PHOTO_UPLOADED'],    value: data.sysdate },
+			{ title: lychee.locale['PHOTO_DESCRIPTION'], value: data.description, editable }
 		]
 	}
 
 	structure.image = {
-		title : 'Image',
+		title : lychee.locale['PHOTO_IMAGE'],
 		type  : sidebar.types.DEFAULT,
 		rows  : [
-			{ title: 'Size',       value: data.size },
-			{ title: 'Format',     value: data.type },
-			{ title: 'Resolution', value: data.width + ' x ' + data.height }
+			{ title: lychee.locale['PHOTO_SIZE'],       value: data.size },
+			{ title: lychee.locale['PHOTO_FORMAT'],     value: data.type },
+			{ title: lychee.locale['PHOTO_FORMAT'], value: data.width + ' x ' + data.height }
 		]
 	}
 
@@ -159,7 +159,7 @@ sidebar.createStructure.photo = function(data) {
 	if (lychee.publicMode===false) {
 
 		structure.tags = {
-			title : 'Tags',
+			title : lychee.locale['PHOTO_TAGS'],
 			type  : sidebar.types.TAGS,
 			value : build.tags(data.tags),
 			editable
@@ -175,16 +175,16 @@ sidebar.createStructure.photo = function(data) {
 	if (exifHash!=='0') {
 
 		structure.exif = {
-			title : 'Camera',
+			title : lychee.locale['PHOTO_CAMERA'],
 			type  : sidebar.types.DEFAULT,
 			rows  : [
-				{ title: 'Captured',      value: data.takedate },
-				{ title: 'Make',          value: data.make },
-				{ title: 'Type/Model',    value: data.model },
-				{ title: 'Shutter Speed', value: data.shutter },
-				{ title: 'Aperture',      value: data.aperture },
-				{ title: 'Focal Length',  value: data.focal },
-				{ title: 'ISO',           value: data.iso }
+				{ title: lychee.locale['PHOTO_CAPTURED'],      value: data.takedate },
+				{ title: lychee.locale['PHOTO_MAKE'],          value: data.make },
+				{ title: lychee.locale['PHOTO_TYPE'],    value: data.model },
+				{ title: lychee.locale['PHOTO_SHUTTER'], value: data.shutter },
+				{ title: lychee.locale['PHOTO_APERTURE'],      value: data.aperture },
+				{ title: lychee.locale['PHOTO_FOCAL'],  value: data.focal },
+				{ title: lychee.locale['PHOTO_ISO'],           value: data.iso }
 			]
 		}
 
@@ -195,10 +195,10 @@ sidebar.createStructure.photo = function(data) {
 	}
 
 	structure.sharing = {
-		title : 'Sharing',
+		title : lychee.locale['PHOTO_SHARING'],
 		type  : sidebar.types.DEFAULT,
 		rows  : [
-			{ title: 'Public', value: _public }
+			{ title: lychee.locale['PHOTO_SHR_PLUBLIC'], value: _public }
 		]
 	}
 
@@ -232,9 +232,9 @@ sidebar.createStructure.album = function(data) {
 	// Set value for public
 	switch (data.public) {
 
-		case '0' : _public = 'No'
+		case '0' : _public = lychee.locale['ALBUM_SHR_NO']
 		           break
-		case '1' : _public = 'Yes'
+		case '1' : _public = lychee.locale['ALBUM_SHR_YES']
 		           break
 		default  : _public = '-'
 		           break
@@ -244,9 +244,9 @@ sidebar.createStructure.album = function(data) {
 	// Set value for hidden
 	switch (data.visible) {
 
-		case '0' : hidden = 'Yes'
+		case '0' : hidden = lychee.locale['ALBUM_SHR_YES']
 		           break
-		case '1' : hidden = 'No'
+		case '1' : hidden = lychee.locale['ALBUM_SHR_NO']
 		           break
 		default  : hidden = '-'
 		           break
@@ -256,9 +256,9 @@ sidebar.createStructure.album = function(data) {
 	// Set value for downloadable
 	switch (data.downloadable) {
 
-		case '0' : downloadable = 'No'
+		case '0' : downloadable = lychee.locale['ALBUM_SHR_NO']
 		           break
-		case '1' : downloadable = 'Yes'
+		case '1' : downloadable = lychee.locale['ALBUM_SHR_YES']
 		           break
 		default  : downloadable = '-'
 		           break
@@ -268,9 +268,9 @@ sidebar.createStructure.album = function(data) {
 	// Set value for password
 	switch (data.password) {
 
-		case '0' : password = 'No'
+		case '0' : password = lychee.locale['ALBUM_SHR_NO']
 		           break
-		case '1' : password = 'Yes'
+		case '1' : password = lychee.locale['ALBUM_SHR_YES']
 		           break
 		default  : password = '-'
 		           break
@@ -278,31 +278,31 @@ sidebar.createStructure.album = function(data) {
 	}
 
 	structure.basics = {
-		title : 'Basics',
+		title : lychee.locale['ALBUM_BASICS'],
 		type  : sidebar.types.DEFAULT,
 		rows  : [
-			{ title: 'Title',       value: data.title,       editable },
-			{ title: 'Description', value: data.description, editable }
+			{ title: lychee.locale['ALBUM_TITLE'],       value: data.title,       editable },
+			{ title: lychee.locale['ALBUM_DESCRIPTION'], value: data.description, editable }
 		]
 	}
 
 	structure.album = {
-		title : 'Album',
+		title : lychee.locale['ALBUM_ALBUM'],
 		type  : sidebar.types.DEFAULT,
 		rows  : [
-			{ title: 'Created', value: data.sysdate },
-			{ title: 'Images',  value: data.num }
+			{ title: lychee.locale['ALBUM_CREATED'], value: data.sysdate },
+			{ title: lychee.locale['ALBUM_IMAGES'],  value: data.num }
 		]
 	}
 
 	structure.share = {
-		title : 'Share',
+		title : lychee.locale['ALBUM_SHARING'],
 		type  : sidebar.types.DEFAULT,
 		rows  : [
-			{ title: 'Public',       value: _public },
-			{ title: 'Hidden',       value: hidden },
-			{ title: 'Downloadable', value: downloadable },
-			{ title: 'Password',     value: password }
+			{ title: lychee.locale['ALBUM_PUBLIC'],       value: _public },
+			{ title: lychee.locale['ALBUM_HIDDEN'],       value: hidden },
+			{ title: lychee.locale['ALBUM_DOWNLOADABLE'], value: downloadable },
+			{ title: lychee.locale['ALBUM_PASSWORD'],     value: password }
 		]
 	}
 
