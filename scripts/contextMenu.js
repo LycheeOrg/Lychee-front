@@ -30,8 +30,8 @@ contextMenu.settings = function(e) {
 		{ title: build.iconic('dropbox', 'ionicons') + lychee.locale['SET_DROPBOX'], fn: settings.setDropboxKey },
 		{ },
 		{ title: build.iconic('info') + lychee.locale['ABOUT_LYCHEE'], fn: () => window.open(lychee.website) },
-		{ title: build.iconic('wrench') + lychee.locale['DIAGNOSTICS'], fn: () => window.open('plugins/Diagnostics/') },
-		{ title: build.iconic('align-left') + lychee.locale['LOGS'], fn: () => window.open('plugins/Log/') },
+		{ title: build.iconic('wrench') + lychee.locale['DIAGNOSTICS'], fn: () => window.open(lychee.diagnostics()) },
+		{ title: build.iconic('align-left') + lychee.locale['LOGS'], fn: () => window.open(lychee.logs()) },
 		{ },
 		{ title: build.iconic('account-logout') + lychee.locale['SIGN_OUT'], fn: lychee.logout }
 	]
