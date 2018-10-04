@@ -290,6 +290,26 @@ lychee = {
 
 }
 
+lychee.diagnostics = function() {
+	if(lychee.api_V2)
+	{
+		return '/Diagnostics'
+	}
+	else {
+		return 'plugins/Diagnostics/'
+	}
+}
+
+lychee.logs = function() {
+	if(lychee.api_V2)
+	{
+		return '/Logs'
+	}
+	else {
+		return 'plugins/Log/'
+	}
+}
+
 lychee.init = function() {
 
 	api.post('Session::init', {}, function(data) {
