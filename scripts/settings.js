@@ -408,7 +408,7 @@ settings.setDropboxKey = function(callback) {
 	let msg = lychee.html`
 	          <p>
 	              ` + lychee.locale['DROPBOX_TEXT'] + `
-	              <input class='text' name='key' type='text' placeholder='Dropbox API Key' value='$${ lychee.dropboxKey }'>
+	              <input class='text' name='key' type='text' placeholder='Dropbox API Key' value='${ lychee.dropboxKey }'>
 	          </p>
 	          `
 

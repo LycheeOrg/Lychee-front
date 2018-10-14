@@ -342,14 +342,14 @@ sidebar.render = function(structure) {
 			if (value==='' || value==null) value = '-'
 
 			// Wrap span-element around value for easier selecting on change
-			value = lychee.html`<span class='attr_$${ row.title.toLowerCase() }'>$${ value }</span>`
+			value = lychee.html`<span class='attr_${ row.title.toLowerCase() }'>${ value }</span>`
 
 			// Add edit-icon to the value when editable
 			if (row.editable===true) value += ' ' + build.editIcon('edit_' + row.title.toLowerCase())
 
 			_html += lychee.html`
 			         <tr>
-			             <td>$${ row.title }</td>
+			             <td>${ row.title }</td>
 			             <td>${ value }</td>
 			         </tr>
 			         `
@@ -374,10 +374,10 @@ sidebar.render = function(structure) {
 
 		_html += lychee.html`
 		         <div class='sidebar__divider'>
-		             <h1>$${ section.title }</h1>
+		             <h1>${ section.title }</h1>
 		         </div>
 		         <div id='tags'>
-		             <div class='attr_$${ section.title.toLowerCase() }'>${ section.value }</div>
+		             <div class='attr_${ section.title.toLowerCase() }'>${ section.value }</div>
 		             ${ editable }
 		         </div>
 		         `

@@ -497,7 +497,7 @@ photo.setDescription = function(photoID) {
 	}
 
 	basicModal.show({
-		body: lychee.html`<p>` + lychee.locale['PHOTO_NEW_DESCRIPTION'] + ` <input class='text' name='description' type='text' maxlength='800' placeholder='` + lychee.locale['PHOTO_DESCRIPTION']+ `' value='$${ oldDescription }'></p>`,
+		body: lychee.html`<p>` + lychee.locale['PHOTO_NEW_DESCRIPTION'] + ` <input class='text' name='description' type='text' maxlength='800' placeholder='` + lychee.locale['PHOTO_DESCRIPTION']+ `' value='${ oldDescription }'></p>`,
 		buttons: {
 			action: {
 				title: lychee.locale['PHOTO_SET_DESCRIPTION'],
@@ -543,7 +543,7 @@ photo.editTags = function(photoIDs) {
 
 	}
 
-	let input = lychee.html`<input class='text' name='tags' type='text' maxlength='800' placeholder='Tags' value='$${ oldTags }'>`
+	let input = lychee.html`<input class='text' name='tags' type='text' maxlength='800' placeholder='Tags' value='${ oldTags }'>`
 
 	if (photoIDs.length===1) msg = lychee.html`<p>` + lychee.locale['PHOTO_NEW_TAGS'] + ` ${ input }</p>`
 	else                     msg = lychee.html`<p>` + lychee.locale['PHOTO_NEW_TAGS_1'] + ` ${ photoIDs.length } ` + lychee.locale['PHOTO_NEW_TAGS_2'] + ` ${ input }</p>`

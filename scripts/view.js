@@ -423,7 +423,7 @@ view.photo = {
 			let nextPhotoID = album.json.content[photoID].nextPhoto
 			let nextPhoto   = album.json.content[nextPhotoID]
 
-			$nextArrow.css('background-image', lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("$${ nextPhoto.thumbUrl }")`)
+			$nextArrow.css('background-image', lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("${ nextPhoto.thumbUrl }")`)
 
 		}
 
@@ -436,7 +436,7 @@ view.photo = {
 			let previousPhotoID = album.json.content[photoID].previousPhoto
 			let previousPhoto   = album.json.content[previousPhotoID]
 
-			$previousArrow.css('background-image', lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("$${ previousPhoto.thumbUrl }")`)
+			$previousArrow.css('background-image', lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("${ previousPhoto.thumbUrl }")`)
 
 		}
 
