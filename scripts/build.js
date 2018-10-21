@@ -133,7 +133,8 @@ build.imageview = function(data, visibleControls) {
 
 	} else {
 
-		html += lychee.html`<img id='image' class='${ visibleControls===true ? '' : 'full' }' src='${ data.url }' srcset='${ data.medium } 1920w, ${ data.url } ${ data.width }w' draggable='false'>`
+		// html += lychee.html`<img id='image' class='${ visibleControls===true ? '' : 'full' }' src='${ data.url }' srcset='${ data.medium } 1920w, ${ data.url } ${ data.width }w' draggable='false'>`
+        html += lychee.html`<img id='image' class='${ visibleControls===true ? '' : 'full' }' src='${ data.medium }' draggable='false'>`
 
 	}
 
