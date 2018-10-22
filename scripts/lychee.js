@@ -232,7 +232,7 @@ lychee = {
 		'SORT_ALBUM_SELECT_3'		: 'Description',
 		'SORT_ALBUM_SELECT_4'		: 'Public',
 		'SORT_ALBUM_SELECT_5'		: 'Latest Take Date',
-		'SORT_ALBUM_SELECT_5'		: 'Oldest Take Date',
+		'SORT_ALBUM_SELECT_6'		: 'Oldest Take Date',
 
 
 		'SORT_PHOTO_BY_1'			: 'Sort photos by',
