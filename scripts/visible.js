@@ -49,3 +49,8 @@ visible.multiselect = function() {
 	if ($('#multiselect').length>0) return true
 	return false
 }
+
+visible.leftMenu = function () {
+	if (leftMenu.dom().hasClass('leftMenu__visible')) return true;
+	return false;
+}

@@ -1,0 +1,89 @@
+.setLogin {
+  font-size: 14px;
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+  padding: 5%;
+
+  p {
+    margin: 0 0 5%;
+    width: 100%;
+    color: #444
+  }
+
+  p:last-of-type {
+    margin: 0;
+  }
+
+  input.text {
+    padding: 9px 2px;
+    width: 100%;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    border-bottom: 1px solid #222;
+    border-radius: 0;
+    box-shadow: 0 1px 0 rgba(255,255,255,.05);
+    outline: 0
+  }
+
+  input.text:focus {
+    border-bottom-color: #2293EC
+  }
+
+  input.text.error {
+    border-bottom-color: #d92c34
+  }
+
+  input.text:first-child {
+    margin-top: 10px
+  }
+
+  input.text:last-child {
+    margin-bottom: 10px
+  }
+
+  .choice {
+    padding: 0 30px 15px;
+    width: 100%;
+    color: #fff
+  }
+
+  .choice:last-child {
+    padding-bottom: 40px
+  }
+
+  .choice label {
+    float: left;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700
+  }
+
+  .choice label input {
+    position: absolute;
+    margin: 0;
+    opacity: 0
+  }
+
+  .choice label .checkbox {
+    float: left;
+    display: block;
+    width: 16px;
+    height: 16px;
+    background: rgba(0,0,0,.5);
+    border-radius: 3px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.7)
+  }
+
+  .choice label .checkbox .iconic {
+    box-sizing: border-box;
+    fill: #2293EC;
+    padding: 2px;
+    opacity: 0;
+    -ms-transform: scale(0);
+    transform: scale(0);
+    transition: opacity .2s cubic-bezier(.51,.92,.24,1),transform .2s cubic-bezier(.51,.92,.24,1)
+  }
+
+}

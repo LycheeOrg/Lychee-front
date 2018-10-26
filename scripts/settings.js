@@ -2,7 +2,18 @@
  * @description Lets you change settings.
  */
 
-settings = {}
+settings = {};
+
+settings.open = function(e) {
+	if(lychee.api_V2)
+	{
+		view.settings.init()
+	}
+	else
+	{
+        contextMenu.settings(e)
+	}
+};
 
 settings.createConfig = function() {
 
@@ -199,6 +210,50 @@ settings.createLogin = function() {
 
 }
 
+
+// from https://github.com/electerious/basicModal/blob/master/src/scripts/main.js
+settings.getValues = function(form_name) {
+
+    let values  = {};
+    let inputs  = $(form_name + ' input[name]');
+    let selects = $(form_name + ' select[name]');
+
+    // Get value from all inputs
+    $(inputs).each(function() {
+
+        let name  = $(this).attr('name');
+        // Store name and value of input
+        values[name] = $(this).val()
+
+    });
+
+    $(selects).each(function () {
+            let name  = $(this).attr('name');
+            // Store name and value of select
+            values[name] = $(this).options[$(this).selectedIndex].value
+
+    });
+
+    // console.log(values);
+    return (Object.keys(values).length===0 ? null : values)
+
+};
+
+// from https://github.com/electerious/basicModal/blob/master/src/scripts/main.js
+settings.bind = function(item, name, fn) {
+
+    // Action-button
+	$(item).on('click', function () {
+
+		// Don't execute function when button has been clicked already
+		if (this.classList.contains('basicModal__button--active') === true) return false;
+
+		this.classList.add('basicModal__button--active');
+		fn(settings.getValues(name))
+
+	})
+};
+
 settings.setLogin = function() {
 
 	const action = function(data) {
@@ -263,6 +318,44 @@ settings.setLogin = function() {
 			}
 		}
 	})
+
+}
+
+settings.changeLogin = function(data) {
+		console.log(data);
+	    let oldUsername = data.oldUsername || '';
+        let oldPassword = data.oldPassword || '';
+        let username    = data.username    || '';
+        let password    = data.password    || '';
+
+
+        if (oldPassword.length<1) {
+            basicModal.error('oldPassword')
+            return false
+        }
+
+        if (username.length<1) {
+            basicModal.error('username')
+            return false
+        }
+
+        if (password.length<1) {
+            basicModal.error('password')
+            return false
+        }
+
+        let params = {
+        	oldUsername,
+            oldPassword,
+            username,
+            password
+        };
+
+        api.post('Settings::setLogin', params, function(data) {
+
+            if (data!==true) lychee.error(null, params, data)
+
+        })
 
 }
 

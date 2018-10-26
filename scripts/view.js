@@ -453,3 +453,53 @@ view.photo = {
 	}
 
 }
+
+view.settings = {
+
+    init: function() {
+
+        // photo.parse()
+
+        view.settings.title()
+        view.settings.content.init()
+
+    },
+
+    title: function() {
+
+        lychee.setTitle('Settings', false)
+    },
+
+    content: {
+
+    	init: function() {
+            $('.content').unbind('mousedown');
+            view.settings.content.setLogin()
+    	},
+
+    	setLogin: function () {
+            let msg = `
+			<div class="setLogin">
+	          <p>
+	              ` + lychee.locale['PASSWORD_TITLE'] + `
+	              <input name='oldUsername' class='text' type='text' placeholder='` + lychee.locale['USERNAME_CURRENT'] + `' value=''>
+	              <input name='oldPassword' class='text' type='password' placeholder='` + lychee.locale['PASSWORD_CURRENT'] + `' value=''>
+	          </p>
+	          <p>
+	              ` + lychee.locale['PASSWORD_TEXT'] + `
+	              <input name='username' class='text' type='text' placeholder='` + lychee.locale['LOGIN_USERNAME'] + `' value=''>
+	              <input name='password' class='text' type='password' placeholder='` + lychee.locale['LOGIN_PASSWORD'] + `' value=''>
+	          </p>
+	        <div class="basicModal__buttons">
+			    <!--<a id="basicModal__cancel" class="basicModal__button ">Cancel</a>-->
+			    <a id="basicModal__action_password_change" class="basicModal__button ">` + lychee.locale['PASSWORD_CHANGE'] + `</a>
+			</div>
+			</div>`
+
+            $(".content").html(msg)
+
+			settings.bind('#basicModal__action_password_change','.setLogin',settings.changeLogin);
+
+        }
+    }
+}

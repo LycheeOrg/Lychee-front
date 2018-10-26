@@ -69,6 +69,7 @@ $(document).ready(function() {
 
 	Mousetrap.bindGlobal([ 'esc', 'command+up' ], function() {
 		if (basicModal.visible()===true)                                             basicModal.cancel()
+		else if (visible.leftMenu())												 leftMenu.close()
 		else if (visible.contextMenu())                                              contextMenu.close()
 		else if (visible.photo())                                                    lychee.goto(album.getID())
 		else if (visible.album())                                                    lychee.goto()
