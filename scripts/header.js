@@ -40,7 +40,7 @@ header.bind = function() {
 	})
 
 	header.dom('#button_signin')      .on(eventName, lychee.loginDialog)
-	header.dom('#button_settings')    .on(eventName, contextMenu.settings)
+	header.dom('#button_settings')    .on(eventName, leftMenu.open)
 	header.dom('#button_info_album')  .on(eventName, sidebar.toggle)
 	header.dom('#button_info')        .on(eventName, sidebar.toggle)
 	header.dom('.button_add')         .on(eventName, contextMenu.add)

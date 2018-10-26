@@ -28,12 +28,12 @@ contextMenu.settings = function(e) {
 		{ title: build.iconic('person') + lychee.locale['CHANGE_LOGIN'], fn: settings.setLogin },
 		{ title: build.iconic('sort-ascending') + lychee.locale['CHANGE_SORTING'], fn: settings.setSorting },
 		{ title: build.iconic('dropbox', 'ionicons') + lychee.locale['SET_DROPBOX'], fn: settings.setDropboxKey },
-		{ },
-		{ title: build.iconic('info') + lychee.locale['ABOUT_LYCHEE'], fn: () => window.open(lychee.website) },
-		{ title: build.iconic('wrench') + lychee.locale['DIAGNOSTICS'], fn: () => window.open(lychee.diagnostics()) },
-		{ title: build.iconic('align-left') + lychee.locale['LOGS'], fn: () => window.open(lychee.logs()) },
-		{ },
-		{ title: build.iconic('account-logout') + lychee.locale['SIGN_OUT'], fn: lychee.logout }
+		// { },
+		// { title: build.iconic('info') + lychee.locale['ABOUT_LYCHEE'], fn: () => window.open(lychee.website) },
+		// { title: build.iconic('wrench') + lychee.locale['DIAGNOSTICS'], fn: () => window.open(lychee.diagnostics()) },
+		// { title: build.iconic('align-left') + lychee.locale['LOGS'], fn: () => window.open(lychee.logs()) },
+		// { },
+		// { title: build.iconic('account-logout') + lychee.locale['SIGN_OUT'], fn: lychee.logout }
 	]
 
 	basicContext.show(items, e.originalEvent)

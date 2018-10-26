@@ -13,6 +13,10 @@ $(document).ready(function() {
 	// Multiselect
 	multiselect.bind()
 
+	// leftMenu
+	leftMenu.build()
+	leftMenu.bind()
+
 	// Header
 	header.bind()
 
