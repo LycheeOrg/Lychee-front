@@ -32,18 +32,44 @@ loadingBar.show = function(status, errorText) {
 
 		// Modify loading
 		loadingBar.dom()
-			.removeClass('loading uploading error')
+			.removeClass('loading uploading error success')
 			.html(`<h1>` + lychee.locale['ERROR'] + `: <span>${ errorText }</span></h1>`)
 			.addClass(status)
 			.show()
 
 		// Set timeout
 		clearTimeout(loadingBar._timeout)
-		loadingBar._timeout = setTimeout(() => loadingBar.hide(true), 3000)
+		loadingBar._timeout = setTimeout(() => loadingBar.hide(true), 5000)
 
 		return true
 
 	}
+
+	if (status==='success') {
+        // Set status
+        loadingBar.status = 'success'
+
+        // Parse text
+        if (errorText)  errorText = errorText.replace('<br>', '')
+        if (!errorText) errorText = lychee.locale['ERROR_TEXT']
+
+        // Move header down
+        if (visible.header()) header.dom().addClass('header--error')
+
+        // Modify loading
+        loadingBar.dom()
+            .removeClass('loading uploading error success')
+            .html(`<h1>` + lychee.locale['SUCCESS'] + `: <span>${ errorText }</span></h1>`)
+            .addClass(status)
+            .show()
+
+        // Set timeout
+        clearTimeout(loadingBar._timeout)
+        loadingBar._timeout = setTimeout(() => loadingBar.hide(true), 5000)
+
+        return true
+
+    }
 
 	if (loadingBar.status===null) {
 
@@ -74,7 +100,7 @@ loadingBar.show = function(status, errorText) {
 
 loadingBar.hide = function(force) {
 
-	if ((loadingBar.status!=='error' && loadingBar.status!=null) || force) {
+	if ((loadingBar.status!=='error' && loadingBar.status!=='success' && loadingBar.status!=null) || force) {
 
 		// Remove status
 		loadingBar.status = null

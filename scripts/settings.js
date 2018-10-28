@@ -236,84 +236,11 @@ settings.bind = function(item, name, fn) {
 
     // Action-button
 	$(item).on('click', function () {
-
-		// Don't execute function when button has been clicked already
-		if (this.classList.contains('basicModal__button--active') === true) return false;
-
-		this.classList.add('basicModal__button--active');
 		fn(settings.getValues(name))
-
 	})
 };
 
-// settings.setLogin = function() {
-//
-// 	const action = function(data) {
-//
-// 		let oldPassword = data.oldPassword || ''
-// 		let username    = data.username    || ''
-// 		let password    = data.password    || ''
-//
-// 		if (oldPassword.length<1) {
-// 			basicModal.error('oldPassword')
-// 			return false
-// 		}
-//
-// 		if (username.length<1) {
-// 			basicModal.error('username')
-// 			return false
-// 		}
-//
-// 		if (password.length<1) {
-// 			basicModal.error('password')
-// 			return false
-// 		}
-//
-// 		basicModal.close()
-//
-// 		let params = {
-// 			oldPassword,
-// 			username,
-// 			password
-// 		}
-//
-// 		api.post('Settings::setLogin', params, function(data) {
-//
-// 			if (data!==true) lychee.error(null, params, data)
-//
-// 		})
-//
-// 	}
-//
-// 	let msg = `
-// 	          <p>
-// 	              ` + lychee.locale['PASSWORD_TITLE'] + `
-// 	              <input name='oldPassword' class='text' type='password' placeholder='` + lychee.locale['PASSWORD_CURRENT'] + `' value=''>
-// 	          </p>
-// 	          <p>
-// 	              ` + lychee.locale['PASSWORD_TEXT'] + `
-// 	              <input name='username' class='text' type='text' placeholder='` + lychee.locale['LOGIN_USERNAME'] + `' value=''>
-// 	              <input name='password' class='text' type='password' placeholder='` + lychee.locale['LOGIN_PASSWORD'] + `' value=''>
-// 	          </p>
-// 	          `
-//
-// 	basicModal.show({
-// 		body: msg,
-// 		buttons: {
-// 			action: {
-// 				title: lychee.locale['PASSWORD_CHANGE'],
-// 				fn: action
-// 			},
-// 			cancel: {
-// 				title: lychee.locale['CANCEL'],
-// 				fn: basicModal.close
-// 			}
-// 		}
-// 	})
-//
-// }
-
-settings.changeLogin = function(data) {
+settings.changeLogin = function(params) {
 	    // console.log(data);
 	    // let oldUsername = data.oldUsername || '';
         // let oldPassword = data.oldPassword || '';
@@ -344,15 +271,16 @@ settings.changeLogin = function(data) {
         // };
 	    // console.log(params);
 
-        api.post('Settings::setLogin', data, function(data) {
+        api.post('Settings::setLogin', params, function(data) {
 
             if (data!==true)
 			{
-				loadingBar.show('error', 'COULD NOT UPDATE LOGIN INFO');
+				loadingBar.show('error', data.description);
 				lychee.error(null, params, data)
 			}
 			else {
-				loadingBar.show('error', 'LOGIN UPDATED -- LOGIN UPDATED -- LOGIN UPDATED -- LOGIN UPDATED -- LOGIN UPDATED');
+				loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_LOGIN']);
+				view.settings.content.clearLogin();
 			}
         })
 
@@ -481,6 +409,7 @@ settings.changeSorting = function(params) {
             lychee.sortingAlbums = 'ORDER BY ' + params['typeAlbums'] + ' ' + params['orderAlbums'];
             lychee.sortingPhotos = 'ORDER BY ' + params['typePhotos'] + ' ' + params['orderPhotos'];
             albums.refresh()
+            loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_SORT']);
         } else lychee.error(null, params, data)
 
     })
@@ -547,6 +476,7 @@ settings.changeDropboxKey = function(params) {
         if (data===true) {
             lychee.dropboxKey = params.key
             // if (callback) lychee.loadDropbox(callback)
+            loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_DROPBOX']);
         } else lychee.error(null, params, data)
 
     })

@@ -198,7 +198,12 @@ lychee = {
 		'ERROR_CONFIG_FILE'			: "Unable to save this configuration. Permission denied in <b>'data/'</b>. Please set the read, write and execute rights for others in <b>'data/'</b> and <b>'uploads/'</b>. Take a look at the readme for more information.",
 		'ERROR_UNKNOWN'				: 'Something unexpected happened. Please try again and check your installation and server. Take a look at the readme for more information.',
 		'ERROR_LOGIN'				: 'Unable to save login. Please try again with another username and password!',
+        'SUCCESS'					: 'OK',
 		'RETRY'						: 'Retry',
+
+		'SETTINGS_SUCCESS_LOGIN'	: 'Login Info updated.',
+        'SETTINGS_SUCCESS_SORT'		: 'Sorting order updated.',
+        'SETTINGS_SUCCESS_DROPBOX'	: 'Dropbox Key updated.',
 
 		'DB_INFO_TITLE'				: 'Enter your database connection details below:',
 		'DB_INFO_HOST'				: 'Database Host (optional)',

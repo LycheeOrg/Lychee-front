@@ -31,6 +31,7 @@ leftMenu.open = function () {
     leftMenu._dom.addClass('leftMenu__visible');
     $('.content').addClass('leftMenu__open');
     header.dom('.header__title').addClass('leftMenu__open');
+    loadingBar.dom().addClass('leftMenu__open');
 };
 
 /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
@@ -38,6 +39,8 @@ leftMenu.close = function () {
     leftMenu._dom.removeClass('leftMenu__visible');
     $('.content').removeClass('leftMenu__open');
     header.dom('.header__title').removeClass('leftMenu__open');
+    loadingBar.dom().removeClass('leftMenu__open');
+
     multiselect.bind();
     albums.load();
 };
