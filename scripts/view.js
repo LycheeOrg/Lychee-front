@@ -458,9 +458,7 @@ view.settings = {
 
     init: function() {
 
-        // photo.parse()
-
-        view.settings.title()
+        view.settings.title();
         view.settings.content.init()
 
     },
@@ -474,8 +472,15 @@ view.settings = {
 
     	init: function() {
             $('.content').unbind('mousedown');
-            view.settings.content.setLogin()
+            view.settings.content.clearContent();
+            view.settings.content.setLogin();
+            view.settings.content.setSorting();
+            view.settings.content.setDropboxKey();
     	},
+
+		clearContent: function() {
+    		$(".content").html('<div class="settings_view"></div>');
+		},
 
     	setLogin: function () {
             let msg = `
@@ -494,12 +499,107 @@ view.settings = {
 			    <!--<a id="basicModal__cancel" class="basicModal__button ">Cancel</a>-->
 			    <a id="basicModal__action_password_change" class="basicModal__button ">` + lychee.locale['PASSWORD_CHANGE'] + `</a>
 			</div>
-			</div>`
+			</div>`;
 
-            $(".content").html(msg)
+            $(".settings_view").append(msg);
 
 			settings.bind('#basicModal__action_password_change','.setLogin',settings.changeLogin);
 
+        },
+
+		setSorting: function() {
+
+            let sortingPhotos = [];
+            let sortingAlbums = [];
+
+            let msg = `
+			<div class="setSorting">
+	          <p>` + lychee.locale['SORT_ALBUM_BY_1'] + `
+	              <span class="select">
+	                  <select id="settings_albums_type" name="typeAlbums">
+	                      <option value='id'>` + lychee.locale['SORT_ALBUM_SELECT_1'] + `</option>
+	                      <option value='title'>` + lychee.locale['SORT_ALBUM_SELECT_2'] + `</option>
+	                      <option value='description'>` + lychee.locale['SORT_ALBUM_SELECT_3'] + `</option>
+	                      <option value='public'>` + lychee.locale['SORT_ALBUM_SELECT_4'] + `</option>
+	                      <option value='max_takestamp'>` + lychee.locale['SORT_ALBUM_SELECT_5'] + `</option>
+	                      <option value='min_takestamp'>` + lychee.locale['SORT_ALBUM_SELECT_6'] + `</option>
+	                  </select>
+	              </span>
+	              ` + lychee.locale['SORT_ALBUM_BY_2'] + `
+	              <span class="select">
+	                  <select id="settings_albums_order" name="orderAlbums">
+	                      <option value='ASC'>` + lychee.locale['SORT_ASCENDING'] + `</option>
+	                      <option value='DESC'>` + lychee.locale['SORT_DESCENDING'] + `</option>
+	                  </select>
+	              </span>
+	              ` + lychee.locale['SORT_ALBUM_BY_3'] + `
+	          </p>
+	          <p>` + lychee.locale['SORT_PHOTO_BY_1'] + `
+	              <span class="select">
+	                  <select id="settings_photos_type" name="typePhotos">
+	                      <option value='id'>` + lychee.locale['SORT_PHOTO_SELECT_1'] + `</option>
+	                      <option value='takestamp'>` + lychee.locale['SORT_PHOTO_SELECT_2'] + `</option>
+	                      <option value='title'>` + lychee.locale['SORT_PHOTO_SELECT_3'] + `</option>
+	                      <option value='description'>` + lychee.locale['SORT_PHOTO_SELECT_4'] + `</option>
+	                      <option value='public'>` + lychee.locale['SORT_PHOTO_SELECT_5'] + `</option>
+	                      <option value='star'>` + lychee.locale['SORT_PHOTO_SELECT_6'] + `</option>
+	                      <option value='type'>` + lychee.locale['SORT_PHOTO_SELECT_7'] + `</option>
+	                  </select>
+	              </span>
+	              ` + lychee.locale['SORT_PHOTO_BY_2'] + `
+	              <span class="select">
+	                  <select id="settings_photos_order" name="orderPhotos">
+	                      <option value='ASC'>` + lychee.locale['SORT_ASCENDING'] + `</option>
+	                      <option value='DESC'>` + lychee.locale['SORT_DESCENDING'] + `</option>
+	                  </select>
+	              </span>
+	              ` + lychee.locale['SORT_PHOTO_BY_3'] + `
+	          </p>
+				<div class="basicModal__buttons">
+					<!--<a id="basicModal__cancel" class="basicModal__button ">Cancel</a>-->
+					<a id="basicModal__action_sorting_change" class="basicModal__button ">` + lychee.locale['SORT_CHANGE'] + `</a>
+				</div>
+	          </div>
+	          `;
+
+            $(".settings_view").append(msg);
+
+            if (lychee.sortingAlbums!=='') {
+
+                sortingAlbums = lychee.sortingAlbums.replace('ORDER BY ', '').split(' ');
+
+                $('.setSorting select#settings_albums_type').val(sortingAlbums[0]);
+                $('.setSorting select#settings_albums_order').val(sortingAlbums[1])
+
+            }
+
+            if (lychee.sortingPhotos!=='') {
+
+                sortingPhotos = lychee.sortingPhotos.replace('ORDER BY ', '').split(' ');
+
+                $('.setSorting select#settings_photos_type').val(sortingPhotos[0]);
+                $('.setSorting select#settings_photos_order').val(sortingPhotos[1])
+
+            }
+
+            settings.bind('#basicModal__action_sorting_change','.setSorting',settings.changeSorting);
+        },
+
+        setDropboxKey: function () {
+            let msg = `
+			<div class="setDropBox">
+	          <p>${ lychee.locale['DROPBOX_TEXT'] }
+	          <input class='text' name='key' type='text' placeholder='Dropbox API Key' value='${ lychee.dropboxKey }'>
+	          </p>
+				<div class="basicModal__buttons">
+					<a id="basicModal__action_dropbox_change" class="basicModal__button ">${ lychee.locale['DROPBOX_TITLE'] }</a>
+				</div>
+	          </div>
+	          `;
+
+            $(".settings_view").append(msg);
+            settings.bind('#basicModal__action_dropbox_change','.setDropBox',settings.changeDropboxKey);
         }
-    }
-}
+    },
+
+};

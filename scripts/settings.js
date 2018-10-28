@@ -215,11 +215,9 @@ settings.createLogin = function() {
 settings.getValues = function(form_name) {
 
     let values  = {};
-    let inputs  = $(form_name + ' input[name]');
-    let selects = $(form_name + ' select[name]');
-
+    let inputs_select  = $(form_name + ' input[name], '+ form_name + ' select[name]');
     // Get value from all inputs
-    $(inputs).each(function() {
+    $(inputs_select).each(function() {
 
         let name  = $(this).attr('name');
         // Store name and value of input
@@ -227,12 +225,23 @@ settings.getValues = function(form_name) {
 
     });
 
-    $(selects).each(function () {
-            let name  = $(this).attr('name');
-            // Store name and value of select
-            values[name] = $(this).options[$(this).selectedIndex].value
 
-    });
+    // let inputs  = $(form_name + ' input[name],');
+    // let selects = $(form_name + ' select[name]');
+	//
+    // // Get value from all inputs
+    // $(inputs).each(function() {
+	//
+    //     let name  = $(this).attr('name');
+    //     // Store name and value of input
+    //     values[name] = $(this).val()
+	//
+    // });
+	//
+    // $(selects).each(function () {
+    //         let name  = $(this).attr('name');
+    //         values[name] = $(this).val();
+    // });
 
     // console.log(values);
     return (Object.keys(values).length===0 ? null : values)
@@ -322,42 +331,43 @@ settings.setLogin = function() {
 }
 
 settings.changeLogin = function(data) {
-		console.log(data);
-	    let oldUsername = data.oldUsername || '';
-        let oldPassword = data.oldPassword || '';
-        let username    = data.username    || '';
-        let password    = data.password    || '';
+	    // console.log(data);
+	    // let oldUsername = data.oldUsername || '';
+        // let oldPassword = data.oldPassword || '';
+        // let username    = data.username    || '';
+        // let password    = data.password    || '';
+		//
+		//
+        // if (oldPassword.length<1) {
+        //     basicModal.error('oldPassword')
+        //     return false
+        // }
+		//
+        // if (username.length<1) {
+        //     basicModal.error('username')
+        //     return false
+        // }
+		//
+        // if (password.length<1) {
+        //     basicModal.error('password')
+        //     return false
+        // }
+		//
+        // let params = {
+        // 	oldUsername,
+        //     oldPassword,
+        //     username,
+        //     password
+        // };
+	    // console.log(params);
 
-
-        if (oldPassword.length<1) {
-            basicModal.error('oldPassword')
-            return false
-        }
-
-        if (username.length<1) {
-            basicModal.error('username')
-            return false
-        }
-
-        if (password.length<1) {
-            basicModal.error('password')
-            return false
-        }
-
-        let params = {
-        	oldUsername,
-            oldPassword,
-            username,
-            password
-        };
-
-        api.post('Settings::setLogin', params, function(data) {
+        api.post('Settings::setLogin', data, function(data) {
 
             if (data!==true) lychee.error(null, params, data)
 
         })
 
-}
+};
 
 settings.setSorting = function() {
 
@@ -474,6 +484,42 @@ settings.setSorting = function() {
 
 }
 
+settings.changeSorting = function(data) {
+
+    // console.log(data);
+    // let sortingPhotos = [];
+    // let sortingAlbums = [];
+	//
+    // sortingAlbums[0] = $('.setSorting select#settings_albums_type').val();
+    // sortingAlbums[1] = $('.setSorting select#settings_albums_order').val();
+	//
+    // sortingPhotos[0] = $('.setSorting select#settings_photos_type').val();
+    // sortingPhotos[1] = $('.setSorting select#settings_photos_order').val();
+	//
+    // // basicModal.close();
+    // // albums.refresh();
+	//
+    // let params = {
+    //     typeAlbums  : sortingAlbums[0],
+    //     orderAlbums : sortingAlbums[1],
+    //     typePhotos  : sortingPhotos[0],
+    //     orderPhotos : sortingPhotos[1]
+    // };
+	//
+    // console.log(params);
+    api.post('Settings::setSorting', data, function(data) {
+
+        if (data===true) {
+            lychee.sortingAlbums = 'ORDER BY ' + data['typeAlbums'] + ' ' + data['orderAlbums'];
+            lychee.sortingPhotos = 'ORDER BY ' + data['typePhotos'] + ' ' + data['orderPhotos'];
+            // lychee.load()
+            albums.refresh()
+        } else lychee.error(null, params, data)
+
+    })
+
+};
+
 settings.setDropboxKey = function(callback) {
 
 	const action = function(data) {
@@ -519,4 +565,25 @@ settings.setDropboxKey = function(callback) {
 		}
 	})
 
-}
+};
+
+settings.changeDropboxKey = function(params) {
+    let key = params.key;
+
+    if (params.key.length<1) {
+        // basicModal.error('key')
+        return false
+    }
+
+    // basicModal.close()
+
+    api.post('Settings::setDropboxKey', params, function(data) {
+
+        if (data===true) {
+            lychee.dropboxKey = key
+            // if (callback) lychee.loadDropbox(callback)
+        } else lychee.error(null, params, data)
+
+    })
+
+};
