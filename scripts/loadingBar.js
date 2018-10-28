@@ -39,7 +39,7 @@ loadingBar.show = function(status, errorText) {
 
 		// Set timeout
 		clearTimeout(loadingBar._timeout)
-		loadingBar._timeout = setTimeout(() => loadingBar.hide(true), 5000)
+		loadingBar._timeout = setTimeout(() => loadingBar.hide(true), 3000)
 
 		return true
 
@@ -65,7 +65,7 @@ loadingBar.show = function(status, errorText) {
 
         // Set timeout
         clearTimeout(loadingBar._timeout)
-        loadingBar._timeout = setTimeout(() => loadingBar.hide(true), 5000)
+        loadingBar._timeout = setTimeout(() => loadingBar.hide(true), 3000)
 
         return true
 
