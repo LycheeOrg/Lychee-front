@@ -507,6 +507,10 @@ view.settings = {
 
         },
 
+		clearLogin: function () {
+    		$('input[name=oldUsername], input[name=oldPassword], input[name=username], input[name=password]').val('')
+		},
+
 		setSorting: function() {
 
             let sortingPhotos = [];
