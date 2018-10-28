@@ -6,11 +6,11 @@ search = {
 
 	hash: null
 
-}
+};
 
 search.find = function(term) {
 
-	clearTimeout($(window).data('timeout'))
+	clearTimeout($(window).data('timeout'));
 
 	$(window).data('timeout', setTimeout(function() {
 
@@ -18,22 +18,22 @@ search.find = function(term) {
 
 			api.post('search', { term }, function(data) {
 
-				let html       = ''
-				let albumsData = ''
-				let photosData = ''
+				let html       = '';
+				let albumsData = '';
+				let photosData = '';
 
 				// Build albums
 				if (data && data.albums) {
-					albums.json = { albums: data.albums }
+					albums.json = { albums: data.albums };
 					$.each(albums.json.albums, function() {
-						albums.parse(this)
+						albums.parse(this);
 						albumsData += build.album(this)
 					})
 				}
 
 				// Build photos
 				if (data && data.photos) {
-					album.json = { content: data.photos }
+					album.json = { content: data.photos };
 					$.each(album.json.content, function() {
 						photosData += build.photo(this)
 					})
@@ -43,27 +43,27 @@ search.find = function(term) {
 				// 2. Only photos
 				// 3. Only albums
 				// 4. Albums and photos
-				if (albumsData==='' && photosData==='') html = 'error'
-				else if (albumsData==='')               html = build.divider('Photos') + photosData
-				else if (photosData==='')               html = build.divider('Albums') + albumsData
-				else                                    html = build.divider('Albums') + albumsData + build.divider('Photos') + photosData
+				if (albumsData==='' && photosData==='') html = 'error';
+				else if (albumsData==='')               html = build.divider('Photos') + photosData;
+				else if (photosData==='')               html = build.divider('Albums') + albumsData;
+				else                                    html = build.divider('Albums') + albumsData + build.divider('Photos') + photosData;
 
 				// Only refresh view when search results are different
 				if (search.hash!==data.hash) {
 
-					$('.no_content').remove()
+					$('.no_content').remove();
 
-					lychee.animate('.content', 'contentZoomOut')
+					lychee.animate('.content', 'contentZoomOut');
 
-					search.hash = data.hash
+					search.hash = data.hash;
 
 					setTimeout(() => {
 
 						if (html==='error') {
-							lychee.content.html('')
+							lychee.content.html('');
 							$('body').append(build.no_content('magnifying-glass'))
 						} else {
-							lychee.content.html(html)
+							lychee.content.html(html);
 							lychee.animate(lychee.content, 'contentZoomIn')
 						}
 
@@ -77,24 +77,24 @@ search.find = function(term) {
 
 	}, 250))
 
-}
+};
 
 search.reset = function() {
 
-	header.dom('.header__search').val('')
-	$('.no_content').remove()
+	header.dom('.header__search').val('');
+	$('.no_content').remove();
 
 	if (search.hash!=null) {
 
 		// Trash data
-		albums.json = null
-		album.json  = null
-		photo.json  = null
-		search.hash = null
+		albums.json = null;
+		album.json  = null;
+		photo.json  = null;
+		search.hash = null;
 
-		lychee.animate('.divider', 'fadeOut')
+		lychee.animate('.divider', 'fadeOut');
 		lychee.goto()
 
 	}
 
-}
+};

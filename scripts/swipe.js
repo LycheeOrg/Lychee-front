@@ -8,22 +8,22 @@ swipe = {
 	tolerance : 150,
 	offset    : 0
 
-}
+};
 
 swipe.start = function(obj, tolerance) {
 
-	if (obj)       swipe.obj       = obj
-	if (tolerance) swipe.tolerance = tolerance
+	if (obj)       swipe.obj       = obj;
+	if (tolerance) swipe.tolerance = tolerance;
 
 	return true
 
-}
+};
 
 swipe.move = function(e) {
 
-	if (swipe.obj===null) return false
+	if (swipe.obj===null) return false;
 
-	swipe.offset = -1 * e.x
+	swipe.offset = -1 * e.x;
 
 	swipe.obj.css({
 		WebkitTransform : 'translateX(' + swipe.offset + 'px)',
@@ -31,12 +31,12 @@ swipe.move = function(e) {
 		transform       : 'translateX(' + swipe.offset + 'px)'
 	})
 
-}
+};
 
 swipe.stop = function(e, left, right) {
 
 	// Only execute once
-	if (swipe.obj==null) return false
+	if (swipe.obj==null) return false;
 
 	if (e.x<=-swipe.tolerance) {
 
@@ -56,7 +56,7 @@ swipe.stop = function(e, left, right) {
 
 	}
 
-	swipe.obj    = null
+	swipe.obj    = null;
 	swipe.offset = 0
 
-}
+};

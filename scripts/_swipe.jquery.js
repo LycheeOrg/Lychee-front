@@ -1,36 +1,36 @@
 (function($) {
 	var Swipe = function(el) {
-		var self = this
+		var self = this;
 
-		this.el = $(el)
-		this.pos = { start: { x: 0, y: 0 }, end: { x: 0, y: 0 } }
-		this.startTime
+		this.el = $(el);
+		this.pos = { start: { x: 0, y: 0 }, end: { x: 0, y: 0 } };
+		this.startTime = null;
 
-		el.on('touchstart', function(e) { self.touchStart(e) })
-		el.on('touchmove',  function(e) { self.touchMove(e) })
-		el.on('touchend',   function(e) { self.swipeEnd() })
+		el.on('touchstart', function(e) { self.touchStart(e) });
+		el.on('touchmove',  function(e) { self.touchMove(e) });
+		el.on('touchend',   function() { self.swipeEnd() });
 		el.on('mousedown',  function(e) { self.mouseDown(e) })
-	}
+	};
 
 	Swipe.prototype = {
 		touchStart: function(e) {
-			var touch = e.originalEvent.touches[0]
+			var touch = e.originalEvent.touches[0];
 
 			this.swipeStart(e, touch.pageX, touch.pageY)
 		},
 
 		touchMove: function(e) {
-			var touch = e.originalEvent.touches[0]
+			var touch = e.originalEvent.touches[0];
 
 			this.swipeMove(e, touch.pageX, touch.pageY)
 		},
 
 		mouseDown: function(e) {
-			var self = this
+			var self = this;
 
-			this.swipeStart(e, e.pageX, e.pageY)
+			this.swipeStart(e, e.pageX, e.pageY);
 
-			this.el.on('mousemove', function(e) { self.mouseMove(e) })
+			this.el.on('mousemove', function(e) { self.mouseMove(e) });
 			this.el.on('mouseup', function() { self.mouseUp() })
 		},
 
@@ -39,26 +39,26 @@
 		},
 
 		mouseUp: function(e) {
-			this.swipeEnd(e)
+			this.swipeEnd(e);
 
-			this.el.off('mousemove')
+			this.el.off('mousemove');
 			this.el.off('mouseup')
 		},
 
 		swipeStart: function(e, x, y) {
-			this.pos.start.x = x
-			this.pos.start.y = y
-			this.pos.end.x = x
-			this.pos.end.y = y
+			this.pos.start.x = x;
+			this.pos.start.y = y;
+			this.pos.end.x = x;
+			this.pos.end.y = y;
 
-			this.startTime = new Date().getTime()
+			this.startTime = new Date().getTime();
 
 			this.trigger('swipeStart', e)
 		},
 
 		swipeMove: function(e, x, y) {
-			this.pos.end.x = x
-			this.pos.end.y = y
+			this.pos.end.x = x;
+			this.pos.end.y = y;
 
 			this.trigger('swipeMove', e)
 		},
@@ -68,9 +68,9 @@
 		},
 
 		trigger: function(e, originalEvent) {
-			var self = this
+			let self = this;
 
-			var
+			let
 				event = $.Event(e),
 				x = self.pos.start.x - self.pos.end.x,
 				y = self.pos.end.y - self.pos.start.y,
@@ -78,7 +78,7 @@
 				direction = 'up',
 				distance = Math.round(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))),
 				angle = Math.round(radians * 180 / Math.PI),
-				speed = Math.round(distance / ( new Date().getTime() - self.startTime ) * 1000)
+				speed = Math.round(distance / ( new Date().getTime() - self.startTime ) * 1000);
 
 			if ( angle < 0 ) {
 				angle = 360 - Math.abs(angle)
@@ -92,17 +92,17 @@
 				direction = 'down'
 			}
 
-			event.originalEvent = originalEvent
+			event.originalEvent = originalEvent;
 
-			event.swipe = { x: x, y: y, direction: direction, distance: distance, angle: angle, speed: speed }
+			event.swipe = { x: x, y: y, direction: direction, distance: distance, angle: angle, speed: speed };
 
 			$(self.el).trigger(event)
 		}
-	}
+	};
 
 	$.fn.swipe = function() {
-		var swipe = new Swipe(this)
+		let swipe = new Swipe(this);
 
 		return this
 	}
-})(jQuery)
+})(jQuery);
