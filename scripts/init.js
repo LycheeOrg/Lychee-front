@@ -5,25 +5,25 @@
 $(document).ready(function() {
 
 	// Event Name
-	let eventName = lychee.getEventName()
+	let eventName = lychee.getEventName();
 
 	// Set API error handler
-	api.onError = lychee.error
+	api.onError = lychee.error;
 
 	// Multiselect
-	multiselect.bind()
+	multiselect.bind();
 
 	// leftMenu
-	leftMenu.build()
-	leftMenu.bind()
+	leftMenu.build();
+	leftMenu.bind();
 
 	// Header
-	header.bind()
+	header.bind();
 
 	// Image View
 	lychee.imageview
 		.on(eventName, '.arrow_wrapper--previous', photo.previous)
-		.on(eventName, '.arrow_wrapper--next',     photo.next)
+		.on(eventName, '.arrow_wrapper--next',     photo.next);
 
 	// Keyboard
 	Mousetrap
@@ -61,21 +61,21 @@ $(document).ready(function() {
 		.bind([ 'command+a', 'ctrl+a' ], function() {
 			if (visible.album() && basicModal.visible()===false)       { multiselect.selectAll(); return false }
 			else if (visible.albums() && basicModal.visible()===false) { multiselect.selectAll(); return false }
-		})
+		});
 
 	Mousetrap.bindGlobal('enter', function() {
 		if (basicModal.visible()===true) basicModal.action()
-	})
+	});
 
 	Mousetrap.bindGlobal([ 'esc', 'command+up' ], function() {
-		if (basicModal.visible()===true)                                             basicModal.cancel()
-		else if (visible.leftMenu())												 leftMenu.close()
-		else if (visible.contextMenu())                                              contextMenu.close()
-		else if (visible.photo())                                                    lychee.goto(album.getID())
-		else if (visible.album())                                                    lychee.goto()
-		else if (visible.albums() && header.dom('.header__search').val().length!==0) search.reset()
+		if (basicModal.visible()===true)                                             basicModal.cancel();
+		else if (visible.leftMenu())												 leftMenu.close();
+		else if (visible.contextMenu())                                              contextMenu.close();
+		else if (visible.photo())                                                    lychee.goto(album.getID());
+		else if (visible.album())                                                    lychee.goto();
+		else if (visible.albums() && header.dom('.header__search').val().length!==0) search.reset();
 		return false
-	})
+	});
 
 	if (eventName==='touchend') {
 
@@ -84,7 +84,7 @@ $(document).ready(function() {
 			// Fullscreen on mobile
 			.on('touchend', '#imageview #image', function(e) {
 				if (swipe.obj==null || (swipe.offset>=-5&&swipe.offset<=5)) {
-					if (visible.header()) header.hide(e)
+					if (visible.header()) header.hide(e);
 					else                  header.show()
 				}
 			})
@@ -115,18 +115,18 @@ $(document).ready(function() {
 		.on('drop', function(e) {
 
 			// Close open overlays or views which are correlating with the upload
-			if (visible.photo())       lychee.goto(album.getID())
-			if (visible.contextMenu()) contextMenu.close()
+			if (visible.photo())       lychee.goto(album.getID());
+			if (visible.contextMenu()) contextMenu.close();
 
 			// Detect if dropped item is a file or a link
-			if (e.originalEvent.dataTransfer.files.length>0)                upload.start.local(e.originalEvent.dataTransfer.files)
-			else if (e.originalEvent.dataTransfer.getData('Text').length>3) upload.start.url(e.originalEvent.dataTransfer.getData('Text'))
+			if (e.originalEvent.dataTransfer.files.length>0)                upload.start.local(e.originalEvent.dataTransfer.files);
+			else if (e.originalEvent.dataTransfer.getData('Text').length>3) upload.start.url(e.originalEvent.dataTransfer.getData('Text'));
 
 			return false
 
-		})
+		});
 
 	// Init
 	lychee.init()
 
-})
+});

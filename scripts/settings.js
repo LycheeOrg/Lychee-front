@@ -4,7 +4,7 @@
 
 settings = {};
 
-settings.open = function(e) {
+settings.open = function() {
 	if(lychee.api_V2)
 	{
 		// we may do something else here later
@@ -20,19 +20,19 @@ settings.createConfig = function() {
 
 	const action = function(data) {
 
-		let dbName        = data.dbName        || ''
-		let dbUser        = data.dbUser        || ''
-		let dbPassword    = data.dbPassword    || ''
-		let dbHost        = data.dbHost        || ''
-		let dbTablePrefix = data.dbTablePrefix || ''
+		let dbName        = data.dbName        || '';
+		let dbUser        = data.dbUser        || '';
+		let dbPassword    = data.dbPassword    || '';
+		let dbHost        = data.dbHost        || '';
+		let dbTablePrefix = data.dbTablePrefix || '';
 
 		if (dbUser.length<1) {
-			basicModal.error('dbUser')
+			basicModal.error('dbUser');
 			return false
 		}
 
-		if (dbHost.length<1) dbHost = 'localhost'
-		if (dbName.length<1) dbName = 'lychee'
+		if (dbHost.length<1) dbHost = 'localhost';
+		if (dbName.length<1) dbName = 'lychee';
 
 		let params = {
 			dbName,
@@ -40,7 +40,7 @@ settings.createConfig = function() {
 			dbPassword,
 			dbHost,
 			dbTablePrefix
-		}
+		};
 
 		api.post('Config::create', params, function(data) {
 
@@ -57,7 +57,7 @@ settings.createConfig = function() {
 								fn: settings.createConfig
 							}
 						}
-					})
+					});
 
 					return false
 
@@ -74,7 +74,7 @@ settings.createConfig = function() {
 								fn: settings.createConfig
 							}
 						}
-					})
+					});
 
 					return false
 
@@ -91,7 +91,7 @@ settings.createConfig = function() {
 								fn: settings.createConfig
 							}
 						}
-					})
+					});
 
 					return false
 
@@ -106,7 +106,7 @@ settings.createConfig = function() {
 							fn: settings.createConfig
 						}
 					}
-				})
+				});
 
 				return false
 
@@ -119,7 +119,7 @@ settings.createConfig = function() {
 
 		})
 
-	}
+	};
 
 	let msg = `
 	          <p>
@@ -133,7 +133,7 @@ settings.createConfig = function() {
 	              <input name='dbName' class='text' type='text' placeholder='` + lychee.locale['DB_NAME'] + `' value=''>
 	              <input name='dbTablePrefix' class='text' type='text' placeholder='` + lychee.locale['DB_PREFIX'] + `' value=''>
 	          </p>
-	          `
+	          `;
 
 	basicModal.show({
 		body: msg,
@@ -145,31 +145,31 @@ settings.createConfig = function() {
 		}
 	})
 
-}
+};
 
 settings.createLogin = function() {
 
 	const action = function(data) {
 
-		let username = data.username
-		let password = data.password
+		let username = data.username;
+		let password = data.password;
 
 		if (username.length<1) {
-			basicModal.error('username')
+			basicModal.error('username');
 			return false
 		}
 
 		if (password.length<1) {
-			basicModal.error('password')
+			basicModal.error('password');
 			return false
 		}
 
-		basicModal.close()
+		basicModal.close();
 
 		let params = {
 			username,
 			password
-		}
+		};
 
 		api.post('Settings::setLogin', params, function(data) {
 
@@ -189,7 +189,7 @@ settings.createLogin = function() {
 
 		})
 
-	}
+	};
 
 	let msg = `
 	          <p>
@@ -197,7 +197,7 @@ settings.createLogin = function() {
 	              <input name='username' class='text' type='text' placeholder='` + lychee.locale['LOGIN_USERNAME'] + `' value=''>
 	              <input name='password' class='text' type='password' placeholder='` + lychee.locale['LOGIN_PASSWORD'] + `' value=''>
 	          </p>
-	          `
+	          `;
 
 	basicModal.show({
 		body: msg,
@@ -209,7 +209,7 @@ settings.createLogin = function() {
 		}
 	})
 
-}
+};
 
 
 // from https://github.com/electerious/basicModal/blob/master/src/scripts/main.js
@@ -286,121 +286,6 @@ settings.changeLogin = function(params) {
 
 };
 
-// settings.setSorting = function() {
-//
-// 	let sortingPhotos = []
-// 	let sortingAlbums = []
-//
-// 	const action = function() {
-//
-// 		sortingAlbums[0] = $('.basicModal select#settings_albums_type').val()
-// 		sortingAlbums[1] = $('.basicModal select#settings_albums_order').val()
-//
-// 		sortingPhotos[0] = $('.basicModal select#settings_photos_type').val()
-// 		sortingPhotos[1] = $('.basicModal select#settings_photos_order').val()
-//
-// 		basicModal.close()
-// 		albums.refresh()
-//
-// 		let params = {
-// 			typeAlbums  : sortingAlbums[0],
-// 			orderAlbums : sortingAlbums[1],
-// 			typePhotos  : sortingPhotos[0],
-// 			orderPhotos : sortingPhotos[1]
-// 		}
-//
-// 		api.post('Settings::setSorting', params, function(data) {
-//
-// 			if (data===true) {
-// 				lychee.sortingAlbums = 'ORDER BY ' + sortingAlbums[0] + ' ' + sortingAlbums[1]
-// 				lychee.sortingPhotos = 'ORDER BY ' + sortingPhotos[0] + ' ' + sortingPhotos[1]
-// 				lychee.load()
-// 			} else lychee.error(null, params, data)
-//
-// 		})
-//
-// 	}
-//
-// 	let msg = `
-// 	          <p>
-// 	              ` + lychee.locale['SORT_ALBUM_BY_1'] + `
-// 	              <span class="select">
-// 	                  <select id='settings_albums_type'>
-// 	                      <option value='id'>` + lychee.locale['SORT_ALBUM_SELECT_1'] + `</option>
-// 	                      <option value='title'>` + lychee.locale['SORT_ALBUM_SELECT_2'] + `</option>
-// 	                      <option value='description'>` + lychee.locale['SORT_ALBUM_SELECT_3'] + `</option>
-// 	                      <option value='public'>` + lychee.locale['SORT_ALBUM_SELECT_4'] + `</option>
-// 	                      <option value='max_takestamp'>` + lychee.locale['SORT_ALBUM_SELECT_5'] + `</option>
-// 	                      <option value='min_takestamp'>` + lychee.locale['SORT_ALBUM_SELECT_6'] + `</option>
-// 	                  </select>
-// 	              </span>
-// 	              ` + lychee.locale['SORT_ALBUM_BY_2'] + `
-// 	              <span class="select">
-// 	                  <select id='settings_albums_order'>
-// 	                      <option value='ASC'>` + lychee.locale['SORT_ASCENDING'] + `</option>
-// 	                      <option value='DESC'>` + lychee.locale['SORT_DESCENDING'] + `</option>
-// 	                  </select>
-// 	              </span>
-// 	              ` + lychee.locale['SORT_ALBUM_BY_3'] + `
-// 	          </p>
-// 	          <p>
-// 	              ` + lychee.locale['SORT_PHOTO_BY_1'] + `
-// 	              <span class="select">
-// 	                  <select id='settings_photos_type'>
-// 	                      <option value='id'>` + lychee.locale['SORT_PHOTO_SELECT_1'] + `</option>
-// 	                      <option value='takestamp'>` + lychee.locale['SORT_PHOTO_SELECT_2'] + `</option>
-// 	                      <option value='title'>` + lychee.locale['SORT_PHOTO_SELECT_3'] + `</option>
-// 	                      <option value='description'>` + lychee.locale['SORT_PHOTO_SELECT_4'] + `</option>
-// 	                      <option value='public'>` + lychee.locale['SORT_PHOTO_SELECT_5'] + `</option>
-// 	                      <option value='star'>` + lychee.locale['SORT_PHOTO_SELECT_6'] + `</option>
-// 	                      <option value='type'>` + lychee.locale['SORT_PHOTO_SELECT_7'] + `</option>
-// 	                  </select>
-// 	              </span>
-// 	              ` + lychee.locale['SORT_PHOTO_BY_2'] + `
-// 	              <span class="select">
-// 	                  <select id='settings_photos_order'>
-// 	                      <option value='ASC'>` + lychee.locale['SORT_ASCENDING'] + `</option>
-// 	                      <option value='DESC'>` + lychee.locale['SORT_DESCENDING'] + `</option>
-// 	                  </select>
-// 	              </span>
-// 	              ` + lychee.locale['SORT_PHOTO_BY_3'] + `
-// 	          </p>
-// 	          `
-//
-// 	basicModal.show({
-// 		body: msg,
-// 		buttons: {
-// 			action: {
-// 				title: lychee.locale['SORT_CHANGE'],
-// 				fn: action
-// 			},
-// 			cancel: {
-// 				title: lychee.locale['CANCEL'],
-// 				fn: basicModal.close
-// 			}
-// 		}
-// 	})
-//
-// 	if (lychee.sortingAlbums!=='') {
-//
-// 		sortingAlbums = lychee.sortingAlbums.replace('ORDER BY ', '').split(' ')
-//
-// 		$('.basicModal select#settings_albums_type').val(sortingAlbums[0])
-// 		$('.basicModal select#settings_albums_order').val(sortingAlbums[1])
-//
-// 	}
-//
-// 	if (lychee.sortingPhotos!=='') {
-//
-// 		sortingPhotos = lychee.sortingPhotos.replace('ORDER BY ', '').split(' ')
-//
-// 		$('.basicModal select#settings_photos_type').val(sortingPhotos[0])
-// 		$('.basicModal select#settings_photos_order').val(sortingPhotos[1])
-//
-// 	}
-//
-// }
-
 settings.changeSorting = function(params) {
 
     api.post('Settings::setSorting', params, function(data) {
@@ -408,60 +293,13 @@ settings.changeSorting = function(params) {
         if (data===true) {
             lychee.sortingAlbums = 'ORDER BY ' + params['typeAlbums'] + ' ' + params['orderAlbums'];
             lychee.sortingPhotos = 'ORDER BY ' + params['typePhotos'] + ' ' + params['orderPhotos'];
-            albums.refresh()
+            albums.refresh();
             loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_SORT']);
         } else lychee.error(null, params, data)
 
     })
 
 };
-
-// settings.setDropboxKey = function(callback) {
-//
-// 	const action = function(data) {
-//
-// 		let key = data.key
-//
-// 		if (data.key.length<1) {
-// 			basicModal.error('key')
-// 			return false
-// 		}
-//
-// 		basicModal.close()
-//
-// 		api.post('Settings::setDropboxKey', { key }, function(data) {
-//
-// 			if (data===true) {
-// 				lychee.dropboxKey = key
-// 				if (callback) lychee.loadDropbox(callback)
-// 			} else lychee.error(null, params, data)
-//
-// 		})
-//
-// 	}
-//
-// 	let msg = lychee.html`
-// 	          <p>
-// 	              ` + lychee.locale['DROPBOX_TEXT'] + `
-// 	              <input class='text' name='key' type='text' placeholder='Dropbox API Key' value='${ lychee.dropboxKey }'>
-// 	          </p>
-// 	          `
-//
-// 	basicModal.show({
-// 		body: msg,
-// 		buttons: {
-// 			action: {
-// 				title: lychee.locale['DROPBOX_TITLE'],
-// 				fn: action
-// 			},
-// 			cancel: {
-// 				title: lychee.locale['CANCEL'],
-// 				fn: basicModal.close
-// 			}
-// 		}
-// 	})
-//
-// };
 
 settings.changeDropboxKey = function(params) {
     // let key = params.key;
@@ -474,7 +312,7 @@ settings.changeDropboxKey = function(params) {
     api.post('Settings::setDropboxKey', params, function(data) {
 
         if (data===true) {
-            lychee.dropboxKey = params.key
+            lychee.dropboxKey = params.key;
             // if (callback) lychee.loadDropbox(callback)
             loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_DROPBOX']);
         } else lychee.error(null, params, data)

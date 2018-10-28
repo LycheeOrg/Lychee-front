@@ -6,18 +6,18 @@ password = {
 
 	value: ''
 
-}
+};
 
 password.get = function(albumID, callback) {
 
-	if (lychee.publicMode===false)                                  callback()
-	else if (album.json && album.json.password==='0')               callback()
-	else if (albums.json && albums.getByID(albumID).password==='0') callback()
+	if (lychee.publicMode===false)                                  callback();
+	else if (album.json && album.json.password==='0')               callback();
+	else if (albums.json && albums.getByID(albumID).password==='0') callback();
 	else if (!albums.json && !album.json) {
 
 		// Continue without password
 
-		album.json = { password: true }
+		album.json = { password: true };
 		callback('')
 
 	} else {
@@ -28,24 +28,24 @@ password.get = function(albumID, callback) {
 
 	}
 
-}
+};
 
 password.getDialog = function(albumID, callback) {
 
 	const action = (data) => {
 
-		let passwd = data.password
+		let passwd = data.password;
 
 		let params = {
 			albumID,
 			password: passwd
-		}
+		};
 
 		api.post('Album::getPublic', params, function(data) {
 
 			if (data===true) {
-				basicModal.close()
-				password.value = passwd
+				basicModal.close();
+				password.value = passwd;
 				callback()
 			} else {
 				basicModal.error('password')
@@ -53,21 +53,21 @@ password.getDialog = function(albumID, callback) {
 
 		})
 
-	}
+	};
 
 	const cancel = () => {
 
-		basicModal.close()
+		basicModal.close();
 		if (!visible.albums()) lychee.goto()
 
-	}
+	};
 
 	let msg = `
 	          <p>
 	              ` + lychee.locale['ALBUM_PASSWORD_REQUIRED'] + `
 	              <input name='password' class='text' type='password' placeholder='password' value=''>
 	          </p>
-	          `
+	          `;
 
 	basicModal.show({
 		body: msg,
@@ -83,4 +83,4 @@ password.getDialog = function(albumID, callback) {
 		}
 	})
 
-}
+};
