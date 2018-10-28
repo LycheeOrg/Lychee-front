@@ -11,7 +11,7 @@ contextMenu.add = function(e) {
 		{ },
 		{ title: build.iconic('link-intact') + lychee.locale['IMPORT_LINK'], fn: upload.start.url },
 		{ title: build.iconic('dropbox', 'ionicons') + lychee.locale['IMPORT_DROPBOX'], fn: upload.start.dropbox },
-		{ title: build.iconic('terminal') + lychee.locale['IMPORT_DROPBOX'], fn: upload.start.server },
+		{ title: build.iconic('terminal') + lychee.locale['IMPORT_SERVER'], fn: upload.start.server },
 		{ },
 		{ title: build.iconic('folder') + lychee.locale['NEW_ALBUM'], fn: album.add }
 	]
@@ -19,18 +19,6 @@ contextMenu.add = function(e) {
 	basicContext.show(items, e.originalEvent)
 
 	upload.notify()
-
-}
-
-contextMenu.settings = function(e) {
-
-	let items = [
-		{ title: build.iconic('person') + lychee.locale['CHANGE_LOGIN'], fn: settings.setLogin },
-		{ title: build.iconic('sort-ascending') + lychee.locale['CHANGE_SORTING'], fn: settings.setSorting },
-		{ title: build.iconic('dropbox', 'ionicons') + lychee.locale['SET_DROPBOX'], fn: settings.setDropboxKey },
-	]
-
-	basicContext.show(items, e.originalEvent)
 
 }
 
