@@ -226,7 +226,7 @@ settings.getValues = function(form_name) {
         values[name] = $(this).val()
 
     });
-
+	console.log(values);
     return (Object.keys(values).length===0 ? null : values)
 
 };
@@ -234,6 +234,14 @@ settings.getValues = function(form_name) {
 // from https://github.com/electerious/basicModal/blob/master/src/scripts/main.js
 settings.bind = function(item, name, fn) {
 
+    // if ($(item).length)
+	// {
+    //     console.log('found');
+	// }
+	// else
+	// {
+    //     console.log('not found: ' + item);
+	// }
     // Action-button
 	$(item).on('click', function () {
 		fn(settings.getValues(name))
@@ -241,44 +249,37 @@ settings.bind = function(item, name, fn) {
 };
 
 settings.changeLogin = function(params) {
-	    // console.log(data);
-	    // let oldUsername = data.oldUsername || '';
-        // let oldPassword = data.oldPassword || '';
-        // let username    = data.username    || '';
-        // let password    = data.password    || '';
-		//
-		//
-        // if (oldPassword.length<1) {
-        //     basicModal.error('oldPassword')
-        //     return false
-        // }
-		//
-        // if (username.length<1) {
-        //     basicModal.error('username')
-        //     return false
-        // }
-		//
-        // if (password.length<1) {
-        //     basicModal.error('password')
-        //     return false
-        // }
-		//
-        // let params = {
-        // 	oldUsername,
-        //     oldPassword,
-        //     username,
-        //     password
-        // };
-	    // console.log(params);
+
+        if (params.username.length < 1) {
+            loadingBar.show('error', 'new username cannot be empty.');
+            $('input[name=username]').addClass('error');
+            return false
+        }
+        else
+		{
+            $('input[name=username]').removeClass('error');
+        }
+
+        if (params.password.length < 1) {
+            loadingBar.show('error', 'new password cannot be empty.');
+            $('input[name=password]').addClass('error');
+            return false
+        }
+        else
+        {
+            $('input[name=password]').removeClass('error');
+        }
+
 
         api.post('Settings::setLogin', params, function(data) {
 
             if (data!==true)
 			{
 				loadingBar.show('error', data.description);
-				lychee.error(null, params, data)
+				lychee.error(null, datas, data)
 			}
 			else {
+                $('input[name]').removeClass('error');
 				loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_LOGIN']);
 				view.settings.content.clearLogin();
 			}
@@ -305,7 +306,7 @@ settings.changeDropboxKey = function(params) {
     // let key = params.key;
 
     if (params.key.length<1) {
-        // basicModal.error('key')
+        loadingBar.show('error', 'key cannot be empty.');
         return false
     }
 

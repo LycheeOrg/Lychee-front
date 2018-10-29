@@ -325,7 +325,7 @@ lychee.init = function() {
 		// 1 = Logged out
 		// 2 = Logged in
 
-    lychee.api_V2          = data.api_V2 || false;
+    	lychee.api_V2          = data.api_V2 || false;
 
 		// we copy the locale that exists only.
 		// This ensure forward and backward compatibility.
@@ -334,6 +334,11 @@ lychee.init = function() {
 		for (let key in data.locale) {
 			lychee.locale[key] = data.locale[key]
 		}
+
+
+        // leftMenu
+        leftMenu.build();
+        leftMenu.bind();
 
 		if (data.status===2) {
 

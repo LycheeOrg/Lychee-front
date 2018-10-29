@@ -19,6 +19,10 @@ leftMenu.build = function () {
     let html = '';
     html += '<a id="button_settings_close" class="closebtn" >&times;</a>';
     html += '<a class="linkMenu" id="button_settings">'+ '<svg class="iconic"><use xlink:href="#cog"></use></svg>' + lychee.locale['SETTINGS'] + '</a>';
+    if(lychee.api_V2)
+    {
+        html += '<a class="linkMenu" id="button_users">'+ build.iconic('person') + 'Users</a>'
+    }
     html += '<a class="linkMenu" id="button_logs">' + build.iconic('align-left') + lychee.locale['LOGS'] + '</a>';
     html += '<a class="linkMenu" id="button_diagnostics">' + build.iconic('wrench') + lychee.locale['DIAGNOSTICS'] + '</a>';
     html += '<a class="linkMenu" id="button_about">' + build.iconic('info') + lychee.locale['ABOUT_LYCHEE'] + '</a>';
@@ -57,6 +61,11 @@ leftMenu.bind = function() {
     leftMenu.dom('#button_diagnostics')       .on(eventName, leftMenu.Diagnostics);
     leftMenu.dom('#button_about')             .on(eventName, () => window.open(lychee.website));
 
+    if (lychee.api_V2)
+    {
+        leftMenu.dom('#button_users')         .on(eventName, leftMenu.Users)
+    }
+
     return true
 
 };
@@ -81,4 +90,8 @@ leftMenu.Diagnostics = function() {
     {
         window.open(lychee.diagnostics())
     }
+};
+
+leftMenu.Users = function () {
+    users.list();
 };

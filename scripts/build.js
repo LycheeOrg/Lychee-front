@@ -234,3 +234,18 @@ build.tags = function(tags) {
 	return html
 
 };
+
+build.user = function (user) {
+	let html =
+		'<div class="users_view_line">' +
+		'<p id="UserData' + user.id + '">' +
+		'<input name="id" type="hidden" value="' + user.id + '" />' +
+		'<input class="text" name="username" type="text" value="' + user.username + '" placeholder="username" />' +
+		'<input class="text" name="password" type="text" placeholder="new password" />' +
+        '</p>' +
+		'<a id="UserUpdate' + user.id + '"  class="basicModal__button basicModal__button_OK">Save</a>' +
+        '<a id="UserDelete' + user.id + '"  class="basicModal__button basicModal__button_DEL">Delete</a>' +
+		'</div>';
+
+	return html;
+};

@@ -467,19 +467,19 @@ view.settings = {
         lychee.setTitle('Settings', false)
     },
 
-    content: {
+    clearContent: function() {
+        $('.content').unbind('mousedown');
+    	$(".content").html('<div class="settings_view"></div>');
+	},
+
+	content: {
 
     	init: function() {
-            $('.content').unbind('mousedown');
-            view.settings.content.clearContent();
+            view.settings.clearContent();
             view.settings.content.setLogin();
             view.settings.content.setSorting();
             view.settings.content.setDropboxKey();
     	},
-
-		clearContent: function() {
-    		$(".content").html('<div class="settings_view"></div>');
-		},
 
     	setLogin: function () {
             let msg = `
@@ -595,7 +595,7 @@ view.settings = {
 	          <input class='text' name='key' type='text' placeholder='Dropbox API Key' value='${ lychee.dropboxKey }'>
 	          </p>
 				<div class="basicModal__buttons">
-					<a id="basicModal__action_dropbox_change" class="basicModal__button ">${ lychee.locale['DROPBOX_TITLE'] }</a>
+					<a id="basicModal__action_dropbox_change" class="basicModal__button">${ lychee.locale['DROPBOX_TITLE'] }</a>
 				</div>
 	          </div>
 	          `;
@@ -605,4 +605,57 @@ view.settings = {
         }
     },
 
+};
+
+view.users = {
+    init: function() {
+
+        view.users.title();
+        view.users.content.init()
+
+    },
+
+    title: function() {
+
+        lychee.setTitle('Users', false)
+
+    },
+
+    clearContent: function() {
+        $('.content').unbind('mousedown');
+        $(".content").html('<div class="users_view"></div>');
+    },
+
+    content: {
+
+        init: function () {
+
+        	view.users.clearContent();
+
+			let i = 0;
+			while(i < users.json.length)
+			{
+				user = users.json[i];
+
+                $(".users_view").append(build.user(user));
+
+                settings.bind('#UserUpdate' + user.id, '#UserData' + user.id, users.update);
+                settings.bind('#UserDelete' + user.id, '#UserData' + user.id, users.delete);
+                i += 1;
+			}
+			if (users.json.length === 0) {
+                    $(".users_view").append('<div class="users_view_line"><p style="text-align: center">User list is empty!</p></div>');
+            }
+            let html =
+				'<div class="users_view_line">' +
+				'<p id="UserCreate">' +
+				'<input class="text" name="username" type="text" value="" placeholder="new username" />' +
+				'<input class="text" name="password" type="text" placeholder="new password" />' +
+				'</p>' +
+				'<a id="UserCreate_button"  class="basicModal__button basicModal__button_CREATE">Create</a>' +
+				'</div>';
+			$(".users_view").append(html);
+            settings.bind('#UserCreate_button', '#UserCreate', users.create);
+        }
+    }
 };
