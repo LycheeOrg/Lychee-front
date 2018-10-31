@@ -14,7 +14,9 @@ lychee = {
 
 	publicMode      : false,
 	viewMode        : false,
-    api_V2			: false,
+    api_V2			: false,  // enable api_V2
+	admin			: false,  // enable admin mode (multi-user)
+	upload			: false,  // enable possibility to upload (multi-user)
 
 	checkForUpdates : '1',
 	sortingPhotos   : '',
@@ -325,7 +327,7 @@ lychee.init = function() {
 		// 1 = Logged out
 		// 2 = Logged in
 
-    	lychee.api_V2          = data.api_V2 || false;
+    	lychee.api_V2 = data.api_V2 || false;
 
 		// we copy the locale that exists only.
 		// This ensure forward and backward compatibility.
@@ -335,12 +337,7 @@ lychee.init = function() {
 			lychee.locale[key] = data.locale[key]
 		}
 
-
-        // leftMenu
-        leftMenu.build();
-        leftMenu.bind();
-
-		if (data.status===2) {
+        if (data.status===2) {
 
 			// Logged in
 
@@ -350,7 +347,21 @@ lychee.init = function() {
 			lychee.location        = data.config.location        || '';
 			lychee.checkForUpdates = data.config.checkForUpdates || '1';
 
-			// Show dialog when there is no username and password
+            lychee.upload = !lychee.api_V2;
+            lychee.admin = !lychee.api_V2;
+
+            // leftMenu
+            leftMenu.build();
+            leftMenu.bind();
+
+            if (lychee.api_V2)
+			{
+				lychee.upload = data.admin || data.upload;
+				lychee.admin = data.admin;
+                lychee.setMode('logged_in');
+			}
+
+            // Show dialog when there is no username and password
 			if (data.config.login===false) settings.createLogin()
 
 		} else if (data.status===1) {
@@ -359,7 +370,7 @@ lychee.init = function() {
 
 			lychee.checkForUpdates = data.config.checkForUpdates || '1';
 
-			lychee.setMode('public')
+			lychee.setMode('public');
 
 		} else if (data.status===0) {
 
@@ -376,7 +387,7 @@ lychee.init = function() {
 
 		}
 
-		$(window).bind('popstate', lychee.load);
+        $(window).bind('popstate', lychee.load);
 		lychee.load()
 
 	})
@@ -539,31 +550,65 @@ lychee.setTitle = function(title, editable) {
 
 lychee.setMode = function(mode) {
 
-	$('#button_settings, #button_trash_album, .button_add, .header__divider, .leftMenu').remove();
-	$('#button_trash, #button_move, #button_star').remove();
+    if (!lychee.upload)
+    {
+        $('#button_trash_album, .button_add').remove();
+        $('#button_trash, #button_move, #button_star').remove();
 
-	$('#button_share, #button_share_album')
-		.removeClass('button--eye')
-		.addClass('button--share')
-		.find('use')
-		.attr('xlink:href', '#share');
+        $('#button_share, #button_share_album')
+            .removeClass('button--eye')
+            .addClass('button--share')
+            .find('use')
+            .attr('xlink:href', '#share');
 
-	$(document)
-		.off('click',       '.header__title--editable')
-		.off('touchend',    '.header__title--editable')
-		.off('contextmenu', '.photo')
-		.off('contextmenu', '.album')
-		.off('drop');
+        $(document)
+            .off('click',       '.header__title--editable')
+            .off('touchend',    '.header__title--editable')
+            .off('contextmenu', '.photo')
+            .off('contextmenu', '.album')
+            .off('drop');
 
-	Mousetrap
-		.unbind([ 'u' ])
-		.unbind([ 's' ])
-		.unbind([ 'f' ])
-		.unbind([ 'r' ])
-		.unbind([ 'd' ])
-		.unbind([ 't' ])
-		.unbind([ 'command+backspace', 'ctrl+backspace' ])
-		.unbind([ 'command+a', 'ctrl+a' ]);
+        Mousetrap
+            .unbind([ 'u' ])
+            .unbind([ 's' ])
+            .unbind([ 'f' ])
+            .unbind([ 'r' ])
+            .unbind([ 'd' ])
+            .unbind([ 't' ])
+            .unbind([ 'command+backspace', 'ctrl+backspace' ])
+            .unbind([ 'command+a', 'ctrl+a' ]);
+    }
+    if (!lychee.admin)
+    {
+        $('#button_users, #button_logs, #button_diagnostics').remove();
+    }
+
+	if(mode==='logged_in') return;
+
+	$('#button_settings, .header__divider, .leftMenu').remove();
+
+	// $('#button_share, #button_share_album')
+	// 	.removeClass('button--eye')
+	// 	.addClass('button--share')
+	// 	.find('use')
+	// 	.attr('xlink:href', '#share');
+	//
+	// $(document)
+	// 	.off('click',       '.header__title--editable')
+	// 	.off('touchend',    '.header__title--editable')
+	// 	.off('contextmenu', '.photo')
+	// 	.off('contextmenu', '.album')
+	// 	.off('drop');
+	//
+	// Mousetrap
+	// 	.unbind([ 'u' ])
+	// 	.unbind([ 's' ])
+	// 	.unbind([ 'f' ])
+	// 	.unbind([ 'r' ])
+	// 	.unbind([ 'd' ])
+	// 	.unbind([ 't' ])
+	// 	.unbind([ 'command+backspace', 'ctrl+backspace' ])
+	// 	.unbind([ 'command+a', 'ctrl+a' ]);
 
 	if (mode==='public') {
 

@@ -119,7 +119,7 @@ sidebar.createStructure.photo = function(data) {
 	let _public   = '';
 
 	// Enable editable when user logged in
-	if (lychee.publicMode===false) editable = true;
+	if (lychee.publicMode===false && lychee.upload) editable = true;
 
 	// Set value for public
 	switch (data.public) {
@@ -156,7 +156,7 @@ sidebar.createStructure.photo = function(data) {
 	};
 
 	// Only create tags section when user logged in
-	if (lychee.publicMode===false) {
+	if (lychee.publicMode===false && lychee.upload) {
 
 		structure.tags = {
 			title : lychee.locale['PHOTO_TAGS'],
@@ -227,7 +227,7 @@ sidebar.createStructure.album = function(data) {
 	let password     = '';
 
 	// Enable editable when user logged in
-	if (lychee.publicMode===false) editable = true;
+	if (lychee.publicMode===false && lychee.upload) editable = true;
 
 	// Set value for public
 	switch (data.public) {

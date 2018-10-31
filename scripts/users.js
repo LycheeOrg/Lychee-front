@@ -4,6 +4,15 @@ users = {
 
 users.update = function (params) {
 
+    if ( $('#UserData' + params.id + ' .choice input[name="upload"]:checked').length === 1 )
+    {
+        params.upload = '1';
+    }
+    else
+    {
+        params.upload= '0';
+    }
+
     api.post('User::Save', params, function (data) {
         if(data!==true)
         {
@@ -19,6 +28,15 @@ users.update = function (params) {
 };
 
 users.create = function (params) {
+
+    if ( $('#UserCreate .choice input[name="upload"]:checked').length === 1 )
+    {
+        params.upload = '1';
+    }
+    else
+    {
+        params.upload= '0';
+    }
 
     api.post('User::Create', params, function (data) {
         if(data!==true)

@@ -477,8 +477,11 @@ view.settings = {
     	init: function() {
             view.settings.clearContent();
             view.settings.content.setLogin();
-            view.settings.content.setSorting();
-            view.settings.content.setDropboxKey();
+            if(lychee.admin)
+			{
+				view.settings.content.setSorting();
+                view.settings.content.setDropboxKey();
+            }
     	},
 
     	setLogin: function () {
@@ -632,25 +635,55 @@ view.users = {
 
         	view.users.clearContent();
 
-			let i = 0;
+            if (users.json.length === 0) {
+                $(".users_view").append('<div class="users_view_line" style="margin-bottom: 50px;"><p style="text-align: center">User list is empty!</p></div>');
+            }
+
+            let html = '';
+
+            html += '<div class="users_view_line">' +
+            '<p>' +
+            '<span class="text">username</span>' +
+            '<span class="text">new password</span>' +
+            '<span class="text">' + build.iconic('arrow-thick-top')+ '</span>' +
+            '</p>' +
+            '</div>';
+
+            $(".users_view").append(html);
+
+            let i = 0;
 			while(i < users.json.length)
 			{
 				user = users.json[i];
 
                 $(".users_view").append(build.user(user));
 
+                if(user.upload === 1)
+				{
+                    $('#UserData' + user.id + ' .choice input[name="upload"]').click();
+				}
+
                 settings.bind('#UserUpdate' + user.id, '#UserData' + user.id, users.update);
                 settings.bind('#UserDelete' + user.id, '#UserData' + user.id, users.delete);
+
                 i += 1;
+
 			}
-			if (users.json.length === 0) {
-                    $(".users_view").append('<div class="users_view_line"><p style="text-align: center">User list is empty!</p></div>');
+            html = '<div class="users_view_line"';
+
+            if (users.json.length === 0) {
+            	html += ' style="padding-top: 0px;"';
             }
-            let html =
-				'<div class="users_view_line">' +
+            html += '>' +
 				'<p id="UserCreate">' +
 				'<input class="text" name="username" type="text" value="" placeholder="new username" />' +
 				'<input class="text" name="password" type="text" placeholder="new password" />' +
+                '<span class="choice">' +
+                '<label>' +
+                '<input type="checkbox" name="upload" />' +
+                '<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
+                '</label>' +
+                '</span>' +
 				'</p>' +
 				'<a id="UserCreate_button"  class="basicModal__button basicModal__button_CREATE">Create</a>' +
 				'</div>';

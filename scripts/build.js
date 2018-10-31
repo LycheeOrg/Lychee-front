@@ -236,16 +236,19 @@ build.tags = function(tags) {
 };
 
 build.user = function (user) {
-	let html =
-		'<div class="users_view_line">' +
-		'<p id="UserData' + user.id + '">' +
-		'<input name="id" type="hidden" value="' + user.id + '" />' +
-		'<input class="text" name="username" type="text" value="' + user.username + '" placeholder="username" />' +
-		'<input class="text" name="password" type="text" placeholder="new password" />' +
+    return '<div class="users_view_line">' +
+        '<p id="UserData' + user.id + '">' +
+        '<input name="id" type="hidden" value="' + user.id + '" />' +
+        '<input class="text" name="username" type="text" value="' + user.username + '" placeholder="username" />' +
+        '<input class="text" name="password" type="text" placeholder="new password" />' +
+        '<span class="choice">' +
+        '<label>' +
+        '<input type="checkbox" name="upload" />' +
+        '<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
+        '</label>' +
+        '</span>' +
         '</p>' +
-		'<a id="UserUpdate' + user.id + '"  class="basicModal__button basicModal__button_OK">Save</a>' +
+        '<a id="UserUpdate' + user.id + '"  class="basicModal__button basicModal__button_OK">Save</a>' +
         '<a id="UserDelete' + user.id + '"  class="basicModal__button basicModal__button_DEL">Delete</a>' +
-		'</div>';
-
-	return html;
+        '</div>';
 };

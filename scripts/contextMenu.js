@@ -291,7 +291,10 @@ contextMenu.sharePhoto = function(photoID, e) {
 		{ title: build.iconic('ban') + lychee.locale['MAKE_PRIVATE'], visible: lychee.publicMode===false, fn: () => photo.setPublic(photoID) }
 	];
 
-	if (lychee.publicMode===true) items.splice(7, 1);
+	if (lychee.publicMode===true || (lychee.api_V2 && !lychee.upload))
+	{
+		items.splice(7, 2);
+    }
 
 	basicContext.show(items, e.originalEvent);
 	$('.basicContext input#link').focus().select()
@@ -313,7 +316,7 @@ contextMenu.shareAlbum = function(albumID, e) {
 		{ title: build.iconic('ban') + lychee.locale['MAKE_PRIVATE'], visible: lychee.publicMode===false, fn: () => album.setPublic(albumID, false) }
 	];
 
-	if (lychee.publicMode===true) items.splice(5, 1);
+	if (lychee.publicMode===true || (lychee.api_V2 && !lychee.upload)) items.splice(5, 3);
 
 	basicContext.show(items, e.originalEvent);
 	$('.basicContext input#link').focus().select()

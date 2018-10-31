@@ -30,12 +30,12 @@ header.bind = function() {
 	});
 
 	header.dom('#button_share').on(eventName, function(e) {
-		if (photo.json.public==='1' || photo.json.public==='2') contextMenu.sharePhoto(photo.getID(), e);
+		if (photo.json.public==='1' || photo.json.public==='2' || (lychee.api_V2 && !lychee.upload)) contextMenu.sharePhoto(photo.getID(), e);
 		else                                                    photo.setPublic(photo.getID(), e)
 	});
 
 	header.dom('#button_share_album').on(eventName, function(e) {
-		if (album.json.public==='1') contextMenu.shareAlbum(album.getID(), e);
+		if (album.json.public==='1' || (lychee.api_V2 && !lychee.upload)) contextMenu.shareAlbum(album.getID(), e);
 		else                         album.setPublic(album.getID(), true, e)
 	});
 
@@ -166,7 +166,7 @@ header.setEditable = function(editable) {
 	let $title = header.dom('.header__title');
 
 	// Hide editable icon when not logged in
-	if (lychee.publicMode===true) editable = false;
+	if (lychee.publicMode===true || (lychee.api_V2 && !lychee.upload)) editable = false;
 
 	if (editable) $title.addClass('header__title--editable');
 	else          $title.removeClass('header__title--editable');

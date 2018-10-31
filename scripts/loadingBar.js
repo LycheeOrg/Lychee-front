@@ -65,7 +65,7 @@ loadingBar.show = function(status, errorText) {
 
         // Set timeout
         clearTimeout(loadingBar._timeout);
-        loadingBar._timeout = setTimeout(() => loadingBar.hide(true), 3000);
+        loadingBar._timeout = setTimeout(() => loadingBar.hide(true), 2000);
 
         return true
 

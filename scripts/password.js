@@ -65,7 +65,7 @@ password.getDialog = function(albumID, callback) {
 	let msg = `
 	          <p>
 	              ` + lychee.locale['ALBUM_PASSWORD_REQUIRED'] + `
-	              <input name='password' class='text' type='password' placeholder='password' value=''>
+	              <input name='password' class='text' type='password' placeholder='` + lychee.locale['PASSWORD'] + `' value=''>
 	          </p>
 	          `;
 

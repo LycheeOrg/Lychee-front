@@ -24,7 +24,7 @@ photo.getID = function() {
 photo.load = function(photoID, albumID) {
 
 	const checkContent = function() {
-		if (album.json!=null) photo.load(photoID, albumID);
+		if (album.json!=null && album.json.content) photo.load(photoID, albumID);
 		else                  setTimeout(checkContent, 100)
 	};
 
@@ -33,7 +33,8 @@ photo.load = function(photoID, albumID) {
 		else                     setTimeout(checkPasswd, 200)
 	};
 
-	if (album.json==null) {
+	// we need to check the album.json.content because otherwise the script is too fast and this raise an error.
+	if (album.json==null || album.json.content == null) {
 		checkContent();
 		return false
 	}

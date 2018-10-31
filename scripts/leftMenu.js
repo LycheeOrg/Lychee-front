@@ -19,7 +19,7 @@ leftMenu.build = function () {
     let html = '';
     html += '<a id="button_settings_close" class="closebtn" >&times;</a>';
     html += '<a class="linkMenu" id="button_settings">'+ '<svg class="iconic"><use xlink:href="#cog"></use></svg>' + lychee.locale['SETTINGS'] + '</a>';
-    if(lychee.api_V2)
+    if (lychee.api_V2)
     {
         html += '<a class="linkMenu" id="button_users">'+ build.iconic('person') + 'Users</a>'
     }
@@ -46,7 +46,7 @@ leftMenu.close = function () {
     loadingBar.dom().removeClass('leftMenu__open');
 
     multiselect.bind();
-    albums.load();
+    lychee.load();
 };
 
 leftMenu.bind = function() {
