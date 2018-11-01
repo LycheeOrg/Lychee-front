@@ -692,3 +692,32 @@ view.users = {
         }
     }
 };
+
+view.logs_diagnostics = {
+    init: function (get) {
+
+        view.logs_diagnostics.title(get);
+        view.logs_diagnostics.content.init(get)
+
+    },
+
+    title: function (get) {
+
+        lychee.setTitle(get, false)
+
+    },
+
+    clearContent: function () {
+        $('.content').unbind('mousedown');
+        $(".content").html('<pre class="logs_diagnostics_view"></pre>');
+    },
+
+    content: {
+        init: function (get) {
+            view.logs_diagnostics.clearContent();
+			api.post_raw(get, {}, function (data) {
+				$(".logs_diagnostics_view").html(data);
+            })
+        }
+    }
+};

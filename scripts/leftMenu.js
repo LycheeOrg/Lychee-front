@@ -73,7 +73,7 @@ leftMenu.bind = function() {
 leftMenu.Logs = function() {
     if(lychee.api_V2)
     {
-        // do nothing... for now
+        view.logs_diagnostics.init('Logs');
     }
     else
     {
@@ -84,7 +84,7 @@ leftMenu.Logs = function() {
 leftMenu.Diagnostics = function() {
     if(lychee.api_V2)
     {
-        // do nothing... for now
+        view.logs_diagnostics.init('Diagnostics');
     }
     else
     {
