@@ -23,6 +23,9 @@ lychee = {
 	sortingAlbums   : '',
 	location        : '',
 
+    lang			: '',
+	lang_available	: {},
+
 	dropbox         : false,
 	dropboxKey      : '',
 
@@ -205,6 +208,7 @@ lychee = {
 		'SETTINGS_SUCCESS_LOGIN'	: 'Login Info updated.',
         'SETTINGS_SUCCESS_SORT'		: 'Sorting order updated.',
         'SETTINGS_SUCCESS_DROPBOX'	: 'Dropbox Key updated.',
+		'SETTINGS_SUCCESS_LANG'		: 'Language updated',
 
 		'DB_INFO_TITLE'				: 'Enter your database connection details below:',
 		'DB_INFO_HOST'				: 'Database Host (optional)',
@@ -242,7 +246,6 @@ lychee = {
 		'SORT_ALBUM_SELECT_5'		: 'Latest Take Date',
 		'SORT_ALBUM_SELECT_6'		: 'Oldest Take Date',
 
-
 		'SORT_PHOTO_BY_1'			: 'Sort photos by',
 		'SORT_PHOTO_BY_2'			: 'in an',
 		'SORT_PHOTO_BY_3'			: 'order.',
@@ -261,6 +264,9 @@ lychee = {
 
 		'DROPBOX_TITLE'				: 'Set Dropbox Key',
 		'DROPBOX_TEXT'				: "In order to import photos from your Dropbox, you need a valid drop-ins app key from <a href='https://www.dropbox.com/developers/apps/create'>their website</a>. Generate yourself a personal key and enter it below:",
+
+		'LANG_TEXT'					: 'Change Lychee language for:',
+		'LANG_TITLE'				: 'Change Language',
 
 		'VIEW_NO_RESULT'			: 'No results',
 		'VIEW_NO_PUBLIC_ALBUMS'		: 'No public albums',
@@ -346,6 +352,8 @@ lychee.init = function() {
 			lychee.dropboxKey      = data.config.dropboxKey      || '';
 			lychee.location        = data.config.location        || '';
 			lychee.checkForUpdates = data.config.checkForUpdates || '1';
+            lychee.lang			   = data.config.lang            || '';
+			lychee.lang_available  = data.config.lang_available  || {};
 
             lychee.upload = !lychee.api_V2;
             lychee.admin = !lychee.api_V2;

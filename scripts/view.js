@@ -481,6 +481,7 @@ view.settings = {
 			{
 				view.settings.content.setSorting();
                 view.settings.content.setDropboxKey();
+                view.settings.content.setLang();
             }
     	},
 
@@ -605,6 +606,32 @@ view.settings = {
 
             $(".settings_view").append(msg);
             settings.bind('#basicModal__action_dropbox_change','.setDropBox',settings.changeDropboxKey);
+        },
+
+		setLang: function () {
+			let msg = `
+			<div class="setLang">
+			<p>${ lychee.locale['LANG_TEXT']}
+			  <span class="select">
+				  <select id="settings_photos_order" name="lang">`;
+			let i = 0;
+			while( i < lychee.lang_available.length)
+			{
+				let lang_av = lychee.lang_available[i];
+                msg += `<option ` + (lychee.lang == lang_av ? 'selected' : '') + `>` + lang_av + `</option>`;
+                i += 1;
+			}
+			msg += `
+				  </select>
+			  </span>
+			</p>
+			<div class="basicModal__buttons">
+				<a id="basicModal__action_set_lang" class="basicModal__button">${ lychee.locale['LANG_TITLE'] }</a>
+			</div>
+			</div>`
+
+            $(".settings_view").append(msg);
+            settings.bind('#basicModal__action_set_lang','.setLang',settings.changeLang);
         }
     },
 

@@ -321,3 +321,18 @@ settings.changeDropboxKey = function(params) {
     })
 
 };
+
+
+
+settings.changeLang = function(params) {
+
+    api.post('Settings::setLang', params, function(data) {
+
+        if (data===true) {
+            loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_LANG']);
+            lychee.init(); // to reload languages.
+        } else lychee.error(null, params, data)
+
+    })
+
+};
