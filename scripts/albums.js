@@ -21,7 +21,7 @@ albums.load = function() {
 			let waitTime = 0;
 
 			// Smart Albums
-			if (lychee.publicMode===false) albums._createSmartAlbums(data.smartalbums);
+			if (lychee.publicMode===false && data.smartalbums != null) albums._createSmartAlbums(data.smartalbums);
 
 			albums.json = data;
 
