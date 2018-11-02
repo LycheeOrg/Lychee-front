@@ -213,6 +213,7 @@ upload.start = {
 
 			};
 
+            xhr.setRequestHeader( 'X-XSRF-TOKEN', csrf.getCookie( 'XSRF-TOKEN' ) );
 			xhr.send(formData)
 
 		};
