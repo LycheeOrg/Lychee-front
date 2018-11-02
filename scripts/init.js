@@ -7,6 +7,9 @@ $(document).ready(function() {
 	// Event Name
 	let eventName = lychee.getEventName();
 
+	// set CSRF protection (Laravel)
+    csrf.bind();
+
 	// Set API error handler
 	api.onError = lychee.error;
 
