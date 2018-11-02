@@ -171,7 +171,8 @@
 		margin: 0 0 0 6px;
 		padding: 12px 8px 6px;
 		width: 18px;
-		background: $colorRed;
+		//background: $colorRed;
+		background: $colorBlue;
 		box-shadow: 0 0 2px black(.6);
 		border-radius: 0 0 5px 5px;
 		border: 1px solid #fff;
@@ -183,6 +184,14 @@
 
 		&--visible {
 			display: inline-block;
+		}
+
+		&--not--hidden {
+			background: $colorGreen;
+		}
+
+		&--star {
+			background: $colorYellow;
 		}
 
 		.iconic {

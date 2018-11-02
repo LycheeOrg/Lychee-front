@@ -72,8 +72,8 @@ build.album = function(data) {
 
 		html += lychee.html`
 		        <div class='badges'>
-		            <a class='badge ${ (data.star==='1'     ? 'badge--visible' : '') } icn-star'>${ build.iconic('star') }</a>
-		            <a class='badge ${ (data.public==='1'   ? 'badge--visible' : '') } icn-share'>${ build.iconic('eye') }</a>
+		            <a class='badge ${ (data.star==='1'     ? 'badge--visible badge--star' : '') } icn-star'>${ build.iconic('star') }</a>
+		            <a class='badge ${ (data.public==='1'   ? 'badge--visible' : '') } ${ (data.hidden==='1' ? 'badge--not--hidden' : '') } icn-share'>${ build.iconic('eye') }</a>
 		            <a class='badge ${ (data.unsorted==='1' ? 'badge--visible' : '') }'>${ build.iconic('list') }</a>
 		            <a class='badge ${ (data.recent==='1'   ? 'badge--visible' : '') }'>${ build.iconic('clock') }</a>
 		            <a class='badge ${ (data.password==='1' ? 'badge--visible' : '') }'>${ build.iconic('lock-locked') }</a>

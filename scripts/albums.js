@@ -90,7 +90,8 @@ albums._createSmartAlbums = function(data) {
 		title   : lychee.locale['PUBLIC'],
 		sysdate : data.public.num + ' ' + lychee.locale['NUM_PHOTOS'],
 		public  : '1',
-		thumbs  : data.public.thumbs
+		thumbs  : data.public.thumbs,
+        hidden 	: '1'
 	};
 
 	data.recent = {
