@@ -177,8 +177,8 @@ view.album = {
 
 			let $badge = $('.photo[data-id="' + photoID + '"] .icn-star');
 
-			if (album.json.content[photoID].star==='1') $badge.addClass('badge--visible');
-			else                                        $badge.removeClass('badge--visible')
+			if (album.json.content[photoID].star==='1') $badge.addClass('badge--star');
+			else                                        $badge.removeClass('badge--star')
 
 		},
 
