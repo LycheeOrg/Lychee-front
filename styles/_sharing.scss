@@ -4,9 +4,8 @@
   margin-left: auto;
   margin-right: auto;
 
-  .row {
-    margin-right: -15px;
-    margin-left: -15px;
+  .sharing_view_line {
+    width: 100%;
     display: flex;
   }
 
@@ -23,13 +22,7 @@
   }
 
   .col-xs-5 {
-    width: 40%;
-  }
-
-  .btn-primary {
-    color: #fff;
-    background-color: #337ab7;
-    border-color: #2e6da4;
+    width: 50%;
   }
 
   .btn-block+.btn-block {
@@ -40,16 +33,15 @@
     display: block;
     width: 100%;
   }
+
   .btn-default {
-    color: #333;
-    background-color: #fff;
-    border-color: #ccc;
+    color: $colorBlue;
+    border-color: $colorBlue;
+    background: rgba(0,0,0,.5);
+    border-radius: 3px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.7)
   }
-  .btn-warning {
-    color: #fff;
-    background-color: #f0ad4e;
-    border-color: #eea236;
-  }
+
   .btn {
     display: inline-block;
     padding: 6px 12px;
@@ -73,7 +65,7 @@
   }
 
   select[multiple], select[size] {
-    height: auto;
+    height: 150px;
   }
 
   .form-control {
@@ -99,7 +91,7 @@
     display: inline-block;
     width: 15px;
     height: 14px;
-    fill: #818181;
+    fill: $colorBlue;
 
     .iconic.ionicons {
       margin: 0 8px -2px 0;
@@ -112,6 +104,8 @@
     margin: 0 0 5%;
     width: 100%;
     color: #CCC;
+    text-align: center;
+    font-size: 16px;
 
     a {
       color: rgba(255,255,255,.9);
@@ -121,7 +115,7 @@
   }
 
   p:last-of-type {
-    margin: 0;
+    margin: 10px 0 10px;
   }
 
   input.text {
@@ -212,20 +206,20 @@
 
   .select {
     position: relative;
-    margin: 1px 5px;
+    //margin: 1px 5px;
     padding: 0;
-    width: 110px;
     color: #fff;
     border-radius: 3px;
     border: 1px solid rgba(0,0,0,.2);
     box-shadow: 0 1px 0 rgba(255,255,255,.02);
-    font-size: 11px;
+    font-size: 14px;
     line-height: 16px;
-    overflow: hidden;
+    //overflow: hidden;
     outline: 0;
     vertical-align: middle;
     background: rgba(0,0,0,.3);
     display: inline-block;
+
     select {
       margin: 0;
       padding: 4px 8px;
