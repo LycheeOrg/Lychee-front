@@ -128,7 +128,10 @@ build.imageview = function(data, visibleControls) {
 	let html      = '';
 	let hasMedium = data.medium !== '';
 
-	if (hasMedium===false) {
+	if(data.url.indexOf('.mp4') > -1){
+    html += lychee.html`<video width="320" height="240" id='image' class='${ visibleControls===true ? '' : 'full' }' autoplay><source src='${ data.url }' type="video/mp4">Your browser does not support the video tag.</video>`
+	}
+	else if (hasMedium===false) {
 
 		html += lychee.html`<img id='image' class='${ visibleControls===true ? '' : 'full' }' src='${ data.url }' draggable='false'>`
 

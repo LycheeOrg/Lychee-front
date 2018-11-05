@@ -335,6 +335,9 @@ view.photo = {
 		// Hide Photo
 		lychee.animate(lychee.imageview, 'fadeOut');
 		setTimeout(() => {
+			if($('video').length){
+          $('video')[0].pause();
+			}
 			lychee.imageview.hide();
 			view.album.sidebar()
 		}, 300)
