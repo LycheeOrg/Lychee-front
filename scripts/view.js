@@ -27,6 +27,7 @@ view.albums = {
 
 			let smartData  = '';
 			let albumsData = '';
+			let sharedData = '';
 
 			// Smart Albums
 			if (lychee.publicMode===false && albums.json.smartalbums != null) {
@@ -36,12 +37,16 @@ view.albums = {
 				albums.parse(albums.json.smartalbums.starred);
 				albums.parse(albums.json.smartalbums.recent);
 
-				smartData = build.divider('Smart Albums') + build.album(albums.json.smartalbums.unsorted) + build.album(albums.json.smartalbums.public) + build.album(albums.json.smartalbums.starred) + build.album(albums.json.smartalbums.recent)
+				smartData = build.divider(lychee.locale['SMART_ALBUMS']);
+				smartData += build.album(albums.json.smartalbums.unsorted);
+				smartData += build.album(albums.json.smartalbums.public);
+				smartData += build.album(albums.json.smartalbums.starred);
+				smartData += build.album(albums.json.smartalbums.recent);
 
 			}
 
 			// Albums
-			if (albums.json.albums && albums.json.num!==0) {
+			if (albums.json.albums && albums.json.albums.length !==0) {
 
 				$.each(albums.json.albums, function() {
 					albums.parse(this);
@@ -49,15 +54,30 @@ view.albums = {
 				});
 
 				// Add divider
-				if (lychee.publicMode===false) albumsData = build.divider('Albums') + albumsData
+				if (lychee.publicMode===false) albumsData = build.divider(lychee.locale['ALBUMS']) + albumsData
 
 			}
 
-			if (smartData==='' && albumsData==='') {
+			if(lychee.api_V2)
+			{
+                // Shared
+                if (albums.json.shared_albums && albums.json.shared_albums.length !==0) {
+
+                    $.each(albums.json.shared_albums, function() {
+                        albums.parse(this);
+                        sharedData += build.album(this)
+                    });
+
+                    // Add divider
+                    if (lychee.publicMode===false) sharedData = build.divider(lychee.locale['SHARED_ALBUMS']) + sharedData
+                }
+			}
+
+            if (smartData==='' && albumsData==='' && sharedData==='' ) {
 				lychee.content.html('');
 				$('body').append(build.no_content('eye'))
 			} else {
-				lychee.content.html(smartData + albumsData)
+				lychee.content.html(smartData + albumsData + sharedData)
 			}
 
 			// Restore scroll position

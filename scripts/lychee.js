@@ -52,6 +52,7 @@ lychee = {
 		'UPDATE_AVAILABLE'	: 'Update available!',
 
 		'SMART_ALBUMS'		: 'Smart albums',
+        'SHARED_ALBUMS'		: 'Shared albums',
 		'ALBUMS'			: 'Albums',
 
 		'RENAME'			: 'Rename',
