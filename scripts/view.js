@@ -692,30 +692,34 @@ view.users = {
             '<p>' +
             '<span class="text">username</span>' +
             '<span class="text">new password</span>' +
-            '<span class="text">' + build.iconic('arrow-thick-top')+ '</span>' +
+            '<span class="text">' + build.iconic('data-transfer-upload')+ '</span>' +
             '</p>' +
             '</div>';
 
             $(".users_view").append(html);
 
-            let i = 0;
-			while(i < users.json.length)
-			{
-				user = users.json[i];
+            $.each(users.json, function() {
+                $(".users_view").append(build.user(this));
+                // photosData += build.photo(this)
+                settings.bind('#UserUpdate' + this.id, '#UserData' + this.id, users.update);
+                settings.bind('#UserDelete' + this.id, '#UserData' + this.id, users.delete);
+            });
 
-                $(".users_view").append(build.user(user));
-
-                if(user.upload === 1)
-				{
-                    $('#UserData' + user.id + ' .choice input[name="upload"]').click();
-				}
-
-                settings.bind('#UserUpdate' + user.id, '#UserData' + user.id, users.update);
-                settings.bind('#UserDelete' + user.id, '#UserData' + user.id, users.delete);
-
-                i += 1;
-
-			}
+            // let i = 0;
+			// while(i < users.json.length)
+			// {
+			// 	user = users.json[i];
+			//
+			//
+            //     if(user.upload === 1)
+			// 	{
+            //         $('#UserData' + user.id + ' .choice input[name="upload"]').click();
+			// 	}
+			//
+			//
+            //     i += 1;
+			//
+			// }
             html = '<div class="users_view_line"';
 
             if (users.json.length === 0) {
@@ -736,6 +740,150 @@ view.users = {
 				'</div>';
 			$(".users_view").append(html);
             settings.bind('#UserCreate_button', '#UserCreate', users.create);
+        }
+    }
+};
+
+
+view.sharing = {
+    init: function() {
+
+        view.sharing.title();
+        view.sharing.content.init()
+
+    },
+
+    title: function() {
+
+        lychee.setTitle('Sharing', false)
+
+    },
+
+    clearContent: function() {
+        $('.content').unbind('mousedown');
+        $(".content").html('<div class="sharing_view"></div>');
+    },
+
+    content: {
+
+        init: function () {
+
+            view.sharing.clearContent();
+
+            if (sharing.json.shared.length === 0) {
+                $(".sharing_view").append('<div class="sharing_view_line" style="margin-bottom: 50px;"><p style="text-align: center">Sharing list is empty!</p></div>');
+            }
+
+
+            let html = '';
+
+            html += `
+            <div class="row">
+				<div class="col-xs-5">
+					<select name="from" id="undo_redo" class="form-control" size="13" multiple="multiple">`
+
+            $.each(sharing.json.users, function() {
+                html += `<option value="` + this.id + `">` + this.username + `</option>`;
+            });
+
+
+
+
+			html += `</select>
+				</div>
+				
+				<div class="col-xs-2">
+					<button type="button" id="undo_redo_undo" class="btn btn-primary btn-block">undo</button>
+					<button type="button" id="undo_redo_rightAll" class="btn btn-default btn-block">` + build.iconic('media-skip-forward') + `</button>
+					<button type="button" id="undo_redo_rightSelected" class="btn btn-default btn-block">` + build.iconic('chevron-right') + `</button>
+					<button type="button" id="undo_redo_leftSelected" class="btn btn-default btn-block">` + build.iconic('chevron-left') + `</button>
+					<button type="button" id="undo_redo_leftAll" class="btn btn-default btn-block">` + build.iconic('media-skip-backward') + `</button>
+					<button type="button" id="undo_redo_redo" class="btn btn-warning btn-block">redo</button>
+				</div>
+				
+				<div class="col-xs-5">
+					<select name="to" id="undo_redo_to" class="form-control" size="13" multiple="multiple"></select>
+				</div>
+			</div>`;
+
+            html += `
+            <div class="row">
+				<div class="col-xs-5">
+					<select name="from" id="undo_redo" class="form-control" size="13" multiple="multiple">`
+
+            $.each(sharing.json.albums, function() {
+                html += `<option value="` + this.id + `">` + this.title + `</option>`;
+            });
+
+            html += `</select>
+				</div>
+				
+				<div class="col-xs-2">
+					<button type="button" id="undo_redo_undo" class="btn btn-primary btn-block">undo</button>
+					<button type="button" id="undo_redo_rightAll" class="btn btn-default btn-block">` + build.iconic('media-skip-forward') + `</button>
+					<button type="button" id="undo_redo_rightSelected" class="btn btn-default btn-block">` + build.iconic('chevron-right') + `</button>
+					<button type="button" id="undo_redo_leftSelected" class="btn btn-default btn-block">` + build.iconic('chevron-left') + `</button>
+					<button type="button" id="undo_redo_leftAll" class="btn btn-default btn-block">` + build.iconic('media-skip-backward') + `</button>
+					<button type="button" id="undo_redo_redo" class="btn btn-warning btn-block">redo</button>
+				</div>
+				
+				<div class="col-xs-5">
+					<select name="to" id="undo_redo_to" class="form-control" size="13" multiple="multiple"></select>
+				</div>
+			</div>`;
+            $(".sharing_view").append(html);
+
+
+            //     let html = '';
+		//
+        //     html += '<div class="users_view_line">' +
+        //         '<p>' +
+        //         '<span class="text">username</span>' +
+        //         '<span class="text">new password</span>' +
+        //         '<span class="text">' + build.iconic('data-transfer-upload')+ '</span>' +
+        //         '</p>' +
+        //         '</div>';
+		//
+        //     $(".users_view").append(html);
+		//
+        //     let i = 0;
+        //     while(i < users.json.length)
+        //     {
+        //         user = users.json[i];
+		//
+        //         $(".users_view").append(build.user(user));
+		//
+        //         if(user.upload === 1)
+        //         {
+        //             $('#UserData' + user.id + ' .choice input[name="upload"]').click();
+        //         }
+		//
+        //         settings.bind('#UserUpdate' + user.id, '#UserData' + user.id, users.update);
+        //         settings.bind('#UserDelete' + user.id, '#UserData' + user.id, users.delete);
+		//
+        //         i += 1;
+		//
+        //     }
+        //     html = '<div class="users_view_line"';
+		//
+        //     if (users.json.length === 0) {
+        //         html += ' style="padding-top: 0px;"';
+        //     }
+        //     html += '>' +
+        //         '<p id="UserCreate">' +
+        //         '<input class="text" name="username" type="text" value="" placeholder="new username" />' +
+        //         '<input class="text" name="password" type="text" placeholder="new password" />' +
+        //         '<span class="choice">' +
+        //         '<label>' +
+        //         '<input type="checkbox" name="upload" />' +
+        //         '<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
+        //         '</label>' +
+        //         '</span>' +
+        //         '</p>' +
+        //         '<a id="UserCreate_button"  class="basicModal__button basicModal__button_CREATE">Create</a>' +
+        //         '</div>';
+        //     $(".users_view").append(html);
+        //     settings.bind('#UserCreate_button', '#UserCreate', users.create);
         }
     }
 };

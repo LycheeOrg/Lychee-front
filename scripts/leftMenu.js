@@ -22,6 +22,7 @@ leftMenu.build = function () {
     if (lychee.api_V2)
     {
         html += '<a class="linkMenu" id="button_users">'+ build.iconic('person') + 'Users</a>'
+        html += '<a class="linkMenu" id="button_sharing">'+ build.iconic('cloud') + 'Sharing</a>'
     }
     html += '<a class="linkMenu" id="button_logs">' + build.iconic('align-left') + lychee.locale['LOGS'] + '</a>';
     html += '<a class="linkMenu" id="button_diagnostics">' + build.iconic('wrench') + lychee.locale['DIAGNOSTICS'] + '</a>';
@@ -63,7 +64,8 @@ leftMenu.bind = function() {
 
     if (lychee.api_V2)
     {
-        leftMenu.dom('#button_users')         .on(eventName, leftMenu.Users)
+        leftMenu.dom('#button_users')         .on(eventName, leftMenu.Users);
+        leftMenu.dom('#button_sharing')       .on(eventName, leftMenu.Sharing)
     }
 
     return true
@@ -94,4 +96,8 @@ leftMenu.Diagnostics = function() {
 
 leftMenu.Users = function () {
     users.list();
+};
+
+leftMenu.Sharing = function () {
+    sharing.list();
 };
