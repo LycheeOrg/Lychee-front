@@ -2,18 +2,28 @@ sharing = {
     json: null
 };
 
-sharing.update = function (params) {
+sharing.add = function () {
 
-    if ( $('#UserData' + params.id + ' .choice input[name="upload"]:checked').length === 1 )
-    {
-        params.upload = '1';
-    }
-    else
-    {
-        params.upload= '0';
-    }
+    let params = {
+        albumIDs: '',
+        UserIDs: ''
+    };
 
-    api.post('User::Save', params, function (data) {
+    $('#albums_list_to option').each(function () {
+        if(params.albumIDs !== '')
+            params.albumIDs += ',';
+        params.albumIDs += this.value;
+    });
+
+    $('#user_list_to option').each(function () {
+        if(params.UserIDs !== '')
+            params.UserIDs += ',';
+        params.UserIDs += this.value;
+    });
+
+    console.log(params);
+
+    api.post('Sharing::Add', params, function (data) {
         if(data!==true)
         {
             loadingBar.show('error', data.description);
@@ -21,41 +31,26 @@ sharing.update = function (params) {
         }
         else
         {
-            loadingBar.show('success', 'User updated!')
-            users.list(); // reload user list
-        }
-    })
-};
-
-sharing.add = function (params) {
-
-    if ( $('#UserCreate .choice input[name="upload"]:checked').length === 1 )
-    {
-        params.upload = '1';
-    }
-    else
-    {
-        params.upload= '0';
-    }
-
-    api.post('User::Create', params, function (data) {
-        if(data!==true)
-        {
-            loadingBar.show('error', data.description);
-            lychee.error(null,params,data)
-        }
-        else
-        {
-            loadingBar.show('success', 'User created!');
-            users.list(); // reload user list
+            loadingBar.show('success', 'Sharing updated!');
+            sharing.list(); // reload user list
         }
     })
 
 };
 
-sharing.delete = function (params) {
+sharing.delete = function () {
 
-    api.post('User::Delete', params, function (data) {
+    let params = {
+        ShareIDs: '',
+    };
+
+    $('input[name="remove_id"]').each(function () {
+        if(params.ShareIDs !== '')
+            params.ShareIDs += ',';
+        params.ShareIDs += this.value;
+    });
+
+    api.post('Sharing::Delete', params, function (data) {
         if(data!==true)
         {
             loadingBar.show('error', data.description);

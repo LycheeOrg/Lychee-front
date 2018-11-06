@@ -638,7 +638,7 @@ view.settings = {
 			while( i < lychee.lang_available.length)
 			{
 				let lang_av = lychee.lang_available[i];
-                msg += `<option ` + (lychee.lang == lang_av ? 'selected' : '') + `>` + lang_av + `</option>`;
+                msg += `<option ` + (lychee.lang === lang_av ? 'selected' : '') + `>` + lang_av + `</option>`;
                 i += 1;
 			}
 			msg += `
@@ -648,7 +648,7 @@ view.settings = {
 			<div class="basicModal__buttons">
 				<a id="basicModal__action_set_lang" class="basicModal__button">${ lychee.locale['LANG_TITLE'] }</a>
 			</div>
-			</div>`
+			</div>`;
 
             $(".settings_view").append(msg);
             settings.bind('#basicModal__action_set_lang','.setLang',settings.changeLang);
@@ -792,10 +792,10 @@ view.sharing = {
 				
 				<div class="col-xs-2">
 					<!--<button type="button" id="albums_list_undo" class="btn btn-primary btn-block">undo</button>-->
-					<button type="button" id="albums_list_rightAll" class="btn btn-default btn-block">` + build.iconic('media-skip-forward') + `</button>
-					<button type="button" id="albums_list_rightSelected" class="btn btn-default btn-block">` + build.iconic('chevron-right') + `</button>
-					<button type="button" id="albums_list_leftSelected" class="btn btn-default btn-block">` + build.iconic('chevron-left') + `</button>
-					<button type="button" id="albums_list_leftAll" class="btn btn-default btn-block">` + build.iconic('media-skip-backward') + `</button>
+					<button type="button" id="albums_list_rightAll" class="btn btn-default btn-block blue">` + build.iconic('media-skip-forward') + `</button>
+					<button type="button" id="albums_list_rightSelected" class="btn btn-default btn-block blue">` + build.iconic('chevron-right') + `</button>
+					<button type="button" id="albums_list_leftSelected" class="btn btn-default btn-block grey">` + build.iconic('chevron-left') + `</button>
+					<button type="button" id="albums_list_leftAll" class="btn btn-default btn-block grey">` + build.iconic('media-skip-backward') + `</button>
 					<!--<button type="button" id="albums_list_redo" class="btn btn-warning btn-block">redo</button>-->
 				</div>
 				
@@ -805,7 +805,7 @@ view.sharing = {
 			</div>`;
 
             html += `
-            <div class="sharing_view_line"><p>with</p></div>
+            <div class="sharing_view_line"><p class="with">with</p></div>
             <div class="sharing_view_line">
 				<div class="col-xs-5">
 					<select name="from" id="user_list" class="form-control select" size="13" multiple="multiple">`
@@ -819,10 +819,10 @@ view.sharing = {
 				
 				<div class="col-xs-2">
 					<!--<button type="button" id="user_list_undo" class="btn btn-primary btn-block">undo</button>-->
-					<button type="button" id="user_list_rightAll" class="btn btn-default btn-block">` + build.iconic('media-skip-forward') + `</button>
-					<button type="button" id="user_list_rightSelected" class="btn btn-default btn-block">` + build.iconic('chevron-right') + `</button>
-					<button type="button" id="user_list_leftSelected" class="btn btn-default btn-block">` + build.iconic('chevron-left') + `</button>
-					<button type="button" id="user_list_leftAll" class="btn btn-default btn-block">` + build.iconic('media-skip-backward') + `</button>
+					<button type="button" id="user_list_rightAll" class="btn btn-default btn-block blue">` + build.iconic('media-skip-forward') + `</button>
+					<button type="button" id="user_list_rightSelected" class="btn btn-default btn-block blue">` + build.iconic('chevron-right') + `</button>
+					<button type="button" id="user_list_leftSelected" class="btn btn-default btn-block grey">` + build.iconic('chevron-left') + `</button>
+					<button type="button" id="user_list_leftAll" class="btn btn-default btn-block grey">` + build.iconic('media-skip-backward') + `</button>
 					<!--<button type="button" id="user_list_redo" class="btn btn-warning btn-block">redo</button>-->
 				</div>
 				
@@ -830,64 +830,36 @@ view.sharing = {
 					<select name="to" id="user_list_to" class="form-control select" size="13" multiple="multiple"></select>
 				</div>
 			</div>`;
-			html += `<div class="sharing_view_line"><a id="Share_button"  class="basicModal__button basicModal__button_SHARE">Share</a></div>`;
+			html += `<div class="sharing_view_line"><a id="Share_button"  class="basicModal__button">Share</a></div>`;
+            html += '<div class="sharing_view_line">';
+
+            $.each(sharing.json.shared, function() {
+                html +=
+				`<p><span class="text">` + this.title + `</span><span class="text">` + this.username +
+                '</span><span class="choice">' +
+                '<label>' +
+                '<input type="checkbox" name="remove_id" value="' + this.id + '"/>' +
+                '<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
+                '</label>' +
+                '</span></p>' +
+				``;
+            });
+
+            html += '</div>';
+            if(sharing.json.shared.length !== 0)
+			{
+                html += `<div class="sharing_view_line"><a id="Remove_button"  class="basicModal__button">Remove</a></div>`;
+			}
 
             $(".sharing_view").append(html);
 
             $('#albums_list').multiselect();
             $('#user_list').multiselect();
+            $("#Share_button").on('click', sharing.add)
+                .on('mouseenter', function () {$('#albums_list_to, #user_list_to').addClass('borderBlue')})
+                .on('mouseleave', function () {$('#albums_list_to, #user_list_to').removeClass('borderBlue')});
 
-
-            //     let html = '';
-		//
-        //     html += '<div class="users_view_line">' +
-        //         '<p>' +
-        //         '<span class="text">username</span>' +
-        //         '<span class="text">new password</span>' +
-        //         '<span class="text">' + build.iconic('data-transfer-upload')+ '</span>' +
-        //         '</p>' +
-        //         '</div>';
-		//
-        //     $(".users_view").append(html);
-		//
-        //     let i = 0;
-        //     while(i < users.json.length)
-        //     {
-        //         user = users.json[i];
-		//
-        //         $(".users_view").append(build.user(user));
-		//
-        //         if(user.upload === 1)
-        //         {
-        //             $('#UserData' + user.id + ' .choice input[name="upload"]').click();
-        //         }
-		//
-        //         settings.bind('#UserUpdate' + user.id, '#UserData' + user.id, users.update);
-        //         settings.bind('#UserDelete' + user.id, '#UserData' + user.id, users.delete);
-		//
-        //         i += 1;
-		//
-        //     }
-        //     html = '<div class="users_view_line"';
-		//
-        //     if (users.json.length === 0) {
-        //         html += ' style="padding-top: 0px;"';
-        //     }
-        //     html += '>' +
-        //         '<p id="UserCreate">' +
-        //         '<input class="text" name="username" type="text" value="" placeholder="new username" />' +
-        //         '<input class="text" name="password" type="text" placeholder="new password" />' +
-        //         '<span class="choice">' +
-        //         '<label>' +
-        //         '<input type="checkbox" name="upload" />' +
-        //         '<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
-        //         '</label>' +
-        //         '</span>' +
-        //         '</p>' +
-        //         '<a id="UserCreate_button"  class="basicModal__button basicModal__button_CREATE">Create</a>' +
-        //         '</div>';
-        //     $(".users_view").append(html);
-        //     settings.bind('#UserCreate_button', '#UserCreate', users.create);
+			$('#Remove_button').on('click', sharing.delete);
         }
     }
 };

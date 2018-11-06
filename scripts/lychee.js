@@ -487,7 +487,7 @@ lychee.load = function() {
 
 	if (hash[0]!=null) albumID = hash[0];
 	if (hash[1]!=null) photoID = hash[1];
-
+	
 	if (albumID && photoID) {
 
 		// Trash data
