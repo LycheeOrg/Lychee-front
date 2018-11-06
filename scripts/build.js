@@ -57,11 +57,11 @@ build.album = function(data) {
 			{
                 date_stamp = (data.min_takestamp===data.max_takestamp ? data.max_takestamp  : data.min_takestamp + ' - ' + data.max_takestamp)
 			}
-            else if (data.min_takestamp !== '')
+            else if (data.min_takestamp !== '' && sortingAlbums[0]==='min_takestamp')
             {
                 date_stamp = data.min_takestamp
             }
-            else if (data.min_takestamp !== '' && data.max_takestamp !== '')
+            else if (data.max_takestamp !== '' && sortingAlbums[0]==='max_takestamp')
             {
                 date_stamp = data.max_takestamp
             }
