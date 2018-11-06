@@ -40,6 +40,15 @@ build.multiselect = function(top, left) {
 
 };
 
+build.getThumbnailHtml = function(thumb){
+  if(thumb.indexOf('mp4') === -1 && thumb.indexOf('ogv') === -1 && thumb.indexOf('webm') === -1){
+    return `<img src='${thumb}' width='200' height='200' alt='Photo thumbnail' data-overlay='false' draggable='false'>`
+  }else {
+    return `<video width="200" height="200" id='image'  data-overlay='false' preload="metadata">
+							<source src='uploads/big/${ thumb }#t=50' type="video/mp4">Your browser does not support the video tag.</video><span></span>`
+  }
+}
+
 build.album = function(data) {
 
 	let html = '';
@@ -70,9 +79,9 @@ build.album = function(data) {
 
 	html += lychee.html`
 	        <div class='album' data-id='${ data.id }'>
-	            <img src='${ data.thumbs[2] }' width='200' height='200' alt='Photo thumbnail' data-overlay='false' draggable='false'>
-	            <img src='${ data.thumbs[1] }' width='200' height='200' alt='Photo thumbnail' data-overlay='false' draggable='false'>
-	            <img src='${ data.thumbs[0] }' srcset='${ retinaThumbUrl } 1.5x' width='200' height='200' alt='Photo thumbnail' data-overlay='${ isPhoto }' draggable='false'>
+	              ${build.getThumbnailHtml(data.thumbs[2])}
+	              ${build.getThumbnailHtml(data.thumbs[1])}
+	              ${build.getThumbnailHtml(data.thumbs[0])}
 	            <div class='overlay'>
 	                <h1 title='${ data.title }'>${ data.title }</h1>
 	                <a>${ date_stamp }</a>
@@ -106,8 +115,9 @@ build.photo = function(data) {
 	let { path: retinaThumbUrl } = lychee.retinize(data.thumbUrl);
 
 	html += lychee.html`
-	        <div class='photo' data-album-id='${ data.album }' data-id='${ data.id }'>
-	            <img src='${ data.thumbUrl }' srcset='${ retinaThumbUrl } 1.5x' width='200' height='200' alt='Photo thumbnail' draggable='false'>
+	        <div class='photo' data-album-id='${ data.album }' data-id='${ data.id }' test="test">
+	            ${build.getThumbnailHtml(data.thumbUrl)}
+	            <!--<img src='${ data.thumbUrl }' srcset='${ retinaThumbUrl } 1.5x' width='200' height='200' alt='Photo thumbnail' draggable='false'>-->
 	            <div class='overlay'>
 	                <h1 title='${ data.title }'>${ data.title }</h1>
 	        `;
@@ -139,7 +149,10 @@ build.imageview = function(data, visibleControls) {
 	let html      = '';
 	let hasMedium = data.medium !== '';
 
-	if (hasMedium===false) {
+	if(data.type.indexOf('video') > -1){
+    html += lychee.html`<video width="auto" height="auto" id='image' controls class='${ visibleControls===true ? '' : 'full' }' autoplay><source src='${ data.url }' type="${ data.type }">Your browser does not support the video tag.</video>`
+	}
+	else if (hasMedium===false) {
 
 		html += lychee.html`<img id='image' class='${ visibleControls===true ? '' : 'full' }' src='${ data.url }' draggable='false'>`
 
