@@ -16,7 +16,12 @@ contextMenu.add = function(e) {
 		{ title: build.iconic('folder') + lychee.locale['NEW_ALBUM'], fn: album.add }
 	];
 
-	basicContext.show(items, e.originalEvent);
+    if (lychee.api_V2 && !lychee.admin)
+    {
+        items.splice(3, 2);
+    }
+
+    basicContext.show(items, e.originalEvent);
 
 	upload.notify()
 
