@@ -65,11 +65,13 @@
 		}
 
 		&:hover img,
-		&.active img {
+		&:hover video,
+		&.active img,
+		&.active video {
 			border-color: $colorBlue;
 		}
 
-		&:active img {
+		&:active img, &:active video {
 			transition: none;
 			border-color: darken($colorBlue, 15%);
 		}
@@ -87,6 +89,7 @@
 	.album  {
 		video:first-child,
 		img:first-child,
+		video:nth-child(3),
 		img:nth-child(2) {
 			transform: rotate(0) translateY(0) translateX(0);
 			opacity: 0;
@@ -101,7 +104,7 @@
 			will-change: transform;
 		}
 		&:hover video:nth-child(1),
-		&:hover video:nth-child(2) {
+		&:hover video:nth-child(3) {
 			opacity: 1;
 			// Keep the composited layer created by the browser during the animation.
 			// Makes the border of the transformed thumb look better.
@@ -113,7 +116,7 @@
 			transform: rotate(-2deg) translateY(10px) translateX(-12px);
 		}
 
-		&:hover img:nth-child(2), &:hover video:nth-child(2) {
+		&:hover img:nth-child(2), &:hover video:nth-child(3) {
 			transform: rotate(5deg) translateY(-8px) translateX(12px);
 		}
 	}
