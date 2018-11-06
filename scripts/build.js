@@ -247,6 +247,12 @@ build.user = function (user) {
         '<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
         '</label>' +
         '</span>' +
+        '<span class="choice">' +
+        '<label>' +
+        '<input type="checkbox" name="lock" />' +
+        '<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
+        '</label>' +
+        '</span>' +
         '</p>' +
         '<a id="UserUpdate' + user.id + '"  class="basicModal__button basicModal__button_OK">Save</a>' +
         '<a id="UserDelete' + user.id + '"  class="basicModal__button basicModal__button_DEL">Delete</a>' +

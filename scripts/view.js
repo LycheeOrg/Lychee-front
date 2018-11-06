@@ -488,8 +488,8 @@ view.settings = {
     },
 
     clearContent: function() {
-        $('.content').unbind('mousedown');
-    	$(".content").html('<div class="settings_view"></div>');
+        lychee.content.unbind('mousedown');
+        lychee.content.html('<div class="settings_view"></div>');
 	},
 
 	content: {
@@ -672,8 +672,8 @@ view.users = {
     },
 
     clearContent: function() {
-        $('.content').unbind('mousedown');
-        $(".content").html('<div class="users_view"></div>');
+        lychee.content.unbind('mousedown');
+        lychee.content.html('<div class="users_view"></div>');
     },
 
     content: {
@@ -692,7 +692,8 @@ view.users = {
             '<p>' +
             '<span class="text">username</span>' +
             '<span class="text">new password</span>' +
-            '<span class="text">' + build.iconic('data-transfer-upload')+ '</span>' +
+            '<span class="text_icon">' + build.iconic('data-transfer-upload')+ '</span>' +
+			'<span class="text_icon">' + build.iconic('lock-locked')+ '</span>' +
             '</p>' +
             '</div>';
 
@@ -703,23 +704,17 @@ view.users = {
                 // photosData += build.photo(this)
                 settings.bind('#UserUpdate' + this.id, '#UserData' + this.id, users.update);
                 settings.bind('#UserDelete' + this.id, '#UserData' + this.id, users.delete);
+				if(this.upload === 1)
+				{
+					$('#UserData' + this.id + ' .choice input[name="upload"]').click();
+				}
+                if(this.lock === 1)
+                {
+                    $('#UserData' + this.id + ' .choice input[name="lock"]').click();
+                }
+
             });
 
-            // let i = 0;
-			// while(i < users.json.length)
-			// {
-			// 	user = users.json[i];
-			//
-			//
-            //     if(user.upload === 1)
-			// 	{
-            //         $('#UserData' + user.id + ' .choice input[name="upload"]').click();
-			// 	}
-			//
-			//
-            //     i += 1;
-			//
-			// }
             html = '<div class="users_view_line"';
 
             if (users.json.length === 0) {
@@ -732,6 +727,12 @@ view.users = {
                 '<span class="choice">' +
                 '<label>' +
                 '<input type="checkbox" name="upload" />' +
+                '<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
+                '</label>' +
+                '</span>' +
+                '<span class="choice">' +
+                '<label>' +
+                '<input type="checkbox" name="lock" />' +
                 '<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
                 '</label>' +
                 '</span>' +
@@ -760,8 +761,8 @@ view.sharing = {
     },
 
     clearContent: function() {
-        $('.content').unbind('mousedown');
-        $(".content").html('<div class="sharing_view"></div>');
+        lychee.content.unbind('mousedown');
+        lychee.content.html('<div class="sharing_view"></div>');
     },
 
     content: {
@@ -879,8 +880,8 @@ view.logs_diagnostics = {
     },
 
     clearContent: function () {
-        $('.content').unbind('mousedown');
-        $(".content").html('<pre class="logs_diagnostics_view"></pre>');
+        lychee.content.unbind('mousedown');
+        lychee.content.html('<pre class="logs_diagnostics_view"></pre>');
     },
 
     content: {

@@ -12,6 +12,14 @@ users.update = function (params) {
     {
         params.upload= '0';
     }
+    if ( $('#UserData' + params.id + ' .choice input[name="lock"]:checked').length === 1 )
+    {
+        params.lock = '1';
+    }
+    else
+    {
+        params.lock = '0';
+    }
 
     api.post('User::Save', params, function (data) {
         if(data!==true)
@@ -35,7 +43,15 @@ users.create = function (params) {
     }
     else
     {
-        params.upload= '0';
+        params.upload = '0';
+    }
+    if ( $('#UserCreate .choice input[name="lock"]:checked').length === 1 )
+    {
+        params.lock = '1';
+    }
+    else
+    {
+        params.lock = '0';
     }
 
     api.post('User::Create', params, function (data) {

@@ -18,7 +18,7 @@ leftMenu.dom = function(selector) {
 leftMenu.build = function () {
     let html = '';
     html += '<a id="button_settings_close" class="closebtn" >&times;</a>';
-    html += '<a class="linkMenu" id="button_settings">'+ '<svg class="iconic"><use xlink:href="#cog"></use></svg>' + lychee.locale['SETTINGS'] + '</a>';
+    html += '<a class="linkMenu" id="button_settings_open">'+ '<svg class="iconic"><use xlink:href="#cog"></use></svg>' + lychee.locale['SETTINGS'] + '</a>';
     if (lychee.api_V2)
     {
         html += '<a class="linkMenu" id="button_users">'+ build.iconic('person') + 'Users</a>'
@@ -56,7 +56,7 @@ leftMenu.bind = function() {
     let eventName = lychee.getEventName();
 
     leftMenu.dom('#button_settings_close')    .on(eventName, leftMenu.close);
-    leftMenu.dom('#button_settings')          .on(eventName, settings.open);
+    leftMenu.dom('#button_settings_open')     .on(eventName, settings.open);
     leftMenu.dom('#button_signout')           .on(eventName, lychee.logout);
     leftMenu.dom('#button_logs')              .on(eventName, leftMenu.Logs);
     leftMenu.dom('#button_diagnostics')       .on(eventName, leftMenu.Diagnostics);
