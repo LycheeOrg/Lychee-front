@@ -40,21 +40,15 @@ build.multiselect = function(top, left) {
 
 };
 
-build.getThumbnailHtml = function(thumb){
-  console.log(thumb);
+build.getThumbnailHtml = function(thumb, retinaThumbUrl) {
   var thumbU = thumb.toUpperCase();
-  if(thumb !== 'uploads/thumb/' && thumbU.length && thumbU.indexOf('MP4') === -1 && thumbU.indexOf('OGV') === -1 && thumbU.indexOf('WEBM') === -1){
-    return `<img src='${thumb}' width='200' height='200' alt='Photo thumbnail' data-overlay='false' draggable='false'>`
+  if (thumb !== 'uploads/thumb/' && thumbU.length && thumbU.indexOf('MP4') === -1 && thumbU.indexOf('OGV') === -1 && thumbU.indexOf('WEBM') === -1) {
+    return `<img src='${thumb}' srcset='${ retinaThumbUrl } 1.5x' width='200' height='200' alt='Photo thumbnail' data-overlay='false' draggable='false'>`
   }
-  else
-    {
-      return `<span class="video" width='200' height='200' alt='Video thumbnail' data-overlay='false' class="" draggable='false'></span><span></span>`
-    }
-  // else {
-  //   return `<video width="200" height="200" id='image'  data-overlay='false' preload="metadata">
-		// 					<source src='uploads/big/${ thumb }#t=50' type="video/mp4">Your browser does not support the video tag.</video><span></span>`
-  // }
-}
+  else {
+    return `<span class="video" width='200' height='200' alt='Video thumbnail' data-overlay='false' class="" draggable='false'></span><span></span>`
+  }
+};
 
 build.album = function(data) {
 
@@ -86,9 +80,15 @@ build.album = function(data) {
 
 	html += lychee.html`
 	        <div class='album' data-id='${ data.id }'>
+<<<<<<< HEAD
 	              ${build.getThumbnailHtml(data.thumbs[2])}
 	              ${build.getThumbnailHtml(data.thumbs[1])}
 	              ${build.getThumbnailHtml(data.thumbs[0])}
+=======
+	              ${build.getThumbnailHtml(data.thumbs[2],data.thumbs[2])}
+	              ${build.getThumbnailHtml(data.thumbs[1],data.thumbs[1])}
+	              ${build.getThumbnailHtml(data.thumbs[0],data.thumbs[0])}
+>>>>>>> 739369b20b244e8839cd918ecc2fb80b57d4ce8b
 	            <div class='overlay'>
 	                <h1 title='${ data.title }'>${ data.title }</h1>
 	                <a>${ date_stamp }</a>
@@ -123,8 +123,13 @@ build.photo = function(data) {
 
 	html += lychee.html`
 	        <div class='photo' data-album-id='${ data.album }' data-id='${ data.id }' test="test">
+<<<<<<< HEAD
 	            ${build.getThumbnailHtml(data.thumbUrl)}
 	            <!--<img src='${ data.thumbUrl }' srcset='${ retinaThumbUrl } 1.5x' width='200' height='200' alt='Photo thumbnail' draggable='false'>-->
+=======
+	            ${build.getThumbnailHtml(data.thumbUrl,retinaThumbUrl)}
+	            <!-- <img src='${ data.thumbUrl }' srcset='${ retinaThumbUrl } 1.5x' width='200' height='200' alt='Photo thumbnail' draggable='false'> -->
+>>>>>>> 739369b20b244e8839cd918ecc2fb80b57d4ce8b
 	            <div class='overlay'>
 	                <h1 title='${ data.title }'>${ data.title }</h1>
 	        `;
