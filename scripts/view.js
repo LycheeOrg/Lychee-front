@@ -351,13 +351,13 @@ view.photo = {
 
 		// Disable Fullscreen
 		$(document).unbind('mousemove');
+    if($('video').length){
+      $('video')[$('video').length - 1].pause();
+    }
 
 		// Hide Photo
 		lychee.animate(lychee.imageview, 'fadeOut');
 		setTimeout(() => {
-			if($('video').length){
-          $('video')[0].pause();
-			}
 			lychee.imageview.hide();
 			view.album.sidebar()
 		}, 300)

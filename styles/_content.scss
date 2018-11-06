@@ -53,7 +53,7 @@
 		animation-fill-mode: forwards;
 		animation-timing-function: $timing;
 
-		img {
+		img, video {
 			position: absolute;
 			width: 200px;
 			height: 200px;
@@ -77,6 +77,7 @@
 
 	// Album -------------------------------------------------------------- //
 	.album  {
+		video:first-child,
 		img:first-child,
 		img:nth-child(2) {
 			transform: rotate(0) translateY(0) translateX(0);
@@ -91,12 +92,20 @@
 			// See https://github.com/electerious/Lychee/pull/626 for more.
 			will-change: transform;
 		}
+		&:hover video:nth-child(1),
+		&:hover video:nth-child(2) {
+			opacity: 1;
+			// Keep the composited layer created by the browser during the animation.
+			// Makes the border of the transformed thumb look better.
+			// See https://github.com/electerious/Lychee/pull/626 for more.
+			will-change: transform;
+		}
 
-		&:hover img:nth-child(1) {
+		&:hover img:nth-child(1), &:hover video:nth-child(1) {
 			transform: rotate(-2deg) translateY(10px) translateX(-12px);
 		}
 
-		&:hover img:nth-child(2) {
+		&:hover img:nth-child(2), &:hover video:nth-child(2) {
 			transform: rotate(5deg) translateY(-8px) translateX(12px);
 		}
 	}
