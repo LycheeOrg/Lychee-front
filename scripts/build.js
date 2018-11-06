@@ -49,11 +49,22 @@ build.album = function(data) {
     let { path: retinaThumbUrl, isPhoto } = lychee.retinize(data.thumbs[0]);
 
 	// In the special case of take date sorting use the take stamps as title
-	if (lychee.sortingAlbums!=='') {
+	if (lychee.sortingAlbums!=='' && data.min_takestamp && data.max_takestamp) {
 
 		sortingAlbums = lychee.sortingAlbums.replace('ORDER BY ', '').split(' ');
 		if (sortingAlbums[0]==='max_takestamp' || sortingAlbums[0]==='min_takestamp'){
-			date_stamp = (data.min_takestamp===data.max_takestamp ? data.max_takestamp  : data.min_takestamp + ' - ' + data.max_takestamp)
+			if (data.min_takestamp !== '' && data.max_takestamp !== '')
+			{
+                date_stamp = (data.min_takestamp===data.max_takestamp ? data.max_takestamp  : data.min_takestamp + ' - ' + data.max_takestamp)
+			}
+            else if (data.min_takestamp !== '')
+            {
+                date_stamp = data.min_takestamp
+            }
+            else if (data.min_takestamp !== '' && data.max_takestamp !== '')
+            {
+                date_stamp = data.max_takestamp
+            }
 		}
 	}
 
