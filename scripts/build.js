@@ -41,13 +41,19 @@ build.multiselect = function(top, left) {
 };
 
 build.getThumbnailHtml = function(thumb){
+  console.log(thumb);
   var thumbU = thumb.toUpperCase();
-  if(thumbU.indexOf('MP4') === -1 && thumbU.indexOf('OGV') === -1 && thumbU.indexOf('WEBM') === -1){
+  if(thumb !== 'uploads/thumb/' && thumbU.length && thumbU.indexOf('MP4') === -1 && thumbU.indexOf('OGV') === -1 && thumbU.indexOf('WEBM') === -1){
     return `<img src='${thumb}' width='200' height='200' alt='Photo thumbnail' data-overlay='false' draggable='false'>`
-  }else {
-    return `<video width="200" height="200" id='image'  data-overlay='false' preload="metadata">
-							<source src='uploads/big/${ thumb }#t=50' type="video/mp4">Your browser does not support the video tag.</video><span></span>`
   }
+  else
+    {
+      return `<span class="video" width='200' height='200' alt='Video thumbnail' data-overlay='false' class="" draggable='false'></span><span></span>`
+    }
+  // else {
+  //   return `<video width="200" height="200" id='image'  data-overlay='false' preload="metadata">
+		// 					<source src='uploads/big/${ thumb }#t=50' type="video/mp4">Your browser does not support the video tag.</video><span></span>`
+  // }
 }
 
 build.album = function(data) {
