@@ -491,8 +491,8 @@ view.settings = {
     },
 
     clearContent: function() {
-        $('.content').unbind('mousedown');
-    	$(".content").html('<div class="settings_view"></div>');
+        lychee.content.unbind('mousedown');
+        lychee.content.html('<div class="settings_view"></div>');
 	},
 
 	content: {
@@ -641,7 +641,7 @@ view.settings = {
 			while( i < lychee.lang_available.length)
 			{
 				let lang_av = lychee.lang_available[i];
-                msg += `<option ` + (lychee.lang == lang_av ? 'selected' : '') + `>` + lang_av + `</option>`;
+                msg += `<option ` + (lychee.lang === lang_av ? 'selected' : '') + `>` + lang_av + `</option>`;
                 i += 1;
 			}
 			msg += `
@@ -651,7 +651,7 @@ view.settings = {
 			<div class="basicModal__buttons">
 				<a id="basicModal__action_set_lang" class="basicModal__button">${ lychee.locale['LANG_TITLE'] }</a>
 			</div>
-			</div>`
+			</div>`;
 
             $(".settings_view").append(msg);
             settings.bind('#basicModal__action_set_lang','.setLang',settings.changeLang);
@@ -675,8 +675,8 @@ view.users = {
     },
 
     clearContent: function() {
-        $('.content').unbind('mousedown');
-        $(".content").html('<div class="users_view"></div>');
+        lychee.content.unbind('mousedown');
+        lychee.content.html('<div class="users_view"></div>');
     },
 
     content: {
@@ -695,30 +695,29 @@ view.users = {
             '<p>' +
             '<span class="text">username</span>' +
             '<span class="text">new password</span>' +
-            '<span class="text">' + build.iconic('arrow-thick-top')+ '</span>' +
+            '<span class="text_icon">' + build.iconic('data-transfer-upload')+ '</span>' +
+			'<span class="text_icon">' + build.iconic('lock-locked')+ '</span>' +
             '</p>' +
             '</div>';
 
             $(".users_view").append(html);
 
-            let i = 0;
-			while(i < users.json.length)
-			{
-				user = users.json[i];
-
-                $(".users_view").append(build.user(user));
-
-                if(user.upload === 1)
+            $.each(users.json, function() {
+                $(".users_view").append(build.user(this));
+                // photosData += build.photo(this)
+                settings.bind('#UserUpdate' + this.id, '#UserData' + this.id, users.update);
+                settings.bind('#UserDelete' + this.id, '#UserData' + this.id, users.delete);
+				if(this.upload === 1)
 				{
-                    $('#UserData' + user.id + ' .choice input[name="upload"]').click();
+					$('#UserData' + this.id + ' .choice input[name="upload"]').click();
 				}
+                if(this.lock === 1)
+                {
+                    $('#UserData' + this.id + ' .choice input[name="lock"]').click();
+                }
 
-                settings.bind('#UserUpdate' + user.id, '#UserData' + user.id, users.update);
-                settings.bind('#UserDelete' + user.id, '#UserData' + user.id, users.delete);
+            });
 
-                i += 1;
-
-			}
             html = '<div class="users_view_line"';
 
             if (users.json.length === 0) {
@@ -734,11 +733,137 @@ view.users = {
                 '<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
                 '</label>' +
                 '</span>' +
+                '<span class="choice">' +
+                '<label>' +
+                '<input type="checkbox" name="lock" />' +
+                '<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
+                '</label>' +
+                '</span>' +
 				'</p>' +
 				'<a id="UserCreate_button"  class="basicModal__button basicModal__button_CREATE">Create</a>' +
 				'</div>';
 			$(".users_view").append(html);
             settings.bind('#UserCreate_button', '#UserCreate', users.create);
+        }
+    }
+};
+
+
+view.sharing = {
+    init: function() {
+
+        view.sharing.title();
+        view.sharing.content.init()
+
+    },
+
+    title: function() {
+
+        lychee.setTitle('Sharing', false)
+
+    },
+
+    clearContent: function() {
+        lychee.content.unbind('mousedown');
+        lychee.content.html('<div class="sharing_view"></div>');
+    },
+
+    content: {
+
+        init: function () {
+
+            view.sharing.clearContent();
+
+            if (sharing.json.shared.length === 0) {
+                $(".sharing_view").append('<div class="sharing_view_line" style="margin-bottom: 50px;"><p style="text-align: center">Sharing list is empty!</p></div>');
+            }
+
+
+            let html = '';
+
+            html += `
+            <div class="sharing_view_line"><p>Share</p></div>
+            <div class="sharing_view_line">
+				<div class="col-xs-5">
+					<select name="from" id="albums_list" class="form-control select" size="13" multiple="multiple">`
+
+            $.each(sharing.json.albums, function() {
+                html += `<option value="` + this.id + `">` + this.title + `</option>`;
+            });
+
+            html += `</select>
+				</div>
+				
+				<div class="col-xs-2">
+					<!--<button type="button" id="albums_list_undo" class="btn btn-primary btn-block">undo</button>-->
+					<button type="button" id="albums_list_rightAll" class="btn btn-default btn-block blue">` + build.iconic('media-skip-forward') + `</button>
+					<button type="button" id="albums_list_rightSelected" class="btn btn-default btn-block blue">` + build.iconic('chevron-right') + `</button>
+					<button type="button" id="albums_list_leftSelected" class="btn btn-default btn-block grey">` + build.iconic('chevron-left') + `</button>
+					<button type="button" id="albums_list_leftAll" class="btn btn-default btn-block grey">` + build.iconic('media-skip-backward') + `</button>
+					<!--<button type="button" id="albums_list_redo" class="btn btn-warning btn-block">redo</button>-->
+				</div>
+				
+				<div class="col-xs-5">
+					<select name="to" id="albums_list_to" class="form-control select" size="13" multiple="multiple"></select>
+				</div>
+			</div>`;
+
+            html += `
+            <div class="sharing_view_line"><p class="with">with</p></div>
+            <div class="sharing_view_line">
+				<div class="col-xs-5">
+					<select name="from" id="user_list" class="form-control select" size="13" multiple="multiple">`
+
+            $.each(sharing.json.users, function() {
+                html += `<option value="` + this.id + `">` + this.username + `</option>`;
+            });
+
+			html += `</select>
+				</div>
+				
+				<div class="col-xs-2">
+					<!--<button type="button" id="user_list_undo" class="btn btn-primary btn-block">undo</button>-->
+					<button type="button" id="user_list_rightAll" class="btn btn-default btn-block blue">` + build.iconic('media-skip-forward') + `</button>
+					<button type="button" id="user_list_rightSelected" class="btn btn-default btn-block blue">` + build.iconic('chevron-right') + `</button>
+					<button type="button" id="user_list_leftSelected" class="btn btn-default btn-block grey">` + build.iconic('chevron-left') + `</button>
+					<button type="button" id="user_list_leftAll" class="btn btn-default btn-block grey">` + build.iconic('media-skip-backward') + `</button>
+					<!--<button type="button" id="user_list_redo" class="btn btn-warning btn-block">redo</button>-->
+				</div>
+				
+				<div class="col-xs-5">
+					<select name="to" id="user_list_to" class="form-control select" size="13" multiple="multiple"></select>
+				</div>
+			</div>`;
+			html += `<div class="sharing_view_line"><a id="Share_button"  class="basicModal__button">Share</a></div>`;
+            html += '<div class="sharing_view_line">';
+
+            $.each(sharing.json.shared, function() {
+                html +=
+				`<p><span class="text">` + this.title + `</span><span class="text">` + this.username +
+                '</span><span class="choice">' +
+                '<label>' +
+                '<input type="checkbox" name="remove_id" value="' + this.id + '"/>' +
+                '<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
+                '</label>' +
+                '</span></p>' +
+				``;
+            });
+
+            html += '</div>';
+            if(sharing.json.shared.length !== 0)
+			{
+                html += `<div class="sharing_view_line"><a id="Remove_button"  class="basicModal__button">Remove</a></div>`;
+			}
+
+            $(".sharing_view").append(html);
+
+            $('#albums_list').multiselect();
+            $('#user_list').multiselect();
+            $("#Share_button").on('click', sharing.add)
+                .on('mouseenter', function () {$('#albums_list_to, #user_list_to').addClass('borderBlue')})
+                .on('mouseleave', function () {$('#albums_list_to, #user_list_to').removeClass('borderBlue')});
+
+			$('#Remove_button').on('click', sharing.delete);
         }
     }
 };
@@ -758,8 +883,8 @@ view.logs_diagnostics = {
     },
 
     clearContent: function () {
-        $('.content').unbind('mousedown');
-        $(".content").html('<pre class="logs_diagnostics_view"></pre>');
+        lychee.content.unbind('mousedown');
+        lychee.content.html('<pre class="logs_diagnostics_view"></pre>');
     },
 
     content: {

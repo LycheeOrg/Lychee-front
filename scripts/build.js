@@ -58,11 +58,22 @@ build.album = function(data) {
     let { path: retinaThumbUrl, isPhoto } = lychee.retinize(data.thumbs[0]);
 
 	// In the special case of take date sorting use the take stamps as title
-	if (lychee.sortingAlbums!=='') {
+	if (lychee.sortingAlbums!=='' && data.min_takestamp && data.max_takestamp) {
 
 		sortingAlbums = lychee.sortingAlbums.replace('ORDER BY ', '').split(' ');
 		if (sortingAlbums[0]==='max_takestamp' || sortingAlbums[0]==='min_takestamp'){
-			date_stamp = (data.min_takestamp===data.max_takestamp ? data.max_takestamp  : data.min_takestamp + ' - ' + data.max_takestamp)
+			if (data.min_takestamp !== '' && data.max_takestamp !== '')
+			{
+                date_stamp = (data.min_takestamp===data.max_takestamp ? data.max_takestamp  : data.min_takestamp + ' - ' + data.max_takestamp)
+			}
+            else if (data.min_takestamp !== '' && sortingAlbums[0]==='min_takestamp')
+            {
+                date_stamp = data.min_takestamp
+            }
+            else if (data.max_takestamp !== '' && sortingAlbums[0]==='max_takestamp')
+            {
+                date_stamp = data.max_takestamp
+            }
 		}
 	}
 
@@ -257,6 +268,12 @@ build.user = function (user) {
         '<span class="choice">' +
         '<label>' +
         '<input type="checkbox" name="upload" />' +
+        '<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
+        '</label>' +
+        '</span>' +
+        '<span class="choice">' +
+        '<label>' +
+        '<input type="checkbox" name="lock" />' +
         '<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
         '</label>' +
         '</span>' +

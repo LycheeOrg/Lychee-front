@@ -17,6 +17,7 @@ lychee = {
     api_V2			: false,  // enable api_V2
 	admin			: false,  // enable admin mode (multi-user)
 	upload			: false,  // enable possibility to upload (multi-user)
+	lock			: false,  // locked user (multi-user)
 
 	checkForUpdates : '1',
 	sortingPhotos   : '',
@@ -356,8 +357,8 @@ lychee.init = function() {
             lychee.lang			   = data.config.lang            || '';
 			lychee.lang_available  = data.config.lang_available  || {};
 
-            lychee.upload = !lychee.api_V2;
-            lychee.admin = !lychee.api_V2;
+            lychee.upload	= !lychee.api_V2;
+            lychee.admin	= !lychee.api_V2;
 
             // leftMenu
             leftMenu.build();
@@ -365,8 +366,9 @@ lychee.init = function() {
 
             if (lychee.api_V2)
 			{
-				lychee.upload = data.admin || data.upload;
-				lychee.admin = data.admin;
+				lychee.upload	= data.admin || data.upload;
+				lychee.admin	= data.admin;
+				lychee.lock		= data.lock;
                 lychee.setMode('logged_in');
 			}
 
@@ -487,7 +489,7 @@ lychee.load = function() {
 
 	if (hash[0]!=null) albumID = hash[0];
 	if (hash[1]!=null) photoID = hash[1];
-
+	
 	if (albumID && photoID) {
 
 		// Trash data
@@ -508,7 +510,7 @@ lychee.load = function() {
 		// Show Album
 		if (visible.photo()) view.photo.hide();
 		if (visible.sidebar() && (albumID==='0' || albumID==='f' || albumID==='s' || albumID==='r')) sidebar.toggle();
-		if (album.json && albumID==album.json.id) view.album.title();
+		if (album.json && albumID===album.json.id) view.album.title();
 		else album.load(albumID)
 
 	} else {
@@ -559,10 +561,14 @@ lychee.setTitle = function(title, editable) {
 
 lychee.setMode = function(mode) {
 
+    if (lychee.lock)
+	{
+		$('#button_settings_open').remove();
+	}
     if (!lychee.upload)
     {
         $('#button_trash_album, .button_add').remove();
-        $('#button_trash, #button_move, #button_star').remove();
+        $('#button_trash, #button_move, #button_star, #button_sharing').remove();
 
         $('#button_share, #button_share_album')
             .removeClass('button--eye')

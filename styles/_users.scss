@@ -39,15 +39,15 @@
     color: #fff;
     border: none;
 
-    &:last-of-type {
+    &_icon {
       width: 5%;
-    }
 
-    .iconic {
-      width: 15px;
-      height: 14px;
-      margin: 0 10px 0 1px;
-      fill: #FFFFFF;
+      .iconic {
+        width: 15px;
+        height: 14px;
+        margin: 0 10px 0 1px;
+        fill: #FFFFFF;
+      }
     }
   }
 
@@ -81,9 +81,7 @@
 
   .choice {
     display: inline-block;
-    padding: 9px 2px;
     width: 5%;
-    margin: 0 10px;
     color: #fff;
 
     input {

@@ -87,6 +87,7 @@ paths.main = {
 		'node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js',
 		'node_modules/basiccontext/dist/basicContext.min.js',
 		'node_modules/basicmodal/dist/basicModal.min.js',
+		'node_modules/multiselect-two-sides/dist/js/multiselect.min.js',
 		'../dist/_main--javascript.js'
 	],
 	scss: [
@@ -122,7 +123,7 @@ gulp.task('main--scripts', ['main--js'], function() {
 
 	return gulp.src(paths.main.scripts)
 	           .pipe(plugins.concat('main.js', {newLine: "\n"}))
-	           .pipe(plugins.uglify())
+	           // .pipe(plugins.uglify())
 	           .on('error', catchError)
 	           .pipe(gulp.dest('../dist/'))
 
