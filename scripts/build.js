@@ -41,7 +41,8 @@ build.multiselect = function(top, left) {
 };
 
 build.getThumbnailHtml = function(thumb){
-  if(thumb.indexOf('mp4') === -1 && thumb.indexOf('ogv') === -1 && thumb.indexOf('webm') === -1){
+  var thumbU = thumb.toUpperCase();
+  if(thumbU.indexOf('MP4') === -1 && thumbU.indexOf('OGV') === -1 && thumbU.indexOf('WEBM') === -1){
     return `<img src='${thumb}' width='200' height='200' alt='Photo thumbnail' data-overlay='false' draggable='false'>`
   }else {
     return `<video width="200" height="200" id='image'  data-overlay='false' preload="metadata">
