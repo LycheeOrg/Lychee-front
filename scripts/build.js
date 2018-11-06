@@ -45,7 +45,7 @@ build.getThumbnailHtml = function(thumb){
     return `<img src='${thumb}' width='200' height='200' alt='Photo thumbnail' data-overlay='false' draggable='false'>`
   }else {
     return `<video width="200" height="200" id='image'  data-overlay='false' preload="metadata">
-							<source src='uploads/big/${ thumb }#t=50' type="video/mp4">Your browser does not support the video tag.</video>`
+							<source src='uploads/big/${ thumb }#t=50' type="video/mp4">Your browser does not support the video tag.</video><span></span>`
   }
 }
 

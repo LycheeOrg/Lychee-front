@@ -73,6 +73,14 @@
 			transition: none;
 			border-color: darken($colorBlue, 15%);
 		}
+
+		video+span{
+			position: absolute;
+			display: block;
+			height: 200px;
+			width: 200px;
+			background: url('../play-icon.png') 46% 50%;
+		}
 	}
 
 	// Album -------------------------------------------------------------- //
