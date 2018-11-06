@@ -40,12 +40,12 @@ build.multiselect = function(top, left) {
 
 };
 
-build.getThumbnailHtml = function(thumb){
+build.getThumbnailHtml = function(thumb, retinaThumbUrl){
   if(thumb.indexOf('mp4') === -1 && thumb.indexOf('ogv') === -1 && thumb.indexOf('webm') === -1){
-    return `<img src='${thumb}' width='200' height='200' alt='Photo thumbnail' data-overlay='false' draggable='false'>`
+    return `<img src='${thumb}' srcset='${ retinaThumbUrl } 1.5x' width='200' height='200' alt='Photo thumbnail' data-overlay='false' draggable='false'>`
   }else {
     return `<video width="200" height="200" id='image'  data-overlay='false' preload="metadata">
-							<source src='uploads/big/${ thumb }#t=50' type="video/mp4">Your browser does not support the video tag.</video><span></span>`
+			<source src='uploads/big/${ thumb }#t=50' type="video/mp4">Your browser does not support the video tag.</video><span></span>`
   }
 }
 
@@ -79,9 +79,9 @@ build.album = function(data) {
 
 	html += lychee.html`
 	        <div class='album' data-id='${ data.id }'>
-	              ${build.getThumbnailHtml(data.thumbs[2])}
-	              ${build.getThumbnailHtml(data.thumbs[1])}
-	              ${build.getThumbnailHtml(data.thumbs[0])}
+	              ${build.getThumbnailHtml(data.thumbs[2],data.thumbs[2])}
+	              ${build.getThumbnailHtml(data.thumbs[1],data.thumbs[1])}
+	              ${build.getThumbnailHtml(data.thumbs[0],data.thumbs[0])}
 	            <div class='overlay'>
 	                <h1 title='${ data.title }'>${ data.title }</h1>
 	                <a>${ date_stamp }</a>
@@ -116,8 +116,8 @@ build.photo = function(data) {
 
 	html += lychee.html`
 	        <div class='photo' data-album-id='${ data.album }' data-id='${ data.id }' test="test">
-	            ${build.getThumbnailHtml(data.thumbUrl)}
-	            <!--<img src='${ data.thumbUrl }' srcset='${ retinaThumbUrl } 1.5x' width='200' height='200' alt='Photo thumbnail' draggable='false'>-->
+	            ${build.getThumbnailHtml(data.thumbUrl,retinaThumbUrl)}
+	            <!-- <img src='${ data.thumbUrl }' srcset='${ retinaThumbUrl } 1.5x' width='200' height='200' alt='Photo thumbnail' draggable='false'> -->
 	            <div class='overlay'>
 	                <h1 title='${ data.title }'>${ data.title }</h1>
 	        `;
