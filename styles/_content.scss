@@ -53,7 +53,7 @@
 		animation-fill-mode: forwards;
 		animation-timing-function: $timing;
 
-		img, .video {
+		.thumbimg {
 			position: absolute;
 			width: 200px;
 			height: 200px;
@@ -64,47 +64,48 @@
 			transition: opacity .3s ease-out, transform .3s ease-out, border-color .3s ease-out;
 		}
 
-		&:hover img,
-		&:hover .video,
-		&.active img,
-		&.active .video {
+		&:hover .thumbimg,
+		&.active .thumbimg {
 			border-color: $colorBlue;
 		}
 
-		&:active img, &:active .video {
+		&:active .thumbimg {
 			transition: none;
 			border-color: darken($colorBlue, 15%);
 		}
-
-		.video+span{
-			position: absolute;
-			display: block;
-			height: 200px;
-			width: 200px;
-			background: url('../play-icon.png') 46% 50%;
+		.video{
+			&::before {
+              content: '';
+              position: absolute;
+              display: block;
+              height: 200px;
+              width: 200px;
+              background: url('../play-icon.png') 46% 50%;
+              transition: all 0.3s;
+              will-change: opacity, height;
+            }
+            &:hover::before{
+              content: '';
+              position: absolute;
+              display: block;
+              height: 180px;
+              opacity: 0.75;
+              width: 200px;
+              background: url('../play-icon.png') 46% 50%;
+            }
 		}
 	}
 
 	// Album -------------------------------------------------------------- //
 	.album  {
-		.video:first-child,
-		img:first-child,
-		.video:nth-child(3),
-		img:nth-child(2) {
+		.thumbimg:first-child,
+		.thumbimg:nth-child(2) {
 			transform: rotate(0) translateY(0) translateX(0);
 			opacity: 0;
 		}
 
-		&:hover img:nth-child(1),
-		&:hover img:nth-child(2) {
-			opacity: 1;
-			// Keep the composited layer created by the browser during the animation.
-			// Makes the border of the transformed thumb look better.
-			// See https://github.com/electerious/Lychee/pull/626 for more.
-			will-change: transform;
-		}
-		&:hover .video:nth-child(1),
-		&:hover .video:nth-child(3) {
+		&:hover .thumbimg:nth-child(1),
+		&:hover .thumbimg:nth-child(2) {
 			opacity: 1;
 			// Keep the composited layer created by the browser during the animation.
 			// Makes the border of the transformed thumb look better.
@@ -112,11 +113,11 @@
 			will-change: transform;
 		}
 
-		&:hover img:nth-child(1), &:hover .video:nth-child(1) {
+		&:hover .thumbimg:nth-child(1) {
 			transform: rotate(-2deg) translateY(10px) translateX(-12px);
 		}
 
-		&:hover img:nth-child(2), &:hover .video:nth-child(3) {
+		&:hover .thumbimg:nth-child(2) {
 			transform: rotate(5deg) translateY(-8px) translateX(12px);
 		}
 	}
@@ -132,7 +133,7 @@
 	}
 
 	// No overlay for empty albums
-	.album img[data-overlay='false'] + .overlay {
+	.album .thumbimg[data-overlay='false'] + .overlay {
 		background: none;
 	}
 
@@ -173,8 +174,8 @@
 		height: 8px;
 	}
 
-	.album img[data-overlay='false'] + .overlay h1,
-	.album img[data-overlay='false'] + .overlay a {
+	.album .thumbimg[data-overlay='false'] + .overlay h1,
+	.album .thumbimg[data-overlay='false'] + .overlay a {
 		text-shadow: none;
 	}
 

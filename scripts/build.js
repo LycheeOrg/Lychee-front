@@ -40,18 +40,12 @@ build.multiselect = function(top, left) {
 
 };
 
-build.getThumbnailHtml = function(thumb, retinaThumbUrl) {
-  var thumbU = thumb.toUpperCase();
-  if (thumb !== 'uploads/thumb/' && thumbU.length && thumbU.indexOf('MP4') === -1 && thumbU.indexOf('OGV') === -1 && thumbU.indexOf('WEBM') === -1) {
-    return `<img src='${thumb}' srcset='${ retinaThumbUrl } 1.5x' width='200' height='200' alt='Photo thumbnail' data-overlay='false' draggable='false'>`
-  }
-  else {
-    return `<span class="video" width='200' height='200' alt='Video thumbnail' data-overlay='false' class="" draggable='false'></span><span></span>`
-  }
+build.getThumbnailHtml = function(thumb, retinaThumbUrl, type) {
+	let isVideo = type && type.indexOf('video') > -1;
+  return `<span class="thumbimg${isVideo ? ' video': ''}"><img src='${thumb}' srcset='${ retinaThumbUrl } 1.5x' width='200' height='200' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 };
 
 build.album = function(data) {
-
 	let html = '';
 	let date_stamp = data.sysdate;
 	let sortingAlbums = [];
@@ -80,9 +74,9 @@ build.album = function(data) {
 
 	html += lychee.html`
 	        <div class='album' data-id='${ data.id }'>
-	              ${build.getThumbnailHtml(data.thumbs[2],data.thumbs[2])}
-	              ${build.getThumbnailHtml(data.thumbs[1],data.thumbs[1])}
-	              ${build.getThumbnailHtml(data.thumbs[0],data.thumbs[0])}
+	              ${build.getThumbnailHtml(data.thumbs[2],data.thumbs[2], data.types[2])}
+	              ${build.getThumbnailHtml(data.thumbs[1],data.thumbs[1], data.types[1])}
+	              ${build.getThumbnailHtml(data.thumbs[0],data.thumbs[0], data.types[0])}
 	            <div class='overlay'>
 	                <h1 title='${ data.title }'>${ data.title }</h1>
 	                <a>${ date_stamp }</a>
@@ -110,14 +104,14 @@ build.album = function(data) {
 };
 
 build.photo = function(data) {
-
+console.log(data);
 	let html = '';
 
 	let { path: retinaThumbUrl } = lychee.retinize(data.thumbUrl);
 
 	html += lychee.html`
 	        <div class='photo' data-album-id='${ data.album }' data-id='${ data.id }' test="test">
-	            ${build.getThumbnailHtml(data.thumbUrl,retinaThumbUrl)}
+	            ${build.getThumbnailHtml(data.thumbUrl,retinaThumbUrl, data.type)}
 	            <!-- <img src='${ data.thumbUrl }' srcset='${ retinaThumbUrl } 1.5x' width='200' height='200' alt='Photo thumbnail' draggable='false'> -->
 	            <div class='overlay'>
 	                <h1 title='${ data.title }'>${ data.title }</h1>
