@@ -151,7 +151,7 @@ build.imageview = function(data, visibleControls) {
 	let hasMedium = data.medium !== '';
 
 	if(data.type.indexOf('video') > -1){
-    html += lychee.html`<video width="auto" height="auto" id='image' controls class='${ visibleControls===true ? '' : 'full' }' autoplay><source src='${ data.url }' type="${ data.type }">Your browser does not support the video tag.</video>`
+    html += lychee.html`<video width="auto" height="auto" id='image' controls class='${ visibleControls===true ? '' : 'full' }' autoplay><source src='${ data.url }'>Your browser does not support the video tag.</video>`
 	}
 	else if (hasMedium===false) {
 
