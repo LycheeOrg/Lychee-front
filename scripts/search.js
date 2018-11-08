@@ -33,8 +33,8 @@ search.find = function(term) {
 
 				// Build photos
 				if (data && data.photos) {
-					album.json = { content: data.photos };
-					$.each(album.json.content, function() {
+					album.json = { photos: data.photos };
+					$.each(album.json.photos, function() {
 						photosData += build.photo(this)
 					})
 				}

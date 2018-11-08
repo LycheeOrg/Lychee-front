@@ -104,7 +104,7 @@ build.album = function(data) {
 };
 
 build.photo = function(data) {
-console.log(data);
+// console.log(data);
 	let html = '';
 
 	let { path: retinaThumbUrl } = lychee.retinize(data.thumbUrl);

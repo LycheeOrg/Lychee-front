@@ -24,7 +24,7 @@ photo.getID = function() {
 photo.load = function(photoID, albumID) {
 
 	const checkContent = function() {
-		if (album.json!=null && album.json.content) photo.load(photoID, albumID);
+		if (album.json!=null && album.json.photos) photo.load(photoID, albumID);
 		else                  setTimeout(checkContent, 100)
 	};
 
@@ -33,8 +33,8 @@ photo.load = function(photoID, albumID) {
 		else                     setTimeout(checkPasswd, 200)
 	};
 
-	// we need to check the album.json.content because otherwise the script is too fast and this raise an error.
-	if (album.json==null || album.json.content == null) {
+	// we need to check the album.json.photos because otherwise the script is too fast and this raise an error.
+	if (album.json==null || album.json.photos == null) {
 		checkContent();
 		return false
 	}
@@ -75,15 +75,14 @@ photo.load = function(photoID, albumID) {
 
 // Preload the next photo for better response time
 photo.preloadNext = function(photoID) {
-
 	if (album.json &&
-	    album.json.content &&
-	    album.json.content[photoID] &&
-	    album.json.content[photoID].nextPhoto!=='') {
+	    album.json.photos &&
+	    album.getByID(photoID) &&
+	    album.getByID(photoID).nextPhoto!=='') {
 
-		let nextPhoto = album.json.content[photoID].nextPhoto;
-		let url       = album.json.content[nextPhoto].url;
-		let medium    = album.json.content[nextPhoto].medium;
+		let nextPhoto = album.getByID(photoID).nextPhoto;
+		let url       = album.getByID(nextPhoto).url;
+		let medium    = album.getByID(nextPhoto).medium;
 		let href      = (medium!=null && medium!=='' ? medium : url);
 
 		$('head [data-prefetch]').remove();
@@ -103,8 +102,8 @@ photo.previous = function(animate) {
 
 	if (photo.getID()!==false &&
 	    album.json &&
-	    album.json.content[photo.getID()] &&
-	    album.json.content[photo.getID()].previousPhoto!=='') {
+	    album.getByID(photo.getID()) &&
+	    album.getByID(photo.getID()).previousPhoto!=='') {
 
 		let delay = 0;
 
@@ -123,7 +122,7 @@ photo.previous = function(animate) {
 
 		setTimeout(() => {
 			if (photo.getID()===false) return false;
-			lychee.goto(album.getID() + '/' + album.json.content[photo.getID()].previousPhoto)
+			lychee.goto(album.getID() + '/' + album.getByID(photo.getID()).previousPhoto)
 		}, delay)
 
 	}
@@ -134,8 +133,8 @@ photo.next = function(animate) {
 
 	if (photo.getID()!==false &&
 	    album.json &&
-	    album.json.content[photo.getID()] &&
-	    album.json.content[photo.getID()].nextPhoto!=='') {
+	    album.getByID(photo.getID()) &&
+	    album.getByID(photo.getID()).nextPhoto!=='') {
 
 		let delay = 0;
 
@@ -154,7 +153,7 @@ photo.next = function(animate) {
 
 		setTimeout(() => {
 			if (photo.getID()===false) return false;
-			lychee.goto(album.getID() + '/' + album.json.content[photo.getID()].nextPhoto)
+			lychee.goto(album.getID() + '/' + album.getByID(photo.getID()).nextPhoto)
 		}, delay)
 
 	}
@@ -195,7 +194,7 @@ photo.delete = function(photoIDs) {
 
 		// Get title if only one photo is selected
 		if (visible.photo()) photoTitle = photo.json.title;
-		else                 photoTitle = album.json.content[photoIDs].title;
+		else                 photoTitle = album.getByID(photoIDs).title;
 
 		// Fallback for photos without a title
 		if (photoTitle==='') photoTitle = lychee.locale['UNTITLED']
@@ -212,17 +211,18 @@ photo.delete = function(photoIDs) {
 		photoIDs.forEach(function(id, index, array) {
 
 			// Change reference for the next and previous photo
-			if (album.json.content[id].nextPhoto!=='' || album.json.content[id].previousPhoto!=='') {
+			if (album.getByID(id).nextPhoto!=='' || album.getByID(id).previousPhoto!=='') {
 
-				nextPhoto     = album.json.content[id].nextPhoto;
-				previousPhoto = album.json.content[id].previousPhoto;
+				nextPhoto     = album.getByID(id).nextPhoto;
+				previousPhoto = album.getByID(id).previousPhoto;
 
-				album.json.content[previousPhoto].nextPhoto = nextPhoto;
-				album.json.content[nextPhoto].previousPhoto = previousPhoto
+				album.getByID(previousPhoto).nextPhoto = nextPhoto;
+				album.getByID(nextPhoto).previousPhoto = previousPhoto
 
 			}
 
-			delete album.json.content[id];
+			album.deleteByID(id);
+			// delete album.json.photos[id];
 			view.album.content.delete(id)
 
 		});
@@ -291,7 +291,7 @@ photo.setTitle = function(photoIDs) {
 
 		// Get old title if only one photo is selected
 		if (photo.json)      oldTitle = photo.json.title;
-		else if (album.json) oldTitle = album.json.content[photoIDs].title
+		else if (album.json) oldTitle = album.json.photos[photoIDs].title
 
 	}
 
@@ -307,7 +307,7 @@ photo.setTitle = function(photoIDs) {
 		}
 
 		photoIDs.forEach(function(id, index, array) {
-			album.json.content[id].title = newTitle;
+			album.getByID(id).title = newTitle;
 			view.album.content.title(id)
 		});
 
@@ -356,17 +356,18 @@ photo.setAlbum = function(photoIDs, albumID) {
 	photoIDs.forEach(function(id, index, array) {
 
 		// Change reference for the next and previous photo
-		if (album.json.content[id].nextPhoto!==''||album.json.content[id].previousPhoto!=='') {
+		if (album.getByID(id).nextPhoto!==''||album.getByID(id).previousPhoto!=='') {
 
-			nextPhoto     = album.json.content[id].nextPhoto;
-			previousPhoto = album.json.content[id].previousPhoto;
+			nextPhoto     = album.getByID(id).nextPhoto;
+			previousPhoto = album.getByID(id).previousPhoto;
 
-			album.json.content[previousPhoto].nextPhoto = nextPhoto;
-			album.json.content[nextPhoto].previousPhoto = previousPhoto
+			album.getByID(previousPhoto).nextPhoto = nextPhoto;
+			album.getByID(nextPhoto).previousPhoto = previousPhoto
 
 		}
 
-		delete album.json.content[id];
+		album.deleteByID(id);
+//		delete album.json.photos[id];
 		view.album.content.delete(id)
 
 	});
@@ -401,7 +402,7 @@ photo.setStar = function(photoIDs) {
 	}
 
 	photoIDs.forEach(function(id, index, array) {
-		album.json.content[id].star = (album.json.content[id].star==='0' ? '1' : '0');
+		album.getByID(id).star = (album.getByID(id).star==='0' ? '1' : '0');
 		view.album.content.star(id)
 	});
 
@@ -456,7 +457,7 @@ photo.setPublic = function(photoID, e) {
 
 	}
 
-	album.json.content[photoID].public = (album.json.content[photoID].public==='0' ? '1' : '0');
+	album.getByID(photoID).public = (album.getByID(photoID).public==='0' ? '1' : '0');
 	view.album.content.public(photoID);
 
 	albums.refresh();
@@ -523,14 +524,14 @@ photo.editTags = function(photoIDs) {
 
 	// Get tags
 	if (visible.photo())                              oldTags = photo.json.tags;
-	else if (visible.album() && photoIDs.length===1)  oldTags = album.json.content[photoIDs].tags;
-	else if (visible.search() && photoIDs.length===1) oldTags = album.json.content[photoIDs].tags;
+	else if (visible.album() && photoIDs.length===1)  oldTags = album.getByID(photoIDs).tags;
+	else if (visible.search() && photoIDs.length===1) oldTags = album.getByID(photoIDs).tags;
 	else if (visible.album() && photoIDs.length>1) {
 		let same = true;
 		photoIDs.forEach(function(id, index, array) {
-			same = (album.json.content[id].tags === album.json.content[photoIDs[0]].tags && same === true);
+			same = (album.getByID(id).tags === album.getByID(photoIDs[0]).tags && same === true);
 		});
-		if (same===true) oldTags = album.json.content[photoIDs[0]].tags
+		if (same===true) oldTags = album.getByID(photoIDs[0]).tags
 	}
 
 	// Improve tags
@@ -579,7 +580,7 @@ photo.setTags = function(photoIDs, tags) {
 	}
 
 	photoIDs.forEach(function(id, index, array) {
-		album.json.content[id].tags = tags
+		album.getByID(id).tags = tags
 	});
 
 	let params = {

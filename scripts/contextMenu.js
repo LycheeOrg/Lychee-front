@@ -193,12 +193,12 @@ contextMenu.photoTitle = function(albumID, photoID, e) {
 
 	let data = album.json;
 
-	if (data.content!==false && data.num>1) {
+	if (data.photos!==false && data.num>1) {
 
 		items.push({ });
 
 		// Generate list of albums
-		$.each(data.content, function(index) {
+		$.each(data.photos, function(index) {
 
 			if (this.title==='') this.title = lychee.locale['UNTITLED'];
 

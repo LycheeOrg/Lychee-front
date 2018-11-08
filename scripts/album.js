@@ -8,6 +8,7 @@ album = {
 
 };
 
+
 album.getID = function() {
 
 	let id = null;
@@ -26,6 +27,54 @@ album.getID = function() {
 
 	if (isID(id)===true) return id;
 	else                 return false
+
+};
+
+album.getByID = function(photoID) {
+
+    // Function returns the JSON of a photo
+
+    if (photoID==null || !album.json || !album.json.photos)
+	{
+        lychee.error('Error: Album json not found !');
+		return undefined;
+    }
+
+	// console.log(album.json.photos);
+	let i = 0;
+	while(i < album.json.photos.length) {
+        if (album.json.photos[i].id === photoID)
+		{
+            return album.json.photos[i]
+		}
+		i++;
+    }
+
+    lychee.error('Error: photo ' + photoID + ' not found !');
+    return undefined;
+};
+
+album.deleteByID = function(photoID) {
+
+    if (photoID==null || !album.json || !album.json.photos)
+    {
+        lychee.error('Error: Album json not found !');
+        return false;
+    }
+
+    let deleted = false;
+
+    $.each(album.json.photos, function(i) {
+
+        if (album.json.photos[i].id===photoID) {
+            album.json.photos.splice(i, 1);
+            deleted = true;
+            return false
+        }
+
+    });
+
+    return deleted
 
 };
 

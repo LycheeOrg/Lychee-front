@@ -163,7 +163,7 @@ view.album = {
 
 			let photosData = '';
 
-			if (album.json.content && album.json.content!==false) {
+			if (album.json.photos && album.json.photos!==false) {
 
 				// Build photos
 				$.each(album.json.photos, function() {
@@ -183,7 +183,7 @@ view.album = {
 
 		title: function(photoID) {
 
-			let title = album.json.content[photoID].title;
+			let title = album.getByID(photoID).title;
 
 			title = lychee.escapeHTML(title);
 
@@ -197,8 +197,8 @@ view.album = {
 
 			let $badge = $('.photo[data-id="' + photoID + '"] .icn-star');
 
-			if (album.json.content[photoID].star==='1') $badge.addClass('badge--star');
-			else                                        $badge.removeClass('badge--star')
+			if (album.getByID(photoID).star ==='1') $badge.addClass('badge--star');
+			else                                   $badge.removeClass('badge--star')
 
 		},
 
@@ -206,8 +206,8 @@ view.album = {
 
 			let $badge = $('.photo[data-id="' + photoID + '"] .icn-share');
 
-			if (album.json.content[photoID].public==='1') $badge.addClass('badge--visible');
-			else                                          $badge.removeClass('badge--visible')
+			if (album.getByID(photoID).public==='1') $badge.addClass('badge--visible');
+			else                                     $badge.removeClass('badge--visible')
 
 		},
 
@@ -433,8 +433,8 @@ view.photo = {
 		let $nextArrow     = lychee.imageview.find('a#next');
 		let $previousArrow = lychee.imageview.find('a#previous');
 		let photoID        = photo.getID();
-		let hasNext        = album.json && album.json.content && album.json.content[photoID] && album.json.content[photoID].nextPhoto!=null && album.json.content[photoID].nextPhoto!=='';
-		let hasPrevious    = album.json && album.json.content && album.json.content[photoID] && album.json.content[photoID].previousPhoto!=null && album.json.content[photoID].previousPhoto!=='';
+		let hasNext        = album.json && album.json.photos && album.getByID(photoID) && album.getByID(photoID).nextPhoto!=null && album.getByID(photoID).nextPhoto!=='';
+		let hasPrevious    = album.json && album.json.photos && album.getByID(photoID) && album.getByID(photoID).previousPhoto!=null && album.getByID(photoID).previousPhoto!=='';
 
 		if (hasNext===false || lychee.viewMode===true) {
 
@@ -442,8 +442,8 @@ view.photo = {
 
 		} else {
 
-			let nextPhotoID = album.json.content[photoID].nextPhoto;
-			let nextPhoto   = album.json.content[nextPhotoID];
+			let nextPhotoID = album.getByID(photoID).nextPhoto;
+			let nextPhoto   = album.getByID(nextPhotoID);
 
 			$nextArrow.css('background-image', lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("${ nextPhoto.thumbUrl }")`)
 
@@ -455,8 +455,8 @@ view.photo = {
 
 		} else {
 
-			let previousPhotoID = album.json.content[photoID].previousPhoto;
-			let previousPhoto   = album.json.content[previousPhotoID];
+			let previousPhotoID = album.getByID(photoID).previousPhoto;
+			let previousPhoto   = album.getByID(previousPhotoID);
 
 			$previousArrow.css('background-image', lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("${ previousPhoto.thumbUrl }")`)
 

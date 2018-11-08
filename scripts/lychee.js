@@ -500,7 +500,7 @@ lychee.load = function() {
 			lychee.content.hide();
 			album.load(albumID, true)
 		}
-		photo.load(photoID, albumID)
+		photo.load(parseInt(photoID), albumID)
 
 	} else if (albumID) {
 
@@ -777,7 +777,7 @@ lychee.html = function(literalSections, ...substs) {
 
 };
 
-lychee.error = function(errorThrown, params, data) {
+lychee.error = function(errorThrown, params = '', data = '') {
 
 	console.error({
 		description : errorThrown,

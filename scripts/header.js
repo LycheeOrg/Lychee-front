@@ -130,7 +130,7 @@ header.setMode = function(mode) {
 			header.dom('.header__toolbar--album').addClass('header__toolbar--visible');
 
 			// Hide download button when album empty
-			if (album.json.content===false) $('#button_archive').hide();
+			if (album.json.photos===false) $('#button_archive').hide();
 			else                            $('#button_archive').show();
 
 			// Hide download button when not logged in and album not downloadable
