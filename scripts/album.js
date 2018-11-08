@@ -40,10 +40,9 @@ album.getByID = function(photoID) {
 		return undefined;
     }
 
-	// console.log(album.json.photos);
 	let i = 0;
 	while(i < album.json.photos.length) {
-        if (album.json.photos[i].id === photoID)
+        if (parseInt(album.json.photos[i].id) === parseInt(photoID))
 		{
             return album.json.photos[i]
 		}
@@ -66,7 +65,7 @@ album.deleteByID = function(photoID) {
 
     $.each(album.json.photos, function(i) {
 
-        if (album.json.photos[i].id===photoID) {
+		if (parseInt(album.json.photos[i].id) === parseInt(photoID)) {
             album.json.photos.splice(i, 1);
             deleted = true;
             return false

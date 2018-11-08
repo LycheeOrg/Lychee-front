@@ -489,7 +489,7 @@ lychee.load = function() {
 
 	if (hash[0]!=null) albumID = hash[0];
 	if (hash[1]!=null) photoID = hash[1];
-	
+
 	if (albumID && photoID) {
 
 		// Trash data
@@ -500,7 +500,7 @@ lychee.load = function() {
 			lychee.content.hide();
 			album.load(albumID, true)
 		}
-		photo.load(parseInt(photoID), albumID)
+		photo.load(photoID, albumID)
 
 	} else if (albumID) {
 
