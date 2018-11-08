@@ -21,8 +21,6 @@ sharing.add = function () {
         params.UserIDs += this.value;
     });
 
-    console.log(params);
-
     api.post('Sharing::Add', params, function (data) {
         if(data!==true)
         {

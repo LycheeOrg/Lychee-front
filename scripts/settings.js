@@ -226,7 +226,6 @@ settings.getValues = function(form_name) {
         values[name] = $(this).val()
 
     });
-	console.log(values);
     return (Object.keys(values).length===0 ? null : values)
 
 };
