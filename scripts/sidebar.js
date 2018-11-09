@@ -151,7 +151,7 @@ sidebar.createStructure.photo = function(data) {
 		rows  : [
 			{ title: lychee.locale['PHOTO_SIZE'],       value: data.size },
 			{ title: lychee.locale['PHOTO_FORMAT'],     value: data.type },
-			{ title: lychee.locale['PHOTO_FORMAT'], value: data.width + ' x ' + data.height }
+			{ title: lychee.locale['PHOTO_RESOLUTION'], value: data.width + ' x ' + data.height }
 		]
 	};
 
