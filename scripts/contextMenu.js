@@ -239,14 +239,7 @@ contextMenu.move = function(photoIDs, e) {
 
 	api.post('Albums::get', {}, function(data) {
 
-		if (data.num===0) {
-
-			// Show only 'Add album' when no album available
-			items = [
-				{ title: lychee.locale['NEW_ALBUM'], fn: album.add }
-			]
-
-		} else {
+		if (data.num > 0) {
 
 			// Generate list of albums
 			$.each(data.albums, function() {
@@ -272,6 +265,8 @@ contextMenu.move = function(photoIDs, e) {
 			}
 
 		}
+		items.unshift({});
+		items.unshift({ title: lychee.locale['NEW_ALBUM'], fn: () => album.addandmove(photoIDs) });
 
 		basicContext.show(items, e.originalEvent, contextMenu.close)
 

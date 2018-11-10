@@ -153,7 +153,7 @@ album.add = function() {
 
 		let title = data.title;
 
-		const isNumber = (n) => (!isNaN(parseFloat(n)) && isFinite(n));
+		const isNumber = (n) => (!isNaN(parseInt(n, 10)) && isFinite(n));
 
 		basicModal.close();
 
@@ -165,6 +165,50 @@ album.add = function() {
 
 			if (data!==false && isNumber(data)) {
 				albums.refresh();
+				lychee.goto(data)
+			} else {
+				lychee.error(null, params, data)
+			}
+
+		})
+
+	};
+
+	basicModal.show({
+		body: `<p>` + lychee.locale['TITLE_NEW_ALBUM'] + ` <input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'></p>`,
+		buttons: {
+			action: {
+				title: lychee.locale['CREATE_ALBUM'],
+				fn: action
+			},
+			cancel: {
+				title: lychee.locale['CANCEL'],
+				fn: basicModal.close
+			}
+		}
+	})
+
+};
+
+album.addandmove = function (photoIDs) {
+
+	const action = function(data) {
+
+		let title = data.title;
+
+		const isNumber = (n) => (!isNaN(parseInt(n, 10)) && isFinite(n));
+
+		basicModal.close();
+
+		let params = {
+			title
+		};
+
+		api.post('Album::add', params, function(data) {
+
+			if (data!==false && isNumber(data)) {
+				albums.refresh();
+				photo.setAlbum(photoIDs, data);
 				lychee.goto(data)
 			} else {
 				lychee.error(null, params, data)
