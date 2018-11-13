@@ -1,15 +1,16 @@
-var	gulp    = require('gulp'),
-	plugins = require('gulp-load-plugins')(),
-	paths   = {}
+let gulp = require('gulp'),
+    plugins = require('gulp-load-plugins')(),
+    cleanCSS = require('gulp-clean-css'),
+    paths = {};
 
 /* Error Handler -------------------------------- */
 
-var catchError = function(err) {
+const catchError = function (err) {
 
-	console.log(err.toString())
-	this.emit('end')
+    console.log(err.toString());
+    this.emit('end')
 
-}
+};
 
 /* View ----------------------------------------- */
 
@@ -35,21 +36,21 @@ paths.view = {
 		'./images/iconic.svg',
 		'./images/ionicons.svg'
 	]
-}
+};
 
 gulp.task('view--js', function() {
 
-	var babel = plugins.babel({
-		presets: ['es2015']
-	})
+    const babel = plugins.babel({
+        presets: ['es2015']
+    });
 
-	return gulp.src(paths.view.js)
+    return gulp.src(paths.view.js)
 	           .pipe(plugins.concat('_view--javascript.js', {newLine: "\n"}))
 	           .pipe(babel)
 	           .on('error', catchError)
 	           .pipe(gulp.dest('../dist/'))
 
-})
+});
 
 gulp.task('view--scripts', gulp.series('view--js', function() {
 
@@ -59,18 +60,18 @@ gulp.task('view--scripts', gulp.series('view--js', function() {
 	           .on('error', catchError)
 	           .pipe(gulp.dest('../dist/'))
 
-}))
+}));
 
 gulp.task('view--svg', function() {
 
-	return gulp.src(paths.view.php)
+	return gulp.src(paths.view.php, {allowEmpty: true})
 	           .pipe(plugins.inject(gulp.src(paths.view.svg), {
 	           	starttag: '<!-- inject:svg -->',
 	           	transform: function(filePath, file) { return file.contents.toString('utf8') }
 	           }))
 	           .pipe(gulp.dest('../'))
 
- })
+ });
 
 /* Main ----------------------------------------- */
 
@@ -103,21 +104,21 @@ paths.main = {
 		'./images/iconic.svg',
 		'./images/ionicons.svg'
 	]
-}
+};
 
 gulp.task('main--js', function() {
 
-	var babel = plugins.babel({
-		presets: ['es2015']
-	})
+    const babel = plugins.babel({
+        presets: ['es2015']
+    });
 
-	return gulp.src(paths.main.js)
+    return gulp.src(paths.main.js)
 	           .pipe(plugins.concat('_main--javascript.js', {newLine: "\n"}))
 	           .pipe(babel)
 	           .on('error', catchError)
 	           .pipe(gulp.dest('../dist/'))
 
-})
+});
 
 gulp.task('main--scripts', gulp.series('main--js', function() {
 
@@ -127,7 +128,7 @@ gulp.task('main--scripts', gulp.series('main--js', function() {
 	           .on('error', catchError)
 	           .pipe(gulp.dest('../dist/'))
 
-}))
+}));
 
 gulp.task('main--styles', function() {
 
@@ -136,21 +137,21 @@ gulp.task('main--styles', function() {
 	           .on('error', catchError)
 	           .pipe(plugins.concat('main.css', {newLine: "\n"}))
 	           .pipe(plugins.autoprefixer('last 4 versions', '> 5%'))
-	           .pipe(plugins.minifyCss())
+	           .pipe(cleanCSS({level: 2}))
 	           .pipe(gulp.dest('../dist/'))
 
-})
+});
 
 gulp.task('main--svg', function() {
 
-	return gulp.src(paths.main.html)
+	return gulp.src(paths.main.html, {allowEmpty: true})
 	           .pipe(plugins.inject(gulp.src(paths.main.svg), {
 	           	starttag: '<!-- inject:svg -->',
 	           	transform: function(filePath, file) { return file.contents.toString('utf8') }
 	           }))
 	           .pipe(gulp.dest('../'))
 
- })
+ });
 
 /* Clean ----------------------------------------- */
 
@@ -160,17 +161,17 @@ gulp.task('clean', function() {
 	           .pipe(plugins.rimraf({ force: true }))
 	           .on('error', catchError)
 
-})
+});
 
 /* Tasks ----------------------------------------- */
 
-gulp.task('default', gulp.series(gulp.parallel('view--svg', 'view--scripts', 'main--svg', 'main--scripts', 'main--styles'), 'clean'))
+gulp.task('default', gulp.series(gulp.parallel('view--svg', 'view--scripts', 'main--svg', 'main--scripts', 'main--styles'), 'clean'));
 
 gulp.task('watch', gulp.series('default', function() {
 
-	gulp.watch(paths.view.js, ['view--scripts'])
+	gulp.watch(paths.view.js, ['view--scripts']);
 
-	gulp.watch(paths.main.js, ['main--scripts'])
+	gulp.watch(paths.main.js, ['main--scripts']);
 	gulp.watch(paths.main.scss, ['main--styles'])
 
-}))
+}));
