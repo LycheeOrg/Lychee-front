@@ -41,7 +41,7 @@ paths.view = {
 gulp.task('view--js', function() {
 
     const babel = plugins.babel({
-        presets: ['es2015']
+        presets: ['env']
     });
 
     return gulp.src(paths.view.js)
@@ -109,7 +109,7 @@ paths.main = {
 gulp.task('main--js', function() {
 
     const babel = plugins.babel({
-        presets: ['es2015']
+        presets: ['env']
     });
 
     return gulp.src(paths.main.js)
