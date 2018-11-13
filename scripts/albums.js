@@ -122,9 +122,21 @@ albums.getByID = function(albumID) {
 
 		let elem = albums.json.albums[i];
 
-		if (elem.id==albumID) json = elem
+		if (parseInt(elem.id)===parseInt(albumID)) json = elem
 
 	});
+
+	if (json === undefined)
+	{
+        if (!albums.json.shared_albums) return undefined;
+        $.each(albums.json.shared_albums, function(i) {
+
+            let elem = albums.json.shared_albums[i];
+
+            if (parseInt(elem.id)===parseInt(albumID)) json = elem
+
+        });
+	}
 
 	return json
 
@@ -142,13 +154,27 @@ albums.deleteByID = function(albumID) {
 
 	$.each(albums.json.albums, function(i) {
 
-		if (albums.json.albums[i].id==albumID) {
+		if (parseInt(albums.json.albums[i].id)===parseInt(albumID)) {
 			albums.json.albums.splice(i, 1);
 			deleted = true;
 			return false
 		}
 
 	});
+
+    if (deleted === false)
+    {
+        if (!albums.json.shared_albums) return undefined;
+        $.each(albums.json.shared_albums, function(i) {
+
+			if (parseInt(albums.json.shared_albums[i].id)===parseInt(albumID)) {
+				albums.json.shared_albums.splice(i, 1);
+				deleted = true;
+				return false
+			}
+        });
+    }
+
 
 	return deleted
 
