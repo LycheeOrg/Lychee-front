@@ -55,6 +55,7 @@ lychee = {
 		'SMART_ALBUMS'		: 'Smart albums',
         'SHARED_ALBUMS'		: 'Shared albums',
 		'ALBUMS'			: 'Albums',
+        'PHOTOS'			: 'Pictures',
 
 		'RENAME'			: 'Rename',
 		'RENAME_ALL'		: 'Rename All',

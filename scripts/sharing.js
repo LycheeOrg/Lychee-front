@@ -56,7 +56,7 @@ sharing.delete = function () {
         }
         else
         {
-            loadingBar.show('success', 'User deleted!');
+            loadingBar.show('success', 'Sharing removed!');
             sharing.list() // reload user list
         }
     })

@@ -163,6 +163,20 @@ view.album = {
 
 			let photosData = '';
 
+			if (album.json.albums && album.json.albums!==false) {
+                $.each(album.json.albums, function() {
+                    albums.parse(this);
+                    photosData += build.album(this)
+                });
+
+                // Add divider
+				if(album.json.albums.length > 0)
+				{
+                    photosData = build.divider(lychee.locale['ALBUMS']) + photosData;
+                    photosData += build.divider(lychee.locale['PHOTOS'])
+				}
+
+			}
 			if (album.json.photos && album.json.photos!==false) {
 
 				// Build photos
