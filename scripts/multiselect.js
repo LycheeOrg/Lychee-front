@@ -84,9 +84,9 @@ multiselect.selectAll = function() {
 multiselect.resize = function(e) {
 
 	if (multiselect.position.top    === null ||
-	    multiselect.position.right  === null ||
-	    multiselect.position.bottom === null ||
-	    multiselect.position.left   === null) return false;
+		multiselect.position.right  === null ||
+		multiselect.position.bottom === null ||
+		multiselect.position.left   === null) return false;
 
 	let newSize      = {};
 	let documentSize = {};

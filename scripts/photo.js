@@ -76,9 +76,9 @@ photo.load = function(photoID, albumID) {
 // Preload the next photo for better response time
 photo.preloadNext = function(photoID) {
 	if (album.json &&
-	    album.json.photos &&
-	    album.getByID(photoID) &&
-	    album.getByID(photoID).nextPhoto!=='') {
+		album.json.photos &&
+		album.getByID(photoID) &&
+		album.getByID(photoID).nextPhoto!=='') {
 
 		let nextPhoto = album.getByID(photoID).nextPhoto;
 		let url       = album.getByID(nextPhoto).url;
@@ -101,9 +101,9 @@ photo.parse = function() {
 photo.previous = function(animate) {
 
 	if (photo.getID()!==false &&
-	    album.json &&
-	    album.getByID(photo.getID()) &&
-	    album.getByID(photo.getID()).previousPhoto!=='') {
+		album.json &&
+		album.getByID(photo.getID()) &&
+		album.getByID(photo.getID()).previousPhoto!=='') {
 
 		let delay = 0;
 
@@ -132,9 +132,9 @@ photo.previous = function(animate) {
 photo.next = function(animate) {
 
 	if (photo.getID()!==false &&
-	    album.json &&
-	    album.getByID(photo.getID()) &&
-	    album.getByID(photo.getID()).nextPhoto!=='') {
+		album.json &&
+		album.getByID(photo.getID()) &&
+		album.getByID(photo.getID()).nextPhoto!=='') {
 
 		let delay = 0;
 

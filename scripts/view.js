@@ -60,20 +60,20 @@ view.albums = {
 
 			if(lychee.api_V2)
 			{
-                // Shared
-                if (albums.json.shared_albums && albums.json.shared_albums.length !==0) {
+				// Shared
+				if (albums.json.shared_albums && albums.json.shared_albums.length !==0) {
 
-                    $.each(albums.json.shared_albums, function() {
-                        albums.parse(this);
-                        sharedData += build.album(this)
-                    });
+					$.each(albums.json.shared_albums, function() {
+						albums.parse(this);
+						sharedData += build.album(this)
+					});
 
-                    // Add divider
-                    if (lychee.publicMode===false) sharedData = build.divider(lychee.locale['SHARED_ALBUMS']) + sharedData
-                }
+					// Add divider
+					if (lychee.publicMode===false) sharedData = build.divider(lychee.locale['SHARED_ALBUMS']) + sharedData
+				}
 			}
 
-            if (smartData==='' && albumsData==='' && sharedData==='' ) {
+			if (smartData==='' && albumsData==='' && sharedData==='' ) {
 				lychee.content.html('');
 				$('body').append(build.no_content('eye'))
 			} else {
@@ -164,16 +164,16 @@ view.album = {
 			let photosData = '';
 
 			if (album.json.albums && album.json.albums!==false) {
-                $.each(album.json.albums, function() {
-                    albums.parse(this);
-                    photosData += build.album(this)
-                });
+				$.each(album.json.albums, function() {
+					albums.parse(this);
+					photosData += build.album(this)
+				});
 
-                // Add divider
+				// Add divider
 				if(album.json.albums.length > 0)
 				{
-                    photosData = build.divider(lychee.locale['ALBUMS']) + photosData;
-                    photosData += build.divider(lychee.locale['PHOTOS'])
+					photosData = build.divider(lychee.locale['ALBUMS']) + photosData;
+					photosData += build.divider(lychee.locale['PHOTOS'])
 				}
 
 			}
@@ -365,9 +365,9 @@ view.photo = {
 
 		// Disable Fullscreen
 		$(document).unbind('mousemove');
-    if($('video').length){
-      $('video')[$('video').length - 1].pause();
-    }
+	if($('video').length){
+	  $('video')[$('video').length - 1].pause();
+	}
 
 		// Hide Photo
 		lychee.animate(lychee.imageview, 'fadeOut');
@@ -492,158 +492,158 @@ view.photo = {
 
 view.settings = {
 
-    init: function() {
+	init: function() {
 
-        view.settings.title();
-        view.settings.content.init()
+		view.settings.title();
+		view.settings.content.init()
 
-    },
+	},
 
-    title: function() {
+	title: function() {
 
-        lychee.setTitle('Settings', false)
-    },
+		lychee.setTitle('Settings', false)
+	},
 
-    clearContent: function() {
-        lychee.content.unbind('mousedown');
-        lychee.content.html('<div class="settings_view"></div>');
+	clearContent: function() {
+		lychee.content.unbind('mousedown');
+		lychee.content.html('<div class="settings_view"></div>');
 	},
 
 	content: {
 
-    	init: function() {
-            view.settings.clearContent();
-            view.settings.content.setLogin();
-            if(lychee.admin)
+		init: function() {
+			view.settings.clearContent();
+			view.settings.content.setLogin();
+			if(lychee.admin)
 			{
 				view.settings.content.setSorting();
-                view.settings.content.setDropboxKey();
-                view.settings.content.setLang();
-            }
-    	},
+				view.settings.content.setDropboxKey();
+				view.settings.content.setLang();
+			}
+		},
 
-    	setLogin: function () {
-            let msg = `
+		setLogin: function () {
+			let msg = `
 			<div class="setLogin">
-	          <p>
-	              ` + lychee.locale['PASSWORD_TITLE'] + `
-	              <input name='oldUsername' class='text' type='text' placeholder='` + lychee.locale['USERNAME_CURRENT'] + `' value=''>
-	              <input name='oldPassword' class='text' type='password' placeholder='` + lychee.locale['PASSWORD_CURRENT'] + `' value=''>
-	          </p>
-	          <p>
-	              ` + lychee.locale['PASSWORD_TEXT'] + `
-	              <input name='username' class='text' type='text' placeholder='` + lychee.locale['LOGIN_USERNAME'] + `' value=''>
-	              <input name='password' class='text' type='password' placeholder='` + lychee.locale['LOGIN_PASSWORD'] + `' value=''>
-	          </p>
-	        <div class="basicModal__buttons">
-			    <!--<a id="basicModal__cancel" class="basicModal__button ">Cancel</a>-->
-			    <a id="basicModal__action_password_change" class="basicModal__button ">` + lychee.locale['PASSWORD_CHANGE'] + `</a>
+			  <p>
+				  ` + lychee.locale['PASSWORD_TITLE'] + `
+				  <input name='oldUsername' class='text' type='text' placeholder='` + lychee.locale['USERNAME_CURRENT'] + `' value=''>
+				  <input name='oldPassword' class='text' type='password' placeholder='` + lychee.locale['PASSWORD_CURRENT'] + `' value=''>
+			  </p>
+			  <p>
+				  ` + lychee.locale['PASSWORD_TEXT'] + `
+				  <input name='username' class='text' type='text' placeholder='` + lychee.locale['LOGIN_USERNAME'] + `' value=''>
+				  <input name='password' class='text' type='password' placeholder='` + lychee.locale['LOGIN_PASSWORD'] + `' value=''>
+			  </p>
+			<div class="basicModal__buttons">
+				<!--<a id="basicModal__cancel" class="basicModal__button ">Cancel</a>-->
+				<a id="basicModal__action_password_change" class="basicModal__button ">` + lychee.locale['PASSWORD_CHANGE'] + `</a>
 			</div>
 			</div>`;
 
-            $(".settings_view").append(msg);
+			$(".settings_view").append(msg);
 
 			settings.bind('#basicModal__action_password_change','.setLogin',settings.changeLogin);
 
-        },
+		},
 
 		clearLogin: function () {
-    		$('input[name=oldUsername], input[name=oldPassword], input[name=username], input[name=password]').val('')
+			$('input[name=oldUsername], input[name=oldPassword], input[name=username], input[name=password]').val('')
 		},
 
 		setSorting: function() {
 
-            let sortingPhotos = [];
-            let sortingAlbums = [];
+			let sortingPhotos = [];
+			let sortingAlbums = [];
 
-            let msg = `
+			let msg = `
 			<div class="setSorting">
-	          <p>` + lychee.locale['SORT_ALBUM_BY_1'] + `
-	              <span class="select">
-	                  <select id="settings_albums_type" name="typeAlbums">
-	                      <option value='id'>` + lychee.locale['SORT_ALBUM_SELECT_1'] + `</option>
-	                      <option value='title'>` + lychee.locale['SORT_ALBUM_SELECT_2'] + `</option>
-	                      <option value='description'>` + lychee.locale['SORT_ALBUM_SELECT_3'] + `</option>
-	                      <option value='public'>` + lychee.locale['SORT_ALBUM_SELECT_4'] + `</option>
-	                      <option value='max_takestamp'>` + lychee.locale['SORT_ALBUM_SELECT_5'] + `</option>
-	                      <option value='min_takestamp'>` + lychee.locale['SORT_ALBUM_SELECT_6'] + `</option>
-	                  </select>
-	              </span>
-	              ` + lychee.locale['SORT_ALBUM_BY_2'] + `
-	              <span class="select">
-	                  <select id="settings_albums_order" name="orderAlbums">
-	                      <option value='ASC'>` + lychee.locale['SORT_ASCENDING'] + `</option>
-	                      <option value='DESC'>` + lychee.locale['SORT_DESCENDING'] + `</option>
-	                  </select>
-	              </span>
-	              ` + lychee.locale['SORT_ALBUM_BY_3'] + `
-	          </p>
-	          <p>` + lychee.locale['SORT_PHOTO_BY_1'] + `
-	              <span class="select">
-	                  <select id="settings_photos_type" name="typePhotos">
-	                      <option value='id'>` + lychee.locale['SORT_PHOTO_SELECT_1'] + `</option>
-	                      <option value='takestamp'>` + lychee.locale['SORT_PHOTO_SELECT_2'] + `</option>
-	                      <option value='title'>` + lychee.locale['SORT_PHOTO_SELECT_3'] + `</option>
-	                      <option value='description'>` + lychee.locale['SORT_PHOTO_SELECT_4'] + `</option>
-	                      <option value='public'>` + lychee.locale['SORT_PHOTO_SELECT_5'] + `</option>
-	                      <option value='star'>` + lychee.locale['SORT_PHOTO_SELECT_6'] + `</option>
-	                      <option value='type'>` + lychee.locale['SORT_PHOTO_SELECT_7'] + `</option>
-	                  </select>
-	              </span>
-	              ` + lychee.locale['SORT_PHOTO_BY_2'] + `
-	              <span class="select">
-	                  <select id="settings_photos_order" name="orderPhotos">
-	                      <option value='ASC'>` + lychee.locale['SORT_ASCENDING'] + `</option>
-	                      <option value='DESC'>` + lychee.locale['SORT_DESCENDING'] + `</option>
-	                  </select>
-	              </span>
-	              ` + lychee.locale['SORT_PHOTO_BY_3'] + `
-	          </p>
+			  <p>` + lychee.locale['SORT_ALBUM_BY_1'] + `
+				  <span class="select">
+					  <select id="settings_albums_type" name="typeAlbums">
+						  <option value='id'>` + lychee.locale['SORT_ALBUM_SELECT_1'] + `</option>
+						  <option value='title'>` + lychee.locale['SORT_ALBUM_SELECT_2'] + `</option>
+						  <option value='description'>` + lychee.locale['SORT_ALBUM_SELECT_3'] + `</option>
+						  <option value='public'>` + lychee.locale['SORT_ALBUM_SELECT_4'] + `</option>
+						  <option value='max_takestamp'>` + lychee.locale['SORT_ALBUM_SELECT_5'] + `</option>
+						  <option value='min_takestamp'>` + lychee.locale['SORT_ALBUM_SELECT_6'] + `</option>
+					  </select>
+				  </span>
+				  ` + lychee.locale['SORT_ALBUM_BY_2'] + `
+				  <span class="select">
+					  <select id="settings_albums_order" name="orderAlbums">
+						  <option value='ASC'>` + lychee.locale['SORT_ASCENDING'] + `</option>
+						  <option value='DESC'>` + lychee.locale['SORT_DESCENDING'] + `</option>
+					  </select>
+				  </span>
+				  ` + lychee.locale['SORT_ALBUM_BY_3'] + `
+			  </p>
+			  <p>` + lychee.locale['SORT_PHOTO_BY_1'] + `
+				  <span class="select">
+					  <select id="settings_photos_type" name="typePhotos">
+						  <option value='id'>` + lychee.locale['SORT_PHOTO_SELECT_1'] + `</option>
+						  <option value='takestamp'>` + lychee.locale['SORT_PHOTO_SELECT_2'] + `</option>
+						  <option value='title'>` + lychee.locale['SORT_PHOTO_SELECT_3'] + `</option>
+						  <option value='description'>` + lychee.locale['SORT_PHOTO_SELECT_4'] + `</option>
+						  <option value='public'>` + lychee.locale['SORT_PHOTO_SELECT_5'] + `</option>
+						  <option value='star'>` + lychee.locale['SORT_PHOTO_SELECT_6'] + `</option>
+						  <option value='type'>` + lychee.locale['SORT_PHOTO_SELECT_7'] + `</option>
+					  </select>
+				  </span>
+				  ` + lychee.locale['SORT_PHOTO_BY_2'] + `
+				  <span class="select">
+					  <select id="settings_photos_order" name="orderPhotos">
+						  <option value='ASC'>` + lychee.locale['SORT_ASCENDING'] + `</option>
+						  <option value='DESC'>` + lychee.locale['SORT_DESCENDING'] + `</option>
+					  </select>
+				  </span>
+				  ` + lychee.locale['SORT_PHOTO_BY_3'] + `
+			  </p>
 				<div class="basicModal__buttons">
 					<!--<a id="basicModal__cancel" class="basicModal__button ">Cancel</a>-->
 					<a id="basicModal__action_sorting_change" class="basicModal__button ">` + lychee.locale['SORT_CHANGE'] + `</a>
 				</div>
-	          </div>
-	          `;
+			  </div>
+			  `;
 
-            $(".settings_view").append(msg);
+			$(".settings_view").append(msg);
 
-            if (lychee.sortingAlbums!=='') {
+			if (lychee.sortingAlbums!=='') {
 
-                sortingAlbums = lychee.sortingAlbums.replace('ORDER BY ', '').split(' ');
+				sortingAlbums = lychee.sortingAlbums.replace('ORDER BY ', '').split(' ');
 
-                $('.setSorting select#settings_albums_type').val(sortingAlbums[0]);
-                $('.setSorting select#settings_albums_order').val(sortingAlbums[1])
+				$('.setSorting select#settings_albums_type').val(sortingAlbums[0]);
+				$('.setSorting select#settings_albums_order').val(sortingAlbums[1])
 
-            }
+			}
 
-            if (lychee.sortingPhotos!=='') {
+			if (lychee.sortingPhotos!=='') {
 
-                sortingPhotos = lychee.sortingPhotos.replace('ORDER BY ', '').split(' ');
+				sortingPhotos = lychee.sortingPhotos.replace('ORDER BY ', '').split(' ');
 
-                $('.setSorting select#settings_photos_type').val(sortingPhotos[0]);
-                $('.setSorting select#settings_photos_order').val(sortingPhotos[1])
+				$('.setSorting select#settings_photos_type').val(sortingPhotos[0]);
+				$('.setSorting select#settings_photos_order').val(sortingPhotos[1])
 
-            }
+			}
 
-            settings.bind('#basicModal__action_sorting_change','.setSorting',settings.changeSorting);
-        },
+			settings.bind('#basicModal__action_sorting_change','.setSorting',settings.changeSorting);
+		},
 
-        setDropboxKey: function () {
-            let msg = `
+		setDropboxKey: function () {
+			let msg = `
 			<div class="setDropBox">
-	          <p>${ lychee.locale['DROPBOX_TEXT'] }
-	          <input class='text' name='key' type='text' placeholder='Dropbox API Key' value='${ lychee.dropboxKey }'>
-	          </p>
+			  <p>${ lychee.locale['DROPBOX_TEXT'] }
+			  <input class='text' name='key' type='text' placeholder='Dropbox API Key' value='${ lychee.dropboxKey }'>
+			  </p>
 				<div class="basicModal__buttons">
 					<a id="basicModal__action_dropbox_change" class="basicModal__button">${ lychee.locale['DROPBOX_TITLE'] }</a>
 				</div>
-	          </div>
-	          `;
+			  </div>
+			  `;
 
-            $(".settings_view").append(msg);
-            settings.bind('#basicModal__action_dropbox_change','.setDropBox',settings.changeDropboxKey);
-        },
+			$(".settings_view").append(msg);
+			settings.bind('#basicModal__action_dropbox_change','.setDropBox',settings.changeDropboxKey);
+		},
 
 		setLang: function () {
 			let msg = `
@@ -655,8 +655,8 @@ view.settings = {
 			while( i < lychee.lang_available.length)
 			{
 				let lang_av = lychee.lang_available[i];
-                msg += `<option ` + (lychee.lang === lang_av ? 'selected' : '') + `>` + lang_av + `</option>`;
-                i += 1;
+				msg += `<option ` + (lychee.lang === lang_av ? 'selected' : '') + `>` + lang_av + `</option>`;
+				i += 1;
 			}
 			msg += `
 				  </select>
@@ -667,145 +667,145 @@ view.settings = {
 			</div>
 			</div>`;
 
-            $(".settings_view").append(msg);
-            settings.bind('#basicModal__action_set_lang','.setLang',settings.changeLang);
-        }
-    },
+			$(".settings_view").append(msg);
+			settings.bind('#basicModal__action_set_lang','.setLang',settings.changeLang);
+		}
+	},
 
 };
 
 view.users = {
-    init: function() {
+	init: function() {
 
-        view.users.title();
-        view.users.content.init()
+		view.users.title();
+		view.users.content.init()
 
-    },
+	},
 
-    title: function() {
+	title: function() {
 
-        lychee.setTitle('Users', false)
+		lychee.setTitle('Users', false)
 
-    },
+	},
 
-    clearContent: function() {
-        lychee.content.unbind('mousedown');
-        lychee.content.html('<div class="users_view"></div>');
-    },
+	clearContent: function() {
+		lychee.content.unbind('mousedown');
+		lychee.content.html('<div class="users_view"></div>');
+	},
 
-    content: {
+	content: {
 
-        init: function () {
+		init: function () {
 
-        	view.users.clearContent();
+			view.users.clearContent();
 
-            if (users.json.length === 0) {
-                $(".users_view").append('<div class="users_view_line" style="margin-bottom: 50px;"><p style="text-align: center">User list is empty!</p></div>');
-            }
+			if (users.json.length === 0) {
+				$(".users_view").append('<div class="users_view_line" style="margin-bottom: 50px;"><p style="text-align: center">User list is empty!</p></div>');
+			}
 
-            let html = '';
+			let html = '';
 
-            html += '<div class="users_view_line">' +
-            '<p>' +
-            '<span class="text">username</span>' +
-            '<span class="text">new password</span>' +
-            '<span class="text_icon">' + build.iconic('data-transfer-upload')+ '</span>' +
+			html += '<div class="users_view_line">' +
+			'<p>' +
+			'<span class="text">username</span>' +
+			'<span class="text">new password</span>' +
+			'<span class="text_icon">' + build.iconic('data-transfer-upload')+ '</span>' +
 			'<span class="text_icon">' + build.iconic('lock-locked')+ '</span>' +
-            '</p>' +
-            '</div>';
+			'</p>' +
+			'</div>';
 
-            $(".users_view").append(html);
+			$(".users_view").append(html);
 
-            $.each(users.json, function() {
-                $(".users_view").append(build.user(this));
-                // photosData += build.photo(this)
-                settings.bind('#UserUpdate' + this.id, '#UserData' + this.id, users.update);
-                settings.bind('#UserDelete' + this.id, '#UserData' + this.id, users.delete);
+			$.each(users.json, function() {
+				$(".users_view").append(build.user(this));
+				// photosData += build.photo(this)
+				settings.bind('#UserUpdate' + this.id, '#UserData' + this.id, users.update);
+				settings.bind('#UserDelete' + this.id, '#UserData' + this.id, users.delete);
 				if(this.upload === 1)
 				{
 					$('#UserData' + this.id + ' .choice input[name="upload"]').click();
 				}
-                if(this.lock === 1)
-                {
-                    $('#UserData' + this.id + ' .choice input[name="lock"]').click();
-                }
+				if(this.lock === 1)
+				{
+					$('#UserData' + this.id + ' .choice input[name="lock"]').click();
+				}
 
-            });
+			});
 
-            html = '<div class="users_view_line"';
+			html = '<div class="users_view_line"';
 
-            if (users.json.length === 0) {
-            	html += ' style="padding-top: 0px;"';
-            }
-            html += '>' +
+			if (users.json.length === 0) {
+				html += ' style="padding-top: 0px;"';
+			}
+			html += '>' +
 				'<p id="UserCreate">' +
 				'<input class="text" name="username" type="text" value="" placeholder="new username" />' +
 				'<input class="text" name="password" type="text" placeholder="new password" />' +
-                '<span class="choice">' +
-                '<label>' +
-                '<input type="checkbox" name="upload" />' +
-                '<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
-                '</label>' +
-                '</span>' +
-                '<span class="choice">' +
-                '<label>' +
-                '<input type="checkbox" name="lock" />' +
-                '<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
-                '</label>' +
-                '</span>' +
+				'<span class="choice">' +
+				'<label>' +
+				'<input type="checkbox" name="upload" />' +
+				'<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
+				'</label>' +
+				'</span>' +
+				'<span class="choice">' +
+				'<label>' +
+				'<input type="checkbox" name="lock" />' +
+				'<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
+				'</label>' +
+				'</span>' +
 				'</p>' +
 				'<a id="UserCreate_button"  class="basicModal__button basicModal__button_CREATE">Create</a>' +
 				'</div>';
 			$(".users_view").append(html);
-            settings.bind('#UserCreate_button', '#UserCreate', users.create);
-        }
-    }
+			settings.bind('#UserCreate_button', '#UserCreate', users.create);
+		}
+	}
 };
 
 
 view.sharing = {
-    init: function() {
+	init: function() {
 
-        view.sharing.title();
-        view.sharing.content.init()
+		view.sharing.title();
+		view.sharing.content.init()
 
-    },
+	},
 
-    title: function() {
+	title: function() {
 
-        lychee.setTitle('Sharing', false)
+		lychee.setTitle('Sharing', false)
 
-    },
+	},
 
-    clearContent: function() {
-        lychee.content.unbind('mousedown');
-        lychee.content.html('<div class="sharing_view"></div>');
-    },
+	clearContent: function() {
+		lychee.content.unbind('mousedown');
+		lychee.content.html('<div class="sharing_view"></div>');
+	},
 
-    content: {
+	content: {
 
-        init: function () {
+		init: function () {
 
-            view.sharing.clearContent();
+			view.sharing.clearContent();
 
-            if (sharing.json.shared.length === 0) {
-                $(".sharing_view").append('<div class="sharing_view_line" style="margin-bottom: 50px;"><p style="text-align: center">Sharing list is empty!</p></div>');
-            }
+			if (sharing.json.shared.length === 0) {
+				$(".sharing_view").append('<div class="sharing_view_line" style="margin-bottom: 50px;"><p style="text-align: center">Sharing list is empty!</p></div>');
+			}
 
 
-            let html = '';
+			let html = '';
 
-            html += `
-            <div class="sharing_view_line"><p>Share</p></div>
-            <div class="sharing_view_line">
+			html += `
+			<div class="sharing_view_line"><p>Share</p></div>
+			<div class="sharing_view_line">
 				<div class="col-xs-5">
 					<select name="from" id="albums_list" class="form-control select" size="13" multiple="multiple">`
 
-            $.each(sharing.json.albums, function() {
-                html += `<option value="` + this.id + `">` + this.title + `</option>`;
-            });
+			$.each(sharing.json.albums, function() {
+				html += `<option value="` + this.id + `">` + this.title + `</option>`;
+			});
 
-            html += `</select>
+			html += `</select>
 				</div>
 				
 				<div class="col-xs-2">
@@ -822,15 +822,15 @@ view.sharing = {
 				</div>
 			</div>`;
 
-            html += `
-            <div class="sharing_view_line"><p class="with">with</p></div>
-            <div class="sharing_view_line">
+			html += `
+			<div class="sharing_view_line"><p class="with">with</p></div>
+			<div class="sharing_view_line">
 				<div class="col-xs-5">
 					<select name="from" id="user_list" class="form-control select" size="13" multiple="multiple">`
 
-            $.each(sharing.json.users, function() {
-                html += `<option value="` + this.id + `">` + this.username + `</option>`;
-            });
+			$.each(sharing.json.users, function() {
+				html += `<option value="` + this.id + `">` + this.username + `</option>`;
+			});
 
 			html += `</select>
 				</div>
@@ -849,64 +849,64 @@ view.sharing = {
 				</div>
 			</div>`;
 			html += `<div class="sharing_view_line"><a id="Share_button"  class="basicModal__button">Share</a></div>`;
-            html += '<div class="sharing_view_line">';
+			html += '<div class="sharing_view_line">';
 
-            $.each(sharing.json.shared, function() {
-                html +=
+			$.each(sharing.json.shared, function() {
+				html +=
 				`<p><span class="text">` + this.title + `</span><span class="text">` + this.username +
-                '</span><span class="choice">' +
-                '<label>' +
-                '<input type="checkbox" name="remove_id" value="' + this.id + '"/>' +
-                '<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
-                '</label>' +
-                '</span></p>' +
+				'</span><span class="choice">' +
+				'<label>' +
+				'<input type="checkbox" name="remove_id" value="' + this.id + '"/>' +
+				'<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
+				'</label>' +
+				'</span></p>' +
 				``;
-            });
+			});
 
-            html += '</div>';
-            if(sharing.json.shared.length !== 0)
+			html += '</div>';
+			if(sharing.json.shared.length !== 0)
 			{
-                html += `<div class="sharing_view_line"><a id="Remove_button"  class="basicModal__button">Remove</a></div>`;
+				html += `<div class="sharing_view_line"><a id="Remove_button"  class="basicModal__button">Remove</a></div>`;
 			}
 
-            $(".sharing_view").append(html);
+			$(".sharing_view").append(html);
 
-            $('#albums_list').multiselect();
-            $('#user_list').multiselect();
-            $("#Share_button").on('click', sharing.add)
-                .on('mouseenter', function () {$('#albums_list_to, #user_list_to').addClass('borderBlue')})
-                .on('mouseleave', function () {$('#albums_list_to, #user_list_to').removeClass('borderBlue')});
+			$('#albums_list').multiselect();
+			$('#user_list').multiselect();
+			$("#Share_button").on('click', sharing.add)
+				.on('mouseenter', function () {$('#albums_list_to, #user_list_to').addClass('borderBlue')})
+				.on('mouseleave', function () {$('#albums_list_to, #user_list_to').removeClass('borderBlue')});
 
 			$('#Remove_button').on('click', sharing.delete);
-        }
-    }
+		}
+	}
 };
 
 view.logs_diagnostics = {
-    init: function (get) {
+	init: function (get) {
 
-        view.logs_diagnostics.title(get);
-        view.logs_diagnostics.content.init(get)
+		view.logs_diagnostics.title(get);
+		view.logs_diagnostics.content.init(get)
 
-    },
+	},
 
-    title: function (get) {
+	title: function (get) {
 
-        lychee.setTitle(get, false)
+		lychee.setTitle(get, false)
 
-    },
+	},
 
-    clearContent: function () {
-        lychee.content.unbind('mousedown');
-        lychee.content.html('<pre class="logs_diagnostics_view"></pre>');
-    },
+	clearContent: function () {
+		lychee.content.unbind('mousedown');
+		lychee.content.html('<pre class="logs_diagnostics_view"></pre>');
+	},
 
-    content: {
-        init: function (get) {
-            view.logs_diagnostics.clearContent();
+	content: {
+		init: function (get) {
+			view.logs_diagnostics.clearContent();
 			api.post_raw(get, {}, function (data) {
 				$(".logs_diagnostics_view").html(data);
-            })
-        }
-    }
+			})
+		}
+	}
 };

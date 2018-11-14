@@ -63,9 +63,13 @@
 		height: calc(100% - 60px);
 		top: 60px;
 
-		&--previous { left: 0; }
+		&--previous {
+			left: 0;
+		}
 
-		&--next { right: 0; }
+		&--next {
+			right: 0;
+		}
 
 		@media (max-width: 640px) {
 			display: none;

@@ -39,15 +39,25 @@
 			border-bottom: 1px dashed #888;
 		}
 
-		&:first-of-type { padding-top: 42px; }
+		&:first-of-type {
+			padding-top: 42px;
+		}
 
-		&:last-of-type { padding-bottom: 40px; }
+		&:last-of-type {
+			padding-bottom: 40px;
+		}
 
-		&.signIn:first-of-type { padding-top: 30px; }
+		&.signIn:first-of-type {
+			padding-top: 30px;
+		}
 
-		&.signIn:last-of-type { padding-bottom: 30px; }
+		&.signIn:last-of-type {
+			padding-bottom: 30px;
+		}
 
-		&.less { padding-bottom: 30px; }
+		&.less {
+			padding-bottom: 30px;
+		}
 	}
 
 	// Buttons -------------------------------------------------------------- //
@@ -59,7 +69,9 @@
 		box-shadow: inset 0 1px 0 white(.02);
 		cursor: default;
 
-		&:hover { background: white(.02); }
+		&:hover {
+			background: white(.02);
+		}
 
 		&:active,
 		&--active {
@@ -72,9 +84,13 @@
 			box-shadow: inset 0 1px 0 white(.02), inset 1px 0 0 black(.2);
 		}
 
-		&#basicModal__action.red { color: $colorRed; }
+		&#basicModal__action.red {
+			color: $colorRed;
+		}
 
-		&.hidden { display: none; }
+		&.hidden {
+			display: none;
+		}
 	}
 
 	// Inputs -------------------------------------------------------------- //
@@ -91,13 +107,21 @@
 		box-shadow: 0 1px 0 white(.05);
 		outline: none;
 
-		&:focus { border-bottom-color: $colorBlue; }
+		&:focus {
+			border-bottom-color: $colorBlue;
+		}
 
-		&.error { border-bottom-color: $colorRed; }
+		&.error {
+			border-bottom-color: $colorRed;
+		}
 
-		&:first-child { margin-top: 10px; }
+		&:first-child {
+			margin-top: 10px;
+		}
 
-		&:last-child { margin-bottom: 10px; }
+		&:last-child {
+			margin-bottom: 10px;
+		}
 	}
 
 	// Radio Buttons ----------------------------------------------------------- //
@@ -106,7 +130,9 @@
 		width: 100%;
 		color: #fff;
 
-		&:last-child { padding-bottom: 40px; }
+		&:last-child {
+			padding-bottom: 40px;
+		}
 
 		label {
 			float: left;
@@ -152,10 +178,14 @@
 		// Active
 		label input:active ~ .checkbox {
 			background: black(.3);
-			.iconic { opacity: .8; }
+			.iconic {
+				opacity: .8;
+			}
 		}
 
-		label .label { margin: 0 0 0 18px; }
+		label .label {
+			margin: 0 0 0 18px;
+		}
 
 		p {
 			clear: both;
@@ -221,7 +251,9 @@
 			-webkit-appearance: none;
 			appearance: none;
 
-			&:focus { outline: none; }
+			&:focus {
+				outline: none;
+			}
 		}
 
 		select option {
@@ -241,9 +273,13 @@
 		font-size: 12px;
 		text-align: right;
 
-		span { display: none; }
+		span {
+			display: none;
+		}
 
-		span a { color: white(.3); }
+		span a {
+			color: white(.3);
+		}
 	}
 
 	// Title -------------------------------------------------------------- //
@@ -276,7 +312,9 @@
 		width: 100%;
 		background-color: white(.02);
 
-		&:nth-child(2n) { background-color: white(0); }
+		&:nth-child(2n) {
+			background-color: white(0);
+		}
 
 		a.name {
 			float: left;
@@ -303,13 +341,21 @@
 
 			&.error,
 			&.warning,
-			&.success { animation: none; }
+			&.success {
+				animation: none;
+			}
 
-			&.error { color: rgb(233, 42, 0); }
+			&.error {
+				color: rgb(233, 42, 0);
+			}
 
-			&.warning { color: rgb(228, 233, 0); }
+			&.warning {
+				color: rgb(228, 233, 0);
+			}
 
-			&.success { color: rgb(126, 233, 0); }
+			&.success {
+				color: rgb(126, 233, 0);
+			}
 		}
 
 		p.notice {

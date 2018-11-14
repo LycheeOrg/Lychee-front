@@ -125,13 +125,13 @@ sidebar.createStructure.photo = function(data) {
 	switch (data.public) {
 
 		case '0' : _public = lychee.locale['PHOTO_SHR_NO'];
-		           break;
+				   break;
 		case '1' : _public = lychee.locale['PHOTO_SHR_YES'];
-		           break;
+				   break;
 		case '2' : _public = lychee.locale['PHOTO_SHR_ALB'];
-		           break;
+				   break;
 		default :  _public = '-';
-		           break
+				   break
 
 	}
 
@@ -233,11 +233,11 @@ sidebar.createStructure.album = function(data) {
 	switch (data.public) {
 
 		case '0' : _public = lychee.locale['ALBUM_SHR_NO'];
-		           break;
+				   break;
 		case '1' : _public = lychee.locale['ALBUM_SHR_YES'];
-		           break;
+				   break;
 		default  : _public = '-';
-		           break
+				   break
 
 	}
 
@@ -245,11 +245,11 @@ sidebar.createStructure.album = function(data) {
 	switch (data.visible) {
 
 		case '0' : hidden = lychee.locale['ALBUM_SHR_YES'];
-		           break;
+				   break;
 		case '1' : hidden = lychee.locale['ALBUM_SHR_NO'];
-		           break;
+				   break;
 		default  : hidden = '-';
-		           break
+				   break
 
 	}
 
@@ -257,11 +257,11 @@ sidebar.createStructure.album = function(data) {
 	switch (data.downloadable) {
 
 		case '0' : downloadable = lychee.locale['ALBUM_SHR_NO'];
-		           break;
+				   break;
 		case '1' : downloadable = lychee.locale['ALBUM_SHR_YES'];
-		           break;
+				   break;
 		default  : downloadable = '-';
-		           break
+				   break
 
 	}
 
@@ -269,11 +269,11 @@ sidebar.createStructure.album = function(data) {
 	switch (data.password) {
 
 		case '0' : password = lychee.locale['ALBUM_SHR_NO'];
-		           break;
+				   break;
 		case '1' : password = lychee.locale['ALBUM_SHR_YES'];
-		           break;
+				   break;
 		default  : password = '-';
-		           break
+				   break
 
 	}
 
@@ -328,11 +328,11 @@ sidebar.render = function(structure) {
 		let _html = '';
 
 		_html += `
-		         <div class='sidebar__divider'>
-		             <h1>${ section.title }</h1>
-		         </div>
-		         <table>
-		         `;
+				 <div class='sidebar__divider'>
+					 <h1>${ section.title }</h1>
+				 </div>
+				 <table>
+				 `;
 
 		section.rows.forEach(function(row) {
 
@@ -348,17 +348,17 @@ sidebar.render = function(structure) {
 			if (row.editable===true) value += ' ' + build.editIcon('edit_' + row.title.toLowerCase());
 
 			_html += lychee.html`
-			         <tr>
-			             <td>${ row.title }</td>
-			             <td>${ value }</td>
-			         </tr>
-			         `
+					 <tr>
+						 <td>${ row.title }</td>
+						 <td>${ value }</td>
+					 </tr>
+					 `
 
 		});
 
 		_html += `
-		         </table>
-		         `;
+				 </table>
+				 `;
 
 		return _html
 
@@ -373,14 +373,14 @@ sidebar.render = function(structure) {
 		if (section.editable===true) editable = build.editIcon('edit_tags');
 
 		_html += lychee.html`
-		         <div class='sidebar__divider'>
-		             <h1>${ section.title }</h1>
-		         </div>
-		         <div id='tags'>
-		             <div class='attr_${ section.title.toLowerCase() }'>${ section.value }</div>
-		             ${ editable }
-		         </div>
-		         `;
+				 <div class='sidebar__divider'>
+					 <h1>${ section.title }</h1>
+				 </div>
+				 <div id='tags'>
+					 <div class='attr_${ section.title.toLowerCase() }'>${ section.value }</div>
+					 ${ editable }
+				 </div>
+				 `;
 
 		return _html
 

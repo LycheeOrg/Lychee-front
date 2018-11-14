@@ -32,48 +32,48 @@ album.getID = function() {
 
 album.getByID = function(photoID) {
 
-    // Function returns the JSON of a photo
+	// Function returns the JSON of a photo
 
-    if (photoID==null || !album.json || !album.json.photos)
+	if (photoID==null || !album.json || !album.json.photos)
 	{
-        lychee.error('Error: Album json not found !');
+		lychee.error('Error: Album json not found !');
 		return undefined;
-    }
+	}
 
 	let i = 0;
 	while(i < album.json.photos.length) {
-        if (parseInt(album.json.photos[i].id) === parseInt(photoID))
+		if (parseInt(album.json.photos[i].id) === parseInt(photoID))
 		{
-            return album.json.photos[i]
+			return album.json.photos[i]
 		}
 		i++;
-    }
+	}
 
-    lychee.error('Error: photo ' + photoID + ' not found !');
-    return undefined;
+	lychee.error('Error: photo ' + photoID + ' not found !');
+	return undefined;
 };
 
 album.deleteByID = function(photoID) {
 
-    if (photoID==null || !album.json || !album.json.photos)
-    {
-        lychee.error('Error: Album json not found !');
-        return false;
-    }
+	if (photoID==null || !album.json || !album.json.photos)
+	{
+		lychee.error('Error: Album json not found !');
+		return false;
+	}
 
-    let deleted = false;
+	let deleted = false;
 
-    $.each(album.json.photos, function(i) {
+	$.each(album.json.photos, function(i) {
 
 		if (parseInt(album.json.photos[i].id) === parseInt(photoID)) {
-            album.json.photos.splice(i, 1);
-            deleted = true;
-            return false
-        }
+			album.json.photos.splice(i, 1);
+			deleted = true;
+			return false
+		}
 
-    });
+	});
 
-    return deleted
+	return deleted
 
 };
 
@@ -475,35 +475,35 @@ album.setPublic = function(albumID, modal, e) {
 		}
 
 		let msg = `
-		          <p class='less'>${ text }</p>
-		          <form>
-		              <div class='choice'>
-		                  <label>
-		                      <input type='checkbox' name='hidden'>
-		                      <span class='checkbox'>${ build.iconic('check') }</span>
-		                      <span class='label'>` + lychee.locale['ALBUM_HIDDEN'] + `</span>
-		                  </label>
-		                  <p>` + lychee.locale['ALBUM_HIDDEN_EXPL'] + `</p>
-		              </div>
-		              <div class='choice'>
-		                  <label>
-		                      <input type='checkbox' name='downloadable'>
-		                      <span class='checkbox'>${ build.iconic('check') }</span>
-		                      <span class='label'>` + lychee.locale['ALBUM_DOWNLOADABLE'] + `</span>
-		                  </label>
-		                  <p>` + lychee.locale['ALBUM_DOWNLOADABLE_EXPL'] + `</p>
-		              </div>
-		              <div class='choice'>
-		                  <label>
-		                      <input type='checkbox' name='password'>
-		                      <span class='checkbox'>${ build.iconic('check') }</span>
-		                      <span class='label'>` + lychee.locale['ALBUM_PASSWORD_PROT'] + `</span>
-		                  </label>
-		                  <p>` + lychee.locale['ALBUM_PASSWORD_PROT_EXPL'] + `</p>
-		                  <input class='text' name='passwordtext' type='password' placeholder='password' value=''>
-		              </div>
-		          </form>
-		          `;
+				  <p class='less'>${ text }</p>
+				  <form>
+					  <div class='choice'>
+						  <label>
+							  <input type='checkbox' name='hidden'>
+							  <span class='checkbox'>${ build.iconic('check') }</span>
+							  <span class='label'>` + lychee.locale['ALBUM_HIDDEN'] + `</span>
+						  </label>
+						  <p>` + lychee.locale['ALBUM_HIDDEN_EXPL'] + `</p>
+					  </div>
+					  <div class='choice'>
+						  <label>
+							  <input type='checkbox' name='downloadable'>
+							  <span class='checkbox'>${ build.iconic('check') }</span>
+							  <span class='label'>` + lychee.locale['ALBUM_DOWNLOADABLE'] + `</span>
+						  </label>
+						  <p>` + lychee.locale['ALBUM_DOWNLOADABLE_EXPL'] + `</p>
+					  </div>
+					  <div class='choice'>
+						  <label>
+							  <input type='checkbox' name='password'>
+							  <span class='checkbox'>${ build.iconic('check') }</span>
+							  <span class='label'>` + lychee.locale['ALBUM_PASSWORD_PROT'] + `</span>
+						  </label>
+						  <p>` + lychee.locale['ALBUM_PASSWORD_PROT_EXPL'] + `</p>
+						  <input class='text' name='passwordtext' type='password' placeholder='password' value=''>
+					  </div>
+				  </form>
+				  `;
 
 		basicModal.show({
 			body: msg,

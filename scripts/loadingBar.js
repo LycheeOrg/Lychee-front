@@ -46,30 +46,30 @@ loadingBar.show = function(status, errorText) {
 	}
 
 	if (status==='success') {
-        // Set status
-        loadingBar.status = 'success';
+		// Set status
+		loadingBar.status = 'success';
 
-        // Parse text
-        if (errorText)  errorText = errorText.replace('<br>', '');
-        if (!errorText) errorText = lychee.locale['ERROR_TEXT'];
+		// Parse text
+		if (errorText)  errorText = errorText.replace('<br>', '');
+		if (!errorText) errorText = lychee.locale['ERROR_TEXT'];
 
-        // Move header down
-        if (visible.header()) header.dom().addClass('header--error');
+		// Move header down
+		if (visible.header()) header.dom().addClass('header--error');
 
-        // Modify loading
-        loadingBar.dom()
-            .removeClass('loading uploading error success')
-            .html(`<h1>` + lychee.locale['SUCCESS'] + `: <span>${ errorText }</span></h1>`)
-            .addClass(status)
-            .show();
+		// Modify loading
+		loadingBar.dom()
+			.removeClass('loading uploading error success')
+			.html(`<h1>` + lychee.locale['SUCCESS'] + `: <span>${ errorText }</span></h1>`)
+			.addClass(status)
+			.show();
 
-        // Set timeout
-        clearTimeout(loadingBar._timeout);
-        loadingBar._timeout = setTimeout(() => loadingBar.hide(true), 2000);
+		// Set timeout
+		clearTimeout(loadingBar._timeout);
+		loadingBar._timeout = setTimeout(() => loadingBar.hide(true), 2000);
 
-        return true
+		return true
 
-    }
+	}
 
 	if (loadingBar.status===null) {
 

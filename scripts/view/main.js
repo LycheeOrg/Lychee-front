@@ -8,28 +8,28 @@ let lychee = {}
 
 lychee.content = $('.content')
 
-lychee.escapeHTML = function(html = '') {
+lychee.escapeHTML = function (html = '') {
 
 	// Ensure that html is a string
 	html += ''
 
 	// Escape all critical characters
 	html = html.replace(/&/g, '&amp;')
-	           .replace(/</g, '&lt;')
-	           .replace(/>/g, '&gt;')
-	           .replace(/"/g, '&quot;')
-	           .replace(/'/g, '&#039;')
-	           .replace(/`/g, '&#96;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#039;')
+		.replace(/`/g, '&#96;')
 
 	return html
 
 }
 
-lychee.html = function(literalSections, ...substs) {
+lychee.html = function (literalSections, ...substs) {
 
 	// Use raw literal sections: we don’t want
 	// backslashes (\n etc.) to be interpreted
-	let raw    = literalSections.raw
+	let raw = literalSections.raw
 	let result = ''
 
 	substs.forEach((subst, i) => {
@@ -40,9 +40,9 @@ lychee.html = function(literalSections, ...substs) {
 
 		// If the substitution is preceded by a dollar sign,
 		// we escape special characters in it
-		if (lit.slice(-1)==='$') {
+		if (lit.slice(-1) === '$') {
 			subst = lychee.escapeHTML(subst)
-			lit   = lit.slice(0, -1)
+			lit = lit.slice(0, -1)
 		}
 
 		result += lit
@@ -59,10 +59,10 @@ lychee.html = function(literalSections, ...substs) {
 
 }
 
-lychee.getEventName = function() {
+lychee.getEventName = function () {
 
 	let touchendSupport = (/Android|iPhone|iPad|iPod/i).test(navigator.userAgent || navigator.vendor || window.opera) && ('ontouchend' in document.documentElement)
-	let eventName       = (touchendSupport===true ? 'touchend' : 'click')
+	let eventName = (touchendSupport === true ? 'touchend' : 'click')
 
 	return eventName
 
@@ -72,9 +72,9 @@ lychee.getEventName = function() {
 
 let photo = {}
 
-photo.share = function(photoID, service) {
+photo.share = function (photoID, service) {
 
-	let url  = location.toString()
+	let url = location.toString()
 
 	switch (service) {
 		case 'twitter':
@@ -90,9 +90,9 @@ photo.share = function(photoID, service) {
 
 }
 
-photo.getDirectLink = function() {
+photo.getDirectLink = function () {
 
-	return $('#imageview img').attr('src').replace(/"/g,'').replace(/url\(|\)$/ig, '')
+	return $('#imageview img').attr('src').replace(/"/g, '').replace(/url\(|\)$/ig, '')
 
 }
 
@@ -100,15 +100,15 @@ photo.getDirectLink = function() {
 
 let contextMenu = {}
 
-contextMenu.sharePhoto = function(photoID, e) {
+contextMenu.sharePhoto = function (photoID, e) {
 
 	let iconClass = 'ionicons'
 
 	let items = [
-		{ title: build.iconic('twitter', iconClass) + 'Twitter', fn: () => photo.share(photoID, 'twitter') },
-		{ title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => photo.share(photoID, 'facebook') },
-		{ title: build.iconic('envelope-closed') + 'Mail', fn: () => photo.share(photoID, 'mail') },
-		{ title: build.iconic('link-intact') + 'Direct Link', fn: () => window.open(photo.getDirectLink(), '_newtab') }
+		{title: build.iconic('twitter', iconClass) + 'Twitter', fn: () => photo.share(photoID, 'twitter')},
+		{title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => photo.share(photoID, 'facebook')},
+		{title: build.iconic('envelope-closed') + 'Mail', fn: () => photo.share(photoID, 'mail')},
+		{title: build.iconic('link-intact') + 'Direct Link', fn: () => window.open(photo.getDirectLink(), '_newtab')}
 	]
 
 	basicContext.show(items, e.originalEvent)
@@ -117,10 +117,14 @@ contextMenu.sharePhoto = function(photoID, e) {
 
 // Main -------------------------------------------------------------- //
 
-let loadingBar = { show() {}, hide() {} }
-let imageview  = $('#imageview')
+let loadingBar = {
+	show() {
+	}, hide() {
+	}
+}
+let imageview = $('#imageview')
 
-$(document).ready(function() {
+$(document).ready(function () {
 
 	// Save ID of photo
 	let photoID = gup('p')
@@ -129,7 +133,7 @@ $(document).ready(function() {
 	api.onError = error
 
 	// Share
-	header.dom('#button_share').on('click', function(e) {
+	header.dom('#button_share').on('click', function (e) {
 		contextMenu.sharePhoto(photoID, e)
 	})
 
@@ -141,17 +145,17 @@ $(document).ready(function() {
 
 })
 
-const loadPhotoInfo = function(photoID) {
+const loadPhotoInfo = function (photoID) {
 
 	let params = {
 		photoID,
-		albumID  : 0,
-		password : ''
+		albumID: 0,
+		password: ''
 	}
 
-	api.post('Photo::get', params, function(data) {
+	api.post('Photo::get', params, function (data) {
 
-		if (data==='Warning: Photo private!' || data==='Warning: Wrong password!') {
+		if (data === 'Warning: Photo private!' || data === 'Warning: Wrong password!') {
 
 			$('body').append(build.no_content('question-mark'))
 			$('body').removeClass('view')
@@ -172,7 +176,7 @@ const loadPhotoInfo = function(photoID) {
 
 		// Render Sidebar
 		let structure = sidebar.createStructure.photo(data)
-		let html      = sidebar.render(structure)
+		let html = sidebar.render(structure)
 
 		sidebar.dom('.sidebar__wrapper').html(html)
 		sidebar.bind()
@@ -181,12 +185,12 @@ const loadPhotoInfo = function(photoID) {
 
 }
 
-const error = function(errorThrown, params, data) {
+const error = function (errorThrown, params, data) {
 
 	console.error({
-		description : errorThrown,
-		params      : params,
-		response    : data
+		description: errorThrown,
+		params: params,
+		response: data
 	})
 
 	loadingBar.show('error', errorThrown)

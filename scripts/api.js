@@ -15,12 +15,12 @@ api.get_url = function(fn) {
 
 		if(lychee.api_V2)
 		{
-      	// because the api is defined directly by the function called in the route.php
+		// because the api is defined directly by the function called in the route.php
 			api_url = 'api/' + fn;
 		}
 		else
 		{
-	        api_url = api.path;
+			api_url = api.path;
 		}
 
 		return api_url;
@@ -67,39 +67,39 @@ api.post = function(fn, params, callback) {
 };
 
 api.post_raw = function (fn, params, callback) {
-    loadingBar.show();
+	loadingBar.show();
 
-    params = $.extend({ function: fn }, params);
+	params = $.extend({ function: fn }, params);
 
-    let api_url = api.get_url(fn);
+	let api_url = api.get_url(fn);
 
-    const success = (data) => {
+	const success = (data) => {
 
-        setTimeout(loadingBar.hide, 100);
+		setTimeout(loadingBar.hide, 100);
 
-        // Catch errors
-        if (typeof data==='string' && data.substring(0, 7)==='Error: ') {
-            api.onError(data.substring(7, data.length), params, data);
-            return false
-        }
+		// Catch errors
+		if (typeof data==='string' && data.substring(0, 7)==='Error: ') {
+			api.onError(data.substring(7, data.length), params, data);
+			return false
+		}
 
-        callback(data)
+		callback(data)
 
-    };
+	};
 
-    const error = (jqXHR, textStatus, errorThrown) => {
+	const error = (jqXHR, textStatus, errorThrown) => {
 
-        api.onError('Server error or API not found.', params, errorThrown)
+		api.onError('Server error or API not found.', params, errorThrown)
 
-    };
+	};
 
-    $.ajax({
-        type: 'POST',
-        url: api_url,
-        data: params,
-        dataType: 'text',
-        success,
-        error
-    })
+	$.ajax({
+		type: 'POST',
+		url: api_url,
+		data: params,
+		dataType: 'text',
+		success,
+		error
+	})
 
 };

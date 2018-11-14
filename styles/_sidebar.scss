@@ -10,7 +10,9 @@
 	transform: translateX(0);
 	transition: transform .3s $timing;
 
-	&.active { transform: translateX(-360px); }
+	&.active {
+		transform: translateX(-360px);
+	}
 
 	&.notSelectable table tr td:last-child {
 		-webkit-user-select: none !important;
@@ -80,7 +82,9 @@
 			transition: fill .2s ease-out;
 		}
 
-		&:hover .iconic { fill: white(1); }
+		&:hover .iconic {
+			fill: white(1);
+		}
 
 		&:active .iconic {
 			transition: none;
@@ -101,7 +105,9 @@
 		font-size: 14px;
 		line-height: 19px;
 
-		&:first-child { width: 110px; }
+		&:first-child {
+			width: 110px;
+		}
 
 		&:last-child {
 			padding-right: 10px;
@@ -128,9 +134,13 @@
 		margin: 0 2px 8px 0;
 	}
 
-	#tags .edit { margin-top: 6px; }
+	#tags .edit {
+		margin-top: 6px;
+	}
 
-	#tags .empty .edit { margin-top: 0; }
+	#tags .empty .edit {
+		margin-top: 0;
+	}
 
 	#tags .tag {
 		display: inline-block;
@@ -141,7 +151,9 @@
 		font-size: 12px;
 		transition: background-color .2s;
 
-		&:hover { background-color: black(.3); }
+		&:hover {
+			background-color: black(.3);
+		}
 	}
 
 	#tags .tag span {
@@ -159,7 +171,9 @@
 			height: 8px;
 		}
 
-		&:hover .iconic { fill: lighten($colorRed, 10%); }
+		&:hover .iconic {
+			fill: lighten($colorRed, 10%);
+		}
 
 		&:active .iconic {
 			transition: none;

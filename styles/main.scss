@@ -11,16 +11,15 @@
 $shadow: 0 -1px 0 black(.2);
 
 // Colors ------------------------------------------------------------------ //
-$colorBlue		: #2293EC;
-$colorRed  		: #d92c34;
-$colorGreen		: #00AA00;
-$colorYellow	: #FFCC00;
-$colorOrange	: #FF9900;
-
+$colorBlue: #2293EC;
+$colorRed: #d92c34;
+$colorGreen: #00AA00;
+$colorYellow: #FFCC00;
+$colorOrange: #FF9900;
 
 // Animations -------------------------------------------------------------- //
-$timing       : cubic-bezier(.51, .92, .24, 1);
-$timingBounce : cubic-bezier(.51, .92, .24, 1.15);
+$timing: cubic-bezier(.51, .92, .24, 1);
+$timingBounce: cubic-bezier(.51, .92, .24, 1.15);
 
 // Rest -------------------------------------------------------------------- //
 @import 'reset';
@@ -46,7 +45,9 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	font-smoothing: antialiased;
 
-	&.view { background-color: #0f0f0f; }
+	&.view {
+		background-color: #0f0f0f;
+	}
 }
 
 input {
@@ -64,7 +65,9 @@ input {
 	height: 100%;
 }
 
-#upload { display: none; }
+#upload {
+	display: none;
+}
 
 // Files ------------------------------------------------------------------- //
 @import 'animations';

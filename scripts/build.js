@@ -46,7 +46,7 @@ build.getThumbnailHtml = function(thumb, retinaThumbUrl, type) {
 	{
 		return `<span class="thumbimg"><img src='play-icon.png' width='200' height='200' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 	}
-  	return `<span class="thumbimg${isVideo ? ' video': ''}"><img src='${thumb}' srcset='${ retinaThumbUrl } 1.5x' width='200' height='200' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+	return `<span class="thumbimg${isVideo ? ' video': ''}"><img src='${thumb}' srcset='${ retinaThumbUrl } 1.5x' width='200' height='200' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 };
 
 build.album = function(data) {
@@ -54,7 +54,7 @@ build.album = function(data) {
 	let date_stamp = data.sysdate;
 	let sortingAlbums = [];
 
-    let { path: retinaThumbUrl, isPhoto } = lychee.retinize(data.thumbs[0]);
+	let { path: retinaThumbUrl, isPhoto } = lychee.retinize(data.thumbs[0]);
 
 	// In the special case of take date sorting use the take stamps as title
 	if (lychee.sortingAlbums!=='' && data.min_takestamp && data.max_takestamp) {
@@ -63,41 +63,41 @@ build.album = function(data) {
 		if (sortingAlbums[0]==='max_takestamp' || sortingAlbums[0]==='min_takestamp'){
 			if (data.min_takestamp !== '' && data.max_takestamp !== '')
 			{
-                date_stamp = (data.min_takestamp===data.max_takestamp ? data.max_takestamp  : data.min_takestamp + ' - ' + data.max_takestamp)
+				date_stamp = (data.min_takestamp===data.max_takestamp ? data.max_takestamp  : data.min_takestamp + ' - ' + data.max_takestamp)
 			}
-            else if (data.min_takestamp !== '' && sortingAlbums[0]==='min_takestamp')
-            {
-                date_stamp = data.min_takestamp
-            }
-            else if (data.max_takestamp !== '' && sortingAlbums[0]==='max_takestamp')
-            {
-                date_stamp = data.max_takestamp
-            }
+			else if (data.min_takestamp !== '' && sortingAlbums[0]==='min_takestamp')
+			{
+				date_stamp = data.min_takestamp
+			}
+			else if (data.max_takestamp !== '' && sortingAlbums[0]==='max_takestamp')
+			{
+				date_stamp = data.max_takestamp
+			}
 		}
 	}
 
 	html += lychee.html`
-	        <div class='album' data-id='${ data.id }'>
-	              ${build.getThumbnailHtml(data.thumbs[2],data.thumbs[2], data.types[2])}
-	              ${build.getThumbnailHtml(data.thumbs[1],data.thumbs[1], data.types[1])}
-	              ${build.getThumbnailHtml(data.thumbs[0],data.thumbs[0], data.types[0])}
-	            <div class='overlay'>
-	                <h1 title='${ data.title }'>${ data.title }</h1>
-	                <a>${ date_stamp }</a>
-	            </div>
-	        `;
+			<div class='album' data-id='${ data.id }'>
+				  ${build.getThumbnailHtml(data.thumbs[2],data.thumbs[2], data.types[2])}
+				  ${build.getThumbnailHtml(data.thumbs[1],data.thumbs[1], data.types[1])}
+				  ${build.getThumbnailHtml(data.thumbs[0],data.thumbs[0], data.types[0])}
+				<div class='overlay'>
+					<h1 title='${ data.title }'>${ data.title }</h1>
+					<a>${ date_stamp }</a>
+				</div>
+			`;
 
 	if (lychee.publicMode===false) {
 
 		html += lychee.html`
-		        <div class='badges'>
-		            <a class='badge ${ (data.star==='1'     ? 'badge--star' : '') } icn-star'>${ build.iconic('star') }</a>
-		            <a class='badge ${ (data.public==='1'   ? 'badge--visible' : '') } ${ (data.hidden==='1' ? 'badge--not--hidden' : 'badge--hidden') } icn-share'>${ build.iconic('eye') }</a>
-		            <a class='badge ${ (data.unsorted==='1' ? 'badge--visible' : '') }'>${ build.iconic('list') }</a>
-		            <a class='badge ${ (data.recent==='1'   ? 'badge--visible badge--list' : '') }'>${ build.iconic('clock') }</a>
-		            <a class='badge ${ (data.password==='1' ? 'badge--visible' : '') }'>${ build.iconic('lock-locked') }</a>
-		        </div>
-		        `
+				<div class='badges'>
+					<a class='badge ${ (data.star==='1'     ? 'badge--star' : '') } icn-star'>${ build.iconic('star') }</a>
+					<a class='badge ${ (data.public==='1'   ? 'badge--visible' : '') } ${ (data.hidden==='1' ? 'badge--not--hidden' : 'badge--hidden') } icn-share'>${ build.iconic('eye') }</a>
+					<a class='badge ${ (data.unsorted==='1' ? 'badge--visible' : '') }'>${ build.iconic('list') }</a>
+					<a class='badge ${ (data.recent==='1'   ? 'badge--visible badge--list' : '') }'>${ build.iconic('clock') }</a>
+					<a class='badge ${ (data.password==='1' ? 'badge--visible' : '') }'>${ build.iconic('lock-locked') }</a>
+				</div>
+				`
 
 	}
 
@@ -114,12 +114,12 @@ build.photo = function(data) {
 	let { path: retinaThumbUrl } = lychee.retinize(data.thumbUrl);
 
 	html += lychee.html`
-	        <div class='photo' data-album-id='${ data.album }' data-id='${ data.id }' test="test">
-	            ${build.getThumbnailHtml(data.thumbUrl,retinaThumbUrl, data.type)}
-	            <!-- <img src='${ data.thumbUrl }' srcset='${ retinaThumbUrl } 1.5x' width='200' height='200' alt='Photo thumbnail' draggable='false'> -->
-	            <div class='overlay'>
-	                <h1 title='${ data.title }'>${ data.title }</h1>
-	        `;
+			<div class='photo' data-album-id='${ data.album }' data-id='${ data.id }' test="test">
+				${build.getThumbnailHtml(data.thumbUrl,retinaThumbUrl, data.type)}
+				<!-- <img src='${ data.thumbUrl }' srcset='${ retinaThumbUrl } 1.5x' width='200' height='200' alt='Photo thumbnail' draggable='false'> -->
+				<div class='overlay'>
+					<h1 title='${ data.title }'>${ data.title }</h1>
+			`;
 
 	if (data.cameraDate==='1') html += lychee.html`<a><span title='Camera Date'>${ build.iconic('camera-slr') }</span>${ data.sysdate }</a>`;
 	else                       html += lychee.html`<a>${ data.sysdate }</a>`;
@@ -129,11 +129,11 @@ build.photo = function(data) {
 	if (lychee.publicMode===false) {
 
 		html += lychee.html`
-		        <div class='badges'>
-		            <a class='badge ${ (data.star==='1'                                ? 'badge--visible' : '') } icn-star'>${ build.iconic('star') }</a>
-		            <a class='badge ${ ((data.public==='1' && album.json.public!=='1') ? 'badge--visible' : '') } icn-share'>${ build.iconic('eye') }</a>
-		        </div>
-		        `
+				<div class='badges'>
+					<a class='badge ${ (data.star==='1'                                ? 'badge--visible' : '') } icn-star'>${ build.iconic('star') }</a>
+					<a class='badge ${ ((data.public==='1' && album.json.public!=='1') ? 'badge--visible' : '') } icn-share'>${ build.iconic('eye') }</a>
+				</div>
+				`
 
 	}
 
@@ -149,7 +149,7 @@ build.imageview = function(data, visibleControls) {
 	let hasMedium = data.medium !== '';
 
 	if(data.type.indexOf('video') > -1){
-    html += lychee.html`<video width="auto" height="auto" id='image' controls class='${ visibleControls===true ? '' : 'full' }' autoplay><source src='${ data.url }'>Your browser does not support the video tag.</video>`
+	html += lychee.html`<video width="auto" height="auto" id='image' controls class='${ visibleControls===true ? '' : 'full' }' autoplay><source src='${ data.url }'>Your browser does not support the video tag.</video>`
 	}
 	else if (hasMedium===false) {
 
@@ -158,14 +158,14 @@ build.imageview = function(data, visibleControls) {
 	} else {
 
 		// html += lychee.html`<img id='image' class='${ visibleControls===true ? '' : 'full' }' src='${ data.url }' srcset='${ data.medium } 1920w, ${ data.url } ${ data.width }w' draggable='false'>`
-        html += lychee.html`<img id='image' class='${ visibleControls===true ? '' : 'full' }' src='${ data.medium }' draggable='false'>`
+		html += lychee.html`<img id='image' class='${ visibleControls===true ? '' : 'full' }' src='${ data.medium }' draggable='false'>`
 
 	}
 
 	html += `
-	        <div class='arrow_wrapper arrow_wrapper--previous'><a id='previous'>${ build.iconic('caret-left') }</a></div>
-	        <div class='arrow_wrapper arrow_wrapper--next'><a id='next'>${ build.iconic('caret-right') }</a></div>
-	        `;
+			<div class='arrow_wrapper arrow_wrapper--previous'><a id='previous'>${ build.iconic('caret-left') }</a></div>
+			<div class='arrow_wrapper arrow_wrapper--next'><a id='next'>${ build.iconic('caret-right') }</a></div>
+			`;
 
 	return html
 
@@ -176,9 +176,9 @@ build.no_content = function(typ) {
 	let html = '';
 
 	html += `
-	        <div class='no_content fadeIn'>
-	            ${ build.iconic(typ) }
-	        `;
+			<div class='no_content fadeIn'>
+				${ build.iconic(typ) }
+			`;
 
 	switch (typ) {
 		case 'magnifying-glass':
@@ -206,9 +206,9 @@ build.uploadModal = function(title, files) {
 	let html = '';
 
 	html += lychee.html`
-	        <h1>${ title }</h1>
-	        <div class='rows'>
-	        `;
+			<h1>${ title }</h1>
+			<div class='rows'>
+			`;
 
 	let i = 0;
 
@@ -219,12 +219,12 @@ build.uploadModal = function(title, files) {
 		if (file.name.length>40) file.name = file.name.substr(0, 17) + '...' + file.name.substr(file.name.length - 20, 20);
 
 		html += lychee.html`
-		        <div class='row'>
-		            <a class='name'>${ file.name }</a>
-		            <a class='status'></a>
-		            <p class='notice'></p>
-		        </div>
-		        `;
+				<div class='row'>
+					<a class='name'>${ file.name }</a>
+					<a class='status'></a>
+					<p class='notice'></p>
+				</div>
+				`;
 
 		i++
 
@@ -259,25 +259,25 @@ build.tags = function(tags) {
 };
 
 build.user = function (user) {
-    return '<div class="users_view_line">' +
-        '<p id="UserData' + user.id + '">' +
-        '<input name="id" type="hidden" value="' + user.id + '" />' +
-        '<input class="text" name="username" type="text" value="' + user.username + '" placeholder="username" />' +
-        '<input class="text" name="password" type="text" placeholder="new password" />' +
-        '<span class="choice">' +
-        '<label>' +
-        '<input type="checkbox" name="upload" />' +
-        '<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
-        '</label>' +
-        '</span>' +
-        '<span class="choice">' +
-        '<label>' +
-        '<input type="checkbox" name="lock" />' +
-        '<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
-        '</label>' +
-        '</span>' +
-        '</p>' +
-        '<a id="UserUpdate' + user.id + '"  class="basicModal__button basicModal__button_OK">Save</a>' +
-        '<a id="UserDelete' + user.id + '"  class="basicModal__button basicModal__button_DEL">Delete</a>' +
-        '</div>';
+	return '<div class="users_view_line">' +
+		'<p id="UserData' + user.id + '">' +
+		'<input name="id" type="hidden" value="' + user.id + '" />' +
+		'<input class="text" name="username" type="text" value="' + user.username + '" placeholder="username" />' +
+		'<input class="text" name="password" type="text" placeholder="new password" />' +
+		'<span class="choice">' +
+		'<label>' +
+		'<input type="checkbox" name="upload" />' +
+		'<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
+		'</label>' +
+		'</span>' +
+		'<span class="choice">' +
+		'<label>' +
+		'<input type="checkbox" name="lock" />' +
+		'<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
+		'</label>' +
+		'</span>' +
+		'</p>' +
+		'<a id="UserUpdate' + user.id + '"  class="basicModal__button basicModal__button_OK">Save</a>' +
+		'<a id="UserDelete' + user.id + '"  class="basicModal__button basicModal__button_DEL">Delete</a>' +
+		'</div>';
 };

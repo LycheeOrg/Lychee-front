@@ -14,7 +14,7 @@ lychee = {
 
 	publicMode      : false,
 	viewMode        : false,
-    api_V2			: false,  // enable api_V2
+	api_V2			: false,  // enable api_V2
 	admin			: false,  // enable admin mode (multi-user)
 	upload			: false,  // enable possibility to upload (multi-user)
 	lock			: false,  // locked user (multi-user)
@@ -24,7 +24,7 @@ lychee = {
 	sortingAlbums   : '',
 	location        : '',
 
-    lang			: '',
+	lang			: '',
 	lang_available	: {},
 
 	dropbox         : false,
@@ -53,9 +53,9 @@ lychee = {
 		'UPDATE_AVAILABLE'	: 'Update available!',
 
 		'SMART_ALBUMS'		: 'Smart albums',
-        'SHARED_ALBUMS'		: 'Shared albums',
+		'SHARED_ALBUMS'		: 'Shared albums',
 		'ALBUMS'			: 'Albums',
-        'PHOTOS'			: 'Pictures',
+		'PHOTOS'			: 'Pictures',
 
 		'RENAME'			: 'Rename',
 		'RENAME_ALL'		: 'Rename All',
@@ -205,12 +205,12 @@ lychee = {
 		'ERROR_CONFIG_FILE'			: "Unable to save this configuration. Permission denied in <b>'data/'</b>. Please set the read, write and execute rights for others in <b>'data/'</b> and <b>'uploads/'</b>. Take a look at the readme for more information.",
 		'ERROR_UNKNOWN'				: 'Something unexpected happened. Please try again and check your installation and server. Take a look at the readme for more information.',
 		'ERROR_LOGIN'				: 'Unable to save login. Please try again with another username and password!',
-        'SUCCESS'					: 'OK',
+		'SUCCESS'					: 'OK',
 		'RETRY'						: 'Retry',
 
 		'SETTINGS_SUCCESS_LOGIN'	: 'Login Info updated.',
-        'SETTINGS_SUCCESS_SORT'		: 'Sorting order updated.',
-        'SETTINGS_SUCCESS_DROPBOX'	: 'Dropbox Key updated.',
+		'SETTINGS_SUCCESS_SORT'		: 'Sorting order updated.',
+		'SETTINGS_SUCCESS_DROPBOX'	: 'Dropbox Key updated.',
 		'SETTINGS_SUCCESS_LANG'		: 'Language updated',
 
 		'DB_INFO_TITLE'				: 'Enter your database connection details below:',
@@ -336,7 +336,7 @@ lychee.init = function() {
 		// 1 = Logged out
 		// 2 = Logged in
 
-    	lychee.api_V2 = data.api_V2 || false;
+		lychee.api_V2 = data.api_V2 || false;
 
 		// we copy the locale that exists only.
 		// This ensure forward and backward compatibility.
@@ -346,7 +346,7 @@ lychee.init = function() {
 			lychee.locale[key] = data.locale[key]
 		}
 
-        if (data.status===2) {
+		if (data.status===2) {
 
 			// Logged in
 
@@ -355,25 +355,25 @@ lychee.init = function() {
 			lychee.dropboxKey      = data.config.dropboxKey      || '';
 			lychee.location        = data.config.location        || '';
 			lychee.checkForUpdates = data.config.checkForUpdates || '1';
-            lychee.lang			   = data.config.lang            || '';
+			lychee.lang			   = data.config.lang            || '';
 			lychee.lang_available  = data.config.lang_available  || {};
 
-            lychee.upload	= !lychee.api_V2;
-            lychee.admin	= !lychee.api_V2;
+			lychee.upload	= !lychee.api_V2;
+			lychee.admin	= !lychee.api_V2;
 
-            // leftMenu
-            leftMenu.build();
-            leftMenu.bind();
+			// leftMenu
+			leftMenu.build();
+			leftMenu.bind();
 
-            if (lychee.api_V2)
+			if (lychee.api_V2)
 			{
 				lychee.upload	= data.admin || data.upload;
 				lychee.admin	= data.admin;
 				lychee.lock		= data.lock;
-                lychee.setMode('logged_in');
+				lychee.setMode('logged_in');
 			}
 
-            // Show dialog when there is no username and password
+			// Show dialog when there is no username and password
 			if (data.config.login===false) settings.createLogin()
 
 		} else if (data.status===1) {
@@ -399,7 +399,7 @@ lychee.init = function() {
 
 		}
 
-        $(window).bind('popstate', lychee.load);
+		$(window).bind('popstate', lychee.load);
 		lychee.load()
 
 	})
@@ -436,12 +436,12 @@ lychee.login = function(data) {
 lychee.loginDialog = function() {
 
 	let msg = lychee.html`
-	          <p class='signIn'>
-	              <input class='text' name='username' autocomplete='` + lychee.locale['USERNAME'] + `' type='text' placeholder='username' autocapitalize='off' autocorrect='off'>
-	              <input class='text' name='password' autocomplete='current-password' type='password' placeholder='` + lychee.locale['PASSWORD'] + `'>
-	          </p>
-	          <p class='version'>Lychee ${ lychee.version }<span> &#8211; <a target='_blank' href='${ lychee.updateURL }'>` + lychee.locale['UPDATE_AVAILABLE'] + `</a><span></p>
-	          `;
+			  <p class='signIn'>
+				  <input class='text' name='username' autocomplete='` + lychee.locale['USERNAME'] + `' type='text' placeholder='username' autocapitalize='off' autocorrect='off'>
+				  <input class='text' name='password' autocomplete='current-password' type='password' placeholder='` + lychee.locale['PASSWORD'] + `'>
+			  </p>
+			  <p class='version'>Lychee ${ lychee.version }<span> &#8211; <a target='_blank' href='${ lychee.updateURL }'>` + lychee.locale['UPDATE_AVAILABLE'] + `</a><span></p>
+			  `;
 
 	basicModal.show({
 		body: msg,
@@ -562,42 +562,42 @@ lychee.setTitle = function(title, editable) {
 
 lychee.setMode = function(mode) {
 
-    if (lychee.lock)
+	if (lychee.lock)
 	{
 		$('#button_settings_open').remove();
 	}
-    if (!lychee.upload)
-    {
-        $('#button_trash_album, .button_add').remove();
-        $('#button_trash, #button_move, #button_star, #button_sharing').remove();
+	if (!lychee.upload)
+	{
+		$('#button_trash_album, .button_add').remove();
+		$('#button_trash, #button_move, #button_star, #button_sharing').remove();
 
-        $('#button_share, #button_share_album')
-            .removeClass('button--eye')
-            .addClass('button--share')
-            .find('use')
-            .attr('xlink:href', '#share');
+		$('#button_share, #button_share_album')
+			.removeClass('button--eye')
+			.addClass('button--share')
+			.find('use')
+			.attr('xlink:href', '#share');
 
-        $(document)
-            .off('click',       '.header__title--editable')
-            .off('touchend',    '.header__title--editable')
-            .off('contextmenu', '.photo')
-            .off('contextmenu', '.album')
-            .off('drop');
+		$(document)
+			.off('click',       '.header__title--editable')
+			.off('touchend',    '.header__title--editable')
+			.off('contextmenu', '.photo')
+			.off('contextmenu', '.album')
+			.off('drop');
 
-        Mousetrap
-            .unbind([ 'u' ])
-            .unbind([ 's' ])
-            .unbind([ 'f' ])
-            .unbind([ 'r' ])
-            .unbind([ 'd' ])
-            .unbind([ 't' ])
-            .unbind([ 'command+backspace', 'ctrl+backspace' ])
-            .unbind([ 'command+a', 'ctrl+a' ]);
-    }
-    if (!lychee.admin)
-    {
-        $('#button_users, #button_logs, #button_diagnostics').remove();
-    }
+		Mousetrap
+			.unbind([ 'u' ])
+			.unbind([ 's' ])
+			.unbind([ 'f' ])
+			.unbind([ 'r' ])
+			.unbind([ 'd' ])
+			.unbind([ 't' ])
+			.unbind([ 'command+backspace', 'ctrl+backspace' ])
+			.unbind([ 'command+a', 'ctrl+a' ]);
+	}
+	if (!lychee.admin)
+	{
+		$('#button_users, #button_logs, #button_diagnostics').remove();
+	}
 
 	if(mode==='logged_in') return;
 
@@ -723,7 +723,7 @@ lychee.loadDropbox = function(callback) {
 lychee.getEventName = function() {
 
 	let touchendSupport = (/Android|iPhone|iPad|iPod/i).test(navigator.userAgent || navigator.vendor || window.opera) && ('ontouchend' in document.documentElement);
-    return (touchendSupport === true ? 'touchend' : 'click')
+	return (touchendSupport === true ? 'touchend' : 'click')
 
 };
 
@@ -734,11 +734,11 @@ lychee.escapeHTML = function(html = '') {
 
 	// Escape all critical characters
 	html = html.replace(/&/g, '&amp;')
-	           .replace(/</g, '&lt;')
-	           .replace(/>/g, '&gt;')
-	           .replace(/"/g, '&quot;')
-	           .replace(/'/g, '&#039;')
-	           .replace(/`/g, '&#96;');
+			   .replace(/</g, '&lt;')
+			   .replace(/>/g, '&gt;')
+			   .replace(/"/g, '&quot;')
+			   .replace(/'/g, '&#039;')
+			   .replace(/`/g, '&#96;');
 
 	return html
 

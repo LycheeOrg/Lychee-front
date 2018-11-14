@@ -73,31 +73,31 @@
 			transition: none;
 			border-color: darken($colorBlue, 15%);
 		}
-		.video{
+		.video {
 			&::before {
-              content: '';
-              position: absolute;
-              display: block;
-              height: 200px;
-              width: 200px;
-              background: url('../play-icon.png') 46% 50%;
-              transition: all 0.3s;
-              will-change: opacity, height;
-            }
-            &:hover::before{
-              content: '';
-              position: absolute;
-              display: block;
-              height: 180px;
-              opacity: 0.75;
-              width: 200px;
-              background: url('../play-icon.png') 46% 50%;
-            }
+				content: '';
+				position: absolute;
+				display: block;
+				height: 200px;
+				width: 200px;
+				background: url('../play-icon.png') 46% 50%;
+				transition: all 0.3s;
+				will-change: opacity, height;
+			}
+			&:hover::before {
+				content: '';
+				position: absolute;
+				display: block;
+				height: 180px;
+				opacity: 0.75;
+				width: 200px;
+				background: url('../play-icon.png') 46% 50%;
+			}
 		}
 	}
 
 	// Album -------------------------------------------------------------- //
-	.album  {
+	.album {
 		.thumbimg:first-child,
 		.thumbimg:nth-child(2) {
 			transform: rotate(0) translateY(0) translateX(0);
@@ -137,7 +137,9 @@
 		background: none;
 	}
 
-	.photo .overlay { opacity: 0; }
+	.photo .overlay {
+		opacity: 0;
+	}
 
 	.photo:hover .overlay,
 	.photo.active .overlay {

@@ -122,18 +122,18 @@ settings.createConfig = function() {
 	};
 
 	let msg = `
-	          <p>
-	              ` + lychee.locale['DB_INFO_TITLE'] + `
-	              <input name='dbHost' class='text' type='text' placeholder='` + lychee.locale['DB_INFO_HOST']+ `' value=''>
-	              <input name='dbUser' class='text' type='text' placeholder='` + lychee.locale['DB_INFO_USER'] + `' value=''>
-	              <input name='dbPassword' class='text' type='password' placeholder='` + lychee.locale['DB_INFO_PASSWORD'] + `' value=''>
-	          </p>
-	          <p>
-	              ` + lychee.locale['DB_INFO_TEXT'] + `
-	              <input name='dbName' class='text' type='text' placeholder='` + lychee.locale['DB_NAME'] + `' value=''>
-	              <input name='dbTablePrefix' class='text' type='text' placeholder='` + lychee.locale['DB_PREFIX'] + `' value=''>
-	          </p>
-	          `;
+			  <p>
+				  ` + lychee.locale['DB_INFO_TITLE'] + `
+				  <input name='dbHost' class='text' type='text' placeholder='` + lychee.locale['DB_INFO_HOST']+ `' value=''>
+				  <input name='dbUser' class='text' type='text' placeholder='` + lychee.locale['DB_INFO_USER'] + `' value=''>
+				  <input name='dbPassword' class='text' type='password' placeholder='` + lychee.locale['DB_INFO_PASSWORD'] + `' value=''>
+			  </p>
+			  <p>
+				  ` + lychee.locale['DB_INFO_TEXT'] + `
+				  <input name='dbName' class='text' type='text' placeholder='` + lychee.locale['DB_NAME'] + `' value=''>
+				  <input name='dbTablePrefix' class='text' type='text' placeholder='` + lychee.locale['DB_PREFIX'] + `' value=''>
+			  </p>
+			  `;
 
 	basicModal.show({
 		body: msg,
@@ -192,12 +192,12 @@ settings.createLogin = function() {
 	};
 
 	let msg = `
-	          <p>
-	              ` + lychee.locale['LOGIN_TITLE'] + `
-	              <input name='username' class='text' type='text' placeholder='` + lychee.locale['LOGIN_USERNAME'] + `' value=''>
-	              <input name='password' class='text' type='password' placeholder='` + lychee.locale['LOGIN_PASSWORD'] + `' value=''>
-	          </p>
-	          `;
+			  <p>
+				  ` + lychee.locale['LOGIN_TITLE'] + `
+				  <input name='username' class='text' type='text' placeholder='` + lychee.locale['LOGIN_USERNAME'] + `' value=''>
+				  <input name='password' class='text' type='password' placeholder='` + lychee.locale['LOGIN_PASSWORD'] + `' value=''>
+			  </p>
+			  `;
 
 	basicModal.show({
 		body: msg,
@@ -215,33 +215,33 @@ settings.createLogin = function() {
 // from https://github.com/electerious/basicModal/blob/master/src/scripts/main.js
 settings.getValues = function(form_name) {
 
-    let values  = {};
-    let inputs_select  = $(form_name + ' input[name], '+ form_name + ' select[name]');
+	let values  = {};
+	let inputs_select  = $(form_name + ' input[name], '+ form_name + ' select[name]');
 
-    // Get value from all inputs
-    $(inputs_select).each(function() {
+	// Get value from all inputs
+	$(inputs_select).each(function() {
 
-        let name  = $(this).attr('name');
-        // Store name and value of input
-        values[name] = $(this).val()
+		let name  = $(this).attr('name');
+		// Store name and value of input
+		values[name] = $(this).val()
 
-    });
-    return (Object.keys(values).length===0 ? null : values)
+	});
+	return (Object.keys(values).length===0 ? null : values)
 
 };
 
 // from https://github.com/electerious/basicModal/blob/master/src/scripts/main.js
 settings.bind = function(item, name, fn) {
 
-    // if ($(item).length)
+	// if ($(item).length)
 	// {
-    //     console.log('found');
+	//     console.log('found');
 	// }
 	// else
 	// {
-    //     console.log('not found: ' + item);
+	//     console.log('not found: ' + item);
 	// }
-    // Action-button
+	// Action-button
 	$(item).on('click', function () {
 		fn(settings.getValues(name))
 	})
@@ -249,75 +249,75 @@ settings.bind = function(item, name, fn) {
 
 settings.changeLogin = function(params) {
 
-        if (params.username.length < 1) {
-            loadingBar.show('error', 'new username cannot be empty.');
-            $('input[name=username]').addClass('error');
-            return false
-        }
-        else
+		if (params.username.length < 1) {
+			loadingBar.show('error', 'new username cannot be empty.');
+			$('input[name=username]').addClass('error');
+			return false
+		}
+		else
 		{
-            $('input[name=username]').removeClass('error');
-        }
+			$('input[name=username]').removeClass('error');
+		}
 
-        if (params.password.length < 1) {
-            loadingBar.show('error', 'new password cannot be empty.');
-            $('input[name=password]').addClass('error');
-            return false
-        }
-        else
-        {
-            $('input[name=password]').removeClass('error');
-        }
+		if (params.password.length < 1) {
+			loadingBar.show('error', 'new password cannot be empty.');
+			$('input[name=password]').addClass('error');
+			return false
+		}
+		else
+		{
+			$('input[name=password]').removeClass('error');
+		}
 
 
-        api.post('Settings::setLogin', params, function(data) {
+		api.post('Settings::setLogin', params, function(data) {
 
-            if (data!==true)
+			if (data!==true)
 			{
 				loadingBar.show('error', data.description);
 				lychee.error(null, datas, data)
 			}
 			else {
-                $('input[name]').removeClass('error');
+				$('input[name]').removeClass('error');
 				loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_LOGIN']);
 				view.settings.content.clearLogin();
 			}
-        })
+		})
 
 };
 
 settings.changeSorting = function(params) {
 
-    api.post('Settings::setSorting', params, function(data) {
+	api.post('Settings::setSorting', params, function(data) {
 
-        if (data===true) {
-            lychee.sortingAlbums = 'ORDER BY ' + params['typeAlbums'] + ' ' + params['orderAlbums'];
-            lychee.sortingPhotos = 'ORDER BY ' + params['typePhotos'] + ' ' + params['orderPhotos'];
-            albums.refresh();
-            loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_SORT']);
-        } else lychee.error(null, params, data)
+		if (data===true) {
+			lychee.sortingAlbums = 'ORDER BY ' + params['typeAlbums'] + ' ' + params['orderAlbums'];
+			lychee.sortingPhotos = 'ORDER BY ' + params['typePhotos'] + ' ' + params['orderPhotos'];
+			albums.refresh();
+			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_SORT']);
+		} else lychee.error(null, params, data)
 
-    })
+	})
 
 };
 
 settings.changeDropboxKey = function(params) {
-    // let key = params.key;
+	// let key = params.key;
 
-    if (params.key.length<1) {
-        loadingBar.show('error', 'key cannot be empty.');
-        return false
-    }
+	if (params.key.length<1) {
+		loadingBar.show('error', 'key cannot be empty.');
+		return false
+	}
 
-    api.post('Settings::setDropboxKey', params, function(data) {
+	api.post('Settings::setDropboxKey', params, function(data) {
 
-        if (data===true) {
-            lychee.dropboxKey = params.key;
-            // if (callback) lychee.loadDropbox(callback)
-            loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_DROPBOX']);
-        } else lychee.error(null, params, data)
+		if (data===true) {
+			lychee.dropboxKey = params.key;
+			// if (callback) lychee.loadDropbox(callback)
+			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_DROPBOX']);
+		} else lychee.error(null, params, data)
 
-    })
+	})
 
 };
 
@@ -325,13 +325,13 @@ settings.changeDropboxKey = function(params) {
 
 settings.changeLang = function(params) {
 
-    api.post('Settings::setLang', params, function(data) {
+	api.post('Settings::setLang', params, function(data) {
 
-        if (data===true) {
-            loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_LANG']);
-            lychee.init(); // to reload languages.
-        } else lychee.error(null, params, data)
+		if (data===true) {
+			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_LANG']);
+			lychee.init(); // to reload languages.
+		} else lychee.error(null, params, data)
 
-    })
+	})
 
 };

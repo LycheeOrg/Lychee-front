@@ -84,7 +84,7 @@ albums._createSmartAlbums = function(data) {
 		sysdate : data.starred.num + ' ' + lychee.locale['NUM_PHOTOS'],
 		star    : '1',
 		thumbs  : data.starred.thumbs,
-    types   : data.starred.types
+	types   : data.starred.types
 	};
 
 	data.public = {
@@ -94,7 +94,7 @@ albums._createSmartAlbums = function(data) {
 		public  : '1',
 		thumbs  : data.public.thumbs,
 		hidden 	: '1',
-    types   : data.public.types
+	types   : data.public.types
 	};
 
 	data.recent = {
@@ -103,7 +103,7 @@ albums._createSmartAlbums = function(data) {
 		sysdate : data.recent.num + ' ' + lychee.locale['NUM_PHOTOS'],
 		recent  : '1',
 		thumbs  : data.recent.thumbs,
-    types   : data.recent.types
+	types   : data.recent.types
 	}
 
 };
@@ -128,14 +128,14 @@ albums.getByID = function(albumID) {
 
 	if (json === undefined)
 	{
-        if (!albums.json.shared_albums) return undefined;
-        $.each(albums.json.shared_albums, function(i) {
+		if (!albums.json.shared_albums) return undefined;
+		$.each(albums.json.shared_albums, function(i) {
 
-            let elem = albums.json.shared_albums[i];
+			let elem = albums.json.shared_albums[i];
 
-            if (parseInt(elem.id)===parseInt(albumID)) json = elem
+			if (parseInt(elem.id)===parseInt(albumID)) json = elem
 
-        });
+		});
 	}
 
 	return json
@@ -162,18 +162,18 @@ albums.deleteByID = function(albumID) {
 
 	});
 
-    if (deleted === false)
-    {
-        if (!albums.json.shared_albums) return undefined;
-        $.each(albums.json.shared_albums, function(i) {
+	if (deleted === false)
+	{
+		if (!albums.json.shared_albums) return undefined;
+		$.each(albums.json.shared_albums, function(i) {
 
 			if (parseInt(albums.json.shared_albums[i].id)===parseInt(albumID)) {
 				albums.json.shared_albums.splice(i, 1);
 				deleted = true;
 				return false
 			}
-        });
-    }
+		});
+	}
 
 
 	return deleted
