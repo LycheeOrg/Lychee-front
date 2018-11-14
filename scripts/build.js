@@ -49,7 +49,7 @@ build.getThumbnailHtml = function(thumb, retinaThumbUrl, type) {
 	return `<span class="thumbimg${isVideo ? ' video': ''}"><img src='${thumb}' srcset='${ retinaThumbUrl } 1.5x' width='200' height='200' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 };
 
-build.album = function(data) {
+build.album = function(data, disabled = false) {
 	let html = '';
 	let date_stamp = data.sysdate;
 	let sortingAlbums = [];
@@ -77,7 +77,7 @@ build.album = function(data) {
 	}
 
 	html += lychee.html`
-			<div class='album' data-id='${ data.id }'>
+			<div class='album` + (disabled ? ` disabled` : ``) + `' data-id='${ data.id }'>
 				  ${build.getThumbnailHtml(data.thumbs[2],data.thumbs[2], data.types[2])}
 				  ${build.getThumbnailHtml(data.thumbs[1],data.thumbs[1], data.types[1])}
 				  ${build.getThumbnailHtml(data.thumbs[0],data.thumbs[0], data.types[0])}

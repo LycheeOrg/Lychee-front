@@ -2,6 +2,18 @@
  * @description This module is used for the context menu.
  */
 
+
+
+const getAlbumFrom = function(albums, id) {
+
+	for (a in albums) {
+		if (albums[a].id === id) return albums[a]
+	}
+
+	return null
+
+};
+
 contextMenu = {};
 
 contextMenu.add = function(e) {
@@ -33,7 +45,7 @@ contextMenu.album = function(albumID, e) {
 	// fn must call basicContext.close() first,
 	// in order to keep the selection
 
-	if (albumID==='0' || albumID==='f' || albumID==='s' || albumID==='r') return false;
+	if (album.isSmartID(albumID)) return false;
 
 	// Show merge-item when there's more than one album
 	let showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1);
@@ -41,6 +53,8 @@ contextMenu.album = function(albumID, e) {
 	let items = [
 		{ title: build.iconic('pencil') + lychee.locale['RENAME'], fn: () => album.setTitle([ albumID ]) },
 		{ title: build.iconic('collapse-left') + lychee.locale['MERGE'], visible: showMerge, fn: () => { basicContext.close(); contextMenu.mergeAlbum(albumID, e) } },
+// TODO: localization
+		{ title: build.iconic('folder') + 'Move', fn: () => { basicContext.close(); contextMenu.moveAlbum([ albumID ], e) } },
 		{ title: build.iconic('trash') + lychee.locale['DELETE'], fn: () => album.delete([ albumID ]) }
 	];
 
@@ -65,6 +79,8 @@ contextMenu.albumMulti = function(albumIDs, e) {
 		{ title: build.iconic('pencil') + lychee.locale['RENAME_ALL'], fn: () => album.setTitle(albumIDs) },
 		{ title: build.iconic('collapse-left') + lychee.locale['MERGE_ALL'], visible: showMerge && autoMerge, fn: () => album.merge(albumIDs) },
 		{ title: build.iconic('collapse-left') + lychee.locale['MERGE'], visible: showMerge && !autoMerge, fn: () => { basicContext.close(); contextMenu.mergeAlbum(albumIDs[0], e) } },
+// TODO: localization
+		{ title: build.iconic('folder') + 'Move All', fn: () => { basicContext.close(); contextMenu.moveAlbum(albumIDs, e) } },
 		{ title: build.iconic('trash') + lychee.locale['DELETE_ALL'], fn: () => album.delete(albumIDs) }
 	];
 
@@ -74,31 +90,69 @@ contextMenu.albumMulti = function(albumIDs, e) {
 
 };
 
+contextMenu.buildList = function(lists, exclude, action, parent = 0, layer = 0) {
+
+	let items = [];
+
+	let i = 0;
+	while(i < lists.length) {
+		if ((layer===0 && !lists[i].parent_id) || lists[i].parent_id === parent) {
+
+			let item = lists[i];
+
+			let thumb = 'Lychee-front/images/no_cover.svg';
+			if (item.thumbs && item.thumbs[0]) thumb = item.thumbs[0];
+			else if (item.thumbUrl)             thumb = item.thumbUrl;
+
+			if (item.title==='') item.title = lychee.locale['UNTITLED'];
+
+			let prefix = (layer > 0 ? '&nbsp;&nbsp;'.repeat(layer - 1) + '└ ' : '');
+
+			let html = lychee.html`
+			           ${ prefix }
+			           <img class='cover' width='16' height='16' src='${ thumb }'>
+			           <div class='title'>$${ item.title }</div>
+			           `;
+
+			items.push({
+				title: html,
+				disabled: (exclude.indexOf(item.id)!==-1),
+				fn: () => action(item)
+			});
+
+			items = items.concat(contextMenu.buildList(lists, exclude, action, item.id, layer + 1))
+
+		}
+
+		i++;
+	}
+
+	return items
+
+};
+
 contextMenu.albumTitle = function(albumID, e) {
 
 	api.post('Albums::get', {}, function(data) {
 
 		let items = [];
 
-		if (data.albums && data.num>1) {
+		if (data.albums && data.albums.length > 1) {
 
-			// Generate list of albums
-			$.each(data.albums, function() {
+			items = items.concat(contextMenu.buildList(data.albums, [ parseInt(albumID, 10) ], (a) => lychee.goto(a.id)));
 
-				if (!this.thumbs[0]) this.thumbs[0] = 'Lychee-front/images/no_cover.svg';
-				if (this.title==='') this.title = lychee.locale['UNTITLED'];
+		}
 
-				let html = lychee.html`<img class='cover' width='16' height='16' src='${ this.thumbs[0] }'><div class='title'>${ this.title }</div>`;
+		if (data.shared_albums && data.shared_albums.length >1) {
 
-				if (this.id!=albumID) items.push({
-					title: html,
-					fn: () => lychee.goto(this.id)
-				})
+			items = items.concat({});
+			items = items.concat(contextMenu.buildList(data.shared_albums, [ parseInt(albumID,10) ], (a) => lychee.goto(a.id)));
 
-			});
+		}
 
-			items.unshift({ })
-
+		if(items.length > 0)
+		{
+			items.unshift({ });
 		}
 
 		items.unshift({ title: build.iconic('pencil') + lychee.locale['RENAME'], fn: () => album.setTitle([ albumID ]) });
@@ -115,21 +169,27 @@ contextMenu.mergeAlbum = function(albumID, e) {
 
 		let items = [];
 
-		if (data.albums && data.num>1) {
+		if (data.albums && data.albums.length >1) {
 
-			$.each(data.albums, function() {
+			if (data.albums && data.albums.length > 1) {
+				items = items.concat(contextMenu.buildList(data.albums, [ parseInt(albumID,10) ], (a) => album.merge([ albumID, a.id ])));
+				items.unshift({ })
 
-				if (!this.thumbs[0]) this.thumbs[0] = 'Lychee-front/images/no_cover.svg';
-				if (this.title==='') this.title = lychee.locale['UNTITLED'];
+			}
 
-				let html = lychee.html`<img class='cover' width='16' height='16' src='${ this.thumbs[0] }'><div class='title'>${ this.title }</div>`;
-
-				if (this.id!=albumID) items.push({
-					title: html,
-					fn: () => album.merge([ albumID, this.id ])
-				})
-
-			})
+			// $.each(data.albums, function() {
+			//
+			// 	if (!this.thumbs[0]) this.thumbs[0] = 'Lychee-front/images/no_cover.svg';
+			// 	if (this.title==='') this.title = lychee.locale['UNTITLED'];
+			//
+			// 	let html = lychee.html`<img class='cover' width='16' height='16' src='${ this.thumbs[0] }'><div class='title'>${ this.title }</div>`;
+			//
+			// 	if (this.id!==albumID) items.push({
+			// 		title: html,
+			// 		fn: () => album.merge([ albumID, this.id ])
+			// 	})
+			//
+			// })
 
 		}
 
@@ -163,11 +223,45 @@ contextMenu.photo = function(photoID, e) {
 
 };
 
+contextMenu.countSubAlbums = function(photoIDs) {
+
+	let count = 0;
+
+	if (album.albums) {
+
+		for (i in photoIDs) {
+			for (j in album.albums) {
+				if (album.albums[j].id === photoIDs[i]) {
+					count++
+					break
+				}
+			}
+		}
+
+	}
+
+	return count
+};
+
+
 contextMenu.photoMulti = function(photoIDs, e) {
 
 	// Notice for 'Move All':
 	// fn must call basicContext.close() first,
 	// in order to keep the selection and multiselect
+	let subcount = contextMenu.countSubAlbums(photoIDs);
+	let photocount = photoIDs.length - subcount;
+
+	if (subcount && photocount) {
+		multiselect.deselect('.photo.active, .album.active')
+		multiselect.close()
+		lychee.error('Please select either albums or photos!')
+		return
+	}
+	if (subcount) {
+		contextMenu.albumMulti(photoIDs, e)
+		return
+	}
 
 	multiselect.stopResize();
 
@@ -193,23 +287,25 @@ contextMenu.photoTitle = function(albumID, photoID, e) {
 
 	let data = album.json;
 
-	if (data.photos!==false && data.num>1) {
+	if (data.photos!==false && data.photos.length>1) {
 
 		items.push({ });
 
-		// Generate list of albums
-		$.each(data.photos, function(index) {
+		items = items.concat(contextMenu.buildList(data.photos, [ photoID ], (a) => lychee.goto(albumID + '/' + a.id)))
 
-			if (this.title==='') this.title = lychee.locale['UNTITLED'];
-
-			let html = lychee.html`<img class='cover' width='16' height='16' src='${ this.thumbUrl }'><div class='title'>${ this.title }</div>`;
-
-			if (this.id!=photoID) items.push({
-				title: html,
-				fn: () => lychee.goto(albumID + '/' + this.id)
-			})
-
-		})
+		// // Generate list of albums
+		// $.each(data.photos, function(index) {
+		//
+		// 	if (this.title==='') this.title = lychee.locale['UNTITLED'];
+		//
+		// 	let html = lychee.html`<img class='cover' width='16' height='16' src='${ this.thumbUrl }'><div class='title'>${ this.title }</div>`;
+		//
+		// 	if (this.id!==photoID) items.push({
+		// 		title: html,
+		// 		fn: () => lychee.goto(albumID + '/' + this.id)
+		// 	})
+		//
+		// })
 
 	}
 
@@ -233,28 +329,86 @@ contextMenu.photoMore = function(photoID, e) {
 
 };
 
+contextMenu.getSubIDs = function(albums, albumID) {
+
+	let ids = [ albumID ];
+
+	for (a in albums) {
+		if (albums[a].parent_id===albumID) {
+
+			let sub = contextMenu.getSubIDs(albums, albums[a].id);
+			for (id in sub)
+				ids.push(sub[id])
+
+		}
+	}
+
+	return ids
+
+};
+
+
+
+contextMenu.moveAlbum = function(albumIDs, e) {
+
+	api.post('Albums::get', { parent: -1 }, function(data) {
+
+		let items = [];
+
+		if (data.albums && data.num>1) {
+
+			let title = albums.getByID(albumIDs[0]).title;
+			// Disable all childs
+			// It's not possible to move us into them
+			let exclude = [];
+			for (i in albumIDs) {
+				let sub = contextMenu.getSubIDs(data.albums, String(albumIDs[i]));
+				for (s in sub)
+					exclude.push(sub[s])
+			}
+
+			items = contextMenu.buildList(data.albums, exclude, (a) => album.move([ a.id ].concat(albumIDs), [ a.title, title ]), 0, 1);
+
+			items.unshift({ title: 'Root', fn: () => album.move([ 0 ].concat(albumIDs), [ 'Root', title ]) })
+
+		}
+
+		if (items.length===0) return false;
+
+		basicContext.show(items, e.originalEvent, contextMenu.close)
+
+	})
+
+};
+
 contextMenu.move = function(photoIDs, e) {
 
 	let items = [];
 
 	api.post('Albums::get', {}, function(data) {
 
-		if (data.num > 0) {
+		if (data.albums.length > 0) {
 
-			// Generate list of albums
-			$.each(data.albums, function() {
+			if (data.albums && data.albums.length > 1) {
 
-				if (!this.thumbs[0]) this.thumbs[0] = 'Lychee-front/images/no_cover.svg';
-				if (this.title==='') this.title = lychee.locale['UNTITLED'];
+				items = items.concat(contextMenu.buildList(data.albums, [ album.getID() ], (a) => photo.setAlbum(photoIDs, a.id)));
 
-				let html = lychee.html`<img class='cover' width='16' height='16' src='${ this.thumbs[0] }'><div class='title'>${ this.title }</div>`;
+			}
 
-				if (this.id!=album.getID()) items.push({
-					title: html,
-					fn: () => photo.setAlbum(photoIDs, this.id)
-				})
-
-			});
+			// // Generate list of albums
+			// $.each(data.albums, function() {
+			//
+			// 	if (!this.thumbs[0]) this.thumbs[0] = 'Lychee-front/images/no_cover.svg';
+			// 	if (this.title==='') this.title = lychee.locale['UNTITLED'];
+			//
+			// 	let html = lychee.html`<img class='cover' width='16' height='16' src='${ this.thumbs[0] }'><div class='title'>${ this.title }</div>`;
+			//
+			// 	if (this.id!==album.getID()) items.push({
+			// 		title: html,
+			// 		fn: () => photo.setAlbum(photoIDs, this.id)
+			// 	})
+			//
+			// });
 
 			// Show Unsorted when unsorted is not the current album
 			if (album.getID()!=='0') {
@@ -329,7 +483,7 @@ contextMenu.close = function() {
 
 	basicContext.close();
 
-	$('.photo.active, .album.active').removeClass('active');
+	multiselect.deselect('.photo.active, .album.active');
 	if (visible.multiselect()) multiselect.close()
 
 };

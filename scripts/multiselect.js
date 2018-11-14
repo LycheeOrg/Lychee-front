@@ -2,7 +2,9 @@
  * @description Select multiple albums or photos.
  */
 
-multiselect = {};
+multiselect = {
+	ids: []
+};
 
 multiselect.position = {
 
@@ -18,6 +20,97 @@ multiselect.bind = function() {
 	$('.content').on('mousedown', (e) => { if (e.which===1) multiselect.show(e) });
 
 	return true
+
+};
+
+multiselect.toggleItem = function(object, id) {
+
+	if (album.isSmartID(id)) return;
+
+	let pos = $.inArray(id, multiselect.ids);
+
+	if (pos!==-1) {
+		multiselect.ids.splice(pos, 1);
+		multiselect.deselect(object)
+	} else {
+		multiselect.ids.push(id);
+		multiselect.select(object)
+	}
+
+};
+
+multiselect.addItem = function(object, id) {
+
+	let pos = $.inArray(id, multiselect.ids);
+
+	if (pos===-1) {
+		multiselect.ids.push(id);
+		multiselect.select(object)
+	}
+
+};
+
+
+multiselect.albumClick = function(e, albumObj) {
+
+	let id = albumObj.attr('data-id');
+
+
+	if (e.shiftKey)
+	{
+		if (albumObj.hasClass('disabled') && !lychee.admin) return;
+		multiselect.toggleItem(albumObj, id);
+	}
+	else
+	{
+		lychee.goto(id)
+	}
+
+};
+
+
+multiselect.photoClick = function(e, photoObj) {
+
+	let id = photoObj.attr('data-id');
+
+	if (e.shiftKey) multiselect.toggleItem(photoObj, id);
+	else            lychee.goto(album.getID() + '/' + id)
+
+};
+
+multiselect.albumContextMenu = function(e, albumObj) {
+
+	let id = albumObj.attr('data-id');
+
+	if ($.inArray(id, multiselect.ids)!==-1) {
+		contextMenu.albumMulti(multiselect.ids, e);
+		multiselect.ids = []
+	} else {
+		if (albumObj.hasClass('disabled') && !lychee.admin) return;
+		multiselect.clearSelection();
+		contextMenu.album(album.getID(), e)
+	}
+
+};
+
+multiselect.photoContextMenu = function(e, photoObj) {
+
+	let id = photoObj.attr('data-id');
+
+	if ($.inArray(id, multiselect.ids)!==-1) {
+		contextMenu.photoMulti(multiselect.ids, e);
+		multiselect.ids = []
+	} else {
+		multiselect.clearSelection();
+		contextMenu.photo(photo.getID(), e)
+	}
+
+};
+
+multiselect.clearSelection = function() {
+
+	multiselect.deselect('.photo.active, .album.active');
+	multiselect.ids = []
 
 };
 
@@ -41,43 +134,6 @@ multiselect.show = function(e) {
 	$(document)
 		.on('mousemove', multiselect.resize)
 		.on('mouseup', (e) => { if (e.which===1) multiselect.getSelection(e) })
-
-};
-
-multiselect.selectAll = function() {
-
-	if (lychee.publicMode)                   return false;
-	if (visible.search())                    return false;
-	if (!visible.albums() && !visible.album) return false;
-	if (visible.multiselect())               $('#multiselect').remove();
-
-	sidebar.setSelectable(false);
-
-	multiselect.position.top    = 70;
-	multiselect.position.right  = 40;
-	multiselect.position.bottom = 90;
-	multiselect.position.left   = 20;
-
-	$('body').append(build.multiselect(multiselect.position.top, multiselect.position.left));
-
-	let documentSize = {
-		width  : $(document).width(),
-		height : $(document).height()
-	};
-
-	let newSize = {
-		width  : documentSize.width - multiselect.position.right + 2,
-		height : documentSize.height - multiselect.position.bottom
-	};
-
-	let e = {
-		pageX : documentSize.width - (multiselect.position.right / 2),
-		pageY : documentSize.height - multiselect.position.bottom
-	};
-
-	$('#multiselect').css(newSize);
-
-	multiselect.getSelection(e)
 
 };
 
@@ -187,6 +243,11 @@ multiselect.getSelection = function(e) {
 	if (visible.contextMenu())  return false;
 	if (!visible.multiselect()) return false;
 
+	if (!e.shiftKey && (size.width===0 || size.height===0)) {
+		multiselect.close();
+		return false
+	}
+
 	$('.photo, .album').each(function() {
 
 		let offset = $(this).offset();
@@ -196,22 +257,86 @@ multiselect.getSelection = function(e) {
 			(offset.top + 206)<=(size.top + size.height + tolerance) &&
 			(offset.left + 206)<=(size.left + size.width + tolerance)) {
 
-			let id = $(this).data('id');
+			let id = $(this).attr('data-id');
 
-			if (id!=='0' && id!==0 && id!=='f' && id!=='s' && id!=='r' && id!=null) {
-
-				ids.push(id);
-				$(this).addClass('active')
-
-			}
+			multiselect.addItem($(this), id)
 
 		}
 
 	});
 
-	if (ids.length!==0 && visible.album())       contextMenu.photoMulti(ids, e);
-	else if (ids.length!==0 && visible.albums()) contextMenu.albumMulti(ids, e);
-	else                                         multiselect.close()
+	multiselect.hide()
+
+};
+
+// multiselect.getSelection = function(e) {
+//
+// 	let tolerance = 150;
+// 	let ids       = [];
+// 	let size      = multiselect.getSize();
+//
+// 	if (visible.contextMenu())  return false;
+// 	if (!visible.multiselect()) return false;
+//
+// 	$('.photo, .album').each(function() {
+//
+// 		let offset = $(this).offset();
+//
+// 		if (offset.top>=(size.top - tolerance) &&
+// 			offset.left>=(size.left - tolerance) &&
+// 			(offset.top + 206)<=(size.top + size.height + tolerance) &&
+// 			(offset.left + 206)<=(size.left + size.width + tolerance)) {
+//
+// 			let id = $(this).data('id');
+//
+// 			if (id!=='0' && id!==0 && id!=='f' && id!=='s' && id!=='r' && id!=null) {
+//
+// 				ids.push(id);
+// 				$(this).addClass('active')
+//
+// 			}
+//
+// 		}
+//
+// 	});
+//
+// 	if (ids.length!==0 && visible.album())       contextMenu.photoMulti(ids, e);
+// 	else if (ids.length!==0 && visible.albums()) contextMenu.albumMulti(ids, e);
+// 	else                                         multiselect.close()
+//
+// };
+
+multiselect.select = function(id) {
+
+	let el = $(id);
+
+	el.addClass('selected');
+	el.addClass('active')
+
+};
+
+multiselect.deselect = function(id) {
+
+	let el = $(id);
+
+	el.removeClass('selected');
+	el.removeClass('active')
+
+};
+
+multiselect.hide = function() {
+
+	sidebar.setSelectable(true);
+
+	multiselect.stopResize();
+
+	multiselect.position.top    = null;
+	multiselect.position.right  = null;
+	multiselect.position.bottom = null;
+	multiselect.position.left   = null;
+
+	lychee.animate('#multiselect', 'fadeOut');
+	setTimeout(() => $('#multiselect').remove(), 300)
 
 };
 
@@ -230,3 +355,41 @@ multiselect.close = function() {
 	setTimeout(() => $('#multiselect').remove(), 300)
 
 };
+
+multiselect.selectAll = function() {
+
+	if (lychee.publicMode)                   return false;
+	if (visible.search())                    return false;
+	if (!visible.albums() && !visible.album) return false;
+	if (visible.multiselect())               $('#multiselect').remove();
+
+	sidebar.setSelectable(false);
+
+	multiselect.position.top    = 70;
+	multiselect.position.right  = 40;
+	multiselect.position.bottom = 90;
+	multiselect.position.left   = 20;
+
+	$('body').append(build.multiselect(multiselect.position.top, multiselect.position.left));
+
+	let documentSize = {
+		width  : $(document).width(),
+		height : $(document).height()
+	};
+
+	let newSize = {
+		width  : documentSize.width - multiselect.position.right + 2,
+		height : documentSize.height - multiselect.position.bottom
+	};
+
+	let e = {
+		pageX : documentSize.width - (multiselect.position.right / 2),
+		pageY : documentSize.height - multiselect.position.bottom
+	};
+
+	$('#multiselect').css(newSize);
+
+	multiselect.getSelection(e)
+
+};
+

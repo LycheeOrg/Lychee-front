@@ -65,7 +65,7 @@ view.albums = {
 
 					$.each(albums.json.shared_albums, function() {
 						albums.parse(this);
-						sharedData += build.album(this)
+						sharedData += build.album(this, true)
 					});
 
 					// Add divider
@@ -106,7 +106,7 @@ view.albums = {
 				marginLeft : 0
 			}, 300, function() {
 				$(this).remove();
-				if (albums.json.num<=0) lychee.content.find('.divider:last-child').remove()
+				if (albums.json.albums.length <=0) lychee.content.find('.divider:last-child').remove()
 			})
 
 		}

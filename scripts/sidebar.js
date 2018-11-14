@@ -291,7 +291,7 @@ sidebar.createStructure.album = function(data) {
 		type  : sidebar.types.DEFAULT,
 		rows  : [
 			{ title: lychee.locale['ALBUM_CREATED'], value: data.sysdate },
-			{ title: lychee.locale['ALBUM_IMAGES'],  value: data.num }
+			{ title: lychee.locale['ALBUM_IMAGES'],  value: data.photos.length }
 		]
 	};
 

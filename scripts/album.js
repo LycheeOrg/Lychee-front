@@ -8,6 +8,19 @@ album = {
 
 };
 
+album.isSmartID = function(id) {
+
+	return (id==='0' || id==='f' || id==='s' || id==='r')
+
+};
+
+album.getParent = function() {
+
+	if (album.json==null || album.isSmartID(album.json.id)===true || album.json.parent===0) return '';
+
+	return album.json.parent
+
+};
 
 album.getID = function() {
 
@@ -256,7 +269,6 @@ album.delete = function(albumIDs) {
 			if (visible.albums()) {
 
 				albumIDs.forEach(function(id) {
-					albums.json.num--;
 					view.albums.content.delete(id);
 					albums.deleteByID(id)
 				})
@@ -674,8 +686,7 @@ album.merge = function(albumIDs) {
 			if (data!==true) {
 				lychee.error(null, params, data)
 			} else {
-				albums.refresh();
-				lychee.goto()
+				album.reload();
 			}
 
 		})
@@ -696,5 +707,64 @@ album.merge = function(albumIDs) {
 			}
 		}
 	})
+
+};
+
+
+
+album.move = function(albumIDs, titles = []) {
+
+	const action = function() {
+
+		basicModal.close();
+
+		let params = {
+			albumIDs: albumIDs.join()
+		};
+
+		api.post('Album::move', params, function(data) {
+
+			if (data!==true) lychee.error(null, params, data);
+			else             album.reload()
+
+		})
+
+	};
+
+	basicModal.show({
+		body: getMessage(albumIDs, titles, 'move'),
+		buttons: {
+			action: {
+				// TODO: LOCALIZATION
+				title: 'Move Albums',
+				fn: action,
+				class: 'red'
+			},
+			cancel: {
+				// TODO: LOCALIZATION
+				title: "Don't Move",
+				fn: basicModal.close
+			}
+		}
+	})
+
+};
+
+album.reload = function() {
+
+	let albumID = album.getID();
+
+	album.refresh();
+	albums.refresh();
+
+	if (visible.album()) lychee.goto(albumID);
+	else                 lychee.goto()
+
+};
+
+album.refresh = function() {
+
+	album.json = null;
+	album.subjson = null
 
 };
