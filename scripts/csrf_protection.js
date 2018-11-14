@@ -1,7 +1,9 @@
 csrf = {};
 
 csrf.addLaravelCSRF = function ( event, jqxhr, settings ) {
-    jqxhr.setRequestHeader( 'X-XSRF-TOKEN', csrf.getCookie( 'XSRF-TOKEN' ) );
+    if (settings.url != "https:"+lychee.updatePath) {
+        jqxhr.setRequestHeader( 'X-XSRF-TOKEN', csrf.getCookie( 'XSRF-TOKEN' ) );
+    }
 };
 
 csrf.escape = function (s) {
