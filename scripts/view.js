@@ -15,7 +15,7 @@ view.albums = {
 
 	title: function() {
 
-		lychee.setTitle(lychee.locale('ALBUMS'), false)
+		lychee.setTitle(lychee.locale['ALBUMS'], false)
 
 	},
 
