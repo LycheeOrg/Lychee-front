@@ -44,9 +44,9 @@ search.find = function(term) {
 				// 3. Only albums
 				// 4. Albums and photos
 				if (albumsData==='' && photosData==='') html = 'error';
-				else if (albumsData==='')               html = build.divider(lychee.locale('PHOTOS')) + photosData;
-				else if (photosData==='')               html = build.divider(lychee.locale('ALBUMS')) + albumsData;
-				else                                    html = build.divider(lychee.locale('ALBUMS')) + albumsData + build.divider(lychee.locale('PHOTOS')) + photosData;
+				else if (albumsData==='')               html = build.divider(lychee.locale['PHOTOS']) + photosData;
+				else if (photosData==='')               html = build.divider(lychee.locale['ALBUMS']) + albumsData;
+				else                                    html = build.divider(lychee.locale['ALBUMS']) + albumsData + build.divider(lychee.locale['PHOTOS']) + photosData;
 
 				// Only refresh view when search results are different
 				if (search.hash!==data.hash) {
