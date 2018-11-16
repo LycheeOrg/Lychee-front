@@ -57,6 +57,11 @@ contextMenu.album = function(albumID, e) {
 		{ title: build.iconic('trash') + lychee.locale['DELETE'], fn: () => album.delete([ albumID ]) }
 	];
 
+	if (!lychee.sub_albums)
+	{
+		items.splice(2, 1);
+	}
+
 	$('.album[data-id="' + albumID + '"]').addClass('active');
 
 	basicContext.show(items, e.originalEvent, contextMenu.close)
@@ -81,6 +86,11 @@ contextMenu.albumMulti = function(albumIDs, e) {
 		{ title: build.iconic('folder') + lychee.locale['MOVE_ALL'], fn: () => { basicContext.close(); contextMenu.moveAlbum(albumIDs, e) } },
 		{ title: build.iconic('trash') + lychee.locale['DELETE_ALL'], fn: () => album.delete(albumIDs) }
 	];
+
+	if (!lychee.sub_albums)
+	{
+		items.splice(3, 1);
+	}
 
 	items.push();
 

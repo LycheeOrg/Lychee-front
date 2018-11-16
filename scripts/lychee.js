@@ -15,6 +15,7 @@ lychee = {
 	publicMode      : false,
 	viewMode        : false,
 	api_V2			: false,  // enable api_V2
+	sub_albums      : false,  // enable sub_albums features
 	admin			: false,  // enable admin mode (multi-user)
 	upload			: false,  // enable possibility to upload (multi-user)
 	lock			: false,  // locked user (multi-user)
@@ -343,7 +344,7 @@ lychee.init = function() {
 		// 2 = Logged in
 
 		lychee.api_V2 = data.api_V2 || false;
-
+		lychee.sub_albums = data.sub_albums || false;
 		// we copy the locale that exists only.
 		// This ensure forward and backward compatibility.
 		// e.g. if the front localization is unfished in a language
