@@ -153,6 +153,12 @@ lychee = {
 		'ALBUMS_MERGE'				: 'Are you sure you want to merge all selected albums into the album',
 		'MERGE_ALBUM'				: 'Merge Albums',
 		'DONT_MERGE'				: "Don't Merge",
+		'ALBUM_MOVE_1'				: 'Are you sure you want to move the album',
+		'ALBUM_MOVE_2'				: 'into the album',
+		'ALBUMS_MOVE'				: 'Are you sure you want to move all selected albums into the album',
+		'MOVE_ALBUMS'               : "Move Albums",
+		'NOT_MOVE_ALBUMS'           : "Don't Move",
+		'ROOT'                      : "Root",
 
 		'PHOTO_ABOUT'				: 'About',
 		'PHOTO_BASICS'				: 'Basics',

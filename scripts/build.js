@@ -77,13 +77,13 @@ build.album = function(data, disabled = false) {
 	}
 
 	html += lychee.html`
-			<div class='album` + (disabled ? ` disabled` : ``) + `' data-id='${ data.id }'>
+			<div class='album ${ (disabled ? `disabled` : ``) }' data-id='${ data.id }'>
 				  ${build.getThumbnailHtml(data.thumbs[2],data.thumbs[2], data.types[2])}
 				  ${build.getThumbnailHtml(data.thumbs[1],data.thumbs[1], data.types[1])}
 				  ${build.getThumbnailHtml(data.thumbs[0],data.thumbs[0], data.types[0])}
 				<div class='overlay'>
-					<h1 title='${ data.title }'>${ data.title }</h1>
-					<a>${ date_stamp }</a>
+					<h1 title='$${ data.title }'>$${ data.title }</h1>
+					<a>$${ date_stamp }</a>
 				</div>
 			`;
 
@@ -108,17 +108,15 @@ build.album = function(data, disabled = false) {
 };
 
 build.photo = function(data) {
-// console.log(data);
-	let html = '';
 
+	let html = '';
 	let { path: retinaThumbUrl } = lychee.retinize(data.thumbUrl);
 
 	html += lychee.html`
 			<div class='photo' data-album-id='${ data.album }' data-id='${ data.id }' test="test">
 				${build.getThumbnailHtml(data.thumbUrl,retinaThumbUrl, data.type)}
-				<!-- <img src='${ data.thumbUrl }' srcset='${ retinaThumbUrl } 1.5x' width='200' height='200' alt='Photo thumbnail' draggable='false'> -->
 				<div class='overlay'>
-					<h1 title='${ data.title }'>${ data.title }</h1>
+					<h1 title='$${ data.title }'>$${ data.title }</h1>
 			`;
 
 	if (data.cameraDate==='1') html += lychee.html`<a><span title='Camera Date'>${ build.iconic('camera-slr') }</span>${ data.sysdate }</a>`;
@@ -148,18 +146,13 @@ build.imageview = function(data, visibleControls) {
 	let html      = '';
 	let hasMedium = data.medium !== '';
 
-	if(data.type.indexOf('video') > -1){
-	html += lychee.html`<video width="auto" height="auto" id='image' controls class='${ visibleControls===true ? '' : 'full' }' autoplay><source src='${ data.url }'>Your browser does not support the video tag.</video>`
+	if(data.type.indexOf('video') > -1) {
+		html += lychee.html`<video width="auto" height="auto" id='image' controls class='${ visibleControls===true ? '' : 'full' }' autoplay><source src='${ data.url }'>Your browser does not support the video tag.</video>`
 	}
 	else if (hasMedium===false) {
-
 		html += lychee.html`<img id='image' class='${ visibleControls===true ? '' : 'full' }' src='${ data.url }' draggable='false'>`
-
 	} else {
-
-		// html += lychee.html`<img id='image' class='${ visibleControls===true ? '' : 'full' }' src='${ data.url }' srcset='${ data.medium } 1920w, ${ data.url } ${ data.width }w' draggable='false'>`
 		html += lychee.html`<img id='image' class='${ visibleControls===true ? '' : 'full' }' src='${ data.medium }' draggable='false'>`
-
 	}
 
 	html += `
@@ -175,23 +168,20 @@ build.no_content = function(typ) {
 
 	let html = '';
 
-	html += `
-			<div class='no_content fadeIn'>
-				${ build.iconic(typ) }
-			`;
+	html += lychee.html`<div class='no_content fadeIn'>${ build.iconic(typ) }`;
 
 	switch (typ) {
 		case 'magnifying-glass':
-			html += `<p>` + lychee.locale['VIEW_NO_RESULT'] + `</p>`;
+			html += lychee.html`<p>${ lychee.locale['VIEW_NO_RESULT'] }</p>`;
 			break;
 		case 'eye':
-			html += `<p>` + lychee.locale['VIEW_NO_PUBLIC_ALBUMS'] + `</p>`;
+			html += lychee.html`<p>${ lychee.locale['VIEW_NO_PUBLIC_ALBUMS'] }</p>`;
 			break;
 		case 'cog':
-			html += `<p>` + lychee.locale['VIEW_NO_CONFIGURATION'] + `</p>`;
+			html += lychee.html`<p>${ lychee.locale['VIEW_NO_CONFIGURATION'] }</p>`;
 			break;
 		case 'question-mark':
-			html += `<p>` + lychee.locale['VIEW_PHOTO_NOT_FOUND'] + `</p>`;
+			html += lychee.html`<p>${ lychee.locale['VIEW_PHOTO_NOT_FOUND'] }</p>`;
 			break
 	}
 
@@ -206,7 +196,7 @@ build.uploadModal = function(title, files) {
 	let html = '';
 
 	html += lychee.html`
-			<h1>${ title }</h1>
+			<h1>$${ title }</h1>
 			<div class='rows'>
 			`;
 
@@ -245,12 +235,12 @@ build.tags = function(tags) {
 		tags = tags.split(',');
 
 		tags.forEach(function(tag, index, array) {
-			html += lychee.html`<a class='tag'>${ tag }<span data-index='${ index }'>${ build.iconic('x') }</span></a>`
+			html += lychee.html`<a class='tag'>$${ tag }<span data-index='${ index }'>${ build.iconic('x') }</span></a>`
 		})
 
 	} else {
 
-		html = `<div class='empty'>` + lychee.locale['NO_TAGS'] + `</div>`
+		html = lychee.html`<div class='empty'>${ lychee.locale['NO_TAGS'] }</div>`
 
 	}
 
@@ -259,25 +249,28 @@ build.tags = function(tags) {
 };
 
 build.user = function (user) {
-	return '<div class="users_view_line">' +
-		'<p id="UserData' + user.id + '">' +
-		'<input name="id" type="hidden" value="' + user.id + '" />' +
-		'<input class="text" name="username" type="text" value="' + user.username + '" placeholder="username" />' +
-		'<input class="text" name="password" type="text" placeholder="new password" />' +
-		'<span class="choice">' +
-		'<label>' +
-		'<input type="checkbox" name="upload" />' +
-		'<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
-		'</label>' +
-		'</span>' +
-		'<span class="choice">' +
-		'<label>' +
-		'<input type="checkbox" name="lock" />' +
-		'<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
-		'</label>' +
-		'</span>' +
-		'</p>' +
-		'<a id="UserUpdate' + user.id + '"  class="basicModal__button basicModal__button_OK">Save</a>' +
-		'<a id="UserDelete' + user.id + '"  class="basicModal__button basicModal__button_DEL">Delete</a>' +
-		'</div>';
+	let html = lychee.html`<div class="users_view_line">
+			<p id="UserData${ user.id }">
+			<input name="id" type="hidden" value="${ user.id }" />
+			<input class="text" name="username" type="text" value="$${ user.username }" placeholder="username" />
+			<input class="text" name="password" type="text" placeholder="new password" />
+			<span class="choice">
+			<label>
+			<input type="checkbox" name="upload" />
+			<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
+			</label>
+			</span>
+			<span class="choice">
+			<label>
+			<input type="checkbox" name="lock" />
+			<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
+			</label>
+			</span>
+			</p>
+			<a id="UserUpdate${ user.id }"  class="basicModal__button basicModal__button_OK">Save</a>
+			<a id="UserDelete${ user.id }"  class="basicModal__button basicModal__button_DEL">Delete</a>
+		</div>
+		`;
+
+	return html;
 };

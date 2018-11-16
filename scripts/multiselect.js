@@ -2,8 +2,19 @@
  * @description Select multiple albums or photos.
  */
 
+const isSelectKeyPressed = function(e) {
+
+	return e.metaKey || e.ctrlKey
+
+};
+
+
 multiselect = {
-	ids: []
+
+	ids            : [],
+	albumsSelected : 0,
+	photosSelected : 0
+
 };
 
 multiselect.position = {
@@ -23,40 +34,104 @@ multiselect.bind = function() {
 
 };
 
+multiselect.isSelected = function(id) {
+
+	let pos = $.inArray(id, multiselect.ids);
+
+	return {
+		selected : (pos !== -1),
+		position : pos
+	}
+
+};
+
+
 multiselect.toggleItem = function(object, id) {
 
 	if (album.isSmartID(id)) return;
 
-	let pos = $.inArray(id, multiselect.ids);
+	let selected = multiselect.isSelected(id).selected;
 
-	if (pos!==-1) {
-		multiselect.ids.splice(pos, 1);
-		multiselect.deselect(object)
-	} else {
-		multiselect.ids.push(id);
-		multiselect.select(object)
-	}
+	if (selected===false) multiselect.addItem(object, id);
+	else                  multiselect.removeItem(object, id);
+
+	// let pos = $.inArray(id, multiselect.ids);
+	//
+	// if (pos!==-1) {
+	// 	multiselect.ids.splice(pos, 1);
+	// 	multiselect.deselect(object)
+	// } else {
+	// 	multiselect.ids.push(id);
+	// 	multiselect.select(object)
+	// }
 
 };
 
 multiselect.addItem = function(object, id) {
 
-	let pos = $.inArray(id, multiselect.ids);
+	// let pos = $.inArray(id, multiselect.ids);
+	// if (multiselect.isSelected(id).selected===true) return;
+	//
+	// if (pos===-1) {
+	// 	multiselect.ids.push(id);
+	// 	multiselect.select(object)
+	// }
 
-	if (pos===-1) {
-		multiselect.ids.push(id);
-		multiselect.select(object)
+	if (album.isSmartID(id)) return;
+	if (multiselect.isSelected(id).selected===true) return;
+
+	let isAlbum = object.hasClass('album');
+
+	if ((isAlbum && multiselect.photosSelected > 0) ||
+		(!isAlbum && multiselect.albumsSelected > 0)) {
+		lychee.error('Please select either albums or photos!');
+		return
+	}
+
+	multiselect.ids.push(id);
+	multiselect.select(object);
+
+	if (isAlbum)
+	{
+		multiselect.albumsSelected++
+	}
+	else
+	{
+		multiselect.photosSelected++
 	}
 
 };
+
+
+multiselect.removeItem = function(object, id) {
+
+	let { selected, pos } = multiselect.isSelected(id);
+
+	if (selected===false) return;
+
+	multiselect.ids.splice(pos, 1);
+	multiselect.deselect(object);
+
+	let isAlbum = object.hasClass('album');
+
+	if (isAlbum)
+	{
+		multiselect.albumsSelected--
+	}
+	else
+	{
+		multiselect.photosSelected--
+	}
+
+};
+
 
 
 multiselect.albumClick = function(e, albumObj) {
 
 	let id = albumObj.attr('data-id');
 
-
-	if (e.shiftKey)
+	if (isSelectKeyPressed(e) && lychee.upload)
 	{
 		if (albumObj.hasClass('disabled') && !lychee.admin) return;
 		multiselect.toggleItem(albumObj, id);
@@ -68,49 +143,111 @@ multiselect.albumClick = function(e, albumObj) {
 
 };
 
-
 multiselect.photoClick = function(e, photoObj) {
 
 	let id = photoObj.attr('data-id');
 
-	if (e.shiftKey) multiselect.toggleItem(photoObj, id);
-	else            lychee.goto(album.getID() + '/' + id)
+	if (isSelectKeyPressed(e) && lychee.upload)
+	{
+		multiselect.toggleItem(photoObj, id);
+	}
+	else
+	{
+		lychee.goto(album.getID() + '/' + id);
+	}
+
+
+	// let id = photoObj.attr('data-id');
+	//
+	// if (e.shiftKey) multiselect.toggleItem(photoObj, id);
+	// else            lychee.goto(album.getID() + '/' + id)
 
 };
 
+
+
+
 multiselect.albumContextMenu = function(e, albumObj) {
 
-	let id = albumObj.attr('data-id');
+	let id       = albumObj.attr('data-id');
+	let selected = multiselect.isSelected(id).selected;
 
-	if ($.inArray(id, multiselect.ids)!==-1) {
+	if (albumObj.hasClass('disabled') && !lychee.admin) return;
+
+	if (selected!==false) {
 		contextMenu.albumMulti(multiselect.ids, e);
-		multiselect.ids = []
-	} else {
-		if (albumObj.hasClass('disabled') && !lychee.admin) return;
+		multiselect.clearSelection(false)
+	}
+	else {
 		multiselect.clearSelection();
-		contextMenu.album(album.getID(), e)
+		contextMenu.album(id, e)
 	}
 
 };
 
 multiselect.photoContextMenu = function(e, photoObj) {
 
-	let id = photoObj.attr('data-id');
+	let id       = photoObj.attr('data-id');
+	let selected = multiselect.isSelected(id).selected;
 
-	if ($.inArray(id, multiselect.ids)!==-1) {
+	if (photoObj.hasClass('disabled') && !lychee.admin) return;
+
+	if (selected!==false) {
 		contextMenu.photoMulti(multiselect.ids, e);
-		multiselect.ids = []
-	} else {
+		multiselect.clearSelection(false)
+	}
+	else if (visible.album())
+	{
+		console.log(id);
+		contextMenu.photo(id, e);
+	}
+	else if (visible.photo())
+	{
 		multiselect.clearSelection();
 		contextMenu.photo(photo.getID(), e)
+	}
+	else
+	{
+		lychee.error('Could not find what you wnat.');
 	}
 
 };
 
+// multiselect.albumContextMenu = function(e, albumObj) {
+//
+// 	let id = albumObj.attr('data-id');
+//
+// 	if ($.inArray(id, multiselect.ids)!==-1) {
+// 		contextMenu.albumMulti(multiselect.ids, e);
+// 		multiselect.ids = []
+// 	} else {
+// 		if (albumObj.hasClass('disabled') && !lychee.admin) return;
+// 		multiselect.clearSelection();
+// 		contextMenu.album(album.getID(), e)
+// 	}
+//
+// };
+//
+// multiselect.photoContextMenu = function(e, photoObj) {
+//
+// 	let id = photoObj.attr('data-id');
+//
+// 	if ($.inArray(id, multiselect.ids)!==-1) {
+// 		contextMenu.photoMulti(multiselect.ids, e);
+// 		multiselect.ids = []
+// 	} else {
+// 		multiselect.clearSelection();
+// 		contextMenu.photo(photo.getID(), e)
+// 	}
+//
+// };
+
 multiselect.clearSelection = function() {
 
 	multiselect.deselect('.photo.active, .album.active');
-	multiselect.ids = []
+	multiselect.ids = [];
+	multiselect.albumsSelected = 0;
+	multiselect.photosSelected = 0
 
 };
 
@@ -237,7 +374,6 @@ multiselect.getSize = function() {
 multiselect.getSelection = function(e) {
 
 	let tolerance = 150;
-	let ids       = [];
 	let size      = multiselect.getSize();
 
 	if (visible.contextMenu())  return false;

@@ -49,8 +49,11 @@ view.albums = {
 			if (albums.json.albums && albums.json.albums.length !==0) {
 
 				$.each(albums.json.albums, function() {
-					albums.parse(this);
-					albumsData += build.album(this)
+					if(this.parent_id === null || this.parent_id === 0)
+					{
+						albums.parse(this);
+						albumsData += build.album(this)
+					}
 				});
 
 				// Add divider

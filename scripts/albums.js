@@ -75,7 +75,7 @@ albums._createSmartAlbums = function(data) {
 		sysdate  : data.unsorted.num + ' ' + lychee.locale['NUM_PHOTOS'],
 		unsorted : '1',
 		thumbs   : data.unsorted.thumbs,
-		types   : data.unsorted.types
+		types    : data.unsorted.types
 	};
 
 	data.starred = {
@@ -84,7 +84,7 @@ albums._createSmartAlbums = function(data) {
 		sysdate : data.starred.num + ' ' + lychee.locale['NUM_PHOTOS'],
 		star    : '1',
 		thumbs  : data.starred.thumbs,
-	types   : data.starred.types
+		types   : data.starred.types
 	};
 
 	data.public = {
@@ -94,7 +94,7 @@ albums._createSmartAlbums = function(data) {
 		public  : '1',
 		thumbs  : data.public.thumbs,
 		hidden 	: '1',
-	types   : data.public.types
+		types   : data.public.types
 	};
 
 	data.recent = {
@@ -103,7 +103,7 @@ albums._createSmartAlbums = function(data) {
 		sysdate : data.recent.num + ' ' + lychee.locale['NUM_PHOTOS'],
 		recent  : '1',
 		thumbs  : data.recent.thumbs,
-	types   : data.recent.types
+		types   : data.recent.types
 	}
 
 };
@@ -112,33 +112,27 @@ albums.getByID = function(albumID) {
 
 	// Function returns the JSON of an album
 
-	if (albumID==null)       return undefined;
-	if (!albums.json)        return undefined;
+	if (albumID == null) return undefined;
+	if (!albums.json) return undefined;
 	if (!albums.json.albums) return undefined;
 
 	let json = undefined;
 
-	$.each(albums.json.albums, function(i) {
+	let func = function () {
+		if (parseInt(this.id, 10) === parseInt(albumID, 10))
+		{
+			json = this;
+			return false; // stop the loop
+		}
+	};
 
-		let elem = albums.json.albums[i];
+	if (albums.json.shared_albums !== null)
+		$.each(albums.json.albums, func);
 
-		if (parseInt(elem.id)===parseInt(albumID)) json = elem
+	if (json === undefined && albums.json.shared_albums !== null)
+		$.each(albums.json.shared_albums, func);
 
-	});
-
-	if (json === undefined)
-	{
-		if (!albums.json.shared_albums) return undefined;
-		$.each(albums.json.shared_albums, function(i) {
-
-			let elem = albums.json.shared_albums[i];
-
-			if (parseInt(elem.id)===parseInt(albumID)) json = elem
-
-		});
-	}
-
-	return json
+	return json;
 
 };
 
@@ -157,7 +151,7 @@ albums.deleteByID = function(albumID) {
 		if (parseInt(albums.json.albums[i].id)===parseInt(albumID)) {
 			albums.json.albums.splice(i, 1);
 			deleted = true;
-			return false
+			return false  // stop the loop
 		}
 
 	});
@@ -170,18 +164,16 @@ albums.deleteByID = function(albumID) {
 			if (parseInt(albums.json.shared_albums[i].id)===parseInt(albumID)) {
 				albums.json.shared_albums.splice(i, 1);
 				deleted = true;
-				return false
+				return false // stop the loop
 			}
 		});
 	}
-
 
 	return deleted
 
 };
 
 albums.refresh = function() {
-
 	albums.json = null
 
 };
