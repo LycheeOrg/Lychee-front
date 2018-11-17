@@ -277,20 +277,6 @@ contextMenu.photoTitle = function(albumID, photoID, e) {
 
 		items = items.concat(contextMenu.buildList(data.photos, [ photoID ], (a) => lychee.goto(albumID + '/' + a.id)))
 
-		// // Generate list of albums
-		// $.each(data.photos, function(index) {
-		//
-		// 	if (this.title==='') this.title = lychee.locale['UNTITLED'];
-		//
-		// 	let html = lychee.html`<img class='cover' width='16' height='16' src='${ this.thumbUrl }'><div class='title'>${ this.title }</div>`;
-		//
-		// 	if (this.id!==photoID) items.push({
-		// 		title: html,
-		// 		fn: () => lychee.goto(albumID + '/' + this.id)
-		// 	})
-		//
-		// })
-
 	}
 
 	basicContext.show(items, e.originalEvent, contextMenu.close)

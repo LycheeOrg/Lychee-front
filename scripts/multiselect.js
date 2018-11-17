@@ -54,7 +54,7 @@ multiselect.toggleItem = function(object, id) {
 
 	if (selected===false) multiselect.addItem(object, id);
 	else                  multiselect.removeItem(object, id);
-	
+
 };
 
 multiselect.addItem = function(object, id) {
@@ -131,6 +131,7 @@ multiselect.photoClick = function(e, photoObj) {
 
 	if (isSelectKeyPressed(e) && lychee.upload)
 	{
+		if (photoObj.hasClass('disabled') && !lychee.admin) return;
 		multiselect.toggleItem(photoObj, id);
 	}
 	else
@@ -174,10 +175,12 @@ multiselect.photoContextMenu = function(e, photoObj) {
 	}
 	else if (visible.album())
 	{
+		multiselect.clearSelection();
 		contextMenu.photo(id, e);
 	}
 	else if (visible.photo())
 	{
+		// should not happen... but you never know...
 		multiselect.clearSelection();
 		contextMenu.photo(photo.getID(), e)
 	}
