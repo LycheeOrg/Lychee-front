@@ -87,7 +87,7 @@ sidebar.setSelectable = function(selectable = true) {
 	// Selection needs to be deactivated to prevent an unwanted selection
 	// while using multiselect.
 
-	if (selectable===true) sidebar.dom().removeClass('notSelectable')
+	if (selectable===true) sidebar.dom().removeClass('notSelectable');
 	else                   sidebar.dom().addClass('notSelectable')
 
 };
@@ -291,7 +291,7 @@ sidebar.createStructure.album = function(data) {
 		type  : sidebar.types.DEFAULT,
 		rows  : [
 			{ title: lychee.locale['ALBUM_CREATED'], value: data.sysdate },
-			{ title: lychee.locale['ALBUM_IMAGES'],  value: data.num }
+			{ title: lychee.locale['ALBUM_IMAGES'],  value: data.photos.length }
 		]
 	};
 
@@ -342,7 +342,7 @@ sidebar.render = function(structure) {
 			if (value==='' || value==null) value = '-';
 
 			// Wrap span-element around value for easier selecting on change
-			value = lychee.html`<span class='attr_${ row.title.toLowerCase() }'>${ value }</span>`;
+			value = lychee.html`<span class='attr_${ row.title.toLowerCase() }'>$${ value }</span>`;
 
 			// Add edit-icon to the value when editable
 			if (row.editable===true) value += ' ' + build.editIcon('edit_' + row.title.toLowerCase());
@@ -395,4 +395,4 @@ sidebar.render = function(structure) {
 
 	return html
 
-}
+};

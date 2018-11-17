@@ -291,7 +291,7 @@ photo.setTitle = function(photoIDs) {
 
 		// Get old title if only one photo is selected
 		if (photo.json)      oldTitle = photo.json.title;
-		else if (album.json) oldTitle = album.json.photos[photoIDs].title
+		else if (album.json) oldTitle = album.getByID(photoIDs).title
 
 	}
 
