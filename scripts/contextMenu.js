@@ -3,17 +3,6 @@
  */
 
 
-
-const getAlbumFrom = function(albums, id) {
-
-	for (a in albums) {
-		if (albums[a].id === id) return albums[a]
-	}
-
-	return null
-
-};
-
 contextMenu = {};
 
 contextMenu.add = function(e) {
@@ -184,21 +173,6 @@ contextMenu.mergeAlbum = function(albumID, e) {
 				items.unshift({ })
 
 			}
-
-			// $.each(data.albums, function() {
-			//
-			// 	if (!this.thumbs[0]) this.thumbs[0] = 'Lychee-front/images/no_cover.svg';
-			// 	if (this.title==='') this.title = lychee.locale['UNTITLED'];
-			//
-			// 	let html = lychee.html`<img class='cover' width='16' height='16' src='${ this.thumbs[0] }'><div class='title'>${ this.title }</div>`;
-			//
-			// 	if (this.id!==albumID) items.push({
-			// 		title: html,
-			// 		fn: () => album.merge([ albumID, this.id ])
-			// 	})
-			//
-			// })
-
 		}
 
 		if (items.length===0) return false;
@@ -235,12 +209,14 @@ contextMenu.countSubAlbums = function(photoIDs) {
 
 	let count = 0;
 
+	let i, j;
+
 	if (album.albums) {
 
-		for (i in photoIDs) {
-			for (j in album.albums) {
+		for (i = 0; i < photoIDs.length ; i++) {
+			for (j = 0; j < album.albums.length ; j++) {
 				if (album.albums[j].id === photoIDs[i]) {
-					count++
+					count++;
 					break
 				}
 			}
@@ -261,13 +237,13 @@ contextMenu.photoMulti = function(photoIDs, e) {
 	let photocount = photoIDs.length - subcount;
 
 	if (subcount && photocount) {
-		multiselect.deselect('.photo.active, .album.active')
-		multiselect.close()
-		lychee.error('Please select either albums or photos!')
+		multiselect.deselect('.photo.active, .album.active');
+		multiselect.close();
+		lychee.error('Please select either albums or photos!');
 		return
 	}
 	if (subcount) {
-		contextMenu.albumMulti(photoIDs, e)
+		contextMenu.albumMulti(photoIDs, e);
 		return
 	}
 
@@ -340,12 +316,13 @@ contextMenu.photoMore = function(photoID, e) {
 contextMenu.getSubIDs = function(albums, albumID) {
 
 	let ids = [ parseInt(albumID,10) ];
+	let a, id;
 
-	for (a in albums) {
+	for (a = 0; a < albums.length ; a++) {
 		if (parseInt(albums[a].parent_id,10)===parseInt(albumID,10)) {
 
 			let sub = contextMenu.getSubIDs(albums, albums[a].id);
-			for (id in sub)
+			for (id = 0; id < sub.length ; id++)
 				ids.push(sub[id])
 
 		}
@@ -376,10 +353,11 @@ contextMenu.moveAlbum = function(albumIDs, e) {
 			}
 			// Disable all childs
 			// It's not possible to move us into them
+			let i, s;
 			let exclude = [];
-			for (i in albumIDs) {
+			for(i = 0; i < albumIDs.length; i++) {
 				let sub = contextMenu.getSubIDs(data.albums, albumIDs[i]);
-				for (s in sub)
+				for (s = 0 ; s < sub.length ; s++)
 					exclude.push(sub[s])
 			}
 

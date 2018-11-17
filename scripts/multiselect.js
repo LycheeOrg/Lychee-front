@@ -54,28 +54,10 @@ multiselect.toggleItem = function(object, id) {
 
 	if (selected===false) multiselect.addItem(object, id);
 	else                  multiselect.removeItem(object, id);
-
-	// let pos = $.inArray(id, multiselect.ids);
-	//
-	// if (pos!==-1) {
-	// 	multiselect.ids.splice(pos, 1);
-	// 	multiselect.deselect(object)
-	// } else {
-	// 	multiselect.ids.push(id);
-	// 	multiselect.select(object)
-	// }
-
+	
 };
 
 multiselect.addItem = function(object, id) {
-
-	// let pos = $.inArray(id, multiselect.ids);
-	// if (multiselect.isSelected(id).selected===true) return;
-	//
-	// if (pos===-1) {
-	// 	multiselect.ids.push(id);
-	// 	multiselect.select(object)
-	// }
 
 	if (album.isSmartID(id)) return;
 	if (multiselect.isSelected(id).selected===true) return;
@@ -156,12 +138,6 @@ multiselect.photoClick = function(e, photoObj) {
 		lychee.goto(album.getID() + '/' + id);
 	}
 
-
-	// let id = photoObj.attr('data-id');
-	//
-	// if (e.shiftKey) multiselect.toggleItem(photoObj, id);
-	// else            lychee.goto(album.getID() + '/' + id)
-
 };
 
 
@@ -198,7 +174,6 @@ multiselect.photoContextMenu = function(e, photoObj) {
 	}
 	else if (visible.album())
 	{
-		console.log(id);
 		contextMenu.photo(id, e);
 	}
 	else if (visible.photo())
@@ -212,35 +187,6 @@ multiselect.photoContextMenu = function(e, photoObj) {
 	}
 
 };
-
-// multiselect.albumContextMenu = function(e, albumObj) {
-//
-// 	let id = albumObj.attr('data-id');
-//
-// 	if ($.inArray(id, multiselect.ids)!==-1) {
-// 		contextMenu.albumMulti(multiselect.ids, e);
-// 		multiselect.ids = []
-// 	} else {
-// 		if (albumObj.hasClass('disabled') && !lychee.admin) return;
-// 		multiselect.clearSelection();
-// 		contextMenu.album(album.getID(), e)
-// 	}
-//
-// };
-//
-// multiselect.photoContextMenu = function(e, photoObj) {
-//
-// 	let id = photoObj.attr('data-id');
-//
-// 	if ($.inArray(id, multiselect.ids)!==-1) {
-// 		contextMenu.photoMulti(multiselect.ids, e);
-// 		multiselect.ids = []
-// 	} else {
-// 		multiselect.clearSelection();
-// 		contextMenu.photo(photo.getID(), e)
-// 	}
-//
-// };
 
 multiselect.clearSelection = function() {
 
@@ -404,43 +350,6 @@ multiselect.getSelection = function(e) {
 	multiselect.hide()
 
 };
-
-// multiselect.getSelection = function(e) {
-//
-// 	let tolerance = 150;
-// 	let ids       = [];
-// 	let size      = multiselect.getSize();
-//
-// 	if (visible.contextMenu())  return false;
-// 	if (!visible.multiselect()) return false;
-//
-// 	$('.photo, .album').each(function() {
-//
-// 		let offset = $(this).offset();
-//
-// 		if (offset.top>=(size.top - tolerance) &&
-// 			offset.left>=(size.left - tolerance) &&
-// 			(offset.top + 206)<=(size.top + size.height + tolerance) &&
-// 			(offset.left + 206)<=(size.left + size.width + tolerance)) {
-//
-// 			let id = $(this).data('id');
-//
-// 			if (id!=='0' && id!==0 && id!=='f' && id!=='s' && id!=='r' && id!=null) {
-//
-// 				ids.push(id);
-// 				$(this).addClass('active')
-//
-// 			}
-//
-// 		}
-//
-// 	});
-//
-// 	if (ids.length!==0 && visible.album())       contextMenu.photoMulti(ids, e);
-// 	else if (ids.length!==0 && visible.albums()) contextMenu.albumMulti(ids, e);
-// 	else                                         multiselect.close()
-//
-// };
 
 multiselect.select = function(id) {
 
