@@ -449,7 +449,7 @@ lychee.loginDialog = function() {
 
 	let msg = lychee.html`
 			  <p class='signIn'>
-				  <input class='text' name='username' autocomplete='` + lychee.locale['USERNAME'] + `' type='text' placeholder='username' autocapitalize='off' autocorrect='off'>
+				  <input class='text' name='username' autocomplete='on' type='text' placeholder='` + lychee.locale['USERNAME'] + `' autocapitalize='off' autocorrect='off'>
 				  <input class='text' name='password' autocomplete='current-password' type='password' placeholder='` + lychee.locale['PASSWORD'] + `'>
 			  </p>
 			  <p class='version'>Lychee ${ lychee.version }<span> &#8211; <a target='_blank' href='${ lychee.updateURL }'>` + lychee.locale['UPDATE_AVAILABLE'] + `</a><span></p>
