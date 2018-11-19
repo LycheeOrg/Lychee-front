@@ -19,6 +19,7 @@ lychee = {
 	admin			: false,  // enable admin mode (multi-user)
 	upload			: false,  // enable possibility to upload (multi-user)
 	lock			: false,  // locked user (multi-user)
+	justified       : true,  // use Flickr Justified Layout Like
 
 	checkForUpdates : '1',
 	sortingPhotos   : '',
@@ -338,13 +339,13 @@ lychee.init = function() {
 
 	api.post('Session::init', {}, function(data) {
 
-		// Check status
-		// 0 = No configuration
-		// 1 = Logged out
-		// 2 = Logged in
 
 		lychee.api_V2 = data.api_V2 || false;
 		lychee.sub_albums = data.sub_albums || false;
+
+		// will be usefull later
+		lychee.justified = (data.config.justified_layout && data.config.justified_layout === '1') || false;
+
 		// we copy the locale that exists only.
 		// This ensure forward and backward compatibility.
 		// e.g. if the front localization is unfished in a language
@@ -353,6 +354,10 @@ lychee.init = function() {
 			lychee.locale[key] = data.locale[key]
 		}
 
+		// Check status
+		// 0 = No configuration
+		// 1 = Logged out
+		// 2 = Logged in
 		if (data.status===2) {
 
 			// Logged in

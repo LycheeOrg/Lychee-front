@@ -64,6 +64,11 @@
 			transition: opacity .3s ease-out, transform .3s ease-out, border-color .3s ease-out;
 		}
 
+		.thumbimg > img {
+			width: 100%;
+			height: 100%;
+		}
+
 		&:hover .thumbimg,
 		&.active .thumbimg {
 			border-color: $colorBlue;

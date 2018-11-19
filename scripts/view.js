@@ -167,41 +167,46 @@ view.album = {
 		init: function() {
 
 			let photosData = '';
+			let albumsData = '';
+			let html = '';
 
 			if (album.json.albums && album.json.albums !== false) {
 				$.each(album.json.albums, function() {
 					albums.parse(this);
-					photosData += build.album(this)
+					albumsData += build.album(this)
 				});
 
 			}
 			if (album.json.photos && album.json.photos!==false) {
 
-
-				// Add divider
-				if(album.json.albums && album.json.albums !== false && album.json.albums.length > 0)
-				{
-					photosData = build.divider(lychee.locale['ALBUMS']) + photosData;
-				}
-
-				if(photosData !== '' && album.json.photos.length > 0)
-				{
-					photosData += build.divider(lychee.locale['PHOTOS'])
-				}
-
 				// Build photos
-				$.each(album.json.photos, function() {
+				$.each(album.json.photos, function () {
 					photosData += build.photo(this)
-				})
-
+				});
 			}
+
+			if (photosData !== '' && lychee.justified) {
+				photosData = '<div class="justified-layout">' + photosData + '</div>';
+			}
+
+			if (albumsData !== '' && photosData !== '')
+			{
+				html = build.divider(lychee.locale['ALBUMS']);
+			}
+			html += albumsData;
+			if (albumsData !== '' && photosData !== '')
+			{
+				html += build.divider(lychee.locale['PHOTOS'])
+			}
+			html += photosData;
 
 			// Save and reset scroll position
 			view.albums.content.scrollPosition = $(document).scrollTop();
 			requestAnimationFrame(() => $(document).scrollTop(0));
 
 			// Add photos to view
-			lychee.content.html(photosData)
+			lychee.content.html(html);
+			view.album.content.justify();
 
 		},
 
@@ -238,9 +243,9 @@ view.album = {
 		delete: function(photoID) {
 
 			$('.photo[data-id="' + photoID + '"]').css('opacity', 0).animate({
-				width      : 0,
-				marginLeft : 0
-			}, 300, function() {
+				width: 0,
+				marginLeft: 0
+			}, 300, function () {
 				$(this).remove();
 				// Only when search is not active
 				if (!visible.albums()) {
@@ -249,6 +254,29 @@ view.album = {
 				}
 			})
 
+		},
+
+		justify: function () {
+			if (!lychee.justified) return;
+			if (!album.json.photos || album.json.photos===false) return;
+			let ratio = [];
+			$.each(album.json.photos, function (i) {
+				let l_width = this.width > 0 ? this.width : 200;
+				let l_height = this.height > 0 ? this.height : 200;
+				ratio[i] = l_width / l_height;
+			});
+			let layoutGeometry = require('justified-layout')(ratio, {
+				containerWidth: $('.justified-layout').width(),
+				containerPadding: 0
+			});
+			$('.justified-layout').css('height',layoutGeometry.containerHeight + 'px')
+			$('.justified-layout').css('height',layoutGeometry.containerHeight + 'px')
+			$('.justified-layout > div').each(function (i) {
+				$(this).css('top',layoutGeometry.boxes[i].top);
+				$(this).css('width',layoutGeometry.boxes[i].width);
+				$(this).css('height',layoutGeometry.boxes[i].height);
+				$(this).css('left',layoutGeometry.boxes[i].left);
+			});
 		}
 
 	},
