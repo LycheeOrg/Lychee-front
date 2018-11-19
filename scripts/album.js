@@ -5,7 +5,6 @@
 album = {
 
 	json: null
-
 };
 
 album.isSmartID = function(id) {

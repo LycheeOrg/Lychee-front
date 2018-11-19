@@ -103,39 +103,39 @@ $(document).ready(function() {
 
 
 	// Navigation
-		.on('click', '.album', function(e) { multiselect.albumClick(e, $(this)) })
-		.on('click', '.photo', function(e) { multiselect.photoClick(e, $(this)) })
+	.on('click', '.album', function(e) { multiselect.albumClick(e, $(this)) })
+	.on('click', '.photo', function(e) { multiselect.photoClick(e, $(this)) })
 
-		// Context Menu
-		.on('contextmenu', '.photo', function(e) { multiselect.photoContextMenu(e, $(this)) })
-		.on('contextmenu', '.album', function(e) { multiselect.albumContextMenu(e, $(this)) })
+	// Context Menu
+	.on('contextmenu', '.photo', function(e) { multiselect.photoContextMenu(e, $(this)) })
+	.on('contextmenu', '.album', function(e) { multiselect.albumContextMenu(e, $(this)) })
 
-		// // Navigation
-		// .on('click', '.album', function() { lychee.goto($(this).attr('data-id')) })
-		// .on('click', '.photo', function() { lychee.goto(album.getID() + '/' + $(this).attr('data-id')) })
-		//
-		// // Context Menu
-		// .on('contextmenu', '.photo', function(e) { contextMenu.photo(photo.getID(), e) })
-		// .on('contextmenu', '.album', function(e) { contextMenu.album(album.getID(), e) })
 
-		// Upload
-		.on('change', '#upload_files', function() { basicModal.close(); upload.start.local(this.files) })
+	// Upload
+	.on('change', '#upload_files', function() { basicModal.close(); upload.start.local(this.files) })
 
-		// Drag and Drop upload
-		.on('dragover', function() { return false }, false)
-		.on('drop', function(e) {
 
-			// Close open overlays or views which are correlating with the upload
-			if (visible.photo())       lychee.goto(album.getID());
-			if (visible.contextMenu()) contextMenu.close();
+	// Drag and Drop upload
+	.on('dragover', function() { return false }, false)
+	.on('drop', function(e) {
 
-			// Detect if dropped item is a file or a link
-			if (e.originalEvent.dataTransfer.files.length>0)                upload.start.local(e.originalEvent.dataTransfer.files);
-			else if (e.originalEvent.dataTransfer.getData('Text').length>3) upload.start.url(e.originalEvent.dataTransfer.getData('Text'));
+		// Close open overlays or views which are correlating with the upload
+		if (visible.photo())       lychee.goto(album.getID());
+		if (visible.contextMenu()) contextMenu.close();
 
-			return false
+		// Detect if dropped item is a file or a link
+		if (e.originalEvent.dataTransfer.files.length>0)                upload.start.local(e.originalEvent.dataTransfer.files);
+		else if (e.originalEvent.dataTransfer.getData('Text').length>3) upload.start.url(e.originalEvent.dataTransfer.getData('Text'));
 
-		});
+		return false
+
+	});
+
+	$(window)
+	// resize
+	.on('resize', function () {
+		if(visible.album()) view.album.content.justify();
+	});
 
 	// Init
 	lychee.init()
