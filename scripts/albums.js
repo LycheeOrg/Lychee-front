@@ -108,6 +108,29 @@ albums._createSmartAlbums = function(data) {
 
 };
 
+albums.isShared = function(albumID) {
+
+	if (albumID == null) return false;
+	if (!albums.json) return false;
+	if (!albums.json.albums) return false;
+
+	let found = false;
+
+	let func = function () {
+		if (parseInt(this.id, 10) === parseInt(albumID, 10))
+		{
+			found = true;
+			return false; // stop the loop
+		}
+	};
+
+	if (albums.json.shared_albums !== null)
+		$.each(albums.json.shared_albums, func);
+
+	return found;
+
+};
+
 albums.getByID = function(albumID) {
 
 	// Function returns the JSON of an album
@@ -126,8 +149,7 @@ albums.getByID = function(albumID) {
 		}
 	};
 
-	if (albums.json.shared_albums !== null)
-		$.each(albums.json.albums, func);
+	$.each(albums.json.albums, func);
 
 	if (json === undefined && albums.json.shared_albums !== null)
 		$.each(albums.json.shared_albums, func);

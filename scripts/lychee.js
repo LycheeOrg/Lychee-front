@@ -5,8 +5,8 @@
 lychee = {
 
 	title           : document.title,
-	version         : '3.2.1',
-	versionCode     : '030201',
+	version         : '3.2.2',
+	versionCode     : '030202',
 
 	updatePath      : '//LycheeOrg.github.io/update.json',
 	updateURL       : 'https://github.com/LycheeOrg/Lychee',
@@ -610,29 +610,6 @@ lychee.setMode = function(mode) {
 	if(mode==='logged_in') return;
 
 	$('#button_settings, .header__divider, .leftMenu').remove();
-
-	// $('#button_share, #button_share_album')
-	// 	.removeClass('button--eye')
-	// 	.addClass('button--share')
-	// 	.find('use')
-	// 	.attr('xlink:href', '#share');
-	//
-	// $(document)
-	// 	.off('click',       '.header__title--editable')
-	// 	.off('touchend',    '.header__title--editable')
-	// 	.off('contextmenu', '.photo')
-	// 	.off('contextmenu', '.album')
-	// 	.off('drop');
-	//
-	// Mousetrap
-	// 	.unbind([ 'u' ])
-	// 	.unbind([ 's' ])
-	// 	.unbind([ 'f' ])
-	// 	.unbind([ 'r' ])
-	// 	.unbind([ 'd' ])
-	// 	.unbind([ 't' ])
-	// 	.unbind([ 'command+backspace', 'ctrl+backspace' ])
-	// 	.unbind([ 'command+a', 'ctrl+a' ]);
 
 	if (mode==='public') {
 

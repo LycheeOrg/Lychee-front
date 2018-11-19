@@ -60,6 +60,7 @@ multiselect.toggleItem = function(object, id) {
 multiselect.addItem = function(object, id) {
 
 	if (album.isSmartID(id)) return;
+	if (albums.isShared(id)) return;
 	if (multiselect.isSelected(id).selected===true) return;
 
 	let isAlbum = object.hasClass('album');
