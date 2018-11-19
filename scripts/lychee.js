@@ -594,6 +594,7 @@ lychee.setMode = function(mode) {
 		Mousetrap
 			.unbind([ 'u' ])
 			.unbind([ 's' ])
+			.unbind([ 'n' ])
 			.unbind([ 'f' ])
 			.unbind([ 'r' ])
 			.unbind([ 'd' ])

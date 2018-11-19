@@ -35,6 +35,9 @@ $(document).ready(function() {
 		.bind([ 'u' ], function() {
 			if (!visible.photo()) { $('#upload_files').click(); return false }
 		})
+		.bind([ 'n' ], function() {
+			if (!visible.photo()) { album.add(); return false }
+		})
 		.bind([ 's', 'f' ], function() {
 			if (visible.photo())       { header.dom('#button_star').click(); return false }
 			else if (visible.albums()) { header.dom('.header__search').focus(); return false }
