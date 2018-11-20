@@ -334,7 +334,11 @@ multiselect.getSelection = function(e) {
 		return false
 	}
 
-	$('.photo, .album').each(function() {
+	const sortKind = function (a,b){
+		return $(a).hasClass("photo") < $(b).hasClass("photo") ? 1 : -1;
+	};
+
+	$('.photo, .album').sort(sortKind).each(function() {
 
 		let offset = $(this).offset();
 

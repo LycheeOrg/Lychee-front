@@ -251,14 +251,14 @@ photo.delete = function(photoIDs) {
 		action.title = lychee.locale['PHOTO_DELETE'];
 		cancel.title = lychee.locale['PHOTO_KEEP'];
 
-		msg = lychee.html`<p>` + lychee.locale['PHOTO_DELETE_1'] + ` '${ photoTitle }'` + lychee.locale['PHOTO_DELETE_2'] + `</p>`
+		msg = lychee.html`<p>${ lychee.locale['PHOTO_DELETE_1'] } '${ photoTitle }' ${ lychee.locale['PHOTO_DELETE_2'] }</p>`
 
 	} else {
 
 		action.title = lychee.locale['PHOTO_DELETE'];
 		cancel.title = lychee.locale['PHOTO_KEEP'];
 
-		msg = lychee.html`<p>` + lychee.locale['PHOTO_DELETE_ALL_1'] + ` ${ photoIDs.length } ` + lychee.locale['PHOTO_DELETE_ALL_2'] + `</p>`
+		msg = lychee.html`<p>${ lychee.locale['PHOTO_DELETE_ALL_1'] } ${ photoIDs.length } ${ lychee.locale['PHOTO_DELETE_ALL_2'] }</p>`
 
 	}
 
@@ -324,10 +324,10 @@ photo.setTitle = function(photoIDs) {
 
 	};
 
-	let input = lychee.html`<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='${ oldTitle }'>`;
+	let input = lychee.html`<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='$${ oldTitle }'>`;
 
-	if (photoIDs.length===1) msg = lychee.html`<p>` + lychee.locale['PHOTO_NEW_TITLE'] + ` ${ input }</p>`;
-	else                     msg = lychee.html`<p>` + lychee.locale['PHOTOS_NEW_TITLE_1'] + ` ${ photoIDs.length } ` + lychee.locale['PHOTOS_NEW_TITLE_2'] + ` ${ input }</p>`;
+	if (photoIDs.length===1) msg = lychee.html`<p>${ lychee.locale['PHOTO_NEW_TITLE'] } ${ input }</p>`;
+	else                     msg = lychee.html`<p>${ lychee.locale['PHOTOS_NEW_TITLE_1'] } ${ photoIDs.length } ${ lychee.locale['PHOTOS_NEW_TITLE_2'] } ${ input }</p>`;
 
 	basicModal.show({
 		body: msg,
@@ -499,7 +499,7 @@ photo.setDescription = function(photoID) {
 	};
 
 	basicModal.show({
-		body: lychee.html`<p>` + lychee.locale['PHOTO_NEW_DESCRIPTION'] + ` <input class='text' name='description' type='text' maxlength='800' placeholder='` + lychee.locale['PHOTO_DESCRIPTION']+ `' value='${ oldDescription }'></p>`,
+		body: lychee.html`<p>${ lychee.locale['PHOTO_NEW_DESCRIPTION'] } <input class='text' name='description' type='text' maxlength='800' placeholder='${ lychee.locale['PHOTO_DESCRIPTION'] }' value='$${ oldDescription }'></p>`,
 		buttons: {
 			action: {
 				title: lychee.locale['PHOTO_SET_DESCRIPTION'],
@@ -544,10 +544,10 @@ photo.editTags = function(photoIDs) {
 
 	};
 
-	let input = lychee.html`<input class='text' name='tags' type='text' maxlength='800' placeholder='Tags' value='${ oldTags }'>`;
+	let input = lychee.html`<input class='text' name='tags' type='text' maxlength='800' placeholder='Tags' value='$${ oldTags }'>`;
 
-	if (photoIDs.length===1) msg = lychee.html`<p>` + lychee.locale['PHOTO_NEW_TAGS'] + ` ${ input }</p>`;
-	else                     msg = lychee.html`<p>` + lychee.locale['PHOTO_NEW_TAGS_1'] + ` ${ photoIDs.length } ` + lychee.locale['PHOTO_NEW_TAGS_2'] + ` ${ input }</p>`;
+	if (photoIDs.length===1) msg = lychee.html`<p>${ lychee.locale['PHOTO_NEW_TAGS'] } ${ input }</p>`;
+	else                     msg = lychee.html`<p>${ lychee.locale['PHOTO_NEW_TAGS_1'] } ${ photoIDs.length } ${ lychee.locale['PHOTO_NEW_TAGS_2'] } ${ input }</p>`;
 
 	basicModal.show({
 		body: msg,

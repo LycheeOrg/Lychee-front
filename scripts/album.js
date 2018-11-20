@@ -209,7 +209,7 @@ album.add = function() {
 	};
 
 	basicModal.show({
-		body: `<p>` + lychee.locale['TITLE_NEW_ALBUM'] + ` <input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'></p>`,
+		body: `<p>${ lychee.locale['TITLE_NEW_ALBUM'] } <input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'></p>`,
 		buttons: {
 			action: {
 				title: lychee.locale['CREATE_ALBUM'],
@@ -254,7 +254,7 @@ album.addandmove = function (photoIDs) {
 	};
 
 	basicModal.show({
-		body: `<p>` + lychee.locale['TITLE_NEW_ALBUM'] + ` <input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'></p>`,
+		body: `<p>${ lychee.locale['TITLE_NEW_ALBUM'] } <input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'></p>`,
 		buttons: {
 			action: {
 				title: lychee.locale['CREATE_ALBUM'],
@@ -329,14 +329,14 @@ album.delete = function(albumIDs) {
 		// Fallback for album without a title
 		if (albumTitle==='') albumTitle = lychee.locale['UNTITLED'];
 
-		msg = lychee.html`<p>` + lychee.locale['DELETE_ALBUM_CONFIRMATION_1'] + ` '${ albumTitle }' ` + lychee.locale['DELETE_ALBUM_CONFIRMATION_2'] + `</p>`
+		msg = lychee.html`<p>${ lychee.locale['DELETE_ALBUM_CONFIRMATION_1']} '$${ albumTitle }' ${ lychee.locale['DELETE_ALBUM_CONFIRMATION_2']}</p>`
 
 	} else {
 
 		action.title = lychee.locale['DELETE_ALBUMS_QUESTION'];
 		cancel.title = lychee.locale['KEEP_ALBUMS'];
 
-		msg = lychee.html`<p>` + lychee.locale['DELETE_ALBUMS_CONFIRMATION_1'] + ` ${ albumIDs.length } ` + lychee.locale['DELETE_ALBUMS_CONFIRMATION_2'] + `</p>`
+		msg = lychee.html`<p>${ lychee.locale['DELETE_ALBUMS_CONFIRMATION_1']} $${ albumIDs.length } ${ lychee.locale['DELETE_ALBUMS_CONFIRMATION_2'] }</p>`
 
 	}
 
