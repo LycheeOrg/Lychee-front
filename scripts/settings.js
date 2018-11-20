@@ -329,9 +329,31 @@ settings.changeLang = function(params) {
 
 		if (data===true) {
 			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_LANG']);
-			lychee.init(); // to reload languages.
+			lychee.init();
 		} else lychee.error(null, params, data)
 
 	})
 
+};
+
+settings.changeLayout = function () {
+	let params = {};
+	if ( $('#JustifiedLayout:checked').length === 1 )
+	{
+		params.justified_layout = '1';
+	}
+	else
+	{
+		params.justified_layout = '0';
+	}
+
+	alert('stop');
+
+	api.post('Settings::setLayout', params, function (data) {
+		if (data===true) {
+			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_LAYOUT']);
+			lychee.justified = (params.justified_layout === '1');
+		} else lychee.error(null, params, data)
+
+	})
 };

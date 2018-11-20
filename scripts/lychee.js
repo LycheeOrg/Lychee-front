@@ -220,6 +220,7 @@ lychee = {
 		'SETTINGS_SUCCESS_SORT'		: 'Sorting order updated.',
 		'SETTINGS_SUCCESS_DROPBOX'	: 'Dropbox Key updated.',
 		'SETTINGS_SUCCESS_LANG'		: 'Language updated',
+		'SETTINGS_SUCCESS_LAYOUT'   : 'Layout updated',
 
 		'DB_INFO_TITLE'				: 'Enter your database connection details below:',
 		'DB_INFO_HOST'				: 'Database Host (optional)',
@@ -278,6 +279,8 @@ lychee = {
 
 		'LANG_TEXT'					: 'Change Lychee language for:',
 		'LANG_TITLE'				: 'Change Language',
+
+		'LAYOUT_TEXT'               : 'Use justified layout:',
 
 		'VIEW_NO_RESULT'			: 'No results',
 		'VIEW_NO_PUBLIC_ALBUMS'		: 'No public albums',
@@ -467,7 +470,7 @@ lychee.loginDialog = function() {
 				fn: basicModal.close
 			}
 		}
-	})
+	});
 
 	if (lychee.checkForUpdates==='1') lychee.getUpdate()
 

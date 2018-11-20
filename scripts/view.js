@@ -557,6 +557,7 @@ view.settings = {
 				view.settings.content.setSorting();
 				view.settings.content.setDropboxKey();
 				view.settings.content.setLang();
+				view.settings.content.setLayout();
 			}
 		},
 
@@ -707,6 +708,25 @@ view.settings = {
 
 			$(".settings_view").append(msg);
 			settings.bind('#basicModal__action_set_lang','.setLang',settings.changeLang);
+		},
+		
+		setLayout: function () {
+			let msg = `
+			<div class="setLayout">
+			<p>${ lychee.locale['LAYOUT_TEXT'] }
+			<label class="switch">
+			  <input id="JustifiedLayout" type="checkbox" name="justified-layout">
+			  <span class="slider round"></span>
+			</label>
+			</p>
+			</div>`;
+
+			$(".settings_view").append(msg);
+			if(lychee.justified)
+			{
+				$('#JustifiedLayout').click();
+			}
+			settings.bind('#JustifiedLayout','.setLayout',settings.changeLayout);
 		}
 	},
 
