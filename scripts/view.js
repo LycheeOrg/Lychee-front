@@ -8,8 +8,10 @@ view.albums = {
 
 	init: function() {
 
+		multiselect.clearSelection();
+
 		view.albums.title();
-		view.albums.content.init()
+		view.albums.content.init();
 
 	},
 
@@ -123,6 +125,8 @@ view.albums = {
 view.album = {
 
 	init: function() {
+
+		multiselect.clearSelection();
 
 		album.parse();
 
@@ -359,6 +363,8 @@ view.photo = {
 
 	init: function() {
 
+		multiselect.clearSelection();
+
 		photo.parse();
 
 		view.photo.sidebar();
@@ -532,6 +538,8 @@ view.photo = {
 view.settings = {
 
 	init: function() {
+
+		multiselect.clearSelection();
 
 		view.settings.title();
 		view.settings.content.init()
@@ -741,6 +749,8 @@ view.settings = {
 view.users = {
 	init: function() {
 
+		multiselect.clearSelection();
+
 		view.users.title();
 		view.users.content.init()
 
@@ -826,9 +836,10 @@ view.users = {
 	}
 };
 
-
 view.sharing = {
 	init: function() {
+
+		multiselect.clearSelection();
 
 		view.sharing.title();
 		view.sharing.content.init()
@@ -948,6 +959,8 @@ view.sharing = {
 
 view.logs_diagnostics = {
 	init: function (get) {
+
+		multiselect.clearSelection();
 
 		view.logs_diagnostics.title(get);
 		view.logs_diagnostics.content.init(get)
