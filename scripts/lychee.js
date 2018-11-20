@@ -372,6 +372,7 @@ lychee.init = function() {
 			lychee.checkForUpdates = data.config.checkForUpdates || '1';
 			lychee.lang			   = data.config.lang            || '';
 			lychee.lang_available  = data.config.lang_available  || {};
+			lychee.imagick         = (data.config.imagick && data.config.imagick === '1') || false;
 
 			lychee.upload	= !lychee.api_V2;
 			lychee.admin	= !lychee.api_V2;

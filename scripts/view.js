@@ -269,8 +269,9 @@ view.album = {
 				containerWidth: $('.justified-layout').width(),
 				containerPadding: 0
 			});
+			if(lychee.admin) console.log(layoutGeometry);
 			$('.justified-layout').css('height',layoutGeometry.containerHeight + 'px')
-			$('.justified-layout').css('height',layoutGeometry.containerHeight + 'px')
+				.css('height',layoutGeometry.containerHeight + 'px');
 			$('.justified-layout > div').each(function (i) {
 				$(this).css('top',layoutGeometry.boxes[i].top);
 				$(this).css('width',layoutGeometry.boxes[i].width);
@@ -557,7 +558,12 @@ view.settings = {
 				view.settings.content.setSorting();
 				view.settings.content.setDropboxKey();
 				view.settings.content.setLang();
-				view.settings.content.setLayout();
+
+				// only enabled if you have mediums
+				if(lychee.imagick)
+				{
+					view.settings.content.setLayout();
+				}
 			}
 		},
 

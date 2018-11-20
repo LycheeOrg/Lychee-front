@@ -346,9 +346,6 @@ settings.changeLayout = function () {
 	{
 		params.justified_layout = '0';
 	}
-
-	alert('stop');
-
 	api.post('Settings::setLayout', params, function (data) {
 		if (data===true) {
 			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_LAYOUT']);

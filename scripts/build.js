@@ -44,7 +44,7 @@ build.getThumbnailHtml = function(thumb, retinaThumbUrl, type, medium = '') {
 	let isVideo = type && type.indexOf('video') > -1;
 	if (thumb === 'uploads/thumb/' && isVideo)
 	{
-		return `<span class="thumbimg"><img src='play-icon.png' style='width:200px; height:200px' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+		return `<span class="thumbimg"><img src='play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 	}
 	if (lychee.justified && medium !== '')
 	{
