@@ -40,16 +40,23 @@ build.multiselect = function(top, left) {
 
 };
 
-build.getThumbnailHtml = function(thumb, retinaThumbUrl, type, medium = '') {
+build.getThumbnailHtml = function(thumb, retinaThumbUrl, type, medium = '', small='') {
 	let isVideo = type && type.indexOf('video') > -1;
 	if (thumb === 'uploads/thumb/' && isVideo)
 	{
 		return `<span class="thumbimg"><img src='play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 	}
+	// we use small if available
+	if (lychee.justified && small !== '')
+	{
+		return `<span class="thumbimg"><img src='${small}' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+	}
+	// we use medium if small is not available
 	if (lychee.justified && medium !== '')
 	{
 		return `<span class="thumbimg"><img src='${medium}' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 	}
+	// we use crappy thumb image otherwise :]
 	return `<span class="thumbimg${isVideo ? ' video': ''}"><img src='${thumb}' srcset='${ retinaThumbUrl } 1.5x' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 };
 
@@ -118,7 +125,7 @@ build.photo = function(data) {
 
 	html += lychee.html`
 			<div class='photo' data-album-id='${ data.album }' data-id='${ data.id }'>
-				${build.getThumbnailHtml(data.thumbUrl, retinaThumbUrl, data.type, data.medium)}
+				${build.getThumbnailHtml(data.thumbUrl, retinaThumbUrl, data.type, data.medium, data.small)}
 				<div class='overlay'>
 					<h1 title='$${ data.title }'>$${ data.title }</h1>
 			`;
@@ -132,7 +139,7 @@ build.photo = function(data) {
 
 		html += lychee.html`
 				<div class='badges'>
-					<a class='badge ${ (data.star==='1'                                ? 'badge--visible' : '') } icn-star'>${ build.iconic('star') }</a>
+					<a class='badge ${ (data.star==='1'                                ? 'badge--star' : '') } icn-star'>${ build.iconic('star') }</a>
 					<a class='badge ${ ((data.public==='1' && album.json.public!=='1') ? 'badge--visible' : '') } icn-share'>${ build.iconic('eye') }</a>
 				</div>
 				`
