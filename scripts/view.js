@@ -410,9 +410,9 @@ view.photo = {
 
 		// Disable Fullscreen
 		$(document).unbind('mousemove');
-	if($('video').length){
-	  $('video')[$('video').length - 1].pause();
-	}
+		if($('video').length){
+		  $('video')[$('video').length - 1].pause();
+		}
 
 		// Hide Photo
 		lychee.animate(lychee.imageview, 'fadeOut');
@@ -566,12 +566,7 @@ view.settings = {
 				view.settings.content.setSorting();
 				view.settings.content.setDropboxKey();
 				view.settings.content.setLang();
-
-				// only enabled if you have mediums
-				if(lychee.imagick)
-				{
-					view.settings.content.setLayout();
-				}
+				view.settings.content.setLayoutOverlay();
 			}
 		},
 
@@ -724,23 +719,29 @@ view.settings = {
 			settings.bind('#basicModal__action_set_lang','.setLang',settings.changeLang);
 		},
 		
-		setLayout: function () {
+		setLayoutOverlay: function () {
 			let msg = `
-			<div class="setLayout">
+			<div class="setLayoutOverlay">
 			<p>${ lychee.locale['LAYOUT_TEXT'] }
 			<label class="switch">
-			  <input id="JustifiedLayout" type="checkbox" name="justified-layout">
+			  <input id="JustifiedLayout" type="checkbox">
+			  <span class="slider round"></span>
+			</label>
+			</p>
+			<p>${ lychee.locale['IMAGE_OVERLAY_TEXT'] }
+			<label class="switch">
+			  <input id="ImageOverlay" type="checkbox">
 			  <span class="slider round"></span>
 			</label>
 			</p>
 			</div>`;
 
 			$(".settings_view").append(msg);
-			if(lychee.justified)
-			{
-				$('#JustifiedLayout').click();
-			}
-			settings.bind('#JustifiedLayout','.setLayout',settings.changeLayout);
+			if(lychee.justified) $('#JustifiedLayout').click();
+			if(lychee.image_overlay) $('#ImageOverlay').click();
+
+			settings.bind('#JustifiedLayout','.setLayoutOverlay',settings.changeLayout);
+			settings.bind('#ImageOverlay','.setLayoutOverlay',settings.changeImageOverlay);
 		}
 	},
 

@@ -152,18 +152,35 @@ build.photo = function(data) {
 
 };
 
+build.overlay_image = function(data) {
+
+	let exifHash  = data.takestamp + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
+
+	let html = ``;
+
+	if (exifHash !== '0')
+	{
+		html += lychee.html`
+		<div id="image_overlay"><h1>$${ data.title }</h1>
+		<p>${ data.shutter.replace('s','sec') } at ${ data.aperture.replace('f/','&fnof; / ') }, ${ lychee.locale['PHOTO_ISO'] } ${ data.iso }<br>
+		${ data.focal } ${ (data.lens && data.lens !== '') ? '(' + data.lens+ ')' : ''}</p>
+		</div>
+	`;
+	}
+
+	return html;
+};
+
 build.imageview = function(data, visibleControls) {
 
 	let html      = '';
-	let hasMedium = data.medium !== '';
 
 	if(data.type.indexOf('video') > -1) {
 		html += lychee.html`<video width="auto" height="auto" id='image' controls class='${ visibleControls===true ? '' : 'full' }' autoplay><source src='${ data.url }'>Your browser does not support the video tag.</video>`
 	}
-	else if (hasMedium===false) {
-		html += lychee.html`<img id='image' class='${ visibleControls===true ? '' : 'full' }' src='${ data.url }' draggable='false'>`
-	} else {
-		html += lychee.html`<img id='image' class='${ visibleControls===true ? '' : 'full' }' src='${ data.medium }' draggable='false'>`
+	else {
+		html += lychee.html`<img id='image' class='${ visibleControls===true ? '' : 'full' }' src='${ (data.medium !== '') ? data.medium : data.url }' draggable='false'>`
+		if(lychee.image_overlay) html += build.overlay_image(data);
 	}
 
 	html += `

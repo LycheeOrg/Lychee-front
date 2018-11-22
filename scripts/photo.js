@@ -73,6 +73,18 @@ photo.load = function(photoID, albumID) {
 
 };
 
+photo.update_display_overlay = function () {
+	lychee.image_overlay = !lychee.image_overlay;
+	if(!lychee.image_overlay)
+	{
+		$('#image_overlay').remove();
+	}
+	else
+	{
+		lychee.imageview.append(build.overlay_image(photo.json))
+	}
+};
+
 // Preload the next photo for better response time
 photo.preloadNext = function(photoID) {
 	if (album.json &&

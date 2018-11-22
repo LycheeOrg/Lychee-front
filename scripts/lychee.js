@@ -5,8 +5,8 @@
 lychee = {
 
 	title           : document.title,
-	version         : '3.2.3',
-	versionCode     : '030203',
+	version         : '3.2.4',
+	versionCode     : '030204',
 
 	updatePath      : '//LycheeOrg.github.io/update.json',
 	updateURL       : 'https://github.com/LycheeOrg/Lychee',
@@ -14,12 +14,13 @@ lychee = {
 
 	publicMode      : false,
 	viewMode        : false,
-	api_V2			: false,  // enable api_V2
-	sub_albums      : false,  // enable sub_albums features
-	admin			: false,  // enable admin mode (multi-user)
-	upload			: false,  // enable possibility to upload (multi-user)
-	lock			: false,  // locked user (multi-user)
-	justified       : true,  // use Flickr Justified Layout Like
+	api_V2			: false,    // enable api_V2
+	sub_albums      : false,    // enable sub_albums features
+	admin			: false,    // enable admin mode (multi-user)
+	upload			: false,    // enable possibility to upload (multi-user)
+	lock			: false,    // locked user (multi-user)
+	justified       : true,     // use Flickr Justified Layout Like
+	image_overlay   : false,    // display Overlay like in Lightroom
 
 	checkForUpdates : '1',
 	sortingPhotos   : '',
@@ -187,6 +188,7 @@ lychee = {
 		'PHOTO_CAPTURED'			: 'Captured',
 		'PHOTO_MAKE'				: 'Make',
 		'PHOTO_TYPE'				: 'Type/Model',
+		'PHOTO_LENS'                : 'Lens',
 		'PHOTO_SHUTTER'				: 'Shutter Speed',
 		'PHOTO_APERTURE'			: 'Aperture',
 		'PHOTO_FOCAL'				: 'Focal Length',
@@ -223,6 +225,7 @@ lychee = {
 		'SETTINGS_SUCCESS_DROPBOX'	: 'Dropbox Key updated.',
 		'SETTINGS_SUCCESS_LANG'		: 'Language updated',
 		'SETTINGS_SUCCESS_LAYOUT'   : 'Layout updated',
+		'SETTINGS_SUCCESS_IMAGE_OVERLAY'   : 'EXIF Overlay setting updated',
 
 		'DB_INFO_TITLE'				: 'Enter your database connection details below:',
 		'DB_INFO_HOST'				: 'Database Host (optional)',
@@ -283,6 +286,7 @@ lychee = {
 		'LANG_TITLE'				: 'Change Language',
 
 		'LAYOUT_TEXT'               : 'Use justified layout:',
+		'IMAGE_OVERLAY_TEXT'        : 'Display EXIF data overlay:',
 
 		'VIEW_NO_RESULT'			: 'No results',
 		'VIEW_NO_PUBLIC_ALBUMS'		: 'No public albums',
@@ -389,6 +393,7 @@ lychee.init = function() {
 			lychee.lang_available  = data.config.lang_available  || {};
 			lychee.imagick         = (data.config.imagick && data.config.imagick === '1') || false;
 			lychee.justified       = (data.config.justified_layout && data.config.justified_layout === '1') || false;
+			lychee.image_overlay   = (data.config.image_overlay && data.config.image_overlay === '1') || false;
 
 			lychee.upload	= !lychee.api_V2;
 			lychee.admin	= !lychee.api_V2;
@@ -414,6 +419,7 @@ lychee.init = function() {
 
 			lychee.checkForUpdates = data.config.checkForUpdates || '1';
 			lychee.justified       = (data.config.justified_layout && data.config.justified_layout === '1') || false;
+			lychee.image_overlay   = (data.config.image_overlay && data.config.image_overlay === '1') || false;
 
 			lychee.setMode('public');
 
@@ -459,7 +465,7 @@ lychee.loginDialog = function() {
 
 	let msg = lychee.html`
 			  <p class='signIn'>
-				  <input class='text' name='username' autocomplete='on' type='text' placeholder='$${ lychee.locale['USERNAME'] }' autocapitalize='off' autocorrect='off'>
+				  <input class='text' name='username' autocomplete='on' type='text' placeholder='$${ lychee.locale['USERNAME'] }' autocapitalize='off'>
 				  <input class='text' name='password' autocomplete='current-password' type='password' placeholder='$${ lychee.locale['PASSWORD'] }'>
 			  </p>
 			  <p class='version'>Lychee ${ lychee.version }<span> &#8211; <a target='_blank' href='${ lychee.updateURL }'>${ lychee.locale['UPDATE_AVAILABLE'] }</a><span></p>

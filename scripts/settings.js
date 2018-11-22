@@ -346,10 +346,29 @@ settings.changeLayout = function () {
 	{
 		params.justified_layout = '0';
 	}
-	api.post('Settings::setLayout', params, function (data) {
+	api.post('Settings::setLayoutOverlay', params, function (data) {
 		if (data===true) {
 			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_LAYOUT']);
 			lychee.justified = (params.justified_layout === '1');
+		} else lychee.error(null, params, data)
+
+	})
+};
+
+settings.changeImageOverlay = function () {
+	let params = {};
+	if ( $('#ImageOverlay:checked').length === 1 )
+	{
+		params.image_overlay = '1';
+	}
+	else
+	{
+		params.image_overlay = '0';
+	}
+	api.post('Settings::setImageOverlay', params, function (data) {
+		if (data===true) {
+			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_IMAGE_OVERLAY']);
+			lychee.image_overlay = (params.image_overlay === '1');
 		} else lychee.error(null, params, data)
 
 	})

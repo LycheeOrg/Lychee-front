@@ -181,6 +181,7 @@ sidebar.createStructure.photo = function(data) {
 				{ title: lychee.locale['PHOTO_CAPTURED'],       kind: 'takedate',   value: data.takedate },
 				{ title: lychee.locale['PHOTO_MAKE'],           kind: 'make',       value: data.make },
 				{ title: lychee.locale['PHOTO_TYPE'],           kind: 'model',      value: data.model },
+				{ title: lychee.locale['PHOTO_LENS'],           kind: 'lens',       value: data.lens },
 				{ title: lychee.locale['PHOTO_SHUTTER'],        kind: 'shutter',    value: data.shutter },
 				{ title: lychee.locale['PHOTO_APERTURE'],       kind: 'aperture',   value: data.aperture },
 				{ title: lychee.locale['PHOTO_FOCAL'],          kind: 'focal',      value: data.focal },

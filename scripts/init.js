@@ -22,7 +22,8 @@ $(document).ready(function() {
 	// Image View
 	lychee.imageview
 		.on(eventName, '.arrow_wrapper--previous', photo.previous)
-		.on(eventName, '.arrow_wrapper--next',     photo.next);
+		.on(eventName, '.arrow_wrapper--next',     photo.next)
+		.on('click', 'img', photo.update_display_overlay);
 
 	// Keyboard
 	Mousetrap
