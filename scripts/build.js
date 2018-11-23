@@ -158,7 +158,7 @@ build.overlay_image = function(data) {
 
 	let html = ``;
 
-	if (exifHash !== '0')
+	if (exifHash !== '')
 	{
 		html += lychee.html`
 		<div id="image_overlay"><h1>$${ data.title }</h1>
