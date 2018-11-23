@@ -25,7 +25,9 @@ paths.view = {
 		'./scripts/header.js',
 		'./scripts/visible.js',
 		'./scripts/sidebar.js',
-		'./scripts/view/main.js'
+		'./scripts/csrf_protection.js',
+		'./scripts/view/main.js',
+		'./scripts/lychee_locale.js',
 	],
 	scripts: [
 		'node_modules/jquery/dist/jquery.min.js',
@@ -56,7 +58,7 @@ gulp.task('view--scripts', gulp.series('view--js', function() {
 
 	return gulp.src(paths.view.scripts)
 	           .pipe(plugins.concat('view.js', {newLine: "\n"}))
-	           .pipe(plugins.uglify())
+	           // .pipe(plugins.uglify())
 	           .on('error', catchError)
 	           .pipe(gulp.dest('../dist/'))
 
