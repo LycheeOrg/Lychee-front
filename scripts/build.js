@@ -154,7 +154,7 @@ build.photo = function(data) {
 
 build.overlay_image = function(data) {
 
-	let exifHash  = data.takestamp + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
+	let exifHash  = data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
 
 	let html = ``;
 
