@@ -114,7 +114,7 @@ sidebar.createStructure.photo = function(data) {
 	if (data==null || data==='') return false;
 
 	let editable  = false;
-	let exifHash  = data.takestamp + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
+	let exifHash  = data.takedate + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
 	let structure = {};
 	let _public   = '';
 
@@ -172,7 +172,7 @@ sidebar.createStructure.photo = function(data) {
 	}
 
 	// Only create EXIF section when EXIF data available
-	if (exifHash!=='0') {
+	if (exifHash!=='') {
 
 		structure.exif = {
 			title : lychee.locale['PHOTO_CAMERA'],
