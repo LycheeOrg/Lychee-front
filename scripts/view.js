@@ -372,6 +372,7 @@ view.photo = {
 		view.photo.star();
 		view.photo.public();
 		view.photo.photo();
+		view.photo.license();
 
 		photo.json.init = 1
 
@@ -434,6 +435,10 @@ view.photo = {
 
 		if (photo.json.init) sidebar.changeAttr('description', photo.json.description)
 
+	},
+
+	license: function() {
+		if (photo.json.init) sidebar.changeAttr('license', photo.json.license)
 	},
 
 	star: function() {
@@ -718,7 +723,7 @@ view.settings = {
 			$(".settings_view").append(msg);
 			settings.bind('#basicModal__action_set_lang','.setLang',settings.changeLang);
 		},
-		
+
 		setLayoutOverlay: function () {
 			let msg = `
 			<div class="setLayoutOverlay">
@@ -883,7 +888,7 @@ view.sharing = {
 
 			html += `</select>
 				</div>
-				
+
 				<div class="col-xs-2">
 					<!--<button type="button" id="albums_list_undo" class="btn btn-primary btn-block">undo</button>-->
 					<button type="button" id="albums_list_rightAll" class="btn btn-default btn-block blue">` + build.iconic('media-skip-forward') + `</button>
@@ -892,7 +897,7 @@ view.sharing = {
 					<button type="button" id="albums_list_leftAll" class="btn btn-default btn-block grey">` + build.iconic('media-skip-backward') + `</button>
 					<!--<button type="button" id="albums_list_redo" class="btn btn-warning btn-block">redo</button>-->
 				</div>
-				
+
 				<div class="col-xs-5">
 					<select name="to" id="albums_list_to" class="form-control select" size="13" multiple="multiple"></select>
 				</div>
@@ -910,7 +915,7 @@ view.sharing = {
 
 			html += `</select>
 				</div>
-				
+
 				<div class="col-xs-2">
 					<!--<button type="button" id="user_list_undo" class="btn btn-primary btn-block">undo</button>-->
 					<button type="button" id="user_list_rightAll" class="btn btn-default btn-block blue">` + build.iconic('media-skip-forward') + `</button>
@@ -919,7 +924,7 @@ view.sharing = {
 					<button type="button" id="user_list_leftAll" class="btn btn-default btn-block grey">` + build.iconic('media-skip-backward') + `</button>
 					<!--<button type="button" id="user_list_redo" class="btn btn-warning btn-block">redo</button>-->
 				</div>
-				
+
 				<div class="col-xs-5">
 					<select name="to" id="user_list_to" class="form-control select" size="13" multiple="multiple"></select>
 				</div>

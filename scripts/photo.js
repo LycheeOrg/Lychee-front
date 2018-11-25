@@ -503,7 +503,8 @@ photo.setDescription = function(photoID) {
 		};
 
 		api.post('Photo::setDescription', params, function(data) {
-
+			console.log(data);
+			console.log(params);
 			if (data!==true) lychee.error(null, params, data)
 
 		})
@@ -643,6 +644,49 @@ photo.share = function(photoID, service) {
 			});
 			break
 	}
+
+};
+
+photo.setLicense = function(photoID) {
+
+	let oldLicense = photo.json.license;
+
+	const action = function(data) {
+
+		basicModal.close();
+		let license = data.license;
+
+		if (visible.photo()) {
+			photo.json.license = license;
+			view.photo.license()
+		}
+
+		let params = {
+			photoID,
+			license
+		};
+
+		api.post('Photo::setLicense', params, function(data) {
+
+			if (data!==true) lychee.error(null, params, data)
+
+		})
+
+	};
+
+	basicModal.show({
+		body: lychee.html`<p>${ lychee.locale['PHOTO_NEW_LICENSE'] } <input class='text' name='license' type='text' maxlength='800' placeholder='${ lychee.locale['PHOTO_LICENSE'] }' value='$${ oldLicense }'></p>`,
+		buttons: {
+			action: {
+				title: lychee.locale['PHOTO_SET_LICENSE'],
+				fn: action
+			},
+			cancel: {
+				title: lychee.locale['CANCEL'],
+				fn: basicModal.close
+			}
+		}
+	})
 
 };
 
