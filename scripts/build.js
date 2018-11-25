@@ -130,7 +130,7 @@ build.photo = function(data) {
 					<h1 title='$${ data.title }'>$${ data.title }</h1>
 			`;
 
-	if (data.cameraDate==='1') html += lychee.html`<a><span title='Camera Date'>${ build.iconic('camera-slr') }</span>${ data.sysdate }</a>`;
+	if (data.cameraDate==='1') html += lychee.html`<a><span title='Camera Date'>${ build.iconic('camera-slr') }</span>${ data.takedate }</a>`;
 	else                       html += lychee.html`<a>${ data.sysdate }</a>`;
 
 	html += `</div>`;
