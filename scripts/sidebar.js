@@ -61,6 +61,13 @@ sidebar.bind = function() {
 			photo.deleteTag(photo.getID(), $(this).data('index'))
 		});
 
+	sidebar
+		.dom('#edit_license')
+		.off(eventName)
+		.on(eventName, function() {
+			photo.setLicense(photo.getID());
+		})
+
 	return true
 
 };
@@ -203,13 +210,22 @@ sidebar.createStructure.photo = function(data) {
 		]
 	};
 
+	structure.license = {
+		title : lychee.locale['PHOTO_LICENSE'],
+		type  : sidebar.types.DEFAULT,
+		rows  : [
+			{ title: lychee.locale['PHOTO_SET_LICENSE'], kind: 'license', value: photo.json.license, editable: editable }
+		]
+	};
+
 	// Construct all parts of the structure
 	structure = [
 		structure.basics,
 		structure.image,
 		structure.tags,
 		structure.exif,
-		structure.sharing
+		structure.sharing,
+		structure.license
 	];
 
 	return structure

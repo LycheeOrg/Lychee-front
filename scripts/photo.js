@@ -525,7 +525,6 @@ photo.setDescription = function(photoID) {
 		};
 
 		api.post('Photo::setDescription', params, function(data) {
-
 			if (data!==true) lychee.error(null, params, data)
 
 		})
@@ -665,6 +664,62 @@ photo.share = function(photoID, service) {
 			});
 			break
 	}
+
+};
+
+photo.setLicense = function(photoID) {
+
+	let oldLicense = photo.json.license;
+
+	const action = function(data) {
+
+		basicModal.close();
+		let license = data.license;
+
+		if (visible.photo()) {
+			photo.json.license = license;
+			view.photo.license()
+		}
+
+		let params = {
+			photoID,
+			license
+		};
+
+		api.post('Photo::setLicense', params, function(data) {
+
+			if (data!==true) lychee.error(null, params, data)
+
+		})
+
+	};
+
+	basicModal.show({
+		body: lychee.html`
+			<p>${ lychee.locale['PHOTO_NEW_LICENSE'] }
+			<select class="select" name="license">
+				<option value="">${ lychee.locale['PHOTO_LICENSE_NONE'] }</option>
+				<option value="CC0">CC0 - Public Domain</option>
+				<option value="CC-BY">CC Attribution 4.0</option>
+				<option value="CC-BY-ND">CC Attribution-NoDerivatives 4.0</option>
+				<option value="CC-BY-SA">CC Attribution-ShareAlike 4.0</option>
+				<option value="CC-BY-ND">CC Attribution-NonCommercial 4.0</option>
+				<option value="CC-BY-NC-ND">CC Attribution-NonCommercial-NoDerivatives 4.0</option>
+				<option value="CC-BY-SA">CC Attribution-NonCommercial-ShareAlike 4.0</option>
+			</select>
+			<br />
+			<a href="https://creativecommons.org/choose/" target="_blank">${ lychee.locale['PHOTO_LICENSE_HELP'] }</a></p>`,
+		buttons: {
+			action: {
+				title: lychee.locale['PHOTO_SET_LICENSE'],
+				fn: action
+			},
+			cancel: {
+				title: lychee.locale['CANCEL'],
+				fn: basicModal.close
+			}
+		}
+	})
 
 };
 
