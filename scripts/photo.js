@@ -671,6 +671,11 @@ photo.setLicense = function(photoID) {
 
 	let oldLicense = photo.json.license;
 
+	const callback = function() {
+		$('select#license').val(photo.json.license);
+		return false;
+	}
+
 	const action = function(data) {
 
 		basicModal.close();
@@ -694,21 +699,28 @@ photo.setLicense = function(photoID) {
 
 	};
 
+	let msg = `
+	<div>
+	  <p>
+		  ` + lychee.locale['PHOTO_NEW_LICENSE'] + `
+		  <select class="select" name="license" id="license">
+			<option value="">${ lychee.locale['PHOTO_LICENSE_NONE'] }</option>
+			<option value="CC0">CC0 - Public Domain</option>
+			<option value="CC-BY">CC Attribution 4.0</option>
+			<option value="CC-BY-ND">CC Attribution-NoDerivatives 4.0</option>
+			<option value="CC-BY-SA">CC Attribution-ShareAlike 4.0</option>
+			<option value="CC-BY-ND">CC Attribution-NonCommercial 4.0</option>
+			<option value="CC-BY-NC-ND">CC Attribution-NonCommercial-NoDerivatives 4.0</option>
+			<option value="CC-BY-SA">CC Attribution-NonCommercial-ShareAlike 4.0</option>
+		</select>
+		<br />
+		<a href="https://creativecommons.org/choose/" target="_blank">${ lychee.locale['PHOTO_LICENSE_HELP'] }</a>
+	  </p>
+	</div>`;
+
 	basicModal.show({
-		body: lychee.html`
-			<p>${ lychee.locale['PHOTO_NEW_LICENSE'] }
-			<select class="select" name="license">
-				<option value="">${ lychee.locale['PHOTO_LICENSE_NONE'] }</option>
-				<option value="CC0">CC0 - Public Domain</option>
-				<option value="CC-BY">CC Attribution 4.0</option>
-				<option value="CC-BY-ND">CC Attribution-NoDerivatives 4.0</option>
-				<option value="CC-BY-SA">CC Attribution-ShareAlike 4.0</option>
-				<option value="CC-BY-ND">CC Attribution-NonCommercial 4.0</option>
-				<option value="CC-BY-NC-ND">CC Attribution-NonCommercial-NoDerivatives 4.0</option>
-				<option value="CC-BY-SA">CC Attribution-NonCommercial-ShareAlike 4.0</option>
-			</select>
-			<br />
-			<a href="https://creativecommons.org/choose/" target="_blank">${ lychee.locale['PHOTO_LICENSE_HELP'] }</a></p>`,
+		body: msg,
+		callback: callback,
 		buttons: {
 			action: {
 				title: lychee.locale['PHOTO_SET_LICENSE'],
