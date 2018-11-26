@@ -124,7 +124,6 @@ sidebar.createStructure.photo = function(data) {
 	let exifHash  = data.takedate + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
 	let structure = {};
 	let _public   = '';
-	let _license  = '';
 
 	// Enable editable when user logged in
 	if (lychee.publicMode===false && lychee.upload) editable = true;
@@ -215,7 +214,7 @@ sidebar.createStructure.photo = function(data) {
 		title : lychee.locale['PHOTO_LICENSE'],
 		type  : sidebar.types.DEFAULT,
 		rows  : [
-			{ title: lychee.locale['PHOTO_SET_LICENSE'], kind: 'license', value: _license, editable: editable }
+			{ title: lychee.locale['PHOTO_SET_LICENSE'], kind: 'license', value: photo.json.license, editable: editable }
 		]
 	};
 
