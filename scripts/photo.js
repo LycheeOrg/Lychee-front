@@ -172,7 +172,7 @@ photo.next = function(animate) {
 
 };
 
-photo.duplicate = function(photoIDs) {
+photo.duplicate = function(photoIDs, callback = null) {
 
 	if (!photoIDs) return false;
 	if (photoIDs instanceof Array===false) photoIDs = [ photoIDs ];
@@ -185,8 +185,15 @@ photo.duplicate = function(photoIDs) {
 
 	api.post('Photo::duplicate', params, function(data) {
 
-		if (data!==true) lychee.error(null, params, data);
-		else             album.load(album.getID())
+		if (data!==true){
+			lychee.error(null, params, data);
+		}
+		else {
+			album.load(album.getID());
+			if (callback != null) {
+				callback();
+			}
+		}
 
 	})
 
@@ -357,6 +364,15 @@ photo.setTitle = function(photoIDs) {
 
 };
 
+photo.copyto = function(photoIDs, albumID) {
+
+	const action = function()
+	{
+		photo.setAlbum(photoIDs,albumID);
+	};
+	photo.duplicate(photoIDs, action);
+};
+
 photo.setAlbum = function(photoIDs, albumID) {
 
 	let nextPhoto = null;
@@ -398,7 +414,13 @@ photo.setAlbum = function(photoIDs, albumID) {
 
 	api.post('Photo::setAlbum', params, function(data) {
 
-		if (data!==true) lychee.error(null, params, data)
+		if (data!==true){
+			lychee.error(null, params, data)
+		}
+		else
+		{
+			album.reload();
+		}
 
 	})
 

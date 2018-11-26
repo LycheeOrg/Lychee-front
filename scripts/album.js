@@ -167,7 +167,7 @@ album.parse = function() {
 
 };
 
-album.add = function() {
+album.add = function(IDs = null, callback = null) {
 
 	const action = function(data) {
 
@@ -198,8 +198,15 @@ album.add = function() {
 		api.post('Album::add', params, function(data) {
 
 			if (data!==false && isNumber(data)) {
-				albums.refresh();
-				lychee.goto(data)
+				if(IDs != null)
+				{
+					callback(IDs, data, false); // we do not confirm
+				}
+				else
+				{
+					albums.refresh();
+					lychee.goto(data)
+				}
 			} else {
 				lychee.error(null, params, data)
 			}
@@ -224,138 +231,6 @@ album.add = function() {
 
 };
 
-album.addandmove = function (photoIDs) {
-
-	const action = function(data) {
-
-		// let title = data.title;
-
-		const isNumber = (n) => (!isNaN(parseInt(n, 10)) && isFinite(n));
-
-		basicModal.close();
-
-		let params = {
-			title: data.title,
-			parent_id: 0 // root
-		};
-
-		api.post('Album::add', params, function(data) {
-
-			if (data!==false && isNumber(data)) {
-				albums.refresh();
-				photo.setAlbum(photoIDs, data);
-				lychee.goto(data)
-			} else {
-				lychee.error(null, params, data)
-			}
-
-		})
-
-	};
-
-	basicModal.show({
-		body: `<p>${ lychee.locale['TITLE_NEW_ALBUM'] } <input class='text' name='title' type='text' maxlength='50' placeholder='$${ lychee.locale['ALBUM_TITLE'] }' value='$${ lychee.locale['UNTITLED'] }'></p>`,
-		buttons: {
-			action: {
-				title: lychee.locale['CREATE_ALBUM'],
-				fn: action
-			},
-			cancel: {
-				title: lychee.locale['CANCEL'],
-				fn: basicModal.close
-			}
-		}
-	})
-
-};
-
-album.delete = function(albumIDs) {
-
-	let action = {};
-	let cancel = {};
-	let msg    = '';
-
-	if (!albumIDs) return false;
-	if (albumIDs instanceof Array===false) albumIDs = [ albumIDs ];
-
-	action.fn = function() {
-
-		basicModal.close();
-
-		let params = {
-			albumIDs: albumIDs.join()
-		};
-
-		api.post('Album::delete', params, function(data) {
-
-			if (visible.albums()) {
-
-				albumIDs.forEach(function(id) {
-					view.albums.content.delete(id);
-					albums.deleteByID(id)
-				})
-
-			} else {
-
-				albums.refresh();
-				lychee.goto()
-
-			}
-
-			if (data!==true) lychee.error(null, params, data)
-
-		})
-
-	};
-
-	if (albumIDs.toString()==='0') {
-
-		action.title = lychee.locale['CLEAR_UNSORTED'];
-		cancel.title = lychee.locale['KEEP_UNSORTED'];
-
-		msg = `<p>` + lychee.locale['DELETE_UNSORTED_CONFIRM'] + `</p>`
-
-	} else if (albumIDs.length===1) {
-
-		let albumTitle = '';
-
-		action.title = lychee.locale['DELETE_ALBUM_QUESTION'];
-		cancel.title = lychee.locale['KEEP_ALBUM'];
-
-		// Get title
-		if (album.json)       albumTitle = album.json.title;
-		else if (albums.json) albumTitle = albums.getByID(albumIDs).title;
-
-		// Fallback for album without a title
-		if (albumTitle==='') albumTitle = lychee.locale['UNTITLED'];
-
-		msg = lychee.html`<p>${ lychee.locale['DELETE_ALBUM_CONFIRMATION_1']} '$${ albumTitle }' ${ lychee.locale['DELETE_ALBUM_CONFIRMATION_2']}</p>`
-
-	} else {
-
-		action.title = lychee.locale['DELETE_ALBUMS_QUESTION'];
-		cancel.title = lychee.locale['KEEP_ALBUMS'];
-
-		msg = lychee.html`<p>${ lychee.locale['DELETE_ALBUMS_CONFIRMATION_1']} $${ albumIDs.length } ${ lychee.locale['DELETE_ALBUMS_CONFIRMATION_2'] }</p>`
-
-	}
-
-	basicModal.show({
-		body: msg,
-		buttons: {
-			action: {
-				title: action.title,
-				fn: action.fn,
-				class: 'red'
-			},
-			cancel: {
-				title: cancel.title,
-				fn: basicModal.close
-			}
-		}
-	})
-
-};
 
 album.setTitle = function(albumIDs) {
 
@@ -665,7 +540,7 @@ album.getArchive = function(albumID) {
 
 };
 
-album.merge = function(albumIDs) {
+album.buildMessage = function(albumIDs, albumID, op1, op2, ops) {
 
 	let title  = '';
 	let sTitle = '';
@@ -675,30 +550,129 @@ album.merge = function(albumIDs) {
 	if (albumIDs instanceof Array===false) albumIDs = [ albumIDs ];
 
 	// Get title of first album
-	if (albums.json) title = albums.getByID(albumIDs[0]).title;
+	if (parseInt(albumID, 10) === 0)
+	{
+		title = lychee.locale['ROOT'];
+	}
+	else if (albums.json) title = albums.getByID(albumID).title;
 
 	// Fallback for first album without a title
 	if (title==='') title = lychee.locale['UNTITLED'];
 
-	if (albumIDs.length===2) {
+	if (albumIDs.length===1) {
 
 		// Get title of second album
-		if (albums.json) sTitle = albums.getByID(albumIDs[1]).title;
+		if (albums.json) sTitle = albums.getByID(albumIDs[0]).title;
 
 		// Fallback for second album without a title
 		if (sTitle==='') sTitle = lychee.locale['UNTITLED'];
 
-		msg = lychee.html`<p>${ lychee.locale['ALBUM_MERGE_1'] } '$${ sTitle }' ${ lychee.locale['ALBUM_MERGE_2'] } '$${ title }'?</p>`
+		msg = lychee.html`<p>${ lychee.locale[op1] } '$${ sTitle }' ${ lychee.locale[op2] } '$${ title }'?</p>`
 
 	} else {
 
-		msg = lychee.html`<p>${ lychee.locale['ALBUMS_MERGE'] } '$${ title }'?</p>`
+		msg = lychee.html`<p>${ lychee.locale[ops] } '$${ title }'?</p>`
 
 	}
+
+	return msg
+
+};
+
+album.delete = function(albumIDs) {
+
+	let action = {};
+	let cancel = {};
+	let msg    = '';
+
+	if (!albumIDs) return false;
+	if (albumIDs instanceof Array===false) albumIDs = [ albumIDs ];
+
+	action.fn = function() {
+
+		basicModal.close();
+
+		let params = {
+			albumIDs: albumIDs.join()
+		};
+
+		api.post('Album::delete', params, function(data) {
+
+			if (visible.albums()) {
+
+				albumIDs.forEach(function(id) {
+					view.albums.content.delete(id);
+					albums.deleteByID(id)
+				})
+
+			} else {
+
+				albums.refresh();
+				lychee.goto()
+
+			}
+
+			if (data!==true) lychee.error(null, params, data)
+
+		})
+
+	};
+
+	if (albumIDs.toString()==='0') {
+
+		action.title = lychee.locale['CLEAR_UNSORTED'];
+		cancel.title = lychee.locale['KEEP_UNSORTED'];
+
+		msg = `<p>` + lychee.locale['DELETE_UNSORTED_CONFIRM'] + `</p>`
+
+	} else if (albumIDs.length===1) {
+
+		let albumTitle = '';
+
+		action.title = lychee.locale['DELETE_ALBUM_QUESTION'];
+		cancel.title = lychee.locale['KEEP_ALBUM'];
+
+		// Get title
+		if (album.json)       albumTitle = album.json.title;
+		else if (albums.json) albumTitle = albums.getByID(albumIDs).title;
+
+		// Fallback for album without a title
+		if (albumTitle==='') albumTitle = lychee.locale['UNTITLED'];
+
+		msg = lychee.html`<p>${ lychee.locale['DELETE_ALBUM_CONFIRMATION_1']} '$${ albumTitle }' ${ lychee.locale['DELETE_ALBUM_CONFIRMATION_2']}</p>`
+
+	} else {
+
+		action.title = lychee.locale['DELETE_ALBUMS_QUESTION'];
+		cancel.title = lychee.locale['KEEP_ALBUMS'];
+
+		msg = lychee.html`<p>${ lychee.locale['DELETE_ALBUMS_CONFIRMATION_1']} $${ albumIDs.length } ${ lychee.locale['DELETE_ALBUMS_CONFIRMATION_2'] }</p>`
+
+	}
+
+	basicModal.show({
+		body: msg,
+		buttons: {
+			action: {
+				title: action.title,
+				fn: action.fn,
+				class: 'red'
+			},
+			cancel: {
+				title: cancel.title,
+				fn: basicModal.close
+			}
+		}
+	})
+
+};
+
+album.merge = function(albumIDs, albumID, confirm = true) {
 
 	const action = function() {
 
 		basicModal.close();
+		albumIDs.unshift(albumID);
 
 		let params = {
 			albumIDs: albumIDs.join()
@@ -716,95 +690,151 @@ album.merge = function(albumIDs) {
 
 	};
 
-	basicModal.show({
-		body: msg,
-		buttons: {
-			action: {
-				title: lychee.locale['MERGE_ALBUM'],
-				fn: action,
-				class: 'red'
-			},
-			cancel: {
-				title: lychee.locale['DONT_MERGE'],
-				fn: basicModal.close
+	if (confirm) {
+		basicModal.show({
+			body: album.buildMessage(albumIDs,albumID,'ALBUM_MERGE_1','ALBUM_MERGE_2', 'ALBUMS_MERGE'),
+			buttons: {
+				action: {
+					title: lychee.locale['MERGE_ALBUM'],
+					fn: action,
+					class: 'red'
+				},
+				cancel: {
+					title: lychee.locale['DONT_MERGE'],
+					fn: basicModal.close
+				}
 			}
-		}
-	})
-
-};
-
-album.move = function(albumIDs, titles = []) {
-
-	let title  = '';
-	let sTitle = '';
-	let msg    = '';
-
-	if (!albumIDs) return false;
-	if (albumIDs instanceof Array===false) albumIDs = [ albumIDs ];
-
-	// Get title of first album
-	if (albums.json && albums.getByID(albumIDs[0]))
-	{
-		title = albums.getByID(albumIDs[0]).title;
+		})
 	}
 	else
 	{
-		title = lychee.locale['ROOT'];
+		action();
 	}
 
-	// Fallback for first album without a title
-	if (title==='') title = lychee.locale['UNTITLED'];
+};
 
-	if (albumIDs.length===2) {
+// album.move = function(albumIDs, titles = []) {
+//
+// 	let title  = '';
+// 	let sTitle = '';
+// 	let msg    = '';
+//
+// 	if (!albumIDs) return false;
+// 	if (albumIDs instanceof Array===false) albumIDs = [ albumIDs ];
+//
+// 	// Get title of first album
+// 	if (albums.json && albums.getByID(albumIDs[0]))
+// 	{
+// 		title = albums.getByID(albumIDs[0]).title;
+// 	}
+// 	else
+// 	{
+// 		title = lychee.locale['ROOT'];
+// 	}
+//
+// 	// Fallback for first album without a title
+// 	if (title==='') title = lychee.locale['UNTITLED'];
+//
+// 	if (albumIDs.length===2) {
+//
+// 		// Get title of second album
+// 		if (albums.json) sTitle = albums.getByID(albumIDs[1]).title;
+//
+// 		// Fallback for second album without a title
+// 		if (sTitle==='') sTitle = lychee.locale['UNTITLED'];
+//
+// 		msg = lychee.html`<p>${ lychee.locale['ALBUM_MOVE_1'] } '$${ sTitle }' ${ lychee.locale['ALBUM_MOVE_2'] } '$${ title }'?</p>`
+//
+// 	} else {
+//
+// 		msg = lychee.html`<p>${ lychee.locale['ALBUMS_MOVE'] } '$${ title }'?</p>`
+//
+// 	}
+//
+// 	const action = function() {
+//
+// 		basicModal.close();
+//
+// 		let params = {
+// 			albumIDs: albumIDs.join()
+// 		};
+//
+// 		api.post('Album::move', params, function(data) {
+//
+// 			if (data!==true) lychee.error(null, params, data);
+// 			else
+// 			{
+// 				album.reload()
+// 			}
+//
+// 		})
+//
+// 	};
+//
+// 	basicModal.show({
+// 		body: msg, //getMessage(albumIDs, titles, 'move'),
+// 		buttons: {
+// 			action: {
+// 				title: lychee.locale['MOVE_ALBUMS'],
+// 				fn: action,
+// 				class: 'red'
+// 			},
+// 			cancel: {
+// 				title: lychee.locale['NOT_MOVE_ALBUMS'],
+// 				fn: basicModal.close
+// 			}
+// 		}
+// 	})
+//
+// };
 
-		// Get title of second album
-		if (albums.json) sTitle = albums.getByID(albumIDs[1]).title;
-
-		// Fallback for second album without a title
-		if (sTitle==='') sTitle = lychee.locale['UNTITLED'];
-
-		msg = lychee.html`<p>${ lychee.locale['ALBUM_MOVE_1'] } '$${ sTitle }' ${ lychee.locale['ALBUM_MOVE_2'] } '$${ title }'?</p>`
-
-	} else {
-
-		msg = lychee.html`<p>${ lychee.locale['ALBUMS_MOVE'] } '$${ title }'?</p>`
-
-	}
+album.setAlbum = function(albumIDs, albumID, confirm = true) {
 
 	const action = function() {
 
 		basicModal.close();
+		albumIDs.unshift(albumID);
 
 		let params = {
 			albumIDs: albumIDs.join()
 		};
 
+
 		api.post('Album::move', params, function(data) {
 
-			if (data!==true) lychee.error(null, params, data);
+			if (data!==true)
+			{
+				lychee.error(null, params, data);
+			}
 			else
 			{
-				album.reload()
+				album.reload();
 			}
 
 		})
 
 	};
 
-	basicModal.show({
-		body: msg, //getMessage(albumIDs, titles, 'move'),
-		buttons: {
-			action: {
-				title: lychee.locale['MOVE_ALBUMS'],
-				fn: action,
-				class: 'red'
-			},
-			cancel: {
-				title: lychee.locale['NOT_MOVE_ALBUMS'],
-				fn: basicModal.close
+	if (confirm) {
+		basicModal.show({
+			body: album.buildMessage(albumIDs, albumID, 'ALBUM_MOVE_1', 'ALBUM_MOVE_2', 'ALBUMS_MOVE'),
+			buttons: {
+				action: {
+					title: lychee.locale['MOVE_ALBUMS'],
+					fn: action,
+					class: 'red'
+				},
+				cancel: {
+					title: lychee.locale['NOT_MOVE_ALBUMS'],
+					fn: basicModal.close
+				}
 			}
-		}
-	})
+		})
+	}
+	else
+	{
+		action();
+	}
 
 };
 
