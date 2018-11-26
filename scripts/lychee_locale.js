@@ -138,7 +138,7 @@ lychee.locale = {
 		'PHOTO_SET_DESCRIPTION'		: 'Set Description',
 		'PHOTO_NEW_LICENSE'				: 'Add a License',
 		'PHOTO_SET_LICENSE'				: 'Set License',
-		'PHOTO_LICENSE'						: 'Resue',
+		'PHOTO_LICENSE'					: 'Reuse',
 		'PHOTO_IMAGE'				: 'Image',
 		'PHOTO_SIZE'				: 'Size',
 		'PHOTO_FORMAT'				: 'Format',
