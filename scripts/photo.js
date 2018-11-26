@@ -503,8 +503,6 @@ photo.setDescription = function(photoID) {
 		};
 
 		api.post('Photo::setDescription', params, function(data) {
-			console.log(data);
-			console.log(params);
 			if (data!==true) lychee.error(null, params, data)
 
 		})
@@ -675,7 +673,19 @@ photo.setLicense = function(photoID) {
 	};
 
 	basicModal.show({
-		body: lychee.html`<p>${ lychee.locale['PHOTO_NEW_LICENSE'] } <input class='text' name='license' type='text' maxlength='800' placeholder='${ lychee.locale['PHOTO_LICENSE'] }' value='$${ oldLicense }'></p>`,
+		body: lychee.html`
+			<p>${ lychee.locale['PHOTO_NEW_LICENSE'] }
+			<select class="select" name="license">
+				<option value="CC0">CC0 - Public Domain</option>
+				<option value="CC-BY">CC Attribution 4.0</option>
+				<option value="CC-BY-ND">CC Attribution-NoDerivatives 4.0</option>
+				<option value="CC-BY-SA">CC Attribution-ShareAlike 4.0</option>
+				<option value="CC-BY-ND">CC Attribution-NonCommercial 4.0</option>
+				<option value="CC-BY-NC-ND">CC Attribution-NonCommercial-NoDerivatives 4.0</option>
+				<option value="CC-BY-SA">CC Attribution-NonCommercial-ShareAlike 4.0</option>
+			</select>
+			<br />
+			<a href="https://creativecommons.org/choose/" target="_blank">Need help choosing?</a></p>`,
 		buttons: {
 			action: {
 				title: lychee.locale['PHOTO_SET_LICENSE'],
