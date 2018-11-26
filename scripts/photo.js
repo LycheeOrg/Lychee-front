@@ -676,6 +676,7 @@ photo.setLicense = function(photoID) {
 		body: lychee.html`
 			<p>${ lychee.locale['PHOTO_NEW_LICENSE'] }
 			<select class="select" name="license">
+				<option value="">${ lychee.locale['PHOTO_LICENSE_NONE'] }</option>
 				<option value="CC0">CC0 - Public Domain</option>
 				<option value="CC-BY">CC Attribution 4.0</option>
 				<option value="CC-BY-ND">CC Attribution-NoDerivatives 4.0</option>
@@ -685,7 +686,7 @@ photo.setLicense = function(photoID) {
 				<option value="CC-BY-SA">CC Attribution-NonCommercial-ShareAlike 4.0</option>
 			</select>
 			<br />
-			<a href="https://creativecommons.org/choose/" target="_blank">Need help choosing?</a></p>`,
+			<a href="https://creativecommons.org/choose/" target="_blank">${ lychee.locale['PHOTO_LICENSE_HELP'] }</a></p>`,
 		buttons: {
 			action: {
 				title: lychee.locale['PHOTO_SET_LICENSE'],
