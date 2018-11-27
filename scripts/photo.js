@@ -241,7 +241,6 @@ photo.delete = function(photoIDs) {
 			}
 
 			album.deleteByID(id);
-			// delete album.json.photos[id];
 			view.album.content.delete(id)
 
 		});
@@ -395,7 +394,6 @@ photo.setAlbum = function(photoIDs, albumID) {
 		}
 
 		album.deleteByID(id);
-//		delete album.json.photos[id];
 		view.album.content.delete(id)
 
 	});
@@ -672,9 +670,9 @@ photo.setLicense = function(photoID) {
 	let oldLicense = photo.json.license;
 
 	const callback = function() {
-		$('select#license').val(photo.json.license);
+		$('select#license').val(photo.json.license === '' ? 'none' : photo.json.license);
 		return false;
-	}
+	};
 
 	const action = function(data) {
 
@@ -699,23 +697,24 @@ photo.setLicense = function(photoID) {
 
 	};
 
-	let msg = `
+	let msg = lychee.html`
 	<div>
-	  <p>
-		  ` + lychee.locale['PHOTO_NEW_LICENSE'] + `
-		  <select class="select" name="license" id="license">
-			<option value="">${ lychee.locale['PHOTO_LICENSE_NONE'] }</option>
-			<option value="CC0">CC0 - Public Domain</option>
-			<option value="CC-BY">CC Attribution 4.0</option>
-			<option value="CC-BY-ND">CC Attribution-NoDerivatives 4.0</option>
-			<option value="CC-BY-SA">CC Attribution-ShareAlike 4.0</option>
-			<option value="CC-BY-ND">CC Attribution-NonCommercial 4.0</option>
-			<option value="CC-BY-NC-ND">CC Attribution-NonCommercial-NoDerivatives 4.0</option>
-			<option value="CC-BY-SA">CC Attribution-NonCommercial-ShareAlike 4.0</option>
-		</select>
+		<p>${ lychee.locale['PHOTO_NEW_LICENSE'] }
+		<span class="select" style="width:270px">
+			<select name="license" id="license">
+				<option value="none">${ lychee.locale['PHOTO_LICENSE_NONE'] }</option>
+				<option value="CC0">CC0 - Public Domain</option>
+				<option value="CC-BY">CC Attribution 4.0</option>
+				<option value="CC-BY-ND">CC Attribution-NoDerivatives 4.0</option>
+				<option value="CC-BY-SA">CC Attribution-ShareAlike 4.0</option>
+				<option value="CC-BY-ND">CC Attribution-NonCommercial 4.0</option>
+				<option value="CC-BY-NC-ND">CC Attribution-NonCommercial-NoDerivatives 4.0</option>
+				<option value="CC-BY-SA">CC Attribution-NonCommercial-ShareAlike 4.0</option>
+			</select>
+		</span>
 		<br />
 		<a href="https://creativecommons.org/choose/" target="_blank">${ lychee.locale['PHOTO_LICENSE_HELP'] }</a>
-	  </p>
+		</p>
 	</div>`;
 
 	basicModal.show({
