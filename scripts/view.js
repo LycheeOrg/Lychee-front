@@ -372,7 +372,6 @@ view.photo = {
 		view.photo.star();
 		view.photo.public();
 		view.photo.photo();
-		view.photo.license();
 
 		photo.json.init = 1
 
@@ -438,7 +437,7 @@ view.photo = {
 	},
 
 	license: function() {
-		if (photo.json.init) sidebar.changeAttr('license', photo.json.license)
+		if (photo.json.init) sidebar.changeAttr('license', photo.json.license);
 	},
 
 	star: function() {
