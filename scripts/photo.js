@@ -680,7 +680,7 @@ photo.setLicense = function(photoID) {
 		let license = data.license;
 
 		if (visible.photo()) {
-			photo.json.license = license;
+			photo.json.license = (license === 'none' ? '' : license);
 			view.photo.license()
 		}
 

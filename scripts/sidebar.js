@@ -211,10 +211,10 @@ sidebar.createStructure.photo = function(data) {
 	};
 
 	structure.license = {
-		title : lychee.locale['PHOTO_LICENSE'],
+		title : lychee.locale['PHOTO_REUSE'],
 		type  : sidebar.types.DEFAULT,
 		rows  : [
-			{ title: lychee.locale['PHOTO_SET_LICENSE'], kind: 'license', value: photo.json.license, editable: editable }
+			{ title: lychee.locale['PHOTO_LICENSE'], kind: 'license', value: photo.json.license, editable: editable }
 		]
 	};
 
