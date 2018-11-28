@@ -437,7 +437,19 @@ view.photo = {
 	},
 
 	license: function() {
-		if (photo.json.init) sidebar.changeAttr('license', photo.json.license);
+		let license;
+
+		// Process key to display correct string
+		if(photo.json.license === 'none') {
+			license = lychee.locale['PHOTO_LICENSE_NONE'];
+		} else if (photo.json.license === 'reserved') {
+			license = lychee.locale['PHOTO_RESERVED'];
+		} else {
+			license = photo.json.license;
+		}
+
+		// Update the sidebar if the photo is visible
+		if (photo.json.init) sidebar.changeAttr('license', license);
 	},
 
 	star: function() {
@@ -731,6 +743,7 @@ view.settings = {
 			<span class="select" style="width:270px">
 				<select name="license" id="license">
 					<option value="none">${ lychee.locale['PHOTO_LICENSE_NONE'] }</option>
+					<option value="reserved">${ lychee.locale['PHOTO_RESERVED'] }</option>
 					<option value="CC0">CC0 - Public Domain</option>
 					<option value="CC-BY">CC Attribution 4.0</option>
 					<option value="CC-BY-ND">CC Attribution-NoDerivatives 4.0</option>

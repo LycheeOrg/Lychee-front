@@ -18,7 +18,7 @@ lychee.locale = {
 		'LOGS'				: 'Show Logs',
 		'SIGN_OUT'			: 'Sign Out',
 		'UPDATE_AVAILABLE'	: 'Update available!',
-		'DEFAULT_LICENSE'	: 'Default License:',
+		'DEFAULT_LICENSE'	: 'Default License for new uploads:',
 		'SET_LICENSE'		: 'Set License',
 
 		'SMART_ALBUMS'		: 'Smart albums',
@@ -146,6 +146,7 @@ lychee.locale = {
 		'PHOTO_LICENSE'				: 'License',
 		'PHOTO_LICENSE_HELP'		: 'Need help choosing?',
 		'PHOTO_LICENSE_NONE'		: 'None',
+		'PHOTO_RESERVED'			: 'All Rights Reserved',
 		'PHOTO_IMAGE'				: 'Image',
 		'PHOTO_SIZE'				: 'Size',
 		'PHOTO_FORMAT'				: 'Format',
