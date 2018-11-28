@@ -18,6 +18,8 @@ lychee.locale = {
 		'LOGS'				: 'Show Logs',
 		'SIGN_OUT'			: 'Sign Out',
 		'UPDATE_AVAILABLE'	: 'Update available!',
+		'DEFAULT_LICENSE'	: 'Default License:',
+		'SET_LICENSE'		: 'Set License',
 
 		'SMART_ALBUMS'		: 'Smart albums',
 		'SHARED_ALBUMS'		: 'Shared albums',
@@ -196,6 +198,7 @@ lychee.locale = {
 		'SETTINGS_SUCCESS_LANG'		: 'Language updated',
 		'SETTINGS_SUCCESS_LAYOUT'   : 'Layout updated',
 		'SETTINGS_SUCCESS_IMAGE_OVERLAY'   : 'EXIF Overlay setting updated',
+		'SETTINGS_SUCCESS_LICENSE'	: 'Default license updated',
 
 		'DB_INFO_TITLE'				: 'Enter your database connection details below:',
 		'DB_INFO_HOST'				: 'Database Host (optional)',

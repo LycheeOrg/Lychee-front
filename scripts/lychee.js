@@ -63,7 +63,6 @@ lychee.init = function() {
 
 	api.post('Session::init', {}, function(data) {
 
-
 		lychee.api_V2 = data.api_V2 || false;
 
 		if (data.status===0) {
@@ -109,6 +108,7 @@ lychee.init = function() {
 			lychee.imagick         = (data.config.imagick && data.config.imagick === '1') || false;
 			lychee.justified       = (data.config.justified_layout && data.config.justified_layout === '1') || false;
 			lychee.image_overlay   = (data.config.image_overlay && data.config.image_overlay === '1') || false;
+			lychee.default_license = data.config.default_license || 'none';
 
 			lychee.upload	= !lychee.api_V2;
 			lychee.admin	= !lychee.api_V2;

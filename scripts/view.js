@@ -570,6 +570,7 @@ view.settings = {
 				view.settings.content.setSorting();
 				view.settings.content.setDropboxKey();
 				view.settings.content.setLang();
+				view.settings.content.setDefaultLicense();
 				view.settings.content.setLayoutOverlay();
 			}
 		},
@@ -721,6 +722,35 @@ view.settings = {
 
 			$(".settings_view").append(msg);
 			settings.bind('#basicModal__action_set_lang','.setLang',settings.changeLang);
+		},
+
+		setDefaultLicense: function() {
+			let msg = `
+			<div class="setDefaultLicense">
+			<p>${ lychee.locale['DEFAULT_LICENSE'] }
+			<span class="select" style="width:270px">
+				<select name="license" id="license">
+					<option value="none">${ lychee.locale['PHOTO_LICENSE_NONE'] }</option>
+					<option value="CC0">CC0 - Public Domain</option>
+					<option value="CC-BY">CC Attribution 4.0</option>
+					<option value="CC-BY-ND">CC Attribution-NoDerivatives 4.0</option>
+					<option value="CC-BY-SA">CC Attribution-ShareAlike 4.0</option>
+					<option value="CC-BY-NC">CC Attribution-NonCommercial 4.0</option>
+					<option value="CC-BY-NC-ND">CC Attribution-NonCommercial-NoDerivatives 4.0</option>
+					<option value="CC-BY-NC-SA">CC Attribution-NonCommercial-ShareAlike 4.0</option>
+				</select>
+			</span>
+			<br />
+			<a href="https://creativecommons.org/choose/" target="_blank">${ lychee.locale['PHOTO_LICENSE_HELP'] }</a>
+			</p>
+			<div class="basicModal__buttons">
+				<a id="basicModal__action_set_license" class="basicModal__button">${ lychee.locale['SET_LICENSE'] }</a>
+			</div>
+			</div>
+			`
+			$(".settings_view").append(msg);
+			$('select#license').val(lychee.default_license === '' ? 'none' : lychee.default_license);
+			settings.bind('#basicModal__action_set_license', '.setDefaultLicense', settings.setDefaultLicense);
 		},
 
 		setLayoutOverlay: function () {

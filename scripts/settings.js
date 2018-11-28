@@ -321,8 +321,6 @@ settings.changeDropboxKey = function(params) {
 
 };
 
-
-
 settings.changeLang = function(params) {
 
 	api.post('Settings::setLang', params, function(data) {
@@ -334,6 +332,17 @@ settings.changeLang = function(params) {
 
 	})
 
+};
+
+settings.setDefaultLicense = function(params) {
+
+	api.post('Settings::setDefaultLicense', params, function(data) {
+		if (data===true) {
+			lychee.default_license = params.license;
+			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_LICENSE']);
+			lychee.image_overlay = (params.image_overlay === '1');
+		} else lychee.error(ull, params, data)
+	})
 };
 
 settings.changeLayout = function () {
