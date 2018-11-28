@@ -80,7 +80,7 @@ albums._createSmartAlbums = function(data) {
 
 	data.starred = {
 		id      : 'f',
-		title   : lychee.locale['STARED'],
+		title   : lychee.locale['STARRED'],
 		sysdate : data.starred.num + ' ' + lychee.locale['NUM_PHOTOS'],
 		star    : '1',
 		thumbs  : data.starred.thumbs,

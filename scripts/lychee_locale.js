@@ -76,7 +76,7 @@ lychee.locale = {
 		'TITLE_NEW_ALBUM'			: 'Enter a title for the new album:',
 		'UNTITLED'					: 'Untilted',
 		'UNSORTED'					: 'Unsorted',
-		'STARED'					: 'Stared',
+		'STARRED'					: 'Starred',
 		'RECENT'					: 'Recent',
 		'PUBLIC'					: 'Public',
 		'NUM_PHOTOS'				: 'Photos',
