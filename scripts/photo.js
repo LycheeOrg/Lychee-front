@@ -707,9 +707,9 @@ photo.setLicense = function(photoID) {
 				<option value="CC-BY">CC Attribution 4.0</option>
 				<option value="CC-BY-ND">CC Attribution-NoDerivatives 4.0</option>
 				<option value="CC-BY-SA">CC Attribution-ShareAlike 4.0</option>
-				<option value="CC-BY-ND">CC Attribution-NonCommercial 4.0</option>
+				<option value="CC-BY-NC">CC Attribution-NonCommercial 4.0</option>
 				<option value="CC-BY-NC-ND">CC Attribution-NonCommercial-NoDerivatives 4.0</option>
-				<option value="CC-BY-SA">CC Attribution-NonCommercial-ShareAlike 4.0</option>
+				<option value="CC-BY-NC-SA">CC Attribution-NonCommercial-ShareAlike 4.0</option>
 			</select>
 		</span>
 		<br />
