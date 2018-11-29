@@ -18,6 +18,8 @@ lychee.locale = {
 		'LOGS'				: 'Show Logs',
 		'SIGN_OUT'			: 'Sign Out',
 		'UPDATE_AVAILABLE'	: 'Update available!',
+		'DEFAULT_LICENSE'	: 'Default License for new uploads:',
+		'SET_LICENSE'		: 'Set License',
 
 		'SMART_ALBUMS'		: 'Smart albums',
 		'SHARED_ALBUMS'		: 'Shared albums',
@@ -74,7 +76,7 @@ lychee.locale = {
 		'TITLE_NEW_ALBUM'			: 'Enter a title for the new album:',
 		'UNTITLED'					: 'Untilted',
 		'UNSORTED'					: 'Unsorted',
-		'STARED'					: 'Stared',
+		'STARRED'					: 'Starred',
 		'RECENT'					: 'Recent',
 		'PUBLIC'					: 'Public',
 		'NUM_PHOTOS'				: 'Photos',
@@ -144,6 +146,7 @@ lychee.locale = {
 		'PHOTO_LICENSE'				: 'License',
 		'PHOTO_LICENSE_HELP'		: 'Need help choosing?',
 		'PHOTO_LICENSE_NONE'		: 'None',
+		'PHOTO_RESERVED'			: 'All Rights Reserved',
 		'PHOTO_IMAGE'				: 'Image',
 		'PHOTO_SIZE'				: 'Size',
 		'PHOTO_FORMAT'				: 'Format',
@@ -196,6 +199,7 @@ lychee.locale = {
 		'SETTINGS_SUCCESS_LANG'		: 'Language updated',
 		'SETTINGS_SUCCESS_LAYOUT'   : 'Layout updated',
 		'SETTINGS_SUCCESS_IMAGE_OVERLAY'   : 'EXIF Overlay setting updated',
+		'SETTINGS_SUCCESS_LICENSE'	: 'Default license updated',
 
 		'DB_INFO_TITLE'				: 'Enter your database connection details below:',
 		'DB_INFO_HOST'				: 'Database Host (optional)',

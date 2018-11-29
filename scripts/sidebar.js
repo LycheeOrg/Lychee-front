@@ -214,7 +214,7 @@ sidebar.createStructure.photo = function(data) {
 		title : lychee.locale['PHOTO_REUSE'],
 		type  : sidebar.types.DEFAULT,
 		rows  : [
-			{ title: lychee.locale['PHOTO_LICENSE'], kind: 'license', value: photo.json.license, editable: editable }
+			{ title: lychee.locale['PHOTO_LICENSE'], kind: 'license', value: (photo.json.license === 'none' ? '' : photo.json.license), editable: editable }
 		]
 	};
 

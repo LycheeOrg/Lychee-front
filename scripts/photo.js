@@ -667,8 +667,6 @@ photo.share = function(photoID, service) {
 
 photo.setLicense = function(photoID) {
 
-	let oldLicense = photo.json.license;
-
 	const callback = function() {
 		$('select#license').val(photo.json.license === '' ? 'none' : photo.json.license);
 		return false;
@@ -679,11 +677,6 @@ photo.setLicense = function(photoID) {
 		basicModal.close();
 		let license = data.license;
 
-		if (visible.photo()) {
-			photo.json.license = (license === 'none' ? '' : license);
-			view.photo.license()
-		}
-
 		let params = {
 			photoID,
 			license
@@ -693,23 +686,28 @@ photo.setLicense = function(photoID) {
 
 			if (data!==true) lychee.error(null, params, data)
 
+			// update the photo JSON and reload the license in the sidebar
+			photo.json.license = params.license;
+			view.photo.license();
+
 		})
 
 	};
 
 	let msg = lychee.html`
 	<div>
-		<p>${ lychee.locale['PHOTO_NEW_LICENSE'] }
+		<p>${ lychee.locale['PHOTO_LICENSE'] }
 		<span class="select" style="width:270px">
 			<select name="license" id="license">
 				<option value="none">${ lychee.locale['PHOTO_LICENSE_NONE'] }</option>
+				<option value="reserved">${ lychee.locale['PHOTO_RESERVED'] }</option>
 				<option value="CC0">CC0 - Public Domain</option>
 				<option value="CC-BY">CC Attribution 4.0</option>
 				<option value="CC-BY-ND">CC Attribution-NoDerivatives 4.0</option>
 				<option value="CC-BY-SA">CC Attribution-ShareAlike 4.0</option>
-				<option value="CC-BY-ND">CC Attribution-NonCommercial 4.0</option>
+				<option value="CC-BY-NC">CC Attribution-NonCommercial 4.0</option>
 				<option value="CC-BY-NC-ND">CC Attribution-NonCommercial-NoDerivatives 4.0</option>
-				<option value="CC-BY-SA">CC Attribution-NonCommercial-ShareAlike 4.0</option>
+				<option value="CC-BY-NC-SA">CC Attribution-NonCommercial-ShareAlike 4.0</option>
 			</select>
 		</span>
 		<br />
