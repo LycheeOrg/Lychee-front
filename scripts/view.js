@@ -441,7 +441,7 @@ view.photo = {
 
 		// Process key to display correct string
 		if(photo.json.license === 'none') {
-			license = lychee.locale['PHOTO_LICENSE_NONE'];
+			license = ''; // no license is displayed as '-' (uniformity of the display)
 		} else if (photo.json.license === 'reserved') {
 			license = lychee.locale['PHOTO_RESERVED'];
 		} else {
