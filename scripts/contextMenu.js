@@ -304,37 +304,34 @@ contextMenu.move = function(IDs, e, callback, kind = 'UNSORTED', display_root = 
 
 	api.post('Albums::get', {}, function(data) {
 
-		if (data.albums.length > 0) {
+		if (data.albums && data.albums.length > 0) {
 
-			if (data.albums && data.albums.length > 1) {
+			// items = items.concat(contextMenu.buildList(data.albums, [ album.getID() ], (a) => callback(IDs, a.id))); //photo.setAlbum
 
-				// items = items.concat(contextMenu.buildList(data.albums, [ album.getID() ], (a) => callback(IDs, a.id))); //photo.setAlbum
-
-				// Disable all childs
-				// It's not possible to move us into them
-				let i, s;
-				let exclude = [];
-				for(i = 0; i < IDs.length; i++) {
-					let sub = contextMenu.getSubIDs(data.albums, IDs[i]);
-					for (s = 0 ; s < sub.length ; s++)
-						exclude.push(sub[s])
-				}
-				if (visible.album())
-				{
-					exclude.push(album.json.id.toString());
-				}
-				items = items.concat(contextMenu.buildList(data.albums, exclude.concat(IDs), (a) => callback(IDs, a.id)));
+			// Disable all childs
+			// It's not possible to move us into them
+			let i, s;
+			let exclude = [];
+			for(i = 0; i < IDs.length; i++) {
+				let sub = contextMenu.getSubIDs(data.albums, IDs[i]);
+				for (s = 0 ; s < sub.length ; s++)
+					exclude.push(sub[s])
 			}
-
-			// Show Unsorted when unsorted is not the current album
-			if (display_root && album.getID()!=='0' && !visible.albums()) {
-
-				items.unshift({ });
-				items.unshift({ title: lychee.locale[kind], fn: () =>  callback(IDs, 0)})
-
+			if (visible.album())
+			{
+				exclude.push(album.json.id.toString());
 			}
+			items = items.concat(contextMenu.buildList(data.albums, exclude.concat(IDs), (a) => callback(IDs, a.id)));
+		}
+
+		// Show Unsorted when unsorted is not the current album
+		if (display_root && album.getID()!=='0' && !visible.albums()) {
+
+			items.unshift({ });
+			items.unshift({ title: lychee.locale[kind], fn: () =>  callback(IDs, 0)})
 
 		}
+
 		items.unshift({});
 		items.unshift({ title: lychee.locale['NEW_ALBUM'], fn: () => album.add(IDs, callback) });
 
