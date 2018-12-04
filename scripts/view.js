@@ -292,6 +292,12 @@ view.album = {
 
 	},
 
+	license: function() {
+
+		sidebar.changeAttr('license', album.json.license)
+
+	},
+
 	num: function() {
 
 		sidebar.changeAttr('images', album.json.num)

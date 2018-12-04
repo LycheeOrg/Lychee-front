@@ -65,7 +65,8 @@ sidebar.bind = function() {
 		.dom('#edit_license')
 		.off(eventName)
 		.on(eventName, function() {
-			photo.setLicense(photo.getID());
+			if (visible.photo())      photo.setLicense(photo.getID());
+			else if (visible.album()) album.setLicense(album.getID())
 		})
 
 	return true
@@ -242,6 +243,7 @@ sidebar.createStructure.album = function(data) {
 	let hidden       = '';
 	let downloadable = '';
 	let password     = '';
+	let license 	 = data.license
 
 	// Enable editable when user logged in
 	if (lychee.publicMode===false && lychee.upload) editable = true;
@@ -323,11 +325,20 @@ sidebar.createStructure.album = function(data) {
 		]
 	};
 
+	structure.license = {
+		title : lychee.locale['ALBUM_REUSE'],
+		type  : sidebar.types.DEFAULT,
+		rows  : [
+			{ title: lychee.locale['ALBUM_LICENSE'], kind: 'license', value: (album.json.license === 'none' ? '' : album.json.license), editable: editable }
+		]
+	}
+
 	// Construct all parts of the structure
 	structure = [
 		structure.basics,
 		structure.album,
-		structure.share
+		structure.share,
+		structure.license
 	];
 
 	return structure
