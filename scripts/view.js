@@ -294,7 +294,18 @@ view.album = {
 
 	license: function() {
 
-		sidebar.changeAttr('license', album.json.license)
+		switch (album.json.license) {
+			case 'none' 	:   license = lychee.locale['ALBUM_LICENSE_NONE'];
+								break;
+			case 'reserved'	:	license = lychee.locale['ALBUM_RESERVED'];
+								break;
+			case ''			:	license = lychee.default_license;
+								break;
+			default			: 	license = album.json.license;
+								break;
+		}
+
+		sidebar.changeAttr('license', license)
 
 	},
 
@@ -447,7 +458,7 @@ view.photo = {
 
 		// Process key to display correct string
 		if(photo.json.license === 'none') {
-			license = ''; // no license is displayed as '-' (uniformity of the display)
+			license = lychee.locale['PHOTO_LICENSE_NONE']; // no license is displayed as '-' (uniformity of the display)
 		} else if (photo.json.license === 'reserved') {
 			license = lychee.locale['PHOTO_RESERVED'];
 		} else {

@@ -357,7 +357,7 @@ album.setLicense = function(albumID) {
 	let oldLicense = album.json.license;
 
 	const callback = function() {
-		$('select#license').val(album.json.license === '' ? 'none' : album.json.license);
+		$('select#license').val(album.json.license === '' ? lychee.locale['ALBUM_LICENSE_NONE'] : album.json.license);
 		return false;
 	};
 
@@ -367,10 +367,9 @@ album.setLicense = function(albumID) {
 
 		basicModal.close();
 
-		if (visible.album()) {
-			album.json.license = license;
-			view.album.license()
-		}
+		// if (visible.album()) {
+		//
+		// }
 
 		let params = {
 			albumID,
@@ -379,8 +378,12 @@ album.setLicense = function(albumID) {
 
 		api.post('Album::setLicense', params, function(data) {
 
-			if (data!==true) lychee.error(null, params, data)
-
+			if(data!==true) {
+				lychee.error(null, params, data);
+			} else {
+				album.json.license = params.license;
+				view.album.license()
+			}
 		})
 
 	};
