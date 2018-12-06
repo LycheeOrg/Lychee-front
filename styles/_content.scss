@@ -88,20 +88,14 @@
 				content: '';
 				position: absolute;
 				display: block;
-				height: 200px;
-				width: 200px;
+				height: 100%;
+				width: 100%;
 				background: url('../play-icon.png') 46% 50%;
 				transition: all 0.3s;
 				will-change: opacity, height;
 			}
 			&:hover::before {
-				content: '';
-				position: absolute;
-				display: block;
-				height: 180px;
 				opacity: 0.75;
-				width: 200px;
-				background: url('../play-icon.png') 46% 50%;
 			}
 		}
 	}
