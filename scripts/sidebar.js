@@ -65,7 +65,8 @@ sidebar.bind = function() {
 		.dom('#edit_license')
 		.off(eventName)
 		.on(eventName, function() {
-			photo.setLicense(photo.getID());
+			if (visible.photo())      photo.setLicense(photo.getID());
+			else if (visible.album()) album.setLicense(album.getID())
 		})
 
 	return true
@@ -127,6 +128,19 @@ sidebar.createStructure.photo = function(data) {
 
 	// Enable editable when user logged in
 	if (lychee.publicMode===false && lychee.upload) editable = true;
+
+	// Set the license string for a photo
+	switch (data.license) {
+		// if the photo doesn't have a license, apply the album's
+		case 'none' 	:   license = (album.json.license === 'none') ? lychee.locale['ALBUM_LICENSE_NONE'] : album.json.license;
+							break;
+		// Localize All Rights Reserved
+		case 'reserved'	:	license = lychee.locale['PHOTO_RESERVED'];
+							break;
+		// Display anything else that's set
+		default			: 	license = data.license;
+							break;
+	}
 
 	// Set value for public
 	switch (data.public) {
@@ -214,7 +228,7 @@ sidebar.createStructure.photo = function(data) {
 		title : lychee.locale['PHOTO_REUSE'],
 		type  : sidebar.types.DEFAULT,
 		rows  : [
-			{ title: lychee.locale['PHOTO_LICENSE'], kind: 'license', value: (photo.json.license === 'none' ? '' : photo.json.license), editable: editable }
+			{ title: lychee.locale['PHOTO_LICENSE'], kind: 'license', value: license, editable: editable }
 		]
 	};
 
@@ -242,6 +256,7 @@ sidebar.createStructure.album = function(data) {
 	let hidden       = '';
 	let downloadable = '';
 	let password     = '';
+	let license 	 = '';
 
 	// Enable editable when user logged in
 	if (lychee.publicMode===false && lychee.upload) editable = true;
@@ -294,6 +309,16 @@ sidebar.createStructure.album = function(data) {
 
 	}
 
+	// Set license string
+	switch (data.license) {
+		case 'none' 	:   license = ''; // consistency
+							break;
+		case 'reserved'	:	license = lychee.locale['ALBUM_RESERVED'];
+							break;
+		default			: 	license = data.license;
+							break;
+	}
+
 	structure.basics = {
 		title : lychee.locale['ALBUM_BASICS'],
 		type  : sidebar.types.DEFAULT,
@@ -323,11 +348,20 @@ sidebar.createStructure.album = function(data) {
 		]
 	};
 
+	structure.license = {
+		title : lychee.locale['ALBUM_REUSE'],
+		type  : sidebar.types.DEFAULT,
+		rows  : [
+			{ title: lychee.locale['ALBUM_LICENSE'], kind: 'license', value: license, editable: editable }
+		]
+	}
+
 	// Construct all parts of the structure
 	structure = [
 		structure.basics,
 		structure.album,
-		structure.share
+		structure.share,
+		structure.license
 	];
 
 	return structure

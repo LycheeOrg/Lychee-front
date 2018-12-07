@@ -130,6 +130,12 @@ lychee.locale = {
 		'MOVE_ALBUMS'               : "Move Albums",
 		'NOT_MOVE_ALBUMS'           : "Don't Move",
 		'ROOT'                      : "Root",
+		'ALBUM_REUSE'				: "Reuse",
+		'ALBUM_LICENSE'				: 'License',
+		'ALBUM_SET_LICENSE'			: 'Set License',
+		'ALBUM_LICENSE_HELP'		: 'Need help choosing?',
+		'ALBUM_LICENSE_NONE'		: 'None',
+		'ALBUM_RESERVED'			: 'All Rights Reserved',
 
 		'PHOTO_ABOUT'				: 'About',
 		'PHOTO_BASICS'				: 'Basics',

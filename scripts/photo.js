@@ -668,7 +668,7 @@ photo.share = function(photoID, service) {
 photo.setLicense = function(photoID) {
 
 	const callback = function() {
-		$('select#license').val(photo.json.license === '' ? 'none' : photo.json.license);
+		$('select#license').val(photo.json.license === '' ? 'none' : photo.json.license); // this is not the place where you do logic (removed the album mention).
 		return false;
 	};
 
@@ -684,11 +684,13 @@ photo.setLicense = function(photoID) {
 
 		api.post('Photo::setLicense', params, function(data) {
 
-			if (data!==true) lychee.error(null, params, data)
-
-			// update the photo JSON and reload the license in the sidebar
-			photo.json.license = params.license;
-			view.photo.license();
+			if (data!==true) {
+				lychee.error(null, params, data)
+			} else {
+				// update the photo JSON and reload the license in the sidebar
+				photo.json.license = params.license;
+				view.photo.license();
+			}
 
 		})
 

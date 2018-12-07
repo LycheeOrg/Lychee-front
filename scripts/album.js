@@ -352,6 +352,76 @@ album.setDescription = function(albumID) {
 
 };
 
+album.setLicense = function(albumID) {
+
+	const callback = function() {
+		$('select#license').val(album.json.license === '' ? 'none' : album.json.license);
+		return false;
+	};
+
+	const action = function(data) {
+
+		let license = data.license;
+
+		basicModal.close();
+
+		let params = {
+			albumID,
+			license
+		};
+
+		api.post('Album::setLicense', params, function(data) {
+
+			if(data!==true) {
+				lychee.error(null, params, data);
+			} else {
+				if (visible.album()) {
+					album.json.license = params.license.license;
+					view.album.license()
+				}
+			}
+		})
+
+	};
+
+	let msg = lychee.html`
+	<div>
+		<p>${ lychee.locale['ALBUM_LICENSE'] }
+		<span class="select" style="width:270px">
+			<select name="license" id="license">
+				<option value="none">${ lychee.locale['ALBUM_LICENSE_NONE'] }</option>
+				<option value="reserved">${ lychee.locale['ALBUM_RESERVED'] }</option>
+				<option value="CC0">CC0 - Public Domain</option>
+				<option value="CC-BY">CC Attribution 4.0</option>
+				<option value="CC-BY-ND">CC Attribution-NoDerivatives 4.0</option>
+				<option value="CC-BY-SA">CC Attribution-ShareAlike 4.0</option>
+				<option value="CC-BY-NC">CC Attribution-NonCommercial 4.0</option>
+				<option value="CC-BY-NC-ND">CC Attribution-NonCommercial-NoDerivatives 4.0</option>
+				<option value="CC-BY-NC-SA">CC Attribution-NonCommercial-ShareAlike 4.0</option>
+			</select>
+		</span>
+		<br />
+		<a href="https://creativecommons.org/choose/" target="_blank">${ lychee.locale['ALBUM_LICENSE_HELP'] }</a>
+		</p>
+	</div>`;
+
+	basicModal.show({
+		body: msg,
+		callback: callback,
+		buttons: {
+			action: {
+				title: lychee.locale['ALBUM_SET_LICENSE'],
+				fn: action
+			},
+			cancel: {
+				title: lychee.locale['CANCEL'],
+				fn: basicModal.close
+			}
+		}
+	})
+
+};
+
 album.setPublic = function(albumID, modal, e) {
 
 	let password = '';
