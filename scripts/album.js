@@ -354,10 +354,8 @@ album.setDescription = function(albumID) {
 
 album.setLicense = function(albumID) {
 
-	let oldLicense = album.json.license;
-
 	const callback = function() {
-		$('select#license').val(album.json.license === '' ? lychee.locale['ALBUM_LICENSE_NONE'] : album.json.license);
+		$('select#license').val(album.json.license === '' ? 'none' : album.json.license);
 		return false;
 	};
 
@@ -366,10 +364,6 @@ album.setLicense = function(albumID) {
 		let license = data.license;
 
 		basicModal.close();
-
-		// if (visible.album()) {
-		//
-		// }
 
 		let params = {
 			albumID,
@@ -381,8 +375,10 @@ album.setLicense = function(albumID) {
 			if(data!==true) {
 				lychee.error(null, params, data);
 			} else {
-				album.json.license = params.license;
-				view.album.license()
+				if (visible.album()) {
+					album.json.license = params.license.license;
+					view.album.license()
+				}
 			}
 		})
 

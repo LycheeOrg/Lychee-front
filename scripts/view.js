@@ -295,13 +295,12 @@ view.album = {
 	license: function() {
 
 		switch (album.json.license) {
-			case 'none' 	:   license = lychee.locale['ALBUM_LICENSE_NONE'];
+			case 'none' 	:   license = ''; // none is displayed as - thus is empty.
 								break;
 			case 'reserved'	:	license = lychee.locale['ALBUM_RESERVED'];
 								break;
-			case ''			:	license = lychee.default_license;
-								break;
 			default			: 	license = album.json.license;
+			console.log('default');
 								break;
 		}
 
@@ -457,12 +456,13 @@ view.photo = {
 		let license;
 
 		// Process key to display correct string
-		if(photo.json.license === 'none') {
-			license = lychee.locale['PHOTO_LICENSE_NONE']; // no license is displayed as '-' (uniformity of the display)
-		} else if (photo.json.license === 'reserved') {
-			license = lychee.locale['PHOTO_RESERVED'];
-		} else {
-			license = photo.json.license;
+		switch (album.json.license) {
+			case 'none' 	:   license = ''; // none is displayed as - thus is empty (uniformity of the display).
+				break;
+			case 'reserved'	:	license = lychee.locale['PHOTO_RESERVED'];
+				break;
+			default			: 	license = album.json.license;
+				break;
 		}
 
 		// Update the sidebar if the photo is visible

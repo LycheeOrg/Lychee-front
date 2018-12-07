@@ -311,11 +311,9 @@ sidebar.createStructure.album = function(data) {
 
 	// Set license string
 	switch (data.license) {
-		case 'none' 	:   license = lychee.locale['ALBUM_LICENSE_NONE'];
+		case 'none' 	:   license = ''; // consistency
 							break;
 		case 'reserved'	:	license = lychee.locale['ALBUM_RESERVED'];
-							break;
-		case ''			:	license = lychee.default_license;
 							break;
 		default			: 	license = data.license;
 							break;
