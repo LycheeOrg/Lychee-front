@@ -131,8 +131,8 @@ sidebar.createStructure.photo = function(data) {
 
 	// Set the license string for a photo
 	switch (data.license) {
-		// if the photo doesn't have a license, apply the album's
-		case 'none' 	:   license = (album.json.license === 'none') ? lychee.locale['ALBUM_LICENSE_NONE'] : album.json.license;
+		// if the photo doesn't have a license
+		case 'none' 	:   license = '';
 							break;
 		// Localize All Rights Reserved
 		case 'reserved'	:	license = lychee.locale['PHOTO_RESERVED'];

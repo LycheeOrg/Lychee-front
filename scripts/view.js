@@ -461,7 +461,7 @@ view.photo = {
 				break;
 			case 'reserved'	:	license = lychee.locale['PHOTO_RESERVED'];
 				break;
-			default			: 	license = album.json.license;
+			default			: 	license = photo.json.license;
 				break;
 		}
 

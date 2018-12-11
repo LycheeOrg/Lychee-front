@@ -376,7 +376,7 @@ album.setLicense = function(albumID) {
 				lychee.error(null, params, data);
 			} else {
 				if (visible.album()) {
-					album.json.license = params.license.license;
+					album.json.license = params.license;
 					view.album.license()
 				}
 			}

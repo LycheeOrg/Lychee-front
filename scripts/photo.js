@@ -668,7 +668,7 @@ photo.share = function(photoID, service) {
 photo.setLicense = function(photoID) {
 
 	const callback = function() {
-		$('select#license').val(photo.json.license === '' ? 'none' : photo.json.license); // this is not the place where you do logic (removed the album mention).
+		$('select#license').val(photo.json.license === '' ? 'none' : photo.json.license);
 		return false;
 	};
 
