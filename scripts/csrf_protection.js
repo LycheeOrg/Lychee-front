@@ -1,7 +1,7 @@
 csrf = {};
 
 csrf.addLaravelCSRF = function (event, jqxhr, settings) {
-	if (settings.url !== "https:" + lychee.updatePath) {
+	if (settings.url !== lychee.updatePath) {
 		jqxhr.setRequestHeader('X-XSRF-TOKEN', csrf.getCookie('XSRF-TOKEN'));
 	}
 };
