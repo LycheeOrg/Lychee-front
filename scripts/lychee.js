@@ -59,6 +59,29 @@ lychee.logs = function() {
 	}
 };
 
+lychee.aboutDialog = function() {
+
+	let msg = lychee.html`
+				<h1>Lychee ${ lychee.version }</h1>
+				<div class='version'><span><a target='_blank' href='${ lychee.updateURL }'>${ lychee.locale['UPDATE_AVAILABLE'] }</a></span></div>
+				<h1>${ lychee.locale['ABOUT_SUBTITLE'] }</h1>
+				<p><a target='_blank' href='${ lychee.website }'>Lychee</a> ${ lychee.locale['ABOUT_DESCRIPTION'] }</p>
+			  `;
+
+	basicModal.show({
+		body: msg,
+		buttons: {
+			cancel: {
+				title: lychee.locale['CLOSE'],
+				fn: basicModal.close
+			}
+		}
+	});
+
+	if (lychee.checkForUpdates==='1') lychee.getUpdate()
+
+};
+
 lychee.init = function() {
 
 	api.post('Session::init', {}, function(data) {
