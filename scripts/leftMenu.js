@@ -62,7 +62,7 @@ leftMenu.bind = function() {
 	leftMenu.dom('#button_signout')           .on(eventName, lychee.logout);
 	leftMenu.dom('#button_logs')              .on(eventName, leftMenu.Logs);
 	leftMenu.dom('#button_diagnostics')       .on(eventName, leftMenu.Diagnostics);
-	leftMenu.dom('#button_about')             .on(eventName, () => window.open(lychee.website));
+	leftMenu.dom('#button_about')             .on(eventName, lychee.aboutDialog);
 
 	if (lychee.api_V2)
 	{

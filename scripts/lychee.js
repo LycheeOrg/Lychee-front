@@ -59,6 +59,29 @@ lychee.logs = function() {
 	}
 };
 
+lychee.aboutDialog = function() {
+
+	let msg = lychee.html`
+				<h1>Lychee ${ lychee.version }</h1>
+				<div class='version'><span><a target='_blank' href='${ lychee.updateURL }'>${ lychee.locale['UPDATE_AVAILABLE'] }</a></span></div>
+				<h1>Self-hosted photo-management done right</h1>
+				<p><a target='_blank' href='${ lychee.website }'>Lychee</a> is a free photo-management tool, which runs on your server or web-space. Installing is a matter of seconds. Upload, manage and share photos like from a native application. Lychee comes with everything you need and all your photos are stored securely.</p>
+			  `;
+
+	basicModal.show({
+		body: msg,
+		buttons: {
+			cancel: {
+				title: lychee.locale['CLOSE'],
+				fn: basicModal.close
+			}
+		}
+	});
+
+	if (lychee.checkForUpdates==='1') lychee.getUpdate()
+
+};
+
 lychee.init = function() {
 
 	api.post('Session::init', {}, function(data) {
