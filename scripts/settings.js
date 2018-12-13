@@ -340,7 +340,6 @@ settings.setDefaultLicense = function(params) {
 		if (data===true) {
 			lychee.default_license = params.license;
 			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_LICENSE']);
-			lychee.image_overlay = (params.image_overlay === '1');
 		} else lychee.error(ull, params, data)
 	})
 };
@@ -377,7 +376,8 @@ settings.changeImageOverlay = function () {
 	api.post('Settings::setImageOverlay', params, function (data) {
 		if (data===true) {
 			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_IMAGE_OVERLAY']);
-			lychee.image_overlay = (params.image_overlay === '1');
+			lychee.image_overlay_default = (params.image_overlay === '1');
+			lychee.image_overlay = lychee.image_overlay_default;
 		} else lychee.error(null, params, data)
 
 	})

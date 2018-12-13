@@ -4,39 +4,40 @@
 
 lychee = {
 
-	title           : document.title,
-	version         : '3.2.7',
-	versionCode     : '030207',
+	title					: document.title,
+	version					: '3.2.7',
+	versionCode				: '030207',
 
-	updatePath      : 'https://LycheeOrg.github.io/update.json',
-	updateURL       : 'https://github.com/LycheeOrg/Lychee/releases',
-	website         : 'https://LycheeOrg.github.io',
+	updatePath				: 'https://LycheeOrg.github.io/update.json',
+	updateURL				: 'https://github.com/LycheeOrg/Lychee/releases',
+	website					: 'https://LycheeOrg.github.io',
 
-	publicMode      : false,
-	viewMode        : false,
-	api_V2			: false,    // enable api_V2
-	sub_albums      : false,    // enable sub_albums features
-	admin			: false,    // enable admin mode (multi-user)
-	upload			: false,    // enable possibility to upload (multi-user)
-	lock			: false,    // locked user (multi-user)
-	justified       : true,     // use Flickr Justified Layout Like
-	image_overlay   : false,    // display Overlay like in Lightroom
+	publicMode				: false,
+	viewMode				: false,
+	api_V2					: false,	// enable api_V2
+	sub_albums				: false,	// enable sub_albums features
+	admin					: false,	// enable admin mode (multi-user)
+	upload					: false,	// enable possibility to upload (multi-user)
+	lock					: false,	// locked user (multi-user)
+	justified				: true,		// use Flickr Justified Layout Like
+	image_overlay			: false,	// display Overlay like in Lightroom
+	image_overlay_default	: false,	// display Overlay like in Lightroom by default
 
-	checkForUpdates : '1',
-	sortingPhotos   : '',
-	sortingAlbums   : '',
-	location        : '',
+	checkForUpdates			: '1',
+	sortingPhotos			: '',
+	sortingAlbums			: '',
+	location				: '',
 
-	lang			: '',
-	lang_available	: {},
+	lang					: '',
+	lang_available			: {},
 
-	dropbox         : false,
-	dropboxKey      : '',
+	dropbox					: false,
+	dropboxKey				: '',
 
-	content         : $('.content'),
-	imageview       : $('#imageview'),
+	content					: $('.content'),
+	imageview				: $('#imageview'),
 
-	locale  : {}
+	locale					: {}
 };
 
 lychee.diagnostics = function() {
@@ -121,17 +122,18 @@ lychee.init = function() {
 
 			// Logged in
 
-			lychee.sortingPhotos   = data.config.sortingPhotos   || '';
-			lychee.sortingAlbums   = data.config.sortingAlbums   || '';
-			lychee.dropboxKey      = data.config.dropboxKey      || '';
-			lychee.location        = data.config.location        || '';
-			lychee.checkForUpdates = data.config.checkForUpdates || '1';
-			lychee.lang			   = data.config.lang            || '';
-			lychee.lang_available  = data.config.lang_available  || {};
-			lychee.imagick         = (data.config.imagick && data.config.imagick === '1') || false;
-			lychee.justified       = (data.config.justified_layout && data.config.justified_layout === '1') || false;
-			lychee.image_overlay   = (data.config.image_overlay && data.config.image_overlay === '1') || false;
-			lychee.default_license = data.config.default_license || 'none';
+			lychee.sortingPhotos		= data.config.sortingPhotos		|| '';
+			lychee.sortingAlbums		= data.config.sortingAlbums		|| '';
+			lychee.dropboxKey			= data.config.dropboxKey		|| '';
+			lychee.location				= data.config.location			|| '';
+			lychee.checkForUpdates		= data.config.checkForUpdates	|| '1';
+			lychee.lang					= data.config.lang				|| '';
+			lychee.lang_available		= data.config.lang_available	|| {};
+			lychee.imagick				= (data.config.imagick && data.config.imagick === '1')						|| false;
+			lychee.justified			= (data.config.justified_layout && data.config.justified_layout === '1')	|| false;
+			lychee.image_overlay_default= (data.config.image_overlay && data.config.image_overlay === '1')			|| false;
+			lychee.image_overlay		= lychee.image_overlay_default;
+			lychee.default_license		= data.config.default_license	|| 'none';
 
 			lychee.upload	= !lychee.api_V2;
 			lychee.admin	= !lychee.api_V2;
@@ -155,9 +157,9 @@ lychee.init = function() {
 
 			// Logged out
 
-			lychee.checkForUpdates = data.config.checkForUpdates || '1';
-			lychee.justified       = (data.config.justified_layout && data.config.justified_layout === '1') || false;
-			lychee.image_overlay   = (data.config.image_overlay && data.config.image_overlay === '1') || false;
+			lychee.checkForUpdates	= data.config.checkForUpdates || '1';
+			lychee.justified		= (data.config.justified_layout && data.config.justified_layout === '1') || false;
+			lychee.image_overlay	= (data.config.image_overlay && data.config.image_overlay === '1') || false;
 
 			lychee.setMode('public');
 
@@ -174,8 +176,8 @@ lychee.init = function() {
 
 lychee.login = function(data) {
 
-	let user     = data.username;
-	let password = data.password;
+	let user	= data.username;
+	let password= data.password;
 
 	let params = {
 		user,
@@ -202,12 +204,12 @@ lychee.login = function(data) {
 lychee.loginDialog = function() {
 
 	let msg = lychee.html`
-			  <p class='signIn'>
-				  <input class='text' name='username' autocomplete='on' type='text' placeholder='$${ lychee.locale['USERNAME'] }' autocapitalize='off'>
-				  <input class='text' name='password' autocomplete='current-password' type='password' placeholder='$${ lychee.locale['PASSWORD'] }'>
-			  </p>
-			  <p class='version'>Lychee ${ lychee.version }<span> &#8211; <a target='_blank' href='${ lychee.updateURL }'>${ lychee.locale['UPDATE_AVAILABLE'] }</a><span></p>
-			  `;
+				<p class='signIn'>
+					<input class='text' name='username' autocomplete='on' type='text' placeholder='$${ lychee.locale['USERNAME'] }' autocapitalize='off'>
+					<input class='text' name='password' autocomplete='current-password' type='password' placeholder='$${ lychee.locale['PASSWORD'] }'>
+				</p>
+				<p class='version'>Lychee ${ lychee.version }<span> &#8211; <a target='_blank' href='${ lychee.updateURL }'>${ lychee.locale['UPDATE_AVAILABLE'] }</a><span></p>
+			`;
 
 	basicModal.show({
 		body: msg,
@@ -246,9 +248,9 @@ lychee.goto = function(url = '') {
 
 lychee.load = function() {
 
-	let albumID = '';
-	let photoID = '';
-	let hash    = document.location.hash.replace('#', '').split('/');
+	let albumID	= '';
+	let photoID	= '';
+	let hash	= document.location.hash.replace('#', '').split('/');
 
 	$('.no_content').remove();
 	contextMenu.close();
@@ -311,8 +313,8 @@ lychee.getUpdate = function() {
 	};
 
 	$.ajax({
-		url     : lychee.updatePath,
-		success : success
+		url		: lychee.updatePath,
+		success	: success
 	})
 
 };
@@ -344,10 +346,10 @@ lychee.setMode = function(mode) {
 			.attr('xlink:href', '#share');
 
 		$(document)
-			.off('click',       '.header__title--editable')
-			.off('touchend',    '.header__title--editable')
-			.off('contextmenu', '.photo')
-			.off('contextmenu', '.album')
+			.off('click',		'.header__title--editable')
+			.off('touchend',	'.header__title--editable')
+			.off('contextmenu',	'.photo')
+			.off('contextmenu',	'.album')
 			.off('drop');
 
 		Mousetrap
@@ -525,9 +527,9 @@ lychee.html = function(literalSections, ...substs) {
 lychee.error = function(errorThrown, params = '', data = '') {
 
 	console.error({
-		description : errorThrown,
-		params      : params,
-		response    : data
+		description	: errorThrown,
+		params		: params,
+		response	: data
 	});
 
 	loadingBar.show('error', errorThrown)

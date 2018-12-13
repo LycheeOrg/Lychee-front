@@ -802,7 +802,7 @@ view.settings = {
 
 			$(".settings_view").append(msg);
 			if(lychee.justified) $('#JustifiedLayout').click();
-			if(lychee.image_overlay) $('#ImageOverlay').click();
+			if(lychee.image_overlay_default) $('#ImageOverlay').click();
 
 			settings.bind('#JustifiedLayout','.setLayoutOverlay',settings.changeLayout);
 			settings.bind('#ImageOverlay','.setLayoutOverlay',settings.changeImageOverlay);
