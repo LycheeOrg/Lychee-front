@@ -601,6 +601,8 @@ view.settings = {
 				view.settings.content.setLang();
 				view.settings.content.setDefaultLicense();
 				view.settings.content.setLayoutOverlay();
+				view.settings.content.setCSS();
+				view.settings.content.moreButton();
 			}
 		},
 
@@ -806,7 +808,106 @@ view.settings = {
 
 			settings.bind('#JustifiedLayout','.setLayoutOverlay',settings.changeLayout);
 			settings.bind('#ImageOverlay','.setLayoutOverlay',settings.changeImageOverlay);
-		}
+		},
+		
+		setCSS: function () {
+			let msg = `
+			<div class="setCSS">
+			<p>${ lychee.locale['CSS_TEXT'] }</p>
+			<textarea id="css"></textarea>
+			<div class="basicModal__buttons">
+				<a id="basicModal__action_set_css" class="basicModal__button">${ lychee.locale['CSS_TITLE'] }</a>
+			</div>
+			</div>`;
+
+			$(".settings_view").append(msg);
+
+			api.get('dist/user.css', function (data) {
+				$("#css").html(data);
+			});
+
+			settings.bind('#basicModal__action_set_css','.setCSS',settings.changeCSS);
+		},
+
+		moreButton: function () {
+			let msg = lychee.html`
+			<div class="setCSS">
+				<a id="basicModal__action_more" class="basicModal__button basicModal__button_MORE">${ lychee.locale['MORE'] }</a>
+			</div>
+			`;
+
+			$(".settings_view").append(msg);
+
+			$("#basicModal__action_more").on('click',view.full_settings.init);
+
+		},
+		
+	},
+
+};
+
+
+view.full_settings = {
+
+	init: function() {
+
+		multiselect.clearSelection();
+
+		view.full_settings.title();
+		view.full_settings.content.init()
+
+	},
+
+	title: function() {
+
+		lychee.setTitle('Full Settings', false)
+	},
+
+	clearContent: function() {
+		lychee.content.unbind('mousedown');
+		lychee.content.html('<div class="settings_view"></div>');
+	},
+
+	content: {
+
+		init: function() {
+			view.full_settings.clearContent();
+
+			api.post('Settings::getAll', {}, function (data) {
+
+				let msg = lychee.html`
+			<div id="fullSettings">
+				<div class="setting_line">
+				<p class="warning">
+				${ lychee.locale['SETTINGS_WARNING'] }
+				</p>
+				</div>
+				`;
+
+				$.each(data, function() {
+
+					msg += lychee.html`
+			<div class="setting_line">
+				<p>
+				<span class="text">$${ this.key }</span>
+				<input class="text" name="$${ this.key }" type="text" value="$${ this.value }" placeholder="" />
+				</p>
+			</div>
+		`;
+
+				});
+
+				msg += lychee.html`
+			<a id="FullSettingsSave_button"  class="basicModal__button basicModal__button_SAVE">${ lychee.locale['SAVE_RISK'] }</a>
+		</div>
+			`;
+				$(".settings_view").append(msg);
+
+				settings.bind('#FullSettingsSave_button', '#fullSettings', settings.save);
+			});
+
+		},
+
 	},
 
 };

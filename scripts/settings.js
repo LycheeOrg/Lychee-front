@@ -345,6 +345,7 @@ settings.setDefaultLicense = function(params) {
 };
 
 settings.changeLayout = function () {
+
 	let params = {};
 	if ( $('#JustifiedLayout:checked').length === 1 )
 	{
@@ -381,4 +382,34 @@ settings.changeImageOverlay = function () {
 		} else lychee.error(null, params, data)
 
 	})
+};
+
+settings.changeCSS = function() {
+
+	let params = {};
+	params.css = $('#css').val();
+
+	api.post('Settings::setCSS', params, function(data) {
+
+		if (data===true) {
+			lychee.css = params.css;
+			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_CSS']);
+		} else lychee.error(null, params, data)
+
+	})
+
+};
+
+settings.save = function (params) {
+
+	api.post('Settings::saveAll', params, function(data) {
+
+		if (data===true) {
+			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_UPDATE']);
+			view.full_settings.init();
+			// lychee.init();
+		} else lychee.error(null, params, data);
+
+	})
+
 };

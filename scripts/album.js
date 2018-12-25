@@ -198,7 +198,7 @@ album.add = function(IDs = null, callback = null) {
 		api.post('Album::add', params, function(data) {
 
 			if (data!==false && isNumber(data)) {
-				if(IDs != null)
+				if(IDs != null && callback !=null)
 				{
 					callback(IDs, data, false); // we do not confirm
 				}

@@ -66,6 +66,41 @@ api.post = function(fn, params, callback) {
 
 };
 
+api.get = function(url, callback) {
+
+	loadingBar.show();
+
+	const success = (data) => {
+
+		setTimeout(loadingBar.hide, 100);
+
+		// Catch errors
+		if (typeof data==='string' && data.substring(0, 7)==='Error: ') {
+			api.onError(data.substring(7, data.length), params, data);
+			return false
+		}
+
+		callback(data)
+
+	};
+
+	const error = (jqXHR, textStatus, errorThrown) => {
+
+		api.onError('Server error or API not found.', {}, errorThrown)
+
+	};
+
+	$.ajax({
+		type: 'GET',
+		url: url,
+		data: {},
+		dataType: 'text',
+		success,
+		error
+	})
+
+};
+
 api.post_raw = function (fn, params, callback) {
 	loadingBar.show();
 
