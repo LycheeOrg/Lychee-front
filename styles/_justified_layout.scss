@@ -13,6 +13,7 @@
 	width: 100%;
 	height: 100%;
 	border: none;
+	object-fit: cover;
 }
 
 .justified-layout > .photo > .overlay
@@ -21,4 +22,3 @@
 	bottom: 0;
 	margin: 0 0 0 0;
 }
-
