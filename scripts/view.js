@@ -65,18 +65,33 @@ view.albums = {
 
 			if(lychee.api_V2)
 			{
+				let current_owner = '';
+				let i = 0;
 				// Shared
 				if (albums.json.shared_albums && albums.json.shared_albums.length !==0) {
 
-					$.each(albums.json.shared_albums, function() {
-						if(!this.parent_id || this.parent_id === 0) {
-							albums.parse(this);
-							sharedData += build.album(this, true)
+					for( i = 0; i < albums.json.shared_albums.length ; ++i)
+					{
+						let alb = albums.json.shared_albums[i];
+						if(!alb.parent_id || alb.parent_id === 0) {
+							albums.parse(alb);
+							if(current_owner !== alb.owner && lychee.publicMode===false)
+							{
+								sharedData += build.divider(alb.owner);
+								current_owner = alb.owner;
+							}
+							sharedData += build.album(alb, true);
 						}
-					});
-
-					// Add divider
-					if (lychee.publicMode===false) sharedData = build.divider(lychee.locale['SHARED_ALBUMS']) + sharedData
+					}
+					// $.each(albums.json.shared_albums, function() {
+					// 	if(!this.parent_id || this.parent_id === 0) {
+					// 		albums.parse(this);
+					// 		sharedData += build.album(this, true)
+					// 	}
+					// });
+					//
+					// // Add divider
+					// if (lychee.publicMode===false) sharedData = build.divider(lychee.locale['SHARED_ALBUMS']) + sharedData
 				}
 			}
 

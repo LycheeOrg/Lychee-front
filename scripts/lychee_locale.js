@@ -111,6 +111,7 @@ lychee.locale = {
 		'ALBUM_CREATED'				: 'Created',
 		'ALBUM_IMAGES'				: 'Images',
 		'ALBUM_SHARING'				: 'Share',
+		'ALBUM_OWNER'               : 'Owner',
 		'ALBUM_SHR_YES'				: 'YES',
 		'ALBUM_SHR_NO'				: 'No',
 		'ALBUM_PUBLIC'				: 'Public',

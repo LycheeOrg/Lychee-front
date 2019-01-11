@@ -348,13 +348,18 @@ sidebar.createStructure.album = function(data) {
 		]
 	};
 
+	if (data.owner != null)
+	{
+		structure.share.rows.push({title: lychee.locale['ALBUM_OWNER'], kind: 'owner',    value: data.owner });
+	}
+
 	structure.license = {
 		title : lychee.locale['ALBUM_REUSE'],
 		type  : sidebar.types.DEFAULT,
 		rows  : [
 			{ title: lychee.locale['ALBUM_LICENSE'], kind: 'license', value: license, editable: editable }
 		]
-	}
+	};
 
 	// Construct all parts of the structure
 	structure = [
