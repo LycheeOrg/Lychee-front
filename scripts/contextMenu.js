@@ -8,13 +8,13 @@ contextMenu = {};
 contextMenu.add = function(e) {
 
 	let items = [
-		{ title: build.iconic('image') + lychee.locale['UPLOAD_PHOTO'], fn: () => $('#upload_files').click() },
+		{ title: build.iconic('image') + lychee.locale['UPLOAD_PHOTO'],                 fn: () => $('#upload_files').click() },
 		{ },
-		{ title: build.iconic('link-intact') + lychee.locale['IMPORT_LINK'], fn: upload.start.url },
+		{ title: build.iconic('link-intact') + lychee.locale['IMPORT_LINK'],            fn: upload.start.url },
 		{ title: build.iconic('dropbox', 'ionicons') + lychee.locale['IMPORT_DROPBOX'], fn: upload.start.dropbox },
-		{ title: build.iconic('terminal') + lychee.locale['IMPORT_SERVER'], fn: upload.start.server },
+		{ title: build.iconic('terminal') + lychee.locale['IMPORT_SERVER'],             fn: upload.start.server },
 		{ },
-		{ title: build.iconic('folder') + lychee.locale['NEW_ALBUM'], fn: album.add }
+		{ title: build.iconic('folder') + lychee.locale['NEW_ALBUM'],                   fn: album.add }
 	];
 
     if (lychee.api_V2 && !lychee.admin)
@@ -40,10 +40,11 @@ contextMenu.album = function(albumID, e) {
 	let showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1);
 
 	let items = [
-		{ title: build.iconic('pencil') + lychee.locale['RENAME'], fn: () => album.setTitle([ albumID ]) },
-		{ title: build.iconic('collapse-left') + lychee.locale['MERGE'], visible: showMerge, fn: () => { basicContext.close(); contextMenu.move([albumID], e, album.merge, 'ROOT', false) } },
-		{ title: build.iconic('folder') + lychee.locale['MOVE'], visible: lychee.sub_albums, fn: () => { basicContext.close(); contextMenu.move([ albumID ], e, album.setAlbum, 'ROOT') } },
-		{ title: build.iconic('trash') + lychee.locale['DELETE'], fn: () => album.delete([ albumID ]) }
+		{ title: build.iconic('pencil') + lychee.locale['RENAME'],                                                  fn: () => album.setTitle([ albumID ]) },
+		{ title: build.iconic('collapse-left') + lychee.locale['MERGE'], visible: showMerge,                        fn: () => { basicContext.close(); contextMenu.move([albumID], e, album.merge, 'ROOT', false) } },
+		{ title: build.iconic('folder') + lychee.locale['MOVE'],         visible: lychee.sub_albums,                fn: () => { basicContext.close(); contextMenu.move([ albumID ], e, album.setAlbum, 'ROOT') } },
+		// { title: build.iconic('cloud') + lychee.locale['SHARE_WITH'],    visible: lychee.api_V2 && lychee.upload,   fn: () => alert('ho')},
+		{ title: build.iconic('trash') + lychee.locale['DELETE'],                                                   fn: () => album.delete([ albumID ]) },
 	];
 
 	$('.album[data-id="' + albumID + '"]').addClass('active');
@@ -65,11 +66,10 @@ contextMenu.albumMulti = function(albumIDs, e) {
 
 	let items = [
 		{ title: build.iconic('pencil') + lychee.locale['RENAME_ALL'], fn: () => album.setTitle(albumIDs) },
-		{ title: build.iconic('collapse-left') + lychee.locale['MERGE_ALL'], visible: showMerge && autoMerge, fn: () => { let albumID = albumIDs.shift(); album.merge(albumIDs, albumID) } },
-		{ title: build.iconic('collapse-left') + lychee.locale['MERGE'], visible: showMerge && !autoMerge, fn: () => { basicContext.close(); contextMenu.move(albumIDs, e, album.merge, 'ROOT', false) } },
-		// contextMenu.mergeAlbum(albumIDs[0], e) } },
-		{ title: build.iconic('folder') + lychee.locale['MOVE_ALL'], visible: lychee.sub_albums, fn: () => { basicContext.close(); contextMenu.move(albumIDs, e, album.setAlbum, 'ROOT') } },
-		{ title: build.iconic('trash') + lychee.locale['DELETE_ALL'], fn: () => album.delete(albumIDs) }
+		{ title: build.iconic('collapse-left') + lychee.locale['MERGE_ALL'], visible: showMerge && autoMerge,   fn: () => { let albumID = albumIDs.shift(); album.merge(albumIDs, albumID) } },
+		{ title: build.iconic('collapse-left') + lychee.locale['MERGE'],     visible: showMerge && !autoMerge,  fn: () => { basicContext.close(); contextMenu.move(albumIDs, e, album.merge, 'ROOT', false) } },
+		{ title: build.iconic('folder') + lychee.locale['MOVE_ALL'],         visible: lychee.sub_albums,        fn: () => { basicContext.close(); contextMenu.move(albumIDs, e, album.setAlbum, 'ROOT') } },
+		{ title: build.iconic('trash') + lychee.locale['DELETE_ALL'],                                           fn: () => album.delete(albumIDs) }
 	];
 
 	items.push();

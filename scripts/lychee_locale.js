@@ -36,6 +36,7 @@ lychee.locale = {
 		'MAKE_PUBLIC'		: 'Make Public',
 		'SHARE_ALBUM'		: 'Share Album',
 		'SHARE_PHOTO'		: 'Share Photo',
+		'SHARE_WITH'    	: 'Share with...',
 		'DOWNLOAD_ALBUM'	: 'Download Album',
 		'ABOUT_ALBUM'		: 'About Album',
 		'DELETE_ALBUM'		: 'Delete Album',
