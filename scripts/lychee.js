@@ -14,6 +14,7 @@ lychee = {
 
 	publicMode				: false,
 	viewMode				: false,
+	full_photo              : true,
 	api_V2					: false,	// enable api_V2
 	sub_albums				: false,	// enable sub_albums features
 	admin					: false,	// enable admin mode (multi-user)
@@ -163,10 +164,12 @@ lychee.init = function() {
 
 			// Logged out
 
+			lychee.full_photo	= (data.config.full_photo == null) || (data.config.full_photo === '1');
 			lychee.checkForUpdates	= data.config.checkForUpdates || '1';
 			lychee.justified		= (data.config.justified_layout && data.config.justified_layout === '1') || false;
 			lychee.image_overlay	= (data.config.image_overlay && data.config.image_overlay === '1') || false;
 
+			console.log(lychee.full_photo);
 			lychee.setMode('public');
 
 		} else {

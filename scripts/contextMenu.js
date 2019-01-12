@@ -271,7 +271,7 @@ contextMenu.photoMore = function(photoID, e) {
 	let showDownload = lychee.publicMode===false || ((album.json && album.json.downloadable && album.json.downloadable==='1') && lychee.publicMode===true);
 
 	let items = [
-		{ title: build.iconic('fullscreen-enter') + lychee.locale['FULL_PHOTO'], fn: () => window.open(photo.getDirectLink()) },
+		{ title: build.iconic('fullscreen-enter') + lychee.locale['FULL_PHOTO'], visible: lychee.full_photo, fn: () => window.open(photo.getDirectLink()) },
 		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD'], visible: showDownload, fn: () => photo.getArchive(photoID) }
 	];
 

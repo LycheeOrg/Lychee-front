@@ -114,7 +114,6 @@ build.album = function(data, disabled = false) {
 
 	if (data.albums && data.albums.length > 0)
 	{
-		console.log('sub');
 		html += lychee.html`
 				<div class='subalbum_badge'>
 					<a class='badge badge--folder'>${ build.iconic('layers') }</a>	
