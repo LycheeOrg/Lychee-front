@@ -75,7 +75,8 @@ $(document).ready(function() {
 		else if (visible.leftMenu())												 leftMenu.close();
 		else if (visible.contextMenu())                                              contextMenu.close();
 		else if (visible.photo())                                                    lychee.goto(album.getID());
-		else if (visible.album())                                                    lychee.goto();
+		else if (visible.album() && album.json.parent_id !== null)                   lychee.goto(album.getParent());
+		else if (visible.album())													 lychee.goto();
 		else if (visible.albums() && header.dom('.header__search').val().length!==0) search.reset();
 		return false
 	});
