@@ -116,7 +116,7 @@ build.album = function(data, disabled = false) {
 	{
 		html += lychee.html`
 				<div class='subalbum_badge'>
-					<a class='badge badge--folder'>${ build.iconic('layers') }</a>	
+					<a class='badge badge--folder'>${ build.iconic('layers') }</a>
 				</div>`;
 	}
 
@@ -163,10 +163,9 @@ build.photo = function(data) {
 build.overlay_image = function(data) {
 
 	let exifHash  = data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
-
 	let html = ``;
 
-	if (exifHash !== '')
+	if (typeof data !== 'string' && exifHash !== '')
 	{
 		html += lychee.html`
 		<div id="image_overlay"><h1>$${ data.title }</h1>
@@ -174,7 +173,13 @@ build.overlay_image = function(data) {
 		${ data.focal } ${ (data.lens && data.lens !== '') ? '(' + data.lens+ ')' : ''}</p>
 		</div>
 	`;
-	}
+} else {
+	html = ``;
+
+	html = lychee.html`
+				<div id="image_overlay"><p>${ data }</p></div>
+			`;
+	};
 
 	return html;
 };
