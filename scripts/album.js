@@ -15,7 +15,7 @@ album.isSmartID = function(id) {
 
 album.getParent = function() {
 
-	if (album.json==null || album.isSmartID(album.json.id)===true || album.json.parent_id===0) return '';
+	if (album.json==null || album.isSmartID(album.json.id)===true || !album.json.parent_id || album.json.parent_id===0) return '';
 	return album.json.parent_id
 
 };
