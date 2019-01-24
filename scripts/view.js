@@ -1154,17 +1154,32 @@ view.logs_diagnostics = {
 
 	},
 
-	clearContent: function () {
+	clearContent: function (get) {
 		lychee.content.unbind('mousedown');
-		lychee.content.html('<pre class="logs_diagnostics_view"></pre>');
+		let html = '';
+
+		if (lychee.api_V2 && get === 'Logs')
+		{
+			// TODO: Localize
+			html += '<div class="clear_logs"><a id="Clean_Noise" class="basicModal__button">Clean Noise</a></div>';
+		}
+		html += '<pre class="logs_diagnostics_view"></pre>';
+		lychee.content.html(html);
+
+		$("#Clean_Noise").on('click', function() {
+			api.post_raw('Logs::clearNoise',{}, function () {
+				view.logs_diagnostics.init('Logs');
+			});
+		});
+
 	},
 
 	content: {
 		init: function (get) {
-			view.logs_diagnostics.clearContent();
+			view.logs_diagnostics.clearContent(get);
 			api.post_raw(get, {}, function (data) {
 				$(".logs_diagnostics_view").html(data);
 			})
 		}
-	}
+	},
 };
