@@ -1160,8 +1160,7 @@ view.logs_diagnostics = {
 
 		if (lychee.api_V2 && get === 'Logs')
 		{
-			// TODO: Localize
-			html += '<div class="clear_logs"><a id="Clean_Noise" class="basicModal__button">Clean Noise</a></div>';
+			html += lychee.html`<div class="clear_logs"><a id="Clean_Noise" class="basicModal__button">${lychee.locale['CLEAN_LOGS']}</a></div>`;
 		}
 		html += '<pre class="logs_diagnostics_view"></pre>';
 		lychee.content.html(html);
