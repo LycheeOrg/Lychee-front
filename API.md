@@ -12,7 +12,7 @@ The current API provide the following calls to `php/index.php` as `POST` request
 | `Albums::get`           |                                                   |             |
 | `Album::get`            | `albumID`                                         |             |
 | `Album::getPublic`      | `albumID`                                         |             |
-| `Album::add`            | `title`, `albumID`                                |             |
+| `Album::add`            | `title`, `parent_id`                              |             |
 | `Album::setTitle`       | `albumIDs`, `title`                               |             |
 | `Album::setDescription` | `albumID`, `description`                          |             |
 | `Album::setPublic`      | `albumID`, `password`, `visible`, `downloadable`  |             |
