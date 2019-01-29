@@ -162,24 +162,27 @@ build.photo = function(data) {
 
 build.overlay_image = function(data) {
 
-	let exifHash  = data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
-	let html = ``;
+	// Get the stored setting for the overlay_image
+	let type = Settings::get('image_overlay_type');
 
-	if (typeof data !== 'string' && exifHash !== '')
-	{
+	if(type && type==='exif') {
+		let exifHash  = data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
+		let html = ``;
+
 		html += lychee.html`
-		<div id="image_overlay"><h1>$${ data.title }</h1>
-		<p>${ data.shutter.replace('s','sec') } at ${ data.aperture.replace('f/','&fnof; / ') }, ${ lychee.locale['PHOTO_ISO'] } ${ data.iso }<br>
-		${ data.focal } ${ (data.lens && data.lens !== '') ? '(' + data.lens+ ')' : ''}</p>
-		</div>
-	`;
-} else {
-	html = ``;
-
-	html = lychee.html`
-				<div id="image_overlay"><p>${ data }</p></div>
-			`;
-	};
+			<div id="image_overlay"><h1>$${ data.title }</h1>
+			<p>${ data.shutter.replace('s','sec') } at ${ data.aperture.replace('f/','&fnof; / ') }, ${ lychee.locale['PHOTO_ISO'] } ${ data.iso }<br>
+			${ data.focal } ${ (data.lens && data.lens !== '') ? '(' + data.lens+ ')' : ''}</p>
+			</div>
+		`;
+	}
+	else if(type && type==='desc') {
+		html = ``;
+		html = lychee.html`
+					<div id="image_overlay"><p>${ data }</p></div>
+				`;
+		};
+	}
 
 	return html;
 };

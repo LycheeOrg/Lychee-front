@@ -824,7 +824,23 @@ view.settings = {
 			settings.bind('#JustifiedLayout','.setLayoutOverlay',settings.changeLayout);
 			settings.bind('#ImageOverlay','.setLayoutOverlay',settings.changeImageOverlay);
 		},
-		
+
+		setOverlayType: function() {
+			let msg = `
+			<div class="setOverlayType">
+			<p>${ lychee.locale['LAYOUT_TYPE'] }
+			<span class="select" style="width:270px">
+				<select name="OverlayType" id="ImgOverlayType">
+					<option value="exif">${ lychee.locale['OVERLAY_EXIF'] }</option>
+					<option value="desc">${ lychee.locale['OVERLAY_DESCRIPTION'] }</option>
+				</select>
+			</span>
+			</div>`;
+
+			$(".settings_view").append(msg);
+			settings.bind('#ImgOverlayType','.setOverlayType',settings.setOverlayType)
+		},
+
 		setCSS: function () {
 			let msg = `
 			<div class="setCSS">
@@ -856,7 +872,7 @@ view.settings = {
 			$("#basicModal__action_more").on('click',view.full_settings.init);
 
 		},
-		
+
 	},
 
 };

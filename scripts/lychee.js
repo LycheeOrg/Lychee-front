@@ -23,6 +23,7 @@ lychee = {
 	justified				: true,		// use Flickr Justified Layout Like
 	image_overlay			: false,	// display Overlay like in Lightroom
 	image_overlay_default	: false,	// display Overlay like in Lightroom by default
+	image_overlay_type		: '',		// Overlay display type
 
 	checkForUpdates			: '1',
 	update_json 			: 0,

@@ -384,6 +384,28 @@ settings.changeImageOverlay = function () {
 	})
 };
 
+settings.setOverlayType = function() {
+	let params = {};
+	if( $("#ImageOverlay:checked") && $('#ImgOverlayType').value === "exif")
+	{
+		params.image_overlay_type = 'exif'
+	}
+	else if ($('#ImageOverlay:checked') && $('#ImgOverlayType').value === "desc") {
+		params.image_overlay_type = 'desc'
+	}
+	else
+	{
+		params.image_overlay_type = ''
+	}
+	api.post('Settings::setOverlayType', params, function (data) {
+		if (data===true) {
+			loadingBar.show('success',lychee.locale['SETTINGS_SUCCESS_IMAGE_OVERLAY']);
+			lychee.image_overlay_type = (params.image_overlay_type);
+		} else lychee.error(null, params, data)
+
+	})
+};
+
 settings.changeCSS = function() {
 
 	let params = {};

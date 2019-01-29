@@ -278,7 +278,10 @@ lychee.locale = {
 		'CSS_TITLE'				    : 'Change CSS',
 
 		'LAYOUT_TEXT'				: 'Use justified layout:',
-		'IMAGE_OVERLAY_TEXT'		: 'Display EXIF data overlay by default:',
+		'IMAGE_OVERLAY_TEXT'		: 'Display image overlay by default:',
+
+		'OVERLAY_EXIF'				: 'Photo EXIF data',
+		'OVERLAY_DESCRIPTION'		: 'Photo description',
 
 		'VIEW_NO_RESULT'			: 'No results',
 		'VIEW_NO_PUBLIC_ALBUMS'		: 'No public albums',
