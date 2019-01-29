@@ -180,7 +180,6 @@ build.overlay_image = function(data) {
 		html = lychee.html`
 					<div id="image_overlay"><p>${ data.description }</p></div>
 				`;
-	};
 
 	return html;
 };
