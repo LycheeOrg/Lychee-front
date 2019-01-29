@@ -616,6 +616,7 @@ view.settings = {
 				view.settings.content.setLang();
 				view.settings.content.setDefaultLicense();
 				view.settings.content.setLayoutOverlay();
+				view.settings.content.setOverlayType();
 				view.settings.content.setCSS();
 				view.settings.content.moreButton();
 			}
@@ -815,7 +816,8 @@ view.settings = {
 			  <span class="slider round"></span>
 			</label>
 			</p>
-			</div>`;
+			</div>
+			`;
 
 			$(".settings_view").append(msg);
 			if(lychee.justified) $('#JustifiedLayout').click();
@@ -826,19 +828,25 @@ view.settings = {
 		},
 
 		setOverlayType: function() {
-			let msg = `
+			let msg =`
 			<div class="setOverlayType">
 			<p>${ lychee.locale['LAYOUT_TYPE'] }
 			<span class="select" style="width:270px">
 				<select name="OverlayType" id="ImgOverlayType">
+					<option value=""></option>
 					<option value="exif">${ lychee.locale['OVERLAY_EXIF'] }</option>
 					<option value="desc">${ lychee.locale['OVERLAY_DESCRIPTION'] }</option>
 				</select>
 			</span>
-			</div>`;
+			<div class="basicModal__buttons">
+				<a id="basicModal__action_set_overlay_type" class="basicModal__button">${ lychee.locale['SET_OVERLAY_TYPE'] }</a>
+			</div>
+			</div>
+			`
 
 			$(".settings_view").append(msg);
-			settings.bind('#ImgOverlayType','.setOverlayType',settings.setOverlayType)
+			settings.bind('#basicModal__action_set_overlay_type','.setOverlayType',settings.setOverlayType);
+
 		},
 
 		setCSS: function () {

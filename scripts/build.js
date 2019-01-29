@@ -163,11 +163,11 @@ build.photo = function(data) {
 build.overlay_image = function(data) {
 
 	// Get the stored setting for the overlay_image
-	let type = Settings::get('image_overlay_type');
+	let type = lychee.image_overlay_type;
+	let html = ``;
 
 	if(type && type==='exif') {
 		let exifHash  = data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
-		let html = ``;
 
 		html += lychee.html`
 			<div id="image_overlay"><h1>$${ data.title }</h1>
@@ -177,12 +177,10 @@ build.overlay_image = function(data) {
 		`;
 	}
 	else if(type && type==='desc') {
-		html = ``;
 		html = lychee.html`
-					<div id="image_overlay"><p>${ data }</p></div>
+					<div id="image_overlay"><p>${ data.description }</p></div>
 				`;
-		};
-	}
+	};
 
 	return html;
 };
