@@ -845,6 +845,7 @@ view.settings = {
 			`
 
 			$(".settings_view").append(msg);
+			$('select#ImgOverlayType').val(lychee.image_overlay_type === '' ? '' : lychee.image_overlay_type);
 			settings.bind('#basicModal__action_set_overlay_type','.setOverlayType',settings.setOverlayType);
 
 		},

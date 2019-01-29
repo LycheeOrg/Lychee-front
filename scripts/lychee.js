@@ -140,6 +140,7 @@ lychee.init = function() {
 			lychee.justified			= (data.config.justified_layout && data.config.justified_layout === '1')	|| false;
 			lychee.image_overlay_default= (data.config.image_overlay && data.config.image_overlay === '1')			|| false;
 			lychee.image_overlay		= lychee.image_overlay_default;
+			lychee.image_overlay_type	= data.config.image_overlay_type;
 			lychee.default_license		= data.config.default_license	|| 'none';
 			lychee.css	            	= data.config.css || '';
 
