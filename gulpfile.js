@@ -156,6 +156,47 @@ gulp.task('main--svg', function() {
 
  });
 
+/* Frame -----------------------------------------  */
+
+paths.frame = {
+	js: [
+		'./scripts/_gup.js',
+		'./scripts/api.js',
+		'./scripts/csrf_protection.js',
+		'./scripts/frame/main.js',
+	],
+	scripts: [
+		'node_modules/jquery/dist/jquery.min.js',
+		'./scripts/frame/stackblur.min.js',
+		'../dist/_frame--javascript.js'
+	],
+};
+
+gulp.task('frame--js', function() {
+
+	const babel = plugins.babel({
+		presets: ['env']
+	});
+
+	return gulp.src(paths.frame.js)
+		.pipe(plugins.concat('_frame--javascript.js', {newLine: "\n"}))
+		.pipe(babel)
+		.on('error', catchError)
+		.pipe(gulp.dest('../dist/'))
+
+});
+
+gulp.task('frame--scripts', gulp.series('frame--js', function() {
+
+	return gulp.src(paths.frame.scripts)
+		.pipe(plugins.concat('frame.js', {newLine: "\n"}))
+		// .pipe(plugins.uglify())
+		.on('error', catchError)
+		.pipe(gulp.dest('../dist/'))
+
+}));
+
+
 /* Clean ----------------------------------------- */
 
 gulp.task('clean', function() {
@@ -168,12 +209,12 @@ gulp.task('clean', function() {
 
 /* Tasks ----------------------------------------- */
 
-gulp.task('default', gulp.series(gulp.parallel('view--svg', 'view--scripts', 'main--svg', 'main--scripts', 'main--styles'), 'clean'));
+gulp.task('default', gulp.series(gulp.parallel('view--svg', 'view--scripts', 'main--svg', 'main--scripts', 'main--styles', 'frame--scripts'), 'clean'));
 
 gulp.task('watch', gulp.series('default', function() {
 
+	gulp.watch(paths.frame.js, ['frame--scripts']);
 	gulp.watch(paths.view.js, ['view--scripts']);
-
 	gulp.watch(paths.main.js, ['main--scripts']);
 	gulp.watch(paths.main.scss, ['main--styles'])
 
