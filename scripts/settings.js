@@ -369,10 +369,17 @@ settings.changeImageOverlay = function () {
 	if ( $('#ImageOverlay:checked').length === 1 )
 	{
 		params.image_overlay = '1';
+
+		// enable image_overlay_type
+		$('select#ImgOverlayType').attr('disabled',false);
 	}
 	else
 	{
 		params.image_overlay = '0';
+
+		// disable image_overlay_type
+		$('select#ImgOverlayType').attr('disabled',true);
+
 	}
 	api.post('Settings::setImageOverlay', params, function (data) {
 		if (data===true) {
@@ -385,7 +392,7 @@ settings.changeImageOverlay = function () {
 };
 
 settings.setOverlayType = function() {
-
+	// validate the input
 	let params = {};
 	if( $('#ImageOverlay:checked') && $('#ImgOverlayType').val() === "exif")
 	{
@@ -393,6 +400,9 @@ settings.setOverlayType = function() {
 	}
 	else if ($('#ImageOverlay:checked') && $('#ImgOverlayType').val() === "desc") {
 		params.image_overlay_type = 'desc';
+	}
+	else if ($('#ImageOverlay:checked') && $('#ImgOverlayType').val() === "date" ) {
+		params.image_overlay_type = 'date';
 	}
 	else
 	{

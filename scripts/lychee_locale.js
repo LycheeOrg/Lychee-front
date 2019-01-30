@@ -284,6 +284,7 @@ lychee.locale = {
 		'LAYOUT_TYPE'				: 'Data to use in image overlay:',
 		'OVERLAY_EXIF'				: 'Photo EXIF data',
 		'OVERLAY_DESCRIPTION'		: 'Photo description',
+		'OVERLAY_DATE'				: 'Photo date taken',
 
 		'VIEW_NO_RESULT'			: 'No results',
 		'VIEW_NO_PUBLIC_ALBUMS'		: 'No public albums',

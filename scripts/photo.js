@@ -74,27 +74,15 @@ photo.load = function(photoID, albumID) {
 };
 
 photo.update_display_overlay = function () {
-	let showDesc = false; // store the intial value
-
 	lychee.image_overlay = !lychee.image_overlay;
-	if(!lychee.image_overlay) {
+	if(!lychee.image_overlay)
+	{
 		$('#image_overlay').remove();
-	} else {
-		// do this while a photo is showing
-		setInterval(() => {
-			$('#image_overlay').remove();
-			if(showDesc) {
-				lychee.imageview.append(build.overlay_image(photo.json.description))
-				showDesc = !showDesc;
-			} else {
-				lychee.imageview.append(build.overlay_image(photo.json));
-				showDesc = !showDesc;
-			}
-
-		}, 3000);
-
 	}
-
+	else
+	{
+		lychee.imageview.append(build.overlay_image(photo.json))
+	}
 };
 
 // Preload the next photo for better response time

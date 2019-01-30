@@ -184,7 +184,12 @@
 				transition: none;
 			}
 		}
+		select:disabled {
+			color:#000;
+			cursor:not-allowed;
+		}
 	}
+
 	.select::after {
 		position: absolute;
 		content: '≡';

@@ -64,6 +64,9 @@ $(document).ready(function() {
 		.bind([ 'command+a', 'ctrl+a' ], function() {
 			if (visible.album() && basicModal.visible()===false)       { multiselect.selectAll(); return false }
 			else if (visible.albums() && basicModal.visible()===false) { multiselect.selectAll(); return false }
+		})
+		.bind([ '0' ], function() {
+			if(visible.photo()) { settings.setOverlayType('exif')}
 		});
 
 	Mousetrap.bindGlobal('enter', function() {
