@@ -1,8 +1,7 @@
-
 // Sub-implementation of lychee -------------------------------------------------------------- //
 
 let lychee = {
-	api_V2 : true
+	api_V2: true
 };
 
 lychee.content = $('.content');
@@ -65,6 +64,18 @@ lychee.getEventName = function () {
 
 };
 
+lychee.error = function (errorThrown, params = '', data = '') {
+
+	console.error({
+		description: errorThrown,
+		params: params,
+		response: data
+	});
+
+	loadingBar.show('error', errorThrown)
+
+};
+
 
 // Sub-implementation of lychee -------------------------------------------------------------- //
 
@@ -73,39 +84,43 @@ let frame = {
 	refresh: 30000
 };
 
-frame.start_blur = function() {
+frame.start_blur = function () {
 	let img = document.getElementById('background');
 	let canvas = document.getElementById('background_canvas');
-	StackBlur.image(img,canvas,20);
+	StackBlur.image(img, canvas, 20);
 	canvas.style.width = '100%';
 	canvas.style.height = '100%';
 };
 
-frame.next = function() {
+frame.next = function () {
 	$('body').removeClass('loaded');
-	setTimeout(function(){ location.reload(); }, 1000);
+	setTimeout(function () {
+		frame.refreshPicture();
+	}, 1000);
 };
 
-frame.refreshPicture = function() {
+frame.refreshPicture = function () {
 	api.post('Photo::getRandom', {}, function (data) {
-		if(!data.url)    console.log('URL not found');
-		if(!data.thumb)  console.log('Thumb not found');
+		if (!data.url) console.log('URL not found');
+		if (!data.thumb) console.log('Thumb not found');
 
-		$('#background').attr("src",data.thumb).on("load",function () {
+		$('#background').attr("src", data.thumb).on("load", function () {
 			frame.start_blur();
 		});
 
-		$('#picture').attr("src",data.url).css('display', 'inline');
+		$('#picture').attr("src", data.url).css('display', 'inline');
 		$('body').addClass('loaded');
 
-		setTimeout(function(){ frame.next(); }, frame.refresh);
+		setTimeout(function () {
+			frame.next();
+		}, frame.refresh);
 	});
 
 };
 
-frame.set = function(data) {
+frame.set = function (data) {
 	console.log(data.refresh);
-	frame.refresh = data.refresh ? data.refresh : 30000;
+	frame.refresh = data.refresh ? (parseInt(data.refresh, 10) + 1000): 31000; // 30 sec + 1 sec of blackout
 	console.log(frame.refresh);
 	frame.refreshPicture();
 };
@@ -114,7 +129,8 @@ frame.set = function(data) {
 
 let loadingBar = {
 	show() {
-	}, hide() {
+	},
+	hide() {
 	}
 };
 
@@ -125,7 +141,11 @@ $(document).ready(function () {
 	// set CSRF protection (Laravel)
 	csrf.bind();
 
-	api.post('Frame::getSettings', {}, function(data) {
+	api.post('Frame::getSettings', {}, function (data) {
 		frame.set(data);
 	});
+
+	// Set API error handler
+	api.onError = lychee.error;
+
 });
