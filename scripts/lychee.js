@@ -23,7 +23,8 @@ lychee = {
 	justified				: true,		// use Flickr Justified Layout Like
 	image_overlay			: false,	// display Overlay like in Lightroom
 	image_overlay_default	: false,	// display Overlay like in Lightroom by default
-	image_overlay_type		: '',		// Overlay display type
+	image_overlay_type		: '',		// current Overlay display type
+	image_overlay_type_default:	'',		// image overlay type default type
 
 	checkForUpdates			: '1',
 	update_json 			: 0,
@@ -141,6 +142,7 @@ lychee.init = function() {
 			lychee.image_overlay_default= (data.config.image_overlay && data.config.image_overlay === '1')			|| false;
 			lychee.image_overlay		= lychee.image_overlay_default;
 			lychee.image_overlay_type	= data.config.image_overlay_type;
+			lychee.image_overlay_type_default = lychee.image_overlay_type;
 			lychee.default_license		= data.config.default_license	|| 'none';
 			lychee.css	            	= data.config.css || '';
 
