@@ -171,17 +171,17 @@ build.overlay_image = function(data) {
 	{
 		html = lychee.html`
 					<div id="image_overlay">
-						<h1> ${ data.title }</h1>
-						<p>${ data.description }</p>
+						<h1>$${ data.title }</h1>
+						<p>$${ data.description }</p>
 					</div>
 				`;
 	}
-	else if (type && type==='date' && data.date !== '')
+	else if (type && type==='takedate' && data.date !== '')
 	{
 		html = lychee.html`
 			<div id="image_overlay">
-				<h1>${ data.title }</h1>
-				<p>${ data.takedate }</p>
+				<h1>$${ data.title }</h1>
+				<p>$${ data.takedate }</p>
 			</div>
 		`
 	}
@@ -190,7 +190,7 @@ build.overlay_image = function(data) {
 	{
 
 		html += lychee.html`
-			<div id="image_overlay"><h1>${ data.title }</h1>
+			<div id="image_overlay"><h1>$${ data.title }</h1>
 			<p>${ data.shutter.replace('s','sec') } at ${ data.aperture.replace('f/','&fnof; / ') }, ${ lychee.locale['PHOTO_ISO'] } ${ data.iso }<br>
 			${ data.focal } ${ (data.lens && data.lens !== '') ? '(' + data.lens+ ')' : ''}</p>
 			</div>
