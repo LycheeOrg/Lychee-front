@@ -835,7 +835,7 @@ view.settings = {
 				<select name="OverlayType" id="ImgOverlayType">
 					<option value="exif">${ lychee.locale['OVERLAY_EXIF'] }</option>
 					<option value="desc">${ lychee.locale['OVERLAY_DESCRIPTION'] }</option>
-					<option value="date">${ lychee.locale['OVERLAY_DATE'] }</option>
+					<option value="takedate">${ lychee.locale['OVERLAY_DATE'] }</option>
 				</select>
 			</span>
 			<div class="basicModal__buttons">
@@ -849,7 +849,7 @@ view.settings = {
 			// Enable based on image_overlay setting
 			if(!lychee.image_overlay) $('select#ImgOverlayType').attr('disabled', true);
 
-			$('select#ImgOverlayType').val(lychee.image_overlay_type === null ? '' : lychee.image_overlay_type);
+			$('select#ImgOverlayType').val(lychee.image_overlay_type === '' ? '' : lychee.image_overlay_type);
 			settings.bind('#basicModal__action_set_overlay_type','.setOverlayType',settings.setOverlayType);
 
 		},
