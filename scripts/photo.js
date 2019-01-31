@@ -73,6 +73,34 @@ photo.load = function(photoID, albumID) {
 
 };
 
+photo.update_overlay_type = function() {
+	// Only run if the overlay is showing
+	if(!lychee.image_overlay)
+	{
+		return false;
+	}
+	else
+	{
+		console.log('Current ' + lychee.image_overlay_type);
+		let types = ['exif', 'desc', 'takedate'];
+
+		let i = types.indexOf(lychee.image_overlay_type);
+
+		if((i+1) > types.length - 1)
+		{
+			lychee.image_overlay_type = types[0];
+			$('#image_overlay').remove();
+			lychee.imageview.append(build.overlay_image(photo.json))
+		}
+		else
+		{
+			lychee.image_overlay_type = types[i+1];
+			$('#image_overlay').remove();
+			lychee.imageview.append(build.overlay_image(photo.json))
+		}
+	}
+}
+
 photo.update_display_overlay = function () {
 	lychee.image_overlay = !lychee.image_overlay;
 	if(!lychee.image_overlay)

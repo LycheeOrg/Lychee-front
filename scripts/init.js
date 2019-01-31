@@ -65,8 +65,8 @@ $(document).ready(function() {
 			if (visible.album() && basicModal.visible()===false)       { multiselect.selectAll(); return false }
 			else if (visible.albums() && basicModal.visible()===false) { multiselect.selectAll(); return false }
 		})
-		.bind([ '0' ], function() {
-			if(visible.photo()) { settings.setOverlayType('exif')}
+		.bind([ 'o' ], function() {
+			if(visible.photo()) { photo.update_overlay_type(); }
 		});
 
 	Mousetrap.bindGlobal('enter', function() {
