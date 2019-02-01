@@ -616,6 +616,7 @@ view.settings = {
 				view.settings.content.setLang();
 				view.settings.content.setDefaultLicense();
 				view.settings.content.setLayoutOverlay();
+				view.settings.content.setOverlayType();
 				view.settings.content.setCSS();
 				view.settings.content.moreButton();
 			}
@@ -815,7 +816,8 @@ view.settings = {
 			  <span class="slider round"></span>
 			</label>
 			</p>
-			</div>`;
+			</div>
+			`;
 
 			$(".settings_view").append(msg);
 			if(lychee.justified) $('#JustifiedLayout').click();
@@ -824,7 +826,34 @@ view.settings = {
 			settings.bind('#JustifiedLayout','.setLayoutOverlay',settings.changeLayout);
 			settings.bind('#ImageOverlay','.setLayoutOverlay',settings.changeImageOverlay);
 		},
-		
+
+		setOverlayType: function() {
+			let msg =`
+			<div class="setOverlayType">
+			<p>${ lychee.locale['LAYOUT_TYPE'] }
+			<span class="select" style="width:270px">
+				<select name="OverlayType" id="ImgOverlayType">
+					<option value="exif">${ lychee.locale['OVERLAY_EXIF'] }</option>
+					<option value="desc">${ lychee.locale['OVERLAY_DESCRIPTION'] }</option>
+					<option value="takedate">${ lychee.locale['OVERLAY_DATE'] }</option>
+				</select>
+			</span>
+			<div class="basicModal__buttons">
+				<a id="basicModal__action_set_overlay_type" class="basicModal__button">${ lychee.locale['SET_OVERLAY_TYPE'] }</a>
+			</div>
+			</div>
+			`
+
+			$(".settings_view").append(msg);
+
+			// Enable based on image_overlay setting
+			if(!lychee.image_overlay) $('select#ImgOverlayType').attr('disabled', true);
+
+			$('select#ImgOverlayType').val(!lychee.image_overlay_type_default ? 'exif' : lychee.image_overlay_type_default);
+			settings.bind('#basicModal__action_set_overlay_type','.setOverlayType',settings.setOverlayType);
+
+		},
+
 		setCSS: function () {
 			let msg = `
 			<div class="setCSS">
@@ -856,7 +885,7 @@ view.settings = {
 			$("#basicModal__action_more").on('click',view.full_settings.init);
 
 		},
-		
+
 	},
 
 };

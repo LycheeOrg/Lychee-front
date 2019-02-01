@@ -5,7 +5,7 @@
 	margin-right: auto;
 }
 
-.setLogin, .setSorting, .setDropBox, .setLang, .setLayoutOverlay, .setDefaultLicense, .setCSS {
+.setLogin, .setSorting, .setDropBox, .setLang, .setLayoutOverlay, .setOverlayType, .setDefaultLicense, .setCSS {
 	font-size: 14px;
 	width: 100%;
 	padding: 5%;
@@ -184,7 +184,12 @@
 				transition: none;
 			}
 		}
+		select:disabled {
+			color:#000;
+			cursor:not-allowed;
+		}
 	}
+
 	.select::after {
 		position: absolute;
 		content: '≡';
@@ -367,4 +372,3 @@
 	}
 
 }
-
