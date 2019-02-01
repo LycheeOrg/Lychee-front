@@ -401,18 +401,21 @@ settings.setOverlayType = function() {
 	else if ($('#ImageOverlay:checked') && $('#ImgOverlayType').val() === "desc") {
 		params.image_overlay_type = 'desc';
 	}
-	else if ($('#ImageOverlay:checked') && $('#ImgOverlayType').val() === "date" ) {
-		params.image_overlay_type = 'date';
+	else if ($('#ImageOverlay:checked') && $('#ImgOverlayType').val() === "takedate" ) {
+		params.image_overlay_type = 'takedate';
 	}
 	else
 	{
-		params.image_overlay_type = '';
+		params.image_overlay_type = 'exif';
+		console.log('Error - default used');
 	}
 
 	api.post('Settings::setOverlayType', params, function (data) {
 		if (data===true) {
 			loadingBar.show('success',lychee.locale['SETTINGS_SUCCESS_IMAGE_OVERLAY']);
-			lychee.image_overlay_type = (params.image_overlay_type);
+			lychee.image_overlay_type = params.image_overlay_type;
+			lychee.image_overlay_type_default = params.image_overlay_type;
+
 		} else lychee.error(null, params, data)
 
 	})

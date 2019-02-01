@@ -176,12 +176,12 @@ build.overlay_image = function(data) {
 					</div>
 				`;
 	}
-	else if (type && type==='takedate' && data.date !== '')
+	else if (type && type==='takedate' && data.takedate !== '')
 	{
 		html = lychee.html`
 			<div id="image_overlay">
 				<h1>$${ data.title }</h1>
-				<p>$${ data.takedate }</p>
+				<p>${ data.takedate }</p>
 			</div>
 		`
 	}

@@ -5,8 +5,8 @@
 lychee = {
 
 	title					: document.title,
-	version					: '3.2.10',
-	versionCode				: '030210', // not really needed anymore
+	version					: '3.2.11',
+	versionCode				: '030211', // not really needed anymore
 
 	updatePath				: 'https://LycheeOrg.github.io/update.json',
 	updateURL				: 'https://github.com/LycheeOrg/Lychee/releases',
@@ -23,8 +23,8 @@ lychee = {
 	justified				: true,		// use Flickr Justified Layout Like
 	image_overlay			: false,	// display Overlay like in Lightroom
 	image_overlay_default	: false,	// display Overlay like in Lightroom by default
-	image_overlay_type		: '',		// current Overlay display type
-	image_overlay_type_default:	'',		// image overlay type default type
+	image_overlay_type		: 'exif',		// current Overlay display type
+	image_overlay_type_default:	'exif',		// image overlay type default type
 
 	checkForUpdates			: '1',
 	update_json 			: 0,
@@ -141,7 +141,7 @@ lychee.init = function() {
 			lychee.justified			= (data.config.justified_layout && data.config.justified_layout === '1')	|| false;
 			lychee.image_overlay_default= (data.config.image_overlay && data.config.image_overlay === '1')			|| false;
 			lychee.image_overlay		= lychee.image_overlay_default;
-			lychee.image_overlay_type	= data.config.image_overlay_type;
+			lychee.image_overlay_type	= (!data.config.image_overlay_type) ? 'exif' : data.config.image_overlay_type;
 			lychee.image_overlay_type_default = lychee.image_overlay_type;
 			lychee.default_license		= data.config.default_license	|| 'none';
 			lychee.css	            	= data.config.css || '';
@@ -168,10 +168,12 @@ lychee.init = function() {
 
 			// Logged out
 
-			lychee.full_photo	= (data.config.full_photo == null) || (data.config.full_photo === '1');
-			lychee.checkForUpdates	= data.config.checkForUpdates || '1';
-			lychee.justified		= (data.config.justified_layout && data.config.justified_layout === '1') || false;
-			lychee.image_overlay	= (data.config.image_overlay && data.config.image_overlay === '1') || false;
+			lychee.full_photo	            = (data.config.full_photo == null) || (data.config.full_photo === '1');
+			lychee.checkForUpdates	        = data.config.checkForUpdates || '1';
+			lychee.justified		        = (data.config.justified_layout && data.config.justified_layout === '1') || false;
+			lychee.image_overlay	        = (data.config.image_overlay && data.config.image_overlay === '1') || false;
+			lychee.image_overlay_type	    = (!data.config.image_overlay_type) ? 'exif' : data.config.image_overlay_type;
+			lychee.image_overlay_type_default = lychee.image_overlay_type;
 
 			console.log(lychee.full_photo);
 			lychee.setMode('public');

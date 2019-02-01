@@ -73,6 +73,20 @@ photo.load = function(photoID, albumID) {
 
 };
 
+photo.hasExif = function () {
+	let exifHash  = photo.json.make + photo.json.model + photo.json.shutter + photo.json.aperture + photo.json.focal + photo.json.iso;
+
+	return exifHash !== '';
+};
+
+photo.hasTakedate = function () {
+	return photo.json.takedate && photo.json.takedate !== '';
+};
+
+photo.hasDesc = function () {
+	return photo.json.description && photo.json.description !== '';
+};
+
 photo.update_overlay_type = function() {
 	// Only run if the overlay is showing
 	if(!lychee.image_overlay)
@@ -81,25 +95,36 @@ photo.update_overlay_type = function() {
 	}
 	else
 	{
-		console.log('Current ' + lychee.image_overlay_type);
+		// console.log('Current ' + lychee.image_overlay_type);
 		let types = ['exif', 'desc', 'takedate'];
 
 		let i = types.indexOf(lychee.image_overlay_type);
-
-		if((i+1) > types.length - 1)
+		let j = (i + 1) %types.length;
+		let cont = true;
+		while(i !== j && cont)
 		{
-			lychee.image_overlay_type = types[0];
+			if (types[j] === 'desc' && photo.hasDesc())
+				cont = false;
+			else if (types[j] === 'takedate' && photo.hasTakedate())
+				cont = false;
+			else if (types[j] === 'exif' && photo.hasExif())
+				cont = false;
+			else
+				j = (j + 1) %types.length;
+		}
+
+		if (i !== j)
+		{
+			lychee.image_overlay_type = types[j];
 			$('#image_overlay').remove();
-			lychee.imageview.append(build.overlay_image(photo.json))
+			lychee.imageview.append(build.overlay_image(photo.json));
 		}
 		else
 		{
-			lychee.image_overlay_type = types[i+1];
-			$('#image_overlay').remove();
-			lychee.imageview.append(build.overlay_image(photo.json))
+			console.log('no other data found, displaying ' + types[j]);
 		}
 	}
-}
+};
 
 photo.update_display_overlay = function () {
 	lychee.image_overlay = !lychee.image_overlay;

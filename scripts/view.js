@@ -849,7 +849,7 @@ view.settings = {
 			// Enable based on image_overlay setting
 			if(!lychee.image_overlay) $('select#ImgOverlayType').attr('disabled', true);
 
-			$('select#ImgOverlayType').val(lychee.image_overlay_type === '' ? '' : lychee.image_overlay_type);
+			$('select#ImgOverlayType').val(!lychee.image_overlay_type_default ? 'exif' : lychee.image_overlay_type_default);
 			settings.bind('#basicModal__action_set_overlay_type','.setOverlayType',settings.setOverlayType);
 
 		},
