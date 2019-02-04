@@ -317,7 +317,7 @@ multiselect.getSize = function() {
 };
 
 multiselect.getSelection = function(e) {
-  // TODO(nshemon): Make this depend on image size.
+  // TODO(nshemon): Make tolerance depend on image size.
 	let tolerance = 202;
 	let size      = multiselect.getSize();
 
