@@ -344,7 +344,15 @@ multiselect.getSelection = function(e) {
 
 			let id = $(this).attr('data-id');
 
-			multiselect.addItem($(this), id)
+
+	    if (isSelectKeyPressed(e) && lychee.upload)
+	    {
+		    multiselect.toggleItem($(this), id);
+	    }
+	    else
+	    {
+			  multiselect.addItem($(this), id)
+      }
 
 		}
 
