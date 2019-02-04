@@ -317,8 +317,8 @@ multiselect.getSize = function() {
 };
 
 multiselect.getSelection = function(e) {
-
-	let tolerance = 150;
+  // TODO(nshemon): Make this depend on image size.
+	let tolerance = 202;
 	let size      = multiselect.getSize();
 
 	if (visible.contextMenu())  return false;
