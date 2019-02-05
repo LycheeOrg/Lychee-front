@@ -154,10 +154,8 @@ multiselect.albumContextMenu = function(e, albumObj) {
 
 	if (selected!==false) {
 		contextMenu.albumMulti(multiselect.ids, e);
-		multiselect.clearSelection(false)
 	}
 	else {
-		multiselect.clearSelection();
 		contextMenu.album(id, e)
 	}
 
@@ -172,17 +170,14 @@ multiselect.photoContextMenu = function(e, photoObj) {
 
 	if (selected!==false) {
 		contextMenu.photoMulti(multiselect.ids, e);
-		multiselect.clearSelection(false)
 	}
 	else if (visible.album() || visible.search())
 	{
-		multiselect.clearSelection();
 		contextMenu.photo(id, e);
 	}
 	else if (visible.photo())
 	{
 		// should not happen... but you never know...
-		multiselect.clearSelection();
 		contextMenu.photo(photo.getID(), e)
 	}
 	else
