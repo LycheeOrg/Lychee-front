@@ -152,7 +152,7 @@ multiselect.albumContextMenu = function(e, albumObj) {
 
 	if (albumObj.hasClass('disabled') && !lychee.admin) return;
 
-	if (selected!==false) {
+	if (selected!==false && multiselect.ids.length > 1) {
 		contextMenu.albumMulti(multiselect.ids, e);
 	}
 	else {
@@ -168,7 +168,7 @@ multiselect.photoContextMenu = function(e, photoObj) {
 
 	if (photoObj.hasClass('disabled') && !lychee.admin) return;
 
-	if (selected!==false) {
+	if (selected!==false && multiselect.ids.length > 1) {
 		contextMenu.photoMulti(multiselect.ids, e);
 	}
 	else if (visible.album() || visible.search())
