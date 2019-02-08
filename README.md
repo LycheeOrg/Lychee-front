@@ -2,6 +2,7 @@
 
 **This repository contains the source of the JS frontend in order to allow its use with different backends.**
 
+[![Build Status](https://travis-ci.com/LycheeOrg/Lychee-front.svg?branch=master)](https://travis-ci.com/LycheeOrg/Lychee-front)
 
 #### A great looking and easy-to-use photo-management-system.
 
