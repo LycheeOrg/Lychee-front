@@ -57,7 +57,7 @@ build.getThumbnailHtml = function(thumb, retinaThumbUrl, type, medium = '', smal
 		return `<span class="thumbimg"><img src='${medium}' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 	}
 	// we use crappy thumb image otherwise :]
-	return `<span class="thumbimg${isVideo ? ' video': ''}"><img src='${thumb}' srcset='${ retinaThumbUrl } 1.5x' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+	return `<span class="thumbimg${isVideo ? ' video': ''}"><img src='${thumb}' srcset='${ retinaThumbUrl } 2x' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 };
 
 build.album = function(data, disabled = false) {
@@ -65,7 +65,9 @@ build.album = function(data, disabled = false) {
 	let date_stamp = data.sysdate;
 	let sortingAlbums = [];
 
-	let { path: retinaThumbUrl, isPhoto } = lychee.retinize(data.thumbs[0]);
+	let { path: retinaThumbUrl0 } = lychee.retinize(data.thumbs[0]);
+	let { path: retinaThumbUrl1 } = lychee.retinize(data.thumbs[1]);
+	let { path: retinaThumbUrl2 } = lychee.retinize(data.thumbs[2]);
 
 	// In the special case of take date sorting use the take stamps as title
 	if (lychee.sortingAlbums!=='' && data.min_takestamp && data.max_takestamp) {
@@ -89,9 +91,9 @@ build.album = function(data, disabled = false) {
 
 	html += lychee.html`
 			<div class='album ${ (disabled ? `disabled` : ``) }' data-id='${ data.id }'>
-				  ${build.getThumbnailHtml(data.thumbs[2],data.thumbs[2], data.types[2])}
-				  ${build.getThumbnailHtml(data.thumbs[1],data.thumbs[1], data.types[1])}
-				  ${build.getThumbnailHtml(data.thumbs[0],data.thumbs[0], data.types[0])}
+				  ${build.getThumbnailHtml(data.thumbs[2], retinaThumbUrl2, data.types[2])}
+				  ${build.getThumbnailHtml(data.thumbs[1], retinaThumbUrl1, data.types[1])}
+				  ${build.getThumbnailHtml(data.thumbs[0], retinaThumbUrl0, data.types[0])}
 				<div class='overlay'>
 					<h1 title='$${ data.title }'>$${ data.title }</h1>
 					<a>$${ date_stamp }</a>
