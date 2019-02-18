@@ -204,8 +204,13 @@ view.album = {
 				});
 			}
 
-			if (photosData !== '' && lychee.justified) {
-				photosData = '<div class="justified-layout">' + photosData + '</div>';
+			if (photosData !== '') {
+				if (lychee.justified) {
+					photosData = '<div class="justified-layout">' + photosData + '</div>';
+				}
+				else if (lychee.unjustified) {
+					photosData = '<div class="unjustified-layout">' + photosData + '</div>';
+				}
 			}
 
 			if (albumsData !== '' && photosData !== '')
@@ -226,6 +231,13 @@ view.album = {
 			// Add photos to view
 			lychee.content.html(html);
 			view.album.content.justify();
+			if (lychee.unjustified) {
+				$('.unjustified-layout > div').each(function (i) {
+					$(this).css('width', ((album.json.photos[i].height > 0 ?
+										   album.json.photos[i].width / album.json.photos[i].height : 1) *
+										  parseInt($(this).css('height'), 10)) + 'px');
+				});
+			}
 
 		},
 
