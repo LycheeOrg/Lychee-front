@@ -348,8 +348,7 @@ settings.setLayout = function (params) {
 
 	api.post('Settings::setLayout', params, function(data) {
 		if (data===true) {
-			lychee.justified = (params.layout === "justified");
-			lychee.unjustified = (params.layout === "unjustified");
+			lychee.layout = params.layout;
 			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_LAYOUT']);
 		} else lychee.error(null, params, data)
 	})

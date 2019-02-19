@@ -5,27 +5,26 @@
 lychee = {
 
 	title					: document.title,
-	version					: '3.2.12',
-	versionCode				: '030212', // not really needed anymore
+	version					: '3.2.13',
+	versionCode				: '030213', // not really needed anymore
 
 	updatePath				: 'https://LycheeOrg.github.io/update.json',
 	updateURL				: 'https://github.com/LycheeOrg/Lychee/releases',
 	website					: 'https://LycheeOrg.github.io',
 
-	publicMode				: false,
-	viewMode				: false,
-	full_photo              : true,
-	api_V2					: false,	// enable api_V2
-	sub_albums				: false,	// enable sub_albums features
-	admin					: false,	// enable admin mode (multi-user)
-	upload					: false,	// enable possibility to upload (multi-user)
-	lock					: false,	// locked user (multi-user)
-	justified				: true,		// use Flickr Justified Layout Like
-	unjustified				: false,	// use Google Photos Unjustified Layout Like
-	image_overlay			: false,	// display Overlay like in Lightroom
-	image_overlay_default	: false,	// display Overlay like in Lightroom by default
-	image_overlay_type		: 'exif',		// current Overlay display type
-	image_overlay_type_default:	'exif',		// image overlay type default type
+	publicMode					: false,
+	viewMode					: false,
+	full_photo					: true,
+	api_V2						: false,	// enable api_V2
+	sub_albums					: false,	// enable sub_albums features
+	admin						: false,	// enable admin mode (multi-user)
+	upload						: false,	// enable possibility to upload (multi-user)
+	lock						: false,	// locked user (multi-user)
+	layout						: '1',		// 0: Use default, "square" layout. 1: Use Flickr-like "justified" layout. 2: Use Google-like "unjustified" layout
+	image_overlay				: false,	// display Overlay like in Lightroom
+	image_overlay_default		: false,	// display Overlay like in Lightroom by default
+	image_overlay_type			: 'exif',	// current Overlay display type
+	image_overlay_type_default	: 'exif',	// image overlay type default type
 
 	checkForUpdates			: '1',
 	update_json 			: 0,
@@ -131,22 +130,21 @@ lychee.init = function() {
 
 			// Logged in
 
-			lychee.sortingPhotos		= data.config.sortingPhotos		|| '';
-			lychee.sortingAlbums		= data.config.sortingAlbums		|| '';
-			lychee.dropboxKey			= data.config.dropboxKey		|| '';
-			lychee.location				= data.config.location			|| '';
-			lychee.checkForUpdates		= data.config.checkForUpdates	|| '1';
-			lychee.lang					= data.config.lang				|| '';
-			lychee.lang_available		= data.config.lang_available	|| {};
-			lychee.imagick				= (data.config.imagick && data.config.imagick === '1')						|| false;
-			lychee.justified			= (data.config.justified_layout && data.config.justified_layout === '1')	|| false;
-			lychee.unjustified			= (data.config.justified_layout && data.config.justified_layout === '2')	|| false;
-			lychee.image_overlay_default= (data.config.image_overlay && data.config.image_overlay === '1')			|| false;
-			lychee.image_overlay		= lychee.image_overlay_default;
-			lychee.image_overlay_type	= (!data.config.image_overlay_type) ? 'exif' : data.config.image_overlay_type;
-			lychee.image_overlay_type_default = lychee.image_overlay_type;
-			lychee.default_license		= data.config.default_license	|| 'none';
-			lychee.css	            	= data.config.css || '';
+			lychee.sortingPhotos				= data.config.sortingPhotos		|| '';
+			lychee.sortingAlbums				= data.config.sortingAlbums		|| '';
+			lychee.dropboxKey					= data.config.dropboxKey		|| '';
+			lychee.location						= data.config.location			|| '';
+			lychee.checkForUpdates				= data.config.checkForUpdates	|| '1';
+			lychee.lang							= data.config.lang				|| '';
+			lychee.lang_available				= data.config.lang_available	|| {};
+			lychee.imagick						= (data.config.imagick && data.config.imagick === '1')						|| false;
+			lychee.layout						= data.config.layout			|| '1';
+			lychee.image_overlay_default		= (data.config.image_overlay && data.config.image_overlay === '1')			|| false;
+			lychee.image_overlay				= lychee.image_overlay_default;
+			lychee.image_overlay_type			= (!data.config.image_overlay_type) ? 'exif' : data.config.image_overlay_type;
+			lychee.image_overlay_type_default	= lychee.image_overlay_type;
+			lychee.default_license				= data.config.default_license	|| 'none';
+			lychee.css							= data.config.css				|| '';
 
 			lychee.upload	= !lychee.api_V2;
 			lychee.admin	= !lychee.api_V2;
@@ -170,13 +168,12 @@ lychee.init = function() {
 
 			// Logged out
 
-			lychee.full_photo	            = (data.config.full_photo == null) || (data.config.full_photo === '1');
-			lychee.checkForUpdates	        = data.config.checkForUpdates || '1';
-			lychee.justified		        = (data.config.justified_layout && data.config.justified_layout === '1') || false;
-			lychee.unjustified		        = (data.config.justified_layout && data.config.justified_layout === '2') || false;
-			lychee.image_overlay	        = (data.config.image_overlay && data.config.image_overlay === '1') || false;
-			lychee.image_overlay_type	    = (!data.config.image_overlay_type) ? 'exif' : data.config.image_overlay_type;
-			lychee.image_overlay_type_default = lychee.image_overlay_type;
+			lychee.full_photo					= (data.config.full_photo == null)	|| (data.config.full_photo === '1');
+			lychee.checkForUpdates				= data.config.checkForUpdates		|| '1';
+			lychee.layout						= data.config.layout				|| '1';
+			lychee.image_overlay				= (data.config.image_overlay && data.config.image_overlay === '1') || false;
+			lychee.image_overlay_type			= (!data.config.image_overlay_type) ? 'exif' : data.config.image_overlay_type;
+			lychee.image_overlay_type_default	= lychee.image_overlay_type;
 
 			console.log(lychee.full_photo);
 			lychee.setMode('public');

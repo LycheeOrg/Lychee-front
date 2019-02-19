@@ -205,10 +205,10 @@ view.album = {
 			}
 
 			if (photosData !== '') {
-				if (lychee.justified) {
+				if (lychee.layout === '1') {
 					photosData = '<div class="justified-layout">' + photosData + '</div>';
 				}
-				else if (lychee.unjustified) {
+				else if (lychee.layout === '2') {
 					photosData = '<div class="unjustified-layout">' + photosData + '</div>';
 				}
 			}
@@ -231,7 +231,7 @@ view.album = {
 			// Add photos to view
 			lychee.content.html(html);
 			view.album.content.justify();
-			if (lychee.unjustified) {
+			if (lychee.layout === '2') {
 				$('.unjustified-layout > div').each(function (i) {
 					$(this).css('width', ((album.json.photos[i].height > 0 ?
 										   album.json.photos[i].width / album.json.photos[i].height : 1) *
@@ -288,7 +288,7 @@ view.album = {
 		},
 
 		justify: function () {
-			if (!lychee.justified) return;
+			if (lychee.layout !== '1') return;
 			if (!album.json.photos || album.json.photos===false) return;
 			let ratio = [];
 			$.each(album.json.photos, function (i) {
@@ -820,9 +820,9 @@ view.settings = {
 			<p>${ lychee.locale['LAYOUT_TYPE'] }
 			<span class="select" style="width:270px">
 				<select name="layout" id="layout">
-					<option value="squares">${ lychee.locale['LAYOUT_SQUARES'] }</option>
-					<option value="justified">${ lychee.locale['LAYOUT_JUSTIFIED'] }</option>
-					<option value="unjustified">${ lychee.locale['LAYOUT_UNJUSTIFIED'] }</option>
+					<option value="0">${ lychee.locale['LAYOUT_SQUARES'] }</option>
+					<option value="1">${ lychee.locale['LAYOUT_JUSTIFIED'] }</option>
+					<option value="2">${ lychee.locale['LAYOUT_UNJUSTIFIED'] }</option>
 				</select>
 			</span>
 			</p>
@@ -832,8 +832,7 @@ view.settings = {
 			</div>
 			`
 			$(".settings_view").append(msg);
-			$('select#layout').val(lychee.justified ? 'justified' :
-								   (lychee.unjustified ? 'unjustified' : 'squares'));
+			$('select#layout').val(lychee.layout);
 			settings.bind('#basicModal__action_set_layout', '.setLayout', settings.setLayout);
 		},
 
