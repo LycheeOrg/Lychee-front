@@ -204,8 +204,13 @@ view.album = {
 				});
 			}
 
-			if (photosData !== '' && lychee.justified) {
-				photosData = '<div class="justified-layout">' + photosData + '</div>';
+			if (photosData !== '') {
+				if (lychee.justified) {
+					photosData = '<div class="justified-layout">' + photosData + '</div>';
+				}
+				else if (lychee.unjustified) {
+					photosData = '<div class="unjustified-layout">' + photosData + '</div>';
+				}
 			}
 
 			if (albumsData !== '' && photosData !== '')
@@ -226,6 +231,13 @@ view.album = {
 			// Add photos to view
 			lychee.content.html(html);
 			view.album.content.justify();
+			if (lychee.unjustified) {
+				$('.unjustified-layout > div').each(function (i) {
+					$(this).css('width', ((album.json.photos[i].height > 0 ?
+										   album.json.photos[i].width / album.json.photos[i].height : 1) *
+										  parseInt($(this).css('height'), 10)) + 'px');
+				});
+			}
 
 		},
 
@@ -615,7 +627,8 @@ view.settings = {
 				view.settings.content.setDropboxKey();
 				view.settings.content.setLang();
 				view.settings.content.setDefaultLicense();
-				view.settings.content.setLayoutOverlay();
+				view.settings.content.setLayout();
+				view.settings.content.setOverlay();
 				view.settings.content.setOverlayType();
 				view.settings.content.setCSS();
 				view.settings.content.moreButton();
@@ -801,15 +814,32 @@ view.settings = {
 			settings.bind('#basicModal__action_set_license', '.setDefaultLicense', settings.setDefaultLicense);
 		},
 
-		setLayoutOverlay: function () {
+		setLayout: function() {
 			let msg = `
-			<div class="setLayoutOverlay">
-			<p>${ lychee.locale['LAYOUT_TEXT'] }
-			<label class="switch">
-			  <input id="JustifiedLayout" type="checkbox">
-			  <span class="slider round"></span>
-			</label>
+			<div class="setLayout">
+			<p>${ lychee.locale['LAYOUT_TYPE'] }
+			<span class="select" style="width:270px">
+				<select name="layout" id="layout">
+					<option value="squares">${ lychee.locale['LAYOUT_SQUARES'] }</option>
+					<option value="justified">${ lychee.locale['LAYOUT_JUSTIFIED'] }</option>
+					<option value="unjustified">${ lychee.locale['LAYOUT_UNJUSTIFIED'] }</option>
+				</select>
+			</span>
 			</p>
+			<div class="basicModal__buttons">
+				<a id="basicModal__action_set_layout" class="basicModal__button">${ lychee.locale['SET_LAYOUT'] }</a>
+			</div>
+			</div>
+			`
+			$(".settings_view").append(msg);
+			$('select#layout').val(lychee.justified ? 'justified' :
+								   (lychee.unjustified ? 'unjustified' : 'squares'));
+			settings.bind('#basicModal__action_set_layout', '.setLayout', settings.setLayout);
+		},
+
+		setOverlay: function () {
+			let msg = `
+			<div class="setOverlay">
 			<p>${ lychee.locale['IMAGE_OVERLAY_TEXT'] }
 			<label class="switch">
 			  <input id="ImageOverlay" type="checkbox">
@@ -820,17 +850,15 @@ view.settings = {
 			`;
 
 			$(".settings_view").append(msg);
-			if(lychee.justified) $('#JustifiedLayout').click();
 			if(lychee.image_overlay_default) $('#ImageOverlay').click();
 
-			settings.bind('#JustifiedLayout','.setLayoutOverlay',settings.changeLayout);
-			settings.bind('#ImageOverlay','.setLayoutOverlay',settings.changeImageOverlay);
+			settings.bind('#ImageOverlay','.setOverlay',settings.changeImageOverlay);
 		},
 
 		setOverlayType: function() {
 			let msg =`
 			<div class="setOverlayType">
-			<p>${ lychee.locale['LAYOUT_TYPE'] }
+			<p>${ lychee.locale['OVERLAY_TYPE'] }
 			<span class="select" style="width:270px">
 				<select name="OverlayType" id="ImgOverlayType">
 					<option value="exif">${ lychee.locale['OVERLAY_EXIF'] }</option>

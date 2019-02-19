@@ -4,19 +4,31 @@
 	position: relative;
 }
 
+.unjustified-layout {
+	margin: 30px 20px -10px 30px;
+	width: 100%;
+	position: relative;
+}
+
 .justified-layout > .photo {
 	position: absolute;
 	margin: 0;
 }
 
-.justified-layout > .photo > .thumbimg > img, .justified-layout > .photo > .thumbimg {
+.unjustified-layout > .photo {
+	float: left;
+	height: 240px;
+	margin: 0 10px 10px 0;
+}
+
+.justified-layout > .photo > .thumbimg > img, .justified-layout > .photo > .thumbimg, .unjustified-layout > .photo > .thumbimg > img, .unjustified-layout > .photo > .thumbimg {
 	width: 100%;
 	height: 100%;
 	border: none;
 	object-fit: cover;
 }
 
-.justified-layout > .photo > .overlay
+.justified-layout > .photo > .overlay, .unjustified-layout > .photo > .overlay
 {
 	width: 100%;
 	bottom: 0;

@@ -47,12 +47,12 @@ build.getThumbnailHtml = function(thumb, retinaThumbUrl, type, medium = '', smal
 		return `<span class="thumbimg"><img src='dist/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 	}
 	// we use small if available
-	if (lychee.justified && small !== '')
+	if ((lychee.justified || lychee.unjustified) && small !== '')
 	{
 		return `<span class="thumbimg"><img src='${small}' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 	}
 	// we use medium if small is not available
-	if (lychee.justified && medium !== '')
+	if ((lychee.justified || lychee.unjustified) && medium !== '')
 	{
 		return `<span class="thumbimg"><img src='${medium}' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 	}

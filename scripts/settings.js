@@ -340,27 +340,18 @@ settings.setDefaultLicense = function(params) {
 		if (data===true) {
 			lychee.default_license = params.license;
 			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_LICENSE']);
-		} else lychee.error(ull, params, data)
+		} else lychee.error(null, params, data)
 	})
 };
 
-settings.changeLayout = function () {
+settings.setLayout = function (params) {
 
-	let params = {};
-	if ( $('#JustifiedLayout:checked').length === 1 )
-	{
-		params.justified_layout = '1';
-	}
-	else
-	{
-		params.justified_layout = '0';
-	}
-	api.post('Settings::setLayout', params, function (data) {
+	api.post('Settings::setLayout', params, function(data) {
 		if (data===true) {
+			lychee.justified = (params.layout === "justified");
+			lychee.unjustified = (params.layout === "unjustified");
 			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_LAYOUT']);
-			lychee.justified = (params.justified_layout === '1');
 		} else lychee.error(null, params, data)
-
 	})
 };
 
