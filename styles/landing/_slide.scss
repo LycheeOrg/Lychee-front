@@ -1,10 +1,19 @@
 #slides {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100vw;
+	height: 98vh;
+
+	.slides-container, li, img {
+		height: 100%;
+		width: 100%;
+	}
+
 	img {
-		position: absolute;
-		left: 0;
 		top: 0;
+		left: 0;
+		position: absolute;
 		object-fit: cover;
-		width: 100vw;
-		height: 98vh;
 	}
 }
