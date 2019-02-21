@@ -231,13 +231,6 @@ view.album = {
 			// Add photos to view
 			lychee.content.html(html);
 			view.album.content.justify();
-			if (lychee.layout === '2') {
-				$('.unjustified-layout > div').each(function (i) {
-					$(this).css('width', ((album.json.photos[i].height > 0 ?
-										   album.json.photos[i].width / album.json.photos[i].height : 1) *
-										  parseInt($(this).css('height'), 10)) + 'px');
-				});
-			}
 
 		},
 
@@ -288,27 +281,46 @@ view.album = {
 		},
 
 		justify: function () {
-			if (lychee.layout !== '1') return;
 			if (!album.json.photos || album.json.photos===false) return;
-			let ratio = [];
-			$.each(album.json.photos, function (i) {
-				let l_width = this.width > 0 ? this.width : 200;
-				let l_height = this.height > 0 ? this.height : 200;
-				ratio[i] = l_width / l_height;
-			});
-			let layoutGeometry = require('justified-layout')(ratio, {
-				containerWidth: $('.justified-layout').width(),
-				containerPadding: 0
-			});
-			if(lychee.admin) console.log(layoutGeometry);
-			$('.justified-layout').css('height',layoutGeometry.containerHeight + 'px')
-				.css('height',layoutGeometry.containerHeight + 'px');
-			$('.justified-layout > div').each(function (i) {
-				$(this).css('top',layoutGeometry.boxes[i].top);
-				$(this).css('width',layoutGeometry.boxes[i].width);
-				$(this).css('height',layoutGeometry.boxes[i].height);
-				$(this).css('left',layoutGeometry.boxes[i].left);
-			});
+			if (lychee.layout === '1') {
+				let ratio = [];
+				$.each(album.json.photos, function (i) {
+					let l_width = this.width > 0 ? this.width : 200;
+					let l_height = this.height > 0 ? this.height : 200;
+					ratio[i] = l_width / l_height;
+				});
+				let layoutGeometry = require('justified-layout')(ratio, {
+					containerWidth: $('.justified-layout').width(),
+					containerPadding: 0
+				});
+				if(lychee.admin) console.log(layoutGeometry);
+				$('.justified-layout').css('height',layoutGeometry.containerHeight + 'px')
+					.css('height',layoutGeometry.containerHeight + 'px');
+				$('.justified-layout > div').each(function (i) {
+					$(this).css('top',layoutGeometry.boxes[i].top);
+					$(this).css('width',layoutGeometry.boxes[i].width);
+					$(this).css('height',layoutGeometry.boxes[i].height);
+					$(this).css('left',layoutGeometry.boxes[i].left);
+				});
+			}
+			else if (lychee.layout === '2') {
+				let containerWidth = parseFloat($('.unjustified-layout').width(), 10);
+				$('.unjustified-layout > div').each(function (i) {
+					let ratio = album.json.photos[i].height > 0 ?
+								album.json.photos[i].width / album.json.photos[i].height : 1;
+					let height = parseFloat($(this).css('max-height'), 10);
+					let width = height * ratio;
+					let margin = parseFloat($(this).css('margin-right'), 10);
+
+					if (width > containerWidth - margin) {
+						width = containerWidth - margin;
+						height = width / ratio;
+					}
+
+					$(this).css('width', width + 'px');
+					$(this).css('height', height + 'px');
+				});
+			}
 		}
 
 	},
