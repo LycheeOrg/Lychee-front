@@ -73,6 +73,8 @@ lychee.locale = {
 		'DELETE'						: 'Delete',
 		'DELETE_ALL'					: 'Delete All',
 		'DOWNLOAD'						: 'Download',
+		'DOWNLOAD_MEDIUM'				: 'Download medium size',
+		'DOWNLOAD_SMALL'				: 'Download small size',
 		'UPLOAD_PHOTO'					: 'Upload Photo',
 		'IMPORT_LINK'					: 'Import from Link',
 		'IMPORT_DROPBOX'				: 'Import from Dropbox',
