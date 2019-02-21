@@ -801,6 +801,35 @@ photo.getArchive = function(photoID) {
 
 };
 
+photo.getArchiveMedium = function(photoID) {
+
+	let link;
+	let url = `${ api.path }?function=Photo::getArchiveMedium&photoID=${ photoID }`;
+
+	if (location.href.indexOf('index.html')>0) link = location.href.replace(location.hash, '').replace('index.html', url);
+	else                                       link = location.href.replace(location.hash, '') + url;
+
+	if (lychee.publicMode===true) link += `&password=${ encodeURIComponent(password.value) }`;
+
+	location.href = link
+
+};
+
+
+photo.getArchiveSmall = function(photoID) {
+
+	let link;
+	let url = `${ api.path }?function=Photo::getArchiveSmall&photoID=${ photoID }`;
+
+	if (location.href.indexOf('index.html')>0) link = location.href.replace(location.hash, '').replace('index.html', url);
+	else                                       link = location.href.replace(location.hash, '') + url;
+
+	if (lychee.publicMode===true) link += `&password=${ encodeURIComponent(password.value) }`;
+
+	location.href = link
+};
+
+
 photo.getDirectLink = function() {
 
 	let url = '';
