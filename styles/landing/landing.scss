@@ -1,0 +1,30 @@
+// Rest -------------------------------------------------------------------- //
+@import 'reset';
+
+* {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	transition: color .3s, opacity .3s ease-out, transform .3s ease-out, box-shadow .3s;
+}
+
+
+html, body {
+	font-family: 'Roboto', sans-serif;
+	background: #000000;
+	min-height: 100%;
+}
+
+ol, ul {
+	list-style: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+@import "animate";
+@import "intro";
+@import "logo";
+@import "menu";
+@import "social";

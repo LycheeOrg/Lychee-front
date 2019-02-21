@@ -197,6 +197,62 @@ gulp.task('frame--scripts', gulp.series('frame--js', function() {
 }));
 
 
+/* Landing -----------------------------------------  */
+
+paths.landing = {
+	js: [
+		'./scripts/_gup.js',
+		'./scripts/landing/landing.js',
+	],
+	scripts: [
+		'node_modules/jquery/dist/jquery.min.js',
+		'../dist/_landing--javascript.js'
+	],
+	scss: [
+		'./styles/landing/*.scss'
+	],
+	styles: [
+		'./styles/landing/landing.scss'
+	],
+};
+
+gulp.task('landing--js', function() {
+
+	const babel = plugins.babel({
+		presets: ['env']
+	});
+
+	return gulp.src(paths.landing.js)
+		.pipe(plugins.concat('_landing--javascript.js', {newLine: "\n"}))
+		.pipe(babel)
+		.on('error', catchError)
+		.pipe(gulp.dest('../dist/'))
+
+});
+
+gulp.task('landing--scripts', gulp.series('landing--js', function() {
+
+	return gulp.src(paths.landing.scripts)
+		.pipe(plugins.concat('landing.js', {newLine: "\n"}))
+		// .pipe(plugins.uglify())
+		.on('error', catchError)
+		.pipe(gulp.dest('../dist/'))
+
+}));
+
+gulp.task('landing--styles', function() {
+
+	return gulp.src(paths.landing.styles)
+		.pipe(plugins.sass())
+		.on('error', catchError)
+		.pipe(plugins.concat('landing.css', {newLine: "\n"}))
+		.pipe(plugins.autoprefixer('last 4 versions', '> 5%'))
+		// .pipe(cleanCSS({level: 2}))
+		.pipe(gulp.dest('../dist/'))
+
+});
+
+
 /* Clean ----------------------------------------- */
 
 gulp.task('clean', function() {
@@ -209,7 +265,7 @@ gulp.task('clean', function() {
 
 /* Tasks ----------------------------------------- */
 
-gulp.task('default', gulp.series(gulp.parallel('view--svg', 'view--scripts', 'main--svg', 'main--scripts', 'main--styles', 'frame--scripts'), 'clean'));
+gulp.task('default', gulp.series(gulp.parallel('view--svg', 'view--scripts', 'main--svg', 'main--scripts', 'main--styles', 'frame--scripts', 'landing--scripts', 'landing--styles'), 'clean'));
 
 gulp.task('watch', gulp.series('default', function() {
 
