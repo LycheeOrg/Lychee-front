@@ -20,14 +20,14 @@ paths.view = {
 	],
 	js: [
 		'./scripts/_gup.js',
-		'./scripts/build.js',
 		'./scripts/api.js',
-		'./scripts/header.js',
-		'./scripts/visible.js',
-		'./scripts/sidebar.js',
 		'./scripts/csrf_protection.js',
 		'./scripts/view/main.js',
-		'./scripts/lychee_locale.js',
+		'./scripts/main/build.js',
+		'./scripts/main/header.js',
+		'./scripts/main/visible.js',
+		'./scripts/main/sidebar.js',
+		'./scripts/main/lychee_locale.js',
 	],
 	scripts: [
 		'node_modules/jquery/dist/jquery.min.js',
@@ -82,7 +82,8 @@ paths.main = {
 		'../index.html'
 	],
 	js: [
-		'./scripts/*.js'
+		'./scripts/*.js',
+		'./scripts/main/*.js'
 	],
 	scripts: [
 		'node_modules/jquery/dist/jquery.min.js',
@@ -95,13 +96,13 @@ paths.main = {
 		'../dist/_main--javascript.js'
 	],
 	scss: [
-		'./styles/*.scss'
+		'./styles/main/*.scss'
 	],
 	styles: [
 		'node_modules/basiccontext/src/styles/main.scss',
 		'node_modules/basiccontext/src/styles/addons/popin.scss',
 		'node_modules/basicmodal/src/styles/main.scss',
-		'./styles/main.scss'
+		'./styles/main/main.scss'
 	],
 	svg: [
 		'./images/iconic.svg',
@@ -165,6 +166,12 @@ paths.frame = {
 		'./scripts/csrf_protection.js',
 		'./scripts/frame/main.js',
 	],
+	scss: [
+		'./styles/frame/*.scss'
+	],
+	styles: [
+		'./styles/frame/frame.scss'
+	],
 	scripts: [
 		'node_modules/jquery/dist/jquery.min.js',
 		'./scripts/frame/stackblur.min.js',
@@ -186,6 +193,18 @@ gulp.task('frame--js', function() {
 
 });
 
+gulp.task('frame--styles', function() {
+
+	return gulp.src(paths.frame.styles)
+		.pipe(plugins.sass())
+		.on('error', catchError)
+		.pipe(plugins.concat('frame.css', {newLine: "\n"}))
+		.pipe(plugins.autoprefixer('last 4 versions', '> 5%'))
+		.pipe(cleanCSS({level: 2}))
+		.pipe(gulp.dest('../dist/'))
+
+});
+
 gulp.task('frame--scripts', gulp.series('frame--js', function() {
 
 	return gulp.src(paths.frame.scripts)
@@ -202,7 +221,7 @@ gulp.task('frame--scripts', gulp.series('frame--js', function() {
 paths.landing = {
 	js: [
 		'./scripts/_gup.js',
-		'./scripts/landing/landing.js',
+		'./scripts/landing/*.js',
 	],
 	scripts: [
 		'node_modules/jquery/dist/jquery.min.js',
@@ -265,7 +284,10 @@ gulp.task('clean', function() {
 
 /* Tasks ----------------------------------------- */
 
-gulp.task('default', gulp.series(gulp.parallel('view--svg', 'view--scripts', 'main--svg', 'main--scripts', 'main--styles', 'frame--scripts', 'landing--scripts', 'landing--styles'), 'clean'));
+gulp.task('default', gulp.series(gulp.parallel('view--svg', 'view--scripts',
+												'main--svg', 'main--scripts', 'main--styles',
+												'frame--scripts', 'frame--styles',
+												'landing--scripts', 'landing--styles'), 'clean'));
 
 gulp.task('watch', gulp.series('default', function() {
 
