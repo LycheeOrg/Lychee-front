@@ -272,7 +272,9 @@ contextMenu.photoMore = function(photoID, e) {
 
 	let items = [
 		{ title: build.iconic('fullscreen-enter') + lychee.locale['FULL_PHOTO'], visible: lychee.full_photo, fn: () => window.open(photo.getDirectLink()) },
-		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD'], visible: showDownload, fn: () => photo.getArchive(photoID) }
+		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD'], visible: showDownload, fn: () => photo.getArchive(photoID) },
+		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD_MEDIUM'], visible: showDownload, fn: () => photo.getArchiveMedium(photoID) },
+		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD_SMALL'], visible: showDownload, fn: () => photo.getArchiveSmall(photoID) }
 	];
 
 	basicContext.show(items, e.originalEvent)
