@@ -273,6 +273,17 @@
 	margin-left: auto;
 	margin-right: auto;
 
+	.setting_category {
+		font-size: 20px;
+		width: 100%;
+		padding-top: 10px;
+		padding-left: 4px;
+		border-bottom: dotted 1px #222222;
+		margin-top: 20px;
+		color: #FFFFFF;
+		font-weight: bold;
+	}
+
 	.setting_line {
 		font-size: 14px;
 		width: 100%;

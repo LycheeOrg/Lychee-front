@@ -959,7 +959,7 @@ view.full_settings = {
 			api.post('Settings::getAll', {}, function (data) {
 
 				let msg = lychee.html`
-			<div id="fullSettings">
+				<div id="fullSettings">
 				<div class="setting_line">
 				<p class="warning">
 				${ lychee.locale['SETTINGS_WARNING'] }
@@ -967,7 +967,20 @@ view.full_settings = {
 				</div>
 				`;
 
+				let prev = '';
 				$.each(data, function() {
+
+					if(this.cat && prev !== this.cat)
+					{
+						msg += lychee.html`
+						<div class="setting_category">
+						<p>
+						$${ this.cat }
+						</p>
+						</div>`;
+						prev = this.cat
+
+					}
 
 					msg += lychee.html`
 			<div class="setting_line">
