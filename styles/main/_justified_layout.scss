@@ -8,6 +8,7 @@
 	margin: 30px 20px -10px 30px;
 	width: 100%;
 	position: relative;
+	overflow: hidden;
 }
 
 .justified-layout > .photo {
@@ -17,7 +18,7 @@
 
 .unjustified-layout > .photo {
 	float: left;
-	height: 240px;
+	max-height: 240px;
 	margin: 0 10px 10px 0;
 }
 
