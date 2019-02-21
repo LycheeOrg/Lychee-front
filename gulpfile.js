@@ -228,7 +228,11 @@ paths.landing = {
 		'../dist/_landing--javascript.js'
 	],
 	scss: [
-		'./styles/landing/*.scss'
+		'./styles/landing/*.scss',
+		'./styles/page/fonts.scss',
+		'./styles/page/menu.scss',
+		'./styles/page/social.scss',
+		'./styles/page/animate.scss'
 	],
 	styles: [
 		'./styles/landing/landing.scss'
@@ -272,6 +276,63 @@ gulp.task('landing--styles', function() {
 });
 
 
+/* Page -----------------------------------------  */
+
+paths.page = {
+	// js: [
+	// 	'./scripts/_gup.js',
+	// 	'./scripts/page/*.js',
+	// ],
+	// scripts: [
+	// 	'node_modules/jquery/dist/jquery.min.js',
+	// 	'../dist/_landing--javascript.js'
+	// ],
+	scss: [
+		'./styles/page/*.scss',
+		'./styles/page/*.scss'
+	],
+	styles: [
+		'./styles/page/page.scss'
+	],
+};
+
+// gulp.task('page--js', function() {
+//
+// 	const babel = plugins.babel({
+// 		presets: ['env']
+// 	});
+//
+// 	return gulp.src(paths.landing.js)
+// 		.pipe(plugins.concat('_page--javascript.js', {newLine: "\n"}))
+// 		.pipe(babel)
+// 		.on('error', catchError)
+// 		.pipe(gulp.dest('../dist/'))
+//
+// });
+//
+// gulp.task('page--scripts', gulp.series('page--js', function() {
+//
+// 	return gulp.src(paths.landing.scripts)
+// 		.pipe(plugins.concat('page.js', {newLine: "\n"}))
+// 		// .pipe(plugins.uglify())
+// 		.on('error', catchError)
+// 		.pipe(gulp.dest('../dist/'))
+//
+// }));
+
+gulp.task('page--styles', function() {
+
+	return gulp.src(paths.page.styles)
+		.pipe(plugins.sass())
+		.on('error', catchError)
+		.pipe(plugins.concat('page.css', {newLine: "\n"}))
+		.pipe(plugins.autoprefixer('last 4 versions', '> 5%'))
+		// .pipe(cleanCSS({level: 2}))
+		.pipe(gulp.dest('../dist/'))
+
+});
+
+
 /* Clean ----------------------------------------- */
 
 gulp.task('clean', function() {
@@ -287,7 +348,8 @@ gulp.task('clean', function() {
 gulp.task('default', gulp.series(gulp.parallel('view--svg', 'view--scripts',
 												'main--svg', 'main--scripts', 'main--styles',
 												'frame--scripts', 'frame--styles',
-												'landing--scripts', 'landing--styles'), 'clean'));
+												'landing--scripts', 'landing--styles', 'page--styles',
+	), 'clean'));
 
 gulp.task('watch', gulp.series('default', function() {
 

@@ -22,7 +22,7 @@ $timing: cubic-bezier(.51, .92, .24, 1);
 $timingBounce: cubic-bezier(.51, .92, .24, 1.15);
 
 // Rest -------------------------------------------------------------------- //
-@import 'reset';
+@import '../reset';
 
 * {
 	-webkit-user-select: none;
