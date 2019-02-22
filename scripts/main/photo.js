@@ -804,7 +804,7 @@ photo.getArchive = function(photoID) {
 photo.getArchiveMedium = function(photoID) {
 
 	let link;
-	let url = `${ api.path }?function=Photo::getArchiveMedium&photoID=${ photoID }`;
+	let url = `${ api.path }?function=Photo::getArchiveMedium&photoID=${ photoID }&kind=MEDIUM`;
 
 	if (location.href.indexOf('index.html')>0) link = location.href.replace(location.hash, '').replace('index.html', url);
 	else                                       link = location.href.replace(location.hash, '') + url;
@@ -819,7 +819,7 @@ photo.getArchiveMedium = function(photoID) {
 photo.getArchiveSmall = function(photoID) {
 
 	let link;
-	let url = `${ api.path }?function=Photo::getArchiveSmall&photoID=${ photoID }`;
+	let url = `${ api.path }?function=Photo::getArchiveSmall&photoID=${ photoID }&kind=SMALL`;
 
 	if (location.href.indexOf('index.html')>0) link = location.href.replace(location.hash, '').replace('index.html', url);
 	else                                       link = location.href.replace(location.hash, '') + url;
