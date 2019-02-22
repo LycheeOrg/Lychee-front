@@ -72,7 +72,7 @@ lychee.locale = {
 		'COPY_ALL_TO'					: 'Copy All to...',
 		'DELETE'						: 'Delete',
 		'DELETE_ALL'					: 'Delete All',
-		'DOWNLOAD'						: 'Download',
+		'DOWNLOAD'						: 'Download original size',
 		'DOWNLOAD_MEDIUM'				: 'Download medium size',
 		'DOWNLOAD_SMALL'				: 'Download small size',
 		'UPLOAD_PHOTO'					: 'Upload Photo',
