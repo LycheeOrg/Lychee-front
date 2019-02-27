@@ -270,9 +270,14 @@ contextMenu.photoMore = function(photoID, e) {
 	// b) Downloadable is 1 and public mode is on
 	let showDownload = lychee.publicMode===false || ((album.json && album.json.downloadable && album.json.downloadable==='1') && lychee.publicMode===true);
 
+	let showMedium = photo.json.medium && photo.json.medium !== '' && showDownload;
+	let showSmall = photo.json.small && photo.json.small !== '' && showDownload;
+	
 	let items = [
 		{ title: build.iconic('fullscreen-enter') + lychee.locale['FULL_PHOTO'], visible: lychee.full_photo, fn: () => window.open(photo.getDirectLink()) },
-		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD'], visible: showDownload, fn: () => photo.getArchive(photoID) }
+		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD'], visible: showDownload, fn: () => photo.getArchive(photoID, 'FULL') },
+		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD_MEDIUM'], visible: showMedium, fn: () => photo.getArchive(photoID, 'MEDIUM') },
+		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD_SMALL'], visible: showSmall, fn: () => photo.getArchive(photoID, 'SMALL') }
 	];
 
 	basicContext.show(items, e.originalEvent)
