@@ -30,6 +30,7 @@ a {
 @import "logo";
 @import "menu";
 @import "social";
+@import "content";
 //@import "slide";
 
 #footer {
@@ -40,4 +41,11 @@ a {
 	bottom: 0;
 	padding: 0 0 10px 0;
 	text-align: center;
+}
+
+#home_copyright {
+	text-transform: uppercase;
+	color: #333333;
+	font-size: 0.5em;
+	font-weight: 400;
 }
