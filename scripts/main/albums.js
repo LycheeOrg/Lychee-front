@@ -75,6 +75,7 @@ albums._createSmartAlbums = function(data) {
 		sysdate  : data.unsorted.num + ' ' + lychee.locale['NUM_PHOTOS'],
 		unsorted : '1',
 		thumbs   : data.unsorted.thumbs,
+		thumbs2x : data.unsorted.thumbs2x ? data.unsorted.thumbs2x : null,
 		types    : data.unsorted.types
 	};
 
@@ -84,6 +85,7 @@ albums._createSmartAlbums = function(data) {
 		sysdate : data.starred.num + ' ' + lychee.locale['NUM_PHOTOS'],
 		star    : '1',
 		thumbs  : data.starred.thumbs,
+		thumbs2x: data.starred.thumbs2x ? data.starred.thumbs2x : null,
 		types   : data.starred.types
 	};
 
@@ -93,6 +95,7 @@ albums._createSmartAlbums = function(data) {
 		sysdate : data.public.num + ' ' + lychee.locale['NUM_PHOTOS'],
 		public  : '1',
 		thumbs  : data.public.thumbs,
+		thumbs2x: data.public.thumbs2x ? data.public.thumbs2x : null,
 		hidden 	: '1',
 		types   : data.public.types
 	};
@@ -103,6 +106,7 @@ albums._createSmartAlbums = function(data) {
 		sysdate : data.recent.num + ' ' + lychee.locale['NUM_PHOTOS'],
 		recent  : '1',
 		thumbs  : data.recent.thumbs,
+		thumbs2x: data.recent.thumbs2x ? data.recent.thumbs2x : null,
 		types   : data.recent.types
 	}
 

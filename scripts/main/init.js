@@ -140,6 +140,7 @@ $(document).ready(function() {
 	// resize
 	.on('resize', function () {
 		if(visible.album()) view.album.content.justify();
+		if(visible.photo()) view.photo.onresize();
 	});
 
 	// Init

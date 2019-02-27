@@ -40,34 +40,29 @@ build.multiselect = function(top, left) {
 
 };
 
-build.getThumbnailHtml = function(thumb, retinaThumbUrl, type, medium = '', small='') {
-	let isVideo = type && type.indexOf('video') > -1;
-	if (thumb === 'uploads/thumb/' && isVideo)
-	{
+build.getAlbumThumb = function(data, i) {
+	let isVideo = data.types[i] && data.types[i].indexOf('video') > -1;
+	let thumb = data.thumbs[i];
+
+	if (thumb === 'uploads/thumb/' && isVideo) {
 		return `<span class="thumbimg"><img src='dist/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 	}
-	// we use small if available
-	if ((lychee.layout === '1' || lychee.layout === '2') && small !== '')
-	{
-		return `<span class="thumbimg"><img src='${small}' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+
+	thumb2x = ''
+	if (data.thumbs2x) {
+		thumb2x = data.thumbs2x[i]
 	}
-	// we use medium if small is not available
-	if ((lychee.layout === '1' || lychee.layout === '2') && medium !== '')
-	{
-		return `<span class="thumbimg"><img src='${medium}' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+	else { // Fallback code for Lychee v3
+		var { path: thumb2x } = lychee.retinize(data.thumbs[i])
 	}
-	// we use crappy thumb image otherwise :]
-	return `<span class="thumbimg${isVideo ? ' video': ''}"><img src='${thumb}' srcset='${ retinaThumbUrl } 2x' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+
+	return `<span class="thumbimg${isVideo ? ' video': ''}"><img src='${thumb}' ${ (thumb2x !== '') ? 'srcset=\'' + thumb2x + ' 2x\'' : '' } alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 };
 
 build.album = function(data, disabled = false) {
 	let html = '';
 	let date_stamp = data.sysdate;
 	let sortingAlbums = [];
-
-	let { path: retinaThumbUrl0 } = lychee.retinize(data.thumbs[0]);
-	let { path: retinaThumbUrl1 } = lychee.retinize(data.thumbs[1]);
-	let { path: retinaThumbUrl2 } = lychee.retinize(data.thumbs[2]);
 
 	// In the special case of take date sorting use the take stamps as title
 	if (lychee.sortingAlbums!=='' && data.min_takestamp && data.max_takestamp) {
@@ -91,9 +86,9 @@ build.album = function(data, disabled = false) {
 
 	html += lychee.html`
 			<div class='album ${ (disabled ? `disabled` : ``) }' data-id='${ data.id }'>
-				  ${build.getThumbnailHtml(data.thumbs[2], retinaThumbUrl2, data.types[2])}
-				  ${build.getThumbnailHtml(data.thumbs[1], retinaThumbUrl1, data.types[1])}
-				  ${build.getThumbnailHtml(data.thumbs[0], retinaThumbUrl0, data.types[0])}
+				  ${build.getAlbumThumb(data, 2)}
+				  ${build.getAlbumThumb(data, 1)}
+				  ${build.getAlbumThumb(data, 0)}
 				<div class='overlay'>
 					<h1 title='$${ data.title }'>$${ data.title }</h1>
 					<a>$${ date_stamp }</a>
@@ -131,11 +126,40 @@ build.album = function(data, disabled = false) {
 build.photo = function(data) {
 
 	let html = '';
-	let { path: retinaThumbUrl } = lychee.retinize(data.thumbUrl);
+
+	let isVideo = data.type && data.type.indexOf('video') > -1;
+	if (data.thumb === 'uploads/thumb/' && isVideo) {
+		thumbnail = `<span class="thumbimg"><img src='dist/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+	}
+	else if (lychee.layout === '0') {
+		if (data.thumb2x) {
+			thumb2x = data.thumb2x
+		}
+		else {
+			var { path: thumb2x } = lychee.retinize(data.thumbUrl)
+		}
+		thumbnail = `<span class="thumbimg${isVideo ? ' video': ''}"><img src='${data.thumbUrl}' ${ (thumb2x !== '') ? 'srcset=\'' + thumb2x + ' 2x\'' : '' } alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+	} else {
+		if (data.small !== '') {
+			thumbnail = `<span class="thumbimg"><img src='${data.small}' ${ (data.small2x && data.small2x !== '') ? 'srcset=\'' + data.small + ' ' + parseInt(data.small_dim) + 'w, ' + data.small2x + ' ' + parseInt(data.small2x_dim) + 'w\'' : '' } alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+		}
+		else if (data.medium !== '') {
+			thumbnail = `<span class="thumbimg"><img src='${data.medium}' ${ (data.medium2x && data.medium2x !== '') ? 'srcset=\'' + data.medium + ' ' + parseInt(data.medium_dim) + 'w, ' + data.medium2x + ' ' + parseInt(data.medium2x_dim) + 'w\'' : '' } alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+		}
+		else {
+			if (data.thumb2x) {
+				thumb2x = data.thumb2x
+			}
+			else {
+				var { path: thumb2x } = lychee.retinize(data.thumbUrl)
+			}
+			thumbnail = `<span class="thumbimg${isVideo ? ' video': ''}"><img src='${data.thumbUrl}' ${ (thumb2x !== '') ? 'srcset=\'' + data.thumbUrl + ' 200w, ' + thumb2x + ' 400w\'' : '' } alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+		}
+	}
 
 	html += lychee.html`
 			<div class='photo' data-album-id='${ data.album }' data-id='${ data.id }'>
-				${build.getThumbnailHtml(data.thumbUrl, retinaThumbUrl, data.type, data.medium, data.small)}
+				${thumbnail}
 				<div class='overlay'>
 					<h1 title='$${ data.title }'>$${ data.title }</h1>
 			`;
@@ -210,7 +234,12 @@ build.imageview = function(data, visibleControls) {
 		html += lychee.html`<video width="auto" height="auto" id='image' controls class='${ visibleControls===true ? '' : 'full' }' autoplay><source src='${ data.url }'>Your browser does not support the video tag.</video>`
 	}
 	else {
-		html += lychee.html`<img id='image' class='${ visibleControls===true ? '' : 'full' }' src='${ (data.medium !== '') ? data.medium : data.url }' draggable='false'>`
+		if (data.medium !== '') {
+			html += lychee.html`<img id='image' class='${ visibleControls===true ? '' : 'full' }' src='${ data.medium }' ${ (data.medium2x && data.medium2x !== '') ? 'srcset=\'' + data.medium + ' ' + parseInt(data.medium_dim) + 'w, ' + data.medium2x + ' ' + parseInt(data.medium2x_dim) + 'w\'' : '' } draggable='false'>`
+		}
+		else {
+			html += lychee.html`<img id='image' class='${ visibleControls===true ? '' : 'full' }' src='${ data.url }' draggable='false'>`
+		}
 		if(lychee.image_overlay) html += build.overlay_image(data);
 	}
 

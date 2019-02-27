@@ -148,7 +148,22 @@ photo.preloadNext = function(photoID) {
 		let nextPhoto = album.getByID(photoID).nextPhoto;
 		let url       = album.getByID(nextPhoto).url;
 		let medium    = album.getByID(nextPhoto).medium;
-		let href      = (medium!=null && medium!=='' ? medium : url);
+		if (medium != null && medium != '') {
+			href = medium;
+
+			let medium2x  = album.getByID(nextPhoto).medium2x;
+			if (medium2x != null && medium2x != '') {
+				// If the currently displayed image uses the 2x variant,
+				// chances are that so will the next one.
+				imgs=$('img#image');
+				if (imgs.length > 0 && imgs[0].currentSrc != null && imgs[0].currentSrc.includes('@2x.')) {
+					href = medium2x;
+				}
+			}
+		}
+		else {
+			href = url;
+		}
 
 		$('head [data-prefetch]').remove();
 		$('head').append(`<link data-prefetch rel="prefetch" href="${ href }">`)
