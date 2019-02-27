@@ -260,7 +260,7 @@ build.imageview = function (data, visibleControls) {
 		} else {
 			img = `<img id='image' class='${visibleControls === true ? '' : 'full'}' src='${data.url}' draggable='false' alt='big'>`
 		}
-		html += lychee.html(img);
+		html += lychee.html`${img}`;
 
 		if (lychee.image_overlay) html += build.overlay_image(data);
 	}
