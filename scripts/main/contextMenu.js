@@ -270,10 +270,8 @@ contextMenu.photoMore = function(photoID, e) {
 	// b) Downloadable is 1 and public mode is on
 	let showDownload = lychee.publicMode===false || ((album.json && album.json.downloadable && album.json.downloadable==='1') && lychee.publicMode===true);
 
-	let medium    = album.getByID(photoID).medium;
-	let showMedium = (medium!=null && medium!=='' ? true : false) && showDownload;
-	let small    = album.getByID(photoID).small;
-	let showSmall = (small!=null && small!=='' ? true : false) && showDownload;
+	let showMedium = photo.json.medium && photo.json.medium !== '' && showDownload;
+	let showSmall = photo.json.small && photo.json.small !== '' && showDownload;
 	
 	let items = [
 		{ title: build.iconic('fullscreen-enter') + lychee.locale['FULL_PHOTO'], visible: lychee.full_photo, fn: () => window.open(photo.getDirectLink()) },
