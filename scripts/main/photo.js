@@ -433,7 +433,7 @@ photo.setAlbum = function(photoIDs, albumID) {
 	if (!photoIDs) return false;
 	if (photoIDs instanceof Array===false) photoIDs = [ photoIDs ];
 
-	photoIDs.forEach(function(id, index, array) {
+	photoIDs.forEach(function(id) {
 
 		// Change reference for the next and previous photo
 		if (album.getByID(id).nextPhoto!==''||album.getByID(id).previousPhoto!=='') {
@@ -470,7 +470,7 @@ photo.setAlbum = function(photoIDs, albumID) {
 		}
 		else
 		{
-			album.reload();
+			if (visible.album()) album.reload();
 		}
 
 	})

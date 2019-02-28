@@ -45,7 +45,7 @@ header.bind = function() {
 	header.dom('#button_info')        .on(eventName, sidebar.toggle);
 	header.dom('.button_add')         .on(eventName, contextMenu.add);
 	header.dom('#button_more')        .on(eventName, function(e) { contextMenu.photoMore(photo.getID(), e) });
-	header.dom('#button_move')        .on(eventName, function(e) { contextMenu.move([ photo.getID() ], e) });
+	header.dom('#button_move')        .on(eventName, function(e) { contextMenu.move([ photo.getID() ], e, photo.setAlbum) });
 	header.dom('.header__hostedwith') .on(eventName, function() { window.open(lychee.website) });
 	header.dom('#button_trash_album') .on(eventName, function() { album.delete([ album.getID() ]) });
 	header.dom('#button_trash')       .on(eventName, function() { photo.delete([ photo.getID() ]) });
@@ -136,7 +136,7 @@ header.setMode = function(mode) {
 			header.dom('.header__toolbar--album').addClass('header__toolbar--visible');
 
 			// Hide download button when album empty
-			if (album.json.photos===false) $('#button_archive').hide();
+			if (!album.json || album.json.photos===false) $('#button_archive').hide();
 			else                            $('#button_archive').show();
 
 			// Hide download button when not logged in and album not downloadable
