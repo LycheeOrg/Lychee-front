@@ -301,6 +301,11 @@ view.album = {
 					$(this).css('width',layoutGeometry.boxes[i].width);
 					$(this).css('height',layoutGeometry.boxes[i].height);
 					$(this).css('left',layoutGeometry.boxes[i].left);
+
+					let imgs = $(this).find(".thumbimg > img");
+					if (imgs.length > 0 && imgs[0].getAttribute('srcset')) {
+						imgs[0].setAttribute('sizes', layoutGeometry.boxes[i].width + 'px');
+					}
 				});
 			}
 			else if (lychee.layout === '2') {
@@ -311,6 +316,7 @@ view.album = {
 					let height = parseFloat($(this).css('max-height'), 10);
 					let width = height * ratio;
 					let margin = parseFloat($(this).css('margin-right'), 10);
+					let imgs = $(this).find(".thumbimg > img");
 
 					if (width > containerWidth - margin) {
 						width = containerWidth - margin;
@@ -319,6 +325,9 @@ view.album = {
 
 					$(this).css('width', width + 'px');
 					$(this).css('height', height + 'px');
+					if (imgs.length > 0 && imgs[0].getAttribute('srcset')) {
+						imgs[0].setAttribute('sizes', width + 'px');
+					}
 				});
 			}
 		}
@@ -560,6 +569,7 @@ view.photo = {
 	photo: function() {
 
 		lychee.imageview.html(build.imageview(photo.json, visible.header()));
+		view.photo.onresize();
 
 		let $nextArrow     = lychee.imageview.find('a#next');
 		let $previousArrow = lychee.imageview.find('a#previous');
@@ -603,6 +613,27 @@ view.photo = {
 		sidebar.dom('.sidebar__wrapper').html(html);
 		sidebar.bind()
 
+	},
+
+	onresize: function() {
+		if (photo.json.medium === '' || !photo.json.medium2x || photo.json.medium2x === '') return;
+
+		// Calculate the width of the image in the current window and
+		// set 'sizes' to it.
+		let imgWidth = parseInt(photo.json.medium_dim);
+		let imgHeight = photo.json.medium_dim.substr(photo.json.medium_dim.lastIndexOf('x') + 1);
+		let containerWidth = parseFloat($('#imageview').width(), 10);
+		let containerHeight = parseFloat($('#imageview').height(), 10);
+
+		// Image can be no larger than its natural size, but it can be
+		// smaller depending on the size of the window.
+		let width = (imgWidth < containerWidth) ? imgWidth : containerWidth;
+		let height = (width * imgHeight) / imgWidth;
+		if (height > containerHeight) {
+			width = (containerHeight * imgWidth) / imgHeight
+		}
+
+		$('img#image').attr('sizes', width + 'px');
 	}
 
 };

@@ -148,7 +148,20 @@ photo.preloadNext = function(photoID) {
 		let nextPhoto = album.getByID(photoID).nextPhoto;
 		let url       = album.getByID(nextPhoto).url;
 		let medium    = album.getByID(nextPhoto).medium;
-		let href      = (medium!=null && medium!=='' ? medium : url);
+		let href      = url;
+		if (medium != null && medium !== '') {
+			href = medium;
+
+			let medium2x = album.getByID(nextPhoto).medium2x;
+			if (medium2x && medium2x !== '') {
+				// If the currently displayed image uses the 2x variant,
+				// chances are that so will the next one.
+				let imgs=$('img#image');
+				if (imgs.length > 0 && imgs[0].currentSrc != null && imgs[0].currentSrc.includes('@2x.')) {
+					href = medium2x;
+				}
+			}
+		}
 
 		$('head [data-prefetch]').remove();
 		$('head').append(`<link data-prefetch rel="prefetch" href="${ href }">`)
@@ -280,7 +293,7 @@ photo.delete = function(photoIDs) {
 
 		basicModal.close();
 
-		photoIDs.forEach(function(id, index, array) {
+		photoIDs.forEach(function(id) {
 
 			// Change reference for the next and previous photo
 			if (album.getByID(id).nextPhoto!=='' || album.getByID(id).previousPhoto!=='') {
@@ -377,7 +390,7 @@ photo.setTitle = function(photoIDs) {
 			view.photo.title()
 		}
 
-		photoIDs.forEach(function(id, index, array) {
+		photoIDs.forEach(function(id) {
 			album.getByID(id).title = newTitle;
 			view.album.content.title(id)
 		});
@@ -486,7 +499,7 @@ photo.setStar = function(photoIDs) {
 		view.photo.star()
 	}
 
-	photoIDs.forEach(function(id, index, array) {
+	photoIDs.forEach(function(id) {
 		album.getByID(id).star = (album.getByID(id).star==='0' ? '1' : '0');
 		view.album.content.star(id)
 	});
@@ -612,7 +625,7 @@ photo.editTags = function(photoIDs) {
 	else if (visible.search() && photoIDs.length===1) oldTags = album.getByID(photoIDs).tags;
 	else if (visible.album() && photoIDs.length>1) {
 		let same = true;
-		photoIDs.forEach(function(id, index, array) {
+		photoIDs.forEach(function(id) {
 			same = (album.getByID(id).tags === album.getByID(photoIDs[0]).tags && same === true);
 		});
 		if (same===true) oldTags = album.getByID(photoIDs[0]).tags
