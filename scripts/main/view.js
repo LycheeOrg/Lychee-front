@@ -283,6 +283,13 @@ view.album = {
 		justify: function () {
 			if (!album.json.photos || album.json.photos===false) return;
 			if (lychee.layout === '1') {
+				let containerWidth = parseFloat($('.justified-layout').width(), 10);
+				if (containerWidth == 0) {
+					// Triggered on Reload in photo view.
+					containerWidth = $(window).width() -
+						parseFloat($('.justified-layout').css('margin-left'), 10) -
+						parseFloat($('.justified-layout').css('margin-right'), 10);
+				}
 				let ratio = [];
 				$.each(album.json.photos, function (i) {
 					let l_width = this.width > 0 ? this.width : 200;
@@ -290,7 +297,7 @@ view.album = {
 					ratio[i] = l_width / l_height;
 				});
 				let layoutGeometry = require('justified-layout')(ratio, {
-					containerWidth: $('.justified-layout').width(),
+					containerWidth: containerWidth,
 					containerPadding: 0
 				});
 				if(lychee.admin) console.log(layoutGeometry);
@@ -310,6 +317,12 @@ view.album = {
 			}
 			else if (lychee.layout === '2') {
 				let containerWidth = parseFloat($('.unjustified-layout').width(), 10);
+				if (containerWidth == 0) {
+					// Triggered on Reload in photo view.
+					containerWidth = $(window).width() -
+						parseFloat($('.unjustified-layout').css('margin-left'), 10) -
+						parseFloat($('.unjustified-layout').css('margin-right'), 10);
+				}
 				$('.unjustified-layout > div').each(function (i) {
 					let ratio = album.json.photos[i].height > 0 ?
 								album.json.photos[i].width / album.json.photos[i].height : 1;
