@@ -35,3 +35,9 @@
 	bottom: 0;
 	margin: 0 0 0 0;
 }
+
+.justified-layout > .photo > .overlay > h1, .unjustified-layout > .photo > .overlay > h1
+{
+	width: auto;
+	margin-right: 15px;
+}
