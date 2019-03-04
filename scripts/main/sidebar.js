@@ -117,6 +117,15 @@ sidebar.changeAttr = function(attr, value = '-', dangerouslySetInnerHTML = false
 
 };
 
+sidebar.secondsToHMS = function(d) {
+	d = Number(d);
+	var h = Math.floor(d / 3600);
+	var m = Math.floor(d % 3600 / 60);
+	var s = Math.floor(d % 3600 % 60);
+
+	return ((h > 0) ? h + 'h' : '') + ((m > 0) ? m + 'm' : '') + ((s > 0) ? s + 's' : '');
+}
+
 sidebar.createStructure.photo = function(data) {
 
 	if (data==null || data==='') return false;
@@ -125,6 +134,7 @@ sidebar.createStructure.photo = function(data) {
 	let exifHash  = data.takedate + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
 	let structure = {};
 	let _public   = '';
+	let isVideo = data.type && data.type.indexOf('video') > -1;
 
 	// Enable editable when user logged in
 	if (lychee.publicMode===false && lychee.upload) editable = true;
@@ -167,7 +177,7 @@ sidebar.createStructure.photo = function(data) {
 	};
 
 	structure.image = {
-		title : lychee.locale['PHOTO_IMAGE'],
+		title : lychee.locale[isVideo ? 'PHOTO_VIDEO' : 'PHOTO_IMAGE'],
 		type  : sidebar.types.DEFAULT,
 		rows  : [
 			{ title: lychee.locale['PHOTO_SIZE'],       kind: 'size',           value: data.size },
@@ -175,6 +185,20 @@ sidebar.createStructure.photo = function(data) {
 			{ title: lychee.locale['PHOTO_RESOLUTION'], kind: 'resolution',     value: data.width + ' x ' + data.height }
 		]
 	};
+
+	if (isVideo) {
+		// We overload the database, storing duration (in full seconds) in
+		// "aperture" and frame rate (floating point with three digits after
+		// the decimal point) in "focal".
+		if (data.aperture != '') {
+			structure.image.rows.push({ title: lychee.locale['PHOTO_DURATION'],
+				kind: 'duration', value: sidebar.secondsToHMS(data.aperture) });
+		}
+		if (data.focal != '') {
+			structure.image.rows.push({ title: lychee.locale['PHOTO_FPS'],
+				kind: 'fps', value: data.focal + ' fps'});
+		}
+	}
 
 	// Only create tags section when user logged in
 	if (lychee.publicMode===false && lychee.upload) {
@@ -198,7 +222,10 @@ sidebar.createStructure.photo = function(data) {
 		structure.exif = {
 			title : lychee.locale['PHOTO_CAMERA'],
 			type  : sidebar.types.DEFAULT,
-			rows  : [
+			rows  : isVideo ? [
+				{ title: lychee.locale['PHOTO_CAPTURED'],       kind: 'takedate',   value: data.takedate },
+			] :
+			[
 				{ title: lychee.locale['PHOTO_CAPTURED'],       kind: 'takedate',   value: data.takedate },
 				{ title: lychee.locale['PHOTO_MAKE'],           kind: 'make',       value: data.make },
 				{ title: lychee.locale['PHOTO_TYPE'],           kind: 'model',      value: data.model },
@@ -328,12 +355,19 @@ sidebar.createStructure.album = function(data) {
 		]
 	};
 
+	videoCount = 0;
+	$.each(data.photos, function () {
+		if (this.type && this.type.indexOf('video') > -1) {
+			videoCount++;
+		}
+	});
 	structure.album = {
 		title : lychee.locale['ALBUM_ALBUM'],
 		type  : sidebar.types.DEFAULT,
 		rows  : [
 			{ title: lychee.locale['ALBUM_CREATED'], kind: 'created',       value: data.sysdate },
-			{ title: lychee.locale['ALBUM_IMAGES'],  kind: 'images',        value: data.photos.length }
+			{ title: lychee.locale['ALBUM_IMAGES'],  kind: 'images',        value: data.photos.length - videoCount },
+			{ title: lychee.locale['ALBUM_VIDEOS'],  kind: 'videos',        value: videoCount }
 		]
 	};
 
