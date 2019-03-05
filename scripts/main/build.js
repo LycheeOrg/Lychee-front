@@ -54,7 +54,10 @@ build.getAlbumThumb = function (data, i) {
 			thumb2x = data.thumbs2x[i]
 		}
 	} else { // Fallback code for Lychee v3
-		var {path: thumb2x} = lychee.retinize(data.thumbs[i])
+		var {path: thumb2x, isPhoto: isPhoto} = lychee.retinize(data.thumbs[i])
+		if (!isPhoto) {
+			thumb2x = ''
+		}
 	}
 
 	return `<span class="thumbimg${isVideo ? ' video' : ''}"><img src='${thumb}' ${(thumb2x !== '') ? 'srcset=\'' + thumb2x + ' 2x\'' : ''} alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
