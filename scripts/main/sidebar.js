@@ -121,9 +121,9 @@ sidebar.secondsToHMS = function(d) {
 	d = Number(d);
 	var h = Math.floor(d / 3600);
 	var m = Math.floor(d % 3600 / 60);
-	var s = Math.floor(d % 3600 % 60);
+	var s = Math.floor(d % 60);
 
-	return ((h > 0) ? h + 'h' : '') + ((m > 0) ? m + 'm' : '') + ((s > 0) ? s + 's' : '');
+	return ((h > 0) ? h.toString() + 'h' : '') + ((m > 0) ? m.toString() + 'm' : '') + ((s > 0 || (h == 0 && m == 0)) ? s.toString() + 's' : '');
 }
 
 sidebar.createStructure.photo = function(data) {
@@ -366,10 +366,13 @@ sidebar.createStructure.album = function(data) {
 		type  : sidebar.types.DEFAULT,
 		rows  : [
 			{ title: lychee.locale['ALBUM_CREATED'], kind: 'created',       value: data.sysdate },
-			{ title: lychee.locale['ALBUM_IMAGES'],  kind: 'images',        value: data.photos.length - videoCount },
-			{ title: lychee.locale['ALBUM_VIDEOS'],  kind: 'videos',        value: videoCount }
+			{ title: lychee.locale['ALBUM_IMAGES'],  kind: 'images',        value: (data.photos ? data.photos.length : 0) - videoCount }
 		]
 	};
+	if (videoCount > 0) {
+		structure.album.rows.push({ title: lychee.locale['ALBUM_VIDEOS'],
+									kind: 'videos', value: videoCount });
+	}
 
 	structure.share = {
 		title : lychee.locale['ALBUM_SHARING'],
