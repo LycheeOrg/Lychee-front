@@ -25,6 +25,7 @@ lychee = {
 	image_overlay_default		: false,	// display Overlay like in Lightroom by default
 	image_overlay_type			: 'exif',	// current Overlay display type
 	image_overlay_type_default	: 'exif',	// image overlay type default type
+	landing_page_enabled        : false,    // is landing page enabled ?
 
 	checkForUpdates			: '1',
 	update_json 			: 0,
@@ -113,6 +114,8 @@ lychee.init = function() {
 		lychee.update_json = data.update_json;
 		lychee.update_available = data.update_available;
 		lychee.versionCode = data.config.version.slice(7, data.config.version);
+		lychee.landing_page_enable = (data.config.landing_page_enable && data.config.landing_page_enable === '1') || false;
+
 		if (lychee.api_V2)
 		{
 			lychee.versionCode = data.config.version;
@@ -420,6 +423,9 @@ lychee.setMode = function(mode) {
 		lychee.viewMode   = true
 
 	}
+
+	// just mak
+	header.bind_back();
 
 };
 

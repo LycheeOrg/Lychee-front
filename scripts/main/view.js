@@ -17,7 +17,18 @@ view.albums = {
 
 	title: function() {
 
-		lychee.setTitle(lychee.locale['ALBUMS'], false)
+		if (lychee.landing_page_enable)
+		{
+			if (lychee.title !== 'Lychee v4') {
+				lychee.setTitle(lychee.title, false)
+			}
+			else {
+				lychee.setTitle(lychee.locale['ALBUMS'], false)
+			}
+		}
+		else {
+			lychee.setTitle(lychee.locale['ALBUMS'], false)
+		}
 
 	},
 
