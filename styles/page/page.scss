@@ -12,8 +12,7 @@
 
 html, body {
 	font-family: 'Roboto', sans-serif;
-	background: #000000;
-	overflow: hidden;
+	background: #FFFFFF;
 }
 
 ol, ul {
@@ -24,14 +23,15 @@ a {
 	text-decoration: none;
 }
 
-@import "../page/fonts";
-@import "../page/animate";
-@import "../page/social";
-@import "menu";
-@import "logo";
-@import "intro";
-@import "slide";
 
+@import "fonts";
+@import "animate";
+//@import "intro";
+@import "logo";
+@import "menu";
+@import "social";
+@import "content";
+//@import "slide";
 
 #footer {
 	position: absolute;
@@ -45,7 +45,7 @@ a {
 
 #home_copyright {
 	text-transform: uppercase;
-	color: #FFFFFF;
+	color: #333333;
 	font-size: 0.5em;
 	font-weight: 400;
 }

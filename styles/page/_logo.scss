@@ -1,0 +1,31 @@
+#header {
+	position: fixed;
+	left: 0;
+	top: 0;
+	right: 0;
+	z-index: 98;
+	background: #f7f7f7;
+}
+
+#logo {
+	float: left;
+	padding: 15px;
+
+	h1 {
+		color: #000000;
+		font-size: 1em;
+		text-transform: uppercase;
+		font-weight: 700;
+		text-align: center;
+
+		span {
+			font-family: 'Roboto', sans-serif;
+			font-size: 0.6em;
+			display: block;
+			font-weight: 300;
+			letter-spacing: 1px;
+			padding: 0 0 0 0;
+		}
+	}
+}
+
