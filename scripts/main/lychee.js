@@ -113,6 +113,12 @@ lychee.init = function() {
 		lychee.update_json = data.update_json;
 		lychee.update_available = data.update_available;
 		lychee.versionCode = data.config.version.slice(7, data.config.version);
+		if (lychee.api_V2)
+		{
+			lychee.versionCode = data.config.version;
+			let digits = lychee.versionCode.match(/.{1,2}/g);
+			lychee.version = parseInt(digits[0]).toString() + '.' + parseInt(digits[1]).toString() + '.' + parseInt(digits[2]).toString();
+		}
 
 		// we copy the locale that exists only.
 		// This ensure forward and backward compatibility.
@@ -175,7 +181,7 @@ lychee.init = function() {
 			lychee.image_overlay_type			= (!data.config.image_overlay_type) ? 'exif' : data.config.image_overlay_type;
 			lychee.image_overlay_type_default	= lychee.image_overlay_type;
 
-			console.log(lychee.full_photo);
+			// console.log(lychee.full_photo);
 			lychee.setMode('public');
 
 		} else {
@@ -326,7 +332,7 @@ lychee.getUpdate = function() {
 	console.log(lychee.update_available);
 	console.log(lychee.update_json);
 
-	if(lychee.update_json != 0)
+	if(lychee.update_json !== 0)
 	{
 		if(lychee.update_available)
 		{
@@ -336,7 +342,7 @@ lychee.getUpdate = function() {
 	else
 	{
 		const success = function(data) {
-			if (data.lychee.version>parseInt(lychee.versionCode)) $('.version span').show()
+			if (data.lychee.version > parseInt(lychee.versionCode)) $('.version span').show()
 		};
 
 		$.ajax({
