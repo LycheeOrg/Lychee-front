@@ -109,6 +109,17 @@
 		border: 3px solid #707070;
 	}
 
+	div.right_30 img, div.right_50 img, div.right_70 img,{
+		width: 100%;
+		box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		border: 3px solid #707070;
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+
+
 	.clearfix::after {
 		content: "";
 		clear: both;
