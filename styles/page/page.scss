@@ -26,21 +26,20 @@ a {
 
 @import "fonts";
 @import "animate";
-//@import "intro";
 @import "logo";
 @import "menu";
 @import "social";
 @import "content";
-//@import "slide";
 
 #footer {
-	position: absolute;
+	position: fixed;
 	z-index: 3;
 	left: 0;
 	right: 0;
 	bottom: 0;
-	padding: 0 0 10px 0;
+	padding: 20px 0 20px 0;
 	text-align: center;
+	background: #FFFFFF;
 }
 
 #home_copyright {
