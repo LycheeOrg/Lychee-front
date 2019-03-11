@@ -18,7 +18,6 @@
 	h2 {
 		display: block;
 		font-size: 1.5em;
-		line-height: 2em;
 		margin-bottom: 0.83em;
 		margin-left: 0;
 		margin-right: 0;
@@ -27,8 +26,7 @@
 
 	h3 {
 		display: block;
-		font-size: 1.2em;
-		line-height: 1.7em;
+		font-size: 1.17em;
 		margin-bottom: 1em;
 		margin-left: 0;
 		margin-right: 0;
@@ -38,7 +36,6 @@
 	h4 {
 		display: block;
 		font-size: 1em;
-		line-height: 1.5em;
 		margin-bottom: 1.33em;
 		margin-left: 0;
 		margin-right: 0;
@@ -48,7 +45,6 @@
 	h5 {
 		display: block;
 		font-size: .83em;
-		line-height: 1.2em;
 		margin-bottom: 1.67em;
 		margin-left: 0;
 		margin-right: 0;
@@ -58,7 +54,6 @@
 	h6 {
 		display: block;
 		font-size: .67em;
-		line-height: 1em;
 		margin-bottom: 2.33em;
 		margin-left: 0;
 		margin-right: 0;
@@ -67,11 +62,8 @@
 
 	p {
 		color: #707070;
-		font-size: 0.9em;
-		letter-spacing: 0.05em;
 		margin-bottom: 1.5em;
-		line-height: 1.7em;
-		font-weight: 300;
+		line-height: 1.2em;
 		text-align: justify;
 	}
 
@@ -103,22 +95,7 @@
 		width: 80%;
 		margin-left: auto;
 		margin-right: auto;
-		box-sizing: border-box;
-		-moz-box-sizing: border-box;
-		-webkit-box-sizing: border-box;
-		border: 3px solid #707070;
 	}
-
-	div.right_30 img, div.right_50 img, div.right_70 img {
-		width: 100%;
-		box-sizing: border-box;
-		-moz-box-sizing: border-box;
-		-webkit-box-sizing: border-box;
-		border: 3px solid #707070;
-		margin-top: 20px;
-		margin-bottom: 20px;
-	}
-
 
 	.clearfix::after {
 		content: "";
