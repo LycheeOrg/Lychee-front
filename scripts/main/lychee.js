@@ -177,6 +177,8 @@ lychee.init = function() {
 
 			// Logged out
 
+			lychee.sortingPhotos				= data.config.sortingPhotos		|| '';
+			lychee.sortingAlbums				= data.config.sortingAlbums		|| '';
 			lychee.full_photo					= (data.config.full_photo == null)	|| (data.config.full_photo === '1');
 			lychee.checkForUpdates				= data.config.checkForUpdates		|| '1';
 			lychee.layout						= data.config.layout				|| '1';
