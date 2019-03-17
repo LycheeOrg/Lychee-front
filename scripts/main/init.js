@@ -140,7 +140,7 @@ $(document).ready(function() {
 	})
 
 	// Fullscreen
-	.on('fullscreenchange', lychee.fullscreenUpdate);
+	.on('fullscreenchange mozfullscreenchange webkitfullscreenchange msfullscreenchange', lychee.fullscreenUpdate);
 
 	$(window)
 	// resize
