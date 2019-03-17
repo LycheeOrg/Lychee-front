@@ -137,7 +137,10 @@ $(document).ready(function() {
 
 		return false
 
-	});
+	})
+
+	// Fullscreen
+	.on('fullscreenchange', lychee.fullscreenUpdate);
 
 	$(window)
 	// resize

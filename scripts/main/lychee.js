@@ -588,9 +588,6 @@ lychee.fullscreenEnter = function() {
 	} else if (elem.msRequestFullscreen) { /* IE/Edge */
 		elem.msRequestFullscreen();
 	}
-
-	$('#button_fs_album_enter,#button_fs_enter').hide();
-	$('#button_fs_album_exit,#button_fs_exit').show();
 };
 
 lychee.fullscreenExit = function() {
@@ -603,16 +600,29 @@ lychee.fullscreenExit = function() {
 	} else if (document.msExitFullscreen) { /* IE/Edge */
 		document.msExitFullscreen();
 	}
-
-	$('#button_fs_album_enter,#button_fs_enter').show();
-	$('#button_fs_album_exit,#button_fs_exit').hide();
 };
 
 lychee.fullscreenToggle = function() {
-	if ($('#button_fs_album_enter,#button_fs_enter').is(":visible")) {
-		lychee.fullscreenEnter();
+	if (lychee.fullscreenStatus()) {
+		lychee.fullscreenExit();
 	}
 	else {
-		lychee.fullscreenExit();
+		lychee.fullscreenEnter();
+	}
+};
+
+lychee.fullscreenStatus = function() {
+	let elem = (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
+	return (elem ? true : false);
+}
+
+lychee.fullscreenUpdate = function() {
+	if (lychee.fullscreenStatus()) {
+		$('#button_fs_album_enter,#button_fs_enter').hide();
+		$('#button_fs_album_exit,#button_fs_exit').show();
+	}
+	else {
+		$('#button_fs_album_enter,#button_fs_enter').show();
+		$('#button_fs_album_exit,#button_fs_exit').hide();
 	}
 };
