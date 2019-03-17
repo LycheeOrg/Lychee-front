@@ -42,6 +42,8 @@ lychee.locale = {
 		'DOWNLOAD_ALBUM'	: 'Download Album',
 		'ABOUT_ALBUM'		: 'About Album',
 		'DELETE_ALBUM'		: 'Delete Album',
+		'FULLSCREEN_ENTER'	: 'Enter Fullscreen',
+		'FULLSCREEN_EXIT'	: 'Exit Fullscreen',
 
 		'DELETE_ALBUM_QUESTION'		: 'Delete Album and Photos',
 		'KEEP_ALBUM'					: 'Keep Album',

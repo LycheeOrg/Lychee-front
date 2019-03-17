@@ -59,6 +59,8 @@ header.bind = function() {
 		}
 	});
 	header.dom('#button_back')        .on(eventName, function() { lychee.goto(album.getID()) });
+	header.dom('#button_fs_album_enter,#button_fs_enter').on(eventName, lychee.fullscreenEnter);
+	header.dom('#button_fs_album_exit,#button_fs_exit').on(eventName, lychee.fullscreenExit).hide();
 
 	header.dom('.header__search').on('keyup click', function() { search.find($(this).val()) });
 	header.dom('.header__clear').on(eventName, function() {
