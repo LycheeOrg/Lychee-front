@@ -1100,8 +1100,8 @@ view.users = {
 			'<p>' +
 			'<span class="text">username</span>' +
 			'<span class="text">new password</span>' +
-			'<span class="text_icon">' + build.iconic('data-transfer-upload')+ '</span>' +
-			'<span class="text_icon">' + build.iconic('lock-locked')+ '</span>' +
+			'<span class="text_icon" title="Allow uploads">' + build.iconic('data-transfer-upload')+ '</span>' +
+			'<span class="text_icon" title="Restricted account">' + build.iconic('lock-locked')+ '</span>' +
 			'</p>' +
 			'</div>';
 
@@ -1130,21 +1130,21 @@ view.users = {
 			}
 			html += '>' +
 				'<p id="UserCreate">' +
-				'<input class="text" name="username" type="text" value="" placeholder="new username" />' +
-				'<input class="text" name="password" type="text" placeholder="new password" />' +
-				'<span class="choice">' +
+				'<input class="text" name="username" type="text" value="" placeholder="new username" /> ' +
+				'<input class="text" name="password" type="password" placeholder="new password" /> ' +
+				'<span class="choice" title="Allow uploads">' +
 				'<label>' +
 				'<input type="checkbox" name="upload" />' +
 				'<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
 				'</label>' +
-				'</span>' +
-				'<span class="choice">' +
+				'</span> ' +
+				'<span class="choice" title="Restricted account">' +
 				'<label>' +
 				'<input type="checkbox" name="lock" />' +
 				'<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
 				'</label>' +
 				'</span>' +
-				'</p>' +
+				'</p> ' +
 				'<a id="UserCreate_button"  class="basicModal__button basicModal__button_CREATE">Create</a>' +
 				'</div>';
 			$(".users_view").append(html);
