@@ -66,7 +66,10 @@ $(document).ready(function() {
 			else if (visible.albums() && basicModal.visible()===false) { multiselect.selectAll(); return false }
 		})
 		.bind([ 'o' ], function() {
-			if(visible.photo()) { photo.update_overlay_type(); }
+			if(visible.photo()) { photo.update_overlay_type(); return false }
+		})
+		.bind([ 'F' ], function() {
+			if (visible.album() || visible.photo()) { lychee.fullscreenToggle(); return false }
 		});
 
 	Mousetrap.bindGlobal('enter', function() {
@@ -134,7 +137,10 @@ $(document).ready(function() {
 
 		return false
 
-	});
+	})
+
+	// Fullscreen
+	.on('fullscreenchange mozfullscreenchange webkitfullscreenchange msfullscreenchange', lychee.fullscreenUpdate);
 
 	$(window)
 	// resize

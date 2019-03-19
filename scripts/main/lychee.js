@@ -576,3 +576,53 @@ lychee.error = function(errorThrown, params = '', data = '') {
 	loadingBar.show('error', errorThrown)
 
 };
+
+lychee.fullscreenEnter = function() {
+	let elem = document.documentElement;
+	if (elem.requestFullscreen) {
+		elem.requestFullscreen();
+	} else if (elem.mozRequestFullScreen) { /* Firefox */
+		elem.mozRequestFullScreen();
+	} else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+		elem.webkitRequestFullscreen();
+	} else if (elem.msRequestFullscreen) { /* IE/Edge */
+		elem.msRequestFullscreen();
+	}
+};
+
+lychee.fullscreenExit = function() {
+	if (document.exitFullscreen) {
+		document.exitFullscreen();
+	} else if (document.mozCancelFullScreen) { /* Firefox */
+		document.mozCancelFullScreen();
+	} else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+		document.webkitExitFullscreen();
+	} else if (document.msExitFullscreen) { /* IE/Edge */
+		document.msExitFullscreen();
+	}
+};
+
+lychee.fullscreenToggle = function() {
+	if (lychee.fullscreenStatus()) {
+		lychee.fullscreenExit();
+	}
+	else {
+		lychee.fullscreenEnter();
+	}
+};
+
+lychee.fullscreenStatus = function() {
+	let elem = (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
+	return (elem ? true : false);
+}
+
+lychee.fullscreenUpdate = function() {
+	if (lychee.fullscreenStatus()) {
+		$('#button_fs_album_enter,#button_fs_enter').hide();
+		$('#button_fs_album_exit,#button_fs_exit').show();
+	}
+	else {
+		$('#button_fs_album_enter,#button_fs_enter').show();
+		$('#button_fs_album_exit,#button_fs_exit').hide();
+	}
+};
