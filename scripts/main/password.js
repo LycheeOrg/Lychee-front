@@ -12,7 +12,7 @@ password.get = function(albumID, callback) {
 
 	if (lychee.publicMode===false)                                  callback();
 	else if (album.json && album.json.password==='0')               callback();
-	else if (albums.json && albums.getByID(albumID).password==='0') callback();
+	else if (albums.json && (albums.getByID(albumID).password==='0' || albums.getByID(albumID).passwordProvided)) callback();
 	else if (!albums.json && !album.json) {
 
 		// Continue without password
@@ -46,6 +46,9 @@ password.getDialog = function(albumID, callback) {
 			if (data===true) {
 				basicModal.close();
 				password.value = passwd;
+				if (lychee.api_V2 && albums.json) {
+					albums.getByID(albumID).passwordProvided = true;
+				}
 				callback()
 			} else {
 				basicModal.error('password')
