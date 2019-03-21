@@ -151,6 +151,8 @@ albums.getByID = function(albumID) {
 			json = this;
 			return false; // stop the loop
 		}
+		if (this.albums)
+			$.each(this.albums, func);
 	};
 
 	$.each(albums.json.albums, func);

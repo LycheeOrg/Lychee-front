@@ -98,64 +98,68 @@ album.getParent = function() {
 
 album.load = function(albumID, refresh = false) {
 
-	password.get(albumID, function() {
+	let params = {
+		albumID,
+		password: ''
+	};
 
-		if (refresh===false) lychee.animate('.content', 'contentZoomOut');
+	const processData = function (data) {
 
-		let startTime = new Date().getTime();
+		if (data === 'Warning: Wrong password!') {
+			// User hit Cancel at the password prompt
+			return false
+		}
 
-		let params = {
-			albumID,
-			password: password.value
-		};
+		if (data === 'Warning: Album private!') {
 
-		api.post('Album::get', params, function(data) {
+			if (document.location.hash.replace('#', '').split('/')[1] !== undefined) {
+				// Display photo only
+				lychee.setMode('view')
+			} else {
+				// Album not public
+				lychee.content.show();
+				if (!visible.albums() && !visible.album()) lychee.goto()
+			}
+			return false
+		}
 
-			let waitTime = 0;
+		album.json = data;
 
-			if (data==='Warning: Album private!') {
+		if (refresh === false) lychee.animate('.content', 'contentZoomOut');
+		let waitTime = 300;
 
-				if (document.location.hash.replace('#', '').split('/')[1]!==undefined) {
-					// Display photo only
-					lychee.setMode('view')
-				} else {
-					// Album not public
-					lychee.content.show();
-					lychee.goto()
-				}
-				return false
+		// Skip delay when refresh is true
+		// Skip delay when opening a blank Lychee
+		if (refresh === true) waitTime = 0;
+		if (!visible.albums() && !visible.photo() && !visible.album()) waitTime = 0;
+
+		setTimeout(() => {
+
+			view.album.init();
+
+			if (refresh === false) {
+				lychee.animate(lychee.content, 'contentZoomIn');
+				header.setMode('album')
 			}
 
-			if (data==='Warning: Wrong password!') {
-				album.load(albumID, refresh);
-				return false
-			}
+		}, waitTime)
+	};
 
-			album.json = data;
+	api.post('Album::get', params, function(data) {
 
-			// Calculate delay
-			let durationTime = (new Date().getTime() - startTime);
-			if (durationTime>300) waitTime = 0;
-			else                  waitTime = 300 - durationTime;
+		if (data === 'Warning: Wrong password!') {
+			password.getDialog(albumID, function() {
 
-			// Skip delay when refresh is true
-			// Skip delay when opening a blank Lychee
-			if (refresh===true)                                            waitTime = 0;
-			if (!visible.albums() && !visible.photo() && !visible.album()) waitTime = 0;
+				params.password = password.value;
 
-			setTimeout(() => {
-
-				view.album.init();
-
-				if (refresh===false) {
-					lychee.animate(lychee.content, 'contentZoomIn');
-					header.setMode('album')
-				}
-
-			}, waitTime)
-
-		})
-
+				api.post('Album::get', params, function(data) {
+					processData(data)
+				})
+			})
+		}
+		else {
+			processData(data)
+		}
 	})
 
 };
