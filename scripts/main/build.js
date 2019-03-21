@@ -375,13 +375,13 @@ build.user = function (user) {
 			<input name="id" type="hidden" value="${user.id}" />
 			<input class="text" name="username" type="text" value="$${user.username}" placeholder="username" />
 			<input class="text" name="password" type="text" placeholder="new password" />
-			<span class="choice">
+			<span class="choice" title="Allow uploads">
 			<label>
 			<input type="checkbox" name="upload" />
 			<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
 			</label>
 			</span>
-			<span class="choice">
+			<span class="choice" title="Restricted account">
 			<label>
 			<input type="checkbox" name="lock" />
 			<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>

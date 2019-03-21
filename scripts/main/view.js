@@ -714,6 +714,7 @@ view.settings = {
 				  ` + lychee.locale['PASSWORD_TEXT'] + `
 				  <input name='username' class='text' type='text' placeholder='` + lychee.locale['LOGIN_USERNAME'] + `' value=''>
 				  <input name='password' class='text' type='password' placeholder='` + lychee.locale['LOGIN_PASSWORD'] + `' value=''>
+				  <input name='confirm' class='text' type='password' placeholder='` + lychee.locale['LOGIN_PASSWORD_CONFIRM'] + `' value=''>
 			  </p>
 			<div class="basicModal__buttons">
 				<!--<a id="basicModal__cancel" class="basicModal__button ">Cancel</a>-->
@@ -728,7 +729,7 @@ view.settings = {
 		},
 
 		clearLogin: function () {
-			$('input[name=oldUsername], input[name=oldPassword], input[name=username], input[name=password]').val('')
+			$('input[name=oldUsername], input[name=oldPassword], input[name=username], input[name=password], input[name=confirm]').val('')
 		},
 
 		setSorting: function() {
@@ -1100,8 +1101,8 @@ view.users = {
 			'<p>' +
 			'<span class="text">username</span>' +
 			'<span class="text">new password</span>' +
-			'<span class="text_icon">' + build.iconic('data-transfer-upload')+ '</span>' +
-			'<span class="text_icon">' + build.iconic('lock-locked')+ '</span>' +
+			'<span class="text_icon" title="Allow uploads">' + build.iconic('data-transfer-upload')+ '</span>' +
+			'<span class="text_icon" title="Restricted account">' + build.iconic('lock-locked')+ '</span>' +
 			'</p>' +
 			'</div>';
 
@@ -1130,21 +1131,21 @@ view.users = {
 			}
 			html += '>' +
 				'<p id="UserCreate">' +
-				'<input class="text" name="username" type="text" value="" placeholder="new username" />' +
-				'<input class="text" name="password" type="text" placeholder="new password" />' +
-				'<span class="choice">' +
+				'<input class="text" name="username" type="text" value="" placeholder="new username" /> ' +
+				'<input class="text" name="password" type="text" placeholder="new password" /> ' +
+				'<span class="choice" title="Allow uploads">' +
 				'<label>' +
 				'<input type="checkbox" name="upload" />' +
 				'<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
 				'</label>' +
-				'</span>' +
-				'<span class="choice">' +
+				'</span> ' +
+				'<span class="choice" title="Restricted account">' +
 				'<label>' +
 				'<input type="checkbox" name="lock" />' +
 				'<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
 				'</label>' +
 				'</span>' +
-				'</p>' +
+				'</p> ' +
 				'<a id="UserCreate_button"  class="basicModal__button basicModal__button_CREATE">Create</a>' +
 				'</div>';
 			$(".users_view").append(html);
