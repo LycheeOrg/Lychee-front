@@ -153,6 +153,7 @@ settings.createLogin = function() {
 
 		let username = data.username;
 		let password = data.password;
+		let confirm = data.confirm;
 
 		if (username.length<1) {
 			basicModal.error('username');
@@ -161,6 +162,11 @@ settings.createLogin = function() {
 
 		if (password.length<1) {
 			basicModal.error('password');
+			return false
+		}
+
+		if (password !== confirm) {
+			basicModal.error('confirm');
 			return false
 		}
 
@@ -196,6 +202,7 @@ settings.createLogin = function() {
 				  ` + lychee.locale['LOGIN_TITLE'] + `
 				  <input name='username' class='text' type='text' placeholder='` + lychee.locale['LOGIN_USERNAME'] + `' value=''>
 				  <input name='password' class='text' type='password' placeholder='` + lychee.locale['LOGIN_PASSWORD'] + `' value=''>
+				  <input name='confirm' class='text' type='password' placeholder='` + lychee.locale['LOGIN_PASSWORD_CONFIRM'] + `' value=''>
 			  </p>
 			  `;
 
@@ -267,6 +274,16 @@ settings.changeLogin = function(params) {
 		else
 		{
 			$('input[name=password]').removeClass('error');
+		}
+
+		if (params.password !== params.confirm) {
+			loadingBar.show('error', 'new password does not match.');
+			$('input[name=confirm]').addClass('error');
+			return false
+		}
+		else
+		{
+			$('input[name=confirm]').removeClass('error');
 		}
 
 

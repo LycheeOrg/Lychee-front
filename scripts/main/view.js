@@ -714,6 +714,7 @@ view.settings = {
 				  ` + lychee.locale['PASSWORD_TEXT'] + `
 				  <input name='username' class='text' type='text' placeholder='` + lychee.locale['LOGIN_USERNAME'] + `' value=''>
 				  <input name='password' class='text' type='password' placeholder='` + lychee.locale['LOGIN_PASSWORD'] + `' value=''>
+				  <input name='confirm' class='text' type='password' placeholder='` + lychee.locale['LOGIN_PASSWORD_CONFIRM'] + `' value=''>
 			  </p>
 			<div class="basicModal__buttons">
 				<!--<a id="basicModal__cancel" class="basicModal__button ">Cancel</a>-->
@@ -728,7 +729,7 @@ view.settings = {
 		},
 
 		clearLogin: function () {
-			$('input[name=oldUsername], input[name=oldPassword], input[name=username], input[name=password]').val('')
+			$('input[name=oldUsername], input[name=oldPassword], input[name=username], input[name=password], input[name=confirm]').val('')
 		},
 
 		setSorting: function() {
@@ -1131,7 +1132,7 @@ view.users = {
 			html += '>' +
 				'<p id="UserCreate">' +
 				'<input class="text" name="username" type="text" value="" placeholder="new username" /> ' +
-				'<input class="text" name="password" type="password" placeholder="new password" /> ' +
+				'<input class="text" name="password" type="text" placeholder="new password" /> ' +
 				'<span class="choice" title="Allow uploads">' +
 				'<label>' +
 				'<input type="checkbox" name="upload" />' +

@@ -237,6 +237,7 @@ lychee.locale = {
 		'LOGIN_TITLE'				: 'Enter a username and password for your installation:',
 		'LOGIN_USERNAME'			: 'New Username',
 		'LOGIN_PASSWORD'			: 'New Password',
+		'LOGIN_PASSWORD_CONFIRM'	: 'Confirm Password',
 		'LOGIN_CREATE'				: 'Create Login',
 
 		'PASSWORD_TITLE'			: 'Enter your current username and password:',

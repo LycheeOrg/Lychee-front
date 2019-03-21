@@ -374,7 +374,7 @@ build.user = function (user) {
 			<p id="UserData${user.id}">
 			<input name="id" type="hidden" value="${user.id}" />
 			<input class="text" name="username" type="text" value="$${user.username}" placeholder="username" />
-			<input class="text" name="password" type="password" placeholder="new password" />
+			<input class="text" name="password" type="text" placeholder="new password" />
 			<span class="choice" title="Allow uploads">
 			<label>
 			<input type="checkbox" name="upload" />

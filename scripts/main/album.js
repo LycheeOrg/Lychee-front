@@ -478,7 +478,7 @@ album.setPublic = function(albumID, modal, e) {
 							  <span class='label'>${ lychee.locale['ALBUM_PASSWORD_PROT'] }</span>
 						  </label>
 						  <p>${ lychee.locale['ALBUM_PASSWORD_PROT_EXPL'] }</p>
-						  <input class='text' name='passwordtext' type='password' placeholder='password' value=''>
+						  <input class='text' name='passwordtext' type='text' placeholder='password' value=''>
 					  </div>
 				  </form>
 				  `;
