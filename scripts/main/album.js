@@ -103,7 +103,7 @@ album.load = function(albumID, refresh = false) {
 		password: ''
 	};
 
-	processData = function(data) {
+	const processData = function (data) {
 
 		if (data === 'Warning: Wrong password!') {
 			// User hit Cancel at the password prompt
@@ -130,7 +130,7 @@ album.load = function(albumID, refresh = false) {
 
 		// Skip delay when refresh is true
 		// Skip delay when opening a blank Lychee
-		if (refresh === true)                                          waitTime = 0;
+		if (refresh === true) waitTime = 0;
 		if (!visible.albums() && !visible.photo() && !visible.album()) waitTime = 0;
 
 		setTimeout(() => {
