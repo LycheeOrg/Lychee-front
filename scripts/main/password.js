@@ -8,27 +8,6 @@ password = {
 
 };
 
-password.get = function(albumID, callback) {
-
-	if (lychee.publicMode===false)                                  callback();
-	else if (albums.json && (albums.getByID(albumID).password==='0' || albums.getByID(albumID).passwordProvided)) callback();
-	else if (!albums.json && !album.json) {
-
-		// Continue without password
-
-		album.json = { password: true };
-		callback('')
-
-	} else {
-
-		// Request password
-
-		password.getDialog(albumID, callback)
-
-	}
-
-};
-
 password.getDialog = function(albumID, callback) {
 
 	const action = (data) => {
@@ -45,9 +24,6 @@ password.getDialog = function(albumID, callback) {
 			if (data===true) {
 				basicModal.close();
 				password.value = passwd;
-				if (lychee.api_V2 && albums.json) {
-					albums.getByID(albumID).passwordProvided = true;
-				}
 				callback()
 			} else {
 				basicModal.error('password')
@@ -60,7 +36,7 @@ password.getDialog = function(albumID, callback) {
 	const cancel = () => {
 
 		basicModal.close();
-		if (!visible.albums()) lychee.goto()
+		if (!visible.albums() && !visible.album()) lychee.goto()
 
 	};
 
