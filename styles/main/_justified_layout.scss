@@ -5,7 +5,7 @@
 }
 
 .unjustified-layout {
-	margin: 30px 20px -10px 30px;
+	margin: 25px 25px -5px 25px;
 	width: 100%;
 	position: relative;
 	overflow: hidden;
@@ -19,7 +19,7 @@
 .unjustified-layout > .photo {
 	float: left;
 	max-height: 240px;
-	margin: 0 10px 10px 0;
+	margin: 5px;
 }
 
 .justified-layout > .photo > .thumbimg > img, .justified-layout > .photo > .thumbimg, .unjustified-layout > .photo > .thumbimg > img, .unjustified-layout > .photo > .thumbimg {
