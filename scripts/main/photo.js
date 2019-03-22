@@ -833,6 +833,7 @@ photo.getViewLink = function(photoID) {
 	}
 
 	if (location.href.indexOf('index.html')>0) return location.href.replace('index.html' + location.hash, url);
-	else                                       return location.href.replace(location.hash, url)
+	if (location.href.indexOf('gallery')>0) return location.href.replace('gallery' + location.hash, url);
+	return location.href.replace(location.hash, url)
 
 };
