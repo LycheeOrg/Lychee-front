@@ -133,6 +133,24 @@ photo.hide = function() {
 
 };
 
+photo.onresize = function() {
+	// Copy of view.photo.onresize
+	if (photo.json.medium === '' || !photo.json.medium2x || photo.json.medium2x === '') return;
+
+	let imgWidth = parseInt(photo.json.medium_dim);
+	let imgHeight = photo.json.medium_dim.substr(photo.json.medium_dim.lastIndexOf('x') + 1);
+	let containerWidth = parseFloat($('#imageview').width(), 10);
+	let containerHeight = parseFloat($('#imageview').height(), 10);
+
+	let width = (imgWidth < containerWidth) ? imgWidth : containerWidth;
+	let height = (width * imgHeight) / imgWidth;
+	if (height > containerHeight) {
+		width = (containerHeight * imgWidth) / imgHeight
+	}
+
+	$('img#image').attr('sizes', width + 'px');
+};
+
 // Sub-implementation of contextMenu -------------------------------------------------------------- //
 
 let contextMenu = {};
@@ -169,6 +187,8 @@ $(document).ready(function () {
 
 	// Image View
 	imageview.on('click', 'img', photo.update_display_overlay);
+
+	$(window).on('resize', photo.onresize);
 
 	// Save ID of photo
 	let photoID = gup('p');
@@ -219,6 +239,7 @@ const loadPhotoInfo = function (photoID) {
 		imageview.html(build.imageview(data, true));
 		imageview.find('.arrow_wrapper').remove();
 		imageview.addClass('fadeIn').show();
+		photo.onresize();
 
 		// Render Sidebar
 		let structure = sidebar.createStructure.photo(data);
