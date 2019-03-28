@@ -5,8 +5,8 @@
 lychee = {
 
 	title					: document.title,
-	version					: '3.2.13',
-	versionCode				: '030213', // not really needed anymore
+	version					: '3.2.14',
+	versionCode				: '030214', // not really needed anymore
 
 	updatePath				: 'https://LycheeOrg.github.io/update.json',
 	updateURL				: 'https://github.com/LycheeOrg/Lychee/releases',
