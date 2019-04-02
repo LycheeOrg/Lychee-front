@@ -139,7 +139,7 @@ build.photo = function (data) {
 		}
 
 		if (thumb2x !== '') {
-			thumb2x = `class="lazyload" src="dist/images/placeholder.png" data-srcset='${thumb2x} 2x'`
+			thumb2x = `src="dist/images/placeholder.png" data-srcset='${thumb2x} 2x'`
 		}
 
 		thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}">`;
@@ -149,7 +149,7 @@ build.photo = function (data) {
 
 		if (data.small !== '') {
 			if (data.small2x && data.small2x !== '') {
-				thumb2x = `class="lazyload" src="dist/images/placeholder.png" data-srcset='${data.small} ${parseInt(data.small_dim, 10)}w, ${data.small2x} ${parseInt(data.small2x_dim, 10)}w'`
+				thumb2x = `src="dist/images/placeholder.png" data-srcset='${data.small} ${parseInt(data.small_dim, 10)}w, ${data.small2x} ${parseInt(data.small2x_dim, 10)}w'`
 			}
 
 			thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}">`;
@@ -157,7 +157,7 @@ build.photo = function (data) {
 			thumbnail += `</span>`
 		} else if (data.medium !== '') {
 			if (data.medium2x && data.medium2x !== '') {
-				thumb2x = `class="lazyload" src="dist/images/placeholder.png" data-srcset='${data.medium} ${parseInt(data.medium_dim, 10)}w, ${data.medium2x} ${parseInt(data.medium2x_dim, 10)}w'`
+				thumb2x = `src="dist/images/placeholder.png" data-srcset='${data.medium} ${parseInt(data.medium_dim, 10)}w, ${data.medium2x} ${parseInt(data.medium2x_dim, 10)}w'`
 			}
 
 			thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}">`;
@@ -176,7 +176,7 @@ build.photo = function (data) {
 			}
 
 			if (thumb2x !== '') {
-				thumb2x = `class="lazyload" src="dist/images/placeholder.png" data-srcset='${data.thumbUrl} 200w, ${thumb2x} 400w'`
+				thumb2x = `src="dist/images/placeholder.png" data-srcset='${data.thumbUrl} 200w, ${thumb2x} 400w'`
 			}
 
 			thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}">`;
@@ -264,7 +264,7 @@ build.imageview = function (data, visibleControls) {
 			let medium = '';
 
 			if (data.medium2x && data.medium2x !== '') {
-				medium = `class="lazyload" src="dist/images/placeholder.png" data-srcset='${data.medium} ${parseInt(data.medium_dim, 10)}w, ${data.medium2x} ${parseInt(data.medium2x_dim, 10)}w'`;
+				medium = `src="${data.medium}" srcset='${data.medium} ${parseInt(data.medium_dim, 10)}w, ${data.medium2x} ${parseInt(data.medium2x_dim, 10)}w'`;
 			}
 			img = `<img id='image' class='${visibleControls === true ? '' : 'full'}' src='${data.medium}' ` + medium + `  draggable='false' alt='medium'>`
 
