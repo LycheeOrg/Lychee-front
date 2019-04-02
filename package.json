@@ -29,6 +29,7 @@
     "gulp-uglify": "^2.1.1",
     "jquery": "^3.2.0",
     "justified-layout": "^2.1.1",
+    "lazysizes": "^4.1.7",
     "mousetrap": "^1.6.0",
     "multiselect-two-sides": "^2.5.5",
     "require": "^2.4.20"
