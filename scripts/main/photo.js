@@ -429,7 +429,7 @@ photo.setTitle = function(photoIDs) {
 
 };
 
-photo.copyto = function(photoIDs, albumID) {
+photo.copyTo = function(photoIDs, albumID) {
 
 	const action = function()
 	{
@@ -803,14 +803,23 @@ photo.setLicense = function(photoID) {
 photo.getArchive = function(photoID, kind) {
 
 	let link;
-	let url = `${ api.path }?function=Photo::getArchive&photoID=${ photoID }&kind=${ kind }`;
 
-	if (location.href.indexOf('index.html')>0) link = location.href.replace(location.hash, '').replace('index.html', url);
-	else                                       link = location.href.replace(location.hash, '') + url;
+	if(lychee.api_V2)
+	{
+		console.log(api.get_url('Photo::getArchive') + lychee.html`?photoID=${photoID}&kind=${ kind }`);
+		location.href = api.get_url('Photo::getArchive') + lychee.html`?photoID=${photoID}&kind=${ kind }`;
+	}
+	else
+	{
+		let url = `${ api.path }?function=Photo::getArchive&photoID=${ photoID }&kind=${ kind }`;
 
-	if (lychee.publicMode===true) link += `&password=${ encodeURIComponent(password.value) }`;
+		if (location.href.indexOf('index.html')>0) link = location.href.replace(location.hash, '').replace('index.html', url);
+		else                                       link = location.href.replace(location.hash, '') + url;
 
-	location.href = link
+		if (lychee.publicMode===true) link += `&password=${ encodeURIComponent(password.value) }`;
+
+		location.href = link
+	}
 
 };
 

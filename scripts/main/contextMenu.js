@@ -173,7 +173,7 @@ contextMenu.photo = function(photoID, e) {
 		{ },
 		{ title: build.iconic('pencil') + lychee.locale['RENAME'], fn: () => photo.setTitle([ photoID ]) },
 		{ title: build.iconic('layers') + lychee.locale['DUPLICATE'], fn: () => photo.duplicate([ photoID ]) },
-		{ title: build.iconic('layers') + lychee.locale['COPY_TO'], fn: () => { basicContext.close(); contextMenu.move([ photoID ], e, photo.copyto, 'UNSORTED') } },
+		{ title: build.iconic('layers') + lychee.locale['COPY_TO'], fn: () => { basicContext.close(); contextMenu.move([ photoID ], e, photo.copyTo, 'UNSORTED') } },
 		{ title: build.iconic('folder') + lychee.locale['MOVE'], fn: () => { basicContext.close(); contextMenu.move([ photoID ], e, photo.setAlbum, 'UNSORTED') } },
 		{ title: build.iconic('trash') + lychee.locale['DELETE'], fn: () => photo.delete([ photoID ]) }
 	];
@@ -234,7 +234,7 @@ contextMenu.photoMulti = function(photoIDs, e) {
 		{ },
 		{ title: build.iconic('pencil') + lychee.locale['RENAME_ALL'], fn: () => photo.setTitle(photoIDs) },
 		{ title: build.iconic('layers') + lychee.locale['DUPLICATE_ALL'], fn: () => photo.duplicate(photoIDs) },
-		{ title: build.iconic('layers') + lychee.locale['COPY_ALL_TO'], fn: () => { basicContext.close(); contextMenu.move(photoIDs, e, photo.copyto, 'UNSORTED') } },
+		{ title: build.iconic('layers') + lychee.locale['COPY_ALL_TO'], fn: () => { basicContext.close(); contextMenu.move(photoIDs, e, photo.copyTo, 'UNSORTED') } },
 		{ title: build.iconic('folder') + lychee.locale['MOVE_ALL'], fn: () => { basicContext.close(); contextMenu.move(photoIDs, e, photo.setAlbum, 'UNSORTED') } },
 		{ title: build.iconic('trash') + lychee.locale['DELETE_ALL'], fn: () => photo.delete(photoIDs) }
 	];
@@ -272,12 +272,11 @@ contextMenu.photoMore = function(photoID, e) {
 
 	let showMedium = photo.json.medium && photo.json.medium !== '' && showDownload;
 	let showSmall = photo.json.small && photo.json.small !== '' && showDownload;
-	
 	let items = [
-		{ title: build.iconic('fullscreen-enter') + lychee.locale['FULL_PHOTO'], visible: lychee.full_photo, fn: () => window.open(photo.getDirectLink()) },
-		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD'], visible: showDownload, fn: () => photo.getArchive(photoID, 'FULL') },
-		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD_MEDIUM'], visible: showMedium, fn: () => photo.getArchive(photoID, 'MEDIUM') },
-		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD_SMALL'], visible: showSmall, fn: () => photo.getArchive(photoID, 'SMALL') }
+		{ title: build.iconic('fullscreen-enter') + lychee.locale['FULL_PHOTO'], visible: !!lychee.full_photo, fn: () => window.open(photo.getDirectLink()) },
+		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD'], visible: !!showDownload, fn: () => photo.getArchive(photoID, 'FULL') },
+		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD_MEDIUM'], visible: !!showMedium, fn: () => photo.getArchive(photoID, 'MEDIUM') },
+		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD_SMALL'], visible: !!showSmall, fn: () => photo.getArchive(photoID, 'SMALL') }
 	];
 
 	basicContext.show(items, e.originalEvent)
