@@ -581,13 +581,19 @@ lychee.html = function(literalSections, ...substs) {
 
 lychee.error = function(errorThrown, params = '', data = '') {
 
-	console.error({
-		description	: errorThrown,
-		params		: params,
-		response	: data
-	});
+	loadingBar.show('error', errorThrown);
 
-	loadingBar.show('error', errorThrown)
+	if (errorThrown === 'Session timed out') {
+		lychee.goto();
+		window.location.reload()
+	}
+	else {
+		console.error({
+			description	: errorThrown,
+			params		: params,
+			response	: data
+		})
+	}
 
 };
 

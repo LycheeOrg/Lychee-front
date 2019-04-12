@@ -27,6 +27,16 @@ api.get_url = function(fn) {
 
 };
 
+api.isTimeout = function(errorThrown, jqXHR) {
+	if (errorThrown && errorThrown === 'Internal Server Error' &&
+	jqXHR && jqXHR.responseJSON && jqXHR.responseJSON.exception &&
+	jqXHR.responseJSON.exception === 'Illuminate\\Contracts\\Encryption\\DecryptException') {
+		return true;
+	}
+
+	return false;
+};
+
 api.post = function(fn, params, callback) {
 
 	loadingBar.show();
@@ -51,7 +61,9 @@ api.post = function(fn, params, callback) {
 
 	const error = (jqXHR, textStatus, errorThrown) => {
 
-		api.onError('Server error or API not found.', params, errorThrown)
+		console.log('error jqXHR ', jqXHR, ' textStatus ', textStatus, ' errorThrown ', errorThrown);
+		api.onError((api.isTimeout(errorThrown, jqXHR) ? 'Session timed out.' :
+					 'Server error or API not found.'), params, errorThrown)
 
 	};
 
@@ -86,7 +98,8 @@ api.get = function(url, callback) {
 
 	const error = (jqXHR, textStatus, errorThrown) => {
 
-		api.onError('Server error or API not found.', {}, errorThrown)
+		api.onError((api.isTimeout(errorThrown, jqXHR) ? 'Session timed out.' :
+					 'Server error or API not found.'), {}, errorThrown)
 
 	};
 
@@ -124,7 +137,8 @@ api.post_raw = function (fn, params, callback) {
 
 	const error = (jqXHR, textStatus, errorThrown) => {
 
-		api.onError('Server error or API not found.', params, errorThrown)
+		api.onError((api.isTimeout(errorThrown, jqXHR) ? 'Session timed out.' :
+					 'Server error or API not found.'), params, errorThrown)
 
 	};
 
