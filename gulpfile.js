@@ -31,12 +31,16 @@ paths.view = {
 	],
 	scripts: [
 		'node_modules/jquery/dist/jquery.min.js',
+		'node_modules/lazysizes/lazysizes.js',
 		'node_modules/basiccontext/dist/basicContext.min.js',
 		'../dist/_view--javascript.js'
 	],
 	svg: [
 		'./images/iconic.svg',
 		'./images/ionicons.svg'
+	],
+	images: [
+		'./images/*png'
 	]
 };
 
@@ -75,6 +79,13 @@ gulp.task('view--svg', function() {
 
  });
 
+ gulp.task('view--images', function() {
+
+	return gulp.src(paths.view.images)
+	           .pipe(gulp.dest('../dist/images'))
+
+ });
+
 /* Main ----------------------------------------- */
 
 paths.main = {
@@ -87,6 +98,7 @@ paths.main = {
 	],
 	scripts: [
 		'node_modules/jquery/dist/jquery.min.js',
+		'node_modules/lazysizes/lazysizes.js',
 		'node_modules/mousetrap/mousetrap.min.js',
 		'node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js',
 		'node_modules/basiccontext/dist/basicContext.min.js',
@@ -174,6 +186,7 @@ paths.frame = {
 	],
 	scripts: [
 		'node_modules/jquery/dist/jquery.min.js',
+		'node_modules/lazysizes/lazysizes.js',
 		'./scripts/frame/stackblur.min.js',
 		'../dist/_frame--javascript.js'
 	],
@@ -225,6 +238,7 @@ paths.landing = {
 	],
 	scripts: [
 		'node_modules/jquery/dist/jquery.min.js',
+		'node_modules/lazysizes/lazysizes.js',
 		'../dist/_landing--javascript.js'
 	],
 	scss: [

@@ -60,7 +60,7 @@ build.getAlbumThumb = function (data, i) {
 		}
 	}
 
-	return `<span class="thumbimg${isVideo ? ' video' : ''}"><img src='${thumb}' ${(thumb2x !== '') ? 'srcset=\'' + thumb2x + ' 2x\'' : ''} alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+	return `<span class="thumbimg${isVideo ? ' video' : ''}"><img class='lazyload' src='dist/images/placeholder.png' data-src='${thumb}' ${(thumb2x !== '') ? 'data-srcset=\'' + thumb2x + ' 2x\'' : ''} alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 };
 
 build.album = function (data, disabled = false) {
@@ -139,31 +139,31 @@ build.photo = function (data) {
 		}
 
 		if (thumb2x !== '') {
-			thumb2x = `srcset='${thumb2x} 2x'`
+			thumb2x = `data-srcset='${thumb2x} 2x'`
 		}
 
 		thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}">`;
-		thumbnail += `<img src='${data.thumbUrl}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
+		thumbnail += `<img class='lazyload' src='dist/images/placeholder.png' data-src='${data.thumbUrl}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
 		thumbnail += `</span>`
 	} else {
 
 		if (data.small !== '') {
 			if (data.small2x && data.small2x !== '') {
-				thumb2x = `srcset='${data.small} ${parseInt(data.small_dim, 10)}w, ${data.small2x} ${parseInt(data.small2x_dim, 10)}w'`
+				thumb2x = `data-srcset='${data.small} ${parseInt(data.small_dim, 10)}w, ${data.small2x} ${parseInt(data.small2x_dim, 10)}w'`
 			}
 
 			thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}">`;
-			thumbnail += `<img src='${data.small}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
+			thumbnail += `<img class='lazyload' src='dist/images/placeholder.png' data-src='${data.small}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
 			thumbnail += `</span>`
 		} else if (data.medium !== '') {
 			if (data.medium2x && data.medium2x !== '') {
-				thumb2x = `srcset='${data.medium} ${parseInt(data.medium_dim, 10)}w, ${data.medium2x} ${parseInt(data.medium2x_dim, 10)}w'`
+				thumb2x = `data-srcset='${data.medium} ${parseInt(data.medium_dim, 10)}w, ${data.medium2x} ${parseInt(data.medium2x_dim, 10)}w'`
 			}
 
 			thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}">`;
-			thumbnail += `<img src='${data.medium}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`
+			thumbnail += `<img class='lazyload' src='dist/images/placeholder.png' data-src='${data.medium}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`
 			thumbnail += `</span>`
-		} else { // safe case if nor medium or small exists
+		} else { // safe case if neither medium nor small exists
 			if (data.thumb2x) {
 				thumb2x = data.thumb2x
 			} else {
@@ -176,11 +176,11 @@ build.photo = function (data) {
 			}
 
 			if (thumb2x !== '') {
-				thumb2x = `srcset='${data.thumbUrl} 200w, ${thumb2x} 400w'`
+				thumb2x = `data-srcset='${data.thumbUrl} 200w, ${thumb2x} 400w'`
 			}
 
 			thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}">`;
-			thumbnail += `<img src='${data.thumbUrl}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
+			thumbnail += `<img class='lazyload' src='dist/images/placeholder.png' data-src='${data.thumbUrl}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
 			thumbnail += `</span>`;
 		}
 

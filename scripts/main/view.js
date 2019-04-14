@@ -321,7 +321,7 @@ view.album = {
 					$(this).css('left',layoutGeometry.boxes[i].left);
 
 					let imgs = $(this).find(".thumbimg > img");
-					if (imgs.length > 0 && imgs[0].getAttribute('srcset')) {
+					if (imgs.length > 0 && imgs[0].getAttribute('data-srcset')) {
 						imgs[0].setAttribute('sizes', layoutGeometry.boxes[i].width + 'px');
 					}
 				});
@@ -349,7 +349,7 @@ view.album = {
 
 					$(this).css('width', width + 'px');
 					$(this).css('height', height + 'px');
-					if (imgs.length > 0 && imgs[0].getAttribute('srcset')) {
+					if (imgs.length > 0 && imgs[0].getAttribute('data-srcset')) {
 						imgs[0].setAttribute('sizes', width + 'px');
 					}
 				});
