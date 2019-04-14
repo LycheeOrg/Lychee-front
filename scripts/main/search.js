@@ -45,7 +45,15 @@ search.find = function(term) {
 				let photos_divider = lychee.locale['PHOTOS'];
 
 				if (albumsData !=='') albums_divider += ' (' + data.albums.length + ')';
-				if (photosData !== '') photos_divider += ' (' + data.photos.length + ')';
+				if (photosData !== '') {
+					photos_divider += ' (' + data.photos.length + ')';
+					if (lychee.layout === '1') {
+						photosData = '<div class="justified-layout">' + photosData + '</div>';
+					}
+					else if  (lychee.layout === '2') {
+						photosData = '<div class="unjustified-layout">' + photosData + '</div>';
+					}
+				}
 
 				// 1. No albums and photos
 				// 2. Only photos
@@ -72,6 +80,7 @@ search.find = function(term) {
 							$('body').append(build.no_content('magnifying-glass'))
 						} else {
 							lychee.content.html(html);
+							view.album.content.justify();
 							lychee.animate(lychee.content, 'contentZoomIn')
 						}
 
