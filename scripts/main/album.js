@@ -64,6 +64,55 @@ album.getByID = function(photoID) {
 	return undefined;
 };
 
+album.getSubByID = function(albumID) {
+
+	// Function returns the JSON of a subalbum
+
+	if (albumID==null || !album.json || !album.json.albums)
+	{
+		lychee.error('Error: Album json not found!');
+		return undefined;
+	}
+
+	let i = 0;
+	while(i < album.json.albums.length) {
+		if (parseInt(album.json.albums[i].id) === parseInt(albumID))
+		{
+			return album.json.albums[i]
+		}
+		i++;
+	}
+
+	lychee.error('Error: album ' + albumID + ' not found!');
+	return undefined;
+};
+
+album.hasSub = function(albumID) {
+
+	// Return true if the current album has albumID as its descendant
+
+	if (albumID == null || !album.json || !album.json.albums) {
+		return false;
+	}
+
+	let ret = false;
+
+	let func = function () {
+		if (parseInt(this.id, 10) === parseInt(albumID, 10)) {
+			ret = true;
+			return false
+		}
+		if (this.albums) {
+			$.each(this.albums, func)
+		}
+	};
+
+	$.each(album.json.albums, func);
+
+	return ret
+
+};
+
 album.deleteByID = function(photoID) {
 
 	if (photoID==null || !album.json || !album.json.photos)
@@ -88,11 +137,27 @@ album.deleteByID = function(photoID) {
 
 };
 
-album.getParent = function() {
+album.deleteSubByID = function(albumID) {
 
-	if (album.json==null || album.isSmartID(album.json.id)===true || album.json.parent_id === 0) return 0;
+	if (albumID==null || !album.json || !album.json.albums)
+	{
+		lychee.error('Error: Album json not found !');
+		return false;
+	}
 
-	return album.json.parent_id
+	let deleted = false;
+
+	$.each(album.json.albums, function(i) {
+
+		if (parseInt(album.json.albums[i].id) === parseInt(albumID)) {
+			album.json.albums.splice(i, 1);
+			deleted = true;
+			return false
+		}
+
+	});
+
+	return deleted
 
 };
 
@@ -246,8 +311,13 @@ album.setTitle = function(albumIDs) {
 	if (albumIDs.length===1) {
 
 		// Get old title if only one album is selected
-		if (album.json)       oldTitle = album.json.title;
-		else if (albums.json) oldTitle = albums.getByID(albumIDs).title
+		if (album.json) {
+			if (parseInt(album.getID()) === parseInt(albumIDs[0])) {
+				oldTitle = album.json.title
+			}
+			else oldTitle = album.getSubByID(albumIDs[0]).title
+		}
+		if (!oldTitle && albums.json) oldTitle = albums.getByID(albumIDs[0]).title
 
 	}
 
@@ -259,12 +329,22 @@ album.setTitle = function(albumIDs) {
 
 		if (visible.album()) {
 
-			// Rename only one album
+			if (albumIDs.length === 1 && parseInt(album.getID()) === parseInt(albumIDs[0])) {
+				// Rename only one album
 
-			album.json.title = newTitle;
-			view.album.title();
+				album.json.title = newTitle;
+				view.album.title();
 
-			if (albums.json) albums.getByID(albumIDs[0]).title = newTitle
+				if (albums.json) albums.getByID(albumIDs[0]).title = newTitle
+			}
+			else {
+				albumIDs.forEach(function(id) {
+					album.getSubByID(id).title = newTitle;
+					view.album.content.titleSub(id);
+
+					if (albums.json) albums.getByID(id).title = newTitle
+				})
+			}
 
 		} else if (visible.albums()) {
 
@@ -686,10 +766,18 @@ album.delete = function(albumIDs) {
 					albums.deleteByID(id)
 				})
 
-			} else {
+			} else if (visible.album()) {
 
 				albums.refresh();
-				lychee.goto()
+				if (albumIDs.length === 1 && parseInt(album.getID()) === parseInt(albumIDs[0])) {
+					lychee.goto(album.getParent())
+				}
+				else {
+					albumIDs.forEach(function(id) {
+						album.deleteSubByID(id);
+						view.album.content.deleteSub(id)
+					})
+				}
 
 			}
 
@@ -714,8 +802,13 @@ album.delete = function(albumIDs) {
 		cancel.title = lychee.locale['KEEP_ALBUM'];
 
 		// Get title
-		if (album.json)       albumTitle = album.json.title;
-		else if (albums.json) albumTitle = albums.getByID(albumIDs).title;
+		if (album.json) {
+			if (parseInt(album.getID()) === parseInt(albumIDs[0])) {
+				albumTitle = album.json.title
+			}
+			else albumTitle = album.getSubByID(albumIDs[0]).title
+		}
+		if (!albumTitle && albums.json) albumTitle = albums.getByID(albumIDs).title;
 
 		// Fallback for album without a title
 		if (albumTitle==='') albumTitle = lychee.locale['UNTITLED'];
