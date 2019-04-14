@@ -325,6 +325,9 @@ contextMenu.move = function(IDs, e, callback, kind = 'UNSORTED', display_root = 
 			{
 				exclude.push(album.json.id.toString());
 			}
+			else if (visible.photo()) {
+				exclude.push(photo.json.album.toString());
+			}
 			items = items.concat(contextMenu.buildList(data.albums, exclude.concat(IDs), (a) => callback(IDs, a.id)));
 		}
 
