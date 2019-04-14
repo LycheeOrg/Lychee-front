@@ -481,9 +481,13 @@ photo.setAlbum = function(photoIDs, albumID) {
 		if (data!==true){
 			lychee.error(null, params, data)
 		}
-		else
-		{
-			if (visible.album()) album.reload();
+		else {
+			if (visible.album() && album.hasSub(albumID)) {
+				// If we moved photos to a subalbum of the currently
+				// displayed album, that may change the subalbum thumbs
+				// being displayed so we need to reload.
+				album.reload();
+			}
 		}
 
 	})
