@@ -257,6 +257,18 @@ view.album = {
 
 		},
 
+		titleSub: function(albumID) {
+
+			let title = album.getSubByID(albumID).title;
+
+			title = lychee.escapeHTML(title);
+
+			$('.album[data-id="' + albumID + '"] .overlay h1')
+				.html(title)
+				.attr('title', title)
+
+		},
+
 		star: function(photoID) {
 
 			let $badge = $('.photo[data-id="' + photoID + '"] .icn-star');
@@ -277,16 +289,30 @@ view.album = {
 
 		delete: function(photoID) {
 
+			if (visible.album() && album.json) {
+				album.json.num--;
+			}
 			$('.photo[data-id="' + photoID + '"]').css('opacity', 0).animate({
 				width: 0,
 				marginLeft: 0
 			}, 300, function () {
 				$(this).remove();
 				// Only when search is not active
-				if (!visible.albums()) {
-					album.json.num--;
+				if (visible.album() && album.json) {
 					view.album.num()
 				}
+			})
+
+		},
+
+		deleteSub: function(albumID) {
+
+			$('.album[data-id="' + albumID + '"]').css('opacity', 0).animate({
+				width: 0,
+				marginLeft: 0
+			}, 300, function () {
+				$(this).remove();
+				if (album.json && album.json.albums.length <= 0) lychee.content.find('.divider').remove()
 			})
 
 		},
