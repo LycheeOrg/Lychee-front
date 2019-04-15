@@ -293,7 +293,7 @@ photo.delete = function(photoIDs) {
 
 		basicModal.close();
 
-		photoIDs.forEach(function(id) {
+		photoIDs.forEach(function(id, index) {
 
 			// Change reference for the next and previous photo
 			if (album.getByID(id).nextPhoto!=='' || album.getByID(id).previousPhoto!=='') {
@@ -307,7 +307,7 @@ photo.delete = function(photoIDs) {
 			}
 
 			album.deleteByID(id);
-			view.album.content.delete(id)
+			view.album.content.delete(id, (index === photoIDs.length - 1))
 
 		});
 
@@ -446,7 +446,7 @@ photo.setAlbum = function(photoIDs, albumID) {
 	if (!photoIDs) return false;
 	if (photoIDs instanceof Array===false) photoIDs = [ photoIDs ];
 
-	photoIDs.forEach(function(id) {
+	photoIDs.forEach(function(id, index) {
 
 		// Change reference for the next and previous photo
 		if (album.getByID(id).nextPhoto!==''||album.getByID(id).previousPhoto!=='') {
@@ -460,7 +460,7 @@ photo.setAlbum = function(photoIDs, albumID) {
 		}
 
 		album.deleteByID(id);
-		view.album.content.delete(id)
+		view.album.content.delete(id, (index === photoIDs.length - 1))
 
 	});
 
