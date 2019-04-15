@@ -125,7 +125,7 @@ build.photo = function (data) {
 
 	let html = '';
 	let thumbnail = '';
-	let thumb2x = '';
+	var thumb2x = '';
 
 	let isVideo = data.type && data.type.indexOf('video') > -1;
 	if (data.thumb === 'uploads/thumb/' && isVideo) {
@@ -135,7 +135,7 @@ build.photo = function (data) {
 		if (data.thumb2x) { // Lychee v4
 			thumb2x = data.thumb2x
 		} else { // Lychee v3
-			let {path: thumb2x} = lychee.retinize(data.thumbUrl)
+			var {path: thumb2x} = lychee.retinize(data.thumbUrl)
 		}
 
 		if (thumb2x !== '') {
@@ -164,15 +164,10 @@ build.photo = function (data) {
 			thumbnail += `<img class='lazyload' src='dist/images/placeholder.png' data-src='${data.medium}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`
 			thumbnail += `</span>`
 		} else { // safe case if neither medium nor small exists
-			if (data.thumb2x) {
-				thumb2x = data.thumb2x
-			} else {
-				let {path: thumb2x} = lychee.retinize(data.thumbUrl)
-			}
 			if (data.thumb2x) { // Lychee v4
 				thumb2x = data.thumb2x
 			} else { // Lychee v3
-				let {path: thumb2x} = lychee.retinize(data.thumbUrl)
+				var {path: thumb2x} = lychee.retinize(data.thumbUrl)
 			}
 
 			if (thumb2x !== '') {
