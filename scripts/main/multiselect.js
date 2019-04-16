@@ -174,7 +174,7 @@ multiselect.photoContextMenu = function(e, photoObj) {
 		contextMenu.photoMulti(multiselect.ids, e);
 		multiselect.clearSelection(false)
 	}
-	else if (visible.album())
+	else if (visible.album() || visible.search())
 	{
 		multiselect.clearSelection();
 		contextMenu.photo(id, e);
