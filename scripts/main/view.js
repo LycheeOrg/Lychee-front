@@ -1369,7 +1369,6 @@ view.diagnostics = {
 		$("#Update_Lychee").on('click', function () {
 			api.get('api/Update', function (data) {
 				data = JSON.parse(data);
-				console.log(data);
 				html = '<pre>';
 				if (typeof data == "string")
 				{
