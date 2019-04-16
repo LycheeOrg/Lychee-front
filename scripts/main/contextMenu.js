@@ -239,7 +239,7 @@ contextMenu.photoMulti = function(photoIDs, e) {
 		{ title: build.iconic('layers') + lychee.locale['DUPLICATE_ALL'], fn: () => photo.duplicate(photoIDs) },
 		{ title: build.iconic('layers') + lychee.locale['COPY_ALL_TO'], fn: () => { basicContext.close(); contextMenu.move(photoIDs, e, photo.copyTo, 'UNSORTED') } },
 		{ title: build.iconic('folder') + lychee.locale['MOVE_ALL'], fn: () => { basicContext.close(); contextMenu.move(photoIDs, e, photo.setAlbum, 'UNSORTED') } },
-		{ title: build.iconic('trash') + lychee.locale['DELETE_ALL'], fn: () => photo.delete(photoIDs) }
+		{ title: build.iconic('trash') + lychee.locale['DELETE_ALL'], fn: () => photo.delete(photoIDs) },
 	];
 
 	basicContext.show(items, e.originalEvent, contextMenu.close)
@@ -403,7 +403,9 @@ contextMenu.close = function() {
 
 	basicContext.close();
 
-	multiselect.deselect('.photo.active, .album.active');
-	if (visible.multiselect()) multiselect.close()
+  multiselect.clearSelection();
+	if (visible.multiselect()) { 
+    multiselect.close();
+  }
 
 };

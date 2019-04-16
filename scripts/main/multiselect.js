@@ -152,12 +152,10 @@ multiselect.albumContextMenu = function(e, albumObj) {
 
 	if (albumObj.hasClass('disabled') && !lychee.admin) return;
 
-	if (selected!==false) {
+	if (selected!==false && multiselect.ids.length > 1) {
 		contextMenu.albumMulti(multiselect.ids, e);
-		multiselect.clearSelection(false)
 	}
 	else {
-		multiselect.clearSelection();
 		contextMenu.album(id, e)
 	}
 
@@ -170,19 +168,16 @@ multiselect.photoContextMenu = function(e, photoObj) {
 
 	if (photoObj.hasClass('disabled') && !lychee.admin) return;
 
-	if (selected!==false) {
+	if (selected!==false && multiselect.ids.length > 1) {
 		contextMenu.photoMulti(multiselect.ids, e);
-		multiselect.clearSelection(false)
 	}
 	else if (visible.album() || visible.search())
 	{
-		multiselect.clearSelection();
 		contextMenu.photo(id, e);
 	}
 	else if (visible.photo())
 	{
 		// should not happen... but you never know...
-		multiselect.clearSelection();
 		contextMenu.photo(photo.getID(), e)
 	}
 	else
@@ -322,8 +317,8 @@ multiselect.getSize = function() {
 };
 
 multiselect.getSelection = function(e) {
-
-	let tolerance = 150;
+  // TODO(nshemon): Make tolerance depend on image size.
+	let tolerance = 202;
 	let size      = multiselect.getSize();
 
 	if (visible.contextMenu())  return false;
@@ -349,7 +344,15 @@ multiselect.getSelection = function(e) {
 
 			let id = $(this).attr('data-id');
 
-			multiselect.addItem($(this), id)
+
+	    if (isSelectKeyPressed(e) && lychee.upload)
+	    {
+		    multiselect.toggleItem($(this), id);
+	    }
+	    else
+	    {
+			  multiselect.addItem($(this), id)
+      }
 
 		}
 
