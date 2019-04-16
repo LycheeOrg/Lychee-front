@@ -121,6 +121,10 @@
 		}
 	}
 
+	#button_settings, #button_signin {
+		padding: 16px 48px 16px 8px;
+	}
+
 	// Divider -------------------------------------------------------------- //
 	&__divider {
 		flex-shrink: 0;

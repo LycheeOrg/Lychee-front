@@ -17,6 +17,7 @@ leftMenu.dom = function(selector) {
 
 leftMenu.build = function () {
 	let html = lychee.html`
+		<a id="text_settings_close" class="closetxt">${ lychee.locale['CLOSE'] }</a>
 		<a id="button_settings_close" class="closebtn" >&times;</a>
 		<a class="linkMenu" id="button_settings_open"><svg class="iconic"><use xlink:href="#cog"></use></svg>${ lychee.locale['SETTINGS'] }</a>`;
 	if (lychee.api_V2)
@@ -58,6 +59,7 @@ leftMenu.bind = function() {
 	let eventName = lychee.getEventName();
 
 	leftMenu.dom('#button_settings_close')    .on(eventName, leftMenu.close);
+	leftMenu.dom('#text_settings_close')      .on(eventName, leftMenu.close);
 	leftMenu.dom('#button_settings_open')     .on(eventName, settings.open);
 	leftMenu.dom('#button_signout')           .on(eventName, lychee.logout);
 	leftMenu.dom('#button_logs')              .on(eventName, leftMenu.Logs);
