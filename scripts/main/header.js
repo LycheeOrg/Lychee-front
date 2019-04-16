@@ -178,6 +178,10 @@ header.setMode = function(mode) {
 			header.dom().addClass('header--view');
 			header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--album').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--photo').addClass('header__toolbar--visible');
+			// Hide More menu if empty (see contextMenu.photoMore)
+			if (!lychee.full_photo && lychee.publicMode && !(album.json && album.json.downloadable && album.json.downloadable==='1')) {
+				$('#button_more').hide();
+			}
 
 			return true;
 
