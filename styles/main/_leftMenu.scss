@@ -36,6 +36,21 @@
 	margin-left: 50px;
 }
 
+.leftMenu .closetxt {
+	position: absolute;
+	top: 0;
+	left: 0;
+	font-size: 24px;
+	height: 28px;
+	padding-top: 16px;
+	color: #111;
+	display: inline-block;
+	width: 210px;
+	&:hover {
+		color: #818181;
+	}
+}
+
 .leftMenu .iconic {
 	display: inline-block;
 	margin: 0 10px 0 1px;
