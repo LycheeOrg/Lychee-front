@@ -135,8 +135,11 @@ contextMenu.albumTitle = function(albumID, e) {
 
 		let items = [];
 
+		items = items.concat({ title: lychee.locale['ROOT'], fn: () => lychee.goto()});
+
 		if (data.albums && data.albums.length > 1) {
 
+			items = items.concat({});
 			items = items.concat(contextMenu.buildList(data.albums, [ parseInt(albumID, 10) ], (a) => lychee.goto(a.id)));
 
 		}
