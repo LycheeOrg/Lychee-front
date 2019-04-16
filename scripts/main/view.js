@@ -1304,27 +1304,26 @@ view.sharing = {
 	}
 };
 
-view.logs_diagnostics = {
-	init: function (get) {
+view.logs = {
+	init: function () {
 
 		multiselect.clearSelection();
 
-		view.logs_diagnostics.title(get);
-		view.logs_diagnostics.content.init(get)
+		view.logs.title();
+		view.logs.content.init()
 
 	},
 
-	title: function (get) {
+	title: function () {
 
-		lychee.setTitle(get, false)
+		lychee.setTitle('Logs', false)
 
 	},
 
-	clearContent: function (get) {
+	clearContent: function () {
 		lychee.content.unbind('mousedown');
 		let html = '';
-
-		if (lychee.api_V2 && get === 'Logs')
+		if (lychee.api_V2)
 		{
 			html += lychee.html`<div class="clear_logs"><a id="Clean_Noise" class="basicModal__button">${lychee.locale['CLEAN_LOGS']}</a></div>`;
 		}
@@ -1333,18 +1332,86 @@ view.logs_diagnostics = {
 
 		$("#Clean_Noise").on('click', function() {
 			api.post_raw('Logs::clearNoise',{}, function () {
-				view.logs_diagnostics.init('Logs');
+				view.logs.init();
 			});
 		});
 
 	},
 
 	content: {
-		init: function (get) {
-			view.logs_diagnostics.clearContent(get);
-			api.post_raw(get, {}, function (data) {
+		init: function () {
+			view.logs.clearContent();
+			api.post_raw('Logs', {}, function (data) {
 				$(".logs_diagnostics_view").html(data);
 			})
 		}
 	},
+};
+
+view.diagnostics = {
+	init: function () {
+
+		multiselect.clearSelection();
+
+		view.diagnostics.title('Diagnostics');
+		view.diagnostics.content.init()
+
+	},
+
+	title: function () {
+
+		lychee.setTitle('Diagnostics', false)
+
+	},
+
+	clearContent: function () {
+		lychee.content.unbind('mousedown');
+		let html = '';
+		html += '<pre class="logs_diagnostics_view"></pre>';
+		lychee.content.html(html);
+	},
+
+	content: {
+		init: function () {
+			view.diagnostics.clearContent();
+
+			if (lychee.api_V2)
+			{
+				api.post('Diagnostics', {}, function (data) {
+					let i = 0;
+					let html = '<pre>\n';
+					html += '    Diagnostics\n' +
+						'    -----------\n';
+					for(i = 0; i < data.errors.length; i++)
+					{
+						html += '    ' + data.errors[i] + '\n';
+					}
+					html += '\n' +
+						'    System Information\n' +
+						'    ------------------\n';
+					for(i = 0; i < data.infos.length; i++)
+					{
+						html += '    ' + data.infos[i] + '\n';
+					}
+					html += '\n' +
+						'    Config Information\n' +
+						'    ------------------\n';
+					for(i = 0; i < data.configs.length; i++)
+					{
+						html += '    ' + data.configs[i] + '\n';
+					}
+					html += '</pre>';
+
+					$(".logs_diagnostics_view").html(html);
+				})
+			}
+			else
+			{
+				api.post_raw('Diagnostics', {}, function (data) {
+					$(".logs_diagnostics_view").html(data);
+				})
+			}
+		}
+	},
+
 };
