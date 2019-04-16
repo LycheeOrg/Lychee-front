@@ -418,7 +418,7 @@ upload.start = {
 		};
 
 		basicModal.show({
-			body: lychee.html`<p>` + lychee.locale['UPLOAD_IMPORT_SERVER_INSTR'] + ` <input class='text' name='path' type='text' maxlength='100' placeholder='` + lychee.locale['UPLOAD_ABSOLUTE_PATH'] + `' value='${ lychee.location }uploads/import/'></p>`,
+			body: lychee.html`<p>` + lychee.locale['UPLOAD_IMPORT_SERVER_INSTR'] + ` <input class='text' name='path' type='text' maxlength='100' placeholder='` + lychee.locale['UPLOAD_ABSOLUTE_PATH'] + `' value='${ lychee.location }public/uploads/import/'></p>`,
 			buttons: {
 				action: {
 					title: lychee.locale['UPLOAD_IMPORT'],
