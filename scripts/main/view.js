@@ -1359,7 +1359,7 @@ view.diagnostics = {
 	clearContent: function (update) {
 		lychee.content.unbind('mousedown');
 		let html = '';
-		if (update === true)
+		if (update === 1)
 		{
 			html += lychee.html`<div class="clear_logs_update"><a id="Update_Lychee" class="basicModal__button">${lychee.locale['UPDATE_AVAILABLE']}</a></div>`;
 		}
