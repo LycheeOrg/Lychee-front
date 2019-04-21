@@ -346,6 +346,10 @@ gulp.task('page--styles', function() {
 
 });
 
+gulp.task('copy', function () {
+	return gulp.src('./images/placeholder.png')
+		.pipe(gulp.dest('../dist/'));
+});
 
 /* Clean ----------------------------------------- */
 
