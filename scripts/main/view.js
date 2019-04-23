@@ -1370,17 +1370,22 @@ view.diagnostics = {
 
 		$("#Update_Lychee").on('click', function () {
 			api.get('api/Update', function (data) {
-				data = JSON.parse(data);
-				html = '<pre>';
-				if (typeof data == "string")
-				{
-					html += '    ' + data;
+				let data_json;
+				try {
+					data_json = JSON.parse(data);
 				}
-				else {
-					for (let i = 0; i < data.length ; i ++)
-					{
-						html += '    ' + data[i];
+				catch (e)
+				{
+					data_json = "JSON error. Check the console logs.";
+					console.log(data);
+				}
+				html = '<pre>';
+				if (Array.isArray(data_json)) {
+					for (let i = 0; i < data_json.length; i++) {
+						html += '    ' + data_json[i]+'\n';
 					}
+				} else {
+					html += '    ' + data_json;
 				}
 				html += '</pre>';
 				$(html).prependTo(".logs_diagnostics_view");
