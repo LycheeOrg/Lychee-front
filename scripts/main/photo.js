@@ -482,11 +482,19 @@ photo.setAlbum = function(photoIDs, albumID) {
 			lychee.error(null, params, data)
 		}
 		else {
-			if (visible.album() && album.hasSub(albumID)) {
+			if (album.hasSub(albumID)) {
 				// If we moved photos to a subalbum of the currently
 				// displayed album, that may change the subalbum thumbs
 				// being displayed so we need to reload.
-				album.reload();
+				if (visible.album()) {
+					album.reload();
+				}
+				else {
+					// We're most likely in photo view.  We still need to
+					// refresh the album but we don't want to reload it
+					// since that would switch the view being displayed.
+					album.refresh();
+				}
 			}
 		}
 

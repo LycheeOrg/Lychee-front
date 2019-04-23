@@ -279,7 +279,7 @@ view.album = {
 
 		delete: function (photoID, justify = false) {
 
-			if (visible.album() && album.json) {
+			if (album.json && album.json.num) {
 				album.json.num--;
 			}
 			$('.photo[data-id="' + photoID + '"]').css('opacity', 0).animate({
@@ -288,8 +288,10 @@ view.album = {
 			}, 300, function () {
 				$(this).remove();
 				// Only when search is not active
-				if (visible.album() && album.json) {
-					view.album.num();
+				if (album.json) {
+					if (album.json.num) {
+						view.album.num();
+					}
 					if (justify) {
 						view.album.content.justify()
 					}
