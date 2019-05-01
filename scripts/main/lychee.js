@@ -373,7 +373,7 @@ lychee.setMode = function(mode) {
 	}
 	if (!lychee.upload)
 	{
-		$('#button_trash_album, .button_add').remove();
+		$('#button_trash_album, .button_add, #button_move_album').remove();
 		$('#button_trash, #button_move, #button_star, #button_sharing').remove();
 
 		$('#button_share, #button_share_album')

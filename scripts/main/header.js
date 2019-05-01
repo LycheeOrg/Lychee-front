@@ -45,6 +45,7 @@ header.bind = function() {
 	header.dom('#button_info')        .on(eventName, sidebar.toggle);
 	header.dom('.button_add')         .on(eventName, contextMenu.add);
 	header.dom('#button_more')        .on(eventName, function(e) { contextMenu.photoMore(photo.getID(), e) });
+	header.dom('#button_move_album')  .on(eventName, function(e) { contextMenu.move([ album.getID() ], e, album.setAlbum, 'ROOT', album.getParent() != '') });
 	header.dom('#button_move')        .on(eventName, function(e) { contextMenu.move([ photo.getID() ], e, photo.setAlbum) });
 	header.dom('.header__hostedwith') .on(eventName, function() { window.open(lychee.website) });
 	header.dom('#button_trash_album') .on(eventName, function() { album.delete([ album.getID() ]) });
@@ -163,12 +164,12 @@ header.setMode = function(mode) {
 			if (lychee.publicMode===true && album.json.downloadable==='0') $('#button_archive').hide();
 
 			if (albumID==='s' || albumID==='f' || albumID==='r') {
-				$('#button_info_album, #button_trash_album, #button_share_album').hide()
+				$('#button_info_album, #button_trash_album, #button_share_album, #button_move_album').hide()
 			} else if (albumID==='0') {
-				$('#button_info_album, #button_share_album').hide();
+				$('#button_info_album, #button_share_album, #button_move_album').hide();
 				$('#button_trash_album').show()
 			} else {
-				$('#button_info_album, #button_trash_album, #button_share_album').show()
+				$('#button_info_album, #button_trash_album, #button_share_album, #button_move_album').show()
 			}
 
 			return true;
