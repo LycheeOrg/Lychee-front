@@ -1,8 +1,25 @@
+os:
+  - linux
+
+dist:
+  - trusty #14.04
+  - xenial #16.04
+#  - bionic #18.04
+#  - disco  #19.04
+
+matrix:
+  allow_failures:
+    - dist: trusty
+
 language: node_js
+
 node_js:
   - "node"
+
 before_script:
   - npm install
+
 script:
   - npm run compile
+
 cache: npm
