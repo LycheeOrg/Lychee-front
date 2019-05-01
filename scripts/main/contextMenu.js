@@ -137,14 +137,14 @@ contextMenu.albumTitle = function(albumID, e) {
 
 		items = items.concat({ title: lychee.locale['ROOT'], fn: () => lychee.goto()});
 
-		if (data.albums && data.albums.length > 1) {
+		if (data.albums && data.albums.length > 0) {
 
 			items = items.concat({});
 			items = items.concat(contextMenu.buildList(data.albums, [ parseInt(albumID, 10) ], (a) => lychee.goto(a.id)));
 
 		}
 
-		if (data.shared_albums && data.shared_albums.length >1) {
+		if (data.shared_albums && data.shared_albums.length > 0) {
 
 			items = items.concat({});
 			items = items.concat(contextMenu.buildList(data.shared_albums, [ parseInt(albumID,10) ], (a) => lychee.goto(a.id)));
@@ -311,27 +311,40 @@ contextMenu.move = function(IDs, e, callback, kind = 'UNSORTED', display_root = 
 
 	api.post('Albums::get', {}, function(data) {
 
-		if (data.albums && data.albums.length > 0) {
+		addItems = function(albums) {
 
-			// items = items.concat(contextMenu.buildList(data.albums, [ album.getID() ], (a) => callback(IDs, a.id))); //photo.setAlbum
-
-			// Disable all childs
+			// Disable all children
 			// It's not possible to move us into them
 			let i, s;
 			let exclude = [];
 			for(i = 0; i < IDs.length; i++) {
-				let sub = contextMenu.getSubIDs(data.albums, IDs[i]);
+				let sub = contextMenu.getSubIDs(albums, IDs[i]);
 				for (s = 0 ; s < sub.length ; s++)
 					exclude.push(sub[s])
 			}
-			if (visible.album())
-			{
-				exclude.push(album.json.id.toString());
+			if (visible.album()) {
+				if (callback !== album.merge) {
+					exclude.push(album.json.id.toString());
+				}
 			}
 			else if (visible.photo()) {
 				exclude.push(photo.json.album.toString());
 			}
-			items = items.concat(contextMenu.buildList(data.albums, exclude.concat(IDs), (a) => callback(IDs, a.id)));
+			items = items.concat(contextMenu.buildList(albums, exclude.concat(IDs), (a) => callback(IDs, a.id)));
+		}
+
+		if (data.albums && data.albums.length > 0) {
+
+			// items = items.concat(contextMenu.buildList(data.albums, [ album.getID() ], (a) => callback(IDs, a.id))); //photo.setAlbum
+
+			addItems(data.albums);
+		}
+
+		if (data.shared_albums && data.shared_albums.length > 0 && lychee.admin) {
+
+			items = items.concat({});
+			addItems(data.shared_albums);
+
 		}
 
 		// Show Unsorted when unsorted is not the current album
