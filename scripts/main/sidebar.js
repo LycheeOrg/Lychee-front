@@ -187,6 +187,11 @@ sidebar.createStructure.photo = function(data) {
 	};
 
 	if (isVideo) {
+		if (data.width === 0 || data.height === 0) {
+			// Remove the "Resolution" line if we don't have the data.
+			structure.image.rows.splice(-1, 1);
+		}
+
 		// We overload the database, storing duration (in full seconds) in
 		// "aperture" and frame rate (floating point with three digits after
 		// the decimal point) in "focal".
@@ -365,10 +370,20 @@ sidebar.createStructure.album = function(data) {
 		title : lychee.locale['ALBUM_ALBUM'],
 		type  : sidebar.types.DEFAULT,
 		rows  : [
-			{ title: lychee.locale['ALBUM_CREATED'], kind: 'created',       value: data.sysdate },
-			{ title: lychee.locale['ALBUM_IMAGES'],  kind: 'images',        value: (data.photos ? data.photos.length : 0) - videoCount }
+			{ title: lychee.locale['ALBUM_CREATED'], kind: 'created',       value: data.sysdate }
 		]
 	};
+	if (data.albums && data.albums.length > 0) {
+		structure.album.rows.push({ title: lychee.locale['ALBUM_SUBALBUMS'],
+									kind: 'subalbums', value: data.albums.length });
+	}
+	if (data.photos) {
+		if (data.photos.length - videoCount > 0) {
+			structure.album.rows.push({ title: lychee.locale['ALBUM_IMAGES'],
+										kind: 'images',
+										value: data.photos.length - videoCount });
+		}
+	}
 	if (videoCount > 0) {
 		structure.album.rows.push({ title: lychee.locale['ALBUM_VIDEOS'],
 									kind: 'videos', value: videoCount });
