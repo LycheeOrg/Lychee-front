@@ -292,6 +292,9 @@ view.album = {
 					if (album.json.num) {
 						view.album.num();
 					}
+					if (album.json.photos.length <= 0) {
+						lychee.content.find('.divider').remove()
+					}
 					if (justify) {
 						view.album.content.justify()
 					}
@@ -324,9 +327,14 @@ view.album = {
 				}
 				let ratio = [];
 				$.each(album.json.photos, function (i) {
-					let l_width = this.width > 0 ? this.width : 200;
-					let l_height = this.height > 0 ? this.height : 200;
-					ratio[i] = l_width / l_height;
+					ratio[i] = this.height > 0 ? this.width / this.height : 1;
+					if (this.type && this.type.indexOf('video') > -1) {
+						// Video.  If there's no small and medium, we have
+						// to fall back to the square thumb.
+						if (this.small === '' && this.medium === '') {
+							ratio[i] = 1;
+						}
+					}
 				});
 				let layoutGeometry = require('justified-layout')(ratio, {
 					containerWidth: containerWidth,
@@ -357,6 +365,14 @@ view.album = {
 				$('.unjustified-layout > div').each(function (i) {
 					let ratio = album.json.photos[i].height > 0 ?
 						album.json.photos[i].width / album.json.photos[i].height : 1;
+					if (album.json.photos[i].type && album.json.photos[i].type.indexOf('video') > -1) {
+						// Video.  If there's no small and medium, we have
+						// to fall back to the square thumb.
+						if (album.json.photos[i].small === '' && album.json.photos[i].medium === '') {
+							ratio = 1;
+						}
+					}
+
 					let height = parseFloat($(this).css('max-height'), 10);
 					let width = height * ratio;
 					let margin = parseFloat($(this).css('margin-right'), 10);
