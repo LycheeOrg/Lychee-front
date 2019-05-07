@@ -49,7 +49,7 @@ build.getAlbumThumb = function (data, i) {
 	}
 
 	thumb2x = '';
-	if (data.hasOwnProperty('thumbs2x')) {
+	if (data.thumbs2x) {
 		if (data.thumbs2x[i]) {
 			thumb2x = data.thumbs2x[i]
 		}
