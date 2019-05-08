@@ -37,7 +37,9 @@ contextMenu.album = function(albumID, e) {
 	if (album.isSmartID(albumID)) return false;
 
 	// Show merge-item when there's more than one album
-	let showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1);
+	// Commented out because it doesn't consider subalbums or shared albums.
+	// let showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1);
+	let showMerge = true;
 
 	let items = [
 		{ title: build.iconic('pencil') + lychee.locale['RENAME'],                                                  fn: () => album.setTitle([ albumID ]) },
@@ -62,7 +64,9 @@ contextMenu.albumMulti = function(albumIDs, e) {
 	let autoMerge = (albumIDs.length > 1);
 
 	// Show merge-item when there's more than one album
-	let showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1);
+	// Commented out because it doesn't consider subalbums or shared albums.
+	// let showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1);
+	let showMerge = true;
 
 	let items = [
 		{ title: build.iconic('pencil') + lychee.locale['RENAME_ALL'], fn: () => album.setTitle(albumIDs) },
@@ -118,7 +122,14 @@ contextMenu.buildList = function(lists, exclude, action, parent = 0, layer = 0) 
 				fn: () => action(item)
 			});
 
-			items = items.concat(contextMenu.buildList(lists, exclude, action, item.id, layer + 1))
+			if (item.albums && item.albums.length > 0) {
+				items = items.concat(contextMenu.buildList(item.albums, exclude, action, item.id, layer + 1))
+			}
+			else {
+				// Fallback for flat tree representation.  Should not be
+				// needed anymore but shouldn't hurt either.
+				items = items.concat(contextMenu.buildList(lists, exclude, action, item.id, layer + 1))
+			}
 
 		}
 
@@ -293,11 +304,11 @@ contextMenu.getSubIDs = function(albums, albumID) {
 
 	for (a = 0; a < albums.length ; a++) {
 		if (parseInt(albums[a].parent_id,10)===parseInt(albumID,10)) {
+			ids = ids.concat(contextMenu.getSubIDs(albums, albums[a].id))
+		}
 
-			let sub = contextMenu.getSubIDs(albums, albums[a].id);
-			for (id = 0; id < sub.length ; id++)
-				ids.push(sub[id])
-
+		if (albums[a].albums && albums[a].albums.length > 0) {
+			ids = ids.concat(contextMenu.getSubIDs(albums[a].albums, albumID))
 		}
 	}
 
@@ -324,7 +335,12 @@ contextMenu.move = function(IDs, e, callback, kind = 'UNSORTED', display_root = 
 			}
 			if (visible.album()) {
 				if (callback !== album.merge) {
-					exclude.push(album.json.id.toString());
+					// For merging, don't exclude the parent.
+					exclude.push(album.getID().toString())
+				}
+				if (IDs.length === 1 && IDs[0] === album.getID() && album.getParent() && callback === album.setAlbum) {
+					// If moving the current album, exclude its parent.
+					exclude.push(album.getParent().toString())
 				}
 			}
 			else if (visible.photo()) {

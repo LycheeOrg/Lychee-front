@@ -126,6 +126,9 @@ albums.isShared = function(albumID) {
 			found = true;
 			return false; // stop the loop
 		}
+		if (this.albums) {
+			$.each(this.albums, func)
+		}
 	};
 
 	if (albums.json.shared_albums !== null)
@@ -151,8 +154,9 @@ albums.getByID = function(albumID) {
 			json = this;
 			return false; // stop the loop
 		}
-		if (this.albums)
-			$.each(this.albums, func);
+		if (this.albums) {
+			$.each(this.albums, func)
+		}
 	};
 
 	$.each(albums.json.albums, func);
@@ -167,6 +171,8 @@ albums.getByID = function(albumID) {
 albums.deleteByID = function(albumID) {
 
 	// Function returns the JSON of an album
+	// This function is only ever invoked for top-level albums so it
+	// doesn't need to descend down the albums tree.
 
 	if (albumID==null)       return false;
 	if (!albums.json)        return false;
