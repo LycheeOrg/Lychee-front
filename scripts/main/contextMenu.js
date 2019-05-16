@@ -37,7 +37,9 @@ contextMenu.album = function(albumID, e) {
 	if (album.isSmartID(albumID)) return false;
 
 	// Show merge-item when there's more than one album
-	let showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1);
+	// Commented out because it doesn't consider subalbums or shared albums.
+	// let showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1);
+	let showMerge = true;
 
 	let items = [
 		{ title: build.iconic('pencil') + lychee.locale['RENAME'],                                                  fn: () => album.setTitle([ albumID ]) },
@@ -62,7 +64,9 @@ contextMenu.albumMulti = function(albumIDs, e) {
 	let autoMerge = (albumIDs.length > 1);
 
 	// Show merge-item when there's more than one album
-	let showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1);
+	// Commented out because it doesn't consider subalbums or shared albums.
+	// let showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1);
+	let showMerge = true;
 
 	let items = [
 		{ title: build.iconic('pencil') + lychee.locale['RENAME_ALL'], fn: () => album.setTitle(albumIDs) },
@@ -118,7 +122,14 @@ contextMenu.buildList = function(lists, exclude, action, parent = 0, layer = 0) 
 				fn: () => action(item)
 			});
 
-			items = items.concat(contextMenu.buildList(lists, exclude, action, item.id, layer + 1))
+			if (item.albums && item.albums.length > 0) {
+				items = items.concat(contextMenu.buildList(item.albums, exclude, action, item.id, layer + 1))
+			}
+			else {
+				// Fallback for flat tree representation.  Should not be
+				// needed anymore but shouldn't hurt either.
+				items = items.concat(contextMenu.buildList(lists, exclude, action, item.id, layer + 1))
+			}
 
 		}
 
@@ -137,14 +148,14 @@ contextMenu.albumTitle = function(albumID, e) {
 
 		items = items.concat({ title: lychee.locale['ROOT'], fn: () => lychee.goto()});
 
-		if (data.albums && data.albums.length > 1) {
+		if (data.albums && data.albums.length > 0) {
 
 			items = items.concat({});
 			items = items.concat(contextMenu.buildList(data.albums, [ parseInt(albumID, 10) ], (a) => lychee.goto(a.id)));
 
 		}
 
-		if (data.shared_albums && data.shared_albums.length >1) {
+		if (data.shared_albums && data.shared_albums.length > 0) {
 
 			items = items.concat({});
 			items = items.concat(contextMenu.buildList(data.shared_albums, [ parseInt(albumID,10) ], (a) => lychee.goto(a.id)));
@@ -293,11 +304,11 @@ contextMenu.getSubIDs = function(albums, albumID) {
 
 	for (a = 0; a < albums.length ; a++) {
 		if (parseInt(albums[a].parent_id,10)===parseInt(albumID,10)) {
+			ids = ids.concat(contextMenu.getSubIDs(albums, albums[a].id))
+		}
 
-			let sub = contextMenu.getSubIDs(albums, albums[a].id);
-			for (id = 0; id < sub.length ; id++)
-				ids.push(sub[id])
-
+		if (albums[a].albums && albums[a].albums.length > 0) {
+			ids = ids.concat(contextMenu.getSubIDs(albums[a].albums, albumID))
 		}
 	}
 
@@ -311,27 +322,45 @@ contextMenu.move = function(IDs, e, callback, kind = 'UNSORTED', display_root = 
 
 	api.post('Albums::get', {}, function(data) {
 
-		if (data.albums && data.albums.length > 0) {
+		addItems = function(albums) {
 
-			// items = items.concat(contextMenu.buildList(data.albums, [ album.getID() ], (a) => callback(IDs, a.id))); //photo.setAlbum
-
-			// Disable all childs
+			// Disable all children
 			// It's not possible to move us into them
 			let i, s;
 			let exclude = [];
 			for(i = 0; i < IDs.length; i++) {
-				let sub = contextMenu.getSubIDs(data.albums, IDs[i]);
+				let sub = contextMenu.getSubIDs(albums, IDs[i]);
 				for (s = 0 ; s < sub.length ; s++)
 					exclude.push(sub[s])
 			}
-			if (visible.album())
-			{
-				exclude.push(album.json.id.toString());
+			if (visible.album()) {
+				if (callback !== album.merge) {
+					// For merging, don't exclude the parent.
+					exclude.push(album.getID().toString())
+				}
+				if (IDs.length === 1 && IDs[0] === album.getID() && album.getParent() && callback === album.setAlbum) {
+					// If moving the current album, exclude its parent.
+					exclude.push(album.getParent().toString())
+				}
 			}
 			else if (visible.photo()) {
 				exclude.push(photo.json.album.toString());
 			}
-			items = items.concat(contextMenu.buildList(data.albums, exclude.concat(IDs), (a) => callback(IDs, a.id)));
+			items = items.concat(contextMenu.buildList(albums, exclude.concat(IDs), (a) => callback(IDs, a.id)));
+		}
+
+		if (data.albums && data.albums.length > 0) {
+
+			// items = items.concat(contextMenu.buildList(data.albums, [ album.getID() ], (a) => callback(IDs, a.id))); //photo.setAlbum
+
+			addItems(data.albums);
+		}
+
+		if (data.shared_albums && data.shared_albums.length > 0 && lychee.admin) {
+
+			items = items.concat({});
+			addItems(data.shared_albums);
+
 		}
 
 		// Show Unsorted when unsorted is not the current album

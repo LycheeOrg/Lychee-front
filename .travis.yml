@@ -1,8 +1,20 @@
 language: node_js
+
+matrix:
+  include:
+    - os: linux
+      dist: xenial #16.04
+  allow_failures:
+    - os: linux
+      dist: trusty #14.04
+
 node_js:
   - "node"
+
 before_script:
   - npm install
+
 script:
   - npm run compile
+
 cache: npm
