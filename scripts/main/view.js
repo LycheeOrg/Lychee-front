@@ -736,6 +736,7 @@ view.settings = {
 				view.settings.content.setLang();
 				view.settings.content.setDefaultLicense();
 				view.settings.content.setLayout();
+				view.settings.content.setPublicSearch();
 				view.settings.content.setOverlay();
 				view.settings.content.setOverlayType();
 				view.settings.content.setCSS();
@@ -942,6 +943,24 @@ view.settings = {
 			$(".settings_view").append(msg);
 			$('select#layout').val(lychee.layout);
 			settings.bind('#basicModal__action_set_layout', '.setLayout', settings.setLayout);
+		},
+
+		setPublicSearch: function () {
+			let msg = `
+			<div class="setPublicSearch">
+			<p>${lychee.locale['PUBLIC_SEARCH_TEXT']}
+			<label class="switch">
+			  <input id="PublicSearch" type="checkbox">
+			  <span class="slider round"></span>
+			</label>
+			</p>
+			</div>
+			`;
+
+			$(".settings_view").append(msg);
+			if (lychee.public_search) $('#PublicSearch').click();
+
+			settings.bind('#PublicSearch', '.setPublicSearch', settings.changePublicSearch);
 		},
 
 		setOverlay: function () {

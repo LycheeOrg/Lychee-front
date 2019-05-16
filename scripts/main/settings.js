@@ -360,6 +360,22 @@ settings.setLayout = function (params) {
 	})
 };
 
+settings.changePublicSearch = function () {
+	var params = {};
+	if ($('#PublicSearch:checked').length === 1) {
+		params.public_search = '1';
+	} else {
+		params.public_search = '0';
+	}
+	api.post('Settings::setPublicSearch', params, function (data) {
+		if (data === true) {
+			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_PUBLIC_SEARCH']);
+			lychee.image_overlay_default = params.image_overlay === '1';
+			lychee.image_overlay = lychee.image_overlay_default;
+		} else lychee.error(null, params, data);
+	});
+};
+
 settings.changeImageOverlay = function () {
 	let params = {};
 	if ($('#ImageOverlay:checked').length === 1) {

@@ -5,8 +5,8 @@
 lychee = {
 
 	title					: document.title,
-	version					: '3.2.14',
-	versionCode				: '030214', // not really needed anymore
+	version					: '3.2.15-alpha',
+	versionCode				: '030215-alpha', // not really needed anymore
 
 	updatePath				: 'https://LycheeOrg.github.io/update.json',
 	updateURL				: 'https://github.com/LycheeOrg/Lychee/releases',
@@ -184,6 +184,7 @@ lychee.init = function() {
 			lychee.full_photo					= (data.config.full_photo == null)	|| (data.config.full_photo === '1');
 			lychee.checkForUpdates				= data.config.checkForUpdates		|| '1';
 			lychee.layout						= data.config.layout				|| '1';
+			lychee.public_search				= (data.config.public_search && data.config.public_search === '1') || false;
 			lychee.image_overlay				= (data.config.image_overlay && data.config.image_overlay === '1') || false;
 			lychee.image_overlay_type			= (!data.config.image_overlay_type) ? 'exif' : data.config.image_overlay_type;
 			lychee.image_overlay_type_default	= lychee.image_overlay_type;
