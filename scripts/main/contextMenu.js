@@ -102,7 +102,7 @@ contextMenu.buildList = function(lists, exclude, action, parent = 0, layer = 0) 
 
 			let item = lists[i];
 
-			let thumb = 'Lychee-front/images/no_cover.svg';
+			let thumb = 'img/no_cover.svg';
 			if (item.thumbs && item.thumbs[0]) thumb = item.thumbs[0];
 			else if (item.thumbUrl)             thumb = item.thumbUrl;
 

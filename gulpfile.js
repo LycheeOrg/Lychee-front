@@ -39,9 +39,6 @@ paths.view = {
 		'./images/iconic.svg',
 		'./images/ionicons.svg'
 	],
-	images: [
-		'./images/*png'
-	]
 };
 
 gulp.task('view--js', function() {
@@ -79,12 +76,6 @@ gulp.task('view--svg', function() {
 
  });
 
- gulp.task('view--images', function() {
-
-	return gulp.src(paths.view.images)
-	           .pipe(gulp.dest('../dist/images'))
-
- });
 
 /* Main ----------------------------------------- */
 
@@ -293,14 +284,6 @@ gulp.task('landing--styles', function() {
 /* Page -----------------------------------------  */
 
 paths.page = {
-	// js: [
-	// 	'./scripts/_gup.js',
-	// 	'./scripts/page/*.js',
-	// ],
-	// scripts: [
-	// 	'node_modules/jquery/dist/jquery.min.js',
-	// 	'../dist/_landing--javascript.js'
-	// ],
 	scss: [
 		'./styles/page/*.scss',
 		'./styles/page/*.scss'
@@ -309,30 +292,6 @@ paths.page = {
 		'./styles/page/page.scss'
 	],
 };
-
-// gulp.task('page--js', function() {
-//
-// 	const babel = plugins.babel({
-// 		presets: ['env']
-// 	});
-//
-// 	return gulp.src(paths.landing.js)
-// 		.pipe(plugins.concat('_page--javascript.js', {newLine: "\n"}))
-// 		.pipe(babel)
-// 		.on('error', catchError)
-// 		.pipe(gulp.dest('../dist/'))
-//
-// });
-//
-// gulp.task('page--scripts', gulp.series('page--js', function() {
-//
-// 	return gulp.src(paths.landing.scripts)
-// 		.pipe(plugins.concat('page.js', {newLine: "\n"}))
-// 		// .pipe(plugins.uglify())
-// 		.on('error', catchError)
-// 		.pipe(gulp.dest('../dist/'))
-//
-// }));
 
 gulp.task('page--styles', function() {
 
@@ -346,12 +305,26 @@ gulp.task('page--styles', function() {
 
 });
 
-gulp.task('copy', function () {
-	return gulp.src('./images/placeholder.png')
-		.pipe(gulp.dest('../dist/'));
+/* Images ----------------------------------------- */
+
+
+paths.images = {
+	src: [
+		'./images/password.svg',
+		'./images/no_images.svg',
+		'./images/*png'
+	]
+};
+
+gulp.task('images--copy', function () {
+	return gulp.src(paths.images.src)
+		.on('error', catchError)
+		.pipe(gulp.dest('../img'))
 });
 
 /* Clean ----------------------------------------- */
+
+
 
 gulp.task('clean', function() {
 
@@ -367,6 +340,7 @@ gulp.task('default', gulp.series(gulp.parallel('view--svg', 'view--scripts',
 												'main--svg', 'main--scripts', 'main--styles',
 												'frame--scripts', 'frame--styles',
 												'landing--scripts', 'landing--styles', 'page--styles',
+												'images--copy'
 	), 'clean'));
 
 gulp.task('watch', gulp.series('default', function() {

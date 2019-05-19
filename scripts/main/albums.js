@@ -55,9 +55,10 @@ albums.load = function() {
 
 albums.parse = function(album) {
 
+	let i;
 	for (i = 0; i < 3; i++) {
 		if (!album.thumbs[i]) {
-			album.thumbs[i] = (album.password === '1' ? 'Lychee-front/images/password.svg' : 'Lychee-front/images/no_images.svg');
+			album.thumbs[i] = (album.password === '1' ? 'img/password.svg' : 'img/no_images.svg');
 		}
 	}
 
