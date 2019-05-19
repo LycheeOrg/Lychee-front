@@ -45,7 +45,7 @@ build.getAlbumThumb = function (data, i) {
 	let thumb = data.thumbs[i];
 
 	if (thumb === 'uploads/thumb/' && isVideo) {
-		return `<span class="thumbimg"><img src='dist/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+		return `<span class="thumbimg"><img src='img/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 	}
 
 	thumb2x = '';
@@ -60,7 +60,7 @@ build.getAlbumThumb = function (data, i) {
 		}
 	}
 
-	return `<span class="thumbimg${isVideo ? ' video' : ''}"><img class='lazyload' src='dist/placeholder.png' data-src='${thumb}' ${(thumb2x !== '') ? 'data-srcset=\'' + thumb2x + ' 2x\'' : ''} alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+	return `<span class="thumbimg${isVideo ? ' video' : ''}"><img class='lazyload' src='img/placeholder.png' data-src='${thumb}' ${(thumb2x !== '') ? 'data-srcset=\'' + thumb2x + ' 2x\'' : ''} alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 };
 
 build.album = function (data, disabled = false) {
@@ -129,7 +129,7 @@ build.photo = function (data) {
 
 	let isVideo = data.type && data.type.indexOf('video') > -1;
 	if (data.thumbUrl === 'uploads/thumb/' && isVideo) {
-		thumbnail = `<span class="thumbimg"><img src='dist/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+		thumbnail = `<span class="thumbimg"><img src='img/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 	} else if (lychee.layout === '0') {
 
 		if (data.hasOwnProperty('thumb2x')) { // Lychee v4
@@ -143,7 +143,7 @@ build.photo = function (data) {
 		}
 
 		thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}">`;
-		thumbnail += `<img class='lazyload' src='dist/placeholder.png' data-src='${data.thumbUrl}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
+		thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.thumbUrl}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
 		thumbnail += `</span>`
 	} else {
 
@@ -153,7 +153,7 @@ build.photo = function (data) {
 			}
 
 			thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}">`;
-			thumbnail += `<img class='lazyload' src='dist/placeholder.png' data-src='${data.small}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
+			thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.small}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
 			thumbnail += `</span>`
 		} else if (data.medium !== '') {
 			if (data.hasOwnProperty('medium2x') && data.medium2x !== '') {
@@ -161,12 +161,12 @@ build.photo = function (data) {
 			}
 
 			thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}">`;
-			thumbnail += `<img class='lazyload' src='dist/placeholder.png' data-src='${data.medium}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`
+			thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.medium}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`
 			thumbnail += `</span>`
 		} else if (!isVideo) {
 			// Fallback for images with no small or medium.
 			thumbnail = `<span class="thumbimg">`;
-			thumbnail += `<img class='lazyload' src='dist/placeholder.png' data-src='${data.url}' alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
+			thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.url}' alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
 			thumbnail += `</span>`
 		} else {
 			// Fallback for videos with no small (the case of no thumb is
@@ -183,7 +183,7 @@ build.photo = function (data) {
 			}
 
 			thumbnail = `<span class="thumbimg video">`;
-			thumbnail += `<img class='lazyload' src='dist/placeholder.png' data-src='${data.thumbUrl}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
+			thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.thumbUrl}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
 			thumbnail += `</span>`
 		}
 

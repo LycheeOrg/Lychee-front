@@ -218,6 +218,7 @@ album.load = function(albumID, refresh = false) {
 				params.password = password.value;
 
 				api.post('Album::get', params, function(data) {
+					albums.refresh();
 					processData(data)
 				})
 			})
