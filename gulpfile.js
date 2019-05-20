@@ -311,6 +311,7 @@ gulp.task('page--styles', function() {
 paths.images = {
 	src: [
 		'./images/password.svg',
+		'./images/no_cover.svg',
 		'./images/no_images.svg',
 		'./images/*png'
 	]
