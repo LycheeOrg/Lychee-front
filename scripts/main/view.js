@@ -1095,6 +1095,11 @@ view.full_settings = {
 				$(".settings_view").append(msg);
 
 				settings.bind('#FullSettingsSave_button', '#fullSettings', settings.save);
+
+				$('#fullSettings').on('keypress', function (e) {
+					settings.save_enter(e)
+				});
+
 			});
 
 		},
@@ -1377,8 +1382,7 @@ view.diagnostics = {
 	clearContent: function (update) {
 		lychee.content.unbind('mousedown');
 		let html = '';
-		if (update === 1)
-		{
+		if (update === 1) {
 			html += lychee.html`<div class="clear_logs_update"><a id="Update_Lychee" class="basicModal__button">${lychee.locale['UPDATE_AVAILABLE']}</a></div>`;
 		}
 		html += '<pre class="logs_diagnostics_view"></pre>';
@@ -1389,16 +1393,14 @@ view.diagnostics = {
 				let data_json;
 				try {
 					data_json = JSON.parse(data);
-				}
-				catch (e)
-				{
+				} catch (e) {
 					data_json = "JSON error. Check the console logs.";
 					console.log(data);
 				}
 				html = '<pre>';
 				if (Array.isArray(data_json)) {
 					for (let i = 0; i < data_json.length; i++) {
-						html += '    ' + data_json[i]+'\n';
+						html += '    ' + data_json[i] + '\n';
 					}
 				} else {
 					html += '    ' + data_json;
