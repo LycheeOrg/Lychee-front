@@ -4,6 +4,11 @@ users = {
 
 users.update = function (params) {
 
+	if (params.username.length < 1) {
+		loadingBar.show('error', 'new username cannot be empty.');
+		return false
+	}
+
 	if ( $('#UserData' + params.id + ' .choice input[name="upload"]:checked').length === 1 )
 	{
 		params.upload = '1';
@@ -36,6 +41,15 @@ users.update = function (params) {
 };
 
 users.create = function (params) {
+
+	if (params.username.length < 1) {
+		loadingBar.show('error', 'new username cannot be empty.');
+		return false
+	}
+	if (params.password.length < 1) {
+		loadingBar.show('error', 'new password cannot be empty.');
+		return false
+	}
 
 	if ( $('#UserCreate .choice input[name="upload"]:checked').length === 1 )
 	{

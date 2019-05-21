@@ -21,6 +21,15 @@ sharing.add = function () {
 		params.UserIDs += this.value;
 	});
 
+	if (params.albumIDs === '') {
+		loadingBar.show('error', 'Select an album to share!');
+		return false;
+	}
+	if (params.UserIDs === '') {
+		loadingBar.show('error', 'Select a user to share with!');
+		return false
+	}
+
 	api.post('Sharing::Add', params, function (data) {
 		if(data!==true)
 		{
@@ -42,12 +51,16 @@ sharing.delete = function () {
 		ShareIDs: '',
 	};
 
-	$('input[name="remove_id"]').each(function () {
+	$('input[name="remove_id"]:checked').each(function () {
 		if(params.ShareIDs !== '')
 			params.ShareIDs += ',';
 		params.ShareIDs += this.value;
 	});
 
+	if (params.ShareIDs === '') {
+		loadingBar.show('error', 'Select a sharing to remove!');
+		return false
+	}
 	api.post('Sharing::Delete', params, function (data) {
 		if(data!==true)
 		{
