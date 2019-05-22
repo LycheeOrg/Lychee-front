@@ -1,12 +1,17 @@
 #footer {
-	padding: 0 0 5px 0;
+	padding: 0;
 	text-align: center;
+	position: relative;
+	background: #1d1d1d;
+	min-height: 40px;
+	display: none;
 
 	.home_copyright {
 		text-transform: uppercase;
 		color: #CCCCCC;
 		font-size: 0.75em;
 		font-weight: 400;
+		line-height: 26px;
 	}
 
 	.personal_text {
@@ -15,10 +20,19 @@
 		font-weight: 400;
 	}
 
-	.hosted_by {
+	p.hosted_by {
 		text-transform: uppercase;
 		color: #CCCCCC;
 		font-size: 0.75em;
 		font-weight: 400;
+		padding-bottom: 5px;
+
+		a {
+			color: #CCC;
+		}
+	}
+
+	p.personal_text {
+		margin-bottom: 10px;
 	}
 }

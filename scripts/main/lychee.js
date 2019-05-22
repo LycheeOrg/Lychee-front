@@ -42,6 +42,7 @@ lychee = {
 
 	content					: $('.content'),
 	imageview				: $('#imageview'),
+	footer                  : $('#footer'),
 
 	locale					: {}
 };
@@ -292,6 +293,7 @@ lychee.load = function() {
 		// Show Photo
 		if (lychee.content.html()==='' || (header.dom('.header__search').length && header.dom('.header__search').val().length!==0)) {
 			lychee.content.hide();
+			lychee.footer.hide();
 			album.load(albumID, true)
 		}
 		photo.load(photoID, albumID)
@@ -325,7 +327,7 @@ lychee.load = function() {
 		// Show Albums
 		if (visible.photo()) view.photo.hide();
 		lychee.content.show();
-		albums.load()
+		albums.load();
 
 	}
 
