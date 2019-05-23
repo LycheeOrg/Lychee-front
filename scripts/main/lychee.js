@@ -630,7 +630,9 @@ lychee.fullscreenUpdate = function() {
 };
 
 lychee.footer_show = function () {
-	lychee.footer.removeClass('hide_footer')
+	setTimeout(function () {
+		lychee.footer.removeClass('hide_footer')
+	}, 200);
 };
 
 

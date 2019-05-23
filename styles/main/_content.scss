@@ -7,6 +7,7 @@
 	min-height: unset;
 	transition: margin-left .5s;
 	-webkit-overflow-scrolling: touch;
+	max-width: calc(100vw - 10px);
 
 	&::before {
 		content: '';
@@ -310,5 +311,5 @@
 
 .leftMenu__open {
 	margin-left: 250px;
-	width: calc(100% - 250px);
+	width: calc(100% - 260px);
 }

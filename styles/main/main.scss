@@ -83,8 +83,6 @@ input {
 @import 'basicContext.extended';
 @import 'basicModal.custom';
 @import 'header';
-@import 'footer';
-@import 'social-footer';
 @import 'imageview';
 @import 'sidebar';
 @import 'loading';
@@ -95,3 +93,6 @@ input {
 @import "sharing";
 @import 'multiselect';
 @import 'justified_layout';
+@import '../page/footer';
+@import 'footer';
+@import 'social-footer';
