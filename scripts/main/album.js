@@ -173,10 +173,12 @@ album.load = function (albumID, refresh = false) {
 
 			if (document.location.hash.replace('#', '').split('/')[1] !== undefined) {
 				// Display photo only
-				lychee.setMode('view')
+				lychee.setMode('view');
+				lychee.footer_hide();
 			} else {
 				// Album not public
 				lychee.content.show();
+				lychee.footer_show();
 				if (!visible.albums() && !visible.album()) lychee.goto()
 			}
 			return false
@@ -203,11 +205,6 @@ album.load = function (albumID, refresh = false) {
 				lychee.animate(lychee.content, 'contentZoomIn');
 				header.setMode('album');
 			}
-
-			setTimeout(() => {
-					lychee.footer.show();
-				},
-				300);
 		}, waitTime)
 	};
 

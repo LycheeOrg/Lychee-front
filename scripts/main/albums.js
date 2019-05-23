@@ -39,7 +39,7 @@ albums.load = function () {
 				view.albums.init();
 				lychee.animate(lychee.content, 'contentZoomIn');
 				setTimeout(() => {
-					lychee.footer.show();
+					lychee.footer_show();
 				},
 					300)
 			}, waitTime)

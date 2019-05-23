@@ -293,10 +293,10 @@ lychee.load = function() {
 		// Show Photo
 		if (lychee.content.html()==='' || (header.dom('.header__search').length && header.dom('.header__search').val().length!==0)) {
 			lychee.content.hide();
-			lychee.footer.hide();
 			album.load(albumID, true)
 		}
-		photo.load(photoID, albumID)
+		photo.load(photoID, albumID);
+		lychee.footer_hide();
 
 	} else if (albumID) {
 
@@ -307,7 +307,8 @@ lychee.load = function() {
 		if (visible.photo()) view.photo.hide();
 		if (visible.sidebar() && (albumID==='0' || albumID==='f' || albumID==='s' || albumID==='r')) sidebar.toggle();
 		if (album.json && albumID===album.json.id) view.album.title();
-		else album.load(albumID)
+		else album.load(albumID);
+		lychee.footer_show();
 
 	} else {
 
@@ -327,6 +328,7 @@ lychee.load = function() {
 		// Show Albums
 		if (visible.photo()) view.photo.hide();
 		lychee.content.show();
+		lychee.footer_show();
 		albums.load();
 
 	}
@@ -614,7 +616,7 @@ lychee.fullscreenToggle = function() {
 lychee.fullscreenStatus = function() {
 	let elem = (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
 	return (elem ? true : false);
-}
+};
 
 lychee.fullscreenUpdate = function() {
 	if (lychee.fullscreenStatus()) {
@@ -625,4 +627,13 @@ lychee.fullscreenUpdate = function() {
 		$('#button_fs_album_enter,#button_fs_enter').show();
 		$('#button_fs_album_exit,#button_fs_exit').hide();
 	}
+};
+
+lychee.footer_show = function () {
+	lychee.footer.removeClass('hide_footer')
+};
+
+
+lychee.footer_hide = function () {
+	lychee.footer.addClass('hide_footer')
 };
