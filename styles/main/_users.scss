@@ -66,6 +66,7 @@
 		border-radius: 0;
 		box-shadow: 0 1px 0 rgba(255, 255, 255, .05);
 		outline: 0;
+		margin-bottom: 10px;
 
 		&:focus {
 			border-bottom-color: #2293EC
@@ -122,10 +123,6 @@
 		min-width: 50px;
 		border-radius: 0 0 0 0;
 
-		&:last-child {
-			border-radius: 0 5px 5px 0;
-		}
-
 		&:hover {
 			cursor: pointer;
 		}
@@ -133,6 +130,7 @@
 
 	.basicModal__button_OK {
 		color: #2293EC;
+		border-radius: 5px 0 0 5px;
 
 		&:hover {
 			background: #2293EC;
@@ -142,6 +140,7 @@
 
 	.basicModal__button_DEL {
 		color: #b22027;
+		border-radius: 0 5px 5px 0;
 
 		&:hover {
 			background: #b22027;
@@ -152,6 +151,7 @@
 	.basicModal__button_CREATE {
 		width: 20%;
 		color: #009900;
+		border-radius: 5px;
 
 		&:hover {
 			background: #009900;
