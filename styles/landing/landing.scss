@@ -27,6 +27,7 @@ a {
 @import "../page/fonts";
 @import "../page/animate";
 @import "../page/social";
+@import "../page/footer";
 @import "menu";
 @import "logo";
 @import "intro";
@@ -35,18 +36,10 @@ a {
 
 #footer {
 	position: absolute;
-	z-index: 3;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	padding: 0 0 10px 0;
-	text-align: center;
+	background: #000000;
 
-	.home_copyright {
-		text-transform: uppercase;
+	p.home_copyright {
 		color: #FFFFFF;
-		font-size: 0.5em;
-		font-weight: 400;
 	}
 }
 

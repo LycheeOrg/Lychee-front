@@ -1,0 +1,34 @@
+#footer {
+	z-index: 3;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	text-align: center;
+	padding: 5px 0 5px 0;
+	transition: color .3s, opacity .3s ease-out, transform .3s ease-out, box-shadow .3s, margin-left .5s;
+
+	p {
+		color: #CCCCCC;
+		font-size: 0.5em;
+		font-weight: 400;
+
+		a {
+			color: #CCC;
+		}
+
+	}
+
+	p.hosted_by {
+	}
+
+	p.personal_text {
+	}
+
+	p.hosted_by, p.home_copyright {
+		text-transform: uppercase;
+	}
+
+	&__open {
+
+	}
+}

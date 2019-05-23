@@ -24,6 +24,7 @@
 
 .socialicons {
 	display: block;
+	font-size: 23px;
 	font-family: 'socials' !important;
 	speak: none;
 	font-style: normal;
@@ -32,7 +33,7 @@
 	text-transform: none;
 	line-height: 1;
 	color: #ffffff;
-	font-size: 1.1em;
+	//font-size: 1.1em;
 	text-decoration: none;
 	margin: 15px;
 	transition: all 0.3s;
@@ -42,8 +43,8 @@
 
 	&:hover {
 		color: #b5b5b5;
-		transform: scale(1.2);
-		-webkit-transform: scale(1.2);
+		transform: scale(1.3);
+		-webkit-transform: scale(1.3);
 	}
 }
 

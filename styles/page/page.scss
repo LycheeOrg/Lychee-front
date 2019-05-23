@@ -30,21 +30,17 @@ a {
 @import "menu";
 @import "social";
 @import "content";
+@import "footer";
 
 #footer {
 	position: fixed;
-	z-index: 3;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	padding: 20px 0 20px 0;
-	text-align: center;
 	background: #FFFFFF;
+	color: #707070;
+	padding: 20px 0 20px 0;
+
+	p {
+		color: #707070;
+		font-size: 0.75em;
+	}
 }
 
-#home_copyright {
-	text-transform: uppercase;
-	color: #333333;
-	font-size: 0.5em;
-	font-weight: 400;
-}
