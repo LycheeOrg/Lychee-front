@@ -911,6 +911,23 @@ album.setAlbum = function (albumIDs, albumID, confirm = true) {
 
 };
 
+album.isUploadable = function() {
+	if (lychee.admin) {
+		return true;
+	}
+	if (lychee.publicMode || !lychee.upload) {
+		return false;
+	}
+
+	// For special cases of no album / smart album / etc. we return true.
+	// It's only for regular non-matching albums that we return false.
+	if (album.json === null || !album.json.owner) {
+		return true;
+	}
+
+	return (album.json.owner === lychee.username);
+}
+
 album.reload = function () {
 
 	let albumID = album.getID();

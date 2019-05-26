@@ -146,28 +146,29 @@ contextMenu.albumTitle = function(albumID, e) {
 
 		let items = [];
 
-		items = items.concat({ title: lychee.locale['ROOT'], fn: () => lychee.goto()});
+		items = items.concat({ title: lychee.locale['ROOT'], disabled: (albumID === false), fn: () => lychee.goto()});
 
 		if (data.albums && data.albums.length > 0) {
 
 			items = items.concat({});
-			items = items.concat(contextMenu.buildList(data.albums, [ parseInt(albumID, 10) ], (a) => lychee.goto(a.id)));
+			items = items.concat(contextMenu.buildList(data.albums, (albumID !== false ? [ parseInt(albumID, 10) ] : []), (a) => lychee.goto(a.id)));
 
 		}
 
 		if (data.shared_albums && data.shared_albums.length > 0) {
 
 			items = items.concat({});
-			items = items.concat(contextMenu.buildList(data.shared_albums, [ parseInt(albumID,10) ], (a) => lychee.goto(a.id)));
+			items = items.concat(contextMenu.buildList(data.shared_albums, (albumID !== false ? [ parseInt(albumID,10) ] : []), (a) => lychee.goto(a.id)));
 
 		}
 
-		if(items.length > 0)
-		{
-			items.unshift({ });
-		}
+		if (albumID !== false && !album.isSmartID(albumID) && album.isUploadable()) {
+			if (items.length > 0) {
+				items.unshift({ });
+			}
 
-		items.unshift({ title: build.iconic('pencil') + lychee.locale['RENAME'], fn: () => album.setTitle([ albumID ]) });
+			items.unshift({ title: build.iconic('pencil') + lychee.locale['RENAME'], fn: () => album.setTitle([ albumID ]) });
+		}
 
 		basicContext.show(items, e.originalEvent, contextMenu.close)
 
@@ -265,12 +266,17 @@ contextMenu.photoTitle = function(albumID, photoID, e) {
 
 	let data = album.json;
 
-	if (data.photos!==false && data.photos.length>1) {
+	if (data.photos !== false && data.photos.length > 0) {
 
 		items.push({ });
 
 		items = items.concat(contextMenu.buildList(data.photos, [ photoID ], (a) => lychee.goto(albumID + '/' + a.id)))
 
+	}
+
+	if (!album.isUploadable()) {
+		// Remove Rename and the spacer.
+		items.splice(0, 2);
 	}
 
 	basicContext.show(items, e.originalEvent, contextMenu.close)
@@ -280,9 +286,9 @@ contextMenu.photoTitle = function(albumID, photoID, e) {
 contextMenu.photoMore = function(photoID, e) {
 
 	// Show download-item when
-	// a) Public mode is off
-	// b) Downloadable is 1 and public mode is on
-	let showDownload = lychee.publicMode===false || ((album.json && album.json.downloadable && album.json.downloadable==='1') && lychee.publicMode===true);
+	// a) We are allowed to upload to the album
+	// b) or the album is explicitly marked as downloadable
+	let showDownload = album.isUploadable() || (album.json && album.json.downloadable && album.json.downloadable === '1');
 
 	let showMedium = photo.json.medium && photo.json.medium !== '' && showDownload;
 	let showSmall = photo.json.small && photo.json.small !== '' && showDownload;
@@ -391,16 +397,15 @@ contextMenu.sharePhoto = function(photoID, e) {
 		{ title: build.iconic('twitter', iconClass) + 'Twitter', fn: () => photo.share(photoID, 'twitter') },
 		{ title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => photo.share(photoID, 'facebook') },
 		{ title: build.iconic('envelope-closed') + 'Mail', fn: () => photo.share(photoID, 'mail') },
-		{ title: build.iconic('dropbox', iconClass) + 'Dropbox', visible: lychee.publicMode===false, fn: () => photo.share(photoID, 'dropbox') },
+		{ title: build.iconic('dropbox', iconClass) + 'Dropbox', visible: lychee.admin === true, fn: () => photo.share(photoID, 'dropbox') },
 		{ title: build.iconic('link-intact') + lychee.locale['DIRECT_LINK'], fn: () => window.open(photo.getDirectLink()) },
 		{ },
-		{ title: build.iconic('ban') + lychee.locale['MAKE_PRIVATE'], visible: lychee.publicMode===false, fn: () => photo.setPublic(photoID) }
+		{ title: build.iconic('ban') + lychee.locale['MAKE_PRIVATE'], fn: () => photo.setPublic(photoID) }
 	];
 
-	if (lychee.publicMode===true || (lychee.api_V2 && !lychee.upload))
-	{
+	if (!album.isUploadable()) {
 		items.splice(7, 2);
-    }
+	}
 
 	basicContext.show(items, e.originalEvent);
 	$('.basicContext input#link').focus().select()
@@ -418,11 +423,13 @@ contextMenu.shareAlbum = function(albumID, e) {
 		{ title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => album.share('facebook') },
 		{ title: build.iconic('envelope-closed') + 'Mail', fn: () => album.share('mail') },
 		{ },
-		{ title: build.iconic('pencil') + lychee.locale['EDIT_SHARING'], visible: lychee.publicMode===false, fn: () => album.setPublic(albumID, true, e) },
-		{ title: build.iconic('ban') + lychee.locale['MAKE_PRIVATE'], visible: lychee.publicMode===false, fn: () => album.setPublic(albumID, false) }
+		{ title: build.iconic('pencil') + lychee.locale['EDIT_SHARING'], fn: () => album.setPublic(albumID, true, e) },
+		{ title: build.iconic('ban') + lychee.locale['MAKE_PRIVATE'], fn: () => album.setPublic(albumID, false) }
 	];
 
-	if (lychee.publicMode===true || (lychee.api_V2 && !lychee.upload)) items.splice(5, 3);
+	if (!album.isUploadable()) {
+		items.splice(5, 3);
+	}
 
 	basicContext.show(items, e.originalEvent);
 	$('.basicContext input#link').focus().select()

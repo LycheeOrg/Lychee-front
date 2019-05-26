@@ -34,32 +34,38 @@ $(document).ready(function() {
 			if (visible.photo()) { $('#imageview a#next').click(); return false }
 		})
 		.bind([ 'u' ], function() {
-			if (!visible.photo()) { $('#upload_files').click(); return false }
+			if (!visible.photo() && album.isUploadable()) { $('#upload_files').click(); return false }
 		})
 		.bind([ 'n' ], function() {
-			if (!visible.photo()) { album.add(); return false }
+			if (!visible.photo() && album.isUploadable()) { album.add(); return false }
 		})
 		.bind([ 's' ], function() {
-			if (visible.photo())       { header.dom('#button_star').click(); return false }
+			if (visible.photo() && album.isUploadable()) { header.dom('#button_star').click(); return false }
 			else if (visible.albums()) { header.dom('.header__search').focus(); return false }
 		})
 		.bind([ 'r' ], function() {
-			if (visible.album())      { album.setTitle(album.getID()); return false }
-			else if (visible.photo()) { photo.setTitle([photo.getID()]); return false }
+			if (album.isUploadable()) {
+				if (visible.album())      { album.setTitle(album.getID()); return false }
+				else if (visible.photo()) { photo.setTitle([photo.getID()]); return false }
+			}
 		})
 		.bind([ 'd' ], function() {
-			if (visible.photo())      { photo.setDescription(photo.getID()); return false }
-			else if (visible.album()) { album.setDescription(album.getID()); return false }
+			if (album.isUploadable()) {
+				if (visible.photo())      { photo.setDescription(photo.getID()); return false }
+				else if (visible.album()) { album.setDescription(album.getID()); return false }
+			}
 		})
 		.bind([ 't' ], function() {
-			if (visible.photo()) { photo.editTags([photo.getID()]); return false }
+			if (visible.photo() && album.isUploadable()) { photo.editTags([photo.getID()]); return false }
 		})
 		.bind([ 'i' ], function() {
 			if (!visible.multiselect()) { sidebar.toggle(); return false }
 		})
 		.bind([ 'command+backspace', 'ctrl+backspace' ], function() {
-			if (visible.photo() && basicModal.visible()===false)      { photo.delete([photo.getID()]); return false }
-			else if (visible.album() && basicModal.visible()===false) { album.delete([album.getID()]); return false }
+			if (album.isUploadable()) {
+				if (visible.photo() && basicModal.visible()===false)      { photo.delete([photo.getID()]); return false }
+				else if (visible.album() && basicModal.visible()===false) { album.delete([album.getID()]); return false }
+			}
 		})
 		.bind([ 'command+a', 'ctrl+a' ], function() {
 			if (visible.album() && basicModal.visible()===false)       { multiselect.selectAll(); return false }
@@ -126,6 +132,10 @@ $(document).ready(function() {
 	// Drag and Drop upload
 	.on('dragover', function() { return false }, false)
 	.on('drop', function(e) {
+
+		if (!album.isUploadable()) {
+			return false;
+		}
 
 		// Close open overlays or views which are correlating with the upload
 		if (visible.photo())       lychee.goto(album.getID());

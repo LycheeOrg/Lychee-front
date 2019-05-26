@@ -60,7 +60,7 @@ multiselect.toggleItem = function(object, id) {
 multiselect.addItem = function(object, id) {
 
 	if (album.isSmartID(id)) return;
-	if (albums.isShared(id)) return;
+	if (!lychee.admin && albums.isShared(id)) return;
 	if (multiselect.isSelected(id).selected===true) return;
 
 	let isAlbum = object.hasClass('album');
@@ -114,13 +114,10 @@ multiselect.albumClick = function(e, albumObj) {
 
 	let id = albumObj.attr('data-id');
 
-	if (isSelectKeyPressed(e) && lychee.upload)
-	{
-		if (albumObj.hasClass('disabled') && !lychee.admin) return;
+	if (isSelectKeyPressed(e) && album.isUploadable()) {
+		if (albumObj.hasClass('disabled')) return;
 		multiselect.toggleItem(albumObj, id);
-	}
-	else
-	{
+	} else {
 		lychee.goto(id)
 	}
 
@@ -130,13 +127,10 @@ multiselect.photoClick = function(e, photoObj) {
 
 	let id = photoObj.attr('data-id');
 
-	if (isSelectKeyPressed(e) && lychee.upload)
-	{
-		if (photoObj.hasClass('disabled') && !lychee.admin) return;
+	if (isSelectKeyPressed(e) && album.isUploadable()) {
+		if (photoObj.hasClass('disabled')) return;
 		multiselect.toggleItem(photoObj, id);
-	}
-	else
-	{
+	} else {
 		lychee.goto(album.getID() + '/' + id);
 	}
 
@@ -150,7 +144,7 @@ multiselect.albumContextMenu = function(e, albumObj) {
 	let id       = albumObj.attr('data-id');
 	let selected = multiselect.isSelected(id).selected;
 
-	if (albumObj.hasClass('disabled') && !lychee.admin) return;
+	if (albumObj.hasClass('disabled')) return;
 
 	if (selected!==false && multiselect.ids.length > 1) {
 		contextMenu.albumMulti(multiselect.ids, e);
@@ -166,7 +160,7 @@ multiselect.photoContextMenu = function(e, photoObj) {
 	let id       = photoObj.attr('data-id');
 	let selected = multiselect.isSelected(id).selected;
 
-	if (photoObj.hasClass('disabled') && !lychee.admin) return;
+	if (photoObj.hasClass('disabled')) return;
 
 	if (selected!==false && multiselect.ids.length > 1) {
 		contextMenu.photoMulti(multiselect.ids, e);
@@ -198,7 +192,7 @@ multiselect.clearSelection = function() {
 
 multiselect.show = function(e) {
 
-	if (lychee.publicMode)                          return false;
+	if (!album.isUploadable())                      return false;
 	if (!visible.albums() && !visible.album())      return false;
 	if ($('.album:hover, .photo:hover').length!==0) return false;
 	if (visible.search())                           return false;
@@ -344,15 +338,11 @@ multiselect.getSelection = function(e) {
 
 			let id = $(this).attr('data-id');
 
-
-	    if (isSelectKeyPressed(e) && lychee.upload)
-	    {
-		    multiselect.toggleItem($(this), id);
-	    }
-	    else
-	    {
-			  multiselect.addItem($(this), id)
-      }
+			if (isSelectKeyPressed(e)) {
+				multiselect.toggleItem($(this), id);
+			} else {
+				multiselect.addItem($(this), id)
+			}
 
 		}
 
@@ -414,7 +404,7 @@ multiselect.close = function() {
 
 multiselect.selectAll = function() {
 
-	if (lychee.publicMode)                   return false;
+	if (!album.isUploadable())               return false;
 	if (visible.search())                    return false;
 	if (!visible.albums() && !visible.album) return false;
 	if (visible.multiselect())               $('#multiselect').remove();

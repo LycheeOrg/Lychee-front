@@ -20,6 +20,7 @@ lychee = {
 	admin						: false,	// enable admin mode (multi-user)
 	upload						: false,	// enable possibility to upload (multi-user)
 	lock						: false,	// locked user (multi-user)
+	username					: null,
 	layout						: '1',		// 0: Use default, "square" layout. 1: Use Flickr-like "justified" layout. 2: Use Google-like "unjustified" layout
 	image_overlay				: false,	// display Overlay like in Lightroom
 	image_overlay_default		: false,	// display Overlay like in Lightroom by default
@@ -167,6 +168,7 @@ lychee.init = function() {
 				lychee.upload	= data.admin || data.upload;
 				lychee.admin	= data.admin;
 				lychee.lock		= data.lock;
+				lychee.username = data.username;
 				lychee.setMode('logged_in');
 			}
 

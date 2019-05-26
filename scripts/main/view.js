@@ -19,12 +19,12 @@ view.albums = {
 
 		if (lychee.landing_page_enable) {
 			if (lychee.title !== 'Lychee v4') {
-				lychee.setTitle(lychee.title, false)
+				lychee.setTitle(lychee.title, true)
 			} else {
-				lychee.setTitle(lychee.locale['ALBUMS'], false)
+				lychee.setTitle(lychee.locale['ALBUMS'], true)
 			}
 		} else {
-			lychee.setTitle(lychee.locale['ALBUMS'], false)
+			lychee.setTitle(lychee.locale['ALBUMS'], true)
 		}
 
 	},
@@ -84,7 +84,7 @@ view.albums = {
 								sharedData += build.divider(alb.owner);
 								current_owner = alb.owner;
 							}
-							sharedData += build.album(alb, true);
+							sharedData += build.album(alb, !lychee.admin);
 						}
 					}
 					// $.each(albums.json.shared_albums, function() {
@@ -164,16 +164,16 @@ view.album = {
 
 			switch (album.getID()) {
 				case 'f':
-					lychee.setTitle(lychee.locale['STARED'], false);
+					lychee.setTitle(lychee.locale['STARED'], true);
 					break;
 				case 's':
-					lychee.setTitle(lychee.locale['PUBLIC'], false);
+					lychee.setTitle(lychee.locale['PUBLIC'], true);
 					break;
 				case 'r':
-					lychee.setTitle(lychee.locale['RECENT'], false);
+					lychee.setTitle(lychee.locale['RECENT'], true);
 					break;
 				case '0':
-					lychee.setTitle(lychee.locale['UNSORTED'], false);
+					lychee.setTitle(lychee.locale['UNSORTED'], true);
 					break;
 				default:
 					if (album.json.init) sidebar.changeAttr('title', album.json.title);
@@ -196,7 +196,7 @@ view.album = {
 			if (album.json.albums && album.json.albums !== false) {
 				$.each(album.json.albums, function () {
 					albums.parse(this);
-					albumsData += build.album(this)
+					albumsData += build.album(this, !album.isUploadable())
 				});
 
 			}
@@ -204,7 +204,7 @@ view.album = {
 
 				// Build photos
 				$.each(album.json.photos, function () {
-					photosData += build.photo(this)
+					photosData += build.photo(this, !album.isUploadable())
 				});
 			}
 
