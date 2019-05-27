@@ -164,12 +164,10 @@
 
 	&__clear {
 		position: absolute;
-		top: 13px;
 		right: 60px;
 		padding: 0;
 		color: white(.5);
-		font-size: 20px;
-		opacity: 0;
+		font-size: 30px;
 		transition: color .2s ease-out;
 		cursor: default;
 
