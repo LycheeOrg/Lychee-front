@@ -94,7 +94,7 @@ build.album = function (data, disabled = false) {
 				</div>
 			`;
 
-	if (lychee.publicMode === false) {
+	if (album.isUploadable() && !disabled) {
 
 		html += lychee.html`
 				<div class='badges'>
@@ -121,7 +121,7 @@ build.album = function (data, disabled = false) {
 
 };
 
-build.photo = function (data) {
+build.photo = function (data, disabled = false) {
 
 	let html = '';
 	let thumbnail = '';
@@ -190,7 +190,7 @@ build.photo = function (data) {
 	}
 
 	html += lychee.html`
-			<div class='photo' data-album-id='${data.album}' data-id='${data.id}'>
+			<div class='photo ${(disabled ? `disabled` : ``)}' data-album-id='${data.album}' data-id='${data.id}'>
 				${thumbnail}
 				<div class='overlay'>
 					<h1 title='$${data.title}'>$${data.title}</h1>
@@ -201,7 +201,7 @@ build.photo = function (data) {
 
 	html += `</div>`;
 
-	if (lychee.publicMode === false) {
+	if (album.isUploadable()) {
 
 		html += lychee.html`
 				<div class='badges'>

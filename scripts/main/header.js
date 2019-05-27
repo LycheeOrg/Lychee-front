@@ -30,12 +30,12 @@ header.bind = function() {
 	});
 
 	header.dom('#button_share').on(eventName, function(e) {
-		if (photo.json.public==='1' || photo.json.public==='2' || (lychee.api_V2 && !lychee.upload)) contextMenu.sharePhoto(photo.getID(), e);
+		if (photo.json.public === '1' || photo.json.public === '2' || !album.isUploadable()) contextMenu.sharePhoto(photo.getID(), e);
 		else                                                    photo.setPublic(photo.getID(), e)
 	});
 
 	header.dom('#button_share_album').on(eventName, function(e) {
-		if (album.json.public==='1' || (lychee.api_V2 && !lychee.upload)) contextMenu.shareAlbum(album.getID(), e);
+		if (album.json.public === '1' || !album.isUploadable()) contextMenu.shareAlbum(album.getID(), e);
 		else                         album.setPublic(album.getID(), true, e)
 	});
 
@@ -156,20 +156,37 @@ header.setMode = function(mode) {
 			header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--album').addClass('header__toolbar--visible');
 
-			// Hide download button when album empty
-			if (!album.json || album.json.photos===false) $('#button_archive').hide();
-			else                            $('#button_archive').show();
-
-			// Hide download button when not logged in and album not downloadable
-			if (lychee.publicMode===true && album.json.downloadable==='0') $('#button_archive').hide();
+			// Hide download button when album empty or we are not allowed to
+			// upload to it and it's not explicitly marked as downloadable.
+			if (!album.json || album.json.photos === false || (!album.isUploadable() && album.json.downloadable === '0')) {
+				$('#button_archive').hide();
+			} else {
+				$('#button_archive').show();
+			}
 
 			if (albumID==='s' || albumID==='f' || albumID==='r') {
-				$('#button_info_album, #button_trash_album, #button_share_album, #button_move_album').hide()
+				$('#button_info_album, #button_trash_album, #button_share_album, #button_move_album').hide();
+				$('.button_add, .header__divider', '.header__toolbar--album').show()
 			} else if (albumID==='0') {
 				$('#button_info_album, #button_share_album, #button_move_album').hide();
-				$('#button_trash_album').show()
+				$('#button_trash_album, .button_add, .header__divider', '.header__toolbar--album').show()
 			} else {
-				$('#button_info_album, #button_trash_album, #button_share_album, #button_move_album').show()
+				$('#button_info_album, #button_share_album').show();
+				if (album.isUploadable()) {
+					$('#button_trash_album, #button_move_album, .button_add, .header__divider', '.header__toolbar--album').show();
+					$('#button_share_album')
+						.removeClass('button--share')
+						.addClass('button--eye')
+						.find('use')
+						.attr('xlink:href', '#eye')
+				} else {
+					$('#button_trash_album, #button_move_album, .button_add, .header__divider', '.header__toolbar--album').hide();
+					$('#button_share_album')
+					.removeClass('button--eye')
+					.addClass('button--share')
+					.find('use')
+					.attr('xlink:href', '#share')
+				}
 			}
 
 			return true;
@@ -179,8 +196,24 @@ header.setMode = function(mode) {
 			header.dom().addClass('header--view');
 			header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--album').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--photo').addClass('header__toolbar--visible');
+			if (album.isUploadable()) {
+				$('#button_trash, #button_move, #button_star').show();
+				$('#button_share')
+					.removeClass('button--share')
+					.addClass('button--eye')
+					.find('use')
+					.attr('xlink:href', '#eye')
+			} else {
+				$('#button_trash, #button_move, #button_star').hide();
+				$('#button_share')
+					.removeClass('button--eye')
+					.addClass('button--share')
+					.find('use')
+					.attr('xlink:href', '#share')
+			}
+
 			// Hide More menu if empty (see contextMenu.photoMore)
-			if (!lychee.full_photo && lychee.publicMode && !(album.json && album.json.downloadable && album.json.downloadable==='1')) {
+			if (!lychee.full_photo && !album.isUploadable() && !(album.json && album.json.downloadable && album.json.downloadable === '1')) {
 				$('#button_more').hide();
 			}
 
@@ -192,12 +225,12 @@ header.setMode = function(mode) {
 
 };
 
+// Note that the pull-down menu is now enabled not only for editable
+// items but for all of public/albums/album/photo views, so 'editable' is a
+// bit of a misnomer at this point...
 header.setEditable = function(editable) {
 
 	let $title = header.dom('.header__title');
-
-	// Hide editable icon when not logged in
-	if (lychee.publicMode===true || (lychee.api_V2 && !lychee.upload)) editable = false;
 
 	if (editable) $title.addClass('header__title--editable');
 	else          $title.removeClass('header__title--editable');

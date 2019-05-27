@@ -130,14 +130,11 @@ sidebar.createStructure.photo = function(data) {
 
 	if (data==null || data==='') return false;
 
-	let editable  = false;
+	let editable  = album.isUploadable();
 	let exifHash  = data.takedate + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
 	let structure = {};
 	let _public   = '';
 	let isVideo = data.type && data.type.indexOf('video') > -1;
-
-	// Enable editable when user logged in
-	if (lychee.publicMode===false && lychee.upload) editable = true;
 
 	// Set the license string for a photo
 	switch (data.license) {
@@ -205,8 +202,8 @@ sidebar.createStructure.photo = function(data) {
 		}
 	}
 
-	// Only create tags section when user logged in
-	if (lychee.publicMode===false && lychee.upload) {
+	// Only create tags section when the photo is editable
+	if (editable) {
 
 		structure.tags = {
 			title : lychee.locale['PHOTO_TAGS'],
@@ -282,16 +279,13 @@ sidebar.createStructure.album = function(data) {
 
 	if (data==null || data==='') return false;
 
-	let editable     = false;
+	let editable     = album.isUploadable();
 	let structure    = {};
 	let _public      = '';
 	let hidden       = '';
 	let downloadable = '';
 	let password     = '';
 	let license 	 = '';
-
-	// Enable editable when user logged in
-	if (lychee.publicMode===false && lychee.upload) editable = true;
 
 	// Set value for public
 	switch (data.public) {
