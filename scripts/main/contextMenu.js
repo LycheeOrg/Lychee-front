@@ -103,8 +103,19 @@ contextMenu.buildList = function(lists, exclude, action, parent = 0, layer = 0) 
 			let item = lists[i];
 
 			let thumb = 'img/no_cover.svg';
-			if (item.thumbs && item.thumbs[0]) thumb = item.thumbs[0];
-			else if (item.thumbUrl)             thumb = item.thumbUrl;
+			if (item.thumbs && item.thumbs[0]) {
+				if (item.thumbs[0] === 'uploads/thumb/' && item.types[0] && item.types[0].indexOf('video') > -1) {
+					thumb = 'img/play-icon.png'
+				} else {
+					thumb = item.thumbs[0]
+				}
+			} else if (item.thumbUrl) {
+				if (item.thumbUrl === 'uploads/thumb/' && item.type.indexOf('video') > -1) {
+					thumb = 'img/play-icon.png'
+				} else {
+					thumb = item.thumbUrl
+				}
+			}
 
 			if (item.title==='') item.title = lychee.locale['UNTITLED'];
 
