@@ -153,7 +153,7 @@
 			opacity: 1;
 		}
 
-		&:focus ~ #clearSearch {
+		&:focus ~ .header__clear {
 			opacity: 1;
 		}
 
@@ -168,12 +168,17 @@
 		padding: 0;
 		color: white(.5);
 		font-size: 30px;
+		opacity: 0;
 		transition: color .2s ease-out;
 		cursor: default;
 
 		&:hover {
 			color: white(1);
 		}
+	}
+
+	&__clear_public {
+		right: 17px;
 	}
 
 	// Hosted with -------------------------------------------------------------- //
