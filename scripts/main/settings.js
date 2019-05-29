@@ -370,8 +370,7 @@ settings.changePublicSearch = function () {
 	api.post('Settings::setPublicSearch', params, function (data) {
 		if (data === true) {
 			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_PUBLIC_SEARCH']);
-			lychee.image_overlay_default = params.image_overlay === '1';
-			lychee.image_overlay = lychee.image_overlay_default;
+			lychee.public_search = (params.public_search === '1');
 		} else lychee.error(null, params, data);
 	});
 };

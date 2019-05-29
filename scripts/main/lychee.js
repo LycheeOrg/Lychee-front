@@ -5,8 +5,8 @@
 lychee = {
 
 	title					: document.title,
-	version					: '3.2.15-alpha',
-	versionCode				: '030215-alpha', // not really needed anymore
+	version					: '3.2.14',
+	versionCode				: '030214', // not really needed anymore
 
 	updatePath				: 'https://LycheeOrg.github.io/update.json',
 	updateURL				: 'https://github.com/LycheeOrg/Lychee/releases',
@@ -22,6 +22,7 @@ lychee = {
 	lock						: false,	// locked user (multi-user)
 	username					: null,
 	layout						: '1',		// 0: Use default, "square" layout. 1: Use Flickr-like "justified" layout. 2: Use Google-like "unjustified" layout
+	public_search				: false,	// display Search in publicMode
 	image_overlay				: false,	// display Overlay like in Lightroom
 	image_overlay_default		: false,	// display Overlay like in Lightroom by default
 	image_overlay_type			: 'exif',	// current Overlay display type
@@ -411,7 +412,14 @@ lychee.setMode = function(mode) {
 		$('#button_users, #button_logs, #button_diagnostics').remove();
 	}
 
-	if(mode==='logged_in') return;
+	if (mode === 'logged_in') {
+		// The code searches by class, so remove the other instance.
+		$('.header__search, .header__clear', '.header__toolbar--public').remove();
+		return;
+	}
+	else {
+		$('.header__search, .header__clear', '.header__toolbar--albums').remove();
+	}
 
 	$('#button_settings, .header__divider, .leftMenu').remove();
 

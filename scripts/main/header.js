@@ -89,8 +89,6 @@ header.bind_back = function () {
 		}
 
 	});
-
-	header.dom('.header__search').attr('placeholder', lychee.locale["HEADER_SEARCH_PLACEHOLDER"]);
 };
 
 header.show = function() {
@@ -139,8 +137,11 @@ header.setMode = function(mode) {
 			header.dom().removeClass('header--view');
 			header.dom('.header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--public').addClass('header__toolbar--visible');
-			if (lychee.public_search) header.dom(".header__toolbar--public").append(header.dom(".header__search"));
-			header.dom(".header__hostedwith").html(lychee.locale["HEADER_HOSTEDWITH"]);
+			if (lychee.public_search) {
+				$('.header__search, .header__clear', '.header__toolbar--public').show()
+			} else {
+				$('.header__search, .header__clear', '.header__toolbar--public').hide()
+			}
 
 			return true;
 
