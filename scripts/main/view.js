@@ -523,7 +523,9 @@ view.photo = {
 		header.setMode('photo');
 
 		// Make body not scrollable
-		$('body').css('overflow', 'hidden');
+		// use bodyScrollLock package to enable locking on iOS
+		// Simple overflow: hidden not working of iOS Safari
+		bodyScrollLock.disableBodyScroll(lychee.imageview);
 
 		// Fullscreen
 		let timeout = null;
@@ -545,7 +547,7 @@ view.photo = {
 		header.setMode('album');
 
 		// Make body scrollable
-		$('body').css('overflow', 'auto');
+		bodyScrollLock.enableBodyScroll(lychee.imageview);
 
 		// Disable Fullscreen
 		$(document).unbind('mousemove');
