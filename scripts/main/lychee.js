@@ -170,8 +170,8 @@ lychee.init = function() {
 				lychee.admin	= data.admin;
 				lychee.lock		= data.lock;
 				lychee.username = data.username;
-				lychee.setMode('logged_in');
 			}
+			lychee.setMode('logged_in');
 
 			// Show dialog when there is no username and password
 			if (data.config.login===false) settings.createLogin()
