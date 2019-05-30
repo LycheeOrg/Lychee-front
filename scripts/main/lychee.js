@@ -150,6 +150,7 @@ lychee.init = function() {
 			lychee.lang							= data.config.lang				|| '';
 			lychee.lang_available				= data.config.lang_available	|| {};
 			lychee.layout						= data.config.layout			|| '1';
+			lychee.public_search				= (data.config.public_search && data.config.public_search === '1') || false;
 			lychee.image_overlay_default		= (data.config.image_overlay && data.config.image_overlay === '1')			|| false;
 			lychee.image_overlay				= lychee.image_overlay_default;
 			lychee.image_overlay_type			= (!data.config.image_overlay_type) ? 'exif' : data.config.image_overlay_type;
