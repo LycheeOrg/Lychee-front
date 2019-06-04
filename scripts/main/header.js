@@ -82,7 +82,7 @@ header.bind_back = function () {
 
 	header.dom('.header__title').on(eventName, function () {
 		if (lychee.landing_page_enable && visible.albums()) {
-			window.location.href = '/'
+			window.location.href = '.'
 		}
 		else {
 			return false;
