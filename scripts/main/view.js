@@ -316,7 +316,7 @@ view.album = {
 		},
 
 		justify: function () {
-			if (!album.json.photos || album.json.photos === false) return;
+			if (!album.json || !album.json.photos || album.json.photos === false) return;
 			if (lychee.layout === '1') {
 				let containerWidth = parseFloat($('.justified-layout').width(), 10);
 				if (containerWidth == 0) {
@@ -344,6 +344,12 @@ view.album = {
 				$('.justified-layout').css('height', layoutGeometry.containerHeight + 'px')
 					.css('height', layoutGeometry.containerHeight + 'px');
 				$('.justified-layout > div').each(function (i) {
+					if (!layoutGeometry.boxes[i]) {
+						// Race condition in search.find -- window content
+						// and album.json can get out of sync as search
+						// query is being modified.
+						return false
+					}
 					$(this).css('top', layoutGeometry.boxes[i].top);
 					$(this).css('width', layoutGeometry.boxes[i].width);
 					$(this).css('height', layoutGeometry.boxes[i].height);
@@ -363,6 +369,12 @@ view.album = {
 						parseFloat($('.unjustified-layout').css('margin-right'), 10);
 				}
 				$('.unjustified-layout > div').each(function (i) {
+					if (!album.json.photos[i]) {
+						// Race condition in search.find -- window content
+						// and album.json can get out of sync as search
+						// query is being modified.
+						return false
+					}
 					let ratio = album.json.photos[i].height > 0 ?
 						album.json.photos[i].width / album.json.photos[i].height : 1;
 					if (album.json.photos[i].type && album.json.photos[i].type.indexOf('video') > -1) {
@@ -736,6 +748,7 @@ view.settings = {
 				view.settings.content.setLang();
 				view.settings.content.setDefaultLicense();
 				view.settings.content.setLayout();
+				view.settings.content.setPublicSearch();
 				view.settings.content.setOverlay();
 				view.settings.content.setOverlayType();
 				view.settings.content.setCSS();
@@ -942,6 +955,24 @@ view.settings = {
 			$(".settings_view").append(msg);
 			$('select#layout').val(lychee.layout);
 			settings.bind('#basicModal__action_set_layout', '.setLayout', settings.setLayout);
+		},
+
+		setPublicSearch: function () {
+			let msg = `
+			<div class="setPublicSearch">
+			<p>${lychee.locale['PUBLIC_SEARCH_TEXT']}
+			<label class="switch">
+			  <input id="PublicSearch" type="checkbox">
+			  <span class="slider round"></span>
+			</label>
+			</p>
+			</div>
+			`;
+
+			$(".settings_view").append(msg);
+			if (lychee.public_search) $('#PublicSearch').click();
+
+			settings.bind('#PublicSearch', '.setPublicSearch', settings.changePublicSearch);
 		},
 
 		setOverlay: function () {

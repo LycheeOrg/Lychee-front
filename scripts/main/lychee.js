@@ -22,6 +22,7 @@ lychee = {
 	lock						: false,	// locked user (multi-user)
 	username					: null,
 	layout						: '1',		// 0: Use default, "square" layout. 1: Use Flickr-like "justified" layout. 2: Use Google-like "unjustified" layout
+	public_search				: false,	// display Search in publicMode
 	image_overlay				: false,	// display Overlay like in Lightroom
 	image_overlay_default		: false,	// display Overlay like in Lightroom by default
 	image_overlay_type			: 'exif',	// current Overlay display type
@@ -149,6 +150,7 @@ lychee.init = function() {
 			lychee.lang							= data.config.lang				|| '';
 			lychee.lang_available				= data.config.lang_available	|| {};
 			lychee.layout						= data.config.layout			|| '1';
+			lychee.public_search				= (data.config.public_search && data.config.public_search === '1') || false;
 			lychee.image_overlay_default		= (data.config.image_overlay && data.config.image_overlay === '1')			|| false;
 			lychee.image_overlay				= lychee.image_overlay_default;
 			lychee.image_overlay_type			= (!data.config.image_overlay_type) ? 'exif' : data.config.image_overlay_type;
@@ -169,8 +171,8 @@ lychee.init = function() {
 				lychee.admin	= data.admin;
 				lychee.lock		= data.lock;
 				lychee.username = data.username;
-				lychee.setMode('logged_in');
 			}
+			lychee.setMode('logged_in');
 
 			// Show dialog when there is no username and password
 			if (data.config.login===false) settings.createLogin()
@@ -184,6 +186,7 @@ lychee.init = function() {
 			lychee.full_photo					= (data.config.full_photo == null)	|| (data.config.full_photo === '1');
 			lychee.checkForUpdates				= data.config.checkForUpdates		|| '1';
 			lychee.layout						= data.config.layout				|| '1';
+			lychee.public_search				= (data.config.public_search && data.config.public_search === '1') || false;
 			lychee.image_overlay				= (data.config.image_overlay && data.config.image_overlay === '1') || false;
 			lychee.image_overlay_type			= (!data.config.image_overlay_type) ? 'exif' : data.config.image_overlay_type;
 			lychee.image_overlay_type_default	= lychee.image_overlay_type;
@@ -410,7 +413,14 @@ lychee.setMode = function(mode) {
 		$('#button_users, #button_logs, #button_diagnostics').remove();
 	}
 
-	if(mode==='logged_in') return;
+	if (mode === 'logged_in') {
+		// The code searches by class, so remove the other instance.
+		$('.header__search, .header__clear', '.header__toolbar--public').remove();
+		return;
+	}
+	else {
+		$('.header__search, .header__clear', '.header__toolbar--albums').remove();
+	}
 
 	$('#button_settings, .header__divider, .leftMenu').remove();
 

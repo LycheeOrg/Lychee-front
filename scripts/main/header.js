@@ -137,6 +137,11 @@ header.setMode = function(mode) {
 			header.dom().removeClass('header--view');
 			header.dom('.header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--public').addClass('header__toolbar--visible');
+			if (lychee.public_search) {
+				$('.header__search, .header__clear', '.header__toolbar--public').show()
+			} else {
+				$('.header__search, .header__clear', '.header__toolbar--public').hide()
+			}
 
 			return true;
 

@@ -346,9 +346,9 @@ gulp.task('default', gulp.series(gulp.parallel('view--svg', 'view--scripts',
 
 gulp.task('watch', gulp.series('default', function() {
 
-	gulp.watch(paths.frame.js, ['frame--scripts']);
-	gulp.watch(paths.view.js, ['view--scripts']);
-	gulp.watch(paths.main.js, ['main--scripts']);
-	gulp.watch(paths.main.scss, ['main--styles'])
+	gulp.watch(paths.frame.js, gulp.series('frame--scripts'));
+	gulp.watch(paths.view.js, gulp.series('view--scripts'));
+	gulp.watch(paths.main.js, gulp.series('main--scripts'));
+	gulp.watch(paths.main.scss, gulp.series('main--styles'));
 
 }));
