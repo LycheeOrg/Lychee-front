@@ -28,9 +28,9 @@ api.get_url = function(fn) {
 };
 
 api.isTimeout = function(errorThrown, jqXHR) {
-	if (errorThrown && errorThrown === 'Internal Server Error' &&
-	jqXHR && jqXHR.responseJSON && jqXHR.responseJSON.exception &&
-	jqXHR.responseJSON.exception === 'Illuminate\\Contracts\\Encryption\\DecryptException') {
+	if (errorThrown && errorThrown === 'Bad Request' &&
+			jqXHR && jqXHR.responseJSON && jqXHR.responseJSON.error &&
+			jqXHR.responseJSON.error === 'Session timed out') {
 		return true;
 	}
 
@@ -61,7 +61,6 @@ api.post = function(fn, params, callback) {
 
 	const error = (jqXHR, textStatus, errorThrown) => {
 
-		console.log('error jqXHR ', jqXHR, ' textStatus ', textStatus, ' errorThrown ', errorThrown);
 		api.onError((api.isTimeout(errorThrown, jqXHR) ? 'Session timed out.' :
 					 'Server error or API not found.'), params, errorThrown)
 

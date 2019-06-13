@@ -583,9 +583,11 @@ lychee.error = function(errorThrown, params = '', data = '') {
 
 	loadingBar.show('error', errorThrown);
 
-	if (errorThrown === 'Session timed out') {
-		lychee.goto();
-		window.location.reload()
+	if (errorThrown === 'Session timed out.') {
+		setTimeout(() => {
+			lychee.goto();
+			window.location.reload()
+		}, 3000)
 	}
 	else {
 		console.error({
