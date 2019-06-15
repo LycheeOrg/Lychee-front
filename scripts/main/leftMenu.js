@@ -41,6 +41,8 @@ leftMenu.open = function () {
 	lychee.footer.addClass('leftMenu__open');
 	header.dom('.header__title').addClass('leftMenu__open');
 	loadingBar.dom().addClass('leftMenu__open');
+
+	multiselect.unbind();
 };
 
 /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */

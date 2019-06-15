@@ -28,9 +28,15 @@ multiselect.position = {
 
 multiselect.bind = function() {
 
-	$('.content').on('mousedown', (e) => { if (e.which===1) multiselect.show(e) });
+	$(document).on('mousedown', (e) => { if (e.which===1) multiselect.show(e) });
 
 	return true
+
+};
+
+multiselect.unbind = function() {
+
+	$(document).off('mousedown');
 
 };
 
@@ -88,11 +94,11 @@ multiselect.addItem = function(object, id) {
 
 multiselect.removeItem = function(object, id) {
 
-	let { selected, pos } = multiselect.isSelected(id);
+	let { selected, position } = multiselect.isSelected(id);
 
 	if (selected===false) return;
 
-	multiselect.ids.splice(pos, 1);
+	multiselect.ids.splice(position, 1);
 	multiselect.deselect(object);
 
 	let isAlbum = object.hasClass('album');
@@ -114,9 +120,36 @@ multiselect.albumClick = function(e, albumObj) {
 
 	let id = albumObj.attr('data-id');
 
-	if (isSelectKeyPressed(e) && album.isUploadable()) {
+	if ((isSelectKeyPressed(e) || e.shiftKey) && album.isUploadable()) {
 		if (albumObj.hasClass('disabled')) return;
-		multiselect.toggleItem(albumObj, id);
+
+		if (isSelectKeyPressed(e)) {
+			multiselect.toggleItem(albumObj, id)
+		} else if (!multiselect.isSelected(id).selected) {
+			// Click with Shift on an element that was not selected.
+			// Select all elements between the current element and the nearest selected one.
+			if (multiselect.albumsSelected > 0) {
+				// Find the nearest preceding album that's selected.
+				let selected = albumObj.prevAll('.selected').last();
+
+				if (selected.length > 0) {
+					albumObj.prevUntil(selected, '.album').each(function() {
+						multiselect.addItem($(this), $(this).attr('data-id'))
+					})
+				} else {
+					// No preceding selected album?  Check after the current one.
+					selected = albumObj.nextAll('.selected').first();
+
+					if (selected.length > 0) {
+						albumObj.nextUntil(selected, '.album').each(function() {
+							multiselect.addItem($(this), $(this).attr('data-id'))
+						})
+					}
+				}
+			}
+
+			multiselect.addItem(albumObj, id)
+		}
 	} else {
 		lychee.goto(id)
 	}
@@ -127,9 +160,36 @@ multiselect.photoClick = function(e, photoObj) {
 
 	let id = photoObj.attr('data-id');
 
-	if (isSelectKeyPressed(e) && album.isUploadable()) {
+	if ((isSelectKeyPressed(e) || e.shiftKey) && album.isUploadable()) {
 		if (photoObj.hasClass('disabled')) return;
-		multiselect.toggleItem(photoObj, id);
+
+		if (isSelectKeyPressed(e)) {
+			multiselect.toggleItem(photoObj, id)
+		} else if (!multiselect.isSelected(id).selected) {
+			// Click with Shift on an element that was not selected.
+			// Select all elements between the current element and the nearest selected one.
+			if (multiselect.photosSelected > 0) {
+				// Find the nearest preceding album that's selected.
+				let selected = photoObj.prevAll('.selected').last();
+
+				if (selected.length > 0) {
+					photoObj.prevUntil(selected, '.photo').each(function() {
+						multiselect.addItem($(this), $(this).attr('data-id'))
+					})
+				} else {
+					// No preceding selected album?  Check after the current one.
+					selected = photoObj.nextAll('.selected').first();
+
+					if (selected.length > 0) {
+						photoObj.nextUntil(selected, '.photo').each(function() {
+							multiselect.addItem($(this), $(this).attr('data-id'))
+						})
+					}
+				}
+			}
+
+			multiselect.addItem(photoObj, id)
+		}
 	} else {
 		lychee.goto(album.getID() + '/' + id);
 	}
@@ -176,7 +236,7 @@ multiselect.photoContextMenu = function(e, photoObj) {
 	}
 	else
 	{
-		lychee.error('Could not find what you wnat.');
+		lychee.error('Could not find what you want.');
 	}
 
 };
@@ -200,9 +260,13 @@ multiselect.show = function(e) {
 
 	sidebar.setSelectable(false);
 
+	if (!isSelectKeyPressed(e) && !e.shiftKey) {
+		multiselect.clearSelection()
+	}
+
 	multiselect.position.top    = e.pageY;
-	multiselect.position.right  = -1 * (e.pageX - $(document).width());
-	multiselect.position.bottom = -1 * (multiselect.position.top - $(window).height());
+	multiselect.position.right  = $(document).width() - e.pageX;
+	multiselect.position.bottom = $(window).height() - e.pageY;
 	multiselect.position.left   = e.pageX;
 
 	$('body').append(build.multiselect(multiselect.position.top, multiselect.position.left));
@@ -220,15 +284,6 @@ multiselect.resize = function(e) {
 		multiselect.position.bottom === null ||
 		multiselect.position.left   === null) return false;
 
-	let newSize      = {};
-	let documentSize = {};
-
-	// Get the position of the mouse
-	let mousePos = {
-		x : e.pageX,
-		y : e.pageY
-	};
-
 	// Default CSS
 	let newCSS = {
 		top    : null,
@@ -239,47 +294,31 @@ multiselect.resize = function(e) {
 		width  : null
 	};
 
-	if (mousePos.y>=multiselect.position.top) {
-
-		documentSize.height = $(document).height();
-
-		// Do not leave the screen
-		newSize.height = mousePos.y - multiselect.position.top;
-		if ((multiselect.position.top + newSize.height)>=documentSize.height) {
-			newSize.height -= (multiselect.position.top + newSize.height) - documentSize.height + 2
-		}
+	if (e.pageY >= multiselect.position.top) {
 
 		newCSS.top    = multiselect.position.top;
 		newCSS.bottom = 'inherit';
-		newCSS.height = newSize.height
+		newCSS.height = Math.min(e.pageY, $(document).height() - 2) - multiselect.position.top
 
 	} else {
 
 		newCSS.top    = 'inherit';
 		newCSS.bottom = multiselect.position.bottom;
-		newCSS.height = multiselect.position.top - e.pageY
+		newCSS.height = multiselect.position.top - Math.max(e.pageY, 2)
 
 	}
 
-	if (mousePos.x>=multiselect.position.left) {
-
-		documentSize.width = $(document).width();
-
-		// Do not leave the screen
-		newSize.width = mousePos.x - multiselect.position.left;
-		if ((multiselect.position.left + newSize.width)>=documentSize.width) {
-			newSize.width -= (multiselect.position.left + newSize.width) - documentSize.width + 2
-		}
+	if (e.pageX >= multiselect.position.left) {
 
 		newCSS.right = 'inherit';
 		newCSS.left  = multiselect.position.left;
-		newCSS.width = newSize.width
+		newCSS.width = Math.min(e.pageX, $(document).width() - 2) - multiselect.position.left
 
 	} else {
 
 		newCSS.right = multiselect.position.right;
 		newCSS.left  = 'inherit';
-		newCSS.width = multiselect.position.left - e.pageX
+		newCSS.width = multiselect.position.left - Math.max(e.pageX, 2)
 
 	}
 
@@ -304,37 +343,29 @@ multiselect.getSize = function() {
 	return {
 		top    : offset.top,
 		left   : offset.left,
-		width  : parseInt($elem.css('width').replace('px', '')),
-		height : parseInt($elem.css('height').replace('px', ''))
+		width  : parseFloat($elem.css('width'), 10),
+		height : parseFloat($elem.css('height'), 10)
 	}
 
 };
 
 multiselect.getSelection = function(e) {
-  // TODO(nshemon): Make tolerance depend on image size.
-	let tolerance = 202;
 	let size      = multiselect.getSize();
 
 	if (visible.contextMenu())  return false;
 	if (!visible.multiselect()) return false;
 
-	if (!e.shiftKey && (size.width===0 || size.height===0)) {
-		multiselect.close();
-		return false
-	}
+	$('.photo, .album').each(function() {
 
-	const sortKind = function (a,b){
-		return $(a).hasClass("photo") < $(b).hasClass("photo") ? 1 : -1;
-	};
-
-	$('.photo, .album').sort(sortKind).each(function() {
-
-		let offset = $(this).offset();
-
-		if (offset.top>=(size.top - tolerance) &&
-			offset.left>=(size.left - tolerance) &&
-			(offset.top + 206)<=(size.top + size.height + tolerance) &&
-			(offset.left + 206)<=(size.left + size.width + tolerance)) {
+		// We select if there's even a slightest overlap.  Overlap between
+		// an object and the selection occurs if the left edge of the
+		// object is to the left of the right edge of the selection *and*
+		// the right edge of the object is to the right of the left edge of
+		// the selection; analogous for top/bottom.
+		if ($(this).offset().left < size.left + size.width &&
+			$(this).offset().left + $(this).width() > size.left &&
+			$(this).offset().top < size.top + size.height &&
+			$(this).offset().top + $(this).height() > size.top) {
 
 			let id = $(this).attr('data-id');
 
@@ -411,31 +442,16 @@ multiselect.selectAll = function() {
 
 	sidebar.setSelectable(false);
 
-	multiselect.position.top    = 70;
-	multiselect.position.right  = 40;
-	multiselect.position.bottom = 90;
-	multiselect.position.left   = 20;
+	multiselect.clearSelection();
 
-	$('body').append(build.multiselect(multiselect.position.top, multiselect.position.left));
+	$('.photo').each(function() {
+		multiselect.addItem($(this), $(this).attr('data-id'))
+	});
 
-	let documentSize = {
-		width  : $(document).width(),
-		height : $(document).height()
-	};
-
-	let newSize = {
-		width  : documentSize.width - multiselect.position.right + 2,
-		height : documentSize.height - multiselect.position.bottom
-	};
-
-	let e = {
-		pageX : documentSize.width - (multiselect.position.right / 2),
-		pageY : documentSize.height - multiselect.position.bottom
-	};
-
-	$('#multiselect').css(newSize);
-
-	multiselect.getSelection(e)
-
+	if (multiselect.photosSelected === 0) {
+		// There are no pictures.  Try albums then.
+		$('.album').each(function() {
+			multiselect.addItem($(this), $(this).attr('data-id'))
+		});
+	}
 };
-
