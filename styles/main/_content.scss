@@ -2,8 +2,8 @@
 
 	display: flex;
 	flex-wrap: wrap;
-	padding: 50px 0 33px;
-	width: 100%;
+	padding: 50px 30px 33px 0;
+	width: calc(100% - 30px);
 	min-height: unset;
 	transition: margin-left .5s;
 	-webkit-overflow-scrolling: touch;
@@ -19,7 +19,7 @@
 	}
 
 	&--sidebar {
-		width: calc(100% - 300px);
+		width: calc(100% - 380px);
 	}
 
 	// Animations -------------------------------------------------------------- //
