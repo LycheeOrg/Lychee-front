@@ -94,6 +94,7 @@ paths.main = {
 		'node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js',
 		'node_modules/basiccontext/dist/basicContext.min.js',
 		'node_modules/basicmodal/dist/basicModal.min.js',
+		'node_modules/body-scroll-lock/lib/bodyScrollLock.min.js',
 		'node_modules/multiselect-two-sides/dist/js/multiselect.min.js',
 		'node_modules/justified-layout/dist/justified-layout.min.js',
 		'../dist/_main--javascript.js'

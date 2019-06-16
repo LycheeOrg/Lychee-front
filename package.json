@@ -17,6 +17,7 @@
     "babel-preset-env": "^1.7.0",
     "basiccontext": "^3.5.1",
     "basicmodal": "^3.3.8",
+    "body-scroll-lock": "^2.6.1",
     "gulp": "^4.0.0",
     "gulp-autoprefixer": "^6.0.0",
     "gulp-babel": "^6.1.2",
