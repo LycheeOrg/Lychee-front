@@ -13,7 +13,8 @@ multiselect = {
 
 	ids            : [],
 	albumsSelected : 0,
-	photosSelected : 0
+	photosSelected : 0,
+	lastClicked    : null
 
 };
 
@@ -89,6 +90,8 @@ multiselect.addItem = function(object, id) {
 		multiselect.photosSelected++
 	}
 
+	multiselect.lastClicked = object
+
 };
 
 
@@ -112,6 +115,8 @@ multiselect.removeItem = function(object, id) {
 		multiselect.photosSelected--
 	}
 
+	multiselect.lastClicked = object
+
 };
 
 
@@ -125,26 +130,19 @@ multiselect.albumClick = function(e, albumObj) {
 
 		if (isSelectKeyPressed(e)) {
 			multiselect.toggleItem(albumObj, id)
-		} else if (!multiselect.isSelected(id).selected) {
-			// Click with Shift on an element that was not selected.
-			// Select all elements between the current element and the nearest selected one.
+		} else {
 			if (multiselect.albumsSelected > 0) {
-				// Find the nearest preceding album that's selected.
-				let selected = albumObj.prevAll('.selected').last();
+				// Click with Shift. Select all elements between the current
+				// element and the last clicked-on one.
 
-				if (selected.length > 0) {
-					albumObj.prevUntil(selected, '.album').each(function() {
+				if (albumObj.prevAll('.album').toArray().includes(multiselect.lastClicked[0])) {
+					albumObj.prevUntil(multiselect.lastClicked, '.album').each(function() {
 						multiselect.addItem($(this), $(this).attr('data-id'))
 					})
-				} else {
-					// No preceding selected album?  Check after the current one.
-					selected = albumObj.nextAll('.selected').first();
-
-					if (selected.length > 0) {
-						albumObj.nextUntil(selected, '.album').each(function() {
-							multiselect.addItem($(this), $(this).attr('data-id'))
-						})
-					}
+				} else if (albumObj.nextAll('.album').toArray().includes(multiselect.lastClicked[0])) {
+					albumObj.nextUntil(multiselect.lastClicked, '.album').each(function() {
+						multiselect.addItem($(this), $(this).attr('data-id'))
+					})
 				}
 			}
 
@@ -165,26 +163,19 @@ multiselect.photoClick = function(e, photoObj) {
 
 		if (isSelectKeyPressed(e)) {
 			multiselect.toggleItem(photoObj, id)
-		} else if (!multiselect.isSelected(id).selected) {
-			// Click with Shift on an element that was not selected.
-			// Select all elements between the current element and the nearest selected one.
+		} else {
 			if (multiselect.photosSelected > 0) {
-				// Find the nearest preceding album that's selected.
-				let selected = photoObj.prevAll('.selected').last();
+				// Click with Shift. Select all elements between the current
+				// element and the last clicked-on one.
 
-				if (selected.length > 0) {
-					photoObj.prevUntil(selected, '.photo').each(function() {
+				if (photoObj.prevAll('.photo').toArray().includes(multiselect.lastClicked[0])) {
+					photoObj.prevUntil(multiselect.lastClicked, '.photo').each(function() {
 						multiselect.addItem($(this), $(this).attr('data-id'))
 					})
-				} else {
-					// No preceding selected album?  Check after the current one.
-					selected = photoObj.nextAll('.selected').first();
-
-					if (selected.length > 0) {
-						photoObj.nextUntil(selected, '.photo').each(function() {
-							multiselect.addItem($(this), $(this).attr('data-id'))
-						})
-					}
+				} else if (photoObj.nextAll('.photo').toArray().includes(multiselect.lastClicked[0])) {
+					photoObj.nextUntil(multiselect.lastClicked, '.photo').each(function() {
+						multiselect.addItem($(this), $(this).attr('data-id'))
+					})
 				}
 			}
 
@@ -246,7 +237,8 @@ multiselect.clearSelection = function() {
 	multiselect.deselect('.photo.active, .album.active');
 	multiselect.ids = [];
 	multiselect.albumsSelected = 0;
-	multiselect.photosSelected = 0
+	multiselect.photosSelected = 0;
+	multiselect.lastClicked = null
 
 };
 
@@ -298,7 +290,7 @@ multiselect.resize = function(e) {
 
 		newCSS.top    = multiselect.position.top;
 		newCSS.bottom = 'inherit';
-		newCSS.height = Math.min(e.pageY, $(document).height() - 2) - multiselect.position.top
+		newCSS.height = Math.min(e.pageY, $(document).height() - 3) - multiselect.position.top
 
 	} else {
 
@@ -312,7 +304,7 @@ multiselect.resize = function(e) {
 
 		newCSS.right = 'inherit';
 		newCSS.left  = multiselect.position.left;
-		newCSS.width = Math.min(e.pageX, $(document).width() - 2) - multiselect.position.left
+		newCSS.width = Math.min(e.pageX, $(document).width() - 3) - multiselect.position.left
 
 	} else {
 
