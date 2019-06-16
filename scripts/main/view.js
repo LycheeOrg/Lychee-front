@@ -164,7 +164,7 @@ view.album = {
 
 			switch (album.getID()) {
 				case 'f':
-					lychee.setTitle(lychee.locale['STARED'], true);
+					lychee.setTitle(lychee.locale['STARRED'], true);
 					break;
 				case 's':
 					lychee.setTitle(lychee.locale['PUBLIC'], true);
