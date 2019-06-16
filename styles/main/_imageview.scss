@@ -56,6 +56,16 @@
 		max-height: 100%;
 	}
 
+	&.image--sidebar #image {
+		right: 380px;
+		max-width: calc(100% - 410px);
+
+		@media (max-width: 640px) {
+			right: 370px;
+			max-width: calc(100% - 390px);
+		}
+	}
+
 	#image_overlay {
 		position: absolute;
 		bottom: 30px;
@@ -141,6 +151,18 @@
 
 		.iconic {
 			fill: white(.8);
+		}
+	}
+
+	&.image--sidebar .arrow_wrapper {
+		&--next {
+			right: 350px;
+		}
+
+		a {
+			&#next {
+				right: 349px;
+			}
 		}
 	}
 

@@ -79,6 +79,8 @@ sidebar.toggle = function() {
 
 		header.dom('.button--info').toggleClass('active');
 		lychee.content.toggleClass('content--sidebar');
+		lychee.imageview.toggleClass('image--sidebar');
+		view.album.content.justify();
 		sidebar.dom().toggleClass('active');
 
 		return true
