@@ -116,10 +116,16 @@ lychee.init = function() {
 		lychee.sub_albums = data.sub_albums || false;
 		lychee.update_json = data.update_json;
 		lychee.update_available = data.update_available;
-		lychee.versionCode = data.config.version.slice(7, data.config.version);
 		lychee.landing_page_enable = (data.config.landing_page_enable && data.config.landing_page_enable === '1') || false;
 
-		lychee.versionCode = data.config.version;
+		if (lychee.api_V2)
+		{
+			lychee.versionCode = data.config.version;
+		}
+		else
+		{
+			lychee.versionCode = data.config.version.slice(7, data.config.version);
+		}
 		if (lychee.versionCode !== '')
 		{
 			let digits = lychee.versionCode.match(/.{1,2}/g);
