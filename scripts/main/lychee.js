@@ -124,7 +124,7 @@ lychee.init = function() {
 		}
 		else
 		{
-			lychee.versionCode = data.config.version.slice(7, data.config.version);
+			lychee.versionCode = data.config.version.slice(7, data.config.version.length);
 		}
 		if (lychee.versionCode !== '')
 		{
