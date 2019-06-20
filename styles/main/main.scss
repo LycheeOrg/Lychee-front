@@ -27,6 +27,7 @@ $timingBounce: cubic-bezier(.51, .92, .24, 1.15);
 * {
 	-webkit-user-select: none;
 	-moz-user-select: none;
+	-ms-user-select: none;
 	user-select: none;
 	transition: color .3s, opacity .3s ease-out, transform .3s ease-out, box-shadow .3s;
 }
@@ -59,6 +60,7 @@ div#container {
 input {
 	-webkit-user-select: text !important;
 	-moz-user-select: text !important;
+	-ms-user-select: text !important;
 	user-select: text !important;
 }
 
