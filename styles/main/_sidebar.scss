@@ -14,11 +14,13 @@
 		transform: translateX(-360px);
 	}
 
-	&.notSelectable table tr td:last-child {
-		-webkit-user-select: none !important;
-		-moz-user-select: none !important;
-		user-select: none !important;
-	}
+//	Doesn't seem to be needed when user-select is globally disabled in main.scss.
+//	&.notSelectable {
+//		-webkit-user-select: none !important;
+//		-moz-user-select: none !important;
+//		-ms-user-select: none !important;
+//		user-select: none !important;
+//	}
 
 	// Header -------------------------------------------------------------- //
 	&__header {
@@ -37,6 +39,10 @@
 		font-size: 16px;
 		font-weight: bold;
 		text-align: center;
+		-webkit-user-select: text;
+		-moz-user-select: text;
+		-ms-user-select: text;
+		user-select: text;
 	}
 
 	// Wrapper -------------------------------------------------------------- //
@@ -66,6 +72,10 @@
 			color: white(.6);
 			font-size: 14px;
 			font-weight: bold;
+			-webkit-user-select: text;
+			-moz-user-select: text;
+			-ms-user-select: text;
+			user-select: text;
 		}
 	}
 
@@ -104,6 +114,10 @@
 		color: #fff;
 		font-size: 14px;
 		line-height: 19px;
+		-webkit-user-select: text;
+		-moz-user-select: text;
+		-ms-user-select: text;
+		user-select: text;
 
 		&:first-child {
 			width: 110px;
@@ -111,8 +125,12 @@
 
 		&:last-child {
 			padding-right: 10px;
+		}
+
+		span {
 			-webkit-user-select: text;
 			-moz-user-select: text;
+			-ms-user-select: text;
 			user-select: text;
 		}
 	}
@@ -132,6 +150,10 @@
 	#tags .empty {
 		font-size: 14px;
 		margin: 0 2px 8px 0;
+		-webkit-user-select: text;
+		-moz-user-select: text;
+		-ms-user-select: text;
+		user-select: text;
 	}
 
 	#tags .edit {
@@ -150,6 +172,10 @@
 		border-radius: 100px;
 		font-size: 12px;
 		transition: background-color .2s;
+		-webkit-user-select: text;
+		-moz-user-select: text;
+		-ms-user-select: text;
+		user-select: text;
 
 		&:hover {
 			background-color: black(.3);
