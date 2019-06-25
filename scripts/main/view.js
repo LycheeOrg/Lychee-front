@@ -323,7 +323,8 @@ view.album = {
 					// Triggered on Reload in photo view.
 					containerWidth = $(window).width() -
 						parseFloat($('.justified-layout').css('margin-left'), 10) -
-						parseFloat($('.justified-layout').css('margin-right'), 10);
+						parseFloat($('.justified-layout').css('margin-right'), 10) -
+						parseFloat($('.content').css('padding-right'), 10)
 				}
 				let ratio = [];
 				$.each(album.json.photos, function (i) {
@@ -366,7 +367,8 @@ view.album = {
 					// Triggered on Reload in photo view.
 					containerWidth = $(window).width() -
 						parseFloat($('.unjustified-layout').css('margin-left'), 10) -
-						parseFloat($('.unjustified-layout').css('margin-right'), 10);
+						parseFloat($('.unjustified-layout').css('margin-right'), 10) -
+						parseFloat($('.content').css('padding-right'), 10)
 				}
 				$('.unjustified-layout > div').each(function (i) {
 					if (!album.json.photos[i]) {
