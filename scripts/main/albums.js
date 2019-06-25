@@ -21,7 +21,7 @@ albums.load = function () {
 			let waitTime = 0;
 
 			// Smart Albums
-			if (lychee.publicMode === false && data.smartalbums != null) albums._createSmartAlbums(data.smartalbums);
+			if (data.smartalbums != null) albums._createSmartAlbums(data.smartalbums);
 
 			albums.json = data;
 
@@ -70,45 +70,53 @@ albums.parse = function (album) {
 
 albums._createSmartAlbums = function (data) {
 
-	data.unsorted = {
-		id: 0,
-		title: lychee.locale['UNSORTED'],
-		sysdate: data.unsorted.num + ' ' + lychee.locale['NUM_PHOTOS'],
-		unsorted: '1',
-		thumbs: data.unsorted.thumbs,
-		thumbs2x: data.unsorted.thumbs2x ? data.unsorted.thumbs2x : null,
-		types: data.unsorted.types
-	};
+	if (data.unsorted) {
+		data.unsorted = {
+			id: 0,
+			title: lychee.locale['UNSORTED'],
+			sysdate: data.unsorted.num + ' ' + lychee.locale['NUM_PHOTOS'],
+			unsorted: '1',
+			thumbs: data.unsorted.thumbs,
+			thumbs2x: data.unsorted.thumbs2x ? data.unsorted.thumbs2x : null,
+			types: data.unsorted.types
+		}
+	}
 
-	data.starred = {
-		id: 'f',
-		title: lychee.locale['STARRED'],
-		sysdate: data.starred.num + ' ' + lychee.locale['NUM_PHOTOS'],
-		star: '1',
-		thumbs: data.starred.thumbs,
-		thumbs2x: data.starred.thumbs2x ? data.starred.thumbs2x : null,
-		types: data.starred.types
-	};
+	if (data.starred) {
+		data.starred = {
+			id: 'f',
+			title: lychee.locale['STARRED'],
+			sysdate: data.starred.num + ' ' + lychee.locale['NUM_PHOTOS'],
+			star: '1',
+			thumbs: data.starred.thumbs,
+			thumbs2x: data.starred.thumbs2x ? data.starred.thumbs2x : null,
+			types: data.starred.types
+		}
+	}
 
-	data.public = {
-		id: 's',
-		title: lychee.locale['PUBLIC'],
-		sysdate: data.public.num + ' ' + lychee.locale['NUM_PHOTOS'],
-		public: '1',
-		thumbs: data.public.thumbs,
-		thumbs2x: data.public.thumbs2x ? data.public.thumbs2x : null,
-		hidden: '1',
-		types: data.public.types
-	};
+	if (data.public) {
+		data.public = {
+			id: 's',
+			title: lychee.locale['PUBLIC'],
+			sysdate: data.public.num + ' ' + lychee.locale['NUM_PHOTOS'],
+			public: '1',
+			thumbs: data.public.thumbs,
+			thumbs2x: data.public.thumbs2x ? data.public.thumbs2x : null,
+			hidden: '1',
+			types: data.public.types
+		}
+	}
 
-	data.recent = {
-		id: 'r',
-		title: lychee.locale['RECENT'],
-		sysdate: data.recent.num + ' ' + lychee.locale['NUM_PHOTOS'],
-		recent: '1',
-		thumbs: data.recent.thumbs,
-		thumbs2x: data.recent.thumbs2x ? data.recent.thumbs2x : null,
-		types: data.recent.types
+	if (data.recent) {
+		data.recent = {
+			id: 'r',
+			title: lychee.locale['RECENT'],
+			sysdate: data.recent.num + ' ' + lychee.locale['NUM_PHOTOS'],
+			recent: '1',
+			thumbs: data.recent.thumbs,
+			thumbs2x: data.recent.thumbs2x ? data.recent.thumbs2x : null,
+			types: data.recent.types
+		}
 	}
 
 };

@@ -40,18 +40,27 @@ view.albums = {
 			let sharedData = '';
 
 			// Smart Albums
-			if (lychee.publicMode === false && albums.json.smartalbums != null) {
+			if (albums.json.smartalbums != null) {
 
-				albums.parse(albums.json.smartalbums.unsorted);
-				albums.parse(albums.json.smartalbums.public);
-				albums.parse(albums.json.smartalbums.starred);
-				albums.parse(albums.json.smartalbums.recent);
-
-				smartData = build.divider(lychee.locale['SMART_ALBUMS']);
-				smartData += build.album(albums.json.smartalbums.unsorted);
-				smartData += build.album(albums.json.smartalbums.public);
-				smartData += build.album(albums.json.smartalbums.starred);
-				smartData += build.album(albums.json.smartalbums.recent);
+				if (lychee.publicMode === false) {
+					smartData = build.divider(lychee.locale['SMART_ALBUMS'])
+				}
+				if (albums.json.smartalbums.unsorted) {
+					albums.parse(albums.json.smartalbums.unsorted);
+					smartData += build.album(albums.json.smartalbums.unsorted)
+				}
+				if (albums.json.smartalbums.public) {
+					albums.parse(albums.json.smartalbums.public);
+					smartData += build.album(albums.json.smartalbums.public)
+				}
+				if (albums.json.smartalbums.starred) {
+					albums.parse(albums.json.smartalbums.starred);
+					smartData += build.album(albums.json.smartalbums.starred)
+				}
+				if (albums.json.smartalbums.recent) {
+					albums.parse(albums.json.smartalbums.recent);
+					smartData += build.album(albums.json.smartalbums.recent)
+				}
 
 			}
 
