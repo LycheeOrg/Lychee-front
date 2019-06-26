@@ -29,7 +29,7 @@ multiselect.position = {
 
 multiselect.bind = function() {
 
-	$(document).on('mousedown', (e) => { if (e.which===1) multiselect.show(e) });
+	$('.content').on('mousedown', (e) => { if (e.which===1) multiselect.show(e) });
 
 	return true
 
@@ -37,7 +37,7 @@ multiselect.bind = function() {
 
 multiselect.unbind = function() {
 
-	$(document).off('mousedown');
+	$('.content').off('mousedown');
 
 };
 
@@ -256,7 +256,7 @@ multiselect.show = function(e) {
 		multiselect.clearSelection()
 	}
 
-	multiselect.position.top    = e.pageY+1;
+	multiselect.position.top    = e.pageY;
 	multiselect.position.right  = $(document).width() - e.pageX;
 	multiselect.position.bottom = $(window).height() - e.pageY;
 	multiselect.position.left   = e.pageX;
