@@ -546,6 +546,9 @@ view.photo = {
 			timeout = setTimeout(header.hide, 2500)
 		});
 
+		// we also put this timeout to enable it by default when you directly click on a picture.
+		setTimeout(header.hide, 2500);
+
 		lychee.animate(lychee.imageview, 'fadeIn')
 
 	},
