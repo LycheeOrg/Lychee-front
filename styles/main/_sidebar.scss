@@ -9,6 +9,7 @@
 	border-left: 1px solid black(.2);
 	transform: translateX(0);
 	transition: transform .3s $timing;
+	z-index: 4;
 
 	&.active {
 		transform: translateX(-360px);

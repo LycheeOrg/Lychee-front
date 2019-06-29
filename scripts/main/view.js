@@ -546,6 +546,9 @@ view.photo = {
 			timeout = setTimeout(header.hide, 2500)
 		});
 
+		// we also put this timeout to enable it by default when you directly click on a picture.
+		setTimeout(header.hide, 2500);
+
 		lychee.animate(lychee.imageview, 'fadeIn')
 
 	},
@@ -746,7 +749,6 @@ view.settings = {
 	},
 
 	clearContent: function () {
-		lychee.content.unbind('mousedown');
 		lychee.content.html('<div class="settings_view"></div>');
 	},
 
@@ -1087,7 +1089,6 @@ view.full_settings = {
 	},
 
 	clearContent: function () {
-		lychee.content.unbind('mousedown');
 		lychee.content.html('<div class="settings_view"></div>');
 	},
 
@@ -1169,7 +1170,6 @@ view.users = {
 	},
 
 	clearContent: function () {
-		lychee.content.unbind('mousedown');
 		lychee.content.html('<div class="users_view"></div>');
 	},
 
@@ -1257,7 +1257,6 @@ view.sharing = {
 	},
 
 	clearContent: function () {
-		lychee.content.unbind('mousedown');
 		lychee.content.html('<div class="sharing_view"></div>');
 	},
 
@@ -1381,7 +1380,6 @@ view.logs = {
 	},
 
 	clearContent: function () {
-		lychee.content.unbind('mousedown');
 		let html = '';
 		if (lychee.api_V2) {
 			html += lychee.html`<div class="clear_logs_update"><a id="Clean_Noise" class="basicModal__button">${lychee.locale['CLEAN_LOGS']}</a></div>`;
@@ -1424,7 +1422,6 @@ view.diagnostics = {
 	},
 
 	clearContent: function (update) {
-		lychee.content.unbind('mousedown');
 		let html = '';
 		if (update === 1) {
 			html += lychee.html`<div class="clear_logs_update"><a id="Update_Lychee" class="basicModal__button">${lychee.locale['UPDATE_AVAILABLE']}</a></div>`;
