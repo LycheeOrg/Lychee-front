@@ -529,6 +529,14 @@ album.setPublic = function (albumID, modal, e) {
 				  <form>
 					  <div class='choice'>
 						  <label>
+							  <input type='checkbox' name='full_photo'>
+							  <span class='checkbox'>${build.iconic('check')}</span>
+							  <span class='label'>${lychee.locale['ALBUM_FULL']}</span>
+						  </label>
+						  <p>${lychee.locale['ALBUM_FULL_EXPL']}</p>
+					  </div>
+					  <div class='choice'>
+						  <label>
 							  <input type='checkbox' name='hidden'>
 							  <span class='checkbox'>${build.iconic('check')}</span>
 							  <span class='label'>${lychee.locale['ALBUM_HIDDEN']}</span>
@@ -569,6 +577,7 @@ album.setPublic = function (albumID, modal, e) {
 			}
 		});
 
+		if (album.json.full_photo !== null && album.json.full_photo === '1') $('.basicModal .choice input[name="full_photo"]').click();
 		if (album.json.public === '1' && album.json.visible === '0') $('.basicModal .choice input[name="hidden"]').click();
 		if (album.json.downloadable === '1') $('.basicModal .choice input[name="downloadable"]').click();
 
@@ -588,6 +597,10 @@ album.setPublic = function (albumID, modal, e) {
 
 		// Visible modal => Set album public
 		album.json.public = '1';
+
+		// Set visible
+		if ($('.basicModal .choice input[name="full_photo"]:checked').length === 1) album.json.full_photo= '1';
+		else album.json.full_photo = '0';
 
 		// Set visible
 		if ($('.basicModal .choice input[name="hidden"]:checked').length === 1) album.json.visible = '0';
@@ -619,6 +632,7 @@ album.setPublic = function (albumID, modal, e) {
 	// Set data and refresh view
 	if (visible.album()) {
 
+		album.json.full_photo = (album.json.full_photo === '0') ? '0' : album.json.full_photo;
 		album.json.visible = (album.json.public === '0') ? '1' : album.json.visible;
 		album.json.downloadable = (album.json.public === '0') ? '0' : album.json.downloadable;
 		album.json.password = (album.json.public === '0') ? '0' : album.json.password;
@@ -634,6 +648,7 @@ album.setPublic = function (albumID, modal, e) {
 
 	let params = {
 		albumID,
+		full_photo: album.json.full_photo,
 		public: album.json.public,
 		password: password,
 		visible: album.json.visible,
