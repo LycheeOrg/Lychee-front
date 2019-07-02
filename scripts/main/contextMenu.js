@@ -303,8 +303,9 @@ contextMenu.photoMore = function(photoID, e) {
 
 	let showMedium = photo.json.medium && photo.json.medium !== '' && showDownload;
 	let showSmall = photo.json.small && photo.json.small !== '' && showDownload;
+	let showFull = (album.json && album.json.full_photo) && (photo.json.url && photo.json.url !== '');
 	let items = [
-		{ title: build.iconic('fullscreen-enter') + lychee.locale['FULL_PHOTO'], visible: !!lychee.full_photo, fn: () => window.open(photo.getDirectLink()) },
+		{ title: build.iconic('fullscreen-enter') + lychee.locale['FULL_PHOTO'], visible: !!showFull, fn: () => window.open(photo.getDirectLink()) },
 		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD'], visible: !!showDownload, fn: () => photo.getArchive(photoID, 'FULL') },
 		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD_MEDIUM'], visible: !!showMedium, fn: () => photo.getArchive(photoID, 'MEDIUM') },
 		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD_SMALL'], visible: !!showSmall, fn: () => photo.getArchive(photoID, 'SMALL') }
