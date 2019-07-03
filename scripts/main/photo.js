@@ -812,18 +812,17 @@ photo.setLicense = function(photoID) {
 
 };
 
-photo.getArchive = function(photoID, kind) {
+photo.getArchive = function(photoIDs, kind) {
 
 	let link;
 
 	if(lychee.api_V2)
 	{
-		console.log(api.get_url('Photo::getArchive') + lychee.html`?photoID=${photoID}&kind=${ kind }`);
-		location.href = api.get_url('Photo::getArchive') + lychee.html`?photoID=${photoID}&kind=${ kind }`;
+		location.href = api.get_url('Photo::getArchive') + lychee.html`?photoIDs=${photoIDs.join()}&kind=${ kind }`
 	}
 	else
 	{
-		let url = `${ api.path }?function=Photo::getArchive&photoID=${ photoID }&kind=${ kind }`;
+		let url = `${ api.path }?function=Photo::getArchive&photoID=${ photoIDs[0] }&kind=${ kind }`;
 
 		if (location.href.indexOf('index.html')>0) link = location.href.replace(location.hash, '').replace('index.html', url);
 		else                                       link = location.href.replace(location.hash, '') + url;

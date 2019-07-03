@@ -47,6 +47,7 @@ contextMenu.album = function(albumID, e) {
 		{ title: build.iconic('folder') + lychee.locale['MOVE'],         visible: lychee.sub_albums,                fn: () => { basicContext.close(); contextMenu.move([ albumID ], e, album.setAlbum, 'ROOT') } },
 		// { title: build.iconic('cloud') + lychee.locale['SHARE_WITH'],    visible: lychee.api_V2 && lychee.upload,   fn: () => alert('ho')},
 		{ title: build.iconic('trash') + lychee.locale['DELETE'],                                                   fn: () => album.delete([ albumID ]) },
+		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD'],                                        fn: () => album.getArchive([ albumID ]) }
 	];
 
 	$('.album[data-id="' + albumID + '"]').addClass('active');
@@ -73,10 +74,13 @@ contextMenu.albumMulti = function(albumIDs, e) {
 		{ title: build.iconic('collapse-left') + lychee.locale['MERGE_ALL'], visible: showMerge && autoMerge,   fn: () => { let albumID = albumIDs.shift(); album.merge(albumIDs, albumID) } },
 		{ title: build.iconic('collapse-left') + lychee.locale['MERGE'],     visible: showMerge && !autoMerge,  fn: () => { basicContext.close(); contextMenu.move(albumIDs, e, album.merge, 'ROOT', false) } },
 		{ title: build.iconic('folder') + lychee.locale['MOVE_ALL'],         visible: lychee.sub_albums,        fn: () => { basicContext.close(); contextMenu.move(albumIDs, e, album.setAlbum, 'ROOT') } },
-		{ title: build.iconic('trash') + lychee.locale['DELETE_ALL'],                                           fn: () => album.delete(albumIDs) }
+		{ title: build.iconic('trash') + lychee.locale['DELETE_ALL'],                                           fn: () => album.delete(albumIDs) },
+		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD_ALL'],                                fn: () => album.getArchive(albumIDs) }
 	];
 
-	items.push();
+	if (!lychee.api_V2) {
+		items.splice(-1)
+	}
 
 	basicContext.show(items, e.originalEvent, contextMenu.close)
 
@@ -201,7 +205,8 @@ contextMenu.photo = function(photoID, e) {
 		{ title: build.iconic('layers') + lychee.locale['DUPLICATE'], fn: () => photo.duplicate([ photoID ]) },
 		{ title: build.iconic('layers') + lychee.locale['COPY_TO'], fn: () => { basicContext.close(); contextMenu.move([ photoID ], e, photo.copyTo, 'UNSORTED') } },
 		{ title: build.iconic('folder') + lychee.locale['MOVE'], fn: () => { basicContext.close(); contextMenu.move([ photoID ], e, photo.setAlbum, 'UNSORTED') } },
-		{ title: build.iconic('trash') + lychee.locale['DELETE'], fn: () => photo.delete([ photoID ]) }
+		{ title: build.iconic('trash') + lychee.locale['DELETE'], fn: () => photo.delete([ photoID ]) },
+		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD'], fn: () => photo.getArchive([ photoID ], 'FULL') }
 	];
 
 	$('.photo[data-id="' + photoID + '"]').addClass('active');
@@ -263,7 +268,13 @@ contextMenu.photoMulti = function(photoIDs, e) {
 		{ title: build.iconic('layers') + lychee.locale['COPY_ALL_TO'], fn: () => { basicContext.close(); contextMenu.move(photoIDs, e, photo.copyTo, 'UNSORTED') } },
 		{ title: build.iconic('folder') + lychee.locale['MOVE_ALL'], fn: () => { basicContext.close(); contextMenu.move(photoIDs, e, photo.setAlbum, 'UNSORTED') } },
 		{ title: build.iconic('trash') + lychee.locale['DELETE_ALL'], fn: () => photo.delete(photoIDs) },
+		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD_ALL'], fn: () => photo.getArchive(photoIDs, 'FULL') }
 	];
+
+	if (!lychee.api_V2) {
+		items.splice(-1)
+	}
+
 
 	basicContext.show(items, e.originalEvent, contextMenu.close)
 
@@ -306,9 +317,9 @@ contextMenu.photoMore = function(photoID, e) {
 	let showFull = (album.json && album.json.full_photo) && (photo.json.url && photo.json.url !== '');
 	let items = [
 		{ title: build.iconic('fullscreen-enter') + lychee.locale['FULL_PHOTO'], visible: !!showFull, fn: () => window.open(photo.getDirectLink()) },
-		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD'], visible: !!showDownload, fn: () => photo.getArchive(photoID, 'FULL') },
-		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD_MEDIUM'], visible: !!showMedium, fn: () => photo.getArchive(photoID, 'MEDIUM') },
-		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD_SMALL'], visible: !!showSmall, fn: () => photo.getArchive(photoID, 'SMALL') }
+		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD'], visible: !!showDownload, fn: () => photo.getArchive([ photoID ], 'FULL') },
+		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD_MEDIUM'], visible: !!showMedium, fn: () => photo.getArchive([ photoID ], 'MEDIUM') },
+		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD_SMALL'], visible: !!showSmall, fn: () => photo.getArchive([ photoID ], 'SMALL') }
 	];
 
 	basicContext.show(items, e.originalEvent)
