@@ -121,7 +121,7 @@ photo.update_overlay_type = function() {
 		}
 		else
 		{
-			console.log('no other data found, displaying ' + types[j]);
+			// console.log('no other data found, displaying ' + types[j]);
 		}
 	}
 };

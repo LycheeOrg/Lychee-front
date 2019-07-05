@@ -225,8 +225,6 @@ header.setMode = function(mode) {
 				|| (photo.json && photo.json.url && photo.json.url === '') ) {
 				$('#button_more').hide();
 			}
-			console.log(album.json);
-			console.log(photo.json);
 
 			return true;
 
