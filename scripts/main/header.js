@@ -50,7 +50,7 @@ header.bind = function() {
 	header.dom('.header__hostedwith') .on(eventName, function() { window.open(lychee.website) });
 	header.dom('#button_trash_album') .on(eventName, function() { album.delete([ album.getID() ]) });
 	header.dom('#button_trash')       .on(eventName, function() { photo.delete([ photo.getID() ]) });
-	header.dom('#button_archive')     .on(eventName, function() { album.getArchive(album.getID()) });
+	header.dom('#button_archive')     .on(eventName, function() { album.getArchive([ album.getID() ]) });
 	header.dom('#button_star')        .on(eventName, function() { photo.setStar([ photo.getID() ]) });
 	header.dom('#button_back_home')   .on(eventName, function() {
 		if (!album.json.parent_id) {
@@ -219,10 +219,10 @@ header.setMode = function(mode) {
 
 			// Hide More menu if empty (see contextMenu.photoMore)
 			$('#button_more').show();
-			if ((!album.isUploadable()
-				&& !(album.json && album.json.downloadable && album.json.downloadable === '1')
-				&& !(album.json && album.json.full_photo && album.json.full_photo === '1'))
-				|| (photo.json && photo.json.url && photo.json.url === '') ) {
+			if (!(album.isUploadable() ||
+				(photo.json.hasOwnProperty('downloadable') ? photo.json.downloadable === '1' :
+				album.json && album.json.downloadable && album.json.downloadable === '1')) &&
+				!(photo.json.url && photo.json.url !== '')) {
 				$('#button_more').hide();
 			}
 

@@ -7,6 +7,7 @@
 let lychee = {};
 
 lychee.content = $('.content');
+lychee.imageview = $('#imageview');
 
 lychee.escapeHTML = function (html = '') {
 
@@ -213,7 +214,6 @@ const loadPhotoInfo = function (photoID) {
 
 	let params = {
 		photoID,
-		albumID: '0',
 		password: ''
 	};
 

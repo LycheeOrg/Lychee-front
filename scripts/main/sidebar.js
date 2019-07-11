@@ -80,7 +80,7 @@ sidebar.toggle = function() {
 		header.dom('.button--info').toggleClass('active');
 		lychee.content.toggleClass('content--sidebar');
 		lychee.imageview.toggleClass('image--sidebar');
-		view.album.content.justify();
+		if (typeof view !== 'undefined') view.album.content.justify();
 		sidebar.dom().toggleClass('active');
 
 		return true
@@ -132,7 +132,7 @@ sidebar.createStructure.photo = function(data) {
 
 	if (data==null || data==='') return false;
 
-	let editable  = album.isUploadable();
+	let editable  = (typeof album !== 'undefined') ? album.isUploadable() : false;
 	let exifHash  = data.takedate + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
 	let structure = {};
 	let _public   = '';

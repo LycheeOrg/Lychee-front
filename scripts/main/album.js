@@ -681,15 +681,15 @@ album.share = function (service) {
 
 };
 
-album.getArchive = function (albumID) {
+album.getArchive = function (albumIDs) {
 
 	let link = '';
 
 	// double check with API_V2 this will not work...
 	if (lychee.api_V2) {
-		location.href = api.get_url('Album::getArchive') + lychee.html`?albumID=${albumID}`;
+		location.href = api.get_url('Album::getArchive') + lychee.html`?albumIDs=${albumIDs.join()}`
 	} else {
-		let url = `${api.path}?function=Album::getArchive&albumID=${albumID}`;
+		let url = `${api.path}?function=Album::getArchive&albumID=${albumIDs[0]}`;
 
 		if (location.href.indexOf('index.html') > 0) link = location.href.replace(location.hash, '').replace('index.html', url);
 		else link = location.href.replace(location.hash, '') + url;
