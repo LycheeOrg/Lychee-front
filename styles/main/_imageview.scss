@@ -166,4 +166,11 @@
 		}
 	}
 
+	// We must not allow the wide next/prev arrow wrappers to cover the
+	// on-screen buttons in videos.  This is imperfect as now the video
+	// covers part of the background image.
+	video {
+		z-index: 1;
+	}
+
 }

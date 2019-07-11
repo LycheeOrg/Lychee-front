@@ -350,7 +350,7 @@ view.album = {
 					containerWidth: containerWidth,
 					containerPadding: 0
 				});
-				if (lychee.admin) console.log(layoutGeometry);
+				// if (lychee.admin) console.log(layoutGeometry);
 				$('.justified-layout').css('height', layoutGeometry.containerHeight + 'px')
 					.css('height', layoutGeometry.containerHeight + 'px');
 				$('.justified-layout > div').each(function (i) {
@@ -434,7 +434,7 @@ view.album = {
 				break;
 			default            :
 				license = album.json.license;
-				console.log('default');
+				// console.log('default');
 				break;
 		}
 

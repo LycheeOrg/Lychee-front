@@ -348,8 +348,8 @@ lychee.load = function() {
 
 lychee.getUpdate = function() {
 
-	console.log(lychee.update_available);
-	console.log(lychee.update_json);
+	// console.log(lychee.update_available);
+	// console.log(lychee.update_json);
 
 	if(lychee.update_json !== 0)
 	{
