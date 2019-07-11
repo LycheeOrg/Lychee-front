@@ -43,9 +43,6 @@ photo.load = function(photoID, albumID) {
 		photoID,
 		password: password.value
 	};
-	if (!lychee.api_V2) {
-		params.albumID = albumID
-	}
 
 	api.post('Photo::get', params, function(data) {
 
@@ -61,10 +58,8 @@ photo.load = function(photoID, albumID) {
 		}
 
 		photo.json = data;
-		if (lychee.api_V2) {
-			photo.json.original_album = photo.json.album;
-			photo.json.album = albumID
-		}
+		photo.json.original_album = photo.json.album;
+		photo.json.album = albumID;
 
 		if (!visible.photo()) view.photo.show();
 		view.photo.init();
