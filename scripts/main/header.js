@@ -219,10 +219,10 @@ header.setMode = function(mode) {
 
 			// Hide More menu if empty (see contextMenu.photoMore)
 			$('#button_more').show();
-			if ((!album.isUploadable()
-				&& !(album.json && album.json.downloadable && album.json.downloadable === '1')
-				&& !(album.json && album.json.full_photo && album.json.full_photo === '1'))
-				|| (photo.json && photo.json.url && photo.json.url === '') ) {
+			if (!(album.isUploadable() ||
+				(photo.json.hasOwnProperty('downloadable') ? photo.json.downloadable === '1' :
+				album.json && album.json.downloadable && album.json.downloadable === '1')) &&
+				!(photo.json.url && photo.json.url !== '')) {
 				$('#button_more').hide();
 			}
 

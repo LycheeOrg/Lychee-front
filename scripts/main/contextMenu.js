@@ -309,12 +309,16 @@ contextMenu.photoMore = function(photoID, e) {
 
 	// Show download-item when
 	// a) We are allowed to upload to the album
-	// b) or the album is explicitly marked as downloadable
-	let showDownload = album.isUploadable() || (album.json && album.json.downloadable && album.json.downloadable === '1');
-
+	// b) the photo is explicitly marked as downloadable (v4-only)
+	// c) or, the album is explicitly marked as downloadable
+	let showDownload = album.isUploadable() ||
+		(photo.json.hasOwnProperty('downloadable') ? photo.json.downloadable === '1' :
+		album.json && album.json.downloadable && album.json.downloadable === '1');
 	let showMedium = photo.json.medium && photo.json.medium !== '' && showDownload;
 	let showSmall = photo.json.small && photo.json.small !== '' && showDownload;
-	let showFull = (album.json && album.json.full_photo) && (photo.json.url && photo.json.url !== '');
+
+	let showFull = photo.json.url && photo.json.url !== '';
+
 	let items = [
 		{ title: build.iconic('fullscreen-enter') + lychee.locale['FULL_PHOTO'], visible: !!showFull, fn: () => window.open(photo.getDirectLink()) },
 		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD'], visible: !!showDownload, fn: () => photo.getArchive([ photoID ], 'FULL') },
