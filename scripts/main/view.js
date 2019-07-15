@@ -662,7 +662,8 @@ view.photo = {
 
 	photo: function () {
 
-		lychee.imageview.html(build.imageview(photo.json, visible.header()));
+		let ret = build.imageview(photo.json, visible.header());
+		lychee.imageview.html(ret.html);
 		view.photo.onresize();
 
 		let $nextArrow = lychee.imageview.find('a#next');
@@ -670,6 +671,25 @@ view.photo = {
 		let photoID = photo.getID();
 		let hasNext = album.json && album.json.photos && album.getByID(photoID) && album.getByID(photoID).nextPhoto != null && album.getByID(photoID).nextPhoto !== '';
 		let hasPrevious = album.json && album.json.photos && album.getByID(photoID) && album.getByID(photoID).previousPhoto != null && album.getByID(photoID).previousPhoto !== '';
+
+		let img = $('img#image');
+		if (img.length > 0) {
+			if (!img[0].complete) {
+				// Image is still loading.  Display the thumb version in the
+				// background.
+				if (ret.thumb !== '') {
+					img.css('background-image', lychee.html`url("${ret.thumb}")`)
+				}
+
+				// Don't preload next/prev until the requested image is
+				// fully loaded.
+				img.on('load', function() {
+					photo.preloadNextPrev(photo.getID())
+				})
+			} else {
+				photo.preloadNextPrev(photo.getID())
+			}
+		}
 
 		if (hasNext === false || lychee.viewMode === true) {
 
@@ -710,7 +730,7 @@ view.photo = {
 	},
 
 	onresize: function () {
-		if (photo.json.medium === '' || !photo.json.medium2x || photo.json.medium2x === '') return;
+		if (!photo.json || photo.json.medium === '' || !photo.json.medium2x || photo.json.medium2x === '') return;
 
 		// Calculate the width of the image in the current window and
 		// set 'sizes' to it.

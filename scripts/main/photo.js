@@ -4,8 +4,9 @@
 
 photo = {
 
-	json  : null,
-	cache : null
+	json             : null,
+	cache            : null,
+	supportsPrefetch : null
 
 };
 
@@ -66,8 +67,7 @@ photo.load = function(photoID, albumID) {
 		lychee.imageview.show();
 
 		setTimeout(() => {
-			lychee.content.show();
-			photo.preloadNext(photoID)
+			lychee.content.show()
 		}, 300)
 
 	})
@@ -139,33 +139,75 @@ photo.update_display_overlay = function () {
 	}
 };
 
-// Preload the next photo for better response time
-photo.preloadNext = function(photoID) {
+// Preload the next and previous photos for better response time
+photo.preloadNextPrev = function(photoID) {
 	if (album.json &&
 		album.json.photos &&
-		album.getByID(photoID) &&
-		album.getByID(photoID).nextPhoto!=='') {
+		album.getByID(photoID)) {
 
-		let nextPhoto = album.getByID(photoID).nextPhoto;
-		let url       = album.getByID(nextPhoto).url;
-		let medium    = album.getByID(nextPhoto).medium;
-		let href      = url;
-		if (medium != null && medium !== '') {
-			href = medium;
-
-			let medium2x = album.getByID(nextPhoto).medium2x;
-			if (medium2x && medium2x !== '') {
-				// If the currently displayed image uses the 2x variant,
-				// chances are that so will the next one.
-				let imgs=$('img#image');
-				if (imgs.length > 0 && imgs[0].currentSrc != null && imgs[0].currentSrc.includes('@2x.')) {
-					href = medium2x;
-				}
-			}
-		}
+		let previousPhotoID = album.getByID(photoID).previousPhoto;
+		let nextPhotoID = album.getByID(photoID).nextPhoto;
+		let current2x = null;
 
 		$('head [data-prefetch]').remove();
-		$('head').append(`<link data-prefetch rel="prefetch" href="${ href }">`)
+
+		let preload = function(preloadID) {
+			let preloadPhoto  = album.getByID(preloadID);
+			let href = '';
+
+			if (preloadPhoto.medium != null && preloadPhoto.medium !== '') {
+				href = preloadPhoto.medium;
+
+				if (preloadPhoto.medium2x && preloadPhoto.medium2x !== '') {
+					if (current2x === null) {
+						let imgs = $('img#image');
+						current2x = imgs.length > 0 && imgs[0].currentSrc !== null && imgs[0].currentSrc.includes('@2x.')
+					}
+					if (current2x) {
+						// If the currently displayed image uses the 2x variant,
+						// chances are that so will the next one.
+						href = preloadPhoto.medium2x
+					}
+				}
+			} else if (preloadPhoto.type && preloadPhoto.type.indexOf('video') === -1) {
+				// Preload the original size, but only if it's not a video
+				href = preloadPhoto.url
+			}
+
+			if (photo.supportsPrefetch === null) {
+				// Copied from https://www.smashingmagazine.com/2016/02/preload-what-is-it-good-for/
+				let DOMTokenListSupports = function(tokenList, token) {
+					if (!tokenList || !tokenList.supports) {
+						return null;
+					}
+					try {
+						return tokenList.supports(token);
+					} catch (e) {
+						if (e instanceof TypeError) {
+							console.log('The DOMTokenList doesn\'t have a supported tokens list');
+						} else {
+							console.error('That shouldn\'t have happened');
+						}
+					}
+				};
+				photo.supportsPrefetch = DOMTokenListSupports(document.createElement('link').relList, 'prefetch');
+			}
+
+			if (photo.supportsPrefetch) {
+				$('head').append(`<link data-prefetch rel="prefetch" href="${ href }">`)
+			} else {
+				// According to https://caniuse.com/#feat=link-rel-prefetch,
+				// as of mid-2019 it's mainly Safari (both on desktop and mobile)
+				(new Image()).src = href
+			}
+		};
+
+		if (nextPhotoID !== '') {
+			preload(nextPhotoID)
+		}
+		if (previousPhotoID !== '') {
+			preload(previousPhotoID)
+		}
 
 	}
 
@@ -289,8 +331,8 @@ photo.delete = function(photoIDs) {
 
 	action.fn = function() {
 
-		let nextPhoto = null;
-		let previousPhoto = null;
+		let nextPhoto = '';
+		let previousPhoto = '';
 
 		basicModal.close();
 
@@ -302,8 +344,12 @@ photo.delete = function(photoIDs) {
 				nextPhoto     = album.getByID(id).nextPhoto;
 				previousPhoto = album.getByID(id).previousPhoto;
 
-				album.getByID(previousPhoto).nextPhoto = nextPhoto;
-				album.getByID(nextPhoto).previousPhoto = previousPhoto
+				if (previousPhoto !== '') {
+					album.getByID(previousPhoto).nextPhoto = nextPhoto
+				}
+				if (nextPhoto !== '') {
+					album.getByID(nextPhoto).previousPhoto = previousPhoto
+				}
 
 			}
 
@@ -315,9 +361,19 @@ photo.delete = function(photoIDs) {
 		albums.refresh();
 
 		// Go to next photo if there is a next photo and
-		// next photo is not the current one. Show album otherwise.
-		if (visible.photo() && nextPhoto!=null && nextPhoto!==photo.getID()) lychee.goto(album.getID() + '/' + nextPhoto);
-		else if (!visible.albums())                                          lychee.goto(album.getID());
+		// next photo is not the current one. Also try the previous one.
+		// Show album otherwise.
+		if (visible.photo()) {
+			if (nextPhoto !== '' && nextPhoto !== photo.getID()) {
+				lychee.goto(album.getID() + '/' + nextPhoto)
+			} else if (previousPhoto !== '' && previousPhoto !== photo.getID()) {
+				lychee.goto(album.getID() + '/' + previousPhoto)
+			} else {
+				lychee.goto(album.getID())
+			}
+		} else if (!visible.albums()) {
+			lychee.goto(album.getID())
+		}
 
 		let params = {
 			photoIDs: photoIDs.join()
@@ -441,8 +497,8 @@ photo.copyTo = function(photoIDs, albumID) {
 
 photo.setAlbum = function(photoIDs, albumID) {
 
-	let nextPhoto = null;
-	let previousPhoto = null;
+	let nextPhoto = '';
+	let previousPhoto = '';
 
 	if (!photoIDs) return false;
 	if (photoIDs instanceof Array===false) photoIDs = [ photoIDs ];
@@ -455,8 +511,12 @@ photo.setAlbum = function(photoIDs, albumID) {
 			nextPhoto     = album.getByID(id).nextPhoto;
 			previousPhoto = album.getByID(id).previousPhoto;
 
-			album.getByID(previousPhoto).nextPhoto = nextPhoto;
-			album.getByID(nextPhoto).previousPhoto = previousPhoto
+			if (previousPhoto !== '') {
+				album.getByID(previousPhoto).nextPhoto = nextPhoto
+			}
+			if (nextPhoto !== '') {
+				album.getByID(nextPhoto).previousPhoto = previousPhoto
+			}
 
 		}
 
@@ -468,9 +528,19 @@ photo.setAlbum = function(photoIDs, albumID) {
 	albums.refresh();
 
 	// Go to next photo if there is a next photo and
-	// next photo is not the current one. Show album otherwise.
-	if (visible.photo() && nextPhoto!=null && nextPhoto!==photo.getID()) lychee.goto(album.getID() + '/' + nextPhoto);
-	else if (!visible.albums())                                          lychee.goto(album.getID());
+	// next photo is not the current one. Also try the previous one.
+	// Show album otherwise.
+	if (visible.photo()) {
+		if (nextPhoto !== '' && nextPhoto !== photo.getID()) {
+			lychee.goto(album.getID() + '/' + nextPhoto)
+		} else if (previousPhoto !== '' && previousPhoto !== photo.getID()) {
+			lychee.goto(album.getID() + '/' + previousPhoto)
+		} else {
+			lychee.goto(album.getID())
+		}
+	} else if (!visible.albums()) {
+		lychee.goto(album.getID())
+	}
 
 	let params = {
 		photoIDs: photoIDs.join(),
