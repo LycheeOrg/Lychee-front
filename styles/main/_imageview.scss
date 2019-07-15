@@ -36,6 +36,9 @@
 		animation-name: zoomIn;
 		animation-duration: .3s;
 		animation-timing-function: $timingBounce;
+		background-size: contain;
+		background-position: center;
+		background-repeat: no-repeat;
 
 		@media (max-width: 640px) {
 			top: 60px;

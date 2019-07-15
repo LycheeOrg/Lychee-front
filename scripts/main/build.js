@@ -257,11 +257,23 @@ build.overlay_image = function (data) {
 build.imageview = function (data, visibleControls) {
 
 	let html = '';
+	let thumb = '';
 
 	if (data.type.indexOf('video') > -1) {
 		html += lychee.html`<video width="auto" height="auto" id='image' controls class='${visibleControls === true ? '' : 'full'}' autoplay><source src='${data.url}'>Your browser does not support the video tag.</video>`
 	} else {
 		let img = '';
+
+		// See if we have the thumbnail loaded...
+		$('.photo').each(function () {
+			if ($(this).attr('data-id') && $(this).attr('data-id') == data.id) {
+				let thumbimg = $(this).find('img');
+				if (thumbimg.length > 0) {
+					thumb = thumbimg[0].currentSrc ? thumbimg[0].currentSrc : thumbimg[0].src;
+					return false
+				}
+			}
+		});
 
 		if (data.medium !== '') {
 			let medium = '';
@@ -284,7 +296,7 @@ build.imageview = function (data, visibleControls) {
 			<div class='arrow_wrapper arrow_wrapper--next'><a id='next'>${build.iconic('caret-right')}</a></div>
 			`;
 
-	return html
+	return { html, thumb }
 
 };
 

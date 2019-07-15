@@ -67,8 +67,7 @@ photo.load = function(photoID, albumID) {
 		lychee.imageview.show();
 
 		setTimeout(() => {
-			lychee.content.show();
-			photo.preloadNextPrev(photoID)
+			lychee.content.show()
 		}, 300)
 
 	})
@@ -170,9 +169,9 @@ photo.preloadNextPrev = function(photoID) {
 						href = preloadPhoto.medium2x
 					}
 				}
-			} else if (preloadPhoto.type && data.type.indexOf('video') === -1) {
+			} else if (preloadPhoto.type && preloadPhoto.type.indexOf('video') === -1) {
 				// Preload the original size, but only if it's not a video
-				href = url
+				href = preloadPhoto.url
 			}
 
 			if (photo.supportsPrefetch === null) {
