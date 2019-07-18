@@ -150,14 +150,14 @@ lychee.init = function() {
 
 			lychee.sortingPhotos				= data.config.sorting_Photos    || data.config.sortingPhotos		|| '';
 			lychee.sortingAlbums				= data.config.sorting_Albums    || data.config.sortingAlbums		|| '';
-			lychee.dropboxKey					= data.config.dropboxKey		|| '';
+			lychee.dropboxKey					= data.config.dropbox_key       || data.config.dropboxKey		    || '';
 			lychee.location						= data.config.location			|| '';
-			lychee.checkForUpdates				= data.config.check_for_updates || data.config.checkForUpdates	|| '1';
+			lychee.checkForUpdates				= data.config.check_for_updates || data.config.checkForUpdates	    || '1';
 			lychee.lang							= data.config.lang				|| '';
 			lychee.lang_available				= data.config.lang_available	|| {};
 			lychee.layout						= data.config.layout			|| '1';
-			lychee.public_search				= (data.config.public_search && data.config.public_search === '1') || false;
-			lychee.image_overlay_default		= (data.config.image_overlay && data.config.image_overlay === '1')			|| false;
+			lychee.public_search				= (data.config.public_search && data.config.public_search === '1')  || false;
+			lychee.image_overlay_default		= (data.config.image_overlay && data.config.image_overlay === '1')	|| false;
 			lychee.image_overlay				= lychee.image_overlay_default;
 			lychee.image_overlay_type			= (!data.config.image_overlay_type) ? 'exif' : data.config.image_overlay_type;
 			lychee.image_overlay_type_default	= lychee.image_overlay_type;

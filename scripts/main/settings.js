@@ -448,7 +448,7 @@ settings.save = function (params) {
 			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_UPDATE']);
 			view.full_settings.init();
 			// lychee.init();
-		} else lychee.error(null, params, data);
+		} else lychee.error('Check the Logs', params, data);
 
 	})
 
