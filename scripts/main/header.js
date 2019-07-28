@@ -182,6 +182,8 @@ header.setMode = function(mode) {
 					$('#button_share_album')
 						.removeClass('button--share')
 						.addClass('button--eye')
+						.find('svg')
+						.removeClass('ionicons')
 						.find('use')
 						.attr('xlink:href', '#eye')
 				} else {
@@ -189,8 +191,10 @@ header.setMode = function(mode) {
 					$('#button_share_album')
 					.removeClass('button--eye')
 					.addClass('button--share')
+					.find('svg')
+					.addClass('ionicons')
 					.find('use')
-					.attr('xlink:href', '#share')
+					.attr('xlink:href', '#share-ion')
 				}
 			}
 
@@ -206,6 +210,8 @@ header.setMode = function(mode) {
 				$('#button_share')
 					.removeClass('button--share')
 					.addClass('button--eye')
+					.find('svg')
+					.removeClass('ionicons')
 					.find('use')
 					.attr('xlink:href', '#eye')
 			} else {
@@ -213,8 +219,10 @@ header.setMode = function(mode) {
 				$('#button_share')
 					.removeClass('button--eye')
 					.addClass('button--share')
+					.find('svg')
+					.addClass('ionicons')
 					.find('use')
-					.attr('xlink:href', '#share')
+					.attr('xlink:href', '#share-ion')
 			}
 
 			// Hide More menu if empty (see contextMenu.photoMore)
