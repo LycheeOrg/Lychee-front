@@ -236,7 +236,7 @@ const loadPhotoInfo = function (photoID) {
 		header.dom('.header__title').html(lychee.escapeHTML(data.title));
 
 		// Render HTML
-		imageview.html(build.imageview(data, true));
+		imageview.html(build.imageview(data, true).html);
 		imageview.find('.arrow_wrapper').remove();
 		imageview.addClass('fadeIn').show();
 		photo.onresize();
