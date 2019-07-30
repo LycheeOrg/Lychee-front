@@ -454,21 +454,21 @@ view.album = {
 
 	public: function () {
 
+		$('#button_visibility_album').removeClass('active--not-hidden active--hidden');
+
 		if (album.json.public === '1') {
 
-			$('#button_share_album')
-				.addClass('active')
-				.attr('title', lychee.locale['SHARE_ALBUM']);
+			if (album.json.visible === '0') {
+				$('#button_visibility_album').addClass('active--hidden')
+			} else {
+				$('#button_visibility_album').addClass('active--not-hidden')
+			}
 
 			$('.photo .iconic-share').remove();
 
 			if (album.json.init) sidebar.changeAttr('public', lychee.locale['ALBUM_SHR_YES'])
 
 		} else {
-
-			$('#button_share_album')
-				.removeClass('active')
-				.attr('title', lychee.locale['MAKE_PUBLIC']);
 
 			if (album.json.init) sidebar.changeAttr('public', lychee.locale['ALBUM_SHR_NO'])
 
@@ -635,22 +635,24 @@ view.photo = {
 
 	public: function () {
 
+		$('#button_visibility').removeClass('active active--not-hidden active--hidden');
+
 		if (photo.json.public === '1' || photo.json.public === '2') {
 
 			// Photo public
-			$('#button_share')
-				.addClass('active')
-				.attr('title', lychee.locale['SHARE_PHOTO']);
+			if (photo.json.public === '1') {
+				$('#button_visibility').addClass('active')
+			} else if (album.json && album.json.visible === '0') {
+				$('#button_visibility').addClass('active--hidden')
+			} else {
+				$('#button_visibility').addClass('active--not-hidden')
+			}
 
 			if (photo.json.init) sidebar.changeAttr('public', lychee.locale['PHOTO_SHR_YES'])
 
 		} else {
 
 			// Photo private
-			$('#button_share')
-				.removeClass('active')
-				.attr('title', 'Make Public');
-
 			if (photo.json.init) sidebar.changeAttr('public', 'No')
 
 		}
