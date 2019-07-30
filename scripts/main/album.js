@@ -493,40 +493,34 @@ album.setLicense = function (albumID) {
 
 };
 
-album.setPublic = function (albumID, modal, e) {
+album.setPublic = function (albumID, e) {
 
 	let password = '';
 
-	albums.refresh();
+	if (!basicModal.visible()) {
 
-	if (modal === true) {
-
-		let text = '';
 		let action = {};
 
 		action.fn = () => {
 
 			// Call setPublic function without showing the modal
-			album.setPublic(album.getID(), false, e)
+			album.setPublic(albumID, e)
 
 		};
 
-		// Album public = Editing a shared album
-		if (album.json.public === '1') {
-
-			action.title = lychee.locale['EDIT_SHARING_TITLE'];
-			text = lychee.locale['EDIT_SHARING_TEXT']
-
-		} else {
-
-			action.title = lychee.locale['SHARE_ALBUM'];
-			text = lychee.locale['SHARE_ALBUM_TEXT']
-
-		}
+		action.title = lychee.locale['EDIT_SHARING_TITLE'];
 
 		let msg = `
-				  <p class='less'>${text}</p>
+				  <p class='less'>${lychee.locale['EDIT_SHARING_TEXT']}</p>
 				  <form>
+					  <div class='switch'>
+						  <label>
+							  ${lychee.locale['ALBUM_PUBLIC']}:
+							  <input type='checkbox' name='public'>
+							  <span class='slider round'></span>
+						  </label>
+						  <p>${lychee.locale['ALBUM_PUBLIC_EXPL']}</p>
+					  </div>
 					  <div class='choice'>
 						  <label>
 							  <input type='checkbox' name='full_photo'>
@@ -578,8 +572,18 @@ album.setPublic = function (albumID, modal, e) {
 		});
 
 		if (album.json.full_photo !== null && album.json.full_photo === '1') $('.basicModal .choice input[name="full_photo"]').click();
-		if (album.json.public === '1' && album.json.visible === '0') $('.basicModal .choice input[name="hidden"]').click();
+		if (album.json.visible === '0') $('.basicModal .choice input[name="hidden"]').click();
 		if (album.json.downloadable === '1') $('.basicModal .choice input[name="downloadable"]').click();
+		if (album.json.password === '1') {
+			$('.basicModal .choice input[name="password"]').click();
+			$('.basicModal .choice input[name="passwordtext"]').show()
+		}
+
+		if (album.json.public === '1') {
+			$('.basicModal .switch input[name="public"]').click()
+		} else {
+			$('.basicModal .choice input').attr('disabled', true)
+		}
 
 		$('.basicModal .choice input[name="password"]').on('change', function () {
 
@@ -588,61 +592,56 @@ album.setPublic = function (albumID, modal, e) {
 
 		});
 
+		$('.basicModal .switch input[name="public"]').on('click', function () {
+			if ($(this).prop('checked') === true) {
+				$('.basicModal .choice input').attr('disabled', false)
+			} else {
+				$('.basicModal .choice input').attr('disabled', true)
+			}
+		});
+
 		return true
 
 	}
 
-	// Set data
-	if (basicModal.visible()) {
+	albums.refresh();
 
-		// Visible modal => Set album public
-		album.json.public = '1';
+	// Set public
+	if ($('.basicModal .switch input[name="public"]:checked').length === 1) album.json.public = '1';
+	else album.json.public = '0';
 
-		// Set visible
-		if ($('.basicModal .choice input[name="full_photo"]:checked').length === 1) album.json.full_photo= '1';
-		else album.json.full_photo = '0';
+	// Set full photo
+	if ($('.basicModal .choice input[name="full_photo"]:checked').length === 1) album.json.full_photo = '1';
+	else album.json.full_photo = '0';
 
-		// Set visible
-		if ($('.basicModal .choice input[name="hidden"]:checked').length === 1) album.json.visible = '0';
-		else album.json.visible = '1';
+	// Set visible
+	if ($('.basicModal .choice input[name="hidden"]:checked').length === 1) album.json.visible = '0';
+	else album.json.visible = '1';
 
-		// Set downloadable
-		if ($('.basicModal .choice input[name="downloadable"]:checked').length === 1) album.json.downloadable = '1';
-		else album.json.downloadable = '0';
+	// Set downloadable
+	if ($('.basicModal .choice input[name="downloadable"]:checked').length === 1) album.json.downloadable = '1';
+	else album.json.downloadable = '0';
 
-		// Set password
-		if ($('.basicModal .choice input[name="password"]:checked').length === 1) {
-			password = $('.basicModal .choice input[name="passwordtext"]').val();
-			album.json.password = '1'
-		} else {
-			password = '';
-			album.json.password = '0'
-		}
-
-		// Modal input has been processed, now it can be closed
-		basicModal.close()
-
+	// Set password
+	let oldPassword = album.json.password;
+	if ($('.basicModal .choice input[name="password"]:checked').length === 1) {
+		password = $('.basicModal .choice input[name="passwordtext"]').val();
+		album.json.password = '1'
 	} else {
-
-		// Modal not visible => Set album private
-		album.json.public = '0'
-
+		password = '';
+		album.json.password = '0'
 	}
+
+	// Modal input has been processed, now it can be closed
+	basicModal.close();
 
 	// Set data and refresh view
 	if (visible.album()) {
-
-		album.json.full_photo = (album.json.full_photo === '0') ? '0' : album.json.full_photo;
-		album.json.visible = (album.json.public === '0') ? '1' : album.json.visible;
-		album.json.downloadable = (album.json.public === '0') ? '0' : album.json.downloadable;
-		album.json.password = (album.json.public === '0') ? '0' : album.json.password;
 
 		view.album.public();
 		view.album.hidden();
 		view.album.downloadable();
 		view.album.password();
-
-		if (album.json.public === '1') contextMenu.shareAlbum(albumID, e)
 
 	}
 
@@ -650,10 +649,14 @@ album.setPublic = function (albumID, modal, e) {
 		albumID,
 		full_photo: album.json.full_photo,
 		public: album.json.public,
-		password: password,
 		visible: album.json.visible,
 		downloadable: album.json.downloadable
 	};
+	if (oldPassword !== album.json.password || password.length > 0) {
+		// We only send the password if there's been a change; that way the
+		// server will keep the current password if it wasn't changed.
+		params.password = password
+	}
 
 	api.post('Album::setPublic', params, function (data) {
 

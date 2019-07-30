@@ -448,15 +448,8 @@ contextMenu.shareAlbum = function(albumID, e) {
 		{ },
 		{ title: build.iconic('twitter', iconClass) + 'Twitter', fn: () => album.share('twitter') },
 		{ title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => album.share('facebook') },
-		{ title: build.iconic('envelope-closed') + 'Mail', fn: () => album.share('mail') },
-		{ },
-		{ title: build.iconic('pencil') + lychee.locale['EDIT_SHARING'], fn: () => album.setPublic(albumID, true, e) },
-		{ title: build.iconic('ban') + lychee.locale['MAKE_PRIVATE'], fn: () => album.setPublic(albumID, false) }
+		{ title: build.iconic('envelope-closed') + 'Mail', fn: () => album.share('mail') }
 	];
-
-	if (!album.isUploadable()) {
-		items.splice(5, 3);
-	}
 
 	basicContext.show(items, e.originalEvent);
 	$('.basicContext input#link').focus().select()

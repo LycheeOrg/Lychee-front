@@ -183,6 +183,18 @@
 			}
 		}
 
+		label input:disabled ~ .checkbox {
+			background: black(.2);
+			.iconic {
+				opacity: 0.3;
+			}
+			cursor: not-allowed;
+		}
+
+		label input:disabled ~ .label {
+			color: white(.6);
+		}
+
 		label .label {
 			margin: 0 0 0 18px;
 		}
@@ -202,6 +214,11 @@
 			margin-left: 35px;
 			width: calc(100% - 35px);
 		}
+
+		input.text:disabled {
+			cursor: not-allowed;
+		}
+
 	}
 
 	// Select -------------------------------------------------------------- //
@@ -373,6 +390,82 @@
 			font-size: 12px;
 			overflow: hidden;
 			line-height: 16px;
+		}
+	}
+
+	// Sliders ----------------------------------------------------------- //
+	.switch {
+		padding: 0 30px 15px;
+		width: 100%;
+		color: #fff;
+
+		input {
+			opacity: 0;
+			width: 0;
+			height: 0;
+			margin: 0;
+		}
+
+		label {
+			float: left;
+			color: white(1);
+			font-size: 14px;
+			font-weight: 700;
+		}
+
+		.slider {
+			display: inline-block;
+			width: 42px;
+			height: 22px;
+			left: -9px;
+			bottom: -6px;
+			position: relative;
+			cursor: pointer;
+			border: 1px solid rgba(0, 0, 0, .2);
+			box-shadow: 0 1px 0 rgba(255, 255, 255, .02);
+			background: rgba(0, 0, 0, .3);
+			-webkit-transition: .4s;
+			transition: .4s;
+		}
+
+		.slider:before {
+			position: absolute;
+			content: "";
+			height: 14px;
+			width: 14px;
+			left: 3px;
+			bottom: 3px;
+			background-color: $colorBlue;
+			-webkit-transition: .4s;
+			transition: .4s;
+		}
+
+		input:checked + .slider {
+			background-color: $colorBlue;
+		}
+
+		input:checked + .slider:before {
+			-ms-transform: translateX(20px);
+			transform: translateX(20px);
+			background-color: #FFFFFF;
+		}
+
+		/* Rounded sliders */
+		.slider.round {
+			border-radius: 20px;
+		}
+
+		.slider.round:before {
+			border-radius: 50%;
+		}
+
+		p {
+			clear: both;
+			padding: 2px 0 0;
+			margin: 0;
+			width: 100%;
+			color: white(.6);
+			font-size: 13px;
 		}
 	}
 
