@@ -390,14 +390,7 @@ lychee.setMode = function(mode) {
 	}
 	if (!lychee.upload)
 	{
-		$('#button_trash_album, .button_add, #button_move_album').remove();
-		$('#button_trash, #button_move, #button_star, #button_sharing').remove();
-
-		$('#button_share, #button_share_album')
-			.removeClass('button--eye')
-			.addClass('button--share')
-			.find('use')
-			.attr('xlink:href', '#share');
+		$('#button_sharing').remove();
 
 		$(document)
 			.off('click',		'.header__title--editable')
