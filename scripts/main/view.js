@@ -379,6 +379,12 @@ view.album = {
 						parseFloat($('.unjustified-layout').css('margin-right'), 10) -
 						parseFloat($('.content').css('padding-right'), 10)
 				}
+				// For whatever reason, the calculation of margin is
+				// super-slow in Firefox (tested with 68), so we make sure to
+				// do it just once, outside the loop.  Height doesn't seem to
+				// be affected, but we do it the same way for consistency.
+				let margin = parseFloat($('.photo').css('margin-right'), 10);
+				let origHeight = parseFloat($('.photo').css('max-height'), 10);
 				$('.unjustified-layout > div').each(function (i) {
 					if (!album.json.photos[i]) {
 						// Race condition in search.find -- window content
@@ -396,9 +402,8 @@ view.album = {
 						}
 					}
 
-					let height = parseFloat($(this).css('max-height'), 10);
+					let height = origHeight;
 					let width = height * ratio;
-					let margin = parseFloat($(this).css('margin-right'), 10);
 					let imgs = $(this).find(".thumbimg > img");
 
 					if (width > containerWidth - margin) {
