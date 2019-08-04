@@ -603,20 +603,132 @@ photo.setStar = function(photoIDs) {
 
 photo.setPublic = function(photoID, e) {
 
-	if (photo.json.public==='2') {
+	let msg_switch = `
+			<div class='switch'>
+				<label>
+					<span class='label'>${lychee.locale['PHOTO_PUBLIC']}:</span>
+					<input type='checkbox' name='public'>
+					<span class='slider round'></span>
+				</label>
+				<p>${lychee.locale['PHOTO_PUBLIC_EXPL']}</p>
+			</div>
+		`;
+
+	let msg_choices = `
+			<div class='choice'>
+				<label>
+					<input type='checkbox' name='full_photo' disabled>
+					<span class='checkbox'>${build.iconic('check')}</span>
+					<span class='label'>${lychee.locale['PHOTO_FULL']}</span>
+				</label>
+				<p>${lychee.locale['PHOTO_FULL_EXPL']}</p>
+			</div>
+			<div class='choice'>
+				<label>
+					<input type='checkbox' name='hidden' disabled>
+					<span class='checkbox'>${build.iconic('check')}</span>
+					<span class='label'>${lychee.locale['PHOTO_HIDDEN']}</span>
+				</label>
+				<p>${lychee.locale['PHOTO_HIDDEN_EXPL']}</p>
+			</div>
+			<div class='choice'>
+				<label>
+					<input type='checkbox' name='downloadable' disabled>
+					<span class='checkbox'>${build.iconic('check')}</span>
+					<span class='label'>${lychee.locale['PHOTO_DOWNLOADABLE']}</span>
+				</label>
+				<p>${lychee.locale['PHOTO_DOWNLOADABLE_EXPL']}</p>
+			</div>
+			<div class='choice'>
+				<label>
+					<input type='checkbox' name='password' disabled>
+					<span class='checkbox'>${build.iconic('check')}</span>
+					<span class='label'>${lychee.locale['PHOTO_PASSWORD_PROT']}</span>
+				</label>
+				<p>${lychee.locale['PHOTO_PASSWORD_PROT_EXPL']}</p>
+			</div>
+		`;
+
+	if (photo.json.public === '2') {
+		// Public album. We can't actually change anything but we will
+		// display the current settings.
+
+		let msg = `
+				<p class='less'>${lychee.locale['PHOTO_NO_EDIT_SHARING_TEXT']}</p>
+				${msg_switch}
+				${msg_choices}
+			`;
+
+		basicModal.show({
+			body: msg,
+			buttons: {
+				cancel: {
+					title: lychee.locale['CLOSE'],
+					fn: basicModal.close
+				}
+			}
+		});
+
+		$('.basicModal .switch input[name="public"]').prop('checked', true);
+		if (album.json) {
+			if (album.json.full_photo !== null && album.json.full_photo === '1') {
+				$('.basicModal .choice input[name="full_photo"]').prop('checked', true)
+			}
+			// Photos in public albums are never hidden as such.  It's the
+			// album that's hidden.  Or is that distinction irrelevant to end
+			// users?
+			if (album.json.downloadable === '1') {
+				$('.basicModal .choice input[name="downloadable"]').prop('checked', true)
+			}
+			if (album.json.password === '1') {
+				$('.basicModal .choice input[name="password"]').prop('checked', true)
+			}
+		}
+
+		$('.basicModal .switch input').attr('disabled', true);
+		$('.basicModal .switch .label').addClass('label--disabled')
+	} else {
+		// Private album -- each photo can be shared individually.
+
+		let msg = `
+				<p>${lychee.locale['PHOTO_EDIT_SHARING_TEXT']}</p>
+				${msg_switch}
+				<p>${lychee.locale['PHOTO_EDIT_GLOBAL_SHARING_TEXT']}</p>
+				${msg_choices}
+			`;
 
 		const action = function() {
 
-			basicModal.close();
-			lychee.goto(photo.json.original_album)
+			let newPublic = $('.basicModal .switch input[name="public"]:checked').length === 1 ? '1' : '0';
 
+			if (newPublic !== photo.json.public) {
+				if (visible.photo()) {
+					photo.json.public = newPublic;
+					view.photo.public()
+				}
+
+				album.getByID(photoID).public = newPublic;
+				view.album.content.public(photoID);
+
+				albums.refresh();
+
+				// Photo::setPublic simply flips the current state.
+				// Ugly API but effective...
+				api.post('Photo::setPublic', { photoID }, function(data) {
+
+					if (data!==true) lychee.error(null, params, data)
+
+				})
+			}
+
+			basicModal.close()
 		};
 
 		basicModal.show({
-			body: '<p>' + lychee.locale['PHOTO_MAKE_PRIVATE_ALBUM'] + '</p>',
+			body: msg,
 			buttons: {
 				action: {
-					title: lychee.locale['PHOTO_SHOW_ALBUM'],
+					title: lychee.locale['EDIT_SHARING_TITLE'],
 					fn: action
 				},
 				cancel: {
@@ -626,29 +738,28 @@ photo.setPublic = function(photoID, e) {
 			}
 		});
 
-		return false
+		$('.basicModal .switch input[name="public"]').on('click', function() {
+			if ($(this).prop('checked') === true) {
+				if (lychee.full_photo) {
+					$('.basicModal .choice input[name="full_photo"]').prop('checked', true)
+				}
+				// Photos shared individually are always hidden.
+				$('.basicModal .choice input[name="hidden"]').prop('checked', true);
+				if (lychee.downloadable) {
+					$('.basicModal .choice input[name="downloadable"]').prop('checked', true)
+				}
+				// Photos shared individually can't be password-protected.
+			} else {
+				$('.basicModal .choice input').prop('checked', false)
+			}
+		});
 
+		if (photo.json.public === '1') {
+			$('.basicModal .switch input[name="public"]').click()
+		}
 	}
 
-	if (visible.photo()) {
-
-		photo.json.public = (photo.json.public==='0' ? '1' : '0');
-		view.photo.public();
-		if (photo.json.public==='1') contextMenu.sharePhoto(photoID, e)
-
-	}
-
-	album.getByID(photoID).public = (album.getByID(photoID).public==='0' ? '1' : '0');
-	view.album.content.public(photoID);
-
-	albums.refresh();
-
-	api.post('Photo::setPublic', { photoID }, function(data) {
-
-		if (data!==true) lychee.error(null, params, data)
-
-	})
-
+	return true
 };
 
 photo.setDescription = function(photoID) {

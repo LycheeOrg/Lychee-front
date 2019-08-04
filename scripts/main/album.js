@@ -571,13 +571,33 @@ album.setPublic = function (albumID, e) {
 			}
 		});
 
-		if (album.json.full_photo !== null && album.json.full_photo === '1') $('.basicModal .choice input[name="full_photo"]').click();
-		if (album.json.visible === '0') $('.basicModal .choice input[name="hidden"]').click();
-		if (album.json.downloadable === '1') $('.basicModal .choice input[name="downloadable"]').click();
-		if (album.json.password === '1') {
-			$('.basicModal .choice input[name="password"]').click();
-			$('.basicModal .choice input[name="passwordtext"]').show()
-		}
+		$('.basicModal .switch input[name="public"]').on('click', function () {
+			if ($(this).prop('checked') === true) {
+				$('.basicModal .choice input').attr('disabled', false);
+
+				if (album.json.public === '1') {
+					// Initialize options based on album settings.
+					if (album.json.full_photo !== null && album.json.full_photo === '1') $('.basicModal .choice input[name="full_photo"]').prop('checked', true);
+					if (album.json.visible === '0') $('.basicModal .choice input[name="hidden"]').prop('checked', true);
+					if (album.json.downloadable === '1') $('.basicModal .choice input[name="downloadable"]').prop('checked', true);
+					if (album.json.password === '1') {
+						$('.basicModal .choice input[name="password"]').prop('checked', true);
+						$('.basicModal .choice input[name="passwordtext"]').show()
+					}
+				} else {
+					// Initialize options based on global settings.
+					if (lychee.full_photo) {
+						$('.basicModal .choice input[name="full_photo"]').prop('checked', true)
+					}
+					if (lychee.downloadable) {
+						$('.basicModal .choice input[name="downloadable"]').prop('checked', true)
+					}
+				}
+			} else {
+				$('.basicModal .choice input').prop('checked', false).attr('disabled', true);
+				$('.basicModal .choice input[name="passwordtext"]').hide()
+			}
+		});
 
 		if (album.json.public === '1') {
 			$('.basicModal .switch input[name="public"]').click()
@@ -590,14 +610,6 @@ album.setPublic = function (albumID, e) {
 			if ($(this).prop('checked') === true) $('.basicModal .choice input[name="passwordtext"]').show().focus();
 			else $('.basicModal .choice input[name="passwordtext"]').hide()
 
-		});
-
-		$('.basicModal .switch input[name="public"]').on('click', function () {
-			if ($(this).prop('checked') === true) {
-				$('.basicModal .choice input').attr('disabled', false)
-			} else {
-				$('.basicModal .choice input').attr('disabled', true)
-			}
 		});
 
 		return true
@@ -653,7 +665,7 @@ album.setPublic = function (albumID, e) {
 		downloadable: album.json.downloadable
 	};
 	if (oldPassword !== album.json.password || password.length > 0) {
-		// We only send the password if there's been a change; that way the
+		// We send the password only if there's been a change; that way the
 		// server will keep the current password if it wasn't changed.
 		params.password = password
 	}

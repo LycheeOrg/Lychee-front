@@ -459,6 +459,18 @@
 			border-radius: 50%;
 		}
 
+		label input:disabled ~ .slider {
+			background: black(.2);
+			.iconic {
+				opacity: 0.3;
+			}
+			cursor: not-allowed;
+		}
+
+		.label--disabled {
+			color: white(.6);
+		}
+
 		p {
 			clear: both;
 			padding: 2px 0 0;

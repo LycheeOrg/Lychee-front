@@ -30,7 +30,7 @@ header.bind = function() {
 	});
 
 	header.dom('#button_visibility').on(eventName, function(e) {
-		photo.setPublic(photo.getID(), true, e)
+		photo.setPublic(photo.getID(), e)
 	});
 	header.dom('#button_share').on(eventName, function(e) {
 		contextMenu.sharePhoto(photo.getID(), e)

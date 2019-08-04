@@ -425,14 +425,8 @@ contextMenu.sharePhoto = function(photoID, e) {
 		{ title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => photo.share(photoID, 'facebook') },
 		{ title: build.iconic('envelope-closed') + 'Mail', fn: () => photo.share(photoID, 'mail') },
 		{ title: build.iconic('dropbox', iconClass) + 'Dropbox', visible: lychee.admin === true, fn: () => photo.share(photoID, 'dropbox') },
-		{ title: build.iconic('link-intact') + lychee.locale['DIRECT_LINK'], fn: () => window.open(photo.getDirectLink()) },
-		{ },
-		{ title: build.iconic('ban') + lychee.locale['MAKE_PRIVATE'], fn: () => photo.setPublic(photoID) }
+		{ title: build.iconic('link-intact') + lychee.locale['DIRECT_LINK'], fn: () => window.open(photo.getDirectLink()) }
 	];
-
-	if (!album.isUploadable()) {
-		items.splice(7, 2);
-	}
 
 	basicContext.show(items, e.originalEvent);
 	$('.basicContext input#link').focus().select()
