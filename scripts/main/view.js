@@ -635,15 +635,13 @@ view.photo = {
 
 	public: function () {
 
-		$('#button_visibility').removeClass('active active--not-hidden active--hidden');
+		$('#button_visibility').removeClass('active active--not-hidden');
 
 		if (photo.json.public === '1' || photo.json.public === '2') {
 
 			// Photo public
 			if (photo.json.public === '1') {
 				$('#button_visibility').addClass('active')
-			} else if (album.json && album.json.visible === '0') {
-				$('#button_visibility').addClass('active--hidden')
 			} else {
 				$('#button_visibility').addClass('active--not-hidden')
 			}
