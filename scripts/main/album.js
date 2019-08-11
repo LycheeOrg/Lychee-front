@@ -511,51 +511,51 @@ album.setPublic = function (albumID, e) {
 		action.title = lychee.locale['EDIT_SHARING_TITLE'];
 
 		let msg = `
-				  <p class='less'>${lychee.locale['EDIT_SHARING_TEXT']}</p>
-				  <form>
-					  <div class='switch'>
-						  <label>
-							  ${lychee.locale['ALBUM_PUBLIC']}:
-							  <input type='checkbox' name='public'>
-							  <span class='slider round'></span>
-						  </label>
-						  <p>${lychee.locale['ALBUM_PUBLIC_EXPL']}</p>
-					  </div>
-					  <div class='choice'>
-						  <label>
-							  <input type='checkbox' name='full_photo'>
-							  <span class='checkbox'>${build.iconic('check')}</span>
-							  <span class='label'>${lychee.locale['ALBUM_FULL']}</span>
-						  </label>
-						  <p>${lychee.locale['ALBUM_FULL_EXPL']}</p>
-					  </div>
-					  <div class='choice'>
-						  <label>
-							  <input type='checkbox' name='hidden'>
-							  <span class='checkbox'>${build.iconic('check')}</span>
-							  <span class='label'>${lychee.locale['ALBUM_HIDDEN']}</span>
-						  </label>
-						  <p>${lychee.locale['ALBUM_HIDDEN_EXPL']}</p>
-					  </div>
-					  <div class='choice'>
-						  <label>
-							  <input type='checkbox' name='downloadable'>
-							  <span class='checkbox'>${build.iconic('check')}</span>
-							  <span class='label'>${lychee.locale['ALBUM_DOWNLOADABLE']}</span>
-						  </label>
-						  <p>${lychee.locale['ALBUM_DOWNLOADABLE_EXPL']}</p>
-					  </div>
-					  <div class='choice'>
-						  <label>
-							  <input type='checkbox' name='password'>
-							  <span class='checkbox'>${build.iconic('check')}</span>
-							  <span class='label'>${lychee.locale['ALBUM_PASSWORD_PROT']}</span>
-						  </label>
-						  <p>${lychee.locale['ALBUM_PASSWORD_PROT_EXPL']}</p>
-						  <input class='text' name='passwordtext' type='text' placeholder='password' value=''>
-					  </div>
-				  </form>
-				  `;
+			<p class='less'>${lychee.locale['EDIT_SHARING_TEXT']}</p>
+			<form>
+				<div class='switch'>
+					<label>
+						${lychee.locale['ALBUM_PUBLIC']}:
+						<input type='checkbox' name='public'>
+						<span class='slider round'></span>
+					</label>
+					<p>${lychee.locale['ALBUM_PUBLIC_EXPL']}</p>
+				</div>
+				<div class='choice'>
+					<label>
+						<input type='checkbox' name='full_photo'>
+						<span class='checkbox'>${build.iconic('check')}</span>
+						<span class='label'>${lychee.locale['ALBUM_FULL']}</span>
+					</label>
+					<p>${lychee.locale['ALBUM_FULL_EXPL']}</p>
+				</div>
+				<div class='choice'>
+					<label>
+						<input type='checkbox' name='hidden'>
+						<span class='checkbox'>${build.iconic('check')}</span>
+						<span class='label'>${lychee.locale['ALBUM_HIDDEN']}</span>
+					</label>
+					<p>${lychee.locale['ALBUM_HIDDEN_EXPL']}</p>
+				</div>
+				<div class='choice'>
+					<label>
+						<input type='checkbox' name='downloadable'>
+						<span class='checkbox'>${build.iconic('check')}</span>
+						<span class='label'>${lychee.locale['ALBUM_DOWNLOADABLE']}</span>
+					</label>
+					<p>${lychee.locale['ALBUM_DOWNLOADABLE_EXPL']}</p>
+				</div>
+				<div class='choice'>
+					<label>
+						<input type='checkbox' name='password'>
+						<span class='checkbox'>${build.iconic('check')}</span>
+						<span class='label'>${lychee.locale['ALBUM_PASSWORD_PROT']}</span>
+					</label>
+					<p>${lychee.locale['ALBUM_PASSWORD_PROT_EXPL']}</p>
+					<input class='text' name='passwordtext' type='text' placeholder='password' value=''>
+				</div>
+			</form>
+		`;
 
 		basicModal.show({
 			body: msg,

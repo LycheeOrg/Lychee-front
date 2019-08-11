@@ -663,14 +663,71 @@ lychee.footer_hide = function () {
 	lychee.footer.addClass('hide_footer')
 };
 
+
 // Because the height of the footer can vary, we need to set some
 // dimensions dynamically, at startup.
 lychee.adjustContentHeight = function() {
 	if (lychee.footer.length > 0) {
 		lychee.content.css('min-height', 'calc(100vh - ' + lychee.content.css('padding-top') + ' - ' + lychee.content.css('padding-bottom') + ' - ' + lychee.footer.outerHeight() + 'px)');
 		$('#container').css('padding-bottom', lychee.footer.outerHeight())
-	}
-	else {
+	} else {
 		lychee.content.css('min-height', 'calc(100vh - ' + lychee.content.css('padding-top') + ' - ' + lychee.content.css('padding-bottom') + ')');
 	}
+};
+
+lychee.getBaseUrl = function() {
+	if (location.href.indexOf('index.html') > 0) {
+		return location.href.replace('index.html' + location.hash, '')
+	} else if (location.href.indexOf('gallery#') > 0) {
+		return location.href.replace('gallery' + location.hash, '')
+	} else {
+		return location.href.replace(location.hash, '')
+	}
+};
+
+// Copied from https://github.com/feross/clipboard-copy/blob/9eba597c774feed48301fef689099599d612387c/index.js
+lychee.clipboardCopy = function(text) {
+
+	// Use the Async Clipboard API when available. Requires a secure browsing
+	// context (i.e. HTTPS)
+	if (navigator.clipboard) {
+		return navigator.clipboard.writeText(text).catch(function (err) {
+			throw (err !== undefined ? err : new DOMException('The request is not allowed', 'NotAllowedError'))
+		})
+	}
+
+	// ...Otherwise, use document.execCommand() fallback
+
+	// Put the text to copy into a <span>
+	var span = document.createElement('span');
+	span.textContent = text;
+
+	// Preserve consecutive spaces and newlines
+	span.style.whiteSpace = 'pre';
+
+	// Add the <span> to the page
+	document.body.appendChild(span);
+
+	// Make a selection object representing the range of text selected by the user
+	var selection = window.getSelection();
+	var range = window.document.createRange();
+	selection.removeAllRanges();
+	range.selectNode(span);
+	selection.addRange(range);
+
+	// Copy text to the clipboard
+	var success = false;
+	try {
+		success = window.document.execCommand('copy')
+	} catch (err) {
+		console.log('error', err)
+	}
+
+	// Cleanup
+	selection.removeAllRanges();
+	window.document.body.removeChild(span);
+
+	return success
+//		? Promise.resolve()
+//		: Promise.reject(new DOMException('The request is not allowed', 'NotAllowedError'))
 };

@@ -604,60 +604,60 @@ photo.setStar = function(photoIDs) {
 photo.setPublic = function(photoID, e) {
 
 	let msg_switch = `
-			<div class='switch'>
-				<label>
-					<span class='label'>${lychee.locale['PHOTO_PUBLIC']}:</span>
-					<input type='checkbox' name='public'>
-					<span class='slider round'></span>
-				</label>
-				<p>${lychee.locale['PHOTO_PUBLIC_EXPL']}</p>
-			</div>
-		`;
+		<div class='switch'>
+			<label>
+				<span class='label'>${lychee.locale['PHOTO_PUBLIC']}:</span>
+				<input type='checkbox' name='public'>
+				<span class='slider round'></span>
+			</label>
+			<p>${lychee.locale['PHOTO_PUBLIC_EXPL']}</p>
+		</div>
+	`;
 
 	let msg_choices = `
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='full_photo' disabled>
-					<span class='checkbox'>${build.iconic('check')}</span>
-					<span class='label'>${lychee.locale['PHOTO_FULL']}</span>
-				</label>
-				<p>${lychee.locale['PHOTO_FULL_EXPL']}</p>
-			</div>
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='hidden' disabled>
-					<span class='checkbox'>${build.iconic('check')}</span>
-					<span class='label'>${lychee.locale['PHOTO_HIDDEN']}</span>
-				</label>
-				<p>${lychee.locale['PHOTO_HIDDEN_EXPL']}</p>
-			</div>
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='downloadable' disabled>
-					<span class='checkbox'>${build.iconic('check')}</span>
-					<span class='label'>${lychee.locale['PHOTO_DOWNLOADABLE']}</span>
-				</label>
-				<p>${lychee.locale['PHOTO_DOWNLOADABLE_EXPL']}</p>
-			</div>
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='password' disabled>
-					<span class='checkbox'>${build.iconic('check')}</span>
-					<span class='label'>${lychee.locale['PHOTO_PASSWORD_PROT']}</span>
-				</label>
-				<p>${lychee.locale['PHOTO_PASSWORD_PROT_EXPL']}</p>
-			</div>
-		`;
+		<div class='choice'>
+			<label>
+				<input type='checkbox' name='full_photo' disabled>
+				<span class='checkbox'>${build.iconic('check')}</span>
+				<span class='label'>${lychee.locale['PHOTO_FULL']}</span>
+			</label>
+			<p>${lychee.locale['PHOTO_FULL_EXPL']}</p>
+		</div>
+		<div class='choice'>
+			<label>
+				<input type='checkbox' name='hidden' disabled>
+				<span class='checkbox'>${build.iconic('check')}</span>
+				<span class='label'>${lychee.locale['PHOTO_HIDDEN']}</span>
+			</label>
+			<p>${lychee.locale['PHOTO_HIDDEN_EXPL']}</p>
+		</div>
+		<div class='choice'>
+			<label>
+				<input type='checkbox' name='downloadable' disabled>
+				<span class='checkbox'>${build.iconic('check')}</span>
+				<span class='label'>${lychee.locale['PHOTO_DOWNLOADABLE']}</span>
+			</label>
+			<p>${lychee.locale['PHOTO_DOWNLOADABLE_EXPL']}</p>
+		</div>
+		<div class='choice'>
+			<label>
+				<input type='checkbox' name='password' disabled>
+				<span class='checkbox'>${build.iconic('check')}</span>
+				<span class='label'>${lychee.locale['PHOTO_PASSWORD_PROT']}</span>
+			</label>
+			<p>${lychee.locale['PHOTO_PASSWORD_PROT_EXPL']}</p>
+		</div>
+	`;
 
 	if (photo.json.public === '2') {
 		// Public album. We can't actually change anything but we will
 		// display the current settings.
 
 		let msg = `
-				<p class='less'>${lychee.locale['PHOTO_NO_EDIT_SHARING_TEXT']}</p>
-				${msg_switch}
-				${msg_choices}
-			`;
+			<p class='less'>${lychee.locale['PHOTO_NO_EDIT_SHARING_TEXT']}</p>
+			${msg_switch}
+			${msg_choices}
+		`;
 
 		basicModal.show({
 			body: msg,
@@ -691,11 +691,11 @@ photo.setPublic = function(photoID, e) {
 		// Private album -- each photo can be shared individually.
 
 		let msg = `
-				<p>${lychee.locale['PHOTO_EDIT_SHARING_TEXT']}</p>
-				${msg_switch}
-				<p>${lychee.locale['PHOTO_EDIT_GLOBAL_SHARING_TEXT']}</p>
-				${msg_choices}
-			`;
+			<p>${lychee.locale['PHOTO_EDIT_SHARING_TEXT']}</p>
+			${msg_switch}
+			<p>${lychee.locale['PHOTO_EDIT_GLOBAL_SHARING_TEXT']}</p>
+			${msg_choices}
+		`;
 
 		const action = function() {
 
@@ -994,20 +994,84 @@ photo.setLicense = function(photoID) {
 
 };
 
-photo.getArchive = function(photoIDs, kind) {
+photo.getArchive = function(photoIDs, kind = null) {
+
+	if (photoIDs.length === 1 && kind === null) {
+		// For a single photo, allow to pick the kind via a dialog box.
+
+		let myPhoto;
+
+		if (photo.json && photo.json.id === photoIDs[0]) {
+			myPhoto = photo.json
+		} else {
+			myPhoto = album.getByID(photoIDs[0])
+		}
+
+		const buildButton = function(id, label) {
+			return `
+				<a class='basicModal__button' id='${ id }' title='Download'>
+					${ build.iconic('cloud-download') }${ label }
+				</a>
+			`
+		};
+
+		let msg = `
+			<div class='downloads'>
+		`;
+
+		if (myPhoto.url) {
+			msg += buildButton('FULL', `Full-size (${ myPhoto.width }x${ myPhoto.height }, ${ myPhoto.size })`)
+		}
+		if (myPhoto.hasOwnProperty('medium2x') && myPhoto.medium2x !== '') {
+			msg += buildButton('MEDIUM2X', `Intermediate (${ myPhoto.medium2x_dim })`)
+		}
+		if (myPhoto.medium !== '') {
+			msg += buildButton('MEDIUM', `Intermediate (${ myPhoto.medium_dim })`)
+		}
+		if (myPhoto.hasOwnProperty('small2x') && myPhoto.small2x !== '') {
+			msg += buildButton('SMALL2X', `Thumb (${ myPhoto.small2x_dim })`)
+		}
+		if (myPhoto.small !== '') {
+			msg += buildButton('SMALL', `Thumb (${ myPhoto.small_dim })`)
+		}
+		if (myPhoto.hasOwnProperty('thumb2x') && myPhoto.thumb2x !== '') {
+			msg += buildButton('THUMB2X', 'Square thumb (400x400)')
+		}
+		if (myPhoto.thumbUrl !== '') {
+			msg += buildButton('THUMB', 'Square thumb (200x200)')
+		}
+
+		msg += `
+			</div>
+		`;
+
+		basicModal.show({
+			body: msg,
+			buttons: {
+				cancel: {
+					title: lychee.locale['CLOSE'],
+					fn: basicModal.close
+				}
+			}
+		});
+
+		$('.downloads .basicModal__button').on(lychee.getEventName(), function() {
+			kind = this.id;
+			basicModal.close();
+			photo.getArchive(photoIDs, kind)
+		});
+
+		return true
+	}
 
 	let link;
 
-	if(lychee.api_V2)
-	{
+	if (lychee.api_V2) {
 		location.href = api.get_url('Photo::getArchive') + lychee.html`?photoIDs=${photoIDs.join()}&kind=${ kind }`
-	}
-	else
-	{
+	} else {
 		let url = `${ api.path }?function=Photo::getArchive&photoID=${ photoIDs[0] }&kind=${ kind }`;
 
-		if (location.href.indexOf('index.html')>0) link = location.href.replace(location.hash, '').replace('index.html', url);
-		else                                       link = location.href.replace(location.hash, '') + url;
+		link = lychee.getBaseUrl() + url;
 
 		if (lychee.publicMode===true) link += `&password=${ encodeURIComponent(password.value) }`;
 
@@ -1034,8 +1098,81 @@ photo.getViewLink = function(photoID) {
 		url = 'view?p=' + photoID;
 	}
 
-	if (location.href.indexOf('index.html')>0) return location.href.replace('index.html' + location.hash, url);
-	if (location.href.indexOf('gallery')>0) return location.href.replace('gallery' + location.hash, url);
-	return location.href.replace(location.hash, url)
+	return lychee.getBaseUrl() + url
+};
+
+photo.showDirectLinks = function(photoID) {
+	if (!photo.json || photo.json.id != photoID) {
+		return;
+	}
+
+	const buildLine = function(label, url) {
+		return `
+			<p>
+				${ label }
+				<br />
+				<input class='text' readonly value='${ url }'>
+				<a class='basicModal__button' title='Copy to clipboard'>
+					${ build.iconic('link-intact') }
+				</a>
+			</p>
+		`
+	};
+
+
+	let msg = `
+		<div class='directLinks'>
+			${ buildLine('Lychee Photo View:', photo.getViewLink(photoID)) }
+			<p class='less'>
+				Direct links to image files:
+			</p>
+			<div class='imageLinks'>
+	`;
+
+	if (photo.json.url) {
+		msg += buildLine(`Full-size (${ photo.json.width }x${ photo.json.height })`, lychee.getBaseUrl() + photo.json.url)
+	}
+	if (photo.json.hasOwnProperty('medium2x') && photo.json.medium2x !== '') {
+		msg += buildLine(`Intermediate (${ photo.json.medium2x_dim })`, lychee.getBaseUrl() + photo.json.medium2x)
+	}
+	if (photo.json.medium !== '') {
+		msg += buildLine(`Intermediate (${ photo.json.medium_dim })`, lychee.getBaseUrl() + photo.json.medium)
+	}
+	if (photo.json.hasOwnProperty('small2x') && photo.json.small2x !== '') {
+		msg += buildLine(`Thumb (${ photo.json.small2x_dim })`, lychee.getBaseUrl() + photo.json.small2x)
+	}
+	if (photo.json.small !== '') {
+		msg += buildLine(`Thumb (${ photo.json.small_dim })`, lychee.getBaseUrl() + photo.json.small)
+	}
+	if (photo.json.hasOwnProperty('thumb2x') && photo.json.thumb2x !== '') {
+		msg += buildLine('Square thumb (400x400)', lychee.getBaseUrl() + photo.json.thumb2x)
+	}
+	if (photo.json.thumbUrl !== '') {
+		msg += buildLine('Square thumb (200x200)', lychee.getBaseUrl() + photo.json.thumbUrl)
+	}
+
+	msg += `
+		</div>
+		</div>
+	`;
+
+	basicModal.show({
+		body: msg,
+		buttons: {
+			cancel: {
+				title: lychee.locale['CLOSE'],
+				fn: basicModal.close
+			}
+		}
+	});
+
+	// Ensure that no input line is selected on opening.
+	$('.basicModal input:focus').blur();
+
+	$('.directLinks .basicModal__button').on(lychee.getEventName(), function() {
+		if (lychee.clipboardCopy($(this).prev().val())) {
+			loadingBar.show('success', 'Copied URL to clipboard!')
+		}
+	});
 
 };
