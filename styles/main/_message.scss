@@ -1,11 +1,20 @@
 .basicModalContainer {
 	background-color: black(.85);
+
+	&--error {
+		transform: translateY(40px);
+	}
+
 }
 
 .basicModal {
 
 	background: linear-gradient(to bottom, #444, #333);
 	box-shadow: 0 1px 4px black(.2), inset 0 1px 0 white(.05);
+
+	&--error {
+		transform: translateY(-40px);
+	}
 
 	// Reset -------------------------------------------------------------- //
 	&__content {

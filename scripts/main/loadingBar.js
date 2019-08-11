@@ -30,6 +30,12 @@ loadingBar.show = function(status, errorText) {
 		// Move header down
 		if (visible.header()) header.dom().addClass('header--error');
 
+		// Also move down the dark background
+		if (basicModal.visible()) {
+			$('.basicModalContainer').addClass('basicModalContainer--error');
+			$('.basicModal').addClass('basicModal--error')
+		}
+
 		// Modify loading
 		loadingBar.dom()
 			.removeClass('loading uploading error success')
@@ -55,6 +61,12 @@ loadingBar.show = function(status, errorText) {
 
 		// Move header down
 		if (visible.header()) header.dom().addClass('header--error');
+
+		// Also move down the dark background
+		if (basicModal.visible()) {
+			$('.basicModalContainer').addClass('basicModalContainer--error');
+			$('.basicModal').addClass('basicModal--error')
+		}
 
 		// Modify loading
 		loadingBar.dom()
@@ -107,6 +119,10 @@ loadingBar.hide = function(force) {
 
 		// Move header up
 		header.dom().removeClass('header--error header--loading');
+		// Also move up the dark background
+		$('.basicModalContainer').removeClass('basicModalContainer--error');
+		$('.basicModal').removeClass('basicModal--error');
+
 
 		// Set timeout
 		clearTimeout(loadingBar._timeout);
