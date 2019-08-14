@@ -281,8 +281,8 @@ view.album = {
 
 			let $badge = $('.photo[data-id="' + photoID + '"] .icn-share');
 
-			if (album.getByID(photoID).public === '1') $badge.addClass('badge--visible');
-			else $badge.removeClass('badge--visible')
+			if (album.getByID(photoID).public === '1') $badge.addClass('badge--visible badge--hidden');
+			else $badge.removeClass('badge--visible badge--hidden')
 
 		},
 
@@ -635,13 +635,13 @@ view.photo = {
 
 	public: function () {
 
-		$('#button_visibility').removeClass('active active--not-hidden');
+		$('#button_visibility').removeClass('active--hidden active--not-hidden');
 
 		if (photo.json.public === '1' || photo.json.public === '2') {
 
 			// Photo public
 			if (photo.json.public === '1') {
-				$('#button_visibility').addClass('active')
+				$('#button_visibility').addClass('active--hidden')
 			} else {
 				$('#button_visibility').addClass('active--not-hidden')
 			}

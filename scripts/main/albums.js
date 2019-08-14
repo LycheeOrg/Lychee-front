@@ -102,7 +102,7 @@ albums._createSmartAlbums = function (data) {
 			public: '1',
 			thumbs: data.public.thumbs,
 			thumbs2x: data.public.thumbs2x ? data.public.thumbs2x : null,
-			hidden: '1',
+			hidden: '0',
 			types: data.public.types
 		}
 	}

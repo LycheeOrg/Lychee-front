@@ -67,6 +67,11 @@
 		&.less {
 			padding-bottom: 30px;
 		}
+
+		&.photoPublic {
+			padding: 0 30px;
+			margin: 30px 0;
+		}
 	}
 
 	// Buttons -------------------------------------------------------------- //
@@ -404,9 +409,14 @@
 
 	// Sliders ----------------------------------------------------------- //
 	.switch {
-		padding: 0 30px 15px;
+		padding: 0 30px;
+		margin-bottom: 15px;
 		width: 100%;
 		color: #fff;
+
+		&:first-child {
+			padding-top: 42px;
+		}
 
 		input {
 			opacity: 0;
