@@ -499,19 +499,7 @@ album.setPublic = function (albumID, e) {
 
 	if (!basicModal.visible()) {
 
-		let action = {};
-
-		action.fn = () => {
-
-			// Call setPublic function without showing the modal
-			album.setPublic(albumID, e)
-
-		};
-
-		action.title = lychee.locale['EDIT_SHARING_TITLE'];
-
 		let msg = `
-			<p class='less'>${lychee.locale['EDIT_SHARING_TEXT']}</p>
 			<form>
 				<div class='switch'>
 					<label>
@@ -552,7 +540,7 @@ album.setPublic = function (albumID, e) {
 						<span class='label'>${lychee.locale['ALBUM_PASSWORD_PROT']}</span>
 					</label>
 					<p>${lychee.locale['ALBUM_PASSWORD_PROT_EXPL']}</p>
-					<input class='text' name='passwordtext' type='text' placeholder='password' value=''>
+					<input class='text' name='passwordtext' type='text' placeholder='${ lychee.locale['PASSWORD'] }' value=''>
 				</div>
 			</form>
 		`;
@@ -561,8 +549,9 @@ album.setPublic = function (albumID, e) {
 			body: msg,
 			buttons: {
 				action: {
-					title: action.title,
-					fn: action.fn
+					title: lychee.locale['ALBUM_SHARING_CONFIRM'],
+					// Call setPublic function without showing the modal
+					fn: () => album.setPublic(albumID, e)
 				},
 				cancel: {
 					title: lychee.locale['CANCEL'],

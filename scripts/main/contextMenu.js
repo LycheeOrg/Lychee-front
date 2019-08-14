@@ -432,7 +432,7 @@ contextMenu.shareAlbum = function(albumID, e) {
 		{ title: build.iconic('twitter', iconClass) + 'Twitter', fn: () => album.share('twitter') },
 		{ title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => album.share('facebook') },
 		{ title: build.iconic('envelope-closed') + 'Mail', fn: () => album.share('mail') },
-		{ title: build.iconic('link-intact') + lychee.locale['DIRECT_LINK'], fn: () => { if (lychee.clipboardCopy(location.href)) loadingBar.show('success', 'Copied URL to clipboard!') } }
+		{ title: build.iconic('link-intact') + lychee.locale['DIRECT_LINK'], fn: () => { if (lychee.clipboardCopy(location.href)) loadingBar.show('success', lychee.locale['URL_COPIED_TO_CLIPBOARD']) } }
 	];
 
 	basicContext.show(items, e.originalEvent)

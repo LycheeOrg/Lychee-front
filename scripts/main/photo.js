@@ -691,9 +691,8 @@ photo.setPublic = function(photoID, e) {
 		// Private album -- each photo can be shared individually.
 
 		let msg = `
-			<p>${lychee.locale['PHOTO_EDIT_SHARING_TEXT']}</p>
 			${msg_switch}
-			<p>${lychee.locale['PHOTO_EDIT_GLOBAL_SHARING_TEXT']}</p>
+			<p class='photoPublic'>${lychee.locale['PHOTO_EDIT_GLOBAL_SHARING_TEXT']}</p>
 			${msg_choices}
 		`;
 
@@ -728,7 +727,7 @@ photo.setPublic = function(photoID, e) {
 			body: msg,
 			buttons: {
 				action: {
-					title: lychee.locale['EDIT_SHARING_TITLE'],
+					title: lychee.locale['PHOTO_SHARING_CONFIRM'],
 					fn: action
 				},
 				cancel: {
@@ -1009,7 +1008,7 @@ photo.getArchive = function(photoIDs, kind = null) {
 
 		const buildButton = function(id, label) {
 			return `
-				<a class='basicModal__button' id='${ id }' title='Download'>
+				<a class='basicModal__button' id='${ id }' title='${ lychee.locale['DOWNLOAD'] }'>
 					${ build.iconic('cloud-download') }${ label }
 				</a>
 			`
@@ -1020,25 +1019,25 @@ photo.getArchive = function(photoIDs, kind = null) {
 		`;
 
 		if (myPhoto.url) {
-			msg += buildButton('FULL', `Full-size (${ myPhoto.width }x${ myPhoto.height }, ${ myPhoto.size })`)
+			msg += buildButton('FULL', `${ lychee.locale['PHOTO_FULL'] } (${ myPhoto.width }x${ myPhoto.height }, ${ myPhoto.size })`)
 		}
 		if (myPhoto.hasOwnProperty('medium2x') && myPhoto.medium2x !== '') {
-			msg += buildButton('MEDIUM2X', `Intermediate (${ myPhoto.medium2x_dim })`)
+			msg += buildButton('MEDIUM2X', `${ lychee.locale['PHOTO_MEDIUM_HIDPI'] } (${ myPhoto.medium2x_dim })`)
 		}
 		if (myPhoto.medium !== '') {
-			msg += buildButton('MEDIUM', `Intermediate (${ myPhoto.medium_dim })`)
+			msg += buildButton('MEDIUM', `${ lychee.locale['PHOTO_MEDIUM'] } (${ myPhoto.medium_dim })`)
 		}
 		if (myPhoto.hasOwnProperty('small2x') && myPhoto.small2x !== '') {
-			msg += buildButton('SMALL2X', `Thumb (${ myPhoto.small2x_dim })`)
+			msg += buildButton('SMALL2X', `${ lychee.locale['PHOTO_SMALL_HIDPI'] } (${ myPhoto.small2x_dim })`)
 		}
 		if (myPhoto.small !== '') {
-			msg += buildButton('SMALL', `Thumb (${ myPhoto.small_dim })`)
+			msg += buildButton('SMALL', `${ lychee.locale['PHOTO_SMALL'] } (${ myPhoto.small_dim })`)
 		}
 		if (myPhoto.hasOwnProperty('thumb2x') && myPhoto.thumb2x !== '') {
-			msg += buildButton('THUMB2X', 'Square thumb (400x400)')
+			msg += buildButton('THUMB2X', `${ lychee.locale['PHOTO_THUMB_HIDPI'] } (400x400)`)
 		}
 		if (myPhoto.thumbUrl !== '') {
-			msg += buildButton('THUMB', 'Square thumb (200x200)')
+			msg += buildButton('THUMB', `${ lychee.locale['PHOTO_THUMB'] } (200x200)`)
 		}
 
 		msg += `
@@ -1112,8 +1111,8 @@ photo.showDirectLinks = function(photoID) {
 				${ label }
 				<br />
 				<input class='text' readonly value='${ url }'>
-				<a class='basicModal__button' title='Copy to clipboard'>
-					${ build.iconic('link-intact') }
+				<a class='basicModal__button' title='${ lychee.locale['URL_COPY_TO_CLIPBOARD'] }'>
+					${ build.iconic('copy', 'ionicons') }
 				</a>
 			</p>
 		`
@@ -1122,33 +1121,33 @@ photo.showDirectLinks = function(photoID) {
 
 	let msg = `
 		<div class='directLinks'>
-			${ buildLine('Lychee Photo View:', photo.getViewLink(photoID)) }
+			${ buildLine(lychee.locale['PHOTO_VIEW'], photo.getViewLink(photoID)) }
 			<p class='less'>
-				Direct links to image files:
+				${ lychee.locale['PHOTO_DIRECT_LINKS_TO_IMAGES'] }
 			</p>
 			<div class='imageLinks'>
 	`;
 
 	if (photo.json.url) {
-		msg += buildLine(`Full-size (${ photo.json.width }x${ photo.json.height })`, lychee.getBaseUrl() + photo.json.url)
+		msg += buildLine(`${ lychee.locale['PHOTO_FULL'] } (${ photo.json.width }x${ photo.json.height })`, lychee.getBaseUrl() + photo.json.url)
 	}
 	if (photo.json.hasOwnProperty('medium2x') && photo.json.medium2x !== '') {
-		msg += buildLine(`Intermediate (${ photo.json.medium2x_dim })`, lychee.getBaseUrl() + photo.json.medium2x)
+		msg += buildLine(`${ lychee.locale['PHOTO_MEDIUM_HIDPI'] } (${ photo.json.medium2x_dim })`, lychee.getBaseUrl() + photo.json.medium2x)
 	}
 	if (photo.json.medium !== '') {
-		msg += buildLine(`Intermediate (${ photo.json.medium_dim })`, lychee.getBaseUrl() + photo.json.medium)
+		msg += buildLine(`${ lychee.locale['PHOTO_MEDIUM'] } (${ photo.json.medium_dim })`, lychee.getBaseUrl() + photo.json.medium)
 	}
 	if (photo.json.hasOwnProperty('small2x') && photo.json.small2x !== '') {
-		msg += buildLine(`Thumb (${ photo.json.small2x_dim })`, lychee.getBaseUrl() + photo.json.small2x)
+		msg += buildLine(`${ lychee.locale['PHOTO_SMALL_HIDPI'] } (${ photo.json.small2x_dim })`, lychee.getBaseUrl() + photo.json.small2x)
 	}
 	if (photo.json.small !== '') {
-		msg += buildLine(`Thumb (${ photo.json.small_dim })`, lychee.getBaseUrl() + photo.json.small)
+		msg += buildLine(`${ lychee.locale['PHOTO_SMALL'] } (${ photo.json.small_dim })`, lychee.getBaseUrl() + photo.json.small)
 	}
 	if (photo.json.hasOwnProperty('thumb2x') && photo.json.thumb2x !== '') {
-		msg += buildLine('Square thumb (400x400)', lychee.getBaseUrl() + photo.json.thumb2x)
+		msg += buildLine(`${ lychee.locale['PHOTO_THUMB_HIDPI'] } (400x400)`, lychee.getBaseUrl() + photo.json.thumb2x)
 	}
 	if (photo.json.thumbUrl !== '') {
-		msg += buildLine('Square thumb (200x200)', lychee.getBaseUrl() + photo.json.thumbUrl)
+		msg += buildLine(` ${ lychee.locale['PHOTO_THUMB'] } (200x200)`, lychee.getBaseUrl() + photo.json.thumbUrl)
 	}
 
 	msg += `
@@ -1171,7 +1170,7 @@ photo.showDirectLinks = function(photoID) {
 
 	$('.directLinks .basicModal__button').on(lychee.getEventName(), function() {
 		if (lychee.clipboardCopy($(this).prev().val())) {
-			loadingBar.show('success', 'Copied URL to clipboard!')
+			loadingBar.show('success', lychee.locale['URL_COPIED_TO_CLIPBOARD'])
 		}
 	});
 
