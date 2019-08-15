@@ -1025,19 +1025,21 @@ photo.getArchive = function(photoIDs, kind = null) {
 			msg += buildButton('MEDIUM2X', `${ lychee.locale['PHOTO_MEDIUM_HIDPI'] } (${ myPhoto.medium2x_dim })`)
 		}
 		if (myPhoto.medium !== '') {
-			msg += buildButton('MEDIUM', `${ lychee.locale['PHOTO_MEDIUM'] } (${ myPhoto.medium_dim })`)
+			msg += buildButton('MEDIUM', `${ lychee.locale['PHOTO_MEDIUM'] } ${ myPhoto.hasOwnProperty('medium_dim') ? '(' + myPhoto.medium_dim + ')' : '' }`)
 		}
 		if (myPhoto.hasOwnProperty('small2x') && myPhoto.small2x !== '') {
 			msg += buildButton('SMALL2X', `${ lychee.locale['PHOTO_SMALL_HIDPI'] } (${ myPhoto.small2x_dim })`)
 		}
 		if (myPhoto.small !== '') {
-			msg += buildButton('SMALL', `${ lychee.locale['PHOTO_SMALL'] } (${ myPhoto.small_dim })`)
+			msg += buildButton('SMALL', `${ lychee.locale['PHOTO_SMALL'] } ${ myPhoto.hasOwnProperty('small_dim') ? '(' + myPhoto.small_dim + ')' : '' }`)
 		}
-		if (myPhoto.hasOwnProperty('thumb2x') && myPhoto.thumb2x !== '') {
-			msg += buildButton('THUMB2X', `${ lychee.locale['PHOTO_THUMB_HIDPI'] } (400x400)`)
-		}
-		if (myPhoto.thumbUrl !== '') {
-			msg += buildButton('THUMB', `${ lychee.locale['PHOTO_THUMB'] } (200x200)`)
+		if (lychee.api_V2) {
+			if (myPhoto.hasOwnProperty('thumb2x') && myPhoto.thumb2x !== '') {
+				msg += buildButton('THUMB2X', `${ lychee.locale['PHOTO_THUMB_HIDPI'] } (400x400)`)
+			}
+			if (myPhoto.thumbUrl !== '') {
+				msg += buildButton('THUMB', `${ lychee.locale['PHOTO_THUMB'] } (200x200)`)
+			}
 		}
 
 		msg += `
@@ -1135,16 +1137,19 @@ photo.showDirectLinks = function(photoID) {
 		msg += buildLine(`${ lychee.locale['PHOTO_MEDIUM_HIDPI'] } (${ photo.json.medium2x_dim })`, lychee.getBaseUrl() + photo.json.medium2x)
 	}
 	if (photo.json.medium !== '') {
-		msg += buildLine(`${ lychee.locale['PHOTO_MEDIUM'] } (${ photo.json.medium_dim })`, lychee.getBaseUrl() + photo.json.medium)
+		msg += buildLine(`${ lychee.locale['PHOTO_MEDIUM'] } ${ photo.json.hasOwnProperty('medium_dim') ? '(' + photo.json.medium_dim + ')' : '' }`, lychee.getBaseUrl() + photo.json.medium)
 	}
 	if (photo.json.hasOwnProperty('small2x') && photo.json.small2x !== '') {
 		msg += buildLine(`${ lychee.locale['PHOTO_SMALL_HIDPI'] } (${ photo.json.small2x_dim })`, lychee.getBaseUrl() + photo.json.small2x)
 	}
 	if (photo.json.small !== '') {
-		msg += buildLine(`${ lychee.locale['PHOTO_SMALL'] } (${ photo.json.small_dim })`, lychee.getBaseUrl() + photo.json.small)
+		msg += buildLine(`${ lychee.locale['PHOTO_SMALL'] } ${ photo.json.hasOwnProperty('small_dim') ? '(' + photo.json.small_dim + ')' : '' }`, lychee.getBaseUrl() + photo.json.small)
 	}
 	if (photo.json.hasOwnProperty('thumb2x') && photo.json.thumb2x !== '') {
 		msg += buildLine(`${ lychee.locale['PHOTO_THUMB_HIDPI'] } (400x400)`, lychee.getBaseUrl() + photo.json.thumb2x)
+	} else if (!lychee.api_V2) {
+		var {path: thumb2x} = lychee.retinize(photo.json.thumbUrl);
+		msg += buildLine(`${ lychee.locale['PHOTO_THUMB_HIDPI'] } (400x400)`, lychee.getBaseUrl() + thumb2x)
 	}
 	if (photo.json.thumbUrl !== '') {
 		msg += buildLine(` ${ lychee.locale['PHOTO_THUMB'] } (200x200)`, lychee.getBaseUrl() + photo.json.thumbUrl)
