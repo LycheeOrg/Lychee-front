@@ -351,8 +351,7 @@ view.album = {
 					containerPadding: 0
 				});
 				// if (lychee.admin) console.log(layoutGeometry);
-				$('.justified-layout').css('height', layoutGeometry.containerHeight + 'px')
-					.css('height', layoutGeometry.containerHeight + 'px');
+				$('.justified-layout').css('height', layoutGeometry.containerHeight + 'px');
 				$('.justified-layout > div').each(function (i) {
 					if (!layoutGeometry.boxes[i]) {
 						// Race condition in search.find -- window content
