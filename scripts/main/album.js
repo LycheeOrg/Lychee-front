@@ -109,6 +109,7 @@ album.hasSub = function (albumID) {
 
 };
 
+// noinspection DuplicatedCode
 album.deleteByID = function (photoID) {
 
 	if (photoID == null || !album.json || !album.json.photos) {
@@ -132,6 +133,7 @@ album.deleteByID = function (photoID) {
 
 };
 
+// noinspection DuplicatedCode
 album.deleteSubByID = function (albumID) {
 
 	if (albumID == null || !album.json || !album.json.albums) {
@@ -296,7 +298,7 @@ album.setTitle = function (albumIDs) {
 	let msg = '';
 
 	if (!albumIDs) return false;
-	if (albumIDs instanceof Array === false) albumIDs = [albumIDs];
+	if (!albumIDs instanceof Array) albumIDs = [albumIDs];
 
 	if (albumIDs.length === 1) {
 
@@ -503,7 +505,7 @@ album.setPublic = function (albumID, e) {
 			<form>
 				<div class='switch'>
 					<label>
-						${lychee.locale['ALBUM_PUBLIC']}:
+						${lychee.locale['ALBUM_PUBLIC']}:&nbsp;
 						<input type='checkbox' name='public'>
 						<span class='slider round'></span>
 					</label>

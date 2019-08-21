@@ -699,7 +699,7 @@ lychee.clipboardCopy = function(text) {
 	// ...Otherwise, use document.execCommand() fallback
 
 	// Put the text to copy into a <span>
-	var span = document.createElement('span');
+	let span = document.createElement('span');
 	span.textContent = text;
 
 	// Preserve consecutive spaces and newlines
@@ -709,14 +709,15 @@ lychee.clipboardCopy = function(text) {
 	document.body.appendChild(span);
 
 	// Make a selection object representing the range of text selected by the user
-	var selection = window.getSelection();
-	var range = window.document.createRange();
+	let selection = window.getSelection();
+	let range = window.document.createRange();
 	selection.removeAllRanges();
 	range.selectNode(span);
 	selection.addRange(range);
 
 	// Copy text to the clipboard
-	var success = false;
+	let success = false;
+
 	try {
 		success = window.document.execCommand('copy')
 	} catch (err) {
@@ -728,6 +729,7 @@ lychee.clipboardCopy = function(text) {
 	window.document.body.removeChild(span);
 
 	return success
-//		? Promise.resolve()
-//		: Promise.reject(new DOMException('The request is not allowed', 'NotAllowedError'))
+		// ? Promise.resolve()
+		// : Promise.reject(new DOMException('The request is not allowed', 'NotAllowedError'))
+
 };
