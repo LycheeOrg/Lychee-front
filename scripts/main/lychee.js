@@ -94,6 +94,8 @@ lychee.aboutDialog = function() {
 
 lychee.init = function() {
 
+	lychee.adjustContentHeight();
+
 	api.post('Session::init', {}, function(data) {
 
 		lychee.api_V2 = data.api_V2 || false;
@@ -664,4 +666,16 @@ lychee.footer_show = function () {
 
 lychee.footer_hide = function () {
 	lychee.footer.addClass('hide_footer')
+};
+
+// Because the height of the footer can vary, we need to set some
+// dimensions dynamically, at startup.
+lychee.adjustContentHeight = function() {
+	if (lychee.footer.length > 0) {
+		lychee.content.css('min-height', 'calc(100vh - ' + lychee.content.css('padding-top') + ' - ' + lychee.content.css('padding-bottom') + ' - ' + lychee.footer.outerHeight() + 'px)');
+		$('#container').css('padding-bottom', lychee.footer.outerHeight())
+	}
+	else {
+		lychee.content.css('min-height', 'calc(100vh - ' + lychee.content.css('padding-top') + ' - ' + lychee.content.css('padding-bottom') + ')');
+	}
 };

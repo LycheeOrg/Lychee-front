@@ -258,7 +258,7 @@ multiselect.show = function(e) {
 
 	multiselect.position.top    = e.pageY;
 	multiselect.position.right  = $(document).width() - e.pageX;
-	multiselect.position.bottom = $(window).height() - e.pageY;
+	multiselect.position.bottom = $(document).height() - e.pageY;
 	multiselect.position.left   = e.pageX;
 
 	$('body').append(build.multiselect(multiselect.position.top, multiselect.position.left));
