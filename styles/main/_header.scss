@@ -109,10 +109,20 @@
 		}
 
 		&--eye.active .iconic {
-			fill: #ff9737;
+			fill: $colorRed;
 		}
 
-		&--share .iconic {
+		&--eye.active--not-hidden .iconic {
+			fill: $colorGreen;
+		}
+
+		&--eye.active--hidden .iconic {
+			fill: $colorOrange;
+		}
+
+		&--share .iconic.ionicons {
+			margin: -2px 0 -2px;
+			width: 18px;
 			height: 18px;
 		}
 

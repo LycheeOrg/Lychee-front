@@ -206,7 +206,7 @@ contextMenu.photo = function(photoID, e) {
 		{ title: build.iconic('layers') + lychee.locale['COPY_TO'], fn: () => { basicContext.close(); contextMenu.move([ photoID ], e, photo.copyTo, 'UNSORTED') } },
 		{ title: build.iconic('folder') + lychee.locale['MOVE'], fn: () => { basicContext.close(); contextMenu.move([ photoID ], e, photo.setAlbum, 'UNSORTED') } },
 		{ title: build.iconic('trash') + lychee.locale['DELETE'], fn: () => photo.delete([ photoID ]) },
-		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD'], fn: () => photo.getArchive([ photoID ], 'FULL') }
+		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD'], fn: () => photo.getArchive([ photoID ]) }
 	];
 
 	$('.photo[data-id="' + photoID + '"]').addClass('active');
@@ -314,16 +314,11 @@ contextMenu.photoMore = function(photoID, e) {
 	let showDownload = album.isUploadable() ||
 		(photo.json.hasOwnProperty('downloadable') ? photo.json.downloadable === '1' :
 		album.json && album.json.downloadable && album.json.downloadable === '1');
-	let showMedium = photo.json.medium && photo.json.medium !== '' && showDownload;
-	let showSmall = photo.json.small && photo.json.small !== '' && showDownload;
-
 	let showFull = photo.json.url && photo.json.url !== '';
 
 	let items = [
 		{ title: build.iconic('fullscreen-enter') + lychee.locale['FULL_PHOTO'], visible: !!showFull, fn: () => window.open(photo.getDirectLink()) },
-		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD'], visible: !!showDownload, fn: () => photo.getArchive([ photoID ], 'FULL') },
-		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD_MEDIUM'], visible: !!showMedium, fn: () => photo.getArchive([ photoID ], 'MEDIUM') },
-		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD_SMALL'], visible: !!showSmall, fn: () => photo.getArchive([ photoID ], 'SMALL') }
+		{ title: build.iconic('cloud-download') + lychee.locale['DOWNLOAD'], visible: !!showDownload, fn: () => photo.getArchive([ photoID ]) }
 	];
 
 	basicContext.show(items, e.originalEvent)
@@ -415,27 +410,17 @@ contextMenu.move = function(IDs, e, callback, kind = 'UNSORTED', display_root = 
 
 contextMenu.sharePhoto = function(photoID, e) {
 
-	let link      = photo.getViewLink(photoID);
 	let iconClass = 'ionicons';
 
 	let items = [
-		{ title: `<input readonly id="link" value="${ link }">`, fn: () => {}, class: 'basicContext__item--noHover' },
-		{ },
 		{ title: build.iconic('twitter', iconClass) + 'Twitter', fn: () => photo.share(photoID, 'twitter') },
 		{ title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => photo.share(photoID, 'facebook') },
 		{ title: build.iconic('envelope-closed') + 'Mail', fn: () => photo.share(photoID, 'mail') },
 		{ title: build.iconic('dropbox', iconClass) + 'Dropbox', visible: lychee.admin === true, fn: () => photo.share(photoID, 'dropbox') },
-		{ title: build.iconic('link-intact') + lychee.locale['DIRECT_LINK'], fn: () => window.open(photo.getDirectLink()) },
-		{ },
-		{ title: build.iconic('ban') + lychee.locale['MAKE_PRIVATE'], fn: () => photo.setPublic(photoID) }
+		{ title: build.iconic('link-intact') + lychee.locale['DIRECT_LINKS'], fn: () => photo.showDirectLinks(photoID) }
 	];
 
-	if (!album.isUploadable()) {
-		items.splice(7, 2);
-	}
-
-	basicContext.show(items, e.originalEvent);
-	$('.basicContext input#link').focus().select()
+	basicContext.show(items, e.originalEvent)
 
 };
 
@@ -444,22 +429,13 @@ contextMenu.shareAlbum = function(albumID, e) {
 	let iconClass = 'ionicons';
 
 	let items = [
-		{ title: `<input readonly id="link" value="${ location.href }">`, fn: () => {}, class: 'basicContext__item--noHover' },
-		{ },
 		{ title: build.iconic('twitter', iconClass) + 'Twitter', fn: () => album.share('twitter') },
 		{ title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => album.share('facebook') },
 		{ title: build.iconic('envelope-closed') + 'Mail', fn: () => album.share('mail') },
-		{ },
-		{ title: build.iconic('pencil') + lychee.locale['EDIT_SHARING'], fn: () => album.setPublic(albumID, true, e) },
-		{ title: build.iconic('ban') + lychee.locale['MAKE_PRIVATE'], fn: () => album.setPublic(albumID, false) }
+		{ title: build.iconic('link-intact') + lychee.locale['DIRECT_LINK'], fn: () => { if (lychee.clipboardCopy(location.href)) loadingBar.show('success', lychee.locale['URL_COPIED_TO_CLIPBOARD']) } }
 	];
 
-	if (!album.isUploadable()) {
-		items.splice(5, 3);
-	}
-
-	basicContext.show(items, e.originalEvent);
-	$('.basicContext input#link').focus().select()
+	basicContext.show(items, e.originalEvent)
 
 };
 

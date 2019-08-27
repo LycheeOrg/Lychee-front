@@ -156,7 +156,7 @@ sidebar.createStructure.photo = function(data) {
 
 		case '0' : _public = lychee.locale['PHOTO_SHR_NO'];
 				   break;
-		case '1' : _public = lychee.locale['PHOTO_SHR_YES'];
+		case '1' : _public = lychee.locale['PHOTO_SHR_PHT'];
 				   break;
 		case '2' : _public = lychee.locale['PHOTO_SHR_ALB'];
 				   break;

@@ -15,6 +15,7 @@ lychee = {
 	publicMode					: false,
 	viewMode					: false,
 	full_photo					: true,
+	downloadable				: false,
 	api_V2						: false,	// enable api_V2
 	sub_albums					: false,	// enable sub_albums features
 	admin						: false,	// enable admin mode (multi-user)
@@ -165,6 +166,8 @@ lychee.init = function() {
 			lychee.image_overlay_type_default	= lychee.image_overlay_type;
 			lychee.default_license				= data.config.default_license	|| 'none';
 			lychee.css							= data.config.css				|| '';
+			lychee.full_photo					= (data.config.full_photo == null) || (data.config.full_photo === '1');
+			lychee.downloadable					= (data.config.downloadable && data.config.downloadable === '1') || false;
 
 			lychee.upload	= !lychee.api_V2;
 			lychee.admin	= !lychee.api_V2;
@@ -191,7 +194,6 @@ lychee.init = function() {
 
 			lychee.sortingPhotos				= data.config.sorting_Photos    || data.config.sortingPhotos		|| '';
 			lychee.sortingAlbums				= data.config.sorting_Albums    || data.config.sortingAlbums		|| '';
-			lychee.full_photo					= (data.config.full_photo == null)	|| (data.config.full_photo === '1');
 			lychee.checkForUpdates				= data.config.check_for_updates || data.config.checkForUpdates	|| '1';
 			lychee.layout						= data.config.layout				|| '1';
 			lychee.public_search				= (data.config.public_search && data.config.public_search === '1') || false;
@@ -390,14 +392,7 @@ lychee.setMode = function(mode) {
 	}
 	if (!lychee.upload)
 	{
-		$('#button_trash_album, .button_add, #button_move_album').remove();
-		$('#button_trash, #button_move, #button_star, #button_sharing').remove();
-
-		$('#button_share, #button_share_album')
-			.removeClass('button--eye')
-			.addClass('button--share')
-			.find('use')
-			.attr('xlink:href', '#share');
+		$('#button_sharing').remove();
 
 		$(document)
 			.off('click',		'.header__title--editable')
@@ -668,14 +663,73 @@ lychee.footer_hide = function () {
 	lychee.footer.addClass('hide_footer')
 };
 
+
 // Because the height of the footer can vary, we need to set some
 // dimensions dynamically, at startup.
 lychee.adjustContentHeight = function() {
 	if (lychee.footer.length > 0) {
 		lychee.content.css('min-height', 'calc(100vh - ' + lychee.content.css('padding-top') + ' - ' + lychee.content.css('padding-bottom') + ' - ' + lychee.footer.outerHeight() + 'px)');
 		$('#container').css('padding-bottom', lychee.footer.outerHeight())
-	}
-	else {
+	} else {
 		lychee.content.css('min-height', 'calc(100vh - ' + lychee.content.css('padding-top') + ' - ' + lychee.content.css('padding-bottom') + ')');
 	}
+};
+
+lychee.getBaseUrl = function() {
+	if (location.href.indexOf('index.html') > 0) {
+		return location.href.replace('index.html' + location.hash, '')
+	} else if (location.href.indexOf('gallery#') > 0) {
+		return location.href.replace('gallery' + location.hash, '')
+	} else {
+		return location.href.replace(location.hash, '')
+	}
+};
+
+// Copied from https://github.com/feross/clipboard-copy/blob/9eba597c774feed48301fef689099599d612387c/index.js
+lychee.clipboardCopy = function(text) {
+
+	// Use the Async Clipboard API when available. Requires a secure browsing
+	// context (i.e. HTTPS)
+	if (navigator.clipboard) {
+		return navigator.clipboard.writeText(text).catch(function (err) {
+			throw (err !== undefined ? err : new DOMException('The request is not allowed', 'NotAllowedError'))
+		})
+	}
+
+	// ...Otherwise, use document.execCommand() fallback
+
+	// Put the text to copy into a <span>
+	let span = document.createElement('span');
+	span.textContent = text;
+
+	// Preserve consecutive spaces and newlines
+	span.style.whiteSpace = 'pre';
+
+	// Add the <span> to the page
+	document.body.appendChild(span);
+
+	// Make a selection object representing the range of text selected by the user
+	let selection = window.getSelection();
+	let range = window.document.createRange();
+	selection.removeAllRanges();
+	range.selectNode(span);
+	selection.addRange(range);
+
+	// Copy text to the clipboard
+	let success = false;
+
+	try {
+		success = window.document.execCommand('copy')
+	} catch (err) {
+		console.log('error', err)
+	}
+
+	// Cleanup
+	selection.removeAllRanges();
+	window.document.body.removeChild(span);
+
+	return success
+		// ? Promise.resolve()
+		// : Promise.reject(new DOMException('The request is not allowed', 'NotAllowedError'))
+
 };
