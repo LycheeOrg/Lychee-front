@@ -539,7 +539,7 @@ view.photo = {
 
 		// Make body not scrollable
 		// use bodyScrollLock package to enable locking on iOS
-		// Simple overflow: hidden not working of iOS Safari
+		// Simple overflow: hidden not working on iOS Safari
 		bodyScrollLock.disableBodyScroll(lychee.imageview);
 
 		// Fullscreen
@@ -736,12 +736,12 @@ view.photo = {
 	onresize: function () {
 		if (!photo.json || photo.json.medium === '' || !photo.json.medium2x || photo.json.medium2x === '') return;
 
-		// Calculate the width of the image in the current window and
-		// set 'sizes' to it.
+		// Calculate the width of the image in the current window without
+		// borders and set 'sizes' to it.
 		let imgWidth = parseInt(photo.json.medium_dim);
 		let imgHeight = photo.json.medium_dim.substr(photo.json.medium_dim.lastIndexOf('x') + 1);
-		let containerWidth = parseFloat($('#imageview').width(), 10);
-		let containerHeight = parseFloat($('#imageview').height(), 10);
+		let containerWidth = $(window).outerWidth();
+		let containerHeight = $(window).outerHeight();
 
 		// Image can be no larger than its natural size, but it can be
 		// smaller depending on the size of the window.
