@@ -108,7 +108,7 @@ build.album = function (data, disabled = false) {
 
 	}
 
-	if (data.albums && data.albums.length > 0) {
+	if ((data.albums && data.albums.length > 0) || (data.hasOwnProperty('has_albums') && data.has_albums === '1')) {
 		html += lychee.html`
 				<div class='subalbum_badge'>
 					<a class='badge badge--folder'>${build.iconic('layers')}</a>
