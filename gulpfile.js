@@ -28,7 +28,7 @@ paths.view = {
 		'./scripts/main/visible.js',
 		'./scripts/main/sidebar.js',
 		'./scripts/main/lychee_locale.js',
-		'./scripts/basiccontext/basicContext.js',
+		'./deps/basiccontext/scripts/basicContext.js',
 	],
 	scripts: [
 		'node_modules/jquery/dist/jquery.min.js',
@@ -86,7 +86,7 @@ paths.main = {
 	js: [
 		'./scripts/*.js',
 		'./scripts/main/*.js',
-		'./scripts/basiccontext/basicContext.js',
+		'./deps/basiccontext/scripts/basicContext.js',
 	],
 	scripts: [
 		'node_modules/jquery/dist/jquery.min.js',
@@ -104,8 +104,8 @@ paths.main = {
 	],
 	styles: [
 		'node_modules/basicmodal/src/styles/main.scss',
-		'./styles/basiccontext/main.scss',
-		'./styles/basiccontext/addons/popin.scss',
+		'./deps/basiccontext/styles/main.scss',
+		'./deps/basiccontext/styles/addons/popin.scss',
 		'./styles/main/main.scss'
 	],
 	svg: [
