@@ -202,10 +202,10 @@ photo.preloadNextPrev = function(photoID) {
 			}
 		};
 
-		if (nextPhotoID !== '') {
+		if (nextPhotoID && nextPhotoID !== '') {
 			preload(nextPhotoID)
 		}
-		if (previousPhotoID !== '') {
+		if (previousPhotoID && previousPhotoID !== '') {
 			preload(previousPhotoID)
 		}
 
