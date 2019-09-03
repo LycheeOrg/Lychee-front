@@ -341,13 +341,16 @@ upload.start = {
 				name: data.path
 			};
 
+			let delete_imported = $('.basicModal .choice input[name="delete"]').prop('checked') ? '1' : '0';
+
 			upload.show(lychee.locale['UPLOAD_IMPORT_SERVER'], files, function() {
 
 				$('.basicModal .rows .row .status').html(lychee.locale['UPLOAD_IMPORTING']);
 
 				let params = {
 					albumID,
-					path: data.path
+					path: data.path,
+					delete_imported
 				};
 
 				api.post('Import::server', params, function(data) {
@@ -417,8 +420,29 @@ upload.start = {
 
 		};
 
+		let msg = lychee.html`
+			<p class='importServer'>
+				${ lychee.locale['UPLOAD_IMPORT_SERVER_INSTR'] }
+				<input class='text' name='path' type='text' placeholder='${ lychee.locale['UPLOAD_ABSOLUTE_PATH'] }' value='${ lychee.location }uploads/import/'>
+			</p>
+		`;
+		if (lychee.api_V2) {
+			msg += lychee.html`
+				<div class='choice'>
+					<label>
+						<input type='checkbox' name='delete'>
+						<span class='checkbox'>${build.iconic('check')}</span>
+						<span class='label'>${lychee.locale['UPLOAD_IMPORT_DELETE_ORIGINALS']}</span>
+					</label>
+					<p>
+						${ lychee.locale['UPLOAD_IMPORT_DELETE_ORIGINALS_EXPL'] }
+					</p>
+				</div>
+			`
+		}
+
 		basicModal.show({
-			body: lychee.html`<p>` + lychee.locale['UPLOAD_IMPORT_SERVER_INSTR'] + ` <input class='text' name='path' type='text' maxlength='100' placeholder='` + lychee.locale['UPLOAD_ABSOLUTE_PATH'] + `' value='${ lychee.location }uploads/import/'></p>`,
+			body: msg,
 			buttons: {
 				action: {
 					title: lychee.locale['UPLOAD_IMPORT'],
@@ -429,7 +453,11 @@ upload.start = {
 					fn: basicModal.close
 				}
 			}
-		})
+		});
+
+		if (lychee.delete_imported) {
+			$('.basicModal .choice input[name="delete"]').prop('checked', true)
+		}
 
 	},
 

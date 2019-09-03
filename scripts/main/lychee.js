@@ -29,6 +29,7 @@ lychee = {
 	image_overlay_type			: 'exif',	// current Overlay display type
 	image_overlay_type_default	: 'exif',	// image overlay type default type
 	landing_page_enabled        : false,    // is landing page enabled ?
+	delete_imported				: true,
 
 	checkForUpdates			: '1',
 	update_json 			: 0,
@@ -168,6 +169,7 @@ lychee.init = function() {
 			lychee.css							= data.config.css				|| '';
 			lychee.full_photo					= (data.config.full_photo == null) || (data.config.full_photo === '1');
 			lychee.downloadable					= (data.config.downloadable && data.config.downloadable === '1') || false;
+			lychee.delete_imported				= (data.config.delete_imported == null) || (data.config.delete_imported === '1');
 
 			lychee.upload	= !lychee.api_V2;
 			lychee.admin	= !lychee.api_V2;
