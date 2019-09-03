@@ -364,7 +364,7 @@ upload.start = {
 
 						// Go back to the album overview to show the imported albums
 						if (visible.albums()) lychee.load();
-						else                  lychee.goto();
+						else                  album.reload();
 
 						basicModal.close();
 
@@ -385,31 +385,34 @@ upload.start = {
 						// Log error
 						lychee.error(lychee.locale['UPLOAD_IMPORT_SERVER_EMPT'], params, data)
 
-					} else if (data!==true) {
-
-						// Maybe an error, maybe just some skipped photos
-
-						$('.basicModal .rows .row p.notice')
-							.html(lychee.locale['UPLOAD_IMPORT_WARN_ERR'])
-							.show();
-
-						$('.basicModal .rows .row .status')
-							.html(lychee.locale['UPLOAD_FINISHED'])
-							.addClass('warning');
-
-						// Log error
-						lychee.error(null, params, data)
-
 					} else {
+						if (data !== true) {
 
-						// No error, everything worked fine
+							// Maybe an error, maybe just some skipped photos
 
-						basicModal.close()
+							$('.basicModal .rows .row p.notice')
+								.html(lychee.locale['UPLOAD_IMPORT_WARN_ERR'])
+								.show();
+
+							$('.basicModal .rows .row .status')
+								.html(lychee.locale['UPLOAD_FINISHED'])
+								.addClass('warning');
+
+							// Log error
+							lychee.error(null, params, data)
+
+						} else {
+
+							// No error, everything worked fine
+
+							basicModal.close()
+
+						}
+
+						if (album.getID()===false) lychee.goto('0');
+						else                       album.load(albumID)
 
 					}
-
-					if (album.getID()===false) lychee.goto('0');
-					else                       album.load(albumID);
 
 					// Show close button
 					$('.basicModal #basicModal__action.hidden').show()
