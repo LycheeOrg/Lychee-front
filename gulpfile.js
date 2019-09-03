@@ -28,11 +28,11 @@ paths.view = {
 		'./scripts/main/visible.js',
 		'./scripts/main/sidebar.js',
 		'./scripts/main/lychee_locale.js',
+		'./deps/basiccontext/scripts/basicContext.js',
 	],
 	scripts: [
 		'node_modules/jquery/dist/jquery.min.js',
-		'node_modules/lazysizes/lazysizes.js',
-		'node_modules/basiccontext/dist/basicContext.min.js',
+		'node_modules/lazysizes/lazysizes.min.js',
 		'../dist/_view--javascript.js'
 	],
 	svg: [
@@ -85,14 +85,14 @@ paths.main = {
 	],
 	js: [
 		'./scripts/*.js',
-		'./scripts/main/*.js'
+		'./scripts/main/*.js',
+		'./deps/basiccontext/scripts/basicContext.js',
 	],
 	scripts: [
 		'node_modules/jquery/dist/jquery.min.js',
-		'node_modules/lazysizes/lazysizes.js',
+		'node_modules/lazysizes/lazysizes.min.js',
 		'node_modules/mousetrap/mousetrap.min.js',
 		'node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js',
-		'node_modules/basiccontext/dist/basicContext.min.js',
 		'node_modules/basicmodal/dist/basicModal.min.js',
 		'node_modules/body-scroll-lock/lib/bodyScrollLock.min.js',
 		'node_modules/multiselect-two-sides/dist/js/multiselect.min.js',
@@ -103,9 +103,9 @@ paths.main = {
 		'./styles/main/*.scss'
 	],
 	styles: [
-		'node_modules/basiccontext/src/styles/main.scss',
-		'node_modules/basiccontext/src/styles/addons/popin.scss',
 		'node_modules/basicmodal/src/styles/main.scss',
+		'./deps/basiccontext/styles/main.scss',
+		'./deps/basiccontext/styles/addons/popin.scss',
 		'./styles/main/main.scss'
 	],
 	svg: [
@@ -178,7 +178,7 @@ paths.frame = {
 	],
 	scripts: [
 		'node_modules/jquery/dist/jquery.min.js',
-		'node_modules/lazysizes/lazysizes.js',
+		'node_modules/lazysizes/lazysizes.min.js',
 		'./scripts/frame/stackblur.min.js',
 		'../dist/_frame--javascript.js'
 	],
@@ -230,7 +230,7 @@ paths.landing = {
 	],
 	scripts: [
 		'node_modules/jquery/dist/jquery.min.js',
-		'node_modules/lazysizes/lazysizes.js',
+		'node_modules/lazysizes/lazysizes.min.js',
 		'../dist/_landing--javascript.js'
 	],
 	scss: [
