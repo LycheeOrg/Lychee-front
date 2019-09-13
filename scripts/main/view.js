@@ -727,10 +727,31 @@ view.photo = {
 
 		let structure = sidebar.createStructure.photo(photo.json);
 		let html = sidebar.render(structure);
+		let has_location = ( (photo.json.latitude && (photo.json.longitude)) ? true : false );
 
 		sidebar.dom('.sidebar__wrapper').html(html);
-		sidebar.bind()
+		sidebar.bind();
 
+		if (has_location && lychee.map_display) {
+			// Leaflet seaches for icon in same directoy as js file -> paths needs
+			// to be overwritten
+			delete L.Icon.Default.prototype._getIconUrl;
+			L.Icon.Default.mergeOptions({
+				iconRetinaUrl: 'img/marker-icon-2x.png',
+				iconUrl: 'img/marker-icon.png',
+				shadowUrl: 'img/marker-shadow.png',
+			});
+
+			var mymap = L.map('mapid').setView([photo.json.latitude, photo.json.longitude], 13);
+
+			// Add plain OpenStreetMap Layer
+			L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+				attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+			}).addTo(mymap);
+
+			// Add Marker to map
+			var marker = L.marker([photo.json.latitude, photo.json.longitude]).addTo(mymap);
+		}
 	},
 
 	onresize: function () {
@@ -790,6 +811,7 @@ view.settings = {
 				view.settings.content.setPublicSearch();
 				view.settings.content.setOverlay();
 				view.settings.content.setOverlayType();
+				view.settings.content.setMapDisplay();
 				view.settings.content.setCSS();
 				view.settings.content.moreButton();
 			}
@@ -1057,6 +1079,24 @@ view.settings = {
 			$('select#ImgOverlayType').val(!lychee.image_overlay_type_default ? 'exif' : lychee.image_overlay_type_default);
 			settings.bind('#basicModal__action_set_overlay_type', '.setOverlayType', settings.setOverlayType);
 
+		},
+
+		setMapDisplay: function () {
+			let msg = `
+			<div class="setMapDisplay">
+			<p>${lychee.locale['MAP_DISPLAY_TEXT']}
+			<label class="switch">
+			  <input id="MapDisplay" type="checkbox">
+			  <span class="slider round"></span>
+			</label>
+			</p>
+			</div>
+			`;
+
+			$(".settings_view").append(msg);
+			if (lychee.map_display) $('#MapDisplay').click();
+
+			settings.bind('#MapDisplay', '.setMapDisplay', settings.changeMapDisplay);
 		},
 
 		setCSS: function () {

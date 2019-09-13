@@ -28,6 +28,7 @@ lychee = {
 	image_overlay_default		: false,	// display Overlay like in Lightroom by default
 	image_overlay_type			: 'exif',	// current Overlay display type
 	image_overlay_type_default	: 'exif',	// image overlay type default type
+  map_display				: true,	// display photo coordinates on map
 	landing_page_enabled        : false,    // is landing page enabled ?
 	delete_imported				: false,
 
@@ -165,6 +166,7 @@ lychee.init = function() {
 			lychee.image_overlay				= lychee.image_overlay_default;
 			lychee.image_overlay_type			= (!data.config.image_overlay_type) ? 'exif' : data.config.image_overlay_type;
 			lychee.image_overlay_type_default	= lychee.image_overlay_type;
+			lychee.map_display				= (data.config.map_display && data.config.map_display === '1')  || false;
 			lychee.default_license				= data.config.default_license	|| 'none';
 			lychee.css							= data.config.css				|| '';
 			lychee.full_photo					= (data.config.full_photo == null) || (data.config.full_photo === '1');
@@ -202,6 +204,7 @@ lychee.init = function() {
 			lychee.image_overlay				= (data.config.image_overlay && data.config.image_overlay === '1') || false;
 			lychee.image_overlay_type			= (!data.config.image_overlay_type) ? 'exif' : data.config.image_overlay_type;
 			lychee.image_overlay_type_default	= lychee.image_overlay_type;
+			lychee.map_display				= (data.config.map_display && data.config.map_display === '1') || false;
 
 			// console.log(lychee.full_photo);
 			lychee.setMode('public');

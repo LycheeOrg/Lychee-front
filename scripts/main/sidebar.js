@@ -134,6 +134,7 @@ sidebar.createStructure.photo = function(data) {
 
 	let editable  = (typeof album !== 'undefined') ? album.isUploadable() : false;
 	let exifHash  = data.takedate + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
+	let locationHash = data.longitude + data.latitude + data.altitude;
 	let structure = {};
 	let _public   = '';
 	let isVideo = data.type && data.type.indexOf('video') > -1;
@@ -263,12 +264,28 @@ sidebar.createStructure.photo = function(data) {
 		]
 	};
 
+	if ((locationHash!=='')  && (locationHash!==0)){
+
+		structure.location = {
+			title : lychee.locale['PHOTO_LOCATION'],
+			type  : sidebar.types.DEFAULT,
+			rows  : [
+				{ title: lychee.locale['PHOTO_LATITUDE'],    kind:'latitude',   value: (data.latitude) ? data.latitude + '°' : '' },
+				{ title: lychee.locale['PHOTO_LONGITUDE'],    kind:'longitude',   value: (data.longitude) ? data.longitude + '°' : ''},
+				{ title: lychee.locale['PHOTO_ALTITUDE'],    kind:'altitude',   value: (data.altitude) ?  data.altitude + 'm' : ''}
+			]
+		};
+	} else {
+		structure.location = {}
+	}
+
 	// Construct all parts of the structure
 	structure = [
 		structure.basics,
 		structure.image,
 		structure.tags,
 		structure.exif,
+		structure.location,
 		structure.sharing,
 		structure.license
 	];
@@ -421,6 +438,23 @@ sidebar.createStructure.album = function(data) {
 
 };
 
+sidebar.has_location = function(structure) {
+
+	if (structure==null || structure==='' || structure===false) return false;
+
+  let _has_location = false;
+
+	structure.forEach(function(section) {
+
+		if(section.title==lychee.locale['PHOTO_LOCATION']) {
+			_has_location = true;
+		}
+
+	});
+
+	return _has_location;
+};
+
 sidebar.render = function(structure) {
 
 	if (structure==null || structure==='' || structure===false) return false;
@@ -437,6 +471,28 @@ sidebar.render = function(structure) {
 				 </div>
 				 <table>
 				 `;
+
+		if(section.title==lychee.locale['PHOTO_LOCATION']) {
+			let _has_latitude = false;
+			let _has_longitude = false;
+
+			section.rows.forEach(function(row) {
+				if ((row.kind=='latitude') && (row.value!=='')) {
+					_has_latitude = true;
+				}
+
+				if((row.kind=='longitude') && (row.value!=='')) {
+					_has_longitude = true;
+				}
+
+			});
+
+			if ((_has_latitude) && (_has_longitude) && (lychee.map_display)) {
+				_html += `
+						 <div id="mapid" style="margin: 10px 0px 0px 20px; height: 180px; width: calc(100% - 40px); float: left"></div>
+						 `;
+			}
+		}
 
 		section.rows.forEach(function(row) {
 

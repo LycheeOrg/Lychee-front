@@ -424,6 +424,22 @@ settings.setOverlayType = function () {
 	})
 };
 
+
+settings.changeMapDisplay = function () {
+	var params = {};
+	if ($('#MapDisplay:checked').length === 1) {
+		params.map_display = '1';
+	} else {
+		params.map_display = '0';
+	}
+	api.post('Settings::setMapDisplay', params, function (data) {
+		if (data === true) {
+			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_MAP_DISPLAY']);
+			lychee.map_display = (params.map_display === '1');
+		} else lychee.error(null, params, data);
+	});
+};
+
 settings.changeCSS = function () {
 
 	let params = {};
