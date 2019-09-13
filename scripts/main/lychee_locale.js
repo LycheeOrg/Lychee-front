@@ -245,7 +245,7 @@ lychee.locale = {
 		'SETTINGS_SUCCESS_IMAGE_OVERLAY': 'EXIF Overlay setting updated',
 		'SETTINGS_SUCCESS_PUBLIC_SEARCH': 'Public search updated',
 		'SETTINGS_SUCCESS_LICENSE'		: 'Default license updated',
-		'SETTINGS_SUCCESS_MAP_DISPLAY': 'Display map settings updated',
+		'SETTINGS_SUCCESS_MAP_DISPLAY'  : 'Display map settings updated',
 		'SETTINGS_SUCCESS_CSS'		    : 'CSS updated',
 		'SETTINGS_SUCCESS_UPDATE'       : 'Settings updated with success',
 
