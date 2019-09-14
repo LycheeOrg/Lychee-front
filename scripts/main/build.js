@@ -42,10 +42,14 @@ build.multiselect = function (top, left) {
 
 build.getAlbumThumb = function (data, i) {
 	let isVideo = data.types[i] && data.types[i].indexOf('video') > -1;
+	let isRaw = data.types[i] && data.types[i].indexOf('raw') > -1;
 	let thumb = data.thumbs[i];
 
 	if (thumb === 'uploads/thumb/' && isVideo) {
 		return `<span class="thumbimg"><img src='img/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+	}
+	if (thumb === 'uploads/thumb/' && isRaw) {
+		return `<span class="thumbimg"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 	}
 
 	thumb2x = '';
@@ -128,8 +132,12 @@ build.photo = function (data, disabled = false) {
 	var thumb2x = '';
 
 	let isVideo = data.type && data.type.indexOf('video') > -1;
+	let isRaw = data.type && data.type.indexOf('raw') > -1;
+
 	if (data.thumbUrl === 'uploads/thumb/' && isVideo) {
 		thumbnail = `<span class="thumbimg"><img src='img/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+	} else if (data.thumbUrl === 'uploads/thumb/' && isRaw) {
+		thumbnail = `<span class="thumbimg"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 	} else if (lychee.layout === '0') {
 
 		if (data.hasOwnProperty('thumb2x')) { // Lychee v4
@@ -261,6 +269,8 @@ build.imageview = function (data, visibleControls) {
 
 	if (data.type.indexOf('video') > -1) {
 		html += lychee.html`<video width="auto" height="auto" id='image' controls class='${visibleControls === true ? '' : 'full'}' autoplay><source src='${data.url}'>Your browser does not support the video tag.</video>`
+	} else if (data.type.indexOf('raw') > -1) {
+		html += lychee.html`<img id='image' class='${visibleControls === true ? '' : 'full'}' src='img/placeholder.png' draggable='false' alt='big'>`
 	} else {
 		let img = '';
 
