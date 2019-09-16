@@ -372,6 +372,21 @@ build.uploadModal = function (title, files) {
 
 };
 
+build.uploadNewFile = function (name) {
+
+	if (name.length > 40) {
+		name = name.substr(0, 17) + '...' + name.substr(name.length - 20, 20)
+	}
+
+	return lychee.html`
+		<div class='row'>
+			<a class='name'>${name}</a>
+			<a class='status'></a>
+			<p class='notice'></p>
+		</div>
+		`
+};
+
 build.tags = function (tags) {
 
 	let html = '';
