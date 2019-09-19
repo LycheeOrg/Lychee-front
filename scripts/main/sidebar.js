@@ -270,8 +270,8 @@ sidebar.createStructure.photo = function(data) {
 			title : lychee.locale['PHOTO_LOCATION'],
 			type  : sidebar.types.DEFAULT,
 			rows  : [
-				{ title: lychee.locale['PHOTO_LATITUDE'],    kind:'latitude',   value: (data.latitude) ? data.latitude + '°' : '' },
-				{ title: lychee.locale['PHOTO_LONGITUDE'],    kind:'longitude',   value: (data.longitude) ? data.longitude + '°' : ''},
+				{ title: lychee.locale['PHOTO_LATITUDE'],    kind:'latitude',   value: (data.latitude) ? DecimalToDegreeMinutesSeconds(data.latitude, true) : '' },
+				{ title: lychee.locale['PHOTO_LONGITUDE'],    kind:'longitude',   value: (data.longitude) ? DecimalToDegreeMinutesSeconds(data.longitude, false) : ''},
 				{ title: lychee.locale['PHOTO_ALTITUDE'],    kind:'altitude',   value: (data.altitude) ?  data.altitude + 'm' : ''}
 			]
 		};
@@ -554,5 +554,54 @@ sidebar.render = function(structure) {
 	});
 
 	return html
+
+};
+
+function DecimalToDegreeMinutesSeconds(decimal, type) {
+
+	let degrees = 0;
+	let minutes = 0;
+	let seconds = 0;
+	let direction = 'X';
+
+	//decimal must be integer or float no larger than 180;
+	//type must be Boolean
+	if( Math.abs(decimal) > 180 || (!(typeof type === "boolean"))) {
+		return false;
+	}
+
+	//inputs OK, proceed
+	//type is latitude when true, longitude when false
+
+	//set direction; north assumed
+	if(type && (decimal < 0)) {
+		direction = 'S';
+	}
+	else if((!type) && (decimal < 0)) {
+		direction = 'W';
+	}
+	else if(!type) {
+		direction = 'E';
+	}
+	else {
+		direction = 'N';
+	}
+
+	//get absolute value of decimal
+	let d = Math.abs(decimal);
+
+	//get degrees
+	degrees = Math.floor(d);
+
+	//get seconds
+	seconds = (d - degrees) * 3600;
+
+	//get minutes
+	minutes = Math.floor(seconds / 60);
+
+	//reset seconds
+	seconds = Math.floor(seconds - (minutes * 60));
+
+  return  degrees + '° ' + minutes + '\' ' + seconds + '\" ' + direction;
 
 };
