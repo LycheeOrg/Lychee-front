@@ -220,6 +220,10 @@ lychee.locale = {
 		'PHOTO_NO_EDIT_SHARING_TEXT': 'Because this photo is located in a public album, it inherits that album\'s visibility settings.  Its current visibility is shown below for informational purposes only.',
 		'PHOTO_EDIT_GLOBAL_SHARING_TEXT' : 'The visibility of this photo can be fine-tuned using global Lychee settings. Its current visibility is shown below for informational purposes only.',
 		'PHOTO_SHARING_CONFIRM'		: 'Save',
+		'PHOTO_LOCATION' : 'Location',
+		'PHOTO_LATITUDE' : 'Latitude',
+		'PHOTO_LONGITUDE' : 'Longitude',
+		'PHOTO_ALTITUDE' : 'Altitude',
 
 		'LOADING'					: 'Loading',
 		'ERROR'						: 'Error',
@@ -241,6 +245,7 @@ lychee.locale = {
 		'SETTINGS_SUCCESS_IMAGE_OVERLAY': 'EXIF Overlay setting updated',
 		'SETTINGS_SUCCESS_PUBLIC_SEARCH': 'Public search updated',
 		'SETTINGS_SUCCESS_LICENSE'		: 'Default license updated',
+		'SETTINGS_SUCCESS_MAP_DISPLAY': 'Display map settings updated',
 		'SETTINGS_SUCCESS_CSS'		    : 'CSS updated',
 		'SETTINGS_SUCCESS_UPDATE'       : 'Settings updated with success',
 
@@ -320,6 +325,8 @@ lychee.locale = {
 		'OVERLAY_EXIF'				: 'Photo EXIF data',
 		'OVERLAY_DESCRIPTION'		: 'Photo description',
 		'OVERLAY_DATE'				: 'Photo date taken',
+
+		'MAP_DISPLAY_TEXT'		: 'Display coordinates on map (OpenStreetMap):',
 
 		'VIEW_NO_RESULT'			: 'No results',
 		'VIEW_NO_PUBLIC_ALBUMS'		: 'No public albums',
