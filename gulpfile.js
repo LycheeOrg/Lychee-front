@@ -98,6 +98,7 @@ paths.main = {
 		'node_modules/multiselect-two-sides/dist/js/multiselect.min.js',
 		'node_modules/justified-layout/dist/justified-layout.min.js',
 		'node_modules/leaflet/dist/leaflet.js',
+		'node_modules/leaflet-rotatedmarker/leaflet.rotatedMarker.js',
 		'../dist/_main--javascript.js'
 	],
 	scss: [
