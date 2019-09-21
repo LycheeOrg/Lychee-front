@@ -272,7 +272,8 @@ sidebar.createStructure.photo = function(data) {
 			rows  : [
 				{ title: lychee.locale['PHOTO_LATITUDE'],    kind:'latitude',   value: (data.latitude) ? DecimalToDegreeMinutesSeconds(data.latitude, true) : '' },
 				{ title: lychee.locale['PHOTO_LONGITUDE'],    kind:'longitude',   value: (data.longitude) ? DecimalToDegreeMinutesSeconds(data.longitude, false) : ''},
-				{ title: lychee.locale['PHOTO_ALTITUDE'],    kind:'altitude',   value: (data.altitude) ?  data.altitude + 'm' : ''}
+				{ title: lychee.locale['PHOTO_ALTITUDE'],    kind:'altitude',   value: (data.altitude) ?  data.altitude + 'm' : ''},
+				{ title: lychee.locale['PHOTO_IMGDIRECTION'],    kind:'imgDirection',   value: (data.imgDirection) ?  data.imgDirection + '°' : ''}
 			]
 		};
 	} else {

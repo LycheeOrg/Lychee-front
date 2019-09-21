@@ -224,6 +224,7 @@ lychee.locale = {
 		'PHOTO_LATITUDE' : 'Latitude',
 		'PHOTO_LONGITUDE' : 'Longitude',
 		'PHOTO_ALTITUDE' : 'Altitude',
+		'PHOTO_IMGDIRECTION' : 'Direction',
 
 		'LOADING'					: 'Loading',
 		'ERROR'						: 'Error',

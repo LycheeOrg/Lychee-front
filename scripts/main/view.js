@@ -749,8 +749,21 @@ view.photo = {
 				attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 			}).addTo(mymap);
 
-			// Add Marker to map
-			var marker = L.marker([photo.json.latitude, photo.json.longitude]).addTo(mymap);
+			if (!photo.json.imgDirection || photo.json.imgDirection === '') {
+				// Add Marker to map, direction is not set
+				var marker = L.marker([photo.json.latitude, photo.json.longitude]).addTo(mymap);
+			} else {
+				// Add Marker, direction has been set
+				var viewDirectionIcon = L.icon({
+							iconUrl: 'img/view-angle-icon.png',
+
+							iconSize:     [100, 58], // size of the icon
+							iconAnchor:   [50, 49],  // point of the icon which will correspond to marker's location
+						});
+				var marker = L.marker([photo.json.latitude, photo.json.longitude], {icon: viewDirectionIcon}).addTo(mymap);
+				marker.setRotationAngle(photo.json.imgDirection);
+			}
+
 		}
 	},
 
