@@ -443,7 +443,7 @@ sidebar.has_location = function(structure) {
 
 	if (structure==null || structure==='' || structure===false) return false;
 
-  let _has_location = false;
+	let _has_location = false;
 
 	structure.forEach(function(section) {
 
@@ -490,7 +490,7 @@ sidebar.render = function(structure) {
 
 			if ((_has_latitude) && (_has_longitude) && (lychee.map_display)) {
 				_html += `
-						 <div id="mapid" style="margin: 10px 0px 0px 20px; height: 180px; width: calc(100% - 40px); float: left"></div>
+						 <div id="mapid"></div>
 						 `;
 			}
 		}

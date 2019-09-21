@@ -515,7 +515,7 @@ view.album = {
 
 view.photo = {
 
-	init: function () {
+	init: function (autoplay) {
 
 		multiselect.clearSelection();
 
@@ -525,7 +525,7 @@ view.photo = {
 		view.photo.title();
 		view.photo.star();
 		view.photo.public();
-		view.photo.photo();
+		view.photo.photo(autoplay);
 
 		photo.json.init = 1
 
@@ -664,9 +664,9 @@ view.photo = {
 
 	},
 
-	photo: function () {
+	photo: function (autoplay) {
 
-		let ret = build.imageview(photo.json, visible.header());
+		let ret = build.imageview(photo.json, visible.header(), autoplay);
 		lychee.imageview.html(ret.html);
 		view.photo.onresize();
 
