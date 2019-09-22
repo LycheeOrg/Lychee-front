@@ -745,8 +745,8 @@ view.photo = {
 			var mymap = L.map('mapid').setView([photo.json.latitude, photo.json.longitude], 13);
 
 			// Add plain OpenStreetMap Layer
-			L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-				attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+			L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+				attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
 			}).addTo(mymap);
 
 			if (!photo.json.imgDirection || photo.json.imgDirection === '') {
