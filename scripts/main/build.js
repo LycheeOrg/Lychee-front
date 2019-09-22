@@ -262,13 +262,13 @@ build.overlay_image = function (data) {
 	return html;
 };
 
-build.imageview = function (data, visibleControls) {
+build.imageview = function (data, visibleControls, autoplay) {
 
 	let html = '';
 	let thumb = '';
 
 	if (data.type.indexOf('video') > -1) {
-		html += lychee.html`<video width="auto" height="auto" id='image' controls class='${visibleControls === true ? '' : 'full'}' autoplay><source src='${data.url}'>Your browser does not support the video tag.</video>`
+		html += lychee.html`<video width="auto" height="auto" id='image' controls class='${visibleControls === true ? '' : 'full'}' ${autoplay ? 'autoplay' : ''}><source src='${data.url}'>Your browser does not support the video tag.</video>`
 	} else if (data.type.indexOf('raw') > -1) {
 		html += lychee.html`<img id='image' class='${visibleControls === true ? '' : 'full'}' src='img/placeholder.png' draggable='false' alt='big'>`
 	} else {

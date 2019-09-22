@@ -22,15 +22,15 @@ photo.getID = function() {
 
 };
 
-photo.load = function(photoID, albumID) {
+photo.load = function(photoID, albumID, autoplay) {
 
 	const checkContent = function() {
-		if (album.json!=null && album.json.photos) photo.load(photoID, albumID);
+		if (album.json!=null && album.json.photos) photo.load(photoID, albumID, autoplay);
 		else                  setTimeout(checkContent, 100)
 	};
 
 	const checkPasswd = function() {
-		if (password.value!=='') photo.load(photoID, albumID);
+		if (password.value!=='') photo.load(photoID, albumID, autoplay);
 		else                     setTimeout(checkPasswd, 200)
 	};
 
@@ -63,7 +63,7 @@ photo.load = function(photoID, albumID) {
 		photo.json.album = albumID;
 
 		if (!visible.photo()) view.photo.show();
-		view.photo.init();
+		view.photo.init(autoplay);
 		lychee.imageview.show();
 
 		setTimeout(() => {
@@ -243,7 +243,7 @@ photo.previous = function(animate) {
 
 		setTimeout(() => {
 			if (photo.getID()===false) return false;
-			lychee.goto(album.getID() + '/' + album.getByID(photo.getID()).previousPhoto)
+			lychee.goto(album.getID() + '/' + album.getByID(photo.getID()).previousPhoto, false)
 		}, delay)
 
 	}
@@ -274,7 +274,7 @@ photo.next = function(animate) {
 
 		setTimeout(() => {
 			if (photo.getID()===false) return false;
-			lychee.goto(album.getID() + '/' + album.getByID(photo.getID()).nextPhoto)
+			lychee.goto(album.getID() + '/' + album.getByID(photo.getID()).nextPhoto, false)
 		}, delay)
 
 	}

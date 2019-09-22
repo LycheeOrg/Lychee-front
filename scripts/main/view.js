@@ -515,7 +515,7 @@ view.album = {
 
 view.photo = {
 
-	init: function () {
+	init: function (autoplay) {
 
 		multiselect.clearSelection();
 
@@ -525,7 +525,7 @@ view.photo = {
 		view.photo.title();
 		view.photo.star();
 		view.photo.public();
-		view.photo.photo();
+		view.photo.photo(autoplay);
 
 		photo.json.init = 1
 
@@ -664,9 +664,9 @@ view.photo = {
 
 	},
 
-	photo: function () {
+	photo: function (autoplay) {
 
-		let ret = build.imageview(photo.json, visible.header());
+		let ret = build.imageview(photo.json, visible.header(), autoplay);
 		lychee.imageview.html(ret.html);
 		view.photo.onresize();
 
@@ -745,8 +745,8 @@ view.photo = {
 			var mymap = L.map('mapid').setView([photo.json.latitude, photo.json.longitude], 13);
 
 			// Add plain OpenStreetMap Layer
-			L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-				attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+			L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+				attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
 			}).addTo(mymap);
 
 			if (!photo.json.imgDirection || photo.json.imgDirection === '') {

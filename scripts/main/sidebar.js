@@ -272,10 +272,14 @@ sidebar.createStructure.photo = function(data) {
 			rows  : [
 				{ title: lychee.locale['PHOTO_LATITUDE'],    kind:'latitude',   value: (data.latitude) ? DecimalToDegreeMinutesSeconds(data.latitude, true) : '' },
 				{ title: lychee.locale['PHOTO_LONGITUDE'],    kind:'longitude',   value: (data.longitude) ? DecimalToDegreeMinutesSeconds(data.longitude, false) : ''},
-				{ title: lychee.locale['PHOTO_ALTITUDE'],    kind:'altitude',   value: (data.altitude) ?  data.altitude + 'm' : ''},
-				{ title: lychee.locale['PHOTO_IMGDIRECTION'],    kind:'imgDirection',   value: (data.imgDirection) ?  data.imgDirection + '°' : ''}
+				// No point in displaying sub-mm precision; 10cm is more than enough.
+				{ title: lychee.locale['PHOTO_ALTITUDE'],    kind:'altitude',   value: (data.altitude) ? (Math.round(parseFloat(data.altitude) * 10) / 10).toString() + 'm' : ''}
 			]
 		};
+		if (data.imgDirection) {
+			// No point in display sub-degree precision.
+			structure.location.rows.push({ title: lychee.locale['PHOTO_IMGDIRECTION'], kind:'imgDirection', value: Math.round(data.imgDirection).toString() + '°'})
+		}
 	} else {
 		structure.location = {}
 	}
@@ -443,7 +447,7 @@ sidebar.has_location = function(structure) {
 
 	if (structure==null || structure==='' || structure===false) return false;
 
-  let _has_location = false;
+	let _has_location = false;
 
 	structure.forEach(function(section) {
 
@@ -490,7 +494,7 @@ sidebar.render = function(structure) {
 
 			if ((_has_latitude) && (_has_longitude) && (lychee.map_display)) {
 				_html += `
-						 <div id="mapid" style="margin: 10px 0px 0px 20px; height: 180px; width: calc(100% - 40px); float: left"></div>
+						 <div id="mapid"></div>
 						 `;
 			}
 		}
