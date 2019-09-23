@@ -4,16 +4,19 @@
 
 swipe = {
 
-	obj       : null,
-	tolerance : 150,
-	offset    : 0
+	obj            : null,
+	tolerance_X    : 150,
+	tolerance_Y    : 250,
+	offsetX        : 0,
+	offsetY        : 0
 
 };
 
-swipe.start = function(obj, tolerance) {
+swipe.start = function(obj, tolerance_X, tolerance_Y) {
 
-	if (obj)       swipe.obj       = obj;
-	if (tolerance) swipe.tolerance = tolerance;
+	if (obj)            swipe.obj         = obj;
+	if (tolerance_X)    swipe.tolerance_X = tolerance_X;
+	if (tolerance_Y)    swipe.tolerance_Y = tolerance_Y;
 
 	return true
 
@@ -23,12 +26,18 @@ swipe.move = function(e) {
 
 	if (swipe.obj===null) return false;
 
-	swipe.offset = -1 * e.x;
+  if (Math.abs(e.x) > Math.abs(e.y)) {
+	  swipe.offsetX = -1 * e.x;
+	  swipe.offsetY = 0.0;
+  } else {
+	  swipe.offsetX = 0.0;
+	  swipe.offsetY = +1 * e.y;
+	}
 
 	swipe.obj.css({
-		WebkitTransform : 'translateX(' + swipe.offset + 'px)',
-		MozTransform    : 'translateX(' + swipe.offset + 'px)',
-		transform       : 'translateX(' + swipe.offset + 'px)'
+		'WebkitTransform' : 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)',
+		'MozTransform'    : 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)',
+		'transform'       : 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)'
 	})
 
 };
@@ -36,27 +45,36 @@ swipe.move = function(e) {
 swipe.stop = function(e, left, right) {
 
 	// Only execute once
-	if (swipe.obj==null) return false;
+	if (swipe.obj==null)            return false;
 
-	if (e.x<=-swipe.tolerance) {
+  if (e.y<=-swipe.tolerance_Y) {
+
+      lychee.goto(album.getID());
+
+	} else if (e.y>=swipe.tolerance_Y) {
+
+     lychee.goto(album.getID());
+
+	} else if (e.x<=-swipe.tolerance_X) {
 
 		left(true)
 
-	} else if (e.x>=swipe.tolerance) {
+	} else if (e.x>=swipe.tolerance_X) {
 
 		right(true)
 
 	} else {
 
 		swipe.obj.css({
-			WebkitTransform : 'translateX(0px)',
-			MozTransform    : 'translateX(0px)',
-			transform       : 'translateX(0px)'
+			WebkitTransform : 'translate(0px, 0px)',
+			MozTransform    : 'translate(0px, 0px)',
+			transform       : 'translate(0px, 0px)'
 		})
 
 	}
 
-	swipe.obj    = null;
-	swipe.offset = 0
+	swipe.obj            = null;
+	swipe.offsetX        = 0;
+	swipe.offsetY        = 0
 
 };

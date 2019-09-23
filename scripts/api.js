@@ -37,7 +37,7 @@ api.isTimeout = function(errorThrown, jqXHR) {
 	return false;
 };
 
-api.post = function(fn, params, callback) {
+api.post = function(fn, params, callback, responseProgressCB = null) {
 
 	loadingBar.show();
 
@@ -66,14 +66,22 @@ api.post = function(fn, params, callback) {
 
 	};
 
-	$.ajax({
+	let ajaxParams = {
 		type: 'POST',
 		url: api_url,
 		data: params,
 		dataType: 'json',
 		success,
 		error
-	})
+	};
+
+	if (responseProgressCB !== null) {
+		ajaxParams.xhrFields = {
+			onprogress: responseProgressCB
+		}
+	}
+
+	$.ajax(ajaxParams)
 
 };
 
