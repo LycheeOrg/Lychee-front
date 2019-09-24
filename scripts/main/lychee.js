@@ -145,6 +145,9 @@ lychee.init = function() {
 			lychee.locale[key] = data.locale[key]
 		}
 
+		// Apply translations to the header
+		header.applyTransduction();
+
 		// Check status
 		// 0 = No configuration
 		// 1 = Logged out
