@@ -232,7 +232,7 @@ header.setEditable = function(editable) {
 
 };
 
-header.applyTransduction = function () {
+header.applyTranslations = function () {
 
 	let selector_locale = {
 		'#button_signin'         : 'SIGN_IN',

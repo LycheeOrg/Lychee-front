@@ -146,7 +146,7 @@ lychee.init = function() {
 		}
 
 		// Apply translations to the header
-		header.applyTransduction();
+		header.applyTranslations();
 
 		// Check status
 		// 0 = No configuration
