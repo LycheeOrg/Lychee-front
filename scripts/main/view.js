@@ -11,6 +11,8 @@ view.albums = {
 		multiselect.clearSelection();
 
 		view.albums.title();
+		view.albums.setting();
+		view.albums.add();
 		view.albums.content.init();
 
 	},
@@ -26,6 +28,18 @@ view.albums = {
 		} else {
 			lychee.setTitle(lychee.locale['ALBUMS'], false)
 		}
+
+	},
+
+	setting: function () {
+
+		$('#button_settings').attr('title', lychee.locale['SETTINGS'])
+
+	},
+
+	add: function () {
+
+		$('.button.button_add').attr('title', lychee.locale['ADD'])
 
 	},
 
@@ -160,6 +174,13 @@ view.album = {
 
 		view.album.sidebar();
 		view.album.title();
+		view.album.share();
+		view.album.download();
+		view.album.about();
+		view.album.delete();
+		view.album.fullscreen();
+		view.album.add();
+		view.album.close();
 		view.album.public();
 		view.album.content.init();
 
@@ -191,6 +212,48 @@ view.album = {
 			}
 
 		}
+
+	},
+
+	share: function () {
+
+		$('#button_share_album').attr('title', lychee.locale['SHARE_ALBUM'])
+
+	},
+
+	download: function () {
+
+		$('#button_archive').attr('title', lychee.locale['DOWNLOAD_ALBUM'])
+
+	},
+
+	about: function () {
+
+		$('#button_info_album').attr('title', lychee.locale['ABOUT_ALBUM'])
+
+	},
+
+	delete: function () {
+
+		$('#button_trash_album').attr('title', lychee.locale['DELETE_ALBUM'])
+
+	},
+
+	fullscreen: function () {
+
+		$('#button_fs_album_enter').attr('title', lychee.locale['FULLSCREEN_ENTER'])
+
+	},
+
+	add: function () {
+
+		$('.button.button_add').attr('title', lychee.locale['ADD'])
+
+	},
+
+	close: function () {
+
+		$('#button_back_home').attr('title', lychee.locale['CLOSE_ALBUM'])
 
 	},
 
@@ -524,6 +587,12 @@ view.photo = {
 		view.photo.sidebar();
 		view.photo.title();
 		view.photo.star();
+		view.photo.share();
+		view.photo.about();
+		view.photo.move();
+		view.photo.delete();
+		view.photo.fullscreen();
+		view.photo.close();
 		view.photo.public();
 		view.photo.photo();
 
@@ -630,6 +699,42 @@ view.photo = {
 			$('#button_star').removeClass('active').attr('title', lychee.locale['STAR_PHOTO'])
 
 		}
+
+	},
+
+	share: function () {
+
+		$('#button_share').attr('title', lychee.locale['SHARE_PHOTO'])
+
+	},
+
+	about: function () {
+
+		$('#button_info').attr('title', lychee.locale['ABOUT_PHOTO'])
+
+	},
+
+	move: function () {
+
+		$('#button_move').attr('title', lychee.locale['MOVE'])
+
+	},
+
+	delete: function () {
+
+		$('#button_trash').attr('title', lychee.locale['DELETE'])
+
+	},
+
+	fullscreen: function () {
+
+		$('#button_fs_enter').attr('title', lychee.locale['FULLSCREEN_ENTER'])
+
+	},
+
+	close: function () {
+
+		$('#button_back').attr('title', lychee.locale['CLOSE_PHOTO'])
 
 	},
 
@@ -763,17 +868,24 @@ view.settings = {
 		multiselect.clearSelection();
 
 		view.settings.title();
+		view.settings.add();
 		view.settings.content.init()
 
 	},
 
 	title: function () {
 
-		lychee.setTitle('Settings', false)
+		lychee.setTitle(lychee.locale['SETTINGS'], false)
 	},
 
 	clearContent: function () {
 		lychee.content.html('<div class="settings_view"></div>');
+	},
+
+	add: function () {
+
+		$('.button.button_add').attr('title', lychee.locale['ADD'])
+
 	},
 
 	content: {
