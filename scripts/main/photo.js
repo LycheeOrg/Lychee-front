@@ -557,7 +557,7 @@ photo.setAlbum = function(photoIDs, albumID) {
 		else {
 			// We only really need to do anything here if the destination
 			// is a (possibly nested) subalbum of the current album; but
-			// since we have no way of figuring it out (album.json is
+			// since we have no way of figuring it out (albums.json is
 			// null), we need to reload.
 			if (visible.album()) {
 				album.reload();
