@@ -250,7 +250,7 @@ album.add = function (IDs = null, callback = null) {
 	};
 
 	basicModal.show({
-		body: `<p>${lychee.locale['TITLE_NEW_ALBUM']} <input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'></p>`,
+		body: lychee.html`<p>${lychee.locale['TITLE_NEW_ALBUM']} <input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'></p>`,
 		buttons: {
 			action: {
 				title: lychee.locale['CREATE_ALBUM'],
@@ -475,7 +475,7 @@ album.setPublic = function (albumID, e) {
 
 	if (!basicModal.visible()) {
 
-		let msg = `
+		let msg = lychee.html`
 			<form>
 				<div class='switch'>
 					<label>
