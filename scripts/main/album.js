@@ -83,32 +83,6 @@ album.getSubByID = function (albumID) {
 	return undefined;
 };
 
-album.hasSub = function (albumID) {
-
-	// Return true if the current album has albumID as its descendant
-
-	if (albumID == null || !album.json || !album.json.albums) {
-		return false;
-	}
-
-	let ret = false;
-
-	let func = function () {
-		if (parseInt(this.id, 10) === parseInt(albumID, 10)) {
-			ret = true;
-			return false
-		}
-		if (this.albums) {
-			$.each(this.albums, func)
-		}
-	};
-
-	$.each(album.json.albums, func);
-
-	return ret
-
-};
-
 // noinspection DuplicatedCode
 album.deleteByID = function (photoID) {
 
