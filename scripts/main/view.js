@@ -678,7 +678,7 @@ view.photo = {
 
 		let img = $('img#image');
 		if (img.length > 0) {
-			if (!img[0].complete) {
+			if (!img[0].complete || (img[0].currentSrc !== null && img[0].currentSrc === '')) {
 				// Image is still loading.  Display the thumb version in the
 				// background.
 				if (ret.thumb !== '') {
