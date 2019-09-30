@@ -742,7 +742,7 @@ view.photo = {
 				shadowUrl: 'img/marker-shadow.png',
 			});
 
-			var mymap = L.map('mapid').setView([photo.json.latitude, photo.json.longitude], 13);
+			var mymap = L.map('leaflet_map_single_photo').setView([photo.json.latitude, photo.json.longitude], 13);
 
 			// Add plain OpenStreetMap Layer
 			L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {

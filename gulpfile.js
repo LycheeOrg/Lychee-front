@@ -27,6 +27,7 @@ paths.view = {
 		'./scripts/main/header.js',
 		'./scripts/main/visible.js',
 		'./scripts/main/sidebar.js',
+		'./scripts/main/mapview.js',
 		'./scripts/main/lychee_locale.js',
 		'./deps/basiccontext/scripts/basicContext.js',
 	],
@@ -99,6 +100,10 @@ paths.main = {
 		'node_modules/justified-layout/dist/justified-layout.min.js',
 		'node_modules/leaflet/dist/leaflet.js',
 		'node_modules/leaflet-rotatedmarker/leaflet.rotatedMarker.js',
+		'node_modules/spin.js/spin.min.js',
+  	'node_modules/leaflet-spin/leaflet.spin.min.js',
+		'node_modules/leaflet.markercluster/dist/leaflet.markercluster.js',
+    'modules/Leaflet.Photo-gh-pages/Leaflet.Photo.js',
 		'../dist/_main--javascript.js'
 	],
 	scss: [
@@ -109,7 +114,9 @@ paths.main = {
 		'./deps/basiccontext/styles/main.scss',
 		'./deps/basiccontext/styles/addons/popin.scss',
 		'./styles/main/main.scss',
-		'node_modules/leaflet/dist/leaflet.css'
+		'node_modules/leaflet/dist/leaflet.css',
+		'node_modules/leaflet.markercluster/dist/MarkerCluster.css',
+    'modules/Leaflet.Photo-gh-pages/Leaflet.Photo.css'
 	],
 	svg: [
 		'./images/iconic.svg',

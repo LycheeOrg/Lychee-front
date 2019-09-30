@@ -292,6 +292,12 @@ lychee.goto = function(url = '', autoplay = true) {
 
 };
 
+lychee.gotoMap = function(albumID = '', autoplay = true) {
+
+	lychee.goto('map/' + albumID, autoplay);
+
+};
+
 lychee.load = function(autoplay = true) {
 
 	let albumID	= '';
@@ -307,16 +313,39 @@ lychee.load = function(autoplay = true) {
 
 	if (albumID && photoID) {
 
-		// Trash data
-		photo.json = null;
+		if(albumID=='map') {
+			// show map
+			// albumID has been stored in photoID due to URL format #map/albumID
+			albumID = photoID;
 
-		// Show Photo
-		if (lychee.content.html()==='' || (header.dom('.header__search').length && header.dom('.header__search').val().length!==0)) {
-			lychee.content.hide();
-			album.load(albumID, true)
+			// Trash data
+			photo.json = null;
+
+			// Show Album -> it's below the map
+			if (visible.photo()) view.photo.hide();
+			if (visible.sidebar()) sidebar.toggle();
+			if (album.json && albumID===album.json.id) {
+				view.album.title();
+			}
+			mapview.open(albumID);
+			lychee.footer_hide();
+
+
+		} else {
+			// Show photo
+
+			// Trash data
+			photo.json = null;
+
+			// Show Photo
+			if (lychee.content.html()==='' || (header.dom('.header__search').length && header.dom('.header__search').val().length!==0)) {
+				lychee.content.hide();
+				album.load(albumID, true)
+			}
+			photo.load(photoID, albumID, autoplay);
+			lychee.footer_hide();
 		}
-		photo.load(photoID, albumID, autoplay);
-		lychee.footer_hide();
+
 
 	} else if (albumID) {
 
@@ -325,6 +354,7 @@ lychee.load = function(autoplay = true) {
 
 		// Show Album
 		if (visible.photo()) view.photo.hide();
+		if (visible.mapview()) mapview.close();
 		if (visible.sidebar() && (albumID==='0' || albumID==='f' || albumID==='s' || albumID==='r')) sidebar.toggle();
 		if (album.json && albumID===album.json.id) view.album.title();
 		else album.load(albumID);
@@ -347,6 +377,7 @@ lychee.load = function(autoplay = true) {
 
 		// Show Albums
 		if (visible.photo()) view.photo.hide();
+		if (visible.mapview()) mapview.close();
 		lychee.content.show();
 		lychee.footer_show();
 		albums.load();

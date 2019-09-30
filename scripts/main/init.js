@@ -92,6 +92,7 @@ $(document).ready(function() {
 		else if (visible.album() && !album.json.parent_id)                           lychee.goto();
 		else if (visible.album())													 lychee.goto(album.getParent());
 		else if (visible.albums() && search.hash !== null) search.reset();
+		else if (visible.mapview())                                                  mapview.close();
 		return false
 	});
 
@@ -150,6 +151,9 @@ $(document).ready(function() {
 		return false
 
 	})
+
+	// click on thumbnail on map
+	.on('click', '.image-leaflet-popup', function(e) { mapview.goto($(this)); })
 
 	// Fullscreen
 	.on('fullscreenchange mozfullscreenchange webkitfullscreenchange msfullscreenchange', lychee.fullscreenUpdate);

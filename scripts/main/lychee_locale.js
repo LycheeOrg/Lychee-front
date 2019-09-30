@@ -64,6 +64,7 @@ lychee.locale = {
 
 		'CLOSE_ALBUM'					: 'Close Album',
 		'CLOSE_PHOTO'					: 'Close Photo',
+		'CLOSE_MAP'           : 'Close Map',
 
 		'ADD'							: 'Add',
 		'MOVE'							: 'Move',
@@ -102,6 +103,7 @@ lychee.locale = {
 
 		'FULL_PHOTO'				: 'Full Photo',
 		'ABOUT_PHOTO'				: 'About Photo',
+		'DISPLAY_FULL_MAP'  : 'Map',
 		'DIRECT_LINK'				: 'Direct Link',
 		'DIRECT_LINKS'				: 'Direct Links',
 

@@ -8,6 +8,7 @@ let lychee = {};
 
 lychee.content = $('.content');
 lychee.imageview = $('#imageview');
+lychee.mapview = $('#mapview');
 
 lychee.escapeHTML = function (html = '') {
 
@@ -205,6 +206,9 @@ $(document).ready(function () {
 	// Infobox
 	header.dom('#button_info').on('click', sidebar.toggle);
 
+	// Show overview Map
+	header.dom('#button_map').on('click', alert("Show Map"));
+
 	// Load photo
 	loadPhotoInfo(photoID)
 
@@ -273,4 +277,3 @@ const error = function (errorThrown, params, data) {
 	loadingBar.show('error', errorThrown)
 
 };
-

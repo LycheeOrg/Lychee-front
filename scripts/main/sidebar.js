@@ -494,7 +494,7 @@ sidebar.render = function(structure) {
 
 			if ((_has_latitude) && (_has_longitude) && (lychee.map_display)) {
 				_html += `
-						 <div id="mapid"></div>
+						 <div id="leaflet_map_single_photo"></div>
 						 `;
 			}
 		}
