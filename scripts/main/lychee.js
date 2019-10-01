@@ -294,6 +294,11 @@ lychee.goto = function(url = '', autoplay = true) {
 
 lychee.gotoMap = function(albumID = '', autoplay = true) {
 
+	// If map functionality is disabled -> go to album
+	if (!lychee.map_display) {
+		loadingBar.show('error', lychee.locale['ERROR_MAP_DEACTIVATED']);
+		return;
+	}
 	lychee.goto('map/' + albumID, autoplay);
 
 };
@@ -314,6 +319,12 @@ lychee.load = function(autoplay = true) {
 	if (albumID && photoID) {
 
 		if(albumID=='map') {
+
+			// If map functionality is disabled -> do nothing
+			if (!lychee.map_display) {
+				loadingBar.show('error', lychee.locale['ERROR_MAP_DEACTIVATED']);
+				return;
+			}
 			// show map
 			// albumID has been stored in photoID due to URL format #map/albumID
 			albumID = photoID;
@@ -338,7 +349,7 @@ lychee.load = function(autoplay = true) {
 			photo.json = null;
 
 			// Show Photo
-			if (lychee.content.html()==='' || (header.dom('.header__search').length && header.dom('.header__search').val().length!==0)) {
+			if (lychee.content.html()==='' || album.json==null || (header.dom('.header__search').length && header.dom('.header__search').val().length!==0)) {
 				lychee.content.hide();
 				album.load(albumID, true)
 			}

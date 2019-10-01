@@ -38,6 +38,6 @@
     "multiselect-two-sides": "^2.5.5",
     "npm": "^6.9.0",
     "require": "^2.4.20",
-    "spin.js": "4.0.0"
+    "spin.js": "^2.3.2"
   }
 }

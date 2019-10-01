@@ -1,5 +1,5 @@
 /**
- * @description This module takes care of the map view of a full album and its sub-albume.
+ * @description This module takes care of the map view of a full album and its sub-albums.
  */
 
 mapview = {
@@ -21,6 +21,12 @@ mapview.isInitialized = function() {
 
 // Open the map view
 mapview.open = function(albumID = null) {
+
+	// If map functionality is disabled -> do nothing
+	if (!lychee.map_display) {
+		loadingBar.show('error', lychee.locale['ERROR_MAP_DEACTIVATED']);
+		return;
+	}
 
 	// In case function is called without albumID -> we take the ID
 	// from the currently shown album
@@ -200,6 +206,9 @@ mapview.open = function(albumID = null) {
 
 mapview.close = function() {
 
+	// If map functionality is disabled -> do nothing
+	if (!lychee.map_display) return;
+
 	lychee.animate($('#mapview'), 'fadeOut');
 	$('#mapview').hide();
 	header.setMode('album');
@@ -207,6 +216,9 @@ mapview.close = function() {
 }
 
 mapview.toggle = function() {
+
+	// If map functionality is disabled -> do nothing
+	if (!lychee.map_display) return;
 
   if(visible.mapview()) {
 		mapview.close();
@@ -219,8 +231,16 @@ mapview.toggle = function() {
 
 mapview.goto = function(elem) {
 
+	// If map functionality is disabled -> do nothing
+	if (!lychee.map_display) return;
+
 	var photoID = elem.attr('data-id');
 	var albumID = elem.attr('data-album-id');
+
+	if( (album.json==null) ||  (albumID!==album.json.id)) {
+		album.refresh();
+	}
+
 	lychee.goto(albumID + '/' + photoID);
 
 };

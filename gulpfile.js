@@ -101,9 +101,9 @@ paths.main = {
 		'node_modules/leaflet/dist/leaflet.js',
 		'node_modules/leaflet-rotatedmarker/leaflet.rotatedMarker.js',
 		'node_modules/spin.js/spin.min.js',
-  	'node_modules/leaflet-spin/leaflet.spin.min.js',
+		'node_modules/leaflet-spin/leaflet.spin.min.js',
 		'node_modules/leaflet.markercluster/dist/leaflet.markercluster.js',
-    'modules/Leaflet.Photo-gh-pages/Leaflet.Photo.js',
+		'modules/Leaflet.Photo-gh-pages/Leaflet.Photo.js',
 		'../dist/_main--javascript.js'
 	],
 	scss: [
