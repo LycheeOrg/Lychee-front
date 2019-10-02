@@ -176,6 +176,13 @@ header.setMode = function(mode) {
 				$('#button_archive').show();
 			}
 
+			// If map is disabled, we should hide the icon
+			if (lychee.map_display) {
+				$('#button_map_album').show();
+			} else {
+				$('#button_map_album').hide();
+			}
+
 			if (albumID==='s' || albumID==='f' || albumID==='r') {
 				$('#button_info_album, #button_trash_album, #button_visibility_album, #button_move_album').hide();
 				$('.button_add, .header__divider', '.header__toolbar--album').show()
@@ -211,6 +218,13 @@ header.setMode = function(mode) {
 				album.json && album.json.downloadable && album.json.downloadable === '1')) &&
 				!(photo.json.url && photo.json.url !== '')) {
 				$('#button_more').hide();
+			}
+
+			// If map is disabled, we should hide the icon
+			if (lychee.map_display) {
+				$('#button_map').show();
+			} else {
+				$('#button_map').hide();
 			}
 
 			return true;
