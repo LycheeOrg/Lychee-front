@@ -182,6 +182,14 @@ header.setMode = function(mode) {
 			} else {
 				$('#button_map_album').hide();
 			}
+			// Set icon in Public mode
+			if(lychee.publicMode===true) {
+				if (lychee.map_display_public) {
+					$('#button_map_album').show();
+				} else {
+					$('#button_map_album').hide();
+				}
+			}
 
 			if (albumID==='s' || albumID==='f' || albumID==='r') {
 				$('#button_info_album, #button_trash_album, #button_visibility_album, #button_move_album').hide();
@@ -192,11 +200,13 @@ header.setMode = function(mode) {
 			} else {
 				$('#button_info_album, #button_visibility_album').show();
 				if (album.isUploadable()) {
-					$('#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album').show()
+					$('#button_trash_album, #button_move_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album').show()
 				} else {
 					$('#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album').hide()
 				}
 			}
+
+
 
 			return true;
 
@@ -205,10 +215,26 @@ header.setMode = function(mode) {
 			header.dom().addClass('header--view');
 			header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--map').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--photo').addClass('header__toolbar--visible');
+
+			// If map is disabled, we should hide the icon
+			if (lychee.map_display) {
+				$('#button_map').show();
+			} else {
+				$('#button_map').hide();
+			}
+			// Set icon in Public mode
+			if(lychee.publicMode===true) {
+				if (lychee.map_display_public) {
+					$('#button_map').show();
+				} else {
+					$('#button_map').hide();
+				}
+			}
+
 			if (album.isUploadable()) {
 				$('#button_trash, #button_move, #button_visibility, #button_star').show()
 			} else {
-				$('#button_trash, #button_move, #button_visibility, #button_star').hide()
+				$('#button_trash, #button_move, #button_visibility, #button_star').hide();
 			}
 
 			// Hide More menu if empty (see contextMenu.photoMore)
@@ -218,13 +244,6 @@ header.setMode = function(mode) {
 				album.json && album.json.downloadable && album.json.downloadable === '1')) &&
 				!(photo.json.url && photo.json.url !== '')) {
 				$('#button_more').hide();
-			}
-
-			// If map is disabled, we should hide the icon
-			if (lychee.map_display) {
-				$('#button_map').show();
-			} else {
-				$('#button_map').hide();
 			}
 
 			return true;

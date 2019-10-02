@@ -249,7 +249,9 @@ lychee.locale = {
 		'SETTINGS_SUCCESS_IMAGE_OVERLAY': 'EXIF Overlay setting updated',
 		'SETTINGS_SUCCESS_PUBLIC_SEARCH': 'Public search updated',
 		'SETTINGS_SUCCESS_LICENSE'		: 'Default license updated',
-		'SETTINGS_SUCCESS_MAP_DISPLAY'  : 'Display map settings updated',
+		'SETTINGS_SUCCESS_MAP_DISPLAY'  : 'Map display settings updated',
+		'SETTINGS_SUCCESS_MAP_DISPLAY_PUBLIC' : 'Map display settings for public albums updated',
+
 		'SETTINGS_SUCCESS_CSS'		    : 'CSS updated',
 		'SETTINGS_SUCCESS_UPDATE'       : 'Settings updated with success',
 
@@ -331,6 +333,7 @@ lychee.locale = {
 		'OVERLAY_DATE'				: 'Photo date taken',
 
 		'MAP_DISPLAY_TEXT'		: 'Enable maps (provided by OpenStreetMap):',
+		'MAP_DISPLAY_PUBLIC_TEXT' : 'Enable maps for public albums (provided by OpenStreetMap):',
 
 		'VIEW_NO_RESULT'			: 'No results',
 		'VIEW_NO_PUBLIC_ALBUMS'		: 'No public albums',

@@ -438,6 +438,34 @@ settings.changeMapDisplay = function () {
 			lychee.map_display = (params.map_display === '1');
 		} else lychee.error(null, params, data);
 	});
+	// Map functionality is disabled
+	// -> map for public albums also needs to be disabled
+	if(lychee.map_display_public === true) {
+		$('#MapDisplayPublic').click();
+	}
+
+};
+
+settings.changeMapDisplayPublic = function () {
+	var params = {};
+	if ($('#MapDisplayPublic:checked').length === 1) {
+		params.map_display_public = '1';
+
+		// If public map functionality is enabled, but map in general is disabled
+		// General map functionality needs to be enabled
+		if(lychee.map_display === false) {
+			$('#MapDisplay').click();
+		}
+	} else {
+		params.map_display_public = '0';
+	}
+	api.post('Settings::setMapDisplayPublic', params, function (data) {
+		if (data === true) {
+			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_MAP_DISPLAY_PUBLIC']);
+			lychee.map_display_public = (params.map_display_public === '1');
+		} else lychee.error(null, params, data);
+	});
+
 };
 
 settings.changeCSS = function () {

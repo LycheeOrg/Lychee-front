@@ -1110,7 +1110,24 @@ view.settings = {
 			if (lychee.map_display) $('#MapDisplay').click();
 
 			settings.bind('#MapDisplay', '.setMapDisplay', settings.changeMapDisplay);
+
+		  msg = `
+			<div class="setMapDisplayPublic">
+			<p>${lychee.locale['MAP_DISPLAY_PUBLIC_TEXT']}
+			<label class="switch">
+				<input id="MapDisplayPublic" type="checkbox">
+				<span class="slider round"></span>
+			</label>
+			</p>
+			</div>
+			`;
+
+			$(".settings_view").append(msg);
+			if (lychee.map_display_public) $('#MapDisplayPublic').click();
+
+			settings.bind('#MapDisplayPublic', '.setMapDisplayPublic', settings.changeMapDisplayPublic);
 		},
+
 
 		setCSS: function () {
 			let msg = `

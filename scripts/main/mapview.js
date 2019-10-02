@@ -23,7 +23,7 @@ mapview.isInitialized = function() {
 mapview.open = function(albumID = null) {
 
 	// If map functionality is disabled -> do nothing
-	if (!lychee.map_display) {
+	if ((!lychee.map_display) || (lychee.publicMode===true && !lychee.map_display_public)) {
 		loadingBar.show('error', lychee.locale['ERROR_MAP_DEACTIVATED']);
 		return;
 	}
