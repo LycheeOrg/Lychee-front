@@ -399,8 +399,12 @@ contextMenu.move = function(IDs, e, callback, kind = 'UNSORTED', display_root = 
 
 		}
 
-		items.unshift({});
-		items.unshift({ title: lychee.locale['NEW_ALBUM'], fn: () => album.add(IDs, callback) });
+		// Don't allow to move the current album to a newly created subalbum
+		// (creating a cycle).
+		if (IDs.length !== 1 || IDs[0] !== (album.json ? album.json.id : null) || callback !== album.setAlbum) {
+			items.unshift({});
+			items.unshift({ title: lychee.locale['NEW_ALBUM'], fn: () => album.add(IDs, callback) })
+		}
 
 		basicContext.show(items, e.originalEvent, contextMenu.close)
 
