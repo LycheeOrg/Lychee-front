@@ -335,6 +335,21 @@ gulp.task('images--copy', function () {
 		.pipe(gulp.dest('../img'))
 });
 
+/* leaflet.markercluster.js.map ----------------------------------------- */
+
+
+paths.leafletMarkercluster = {
+	src: [
+		'./node_modules/leaflet.markercluster/dist/leaflet.markercluster.js.map'
+	]
+};
+
+gulp.task('leafletMarkercluster--copy', function () {
+	return gulp.src(paths.leafletMarkercluster.src)
+		.on('error', catchError)
+		.pipe(gulp.dest('../dist'))
+});
+
 /* Clean ----------------------------------------- */
 
 
@@ -353,7 +368,7 @@ gulp.task('default', gulp.series(gulp.parallel('view--svg', 'view--scripts',
 												'main--svg', 'main--scripts', 'main--styles',
 												'frame--scripts', 'frame--styles',
 												'landing--scripts', 'landing--styles', 'page--styles',
-												'images--copy'
+												'images--copy', 'leafletMarkercluster--copy'
 	), 'clean'));
 
 gulp.task('watch', gulp.series('default', function() {
