@@ -154,29 +154,29 @@ $(document).ready(function() {
 	// Paste upload
 	.on('paste', function (e) {
 		if (e.originalEvent.clipboardData.items) {
-			if (!album.isUploadable()) {
-				return false;
+			const items = e.originalEvent.clipboardData.items;
+			let filesToUpload = [];
+
+			// Search clipboard items for an image
+			for (let i = 0; i < items.length; i++) {
+				if (items[i].type.indexOf('image') !== -1 || items[i].type.indexOf('video') !== -1) {
+					filesToUpload.push(items[i].getAsFile());
+				}
 			}
 
-			// Close open overlays or views which are correlating with the upload
-			if (visible.photo()) lychee.goto(album.getID());
-			if (visible.contextMenu()) contextMenu.close();
-
-			if (e.originalEvent.clipboardData.items.length > 0) {
-				const items = e.originalEvent.clipboardData.items;
-				let imagesToUpload = [];
-
-				// Search clipboard items for an image
-				for (let i = 0; i < items.length; i++) {
-					if (items[i].type.indexOf('image') !== -1) {
-						imagesToUpload.push(items[i].getAsFile());
-					}
+			if (filesToUpload.length > 0) {
+				if (!album.isUploadable()) {
+					return false;
 				}
 
-				upload.start.local(imagesToUpload);
-			}
+				// Close open overlays or views which are correlating with the upload
+				if (visible.photo()) lychee.goto(album.getID());
+				if (visible.contextMenu()) contextMenu.close();
 
-			return false;
+				upload.start.local(filesToUpload);
+
+				return false;
+			}
 		}
 	})
 
