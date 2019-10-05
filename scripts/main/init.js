@@ -165,17 +165,25 @@ $(document).ready(function() {
 			}
 
 			if (filesToUpload.length > 0) {
-				if (!album.isUploadable()) {
-					return false;
-				}
+				if (!album.isUploadable())
+					return;
 
 				// Close open overlays or views which are correlating with the upload
-				if (visible.photo()) lychee.goto(album.getID());
-				if (visible.contextMenu()) contextMenu.close();
 
-				upload.start.local(filesToUpload);
+				if (visible.photo())
+					lychee.goto(album.getID());
+					
+				if (visible.contextMenu())
+					contextMenu.close();
 
-				return false;
+				if (basicModal.visible() || visible.leftMenu())
+					return;
+																
+				if (visible.album() || visible.albums()) {
+					upload.start.local(filesToUpload);
+
+					return false;
+				}
 			}
 		}
 	})
