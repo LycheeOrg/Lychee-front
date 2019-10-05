@@ -283,33 +283,6 @@ photo.next = function(animate) {
 
 };
 
-photo.duplicate = function(photoIDs, callback = null) {
-
-	if (!photoIDs) return false;
-	if (photoIDs instanceof Array===false) photoIDs = [ photoIDs ];
-
-	albums.refresh();
-
-	let params = {
-		photoIDs: photoIDs.join()
-	};
-
-	api.post('Photo::duplicate', params, function(data) {
-
-		if (data!==true){
-			lychee.error(null, params, data);
-		}
-		else {
-			album.load(album.getID());
-			if (callback != null) {
-				callback();
-			}
-		}
-
-	})
-
-};
-
 photo.delete = function(photoIDs) {
 
 	let action     = {};
@@ -490,11 +463,31 @@ photo.setTitle = function(photoIDs) {
 
 photo.copyTo = function(photoIDs, albumID) {
 
-	const action = function()
-	{
-		photo.setAlbum(photoIDs,albumID);
+	if (!photoIDs) return false;
+	if (photoIDs instanceof Array===false) photoIDs = [ photoIDs ];
+
+	let params = {
+		photoIDs: photoIDs.join(),
+		albumID
 	};
-	photo.duplicate(photoIDs, action);
+
+	api.post('Photo::duplicate', params, function(data) {
+
+		if (data !== true){
+			lychee.error(null, params, data)
+		}
+		else {
+			if (lychee.api_V2 || albumID === album.getID()) {
+				album.reload()
+			} else {
+				// Lychee v3 does not support the albumID argument to
+				// Photo::duplicate so we need to do it manually, which is
+				// imperfect, as it moves the source photos, not the duplicates.
+				photo.setAlbum(photoIDs, albumID)
+			}
+		}
+
+	})
 };
 
 photo.setAlbum = function(photoIDs, albumID) {
