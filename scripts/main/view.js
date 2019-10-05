@@ -803,7 +803,7 @@ view.settings = {
 
 	title: function () {
 
-		lychee.setTitle('Settings', false)
+		lychee.setTitle(lychee.locale['SETTINGS'], false)
 	},
 
 	clearContent: function () {
