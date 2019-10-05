@@ -240,7 +240,7 @@ header.applyTranslations = function () {
 		'#button_info_album'     : 'ABOUT_ALBUM',
 		'#button_info'           : 'ABOUT_PHOTO',
 		'.button_add'            : 'ADD',
-		'#button_move_album'     : 'ABOUT_ALBUM',
+		'#button_move_album'     : 'MOVE_ALBUM',
 		'#button_move'           : 'MOVE',
 		'#button_trash_album'    : 'DELETE_ALBUM',
 		'#button_trash'          : 'DELETE',
