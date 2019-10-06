@@ -744,9 +744,8 @@ view.photo = {
 
 			var mymap = L.map('leaflet_map_single_photo').setView([photo.json.latitude, photo.json.longitude], 13);
 
-			// Add plain OpenStreetMap Layer
-			L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-				attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+			L.tileLayer(map_provider_layer_attribution[lychee.map_provider].layer, {
+				attribution: map_provider_layer_attribution[lychee.map_provider].attribution
 			}).addTo(mymap);
 
 			if (!photo.json.imgDirection || photo.json.imgDirection === '') {
@@ -756,7 +755,7 @@ view.photo = {
 				// Add Marker, direction has been set
 				var viewDirectionIcon = L.icon({
 							iconUrl: 'img/view-angle-icon.png',
-
+							iconRetinaUrl: 'img/view-angle-icon-2x.png',
 							iconSize:     [100, 58], // size of the icon
 							iconAnchor:   [50, 49],  // point of the icon which will correspond to marker's location
 						});
@@ -1126,6 +1125,32 @@ view.settings = {
 			if (lychee.map_display_public) $('#MapDisplayPublic').click();
 
 			settings.bind('#MapDisplayPublic', '.setMapDisplayPublic', settings.changeMapDisplayPublic);
+
+			msg = `
+			<div class="setMapProvider">
+			<p>${lychee.locale['MAP_PROVIDER']}
+			<span class="select" style="width:270px">
+				<select name="MapProvider" id="MapProvider">
+					<option value="Wikimedia">${lychee.locale['MAP_PROVIDER_WIKIMEDIA']}</option>
+					<option value="OpenStreetMap.org">${lychee.locale['MAP_PROVIDER_OSM_ORG']}</option>
+					<option value="OpenStreetMap.de">${lychee.locale['MAP_PROVIDER_OSM_DE']}</option>
+					<option value="OpenStreetMap.fr">${lychee.locale['MAP_PROVIDER_OSM_FR']}</option>
+					<option value="RRZE">${lychee.locale['MAP_PROVIDER_RRZE']}</option>
+				</select>
+			</span>
+			<div class="basicModal__buttons">
+				<a id="basicModal__action_set_map_provider" class="basicModal__button">${lychee.locale['SET_MAP_PROVIDER']}</a>
+			</div>
+			</div>
+			`
+
+			$(".settings_view").append(msg);
+
+
+			$('select#MapProvider').val(!lychee.map_provider ? 'Wikimedia' : lychee.map_provider);
+			settings.bind('#basicModal__action_set_map_provider', '.setMapProvider', settings.setMapProvider);
+
+
 		},
 
 

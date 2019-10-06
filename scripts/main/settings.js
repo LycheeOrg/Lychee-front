@@ -468,6 +468,23 @@ settings.changeMapDisplayPublic = function () {
 
 };
 
+settings.setMapProvider = function () {
+	// validate the input
+	let params = {};
+	params.map_provider = $('#MapProvider').val();
+	console.log(params);
+
+
+	api.post('Settings::setMapProvider', params, function (data) {
+		if (data === true) {
+			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_MAP_PROVIDER']);
+			lychee.map_provider = params.map_provider;
+
+		} else lychee.error(null, params, data)
+
+	})
+};
+
 settings.changeCSS = function () {
 
 	let params = {};

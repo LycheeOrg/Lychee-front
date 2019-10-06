@@ -22,6 +22,7 @@ lychee.locale = {
 		'DEFAULT_LICENSE'	: 'Default License for new uploads:',
 		'SET_LICENSE'		: 'Set License',
 		'SET_OVERLAY_TYPE'	: 'Set Overlay',
+		'SET_MAP_PROVIDER'	: 'Set OpenStreetMap tiles provider',
 		'SAVE_RISK'			: 'Save my modifications, I accept the Risk!',
 		'MORE'              : 'More',
 
@@ -251,6 +252,7 @@ lychee.locale = {
 		'SETTINGS_SUCCESS_LICENSE'		: 'Default license updated',
 		'SETTINGS_SUCCESS_MAP_DISPLAY'  : 'Map display settings updated',
 		'SETTINGS_SUCCESS_MAP_DISPLAY_PUBLIC' : 'Map display settings for public albums updated',
+		'SETTINGS_SUCCESS_MAP_PROVIDER' : 'Map provider settings updated',
 
 		'SETTINGS_SUCCESS_CSS'		    : 'CSS updated',
 		'SETTINGS_SUCCESS_UPDATE'       : 'Settings updated with success',
@@ -331,6 +333,13 @@ lychee.locale = {
 		'OVERLAY_EXIF'				: 'Photo EXIF data',
 		'OVERLAY_DESCRIPTION'		: 'Photo description',
 		'OVERLAY_DATE'				: 'Photo date taken',
+
+		'MAP_PROVIDER'            : 'Provider of OpenStreetMap tiles:',
+		'MAP_PROVIDER_WIKIMEDIA'  : 'Wikimedia',
+		'MAP_PROVIDER_OSM_ORG'    : 'OpenStreetMap.org (no retina)',
+		'MAP_PROVIDER_OSM_DE'     : 'OpenStreetMap.de (no retina)',
+		'MAP_PROVIDER_OSM_FR'     : 'OpenStreetMap.fr (no retina)',
+		'MAP_PROVIDER_RRZE'       : 'University of Erlangen, Germany (only retina)',
 
 		'MAP_DISPLAY_TEXT'		: 'Enable maps (provided by OpenStreetMap):',
 		'MAP_DISPLAY_PUBLIC_TEXT' : 'Enable maps for public albums (provided by OpenStreetMap):',

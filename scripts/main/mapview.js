@@ -2,6 +2,34 @@
  * @description This module takes care of the map view of a full album and its sub-albums.
  */
 
+map_provider_layer_attribution = {
+	'Wikimedia':
+			{
+				layer: 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png',
+				attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>'
+			},
+	'OpenStreetMap.org':
+			{
+				layer: 'https://{s}.tile.osm.org/{z}/{x}/{y}{r}.png',
+				attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+			},
+	'OpenStreetMap.de':
+			{
+				layer: 'https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png ',
+				attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+			},
+	'OpenStreetMap.fr':
+			{
+				layer: 'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png ',
+				attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+			},
+	'RRZE':
+			{
+				layer: 'https://{s}.osm.rrze.fau.de/osmhd/{z}/{x}/{y}.png',
+				attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+			},
+};
+
 mapview = {
 		map: null,
 		photoLayer: null,
@@ -9,7 +37,8 @@ mapview = {
 		min_lng: null,
 		max_lat: null,
 		max_lng: null,
-		albumID: null
+		albumID: null,
+		map_provider: null
 };
 
 mapview.isInitialized = function() {
@@ -59,14 +88,31 @@ mapview.open = function(albumID = null) {
 		// Set initial view to (0,0)
 		mapview.map = L.map('leaflet_map_full').setView([0.0, 0.0], 13);
 
-		// Add plain OpenStreetMap Layer
-		L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-			attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+		L.tileLayer(map_provider_layer_attribution[lychee.map_provider].layer, {
+			attribution: map_provider_layer_attribution[lychee.map_provider].attribution
 		}).addTo(mapview.map);
 
+		mapview.map_provider = lychee.map_provider;
+
 	} else {
-		// Mapview has already shown data -> we need to clear it
-		mapview.photoLayer.clear();
+
+		if(mapview.map_provider !== lychee.map_provider) {
+
+			// removew all layers
+			mapview.map.eachLayer(function (layer) {
+			    mapview.map.removeLayer(layer);
+			});
+
+			L.tileLayer(map_provider_layer_attribution[lychee.map_provider].layer, {
+				attribution: map_provider_layer_attribution[lychee.map_provider].attribution
+			}).addTo(mapview.map);
+
+			mapview.map_provider = lychee.map_provider;
+		} else {
+
+			// Mapview has already shown data -> remove only photoLayer showing photos
+			mapview.photoLayer.clear();
+		}
 
 		// Reset min/max lat/lgn Values
 		mapview.min_lat = null;
@@ -79,7 +125,21 @@ mapview.open = function(albumID = null) {
 	mapview.photoLayer = L.photo.cluster().on('click', function(e) {
 			var photo = e.layer.photo;
 			var template = "";
-			template = template.concat('<img class="image-leaflet-popup" src="{url}" data-album-id="{albumID}" data-id="{photoID}"/><div><h1>{name}</h1><span title="Camera Date">', build.iconic("camera-slr"), '</span><p>{takedate}</p></div>');
+
+			// Retina version if available
+			if(photo.url2x !== "") {
+				template = template.concat('<img class="image-leaflet-popup" src="{url}" ',
+																	 'srcset="{url} 1x, {url2x} 2x" ',
+																	 'data-album-id="{albumID}" data-id="{photoID}"/><div><h1>{name}</h1><span title="Camera Date">',
+																	 build.iconic("camera-slr"),
+																	 '</span><p>{takedate}</p></div>');
+			} else {
+				template = template.concat('<img class="image-leaflet-popup" src="{url}" ',
+																	 'data-album-id="{albumID}" data-id="{photoID}"/><div><h1>{name}</h1><span title="Camera Date">',
+																	 build.iconic("camera-slr"),
+																	 '</span><p>{takedate}</p></div>');
+			}
+
 			e.layer.bindPopup(L.Util.template(template, photo), {
 					minWidth: 400
 				}).openPopup();
@@ -111,7 +171,9 @@ mapview.open = function(albumID = null) {
 					"lat": parseFloat(element.latitude),
 					"lng": parseFloat(element.longitude),
 					"thumbnail": element.thumbUrl,
+					"thumbnail2x": element.thumb2x,
 					"url": element.small,
+					"url2x":  element.small2x,
 					"name": element.title,
 					"takedate": element.takedate,
 					"albumID": element.album,
