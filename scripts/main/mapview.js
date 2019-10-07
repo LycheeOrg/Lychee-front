@@ -206,30 +206,26 @@ mapview.open = function(albumID = null) {
 	// Call backend, retrieve information of photos and display them
 	// This function is called recursively to retrieve data for sub-albums
 	// Possible enhancement could be to only have a single ajax call
-	getAlbumData = function(_albumID, setTitle = false) {
+	getAlbumData = function(_albumID, _includeSubAlbums = true, setTitle = false) {
 
 		let params = {
 			albumID: _albumID,
+			includeSubAlbums: _includeSubAlbums,
 			password: ''
 		};
 
-		api.post('Album::get', params, function (data) {
-
+		api.post('Album::getPositionData', params, function (data) {
+			console.log(data);
 			if (data === 'Warning: Wrong password!') {
 				password.getDialog(_albumID, function () {
 
 					params.password = password.value;
 
-					api.post('Album::get', params, function (data) {
+					api.post('Album::getPositionData', params, function (data) {
 						addPhotosToMap(data);
 						if (setTitle===true) {
 							lychee.setTitle(data.title, false);
 						}
-
-						// We also want to display images of subalbums
-						data.albums.forEach(function (element, index) {
-							getAlbumData(element.id);
-						});
 					})
 				})
 			} else {
@@ -237,11 +233,6 @@ mapview.open = function(albumID = null) {
 				if (setTitle===true) {
 					lychee.setTitle(data.title, false);
 				}
-
-				// We also want to display images of subalbums
-				data.albums.forEach(function (element, index) {
-					getAlbumData(element.id);
-				});
 			}
 		});
 	}
@@ -249,11 +240,13 @@ mapview.open = function(albumID = null) {
 	// If the has already been loaded - we can reuse the date
 	if (album.json !== null && album.json.photos !== null) {
 
+		getAlbumData(albumID, true);
+
 		// We reuse the already loaded data
-		addPhotosToMap(album.json);
-		album.json.albums.forEach(function (element, index) {
-			getAlbumData(element.id);
-		});
+		//addPhotosToMap(album.json);
+		//album.json.albums.forEach(function (element, index) {
+		//	getAlbumData(element.id);
+		//});
 
 	} else {
 
