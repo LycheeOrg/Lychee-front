@@ -174,7 +174,7 @@
 
 	&__clear {
 		position: absolute;
-		right: 60px;
+		right: 90px;
 		padding: 0;
 		color: white(.5);
 		font-size: 30px;
@@ -185,6 +185,11 @@
 		&:hover {
 			color: white(1);
 		}
+
+	}
+
+	&__clear_nomap {
+		right: 60px;
 	}
 
 	&__clear_public {

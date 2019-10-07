@@ -47,6 +47,7 @@ header.bind = function() {
 	header.dom('#button_settings')    .on(eventName, leftMenu.open);
 	header.dom('#button_info_album')  .on(eventName, sidebar.toggle);
 	header.dom('#button_info')        .on(eventName, sidebar.toggle);
+	header.dom('#button_map_albums')  .on(eventName, function() { lychee.gotoMap() });
 	header.dom('#button_map_album')   .on(eventName, function() { lychee.gotoMap(album.getID()) });
 	header.dom('#button_map')         .on(eventName, function() { lychee.gotoMap(album.getID()) });
 	header.dom('.button_add')         .on(eventName, contextMenu.add);
@@ -157,6 +158,26 @@ header.setMode = function(mode) {
 			header.dom().removeClass('header--view');
 			header.dom('.header__toolbar--public, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--albums').addClass('header__toolbar--visible');
+
+			// If map is disabled, we should hide the icon
+			if (lychee.map_display) {
+				$('#button_map_albums').show();
+				$('.header__clear').removeClass('header__clear_nomap');
+
+			} else {
+				$('#button_map_albums').hide();
+				$('.header__clear').addClass('header__clear_nomap');
+			}
+			// Set icon in Public mode
+			if(lychee.publicMode===true) {
+				if (lychee.map_display_public) {
+					$('#button_map_albums').show();
+					$('.header__clear').removeClass('header__clear_nomap');
+				} else {
+					$('#button_map_albums').hide();
+					$('.header__clear').addClass('header__clear_nomap');
+				}
+			}
 
 			return true;
 

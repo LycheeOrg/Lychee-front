@@ -292,6 +292,8 @@ lychee.logout = function() {
 
 lychee.goto = function(url = '', autoplay = true) {
 
+	if(url===false) url = '';
+	
 	url = '#' + url;
 
 	history.pushState(null, null, url);
@@ -367,16 +369,38 @@ lychee.load = function(autoplay = true) {
 
 	} else if (albumID) {
 
-		// Trash data
-		photo.json = null;
 
-		// Show Album
-		if (visible.photo()) view.photo.hide();
-		if (visible.mapview()) mapview.close();
-		if (visible.sidebar() && (albumID==='0' || albumID==='f' || albumID==='s' || albumID==='r')) sidebar.toggle();
-		if (album.json && albumID===album.json.id) view.album.title();
-		else album.load(albumID);
-		lychee.footer_show();
+		if(albumID=='map') {
+
+			// Show map of all albums
+			// If map functionality is disabled -> do nothing
+			if (!lychee.map_display) {
+				loadingBar.show('error', lychee.locale['ERROR_MAP_DEACTIVATED']);
+				return;
+			}
+
+			// Trash data
+			photo.json = null;
+
+			// Show Album -> it's below the map
+			if (visible.photo()) view.photo.hide();
+			if (visible.sidebar()) sidebar.toggle();
+			mapview.open();
+			lychee.footer_hide();
+
+		} else {
+
+			// Trash data
+			photo.json = null;
+
+			// Show Album
+			if (visible.photo()) view.photo.hide();
+			if (visible.mapview()) mapview.close();
+			if (visible.sidebar() && (albumID==='0' || albumID==='f' || albumID==='s' || albumID==='r')) sidebar.toggle();
+			if (album.json && albumID===album.json.id) view.album.title();
+			else album.load(albumID);
+			lychee.footer_show();
+		}
 
 	} else {
 

@@ -62,6 +62,9 @@ mapview.title = function(_albumID, _albumTitle) {
 		case '0':
 			lychee.setTitle(lychee.locale['UNSORTED'], false);
 			break;
+		case null:
+			lychee.setTitle(lychee.locale['ALBUMS'], false);
+			break;
 		default:
 			lychee.setTitle(_albumTitle, false);
 			break
@@ -76,16 +79,6 @@ mapview.open = function(albumID = null) {
 	if ((!lychee.map_display) || (lychee.publicMode===true && !lychee.map_display_public)) {
 		loadingBar.show('error', lychee.locale['ERROR_MAP_DEACTIVATED']);
 		return;
-	}
-
-	// In case function is called without albumID -> we take the ID
-	// from the currently shown album
-	if(albumID === null) {
-		if (album.json !== null && album.json.photos !== null) {
-			albumID = album.json.ID;
-		} else {
-			return;
-		}
 	}
 
 	lychee.animate($('#mapview'), 'fadeIn');
@@ -229,29 +222,58 @@ mapview.open = function(albumID = null) {
 	// Possible enhancement could be to only have a single ajax call
 	getAlbumData = function(_albumID, _includeSubAlbums = true) {
 
-		let params = {
-			albumID: _albumID,
-			includeSubAlbums: _includeSubAlbums,
-			password: ''
-		};
+		if (_albumID !== '' && _albumID !== null) {
+			// _ablumID has been to a specific album
+			let params = {
+				albumID: _albumID,
+				includeSubAlbums: _includeSubAlbums,
+				password: ''
+			};
 
-		api.post('Album::getPositionData', params, function (data) {
-			console.log(data);
-			if (data === 'Warning: Wrong password!') {
-				password.getDialog(_albumID, function () {
+			api.post('Album::getPositionData', params, function (data) {
 
-					params.password = password.value;
+				if (data === 'Warning: Wrong password!') {
+					password.getDialog(_albumID, function () {
 
-					api.post('Album::getPositionData', params, function (data) {
-						addPhotosToMap(data);
-						mapview.title(_albumID, data.title);
+						params.password = password.value;
+
+						api.post('Album::getPositionData', params, function (data) {
+							addPhotosToMap(data);
+							mapview.title(_albumID, data.title);
+						})
 					})
-				})
-			} else {
-				addPhotosToMap(data);
-				mapview.title(_albumID, data.title);
-			}
-		});
+				} else {
+					addPhotosToMap(data);
+					mapview.title(_albumID, data.title);
+				}
+			});
+		} else {
+			// AlbumID is empty -> fetch all photos of all albums
+			// _ablumID has been to a specific album
+			let params = {
+				includeSubAlbums: _includeSubAlbums,
+				password: ''
+			};
+
+			api.post('Albums::getPositionData', params, function (data) {
+
+				if (data === 'Warning: Wrong password!') {
+					password.getDialog(_albumID, function () {
+
+						params.password = password.value;
+
+						api.post('Albums::getPositionData', params, function (data) {
+							addPhotosToMap(data);
+							mapview.title(_albumID, data.title);
+						})
+					})
+				} else {
+					addPhotosToMap(data);
+					mapview.title(_albumID, data.title);
+				}
+			});
+		}
+
 	}
 
 	// If subalbums not being included and album.json already has all data
@@ -279,20 +301,6 @@ mapview.close = function() {
 	lychee.animate($('#mapview'), 'fadeOut');
 	$('#mapview').hide();
 	header.setMode('album');
-
-}
-
-mapview.toggle = function() {
-
-	// If map functionality is disabled -> do nothing
-	if (!lychee.map_display) return;
-
-  if(visible.mapview()) {
-		mapview.close();
-	} else {
-		mapview.open();
-	}
-	return true;
 
 };
 
