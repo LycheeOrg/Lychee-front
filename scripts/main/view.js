@@ -1151,6 +1151,23 @@ view.settings = {
 			settings.bind('#basicModal__action_set_map_provider', '.setMapProvider', settings.setMapProvider);
 
 
+			msg = `
+			<div class="setMapIncludeSubalbums">
+			<p>${lychee.locale['MAP_INCLUDE_SUBALBUMS_TEXT']}
+			<label class="switch">
+			  <input id="MapIncludeSubalbums" type="checkbox">
+			  <span class="slider round"></span>
+			</label>
+			</p>
+			</div>
+			`;
+
+			$(".settings_view").append(msg);
+			if (lychee.map_include_subalbums) $('#MapIncludeSubalbums').click();
+
+			settings.bind('#MapIncludeSubalbums', '.setMapIncludeSubalbums', settings.changeMapIncludeSubalbums);
+
+
 		},
 
 

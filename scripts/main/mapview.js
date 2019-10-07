@@ -48,6 +48,27 @@ mapview.isInitialized = function() {
 	return true;
 }
 
+mapview.title = function(_albumID, _albumTitle) {
+	switch (_albumID) {
+		case 'f':
+			lychee.setTitle(lychee.locale['STARRED'], false);
+			break;
+		case 's':
+			lychee.setTitle(lychee.locale['PUBLIC'], false);
+			break;
+		case 'r':
+			lychee.setTitle(lychee.locale['RECENT'], false);
+			break;
+		case '0':
+			lychee.setTitle(lychee.locale['UNSORTED'], false);
+			break;
+		default:
+			lychee.setTitle(_albumTitle, false);
+			break
+	}
+}
+
+
 // Open the map view
 mapview.open = function(albumID = null) {
 
@@ -170,9 +191,9 @@ mapview.open = function(albumID = null) {
 				photos.push({
 					"lat": parseFloat(element.latitude),
 					"lng": parseFloat(element.longitude),
-					"thumbnail": element.thumbUrl,
+					"thumbnail": (element.thumbUrl!=="uploads/thumb/" ? element.thumbUrl : "img/placeholder.png"),
 					"thumbnail2x": element.thumb2x,
-					"url": element.small,
+					"url": (element.small!=="" ? element.small : element.url),
 					"url2x":  element.small2x,
 					"name": element.title,
 					"takedate": element.takedate,
@@ -206,7 +227,7 @@ mapview.open = function(albumID = null) {
 	// Call backend, retrieve information of photos and display them
 	// This function is called recursively to retrieve data for sub-albums
 	// Possible enhancement could be to only have a single ajax call
-	getAlbumData = function(_albumID, _includeSubAlbums = true, setTitle = false) {
+	getAlbumData = function(_albumID, _includeSubAlbums = true) {
 
 		let params = {
 			albumID: _albumID,
@@ -223,35 +244,26 @@ mapview.open = function(albumID = null) {
 
 					api.post('Album::getPositionData', params, function (data) {
 						addPhotosToMap(data);
-						if (setTitle===true) {
-							lychee.setTitle(data.title, false);
-						}
+						mapview.title(_albumID, data.title);
 					})
 				})
 			} else {
 				addPhotosToMap(data);
-				if (setTitle===true) {
-					lychee.setTitle(data.title, false);
-				}
+				mapview.title(_albumID, data.title);
 			}
 		});
 	}
 
-	// If the has already been loaded - we can reuse the date
-	if (album.json !== null && album.json.photos !== null) {
+	// If subalbums not being included and album.json already has all data
+	// -> we can reuse it
+	if (lychee.map_include_subalbums === false && album.json !== null && album.json.photos !== null) {
 
-		getAlbumData(albumID, true);
-
-		// We reuse the already loaded data
-		//addPhotosToMap(album.json);
-		//album.json.albums.forEach(function (element, index) {
-		//	getAlbumData(element.id);
-		//});
+		addPhotosToMap(album.json);
 
 	} else {
 
-		// Nothing preloaded - we need to load everything
-		getAlbumData(albumID, true);
+		// Not all needed data has been  preloaded - we need to load everything
+		getAlbumData(albumID, lychee.map_include_subalbums);
 
 	}
 

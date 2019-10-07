@@ -31,6 +31,7 @@ lychee = {
 	map_display					: false,	// display photo coordinates on map
 	map_display_public					: false,	// display photos of public album on map (user not logged in)
 	map_provider        : 'Wikimedia', // Provider of OSM Tiles
+	map_include_subalbums : false, // include photos of subalbums on map
 	landing_page_enabled        : false,    // is landing page enabled ?
 	delete_imported				: false,
 
@@ -171,6 +172,7 @@ lychee.init = function() {
 			lychee.map_display					= (data.config.map_display && data.config.map_display === '1')  || false;
 			lychee.map_display_public		= (data.config.map_display_public && data.config.map_display_public === '1')  || false;
 			lychee.map_provider			    = (!data.config.map_provider) ? 'Wikimedia' : data.config.map_provider;
+			lychee.map_include_subalbums = (data.config.map_include_subalbums && data.config.map_include_subalbums === '1')  || false;
 			lychee.default_license				= data.config.default_license	|| 'none';
 			lychee.css							= data.config.css				|| '';
 			lychee.full_photo					= (data.config.full_photo == null) || (data.config.full_photo === '1');

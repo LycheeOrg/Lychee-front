@@ -343,6 +343,7 @@ lychee.locale = {
 
 		'MAP_DISPLAY_TEXT'		: 'Enable maps (provided by OpenStreetMap):',
 		'MAP_DISPLAY_PUBLIC_TEXT' : 'Enable maps for public albums (provided by OpenStreetMap):',
+		'MAP_INCLUDE_SUBALBUMS_TEXT': 'Include photos of subalbums on map:',
 
 		'VIEW_NO_RESULT'			: 'No results',
 		'VIEW_NO_PUBLIC_ALBUMS'		: 'No public albums',

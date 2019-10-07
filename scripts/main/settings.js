@@ -472,7 +472,6 @@ settings.setMapProvider = function () {
 	// validate the input
 	let params = {};
 	params.map_provider = $('#MapProvider').val();
-	console.log(params);
 
 
 	api.post('Settings::setMapProvider', params, function (data) {
@@ -483,6 +482,23 @@ settings.setMapProvider = function () {
 		} else lychee.error(null, params, data)
 
 	})
+};
+
+settings.changeMapIncludeSubalbums = function () {
+	var params = {};
+	if ($('#MapIncludeSubalbums:checked').length === 1) {
+		params.map_include_subalbums = '1';
+
+	} else {
+		params.map_include_subalbums = '0';
+	}
+	api.post('Settings::setMapIncludeSubalbums', params, function (data) {
+		if (data === true) {
+			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_MAP_DISPLAY']);
+			lychee.map_include_subalbums = (params.map_include_subalbums === '1');
+		} else lychee.error(null, params, data);
+	});
+
 };
 
 settings.changeCSS = function () {
