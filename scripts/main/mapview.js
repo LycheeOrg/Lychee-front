@@ -312,6 +312,8 @@ mapview.goto = function(elem) {
 	var photoID = elem.attr('data-id');
 	var albumID = elem.attr('data-album-id');
 
+	if (albumID=='null') albumID = 0;
+
 	if( (album.json==null) ||  (albumID!==album.json.id)) {
 		album.refresh();
 	}
