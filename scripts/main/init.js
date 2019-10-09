@@ -151,6 +151,43 @@ $(document).ready(function() {
 
 	})
 
+	// Paste upload
+	.on('paste', function (e) {
+		if (e.originalEvent.clipboardData.items) {
+			const items = e.originalEvent.clipboardData.items;
+			let filesToUpload = [];
+
+			// Search clipboard items for an image
+			for (let i = 0; i < items.length; i++) {
+				if (items[i].type.indexOf('image') !== -1 || items[i].type.indexOf('video') !== -1) {
+					filesToUpload.push(items[i].getAsFile());
+				}
+			}
+
+			if (filesToUpload.length > 0) {
+				if (!album.isUploadable())
+					return;
+
+				// Close open overlays or views which are correlating with the upload
+
+				if (visible.photo())
+					lychee.goto(album.getID());
+					
+				if (visible.contextMenu())
+					contextMenu.close();
+
+				if (basicModal.visible() || visible.leftMenu())
+					return;
+																
+				if (visible.album() || visible.albums()) {
+					upload.start.local(filesToUpload);
+
+					return false;
+				}
+			}
+		}
+	})
+
 	// Fullscreen
 	.on('fullscreenchange mozfullscreenchange webkitfullscreenchange msfullscreenchange', lychee.fullscreenUpdate);
 
