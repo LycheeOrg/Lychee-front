@@ -148,6 +148,11 @@ lychee.init = function() {
 			lychee.locale[key] = data.locale[key]
 		}
 
+		if (!lychee.api_V2) {
+			// Apply translations to the header
+			header.applyTranslations();
+		}
+
 		// Check status
 		// 0 = No configuration
 		// 1 = Logged out

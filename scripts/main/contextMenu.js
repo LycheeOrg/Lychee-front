@@ -202,7 +202,6 @@ contextMenu.photo = function(photoID, e) {
 		{ title: build.iconic('tag') + lychee.locale['TAGS'], fn: () => photo.editTags([ photoID ]) },
 		{ },
 		{ title: build.iconic('pencil') + lychee.locale['RENAME'], fn: () => photo.setTitle([ photoID ]) },
-		{ title: build.iconic('layers') + lychee.locale['DUPLICATE'], fn: () => photo.duplicate([ photoID ]) },
 		{ title: build.iconic('layers') + lychee.locale['COPY_TO'], fn: () => { basicContext.close(); contextMenu.move([ photoID ], e, photo.copyTo, 'UNSORTED') } },
 		{ title: build.iconic('folder') + lychee.locale['MOVE'], fn: () => { basicContext.close(); contextMenu.move([ photoID ], e, photo.setAlbum, 'UNSORTED') } },
 		{ title: build.iconic('trash') + lychee.locale['DELETE'], fn: () => photo.delete([ photoID ]) },
@@ -264,7 +263,6 @@ contextMenu.photoMulti = function(photoIDs, e) {
 		{ title: build.iconic('tag') + lychee.locale['TAGS_ALL'], fn: () => photo.editTags(photoIDs) },
 		{ },
 		{ title: build.iconic('pencil') + lychee.locale['RENAME_ALL'], fn: () => photo.setTitle(photoIDs) },
-		{ title: build.iconic('layers') + lychee.locale['DUPLICATE_ALL'], fn: () => photo.duplicate(photoIDs) },
 		{ title: build.iconic('layers') + lychee.locale['COPY_ALL_TO'], fn: () => { basicContext.close(); contextMenu.move(photoIDs, e, photo.copyTo, 'UNSORTED') } },
 		{ title: build.iconic('folder') + lychee.locale['MOVE_ALL'], fn: () => { basicContext.close(); contextMenu.move(photoIDs, e, photo.setAlbum, 'UNSORTED') } },
 		{ title: build.iconic('trash') + lychee.locale['DELETE_ALL'], fn: () => photo.delete(photoIDs) },
@@ -362,8 +360,9 @@ contextMenu.move = function(IDs, e, callback, kind = 'UNSORTED', display_root = 
 					exclude.push(sub[s])
 			}
 			if (visible.album()) {
-				if (callback !== album.merge) {
-					// For merging, don't exclude the parent.
+				// For merging, don't exclude the parent.
+				// For photo copy, don't exclude the current album.
+				if (callback !== album.merge && callback !== photo.copyTo) {
 					exclude.push(album.getID().toString())
 				}
 				if (IDs.length === 1 && IDs[0] === album.getID() && album.getParent() && callback === album.setAlbum) {
@@ -399,8 +398,12 @@ contextMenu.move = function(IDs, e, callback, kind = 'UNSORTED', display_root = 
 
 		}
 
-		items.unshift({});
-		items.unshift({ title: lychee.locale['NEW_ALBUM'], fn: () => album.add(IDs, callback) });
+		// Don't allow to move the current album to a newly created subalbum
+		// (creating a cycle).
+		if (IDs.length !== 1 || IDs[0] !== (album.json ? album.json.id : null) || callback !== album.setAlbum) {
+			items.unshift({});
+			items.unshift({ title: lychee.locale['NEW_ALBUM'], fn: () => album.add(IDs, callback) })
+		}
 
 		basicContext.show(items, e.originalEvent, contextMenu.close)
 
