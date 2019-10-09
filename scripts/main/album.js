@@ -31,6 +31,7 @@ album.getID = function () {
 
 	if (photo.json) id = photo.json.album;
 	else if (album.json) id = album.json.id;
+	else if (mapview.albumID) id = mapview.albumID;
 
 	// Search
 	if (isID(id) === false) id = $('.album:hover, .album.active').attr('data-id');

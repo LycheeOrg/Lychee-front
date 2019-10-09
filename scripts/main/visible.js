@@ -20,6 +20,11 @@ visible.photo = function() {
 	return false
 };
 
+visible.mapview = function() {
+	if ($('#mapview.fadeIn').length>0) return true;
+	return false
+};
+
 visible.search = function() {
 	if (search.hash!=null) return true;
 	return false

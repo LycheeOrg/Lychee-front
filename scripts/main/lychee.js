@@ -29,6 +29,9 @@ lychee = {
 	image_overlay_type			: 'exif',	// current Overlay display type
 	image_overlay_type_default	: 'exif',	// image overlay type default type
 	map_display					: false,	// display photo coordinates on map
+	map_display_public					: false,	// display photos of public album on map (user not logged in)
+	map_provider        : 'Wikimedia', // Provider of OSM Tiles
+	map_include_subalbums : false, // include photos of subalbums on map
 	landing_page_enabled        : false,    // is landing page enabled ?
 	delete_imported				: false,
 
@@ -172,6 +175,9 @@ lychee.init = function() {
 			lychee.image_overlay_type			= (!data.config.image_overlay_type) ? 'exif' : data.config.image_overlay_type;
 			lychee.image_overlay_type_default	= lychee.image_overlay_type;
 			lychee.map_display					= (data.config.map_display && data.config.map_display === '1')  || false;
+			lychee.map_display_public		= (data.config.map_display_public && data.config.map_display_public === '1')  || false;
+			lychee.map_provider			    = (!data.config.map_provider) ? 'Wikimedia' : data.config.map_provider;
+			lychee.map_include_subalbums = (data.config.map_include_subalbums && data.config.map_include_subalbums === '1')  || false;
 			lychee.default_license				= data.config.default_license	|| 'none';
 			lychee.css							= data.config.css				|| '';
 			lychee.full_photo					= (data.config.full_photo == null) || (data.config.full_photo === '1');
@@ -210,6 +216,7 @@ lychee.init = function() {
 			lychee.image_overlay_type			= (!data.config.image_overlay_type) ? 'exif' : data.config.image_overlay_type;
 			lychee.image_overlay_type_default	= lychee.image_overlay_type;
 			lychee.map_display					= (data.config.map_display && data.config.map_display === '1') || false;
+			lychee.map_display_public		= (data.config.map_display_public && data.config.map_display_public === '1') || false;
 
 			// console.log(lychee.full_photo);
 			lychee.setMode('public');
@@ -290,10 +297,23 @@ lychee.logout = function() {
 
 lychee.goto = function(url = '', autoplay = true) {
 
+	if(url===false) url = '';
+	
 	url = '#' + url;
 
 	history.pushState(null, null, url);
 	lychee.load(autoplay)
+
+};
+
+lychee.gotoMap = function(albumID = '', autoplay = true) {
+
+	// If map functionality is disabled -> go to album
+	if (!lychee.map_display) {
+		loadingBar.show('error', lychee.locale['ERROR_MAP_DEACTIVATED']);
+		return;
+	}
+	lychee.goto('map/' + albumID, autoplay);
 
 };
 
@@ -312,28 +332,80 @@ lychee.load = function(autoplay = true) {
 
 	if (albumID && photoID) {
 
-		// Trash data
-		photo.json = null;
+		if(albumID=='map') {
 
-		// Show Photo
-		if (lychee.content.html()==='' || (header.dom('.header__search').length && header.dom('.header__search').val().length!==0)) {
-			lychee.content.hide();
-			album.load(albumID, true)
+			// If map functionality is disabled -> do nothing
+			if (!lychee.map_display) {
+				loadingBar.show('error', lychee.locale['ERROR_MAP_DEACTIVATED']);
+				return;
+			}
+			// show map
+			// albumID has been stored in photoID due to URL format #map/albumID
+			albumID = photoID;
+
+			// Trash data
+			photo.json = null;
+
+			// Show Album -> it's below the map
+			if (visible.photo()) view.photo.hide();
+			if (visible.sidebar()) sidebar.toggle();
+			if (album.json && albumID===album.json.id) {
+				view.album.title();
+			}
+			mapview.open(albumID);
+			lychee.footer_hide();
+
+
+		} else {
+			// Show photo
+
+			// Trash data
+			photo.json = null;
+
+			// Show Photo
+			if (lychee.content.html()==='' || album.json==null || (header.dom('.header__search').length && header.dom('.header__search').val().length!==0)) {
+				lychee.content.hide();
+				album.load(albumID, true)
+			}
+			photo.load(photoID, albumID, autoplay);
+			lychee.footer_hide();
 		}
-		photo.load(photoID, albumID, autoplay);
-		lychee.footer_hide();
+
 
 	} else if (albumID) {
 
-		// Trash data
-		photo.json = null;
 
-		// Show Album
-		if (visible.photo()) view.photo.hide();
-		if (visible.sidebar() && (albumID==='0' || albumID==='f' || albumID==='s' || albumID==='r')) sidebar.toggle();
-		if (album.json && albumID===album.json.id) view.album.title();
-		else album.load(albumID);
-		lychee.footer_show();
+		if(albumID=='map') {
+
+			// Show map of all albums
+			// If map functionality is disabled -> do nothing
+			if (!lychee.map_display) {
+				loadingBar.show('error', lychee.locale['ERROR_MAP_DEACTIVATED']);
+				return;
+			}
+
+			// Trash data
+			photo.json = null;
+
+			// Show Album -> it's below the map
+			if (visible.photo()) view.photo.hide();
+			if (visible.sidebar()) sidebar.toggle();
+			mapview.open();
+			lychee.footer_hide();
+
+		} else {
+
+			// Trash data
+			photo.json = null;
+
+			// Show Album
+			if (visible.photo()) view.photo.hide();
+			if (visible.mapview()) mapview.close();
+			if (visible.sidebar() && (albumID==='0' || albumID==='f' || albumID==='s' || albumID==='r')) sidebar.toggle();
+			if (album.json && albumID===album.json.id) view.album.title();
+			else album.load(albumID);
+			lychee.footer_show();
+		}
 
 	} else {
 
@@ -352,6 +424,7 @@ lychee.load = function(autoplay = true) {
 
 		// Show Albums
 		if (visible.photo()) view.photo.hide();
+		if (visible.mapview()) mapview.close();
 		lychee.content.show();
 		lychee.footer_show();
 		albums.load();

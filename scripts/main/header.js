@@ -47,6 +47,9 @@ header.bind = function() {
 	header.dom('#button_settings')    .on(eventName, leftMenu.open);
 	header.dom('#button_info_album')  .on(eventName, sidebar.toggle);
 	header.dom('#button_info')        .on(eventName, sidebar.toggle);
+	header.dom('#button_map_albums')  .on(eventName, function() { lychee.gotoMap() });
+	header.dom('#button_map_album')   .on(eventName, function() { lychee.gotoMap(album.getID()) });
+	header.dom('#button_map')         .on(eventName, function() { lychee.gotoMap(album.getID()) });
 	header.dom('.button_add')         .on(eventName, contextMenu.add);
 	header.dom('#button_more')        .on(eventName, function(e) { contextMenu.photoMore(photo.getID(), e) });
 	header.dom('#button_move_album')  .on(eventName, function(e) { contextMenu.move([ album.getID() ], e, album.setAlbum, 'ROOT', album.getParent() != '') });
@@ -64,6 +67,7 @@ header.bind = function() {
 		}
 	});
 	header.dom('#button_back')        .on(eventName, function() { lychee.goto(album.getID()) });
+	header.dom('#button_back_map')    .on(eventName, function() { lychee.goto(album.getID()) });
 	header.dom('#button_fs_album_enter,#button_fs_enter').on(eventName, lychee.fullscreenEnter);
 	header.dom('#button_fs_album_exit,#button_fs_exit').on(eventName, lychee.fullscreenExit).hide();
 
@@ -139,7 +143,7 @@ header.setMode = function(mode) {
 		case 'public':
 
 			header.dom().removeClass('header--view');
-			header.dom('.header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo').removeClass('header__toolbar--visible');
+			header.dom('.header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--public').addClass('header__toolbar--visible');
 			if (lychee.public_search) {
 				$('.header__search, .header__clear', '.header__toolbar--public').show()
@@ -152,8 +156,28 @@ header.setMode = function(mode) {
 		case 'albums':
 
 			header.dom().removeClass('header--view');
-			header.dom('.header__toolbar--public, .header__toolbar--album, .header__toolbar--photo').removeClass('header__toolbar--visible');
+			header.dom('.header__toolbar--public, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--albums').addClass('header__toolbar--visible');
+
+			// If map is disabled, we should hide the icon
+			if (lychee.map_display) {
+				$('#button_map_albums').show();
+				$('.header__clear').removeClass('header__clear_nomap');
+
+			} else {
+				$('#button_map_albums').hide();
+				$('.header__clear').addClass('header__clear_nomap');
+			}
+			// Set icon in Public mode
+			if(lychee.publicMode===true) {
+				if (lychee.map_display_public) {
+					$('#button_map_albums').show();
+					$('.header__clear').removeClass('header__clear_nomap');
+				} else {
+					$('#button_map_albums').hide();
+					$('.header__clear').addClass('header__clear_nomap');
+				}
+			}
 
 			return true;
 
@@ -162,7 +186,7 @@ header.setMode = function(mode) {
 			let albumID = album.getID();
 
 			header.dom().removeClass('header--view');
-			header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo').removeClass('header__toolbar--visible');
+			header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--map').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--album').addClass('header__toolbar--visible');
 
 			// Hide download button when album empty or we are not allowed to
@@ -171,6 +195,21 @@ header.setMode = function(mode) {
 				$('#button_archive').hide();
 			} else {
 				$('#button_archive').show();
+			}
+
+			// If map is disabled, we should hide the icon
+			if (lychee.map_display) {
+				$('#button_map_album').show();
+			} else {
+				$('#button_map_album').hide();
+			}
+			// Set icon in Public mode
+			if(lychee.publicMode===true) {
+				if (lychee.map_display_public) {
+					$('#button_map_album').show();
+				} else {
+					$('#button_map_album').hide();
+				}
 			}
 
 			if (albumID==='s' || albumID==='f' || albumID==='r') {
@@ -182,23 +221,41 @@ header.setMode = function(mode) {
 			} else {
 				$('#button_info_album, #button_visibility_album').show();
 				if (album.isUploadable()) {
-					$('#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album').show()
+					$('#button_trash_album, #button_move_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album').show()
 				} else {
 					$('#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album').hide()
 				}
 			}
+
+
 
 			return true;
 
 		case 'photo':
 
 			header.dom().addClass('header--view');
-			header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--album').removeClass('header__toolbar--visible');
+			header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--map').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--photo').addClass('header__toolbar--visible');
+
+			// If map is disabled, we should hide the icon
+			if (lychee.map_display) {
+				$('#button_map').show();
+			} else {
+				$('#button_map').hide();
+			}
+			// Set icon in Public mode
+			if(lychee.publicMode===true) {
+				if (lychee.map_display_public) {
+					$('#button_map').show();
+				} else {
+					$('#button_map').hide();
+				}
+			}
+
 			if (album.isUploadable()) {
 				$('#button_trash, #button_move, #button_visibility, #button_star').show()
 			} else {
-				$('#button_trash, #button_move, #button_visibility, #button_star').hide()
+				$('#button_trash, #button_move, #button_visibility, #button_star').hide();
 			}
 
 			// Hide More menu if empty (see contextMenu.photoMore)
@@ -209,6 +266,13 @@ header.setMode = function(mode) {
 				!(photo.json.url && photo.json.url !== '')) {
 				$('#button_more').hide();
 			}
+
+			return true;
+		case 'map':
+
+			header.dom().removeClass('header--view');
+			header.dom('.header__toolbar--public, .header__toolbar--album, .header__toolbar--albums, .header__toolbar--photo').removeClass('header__toolbar--visible');
+			header.dom('.header__toolbar--map').addClass('header__toolbar--visible');
 
 			return true;
 
