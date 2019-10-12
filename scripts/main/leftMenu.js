@@ -31,6 +31,12 @@ leftMenu.build = function () {
 		<a class="linkMenu" id="button_diagnostics">${  build.iconic('wrench') } ${         lychee.locale['DIAGNOSTICS'] }</a>
 		<a class="linkMenu" id="button_about">${        build.iconic('info') } ${           lychee.locale['ABOUT_LYCHEE'] }</a>
 		<a class="linkMenu" id="button_signout">${      build.iconic('account-logout') } ${ lychee.locale['SIGN_OUT'] }</a>`;
+	if (lychee.api_V2 && lychee.update_available)
+	{
+		html += lychee.html`
+		<a class="linkMenu" id="button_update">${ build.iconic('timer')} ${ lychee.locale['UPDATE_AVAILABLE']}</a>
+		`
+	}
 	leftMenu._dom.html(html)
 };
 
@@ -74,7 +80,8 @@ leftMenu.bind = function() {
 	if (lychee.api_V2)
 	{
 		leftMenu.dom('#button_users')         .on(eventName, leftMenu.Users);
-		leftMenu.dom('#button_sharing')       .on(eventName, leftMenu.Sharing)
+		leftMenu.dom('#button_sharing')       .on(eventName, leftMenu.Sharing);
+		leftMenu.dom('#button_update')        .on(eventName, leftMenu.Update);
 	}
 
 	return true
@@ -101,6 +108,10 @@ leftMenu.Diagnostics = function() {
 	{
 		window.open(lychee.diagnostics())
 	}
+};
+
+leftMenu.Update = function() {
+	view.update.init();
 };
 
 leftMenu.Users = function () {

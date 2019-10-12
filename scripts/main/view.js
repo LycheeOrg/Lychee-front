@@ -1566,21 +1566,14 @@ view.diagnostics = {
 		lychee.content.html(html);
 
 		$("#Update_Lychee").on('click', function () {
-			api.get('api/Update', function (data) {
-				let data_json;
-				try {
-					data_json = JSON.parse(data);
-				} catch (e) {
-					data_json = "JSON error. Check the console logs.";
-					console.log(data);
-				}
+			api.post('Update::Apply', [], function (data) {
 				html = '<pre>';
-				if (Array.isArray(data_json)) {
-					for (let i = 0; i < data_json.length; i++) {
-						html += '    ' + data_json[i] + '\n';
+				if (Array.isArray(data)) {
+					for (let i = 0; i < data.length; i++) {
+						html += '    ' + data[i] + '\n';
 					}
 				} else {
-					html += '    ' + data_json;
+					html += '    ' + data;
 				}
 				html += '</pre>';
 				$(html).prependTo(".logs_diagnostics_view");
@@ -1600,19 +1593,19 @@ view.diagnostics = {
 					let i;
 					html += '<pre>\n\n\n\n';
 					html += '    Diagnostics\n' +
-						'    -----------\n';
+							'    -----------\n';
 					for (i = 0; i < data.errors.length; i++) {
 						html += '    ' + data.errors[i] + '\n';
 					}
 					html += '\n' +
-						'    System Information\n' +
-						'    ------------------\n';
+							'    System Information\n' +
+							'    ------------------\n';
 					for (i = 0; i < data.infos.length; i++) {
 						html += '    ' + data.infos[i] + '\n';
 					}
 					html += '\n' +
-						'    Config Information\n' +
-						'    ------------------\n';
+							'    Config Information\n' +
+							'    ------------------\n';
 					for (i = 0; i < data.configs.length; i++) {
 						html += '    ' + data.configs[i] + '\n';
 					}
@@ -1629,3 +1622,47 @@ view.diagnostics = {
 	},
 
 };
+
+view.update = {
+	init: function () {
+
+		multiselect.clearSelection();
+
+		view.update.title();
+		view.update.content.init()
+
+	},
+
+	title: function () {
+
+		lychee.setTitle('Update', false)
+
+	},
+
+	clearContent: function () {
+		let html = '';
+		html += '<pre class="logs_diagnostics_view"></pre>';
+		lychee.content.html(html);
+	},
+
+	content: {
+		init: function () {
+			view.update.clearContent();
+
+			// code duplicate
+			api.post('Update::Apply', [], function (data) {
+				html = '<pre class="logs_diagnostics_view">';
+				if (Array.isArray(data)) {
+					for (let i = 0; i < data.length; i++) {
+						html += '    ' + data[i] + '\n';
+					}
+				} else {
+					html += '    ' + data_json;
+				}
+				html += '</pre>';
+				lychee.content.html(html);
+			});
+		}
+	},
+};
+
