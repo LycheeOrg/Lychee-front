@@ -1559,11 +1559,15 @@ view.diagnostics = {
 
 	clearContent: function (update) {
 		let html = '';
-		if (update === 1) {
-			html += lychee.html`<div class="clear_logs_update"><a id="Update_Lychee" class="basicModal__button">${lychee.locale['UPDATE_AVAILABLE']}</a></div>`;
+		if (update > 0) {
+			html += '<div class="clear_logs_update">';
+			html += lychee.html`<a id="Check_Update_Lychee" class="basicModal__button">${lychee.locale['CHECK_FOR_UPDATE']}</a>`;
 		}
 		if (update === 2) {
-			html += lychee.html`<div class="clear_logs_update"><a id="Check_Update_Lychee" class="basicModal__button">${lychee.locale['CHECK_FOR_UPDATE']}</a></div>`;
+			html += lychee.html`<a id="Update_Lychee" class="basicModal__button">${lychee.locale['UPDATE_AVAILABLE']}</a>`;
+		}
+		if (update > 0) {
+			html += '</div>';
 		}
 		html += '<pre class="logs_diagnostics_view"></pre>';
 		lychee.content.html(html);
@@ -1580,7 +1584,7 @@ view.diagnostics = {
 
 		$("#Check_Update_Lychee").on('click', function () {
 			api.post('Update::Check', [], function (data) {
-				loadingBar.show('success',data);
+				loadingBar.show('success', data);
 				$("#Check_Update_Lychee").remove();
 			});
 		});
