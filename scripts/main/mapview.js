@@ -10,7 +10,7 @@ map_provider_layer_attribution = {
 			},
 	'OpenStreetMap.org':
 			{
-				layer: 'https://{s}.tile.osm.org/{z}/{x}/{y}{r}.png',
+				layer: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
 				attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
 			},
 	'OpenStreetMap.de':
