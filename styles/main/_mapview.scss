@@ -1,0 +1,84 @@
+#mapview {
+
+	position: fixed;
+	display: none;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(100, 10, 10, .98);
+	transition: background-color .3s;
+
+	// Modes -------------------------------------------------------------- //
+	&.view {
+		background-color: inherit;
+	}
+
+	&.full {
+		background-color: black(1);
+		cursor: none;
+	}
+	#leaflet_map_full {
+		top: 50px;
+		height: 100%;
+		width: 100%;
+		float: left;
+	}
+}
+
+.leaflet-marker-photo img {
+	width: 100%;
+	height: 100%;
+}
+
+.leaflet-popup-content-wrapper {
+	background-color: rgb(0, 0, 0);
+	padding: 3px;
+}
+
+.image-leaflet-popup {
+	width: 100%;
+}
+
+.leaflet-popup-content div {
+	pointer-events: none;
+	position: absolute;
+	bottom: 19px;
+	left: 22px;
+	right: 22px;
+	padding-bottom: 10px;
+	background: linear-gradient(to bottom,rgba(0,0,0,0),rgba(0,0,0,.6));
+}
+
+.leaflet-popup-content h1 {
+	top: 0px;
+	position: relative;
+	margin: 12px 0px 5px 15px;
+	font-size: 16px;
+	font-weight: 700;
+	text-shadow: 0 1px 3px rgba(255, 255, 255,.4);
+	color: rgb(255, 255, 255);
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.leaflet-popup-content span {
+	margin-left: 12px;
+}
+
+.leaflet-popup-content svg {
+	fill: rgb(255, 255, 255);
+	vertical-align: middle;
+}
+
+.leaflet-popup-content p {
+	display: inline;
+	font-size: 11px;
+	margin: 18px 5px;
+	color: rgb(255, 255, 255);
+}
+
+.leaflet-popup-content .iconic {
+	width: 20px;
+	height: 15px;
+}

@@ -22,6 +22,7 @@ lychee.locale = {
 		'DEFAULT_LICENSE'	: 'Default License for new uploads:',
 		'SET_LICENSE'		: 'Set License',
 		'SET_OVERLAY_TYPE'	: 'Set Overlay',
+		'SET_MAP_PROVIDER'	: 'Set OpenStreetMap tiles provider',
 		'SAVE_RISK'			: 'Save my modifications, I accept the Risk!',
 		'MORE'              : 'More',
 
@@ -64,6 +65,7 @@ lychee.locale = {
 
 		'CLOSE_ALBUM'					: 'Close Album',
 		'CLOSE_PHOTO'					: 'Close Photo',
+		'CLOSE_MAP'           : 'Close Map',
 
 		'ADD'							: 'Add',
 		'MOVE'							: 'Move',
@@ -102,6 +104,7 @@ lychee.locale = {
 
 		'FULL_PHOTO'				: 'Full Photo',
 		'ABOUT_PHOTO'				: 'About Photo',
+		'DISPLAY_FULL_MAP'  : 'Map',
 		'DIRECT_LINK'				: 'Direct Link',
 		'DIRECT_LINKS'				: 'Direct Links',
 
@@ -234,6 +237,7 @@ lychee.locale = {
 		'ERROR_CONFIG_FILE'			: "Unable to save this configuration. Permission denied in <b>'data/'</b>. Please set the read, write and execute rights for others in <b>'data/'</b> and <b>'uploads/'</b>. Take a look at the readme for more information.",
 		'ERROR_UNKNOWN'				: 'Something unexpected happened. Please try again and check your installation and server. Take a look at the readme for more information.',
 		'ERROR_LOGIN'				: 'Unable to save login. Please try again with another username and password!',
+		'ERROR_MAP_DEACTIVATED'				: 'Map functionality has been deactivated under settings.',
 		'SUCCESS'					: 'OK',
 		'RETRY'						: 'Retry',
 
@@ -246,7 +250,10 @@ lychee.locale = {
 		'SETTINGS_SUCCESS_IMAGE_OVERLAY': 'EXIF Overlay setting updated',
 		'SETTINGS_SUCCESS_PUBLIC_SEARCH': 'Public search updated',
 		'SETTINGS_SUCCESS_LICENSE'		: 'Default license updated',
-		'SETTINGS_SUCCESS_MAP_DISPLAY'  : 'Display map settings updated',
+		'SETTINGS_SUCCESS_MAP_DISPLAY'  : 'Map display settings updated',
+		'SETTINGS_SUCCESS_MAP_DISPLAY_PUBLIC' : 'Map display settings for public albums updated',
+		'SETTINGS_SUCCESS_MAP_PROVIDER' : 'Map provider settings updated',
+
 		'SETTINGS_SUCCESS_CSS'		    : 'CSS updated',
 		'SETTINGS_SUCCESS_UPDATE'       : 'Settings updated with success',
 
@@ -327,7 +334,16 @@ lychee.locale = {
 		'OVERLAY_DESCRIPTION'		: 'Photo description',
 		'OVERLAY_DATE'				: 'Photo date taken',
 
-		'MAP_DISPLAY_TEXT'		: 'Display coordinates on map (OpenStreetMap):',
+		'MAP_PROVIDER'            : 'Provider of OpenStreetMap tiles:',
+		'MAP_PROVIDER_WIKIMEDIA'  : 'Wikimedia',
+		'MAP_PROVIDER_OSM_ORG'    : 'OpenStreetMap.org (no retina)',
+		'MAP_PROVIDER_OSM_DE'     : 'OpenStreetMap.de (no retina)',
+		'MAP_PROVIDER_OSM_FR'     : 'OpenStreetMap.fr (no retina)',
+		'MAP_PROVIDER_RRZE'       : 'University of Erlangen, Germany (only retina)',
+
+		'MAP_DISPLAY_TEXT'		: 'Enable maps (provided by OpenStreetMap):',
+		'MAP_DISPLAY_PUBLIC_TEXT' : 'Enable maps for public albums (provided by OpenStreetMap):',
+		'MAP_INCLUDE_SUBALBUMS_TEXT': 'Include photos of subalbums on map:',
 
 		'VIEW_NO_RESULT'			: 'No results',
 		'VIEW_NO_PUBLIC_ALBUMS'		: 'No public albums',

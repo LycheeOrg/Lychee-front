@@ -678,7 +678,7 @@ view.photo = {
 
 		let img = $('img#image');
 		if (img.length > 0) {
-			if (!img[0].complete) {
+			if (!img[0].complete || (img[0].currentSrc !== null && img[0].currentSrc === '')) {
 				// Image is still loading.  Display the thumb version in the
 				// background.
 				if (ret.thumb !== '') {
@@ -742,11 +742,10 @@ view.photo = {
 				shadowUrl: 'img/marker-shadow.png',
 			});
 
-			var mymap = L.map('mapid').setView([photo.json.latitude, photo.json.longitude], 13);
+			var mymap = L.map('leaflet_map_single_photo').setView([photo.json.latitude, photo.json.longitude], 13);
 
-			// Add plain OpenStreetMap Layer
-			L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-				attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+			L.tileLayer(map_provider_layer_attribution[lychee.map_provider].layer, {
+				attribution: map_provider_layer_attribution[lychee.map_provider].attribution
 			}).addTo(mymap);
 
 			if (!photo.json.imgDirection || photo.json.imgDirection === '') {
@@ -756,7 +755,7 @@ view.photo = {
 				// Add Marker, direction has been set
 				var viewDirectionIcon = L.icon({
 							iconUrl: 'img/view-angle-icon.png',
-
+							iconRetinaUrl: 'img/view-angle-icon-2x.png',
 							iconSize:     [100, 58], // size of the icon
 							iconAnchor:   [50, 49],  // point of the icon which will correspond to marker's location
 						});
@@ -803,7 +802,7 @@ view.settings = {
 
 	title: function () {
 
-		lychee.setTitle('Settings', false)
+		lychee.setTitle(lychee.locale['SETTINGS'], false)
 	},
 
 	clearContent: function () {
@@ -1110,7 +1109,67 @@ view.settings = {
 			if (lychee.map_display) $('#MapDisplay').click();
 
 			settings.bind('#MapDisplay', '.setMapDisplay', settings.changeMapDisplay);
+
+		  msg = `
+			<div class="setMapDisplayPublic">
+			<p>${lychee.locale['MAP_DISPLAY_PUBLIC_TEXT']}
+			<label class="switch">
+				<input id="MapDisplayPublic" type="checkbox">
+				<span class="slider round"></span>
+			</label>
+			</p>
+			</div>
+			`;
+
+			$(".settings_view").append(msg);
+			if (lychee.map_display_public) $('#MapDisplayPublic').click();
+
+			settings.bind('#MapDisplayPublic', '.setMapDisplayPublic', settings.changeMapDisplayPublic);
+
+			msg = `
+			<div class="setMapProvider">
+			<p>${lychee.locale['MAP_PROVIDER']}
+			<span class="select" style="width:270px">
+				<select name="MapProvider" id="MapProvider">
+					<option value="Wikimedia">${lychee.locale['MAP_PROVIDER_WIKIMEDIA']}</option>
+					<option value="OpenStreetMap.org">${lychee.locale['MAP_PROVIDER_OSM_ORG']}</option>
+					<option value="OpenStreetMap.de">${lychee.locale['MAP_PROVIDER_OSM_DE']}</option>
+					<option value="OpenStreetMap.fr">${lychee.locale['MAP_PROVIDER_OSM_FR']}</option>
+					<option value="RRZE">${lychee.locale['MAP_PROVIDER_RRZE']}</option>
+				</select>
+			</span>
+			<div class="basicModal__buttons">
+				<a id="basicModal__action_set_map_provider" class="basicModal__button">${lychee.locale['SET_MAP_PROVIDER']}</a>
+			</div>
+			</div>
+			`
+
+			$(".settings_view").append(msg);
+
+
+			$('select#MapProvider').val(!lychee.map_provider ? 'Wikimedia' : lychee.map_provider);
+			settings.bind('#basicModal__action_set_map_provider', '.setMapProvider', settings.setMapProvider);
+
+
+			msg = `
+			<div class="setMapIncludeSubalbums">
+			<p>${lychee.locale['MAP_INCLUDE_SUBALBUMS_TEXT']}
+			<label class="switch">
+			  <input id="MapIncludeSubalbums" type="checkbox">
+			  <span class="slider round"></span>
+			</label>
+			</p>
+			</div>
+			`;
+
+			$(".settings_view").append(msg);
+			if (lychee.map_include_subalbums) $('#MapIncludeSubalbums').click();
+
+			settings.bind('#MapIncludeSubalbums', '.setMapIncludeSubalbums', settings.changeMapIncludeSubalbums);
+
+
 		},
+
 
 		setCSS: function () {
 			let msg = `

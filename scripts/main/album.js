@@ -31,6 +31,7 @@ album.getID = function () {
 
 	if (photo.json) id = photo.json.album;
 	else if (album.json) id = album.json.id;
+	else if (mapview.albumID) id = mapview.albumID;
 
 	// Search
 	if (isID(id) === false) id = $('.album:hover, .album.active').attr('data-id');
@@ -81,32 +82,6 @@ album.getSubByID = function (albumID) {
 
 	lychee.error('Error: album ' + albumID + ' not found!');
 	return undefined;
-};
-
-album.hasSub = function (albumID) {
-
-	// Return true if the current album has albumID as its descendant
-
-	if (albumID == null || !album.json || !album.json.albums) {
-		return false;
-	}
-
-	let ret = false;
-
-	let func = function () {
-		if (parseInt(this.id, 10) === parseInt(albumID, 10)) {
-			ret = true;
-			return false
-		}
-		if (this.albums) {
-			$.each(this.albums, func)
-		}
-	};
-
-	$.each(album.json.albums, func);
-
-	return ret
-
 };
 
 // noinspection DuplicatedCode
@@ -276,7 +251,7 @@ album.add = function (IDs = null, callback = null) {
 	};
 
 	basicModal.show({
-		body: `<p>${lychee.locale['TITLE_NEW_ALBUM']} <input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'></p>`,
+		body: lychee.html`<p>${lychee.locale['TITLE_NEW_ALBUM']} <input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'></p>`,
 		buttons: {
 			action: {
 				title: lychee.locale['CREATE_ALBUM'],
@@ -501,7 +476,7 @@ album.setPublic = function (albumID, e) {
 
 	if (!basicModal.visible()) {
 
-		let msg = `
+		let msg = lychee.html`
 			<form>
 				<div class='switch'>
 					<label>

@@ -47,6 +47,9 @@ header.bind = function() {
 	header.dom('#button_settings')    .on(eventName, leftMenu.open);
 	header.dom('#button_info_album')  .on(eventName, sidebar.toggle);
 	header.dom('#button_info')        .on(eventName, sidebar.toggle);
+	header.dom('.button--map-albums') .on(eventName, function() { lychee.gotoMap() });
+	header.dom('#button_map_album')   .on(eventName, function() { lychee.gotoMap(album.getID()) });
+	header.dom('#button_map')         .on(eventName, function() { lychee.gotoMap(album.getID()) });
 	header.dom('.button_add')         .on(eventName, contextMenu.add);
 	header.dom('#button_more')        .on(eventName, function(e) { contextMenu.photoMore(photo.getID(), e) });
 	header.dom('#button_move_album')  .on(eventName, function(e) { contextMenu.move([ album.getID() ], e, album.setAlbum, 'ROOT', album.getParent() != '') });
@@ -64,6 +67,7 @@ header.bind = function() {
 		}
 	});
 	header.dom('#button_back')        .on(eventName, function() { lychee.goto(album.getID()) });
+	header.dom('#button_back_map')    .on(eventName, function() { lychee.goto(album.getID()) });
 	header.dom('#button_fs_album_enter,#button_fs_enter').on(eventName, lychee.fullscreenEnter);
 	header.dom('#button_fs_album_exit,#button_fs_exit').on(eventName, lychee.fullscreenExit).hide();
 
@@ -139,7 +143,7 @@ header.setMode = function(mode) {
 		case 'public':
 
 			header.dom().removeClass('header--view');
-			header.dom('.header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo').removeClass('header__toolbar--visible');
+			header.dom('.header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--public').addClass('header__toolbar--visible');
 			if (lychee.public_search) {
 				$('.header__search, .header__clear', '.header__toolbar--public').show()
@@ -147,13 +151,28 @@ header.setMode = function(mode) {
 				$('.header__search, .header__clear', '.header__toolbar--public').hide()
 			}
 
+			// Set icon in Public mode
+			if (lychee.map_display_public) {
+				$('.button--map-albums', '.header__toolbar--public').show();
+			} else {
+				$('.button--map-albums', '.header__toolbar--public').hide();
+			}
+
 			return true;
 
 		case 'albums':
 
 			header.dom().removeClass('header--view');
-			header.dom('.header__toolbar--public, .header__toolbar--album, .header__toolbar--photo').removeClass('header__toolbar--visible');
+			header.dom('.header__toolbar--public, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--albums').addClass('header__toolbar--visible');
+
+			// If map is disabled, we should hide the icon
+			if (lychee.map_display) {
+				$('.button--map-albums', '.header__toolbar--albums').show();
+
+			} else {
+				$('.button--map-albums', '.header__toolbar--albums').hide();
+			}
 
 			return true;
 
@@ -162,7 +181,7 @@ header.setMode = function(mode) {
 			let albumID = album.getID();
 
 			header.dom().removeClass('header--view');
-			header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo').removeClass('header__toolbar--visible');
+			header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--map').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--album').addClass('header__toolbar--visible');
 
 			// Hide download button when album empty or we are not allowed to
@@ -171,6 +190,13 @@ header.setMode = function(mode) {
 				$('#button_archive').hide();
 			} else {
 				$('#button_archive').show();
+			}
+
+			// If map is disabled, we should hide the icon
+			if (lychee.publicMode===true ? lychee.map_display_public : lychee.map_display) {
+				$('#button_map_album').show();
+			} else {
+				$('#button_map_album').hide();
 			}
 
 			if (albumID==='s' || albumID==='f' || albumID==='r') {
@@ -188,17 +214,27 @@ header.setMode = function(mode) {
 				}
 			}
 
+
+
 			return true;
 
 		case 'photo':
 
 			header.dom().addClass('header--view');
-			header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--album').removeClass('header__toolbar--visible');
+			header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--map').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--photo').addClass('header__toolbar--visible');
+
+			// If map is disabled, we should hide the icon
+			if (lychee.publicMode===true ? lychee.map_display_public : lychee.map_display) {
+				$('#button_map').show();
+			} else {
+				$('#button_map').hide();
+			}
+
 			if (album.isUploadable()) {
 				$('#button_trash, #button_move, #button_visibility, #button_star').show()
 			} else {
-				$('#button_trash, #button_move, #button_visibility, #button_star').hide()
+				$('#button_trash, #button_move, #button_visibility, #button_star').hide();
 			}
 
 			// Hide More menu if empty (see contextMenu.photoMore)
@@ -209,6 +245,13 @@ header.setMode = function(mode) {
 				!(photo.json.url && photo.json.url !== '')) {
 				$('#button_more').hide();
 			}
+
+			return true;
+		case 'map':
+
+			header.dom().removeClass('header--view');
+			header.dom('.header__toolbar--public, .header__toolbar--album, .header__toolbar--albums, .header__toolbar--photo').removeClass('header__toolbar--visible');
+			header.dom('.header__toolbar--map').addClass('header__toolbar--visible');
 
 			return true;
 
@@ -231,3 +274,30 @@ header.setEditable = function(editable) {
 	return true
 
 };
+
+header.applyTranslations = function () {
+
+	let selector_locale = {
+		'#button_signin'         : 'SIGN_IN',
+		'#button_settings'       : 'SETTINGS',
+		'#button_info_album'     : 'ABOUT_ALBUM',
+		'#button_info'           : 'ABOUT_PHOTO',
+		'.button_add'            : 'ADD',
+		'#button_move_album'     : 'MOVE_ALBUM',
+		'#button_move'           : 'MOVE',
+		'#button_trash_album'    : 'DELETE_ALBUM',
+		'#button_trash'          : 'DELETE',
+		'#button_archive'        : 'DOWNLOAD_ALBUM',
+		'#button_star'           : 'STAR_PHOTO',
+		'#button_back_home'      : 'CLOSE_ALBUM',
+		'#button_fs_album_enter' : 'FULLSCREEN_ENTER',
+		'#button_fs_enter'       : 'FULLSCREEN_ENTER',
+		'#button_share'          : 'SHARE_PHOTO',
+		'#button_share_album'    : 'SHARE_ALBUM'
+	}
+
+	for (let selector in selector_locale) {
+		header.dom(selector).prop('title', lychee.locale[selector_locale[selector]])
+	}
+
+}

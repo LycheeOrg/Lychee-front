@@ -174,31 +174,33 @@ photo.preloadNextPrev = function(photoID) {
 				href = preloadPhoto.url
 			}
 
-			if (photo.supportsPrefetch === null) {
-				// Copied from https://www.smashingmagazine.com/2016/02/preload-what-is-it-good-for/
-				let DOMTokenListSupports = function(tokenList, token) {
-					if (!tokenList || !tokenList.supports) {
-						return null;
-					}
-					try {
-						return tokenList.supports(token);
-					} catch (e) {
-						if (e instanceof TypeError) {
-							console.log('The DOMTokenList doesn\'t have a supported tokens list');
-						} else {
-							console.error('That shouldn\'t have happened');
+			if (href !== '') {
+				if (photo.supportsPrefetch === null) {
+					// Copied from https://www.smashingmagazine.com/2016/02/preload-what-is-it-good-for/
+					let DOMTokenListSupports = function(tokenList, token) {
+						if (!tokenList || !tokenList.supports) {
+							return null;
 						}
-					}
-				};
-				photo.supportsPrefetch = DOMTokenListSupports(document.createElement('link').relList, 'prefetch');
-			}
+						try {
+							return tokenList.supports(token);
+						} catch (e) {
+							if (e instanceof TypeError) {
+								console.log('The DOMTokenList doesn\'t have a supported tokens list');
+							} else {
+								console.error('That shouldn\'t have happened');
+							}
+						}
+					};
+					photo.supportsPrefetch = DOMTokenListSupports(document.createElement('link').relList, 'prefetch');
+				}
 
-			if (photo.supportsPrefetch) {
-				$('head').append(`<link data-prefetch rel="prefetch" href="${ href }">`)
-			} else {
-				// According to https://caniuse.com/#feat=link-rel-prefetch,
-				// as of mid-2019 it's mainly Safari (both on desktop and mobile)
-				(new Image()).src = href
+				if (photo.supportsPrefetch) {
+					$('head').append(lychee.html`<link data-prefetch rel="prefetch" href="${ href }">`)
+				} else {
+					// According to https://caniuse.com/#feat=link-rel-prefetch,
+					// as of mid-2019 it's mainly Safari (both on desktop and mobile)
+					(new Image()).src = href
+				}
 			}
 		};
 
@@ -278,33 +280,6 @@ photo.next = function(animate) {
 		}, delay)
 
 	}
-
-};
-
-photo.duplicate = function(photoIDs, callback = null) {
-
-	if (!photoIDs) return false;
-	if (photoIDs instanceof Array===false) photoIDs = [ photoIDs ];
-
-	albums.refresh();
-
-	let params = {
-		photoIDs: photoIDs.join()
-	};
-
-	api.post('Photo::duplicate', params, function(data) {
-
-		if (data!==true){
-			lychee.error(null, params, data);
-		}
-		else {
-			album.load(album.getID());
-			if (callback != null) {
-				callback();
-			}
-		}
-
-	})
 
 };
 
@@ -488,11 +463,31 @@ photo.setTitle = function(photoIDs) {
 
 photo.copyTo = function(photoIDs, albumID) {
 
-	const action = function()
-	{
-		photo.setAlbum(photoIDs,albumID);
+	if (!photoIDs) return false;
+	if (photoIDs instanceof Array===false) photoIDs = [ photoIDs ];
+
+	let params = {
+		photoIDs: photoIDs.join(),
+		albumID
 	};
-	photo.duplicate(photoIDs, action);
+
+	api.post('Photo::duplicate', params, function(data) {
+
+		if (data !== true){
+			lychee.error(null, params, data)
+		}
+		else {
+			if (lychee.api_V2 || albumID === album.getID()) {
+				album.reload()
+			} else {
+				// Lychee v3 does not support the albumID argument to
+				// Photo::duplicate so we need to do it manually, which is
+				// imperfect, as it moves the source photos, not the duplicates.
+				photo.setAlbum(photoIDs, albumID)
+			}
+		}
+
+	})
 };
 
 photo.setAlbum = function(photoIDs, albumID) {
@@ -553,19 +548,18 @@ photo.setAlbum = function(photoIDs, albumID) {
 			lychee.error(null, params, data)
 		}
 		else {
-			if (album.hasSub(albumID)) {
-				// If we moved photos to a subalbum of the currently
-				// displayed album, that may change the subalbum thumbs
-				// being displayed so we need to reload.
-				if (visible.album()) {
-					album.reload();
-				}
-				else {
-					// We're most likely in photo view.  We still need to
-					// refresh the album but we don't want to reload it
-					// since that would switch the view being displayed.
-					album.refresh();
-				}
+			// We only really need to do anything here if the destination
+			// is a (possibly nested) subalbum of the current album; but
+			// since we have no way of figuring it out (albums.json is
+			// null), we need to reload.
+			if (visible.album()) {
+				album.reload();
+			}
+			else {
+				// We're most likely in photo view.  We still need to
+				// refresh the album but we don't want to reload it
+				// since that would switch the view being displayed.
+				album.refresh();
 			}
 		}
 
@@ -603,7 +597,7 @@ photo.setStar = function(photoIDs) {
 
 photo.setPublic = function(photoID, e) {
 
-	let msg_switch = `
+	let msg_switch = lychee.html`
 		<div class='switch'>
 			<label>
 				<span class='label'>${lychee.locale['PHOTO_PUBLIC']}:</span>
@@ -614,7 +608,7 @@ photo.setPublic = function(photoID, e) {
 		</div>
 	`;
 
-	let msg_choices = `
+	let msg_choices = lychee.html`
 		<div class='choice'>
 			<label>
 				<input type='checkbox' name='full_photo' disabled>
@@ -653,7 +647,7 @@ photo.setPublic = function(photoID, e) {
 		// Public album. We can't actually change anything but we will
 		// display the current settings.
 
-		let msg = `
+		let msg = lychee.html`
 			<p class='less'>${lychee.locale['PHOTO_NO_EDIT_SHARING_TEXT']}</p>
 			${msg_switch}
 			${msg_choices}
@@ -690,7 +684,7 @@ photo.setPublic = function(photoID, e) {
 	} else {
 		// Private album -- each photo can be shared individually.
 
-		let msg = `
+		let msg = lychee.html`
 			${msg_switch}
 			<p class='photoPublic'>${lychee.locale['PHOTO_EDIT_GLOBAL_SHARING_TEXT']}</p>
 			${msg_choices}
@@ -1007,14 +1001,14 @@ photo.getArchive = function(photoIDs, kind = null) {
 		}
 
 		const buildButton = function(id, label) {
-			return `
+			return lychee.html`
 				<a class='basicModal__button' id='${ id }' title='${ lychee.locale['DOWNLOAD'] }'>
 					${ build.iconic('cloud-download') }${ label }
 				</a>
 			`
 		};
 
-		let msg = `
+		let msg = lychee.html`
 			<div class='downloads'>
 		`;
 
@@ -1042,7 +1036,7 @@ photo.getArchive = function(photoIDs, kind = null) {
 			}
 		}
 
-		msg += `
+		msg += lychee.html`
 			</div>
 		`;
 
@@ -1108,7 +1102,7 @@ photo.showDirectLinks = function(photoID) {
 	}
 
 	const buildLine = function(label, url) {
-		return `
+		return lychee.html`
 			<p>
 				${ label }
 				<br />
@@ -1121,7 +1115,7 @@ photo.showDirectLinks = function(photoID) {
 	};
 
 
-	let msg = `
+	let msg = lychee.html`
 		<div class='directLinks'>
 			${ buildLine(lychee.locale['PHOTO_VIEW'], photo.getViewLink(photoID)) }
 			<p class='less'>
@@ -1155,7 +1149,7 @@ photo.showDirectLinks = function(photoID) {
 		msg += buildLine(` ${ lychee.locale['PHOTO_THUMB'] } (200x200)`, lychee.getBaseUrl() + photo.json.thumbUrl)
 	}
 
-	msg += `
+	msg += lychee.html`
 		</div>
 		</div>
 	`;
