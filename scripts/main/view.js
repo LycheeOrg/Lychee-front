@@ -1675,7 +1675,7 @@ view.preify = function (data, css) {
 			html += '    ' + data[i] + '\n';
 		}
 	} else {
-		html += '    ' + data_json;
+		html += '    ' + data;
 	}
 	html += '</pre>';
 
