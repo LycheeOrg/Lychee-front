@@ -16,7 +16,6 @@
   "dependencies": {
     "babel-preset-env": "^1.7.0",
     "basicmodal": "^3.3.8",
-    "body-scroll-lock": "^2.6.1",
     "gulp": "^4.0.0",
     "gulp-autoprefixer": "^6.0.0",
     "gulp-babel": "^6.1.2",
@@ -32,12 +31,13 @@
     "lazysizes": "^4.1.7",
     "leaflet": "^1.5.1",
     "leaflet-rotatedmarker": "^0.2.0",
-    "leaflet.markercluster": "^1.4.1",
     "leaflet-spin": "^1.1.0",
+    "leaflet.markercluster": "^1.4.1",
     "mousetrap": "^1.6.0",
     "multiselect-two-sides": "^2.5.5",
     "npm": "^6.9.0",
     "require": "^2.4.20",
+    "scroll-lock": "^2.1.2",
     "spin.js": "^2.3.2"
   }
 }
