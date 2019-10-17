@@ -76,6 +76,7 @@ search.find = function(term) {
 					setTimeout(() => {
 						if (visible.photo()) view.photo.hide();
 						if (visible.sidebar()) sidebar.toggle();
+						if (visible.mapview()) mapview.close();
 
 						header.setMode('albums');
 
