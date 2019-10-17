@@ -74,6 +74,10 @@ search.find = function(term) {
 					search.hash = data.hash;
 
 					setTimeout(() => {
+						if (visible.photo()) view.photo.hide();
+						if (visible.sidebar()) sidebar.toggle();
+
+						header.setMode('albums');
 
 						if (html==='error') {
 							lychee.content.html('');

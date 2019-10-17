@@ -372,11 +372,6 @@ lychee.load = function(autoplay = true) {
 				return;
 			}
 
-			if (visible.photo()) view.photo.hide();
-			if (visible.sidebar()) sidebar.toggle();
-
-			header.setMode('albums');
-
 			header.dom('.header__search').val(search_string);
 			search.find(search_string);
 
