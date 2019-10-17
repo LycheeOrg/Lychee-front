@@ -303,7 +303,7 @@ lychee.logout = function() {
 lychee.goto = function(url = '', autoplay = true) {
 
 	if(url===false) url = '';
-	
+
 	url = '#' + url;
 
 	history.pushState(null, null, url);
@@ -360,6 +360,27 @@ lychee.load = function(autoplay = true) {
 			mapview.open(albumID);
 			lychee.footer_hide();
 
+
+		} else if (albumID=='search') {
+
+			// Search has been triggered
+			search_string = decodeURIComponent(photoID);
+
+			// If public search is diabled -> do nothing
+			if (lychee.publicMode===true && !lychee.public_search) {
+				loadingBar.show('error', lychee.locale['ERROR_SEARCH_DEACTIVATED']);
+				return;
+			}
+
+			if (visible.photo()) view.photo.hide();
+			if (visible.sidebar()) sidebar.toggle();
+
+			header.setMode('albums');
+
+			header.dom('.header__search').val(search_string);
+			search.find(search_string);
+
+			lychee.footer_show();
 
 		} else {
 			// Show photo

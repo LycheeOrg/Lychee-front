@@ -83,7 +83,7 @@ search.find = function(term) {
 							view.album.content.justify();
 							lychee.animate(lychee.content, 'contentZoomIn')
 						}
-
+						lychee.setTitle(lychee.locale['SEARCH_RESULTS'], false);
 					}, 300)
 
 				}
