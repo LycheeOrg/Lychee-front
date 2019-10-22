@@ -687,7 +687,7 @@ view.photo = {
 
 				// Don't preload next/prev until the requested image is
 				// fully loaded.
-				img.on('load', function() {
+				img.on('load', function () {
 					photo.preloadNextPrev(photo.getID())
 				})
 			} else {
@@ -727,7 +727,7 @@ view.photo = {
 
 		let structure = sidebar.createStructure.photo(photo.json);
 		let html = sidebar.render(structure);
-		let has_location = ( (photo.json.latitude && (photo.json.longitude)) ? true : false );
+		let has_location = ((photo.json.latitude && (photo.json.longitude)) ? true : false);
 
 		sidebar.dom('.sidebar__wrapper').html(html);
 		sidebar.bind();
@@ -754,11 +754,11 @@ view.photo = {
 			} else {
 				// Add Marker, direction has been set
 				var viewDirectionIcon = L.icon({
-							iconUrl: 'img/view-angle-icon.png',
-							iconRetinaUrl: 'img/view-angle-icon-2x.png',
-							iconSize:     [100, 58], // size of the icon
-							iconAnchor:   [50, 49],  // point of the icon which will correspond to marker's location
-						});
+					iconUrl: 'img/view-angle-icon.png',
+					iconRetinaUrl: 'img/view-angle-icon-2x.png',
+					iconSize: [100, 58], // size of the icon
+					iconAnchor: [50, 49],  // point of the icon which will correspond to marker's location
+				});
 				var marker = L.marker([photo.json.latitude, photo.json.longitude], {icon: viewDirectionIcon}).addTo(mymap);
 				marker.setRotationAngle(photo.json.imgDirection);
 			}
@@ -1110,7 +1110,7 @@ view.settings = {
 
 			settings.bind('#MapDisplay', '.setMapDisplay', settings.changeMapDisplay);
 
-		  msg = `
+			msg = `
 			<div class="setMapDisplayPublic">
 			<p>${lychee.locale['MAP_DISPLAY_PUBLIC_TEXT']}
 			<label class="switch">
@@ -1559,34 +1559,35 @@ view.diagnostics = {
 
 	clearContent: function (update) {
 		let html = '';
-		if (update === 1) {
-			html += lychee.html`<div class="clear_logs_update"><a id="Update_Lychee" class="basicModal__button">${lychee.locale['UPDATE_AVAILABLE']}</a></div>`;
+		if (update > 0) {
+			html += '<div class="clear_logs_update">';
+			html += lychee.html`<a id="Check_Update_Lychee" class="basicModal__button">${lychee.locale['CHECK_FOR_UPDATE']}</a>`;
+		}
+		if (update === 2) {
+			html += lychee.html`<a id="Update_Lychee" class="basicModal__button">${lychee.locale['UPDATE_AVAILABLE']}</a>`;
+		}
+		if (update > 0) {
+			html += '</div>';
 		}
 		html += '<pre class="logs_diagnostics_view"></pre>';
 		lychee.content.html(html);
+	},
 
+	bind: function () {
 		$("#Update_Lychee").on('click', function () {
-			api.get('api/Update', function (data) {
-				let data_json;
-				try {
-					data_json = JSON.parse(data);
-				} catch (e) {
-					data_json = "JSON error. Check the console logs.";
-					console.log(data);
-				}
-				html = '<pre>';
-				if (Array.isArray(data_json)) {
-					for (let i = 0; i < data_json.length; i++) {
-						html += '    ' + data_json[i] + '\n';
-					}
-				} else {
-					html += '    ' + data_json;
-				}
-				html += '</pre>';
+			api.post('Update::Apply', [], function (data) {
+				html = view.preify(data, '');
+				$("#Update_Lychee").remove();
 				$(html).prependTo(".logs_diagnostics_view");
 			});
 		});
 
+		$("#Check_Update_Lychee").on('click', function () {
+			api.post('Update::Check', [], function (data) {
+				loadingBar.show('success', data);
+				$("#Check_Update_Lychee").remove();
+			});
+		});
 	},
 
 	content: {
@@ -1619,6 +1620,8 @@ view.diagnostics = {
 					html += '</pre>';
 
 					$(".logs_diagnostics_view").html(html);
+
+					view.diagnostics.bind();
 				})
 			} else {
 				api.post_raw('Diagnostics', {}, function (data) {
@@ -1629,3 +1632,53 @@ view.diagnostics = {
 	},
 
 };
+
+view.update = {
+	init: function () {
+
+		multiselect.clearSelection();
+
+		view.update.title();
+		view.update.content.init()
+
+	},
+
+	title: function () {
+
+		lychee.setTitle('Update', false)
+
+	},
+
+	clearContent: function () {
+		let html = '';
+		html += '<pre class="logs_diagnostics_view"></pre>';
+		lychee.content.html(html);
+	},
+
+	content: {
+		init: function () {
+			view.update.clearContent();
+
+			// code duplicate
+			api.post('Update::Apply', [], function (data) {
+				html = view.preify(data, 'logs_diagnostics_view');
+				lychee.content.html(html);
+			});
+		}
+	},
+};
+
+view.preify = function (data, css) {
+	html = '<pre class="' + css + '">';
+	if (Array.isArray(data)) {
+		for (let i = 0; i < data.length; i++) {
+			html += '    ' + data[i] + '\n';
+		}
+	} else {
+		html += '    ' + data;
+	}
+	html += '</pre>';
+
+	return html;
+};
+
