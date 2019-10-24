@@ -540,7 +540,10 @@ view.photo = {
 		// Make body not scrollable
 		// use bodyScrollLock package to enable locking on iOS
 		// Simple overflow: hidden not working on iOS Safari
-		bodyScrollLock.disableBodyScroll(lychee.imageview);
+		// Only the info pane needs scrolling
+		// Touch event for swiping of photo still work
+
+		scrollLock.disablePageScroll($('.sidebar__wrapper').get());
 
 		// Fullscreen
 		let timeout = null;
@@ -565,7 +568,7 @@ view.photo = {
 		header.setMode('album');
 
 		// Make body scrollable
-		bodyScrollLock.enableBodyScroll(lychee.imageview);
+		scrollLock.enablePageScroll($('.sidebar__wrapper').get());
 
 		// Disable Fullscreen
 		$(document).unbind('mousemove');
