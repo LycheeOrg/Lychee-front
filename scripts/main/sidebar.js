@@ -88,6 +88,7 @@ sidebar.triggerSearch = function(search_string) {
 		return;
 	}
 
+	search.hash = null;
 	// We're either logged in or public search is allowed
 	lychee.goto('search/' + encodeURIComponent(search_string));
 }

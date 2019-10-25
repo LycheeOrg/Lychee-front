@@ -366,6 +366,10 @@ lychee.load = function(autoplay = true) {
 			// Search has been triggered
 			search_string = decodeURIComponent(photoID);
 
+			if(search_string.trim()!=="") {
+				// do nothing on "only space" search strings
+				return;
+			}
 			// If public search is diabled -> do nothing
 			if (lychee.publicMode===true && !lychee.public_search) {
 				loadingBar.show('error', lychee.locale['ERROR_SEARCH_DEACTIVATED']);
@@ -414,6 +418,8 @@ lychee.load = function(autoplay = true) {
 			mapview.open();
 			lychee.footer_hide();
 
+		} else if(albumID=='search') {
+			// search string is empty -> do nothing
 		} else {
 
 			// Trash data
