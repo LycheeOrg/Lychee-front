@@ -119,6 +119,10 @@ sidebar.changeAttr = function(attr, value = '-', dangerouslySetInnerHTML = false
 
 };
 
+sidebar.hideAttr = function(attr) {
+	sidebar.dom('.attr_' + attr).closest('tr').hide()
+};
+
 sidebar.secondsToHMS = function(d) {
 	d = Number(d);
 	var h = Math.floor(d / 3600);
