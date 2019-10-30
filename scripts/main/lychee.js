@@ -328,7 +328,6 @@ lychee.load = function(autoplay = true) {
 	let photoID	= '';
 	let hash	= document.location.hash.replace('#', '').split('/');
 
-	$('.no_content').remove();
 	contextMenu.close();
 	multiselect.close();
 
@@ -344,6 +343,7 @@ lychee.load = function(autoplay = true) {
 				loadingBar.show('error', lychee.locale['ERROR_MAP_DEACTIVATED']);
 				return;
 			}
+			$('.no_content').remove();
 			// show map
 			// albumID has been stored in photoID due to URL format #map/albumID
 			albumID = photoID;
@@ -382,6 +382,7 @@ lychee.load = function(autoplay = true) {
 			lychee.footer_show();
 
 		} else {
+			$('.no_content').remove();
 			// Show photo
 
 			// Trash data
@@ -402,6 +403,7 @@ lychee.load = function(autoplay = true) {
 
 		if(albumID=='map') {
 
+			$('.no_content').remove();
 			// Show map of all albums
 			// If map functionality is disabled -> do nothing
 			if (!lychee.map_display) {
@@ -422,6 +424,7 @@ lychee.load = function(autoplay = true) {
 			// search string is empty -> do nothing
 		} else {
 
+			$('.no_content').remove();
 			// Trash data
 			photo.json = null;
 
@@ -436,6 +439,7 @@ lychee.load = function(autoplay = true) {
 
 	} else {
 
+		$('.no_content').remove();
 		// Trash albums.json when filled with search results
 		if (search.hash!=null) {
 			albums.json = null;
