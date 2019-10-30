@@ -366,7 +366,7 @@ lychee.load = function(autoplay = true) {
 			// Search has been triggered
 			search_string = decodeURIComponent(photoID);
 
-			if(search_string.trim()!=="") {
+			if(search_string.trim()==="") {
 				// do nothing on "only space" search strings
 				return;
 			}
