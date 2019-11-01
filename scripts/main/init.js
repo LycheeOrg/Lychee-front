@@ -25,7 +25,7 @@ $(document).ready(function() {
 	lychee.imageview
 		.on(eventName, '.arrow_wrapper--previous', photo.previous)
 		.on(eventName, '.arrow_wrapper--next',     photo.next)
-		.on('click', 'img', photo.update_display_overlay);
+		.on('click', 'img, #livephoto', photo.update_display_overlay);
 
 	// Keyboard
 	Mousetrap

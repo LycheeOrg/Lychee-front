@@ -6,7 +6,8 @@ photo = {
 
 	json             : null,
 	cache            : null,
-	supportsPrefetch : null
+	supportsPrefetch : null,
+	LivePhotosObject : null
 
 };
 
@@ -87,6 +88,21 @@ photo.hasTakedate = function () {
 photo.hasDesc = function () {
 	return photo.json.description && photo.json.description !== '';
 };
+
+photo.isLivePhoto = function () {
+	if(!(photo.json)) return false; // In case it's called, but not initialized
+	return photo.json.livePhotoUrl && photo.json.livePhotoUrl !== '';
+};
+
+photo.isLivePhotoInitizalized = function () {
+	return (photo.LivePhotosObject !== null);
+};
+
+photo.isLivePhotoPlaying = function () {
+	if(photo.isLivePhotoInitizalized()===false) return false;
+	return photo.LivePhotosObject.isPlaying;
+};
+
 
 photo.update_overlay_type = function() {
 	// Only run if the overlay is showing
@@ -221,6 +237,21 @@ photo.parse = function() {
 
 };
 
+photo.updateSizeLivePhotoDuringAnimation = function(animationDuraction = 300, pauseBetweenUpdated = 10) {
+	// For the LivePhotoKit, we need to call the updateSize manually
+	// during CSS animations
+	//
+	var interval = setInterval(function() {
+			if(photo.isLivePhotoInitizalized()) {
+				photo.LivePhotosObject.updateSize();
+			}
+	}, pauseBetweenUpdated);
+
+	setTimeout(function() {
+			clearInterval(interval);
+	}, animationDuraction);
+};
+
 photo.previous = function(animate) {
 
 	if (photo.getID()!==false &&
@@ -245,6 +276,7 @@ photo.previous = function(animate) {
 
 		setTimeout(() => {
 			if (photo.getID()===false) return false;
+			photo.LivePhotosObject = null;
 			lychee.goto(album.getID() + '/' + album.getByID(photo.getID()).previousPhoto, false)
 		}, delay)
 
@@ -276,6 +308,7 @@ photo.next = function(animate) {
 
 		setTimeout(() => {
 			if (photo.getID()===false) return false;
+			photo.LivePhotosObject = null;
 			lychee.goto(album.getID() + '/' + album.getByID(photo.getID()).nextPhoto, false)
 		}, delay)
 

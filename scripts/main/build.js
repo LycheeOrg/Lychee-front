@@ -274,28 +274,48 @@ build.imageview = function (data, visibleControls, autoplay) {
 	} else {
 		let img = '';
 
-		// See if we have the thumbnail loaded...
-		$('.photo').each(function () {
-			if ($(this).attr('data-id') && $(this).attr('data-id') == data.id) {
-				let thumbimg = $(this).find('img');
-				if (thumbimg.length > 0) {
-					thumb = thumbimg[0].currentSrc ? thumbimg[0].currentSrc : thumbimg[0].src;
-					return false
+		if(data.livePhotoUrl === '') {
+			// It's normal photo
+
+			// See if we have the thumbnail loaded...
+			$('.photo').each(function () {
+				if ($(this).attr('data-id') && $(this).attr('data-id') == data.id) {
+					let thumbimg = $(this).find('img');
+					if (thumbimg.length > 0) {
+						thumb = thumbimg[0].currentSrc ? thumbimg[0].currentSrc : thumbimg[0].src;
+						return false
+					}
 				}
+			});
+
+			if (data.medium !== '') {
+				let medium = '';
+
+				if (data.hasOwnProperty('medium2x') && data.medium2x !== '') {
+					medium = `srcset='${data.medium} ${parseInt(data.medium_dim, 10)}w, ${data.medium2x} ${parseInt(data.medium2x_dim, 10)}w'`;
+				}
+				img = `<img id='image' class='${visibleControls === true ? '' : 'full'}' src='${data.medium}' ` + medium + `  draggable='false' alt='medium'>`
+
+			} else {
+				img = `<img id='image' class='${visibleControls === true ? '' : 'full'}' src='${data.url}' draggable='false' alt='big'>`
 			}
-		});
-
-		if (data.medium !== '') {
-			let medium = '';
-
-			if (data.hasOwnProperty('medium2x') && data.medium2x !== '') {
-				medium = `srcset='${data.medium} ${parseInt(data.medium_dim, 10)}w, ${data.medium2x} ${parseInt(data.medium2x_dim, 10)}w'`;
-			}
-			img = `<img id='image' class='${visibleControls === true ? '' : 'full'}' src='${data.medium}' ` + medium + `  draggable='false' alt='medium'>`
-
 		} else {
-			img = `<img id='image' class='${visibleControls === true ? '' : 'full'}' src='${data.url}' draggable='false' alt='big'>`
+
+			if (data.medium !== '') {
+				medium_dims = data.medium_dim.split("x");
+				medium_width = medium_dims[0];
+				medium_height = medium_dims[1];
+				// It's a live photo
+				img = `<div id='livephoto' data-live-photo data-proactively-loads-video data-photo-src='${data.medium}' data-video-src='${data.livePhotoUrl}'  style='width: ${medium_width}px; height: ${medium_height}px'></div>`
+
+			} else {
+				// It's a live photo
+				img = `<div id='livephoto' data-live-photo data-proactively-loads-video data-photo-src='${data.url}' data-video-src='${data.livePhotoUrl}'  style='width: ${data.width}px; height: ${data.height}px'></div>`
+			}
+
 		}
+
+
 		html += lychee.html`${img}`;
 
 		if (lychee.image_overlay) html += build.overlay_image(data);
@@ -390,13 +410,28 @@ build.uploadNewFile = function (name) {
 build.tags = function (tags) {
 
 	let html = '';
+	let editable  = (typeof album !== 'undefined') ? album.isUploadable() : false;
+
+	// Search is enabled if logged in (not publicMode) or public seach is enabled
+	let searchable = (lychee.publicMode===false || lychee.public_search===true);
+
+	// build class_string for tag
+	let a_class = 'tag';
+	if (searchable) {
+		a_class = a_class + ' search';
+	}
 
 	if (tags !== '') {
 
 		tags = tags.split(',');
 
 		tags.forEach(function (tag, index) {
-			html += lychee.html`<a class='tag'>$${tag}<span data-index='${index}'>${build.iconic('x')}</span></a>`
+			if(editable) {
+				html += lychee.html`<a class='${a_class}'>$${tag}<span data-index='${index}'>${build.iconic('x')}</span></a>`
+			} else {
+				html += lychee.html`<a class='${a_class}'>$${tag}</a>`
+			}
+
 		})
 
 	} else {

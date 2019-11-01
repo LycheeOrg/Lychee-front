@@ -55,6 +55,13 @@ sidebar.bind = function() {
 		});
 
 	sidebar
+		.dom('#tags .tag')
+		.off(eventName)
+		.on(eventName, function() {
+			sidebar.triggerSearch($(this).text())
+		});
+
+	sidebar
 		.dom('#tags .tag span')
 		.off(eventName)
 		.on(eventName, function() {
@@ -73,6 +80,19 @@ sidebar.bind = function() {
 
 };
 
+sidebar.triggerSearch = function(search_string) {
+
+	// If public search is diabled -> do nothing
+	if (lychee.publicMode===true && !lychee.public_search) {
+		// Do not display an error -> just do nothing to not confuse the user
+		return;
+	}
+
+	search.hash = null;
+	// We're either logged in or public search is allowed
+	lychee.goto('search/' + encodeURIComponent(search_string));
+}
+
 sidebar.toggle = function() {
 
 	if (visible.sidebar() || visible.sidebarbutton()) {
@@ -82,6 +102,7 @@ sidebar.toggle = function() {
 		lychee.imageview.toggleClass('image--sidebar');
 		if (typeof view !== 'undefined') view.album.content.justify();
 		sidebar.dom().toggleClass('active');
+		photo.updateSizeLivePhotoDuringAnimation();
 
 		return true
 
@@ -205,21 +226,16 @@ sidebar.createStructure.photo = function(data) {
 		}
 	}
 
-	// Only create tags section when the photo is editable
-	if (editable) {
+	// Always create tags section - behaviour for editing
+	//tags handled when contructing the html code for tags
 
-		structure.tags = {
-			title : lychee.locale['PHOTO_TAGS'],
-			type  : sidebar.types.TAGS,
-			value : build.tags(data.tags),
-			editable
-		}
-
-	} else {
-
-		structure.tags = {}
-
+	structure.tags = {
+		title : lychee.locale['PHOTO_TAGS'],
+		type  : sidebar.types.TAGS,
+		value : build.tags(data.tags),
+		editable
 	}
+
 
 	// Only create EXIF section when EXIF data available
 	if (exifHash!=='') {

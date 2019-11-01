@@ -71,7 +71,15 @@ header.bind = function() {
 	header.dom('#button_fs_album_enter,#button_fs_enter').on(eventName, lychee.fullscreenEnter);
 	header.dom('#button_fs_album_exit,#button_fs_exit').on(eventName, lychee.fullscreenExit).hide();
 
-	header.dom('.header__search').on('keyup click', function() { search.find($(this).val()) });
+
+	header.dom('.header__search').on('keyup click', function() {
+		if ($(this).val().length > 0) {
+			lychee.goto('search/' + encodeURIComponent($(this).val()))
+		} else if (search.hash !== null) {
+			search.reset()
+		}
+	});
+
 	header.dom('.header__clear').on(eventName, function() {
 		header.dom('.header__search').focus();
 		search.reset()
@@ -104,7 +112,17 @@ header.show = function() {
 	lychee.imageview.removeClass('full');
 	header.dom().removeClass('header--hidden');
 
+	photo.updateSizeLivePhotoDuringAnimation();
+
 	return true
+
+};
+
+header.hideIfLivePhotoNotPlaying = function() {
+
+	// Hides the header, if current live photo is not playing
+	if (photo.isLivePhotoPlaying()==true) return false;
+	return header.hide();
 
 };
 
@@ -114,6 +132,8 @@ header.hide = function() {
 
 		lychee.imageview.addClass('full');
 		header.dom().addClass('header--hidden');
+
+		photo.updateSizeLivePhotoDuringAnimation();
 
 		return true
 
