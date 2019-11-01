@@ -106,8 +106,8 @@ $(document).ready(function() {
 					if (visible.header()) header.hide(e);
 					else                  header.show()
 				}
-			})
-
+			});
+		$('#imageview')
 			// Swipe on mobile
 			.swipe().on('swipeStart', function() { if (visible.photo()) swipe.start($('#imageview #image')) })
 			.swipe().on('swipeMove',  function(e) { if (visible.photo()) swipe.move(e.swipe) })
@@ -177,13 +177,13 @@ $(document).ready(function() {
 
 				if (visible.photo())
 					lychee.goto(album.getID());
-					
+
 				if (visible.contextMenu())
 					contextMenu.close();
 
 				if (basicModal.visible() || visible.leftMenu())
 					return;
-																
+
 				if (visible.album() || visible.albums()) {
 					upload.start.local(filesToUpload);
 

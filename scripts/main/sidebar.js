@@ -229,6 +229,8 @@ sidebar.createStructure.photo = function(data) {
 			type  : sidebar.types.DEFAULT,
 			rows  : isVideo ? [
 				{ title: lychee.locale['PHOTO_CAPTURED'],       kind: 'takedate',   value: data.takedate },
+				{ title: lychee.locale['PHOTO_MAKE'],           kind: 'make',       value: data.make },
+				{ title: lychee.locale['PHOTO_TYPE'],           kind: 'model',      value: data.model }
 			] :
 			[
 				{ title: lychee.locale['PHOTO_CAPTURED'],       kind: 'takedate',   value: data.takedate },
@@ -503,22 +505,22 @@ sidebar.render = function(structure) {
 
 			let value = row.value;
 
-			// Set a default for the value
-			if (value==='' || value==null) value = '-';
+			// show only Exif rows which have a value or if its editable
+			if ((!(value==='' || value==null)) || (row.editable===true)) {
 
-			// Wrap span-element around value for easier selecting on change
-			value = lychee.html`<span class='attr_${ row.kind }'>$${ value }</span>`;
+				// Wrap span-element around value for easier selecting on change
+				value = lychee.html`<span class='attr_${ row.kind }'>$${ value }</span>`;
 
-			// Add edit-icon to the value when editable
-			if (row.editable===true) value += ' ' + build.editIcon('edit_' + row.kind);
+				// Add edit-icon to the value when editable
+				if (row.editable===true) value += ' ' + build.editIcon('edit_' + row.kind);
 
-			_html += lychee.html`
-					 <tr>
-						 <td>${ row.title }</td>
-						 <td>${ value }</td>
-					 </tr>
-					 `
-
+				_html += lychee.html`
+						 <tr>
+							 <td>${ row.title }</td>
+							 <td>${ value }</td>
+						 </tr>
+						 `
+			}
 		});
 
 		_html += `

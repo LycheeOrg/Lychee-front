@@ -207,6 +207,7 @@ lychee.init = function() {
 
 			// Logged out
 
+			// TODO remove sortingPhoto once the v4 is out
 			lychee.sortingPhotos				= data.config.sorting_Photos    || data.config.sortingPhotos		|| '';
 			lychee.sortingAlbums				= data.config.sorting_Albums    || data.config.sortingAlbums		|| '';
 			lychee.checkForUpdates				= data.config.check_for_updates || data.config.checkForUpdates	|| '1';
@@ -264,11 +265,13 @@ lychee.login = function(data) {
 lychee.loginDialog = function() {
 
 	let msg = lychee.html`
+			<form>
 				<p class='signIn'>
 					<input class='text' name='username' autocomplete='on' type='text' placeholder='$${ lychee.locale['USERNAME'] }' autocapitalize='off'>
 					<input class='text' name='password' autocomplete='current-password' type='password' placeholder='$${ lychee.locale['PASSWORD'] }'>
 				</p>
 				<p class='version'>Lychee ${ lychee.version }<span> &#8211; <a target='_blank' href='${ lychee.updateURL }'>${ lychee.locale['UPDATE_AVAILABLE'] }</a><span></p>
+			</form>
 			`;
 
 	basicModal.show({
