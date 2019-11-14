@@ -123,9 +123,14 @@ frame.refreshPicture = function () {
 			src = data.url;
 		}
 
-		$('#picture').attr("src", src).attr("srcset", srcset).css('display', 'inline');
-		$('body').addClass('loaded');
-		frame.resize();
+		$('#picture').on('load', function () {
+			$('body').addClass('loaded');
+		});
+		if (srcset !== '') {
+			$('#picture').attr('srcset', srcset);
+			frame.resize();
+		}
+		$('#picture').attr('src', src).css('display', 'inline');
 
 		setTimeout(function () {
 			frame.next();
@@ -135,9 +140,9 @@ frame.refreshPicture = function () {
 };
 
 frame.set = function (data) {
-	console.log(data.refresh);
+//	console.log(data.refresh);
 	frame.refresh = data.refresh ? (parseInt(data.refresh, 10) + 1000): 31000; // 30 sec + 1 sec of blackout
-	console.log(frame.refresh);
+//	console.log(frame.refresh);
 	frame.refreshPicture();
 };
 
