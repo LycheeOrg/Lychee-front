@@ -121,10 +121,8 @@ frame.refreshPicture = function () {
 			src = data.url;
 		}
 
-		if (srcset !== '') {
-			$('#picture').attr('srcset', srcset);
-			frame.resize();
-		}
+		$('#picture').attr('srcset', srcset);
+		frame.resize();
 		$('#picture').attr('src', src).css('display', 'inline');
 
 		setTimeout(function () {
@@ -152,7 +150,7 @@ frame.resize = function() {
 		// enough.
 		let width = (winWidth / ratio > winHeight) ? winHeight * ratio : winWidth;
 
-		$('#picture').attr("sizes", width + 'px');
+		$('#picture').attr('sizes', width + 'px');
 	}
 };
 
@@ -179,7 +177,7 @@ $(document).ready(function () {
 		frame.resize();
 	});
 
-	$('#background').on("load", function () {
+	$('#background').on('load', function () {
 		frame.start_blur();
 	});
 
