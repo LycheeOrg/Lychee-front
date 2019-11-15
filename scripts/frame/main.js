@@ -101,12 +101,10 @@ frame.next = function () {
 
 frame.refreshPicture = function () {
 	api.post('Photo::getRandom', {}, function (data) {
-		if (!data.url) console.log('URL not found');
+		if (!data.url && !data.medium) console.log('URL not found');
 		if (!data.thumbUrl) console.log('Thumb not found');
 
-		$('#background').attr("src", data.thumbUrl).on("load", function () {
-			frame.start_blur();
-		});
+		$('#background').attr('src', data.thumbUrl);
 
 		srcset = '';
 		this.frame.photo = null;
@@ -123,9 +121,9 @@ frame.refreshPicture = function () {
 			src = data.url;
 		}
 
-		$('#picture').attr("src", src).attr("srcset", srcset).css('display', 'inline');
-		$('body').addClass('loaded');
+		$('#picture').attr('srcset', srcset);
 		frame.resize();
+		$('#picture').attr('src', src).css('display', 'inline');
 
 		setTimeout(function () {
 			frame.next();
@@ -135,9 +133,9 @@ frame.refreshPicture = function () {
 };
 
 frame.set = function (data) {
-	console.log(data.refresh);
+//	console.log(data.refresh);
 	frame.refresh = data.refresh ? (parseInt(data.refresh, 10) + 1000): 31000; // 30 sec + 1 sec of blackout
-	console.log(frame.refresh);
+//	console.log(frame.refresh);
 	frame.refreshPicture();
 };
 
@@ -152,7 +150,7 @@ frame.resize = function() {
 		// enough.
 		let width = (winWidth / ratio > winHeight) ? winHeight * ratio : winWidth;
 
-		$('#picture').attr("sizes", width + 'px');
+		$('#picture').attr('sizes', width + 'px');
 	}
 };
 
@@ -172,14 +170,22 @@ $(document).ready(function () {
 	// set CSRF protection (Laravel)
 	csrf.bind();
 
-	api.post('Frame::getSettings', {}, function (data) {
-		frame.set(data);
-	});
-
 	// Set API error handler
 	api.onError = lychee.error;
 
 	$(window).on('resize', function () {
 		frame.resize();
+	});
+
+	$('#background').on('load', function () {
+		frame.start_blur();
+	});
+
+	$('#picture').on('load', function () {
+		$('body').addClass('loaded');
+	});
+
+	api.post('Frame::getSettings', {}, function (data) {
+		frame.set(data);
 	});
 });
