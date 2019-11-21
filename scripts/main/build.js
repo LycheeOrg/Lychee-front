@@ -133,7 +133,11 @@ build.photo = function (data, disabled = false) {
 
 	let isVideo = data.type && data.type.indexOf('video') > -1;
 	let isRaw = data.type && data.type.indexOf('raw') > -1;
+	let isLivePhoto = (data.livePhotoUrl!=='' && data.livePhotoUrl!==null);
 
+	if (data.thumbUrl === 'uploads/thumb/' && isLivePhoto) {
+		thumbnail = `<span class="thumbimg"><img src='img/live-photo-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+	}
 	if (data.thumbUrl === 'uploads/thumb/' && isVideo) {
 		thumbnail = `<span class="thumbimg"><img src='img/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
 	} else if (data.thumbUrl === 'uploads/thumb/' && isRaw) {
@@ -150,7 +154,7 @@ build.photo = function (data, disabled = false) {
 			thumb2x = `data-srcset='${thumb2x} 2x'`
 		}
 
-		thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}">`;
+		thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}${isLivePhoto ? ' livephoto' : ''}">`;
 		thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.thumbUrl}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
 		thumbnail += `</span>`
 	} else {
@@ -160,7 +164,7 @@ build.photo = function (data, disabled = false) {
 				thumb2x = `data-srcset='${data.small} ${parseInt(data.small_dim, 10)}w, ${data.small2x} ${parseInt(data.small2x_dim, 10)}w'`
 			}
 
-			thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}">`;
+			thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}${isLivePhoto ? ' livephoto' : ''}">`;
 			thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.small}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
 			thumbnail += `</span>`
 		} else if (data.medium !== '') {
@@ -168,12 +172,12 @@ build.photo = function (data, disabled = false) {
 				thumb2x = `data-srcset='${data.medium} ${parseInt(data.medium_dim, 10)}w, ${data.medium2x} ${parseInt(data.medium2x_dim, 10)}w'`
 			}
 
-			thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}">`;
+			thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}${isLivePhoto ? ' livephoto' : ''}">`;
 			thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.medium}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`
 			thumbnail += `</span>`
 		} else if (!isVideo) {
 			// Fallback for images with no small or medium.
-			thumbnail = `<span class="thumbimg">`;
+			thumbnail = `<span class="thumbimg${isLivePhoto ? ' livephoto' : ''}">`;
 			thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.url}' alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
 			thumbnail += `</span>`
 		} else {
@@ -306,11 +310,11 @@ build.imageview = function (data, visibleControls, autoplay) {
 				medium_width = medium_dims[0];
 				medium_height = medium_dims[1];
 				// It's a live photo
-				img = `<div id='livephoto' data-live-photo data-proactively-loads-video data-photo-src='${data.medium}' data-video-src='${data.livePhotoUrl}'  style='width: ${medium_width}px; height: ${medium_height}px'></div>`
+				img = `<div id='livephoto' data-live-photo data-proactively-loads-video='true' data-photo-src='${data.medium}' data-video-src='${data.livePhotoUrl}'  style='width: ${medium_width}px; height: ${medium_height}px'></div>`
 
 			} else {
 				// It's a live photo
-				img = `<div id='livephoto' data-live-photo data-proactively-loads-video data-photo-src='${data.url}' data-video-src='${data.livePhotoUrl}'  style='width: ${data.width}px; height: ${data.height}px'></div>`
+				img = `<div id='livephoto' data-live-photo data-proactively-loads-video='true' data-photo-src='${data.url}' data-video-src='${data.livePhotoUrl}'  style='width: ${data.width}px; height: ${data.height}px'></div>`
 			}
 
 		}

@@ -1048,6 +1048,9 @@ photo.getArchive = function(photoIDs, kind = null) {
 		if (myPhoto.url) {
 			msg += buildButton('FULL', `${ lychee.locale['PHOTO_FULL'] } (${ myPhoto.width }x${ myPhoto.height }, ${ myPhoto.size })`)
 		}
+		if (myPhoto.livePhotoUrl) {
+			msg += buildButton('LIVEPHOTOVIDEO', `${ lychee.locale['PHOTO_LIVE_VIDEO'] }`)
+		}
 		if (myPhoto.hasOwnProperty('medium2x') && myPhoto.medium2x !== '') {
 			msg += buildButton('MEDIUM2X', `${ lychee.locale['PHOTO_MEDIUM_HIDPI'] } (${ myPhoto.medium2x_dim })`)
 		}
@@ -1180,6 +1183,9 @@ photo.showDirectLinks = function(photoID) {
 	}
 	if (photo.json.thumbUrl !== '') {
 		msg += buildLine(` ${ lychee.locale['PHOTO_THUMB'] } (200x200)`, lychee.getBaseUrl() + photo.json.thumbUrl)
+	}
+	if (photo.json.livePhotoUrl !== '') {
+		msg += buildLine(` ${ lychee.locale['PHOTO_LIVE_VIDEO'] } `, lychee.getBaseUrl() + photo.json.livePhotoUrl)
 	}
 
 	msg += lychee.html`
