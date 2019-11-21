@@ -71,7 +71,6 @@ header.bind = function() {
 	header.dom('#button_fs_album_enter,#button_fs_enter').on(eventName, lychee.fullscreenEnter);
 	header.dom('#button_fs_album_exit,#button_fs_exit').on(eventName, lychee.fullscreenExit).hide();
 
-
 	header.dom('.header__search').on('keyup click', function() {
 		if ($(this).val().length > 0) {
 			lychee.goto('search/' + encodeURIComponent($(this).val()))
@@ -79,7 +78,6 @@ header.bind = function() {
 			search.reset()
 		}
 	});
-
 	header.dom('.header__clear').on(eventName, function() {
 		header.dom('.header__search').focus();
 		search.reset()
