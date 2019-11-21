@@ -136,13 +136,9 @@ $(document).ready(function() {
 	.on('dragover', function() { return false }, false)
 	.on('drop', function(e) {
 
-		if (!album.isUploadable()) {
+		if (!album.isUploadable() || visible.contextMenu() || basicModal.visible() || visible.leftMenu() || !(visible.album() || visible.albums())) {
 			return false;
 		}
-
-		// Close open overlays or views which are correlating with the upload
-		if (visible.photo())       lychee.goto(album.getID());
-		if (visible.contextMenu()) contextMenu.close();
 
 		// Detect if dropped item is a file or a link
 		if (e.originalEvent.dataTransfer.files.length>0)                upload.start.local(e.originalEvent.dataTransfer.files);
@@ -170,25 +166,13 @@ $(document).ready(function() {
 			}
 
 			if (filesToUpload.length > 0) {
-				if (!album.isUploadable())
-					return;
-
-				// Close open overlays or views which are correlating with the upload
-
-				if (visible.photo())
-					lychee.goto(album.getID());
-
-				if (visible.contextMenu())
-					contextMenu.close();
-
-				if (basicModal.visible() || visible.leftMenu())
-					return;
-
-				if (visible.album() || visible.albums()) {
-					upload.start.local(filesToUpload);
-
-					return false;
+				// We perform the check so deep because we don't want to
+				// prevent the paste from working in text input fields, etc.
+				if (album.isUploadable() && !visible.contextMenu() && !basicModal.visible()  && !visible.leftMenu() && (visible.album() || visible.albums())) {
+					upload.start.local(filesToUpload)
 				}
+
+				return false
 			}
 		}
 	})

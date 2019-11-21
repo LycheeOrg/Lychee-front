@@ -390,13 +390,28 @@ build.uploadNewFile = function (name) {
 build.tags = function (tags) {
 
 	let html = '';
+	let editable  = (typeof album !== 'undefined') ? album.isUploadable() : false;
+
+	// Search is enabled if logged in (not publicMode) or public seach is enabled
+	let searchable = (lychee.publicMode===false || lychee.public_search===true);
+
+	// build class_string for tag
+	let a_class = 'tag';
+	if (searchable) {
+		a_class = a_class + ' search';
+	}
 
 	if (tags !== '') {
 
 		tags = tags.split(',');
 
 		tags.forEach(function (tag, index) {
-			html += lychee.html`<a class='tag'>$${tag}<span data-index='${index}'>${build.iconic('x')}</span></a>`
+			if(editable) {
+				html += lychee.html`<a class='${a_class}'>$${tag}<span data-index='${index}'>${build.iconic('x')}</span></a>`
+			} else {
+				html += lychee.html`<a class='${a_class}'>$${tag}</a>`
+			}
+
 		})
 
 	} else {

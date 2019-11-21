@@ -74,6 +74,11 @@ search.find = function(term) {
 					search.hash = data.hash;
 
 					setTimeout(() => {
+						if (visible.photo()) view.photo.hide();
+						if (visible.sidebar()) sidebar.toggle();
+						if (visible.mapview()) mapview.close();
+
+						header.setMode('albums');
 
 						if (html==='error') {
 							lychee.content.html('');
@@ -83,7 +88,7 @@ search.find = function(term) {
 							view.album.content.justify();
 							lychee.animate(lychee.content, 'contentZoomIn')
 						}
-
+						lychee.setTitle(lychee.locale['SEARCH_RESULTS'], false);
 					}, 300)
 
 				}

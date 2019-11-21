@@ -288,9 +288,6 @@ view.album = {
 
 		delete: function (photoID, justify = false) {
 
-			if (album.json && album.json.num) {
-				album.json.num--;
-			}
 			$('.photo[data-id="' + photoID + '"]').css('opacity', 0).animate({
 				width: 0,
 				marginLeft: 0
@@ -298,8 +295,23 @@ view.album = {
 				$(this).remove();
 				// Only when search is not active
 				if (album.json) {
-					if (album.json.num) {
-						view.album.num();
+					if (visible.sidebar()) {
+						videoCount = 0;
+						$.each(album.json.photos, function () {
+							if (this.type && this.type.indexOf('video') > -1) {
+								videoCount++;
+							}
+						});
+						if (album.json.photos.length - videoCount > 0) {
+							sidebar.changeAttr('images', album.json.photos.length - videoCount)
+						} else {
+							sidebar.hideAttr('images')
+						}
+						if (videoCount > 0) {
+							sidebar.changeAttr('videos', videoCount)
+						} else {
+							sidebar.hideAttr('videos')
+						}
 					}
 					if (album.json.photos.length <= 0) {
 						lychee.content.find('.divider').remove()
@@ -319,7 +331,18 @@ view.album = {
 				marginLeft: 0
 			}, 300, function () {
 				$(this).remove();
-				if (album.json && album.json.albums.length <= 0) lychee.content.find('.divider').remove()
+				if (album.json) {
+					if (album.json.albums.length <= 0) {
+						lychee.content.find('.divider').remove()
+					}
+					if (visible.sidebar()) {
+						if (album.json.albums.length > 0) {
+							sidebar.changeAttr('subalbums', album.json.albums.length)
+						} else {
+							sidebar.hideAttr('subalbums')
+						}
+					}
+				}
 			})
 
 		},
@@ -443,12 +466,6 @@ view.album = {
 		}
 
 		sidebar.changeAttr('license', license)
-
-	},
-
-	num: function () {
-
-		sidebar.changeAttr('images', album.json.num)
 
 	},
 
