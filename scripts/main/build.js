@@ -278,7 +278,7 @@ build.imageview = function (data, visibleControls, autoplay) {
 	} else {
 		let img = '';
 
-		if(data.livePhotoUrl === '') {
+		if(data.livePhotoUrl === '' || data.livePhotoUrl === null) {
 			// It's normal photo
 
 			// See if we have the thumbnail loaded...
