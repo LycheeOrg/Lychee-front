@@ -653,7 +653,7 @@ album.share = function (service) {
 			window.open(`https://twitter.com/share?url=${encodeURI(url)}`);
 			break;
 		case 'facebook':
-			window.open(`http://www.facebook.com/sharer.php?u=${encodeURI(url)}&t=${encodeURI(album.json.title)}`);
+			window.open(`https://www.facebook.com/sharer.php?u=${encodeURI(url)}&t=${encodeURI(album.json.title)}`);
 			break;
 		case 'mail':
 			location.href = `mailto:?subject=${encodeURI(album.json.title)}&body=${encodeURI(url)}`;
