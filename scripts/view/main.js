@@ -83,7 +83,7 @@ photo.share = function (photoID, service) {
 			window.open(`https://twitter.com/share?url=${ encodeURI(url) }`);
 			break;
 		case 'facebook':
-			window.open(`http://www.facebook.com/sharer.php?u=${ encodeURI(url) }`);
+			window.open(`https://www.facebook.com/sharer.php?u=${ encodeURI(url) }`);
 			break;
 		case 'mail':
 			location.href = `mailto:?subject=&body=${ encodeURI(url) }`;
