@@ -507,6 +507,13 @@ view.album = {
 
 	},
 
+	sharable: () => {
+
+		if (album.json.sharable === '1') sidebar.changeAttr('sharable', lychee.locale['ALBUM_SHR_YES']);
+		else sidebar.changeAttr('sharable', lychee.locale['ALBUM_SHR_NO'])
+
+	},
+
 	password: function () {
 
 		if (album.json.password === '1') sidebar.changeAttr('password', lychee.locale['ALBUM_SHR_YES']);

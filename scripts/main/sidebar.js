@@ -329,6 +329,7 @@ sidebar.createStructure.album = function(data) {
 	let _public      = '';
 	let hidden       = '';
 	let downloadable = '';
+	let sharable = '';
 	let password     = '';
 	let license 	 = '';
 
@@ -364,6 +365,18 @@ sidebar.createStructure.album = function(data) {
 		case '1' : downloadable = lychee.locale['ALBUM_SHR_YES'];
 				   break;
 		default  : downloadable = '-';
+				   break
+
+	}
+
+	// Set value for sharable
+	switch (data.sharable) {
+
+		case '0' : sharable = lychee.locale['ALBUM_SHR_NO'];
+				   break;
+		case '1' : sharable = lychee.locale['ALBUM_SHR_YES'];
+				   break;
+		default  : sharable = '-';
 				   break
 
 	}
@@ -435,6 +448,7 @@ sidebar.createStructure.album = function(data) {
 			{ title: lychee.locale['ALBUM_PUBLIC'],       kind: 'public',           value: _public },
 			{ title: lychee.locale['ALBUM_HIDDEN'],       kind: 'hidden',           value: hidden },
 			{ title: lychee.locale['ALBUM_DOWNLOADABLE'], kind: 'downloadable',     value: downloadable },
+			{ title: lychee.locale['ALBUM_SHARABLE'],     kind: 'sharable',     value: sharable },
 			{ title: lychee.locale['ALBUM_PASSWORD'],     kind: 'password',         value: password }
 		]
 	};

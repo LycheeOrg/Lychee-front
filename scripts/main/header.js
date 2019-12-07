@@ -198,6 +198,18 @@ header.setMode = function(mode) {
 				$('#button_archive').show();
 			}
 
+			if (album.json && album.json.hasOwnProperty('sharable') && album.json.sharable !== '1') {
+				$('#button_share_album').hide();
+			} else {
+				$('#button_share_album').show();
+			}
+
+			if (photo.json && photo.json.hasOwnProperty('sharable') && photo.json.sharable !== '1') {
+				$('#button_share').hide();
+			} else {
+				$('#button_share').show();
+			}
+
 			// If map is disabled, we should hide the icon
 			if (lychee.publicMode===true ? lychee.map_display_public : lychee.map_display) {
 				$('#button_map_album').show();

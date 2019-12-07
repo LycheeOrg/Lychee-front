@@ -635,6 +635,14 @@ photo.setPublic = function(photoID, e) {
 		</div>
 		<div class='choice'>
 			<label>
+				<input type='checkbox' name='sharable' disabled>
+				<span class='checkbox'>${build.iconic('check')}</span>
+				<span class='label'>${lychee.locale['PHOTO_SHARABLE']}</span>
+			</label>
+			<p>${lychee.locale['PHOTO_SHARABLE_EXPL']}</p>
+		</div>
+		<div class='choice'>
+			<label>
 				<input type='checkbox' name='password' disabled>
 				<span class='checkbox'>${build.iconic('check')}</span>
 				<span class='label'>${lychee.locale['PHOTO_PASSWORD_PROT']}</span>
@@ -740,6 +748,11 @@ photo.setPublic = function(photoID, e) {
 				$('.basicModal .choice input[name="hidden"]').prop('checked', true);
 				if (lychee.downloadable) {
 					$('.basicModal .choice input[name="downloadable"]').prop('checked', true)
+				}
+				// Photos shared individually are always hidden.
+				$('.basicModal .choice input[name="hidden"]').prop('checked', true);
+				if (lychee.sharable) {
+					$('.basicModal .choice input[name="sharable"]').prop('checked', true)
 				}
 				// Photos shared individually can't be password-protected.
 			} else {

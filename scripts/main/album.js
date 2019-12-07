@@ -512,6 +512,14 @@ album.setPublic = function (albumID, e) {
 				</div>
 				<div class='choice'>
 					<label>
+						<input type='checkbox' name='sharable'>
+						<span class='checkbox'>${build.iconic('check')}</span>
+						<span class='label'>${lychee.locale['ALBUM_SHARABLE']}</span>
+					</label>
+					<p>${lychee.locale['ALBUM_SHARABLE_EXPL']}</p>
+				</div>
+				<div class='choice'>
+					<label>
 						<input type='checkbox' name='password'>
 						<span class='checkbox'>${build.iconic('check')}</span>
 						<span class='label'>${lychee.locale['ALBUM_PASSWORD_PROT']}</span>
@@ -546,6 +554,7 @@ album.setPublic = function (albumID, e) {
 					if (album.json.full_photo !== null && album.json.full_photo === '1') $('.basicModal .choice input[name="full_photo"]').prop('checked', true);
 					if (album.json.visible === '0') $('.basicModal .choice input[name="hidden"]').prop('checked', true);
 					if (album.json.downloadable === '1') $('.basicModal .choice input[name="downloadable"]').prop('checked', true);
+					if (album.json.sharable === '1') $('.basicModal .choice input[name="sharable"]').prop('checked', true);
 					if (album.json.password === '1') {
 						$('.basicModal .choice input[name="password"]').prop('checked', true);
 						$('.basicModal .choice input[name="passwordtext"]').show()
@@ -557,6 +566,9 @@ album.setPublic = function (albumID, e) {
 					}
 					if (lychee.downloadable) {
 						$('.basicModal .choice input[name="downloadable"]').prop('checked', true)
+					}
+					if (lychee.sharable) {
+						$('.basicModal .choice input[name="sharable"]').prop('checked', true)
 					}
 				}
 			} else {
@@ -600,6 +612,10 @@ album.setPublic = function (albumID, e) {
 	if ($('.basicModal .choice input[name="downloadable"]:checked').length === 1) album.json.downloadable = '1';
 	else album.json.downloadable = '0';
 
+	// Set sharable
+	if ($('.basicModal .choice input[name="sharable"]:checked').length === 1) album.json.sharable = '1';
+	else album.json.sharable = '0';
+
 	// Set password
 	let oldPassword = album.json.password;
 	if ($('.basicModal .choice input[name="password"]:checked').length === 1) {
@@ -619,6 +635,7 @@ album.setPublic = function (albumID, e) {
 		view.album.public();
 		view.album.hidden();
 		view.album.downloadable();
+		view.album.sharable();
 		view.album.password();
 
 	}
@@ -628,7 +645,8 @@ album.setPublic = function (albumID, e) {
 		full_photo: album.json.full_photo,
 		public: album.json.public,
 		visible: album.json.visible,
-		downloadable: album.json.downloadable
+		downloadable: album.json.downloadable,
+		sharable: album.json.sharable,
 	};
 	if (oldPassword !== album.json.password || password.length > 0) {
 		// We send the password only if there's been a change; that way the
@@ -645,6 +663,10 @@ album.setPublic = function (albumID, e) {
 };
 
 album.share = function (service) {
+
+	if (album.json.hasOwnProperty('sharable') && album.json.sharable !== '1') {
+		return;
+	}
 
 	let url = location.href;
 

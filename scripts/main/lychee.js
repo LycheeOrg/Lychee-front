@@ -16,6 +16,7 @@ lychee = {
 	viewMode					: false,
 	full_photo					: true,
 	downloadable				: false,
+	sharable					: false,	// enable only v4+
 	api_V2						: false,	// enable api_V2
 	sub_albums					: false,	// enable sub_albums features
 	admin						: false,	// enable admin mode (multi-user)
@@ -182,6 +183,7 @@ lychee.init = function() {
 			lychee.css							= data.config.css				|| '';
 			lychee.full_photo					= (data.config.full_photo == null) || (data.config.full_photo === '1');
 			lychee.downloadable					= (data.config.downloadable && data.config.downloadable === '1') || false;
+			lychee.sharable						= (data.config.sharable && data.config.sharable === '1') || false;
 			lychee.delete_imported				= (data.config.delete_imported && data.config.delete_imported === '1');
 
 			lychee.upload	= !lychee.api_V2;
