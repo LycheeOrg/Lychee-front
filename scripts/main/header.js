@@ -198,16 +198,10 @@ header.setMode = function(mode) {
 				$('#button_archive').show();
 			}
 
-			if (album.json && album.json.hasOwnProperty('sharable') && album.json.sharable !== '1') {
+			if (album.json && album.json.hasOwnProperty('share_button_visible') && album.json.share_button_visible !== '1') {
 				$('#button_share_album').hide();
 			} else {
 				$('#button_share_album').show();
-			}
-
-			if (photo.json && photo.json.hasOwnProperty('sharable') && photo.json.sharable !== '1') {
-				$('#button_share').hide();
-			} else {
-				$('#button_share').show();
 			}
 
 			// If map is disabled, we should hide the icon
@@ -253,6 +247,12 @@ header.setMode = function(mode) {
 				$('#button_trash, #button_move, #button_visibility, #button_star').show()
 			} else {
 				$('#button_trash, #button_move, #button_visibility, #button_star').hide();
+			}
+
+			if (photo.json && photo.json.hasOwnProperty('share_button_visible') && photo.json.share_button_visible !== '1') {
+				$('#button_share').hide();
+			} else {
+				$('#button_share').show();
 			}
 
 			// Hide More menu if empty (see contextMenu.photoMore)

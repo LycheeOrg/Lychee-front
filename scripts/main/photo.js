@@ -635,11 +635,11 @@ photo.setPublic = function(photoID, e) {
 		</div>
 		<div class='choice'>
 			<label>
-				<input type='checkbox' name='sharable' disabled>
+				<input type='checkbox' name='share_button_visible' disabled>
 				<span class='checkbox'>${build.iconic('check')}</span>
-				<span class='label'>${lychee.locale['PHOTO_SHARABLE']}</span>
+				<span class='label'>${lychee.locale['PHOTO_SHARE_BUTTON_VISIBLE']}</span>
 			</label>
-			<p>${lychee.locale['PHOTO_SHARABLE_EXPL']}</p>
+			<p>${lychee.locale['PHOTO_SHARE_BUTTON_VISIBLE_EXPL']}</p>
 		</div>
 		<div class='choice'>
 			<label>
@@ -751,8 +751,8 @@ photo.setPublic = function(photoID, e) {
 				}
 				// Photos shared individually are always hidden.
 				$('.basicModal .choice input[name="hidden"]').prop('checked', true);
-				if (lychee.sharable) {
-					$('.basicModal .choice input[name="sharable"]').prop('checked', true)
+				if (lychee.share_button_visible) {
+					$('.basicModal .choice input[name="share_button_visible"]').prop('checked', true)
 				}
 				// Photos shared individually can't be password-protected.
 			} else {
@@ -908,6 +908,10 @@ photo.deleteTag = function(photoID, index) {
 };
 
 photo.share = function(photoID, service) {
+
+	if (photo.json.hasOwnProperty('share_button_visible') && photo.json.share_button_visible !== '1') {
+		return;
+	}
 
 	let url  = photo.getViewLink(photoID);
 

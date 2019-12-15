@@ -512,11 +512,11 @@ album.setPublic = function (albumID, e) {
 				</div>
 				<div class='choice'>
 					<label>
-						<input type='checkbox' name='sharable'>
+						<input type='checkbox' name='share_button_visible'>
 						<span class='checkbox'>${build.iconic('check')}</span>
-						<span class='label'>${lychee.locale['ALBUM_SHARABLE']}</span>
+						<span class='label'>${lychee.locale['ALBUM_SHARE_BUTTON_VISIBLE']}</span>
 					</label>
-					<p>${lychee.locale['ALBUM_SHARABLE_EXPL']}</p>
+					<p>${lychee.locale['ALBUM_SHARE_BUTTON_VISIBLE_EXPL']}</p>
 				</div>
 				<div class='choice'>
 					<label>
@@ -554,7 +554,7 @@ album.setPublic = function (albumID, e) {
 					if (album.json.full_photo !== null && album.json.full_photo === '1') $('.basicModal .choice input[name="full_photo"]').prop('checked', true);
 					if (album.json.visible === '0') $('.basicModal .choice input[name="hidden"]').prop('checked', true);
 					if (album.json.downloadable === '1') $('.basicModal .choice input[name="downloadable"]').prop('checked', true);
-					if (album.json.sharable === '1') $('.basicModal .choice input[name="sharable"]').prop('checked', true);
+					if (album.json.share_button_visible === '1') $('.basicModal .choice input[name="share_button_visible"]').prop('checked', true);
 					if (album.json.password === '1') {
 						$('.basicModal .choice input[name="password"]').prop('checked', true);
 						$('.basicModal .choice input[name="passwordtext"]').show()
@@ -567,8 +567,8 @@ album.setPublic = function (albumID, e) {
 					if (lychee.downloadable) {
 						$('.basicModal .choice input[name="downloadable"]').prop('checked', true)
 					}
-					if (lychee.sharable) {
-						$('.basicModal .choice input[name="sharable"]').prop('checked', true)
+					if (lychee.share_button_visible) {
+						$('.basicModal .choice input[name="share_button_visible"]').prop('checked', true)
 					}
 				}
 			} else {
@@ -612,9 +612,9 @@ album.setPublic = function (albumID, e) {
 	if ($('.basicModal .choice input[name="downloadable"]:checked').length === 1) album.json.downloadable = '1';
 	else album.json.downloadable = '0';
 
-	// Set sharable
-	if ($('.basicModal .choice input[name="sharable"]:checked').length === 1) album.json.sharable = '1';
-	else album.json.sharable = '0';
+	// Set share_button_visible
+	if ($('.basicModal .choice input[name="share_button_visible"]:checked').length === 1) album.json.share_button_visible = '1';
+	else album.json.share_button_visible = '0';
 
 	// Set password
 	let oldPassword = album.json.password;
@@ -635,7 +635,7 @@ album.setPublic = function (albumID, e) {
 		view.album.public();
 		view.album.hidden();
 		view.album.downloadable();
-		view.album.sharable();
+		view.album.shareButtonVisible();
 		view.album.password();
 
 	}
@@ -646,7 +646,7 @@ album.setPublic = function (albumID, e) {
 		public: album.json.public,
 		visible: album.json.visible,
 		downloadable: album.json.downloadable,
-		sharable: album.json.sharable,
+		share_button_visible: album.json.share_button_visible,
 	};
 	if (oldPassword !== album.json.password || password.length > 0) {
 		// We send the password only if there's been a change; that way the
@@ -664,7 +664,7 @@ album.setPublic = function (albumID, e) {
 
 album.share = function (service) {
 
-	if (album.json.hasOwnProperty('sharable') && album.json.sharable !== '1') {
+	if (album.json.hasOwnProperty('share_button_visible') && album.json.share_button_visible !== '1') {
 		return;
 	}
 

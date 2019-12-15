@@ -414,7 +414,7 @@ contextMenu.move = function(IDs, e, callback, kind = 'UNSORTED', display_root = 
 contextMenu.sharePhoto = function(photoID, e) {
 
 	// v4+ only
-	if (photo.json.hasOwnProperty('sharable') && photo.json.sharable !== '1') {
+	if (photo.json.hasOwnProperty('share_button_visible') && photo.json.share_button_visible !== '1') {
 		return;
 	}
 
@@ -435,7 +435,7 @@ contextMenu.sharePhoto = function(photoID, e) {
 contextMenu.shareAlbum = function(albumID, e) {
 
 	// v4+ only
-	if (album.json.hasOwnProperty('sharable') && album.json.sharable !== '1') {
+	if (album.json.hasOwnProperty('share_button_visible') && album.json.share_button_visible !== '1') {
 		return;
 	}
 

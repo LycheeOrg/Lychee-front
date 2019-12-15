@@ -329,7 +329,7 @@ sidebar.createStructure.album = function(data) {
 	let _public      = '';
 	let hidden       = '';
 	let downloadable = '';
-	let sharable = '';
+	let share_button_visible = '';
 	let password     = '';
 	let license 	 = '';
 
@@ -369,14 +369,14 @@ sidebar.createStructure.album = function(data) {
 
 	}
 
-	// Set value for sharable
-	switch (data.sharable) {
+	// Set value for share_button_visible
+	switch (data.share_button_visible) {
 
-		case '0' : sharable = lychee.locale['ALBUM_SHR_NO'];
+		case '0' : share_button_visible = lychee.locale['ALBUM_SHR_NO'];
 				   break;
-		case '1' : sharable = lychee.locale['ALBUM_SHR_YES'];
+		case '1' : share_button_visible = lychee.locale['ALBUM_SHR_YES'];
 				   break;
-		default  : sharable = '-';
+		default  : share_button_visible = '-';
 				   break
 
 	}
@@ -445,11 +445,11 @@ sidebar.createStructure.album = function(data) {
 		title : lychee.locale['ALBUM_SHARING'],
 		type  : sidebar.types.DEFAULT,
 		rows  : [
-			{ title: lychee.locale['ALBUM_PUBLIC'],       kind: 'public',           value: _public },
-			{ title: lychee.locale['ALBUM_HIDDEN'],       kind: 'hidden',           value: hidden },
-			{ title: lychee.locale['ALBUM_DOWNLOADABLE'], kind: 'downloadable',     value: downloadable },
-			{ title: lychee.locale['ALBUM_SHARABLE'],     kind: 'sharable',     value: sharable },
-			{ title: lychee.locale['ALBUM_PASSWORD'],     kind: 'password',         value: password }
+			{ title: lychee.locale['ALBUM_PUBLIC'],                   kind: 'public',                   value: _public },
+			{ title: lychee.locale['ALBUM_HIDDEN'],                   kind: 'hidden',                   value: hidden },
+			{ title: lychee.locale['ALBUM_DOWNLOADABLE'],             kind: 'downloadable',             value: downloadable },
+			{ title: lychee.locale['ALBUM_SHARE_BUTTON_VISIBLE'],     kind: 'share_button_visible',     value: share_button_visible },
+			{ title: lychee.locale['ALBUM_PASSWORD'],                 kind: 'password',                 value: password }
 		]
 	};
 

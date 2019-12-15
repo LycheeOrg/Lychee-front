@@ -507,10 +507,10 @@ view.album = {
 
 	},
 
-	sharable: () => {
+	shareButtonVisible: () => {
 
-		if (album.json.sharable === '1') sidebar.changeAttr('sharable', lychee.locale['ALBUM_SHR_YES']);
-		else sidebar.changeAttr('sharable', lychee.locale['ALBUM_SHR_NO'])
+		if (album.json.share_button_visible === '1') sidebar.changeAttr('share_button_visible', lychee.locale['ALBUM_SHR_YES']);
+		else sidebar.changeAttr('share_button_visible', lychee.locale['ALBUM_SHR_NO'])
 
 	},
 
