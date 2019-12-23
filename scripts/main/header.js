@@ -198,6 +198,12 @@ header.setMode = function(mode) {
 				$('#button_archive').show();
 			}
 
+			if (album.json && album.json.hasOwnProperty('share_button_visible') && album.json.share_button_visible !== '1') {
+				$('#button_share_album').hide();
+			} else {
+				$('#button_share_album').show();
+			}
+
 			// If map is disabled, we should hide the icon
 			if (lychee.publicMode===true ? lychee.map_display_public : lychee.map_display) {
 				$('#button_map_album').show();
@@ -241,6 +247,12 @@ header.setMode = function(mode) {
 				$('#button_trash, #button_move, #button_visibility, #button_star').show()
 			} else {
 				$('#button_trash, #button_move, #button_visibility, #button_star').hide();
+			}
+
+			if (photo.json && photo.json.hasOwnProperty('share_button_visible') && photo.json.share_button_visible !== '1') {
+				$('#button_share').hide();
+			} else {
+				$('#button_share').show();
 			}
 
 			// Hide More menu if empty (see contextMenu.photoMore)
