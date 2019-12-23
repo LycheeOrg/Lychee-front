@@ -573,12 +573,18 @@ view.photo = {
 		let timeout = null;
 		$(document).bind('mousemove', function () {
 			clearTimeout(timeout);
-			header.show();
-			timeout = setTimeout(header.hide, 2500)
+			// For live Photos: header animtion only if LivePhoto is not playing
+			if(!photo.isLivePhotoPlaying()) {
+				header.show();
+				timeout = setTimeout(header.hideIfLivePhotoNotPlaying, 2500);
+			}
+
+
+
 		});
 
 		// we also put this timeout to enable it by default when you directly click on a picture.
-		setTimeout(header.hide, 2500);
+		setTimeout(header.hideIfLivePhotoNotPlaying, 2500);
 
 		lychee.animate(lychee.imageview, 'fadeIn')
 
@@ -695,6 +701,16 @@ view.photo = {
 
 		let ret = build.imageview(photo.json, visible.header(), autoplay);
 		lychee.imageview.html(ret.html);
+
+		// Init Live Photo if needed
+		if (photo.isLivePhoto()) {
+			// Package gives warning that function will be remove and
+			// shoud be replaced by LivePhotosKit.augementElementAsPlayer
+			// But, LivePhotosKit.augementElementAsPlayer is not yet available
+			photo.LivePhotosObject = LivePhotosKit.Player(document.getElementById('livephoto'));
+		}
+
+
 		view.photo.onresize();
 
 		let $nextArrow = lychee.imageview.find('a#next');
@@ -1708,4 +1724,3 @@ view.preify = function (data, css) {
 
 	return html;
 };
-

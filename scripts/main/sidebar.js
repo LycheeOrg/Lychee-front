@@ -102,6 +102,7 @@ sidebar.toggle = function() {
 		lychee.imageview.toggleClass('image--sidebar');
 		if (typeof view !== 'undefined') view.album.content.justify();
 		sidebar.dom().toggleClass('active');
+		photo.updateSizeLivePhotoDuringAnimation();
 
 		return true
 

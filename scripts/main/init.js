@@ -25,7 +25,7 @@ $(document).ready(function() {
 	lychee.imageview
 		.on(eventName, '.arrow_wrapper--previous', photo.previous)
 		.on(eventName, '.arrow_wrapper--next',     photo.next)
-		.on('click', 'img', photo.update_display_overlay);
+		.on('click', 'img, #livephoto', photo.update_display_overlay);
 
 	// Keyboard
 	Mousetrap
@@ -109,7 +109,7 @@ $(document).ready(function() {
 			});
 		$('#imageview')
 			// Swipe on mobile
-			.swipe().on('swipeStart', function() { if (visible.photo()) swipe.start($('#imageview #image')) })
+			.swipe().on('swipeStart', function() { if (visible.photo()) swipe.start($('#imageview #image, #imageview #livephoto')) })
 			.swipe().on('swipeMove',  function(e) { if (visible.photo()) swipe.move(e.swipe) })
 			.swipe().on('swipeEnd',   function(e) { if (visible.photo()) swipe.stop(e.swipe, photo.previous, photo.next) })
 

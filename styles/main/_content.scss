@@ -102,6 +102,23 @@
 				opacity: 0.75;
 			}
 		}
+
+		.livephoto {
+			&::before {
+				content: '';
+				position: absolute;
+				display: block;
+				height: 100%;
+				width: 100%;
+				background: url('../img/live-photo-icon.png') no-repeat 46% 50%;
+				background-position: 2% 2%;
+				transition: all 0.3s;
+				will-change: opacity, height;
+			}
+			&:hover::before {
+				opacity: 0.75;
+			}
+		}
 	}
 
 	// Album -------------------------------------------------------------- //

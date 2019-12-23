@@ -110,7 +110,17 @@ header.show = function() {
 	lychee.imageview.removeClass('full');
 	header.dom().removeClass('header--hidden');
 
+	photo.updateSizeLivePhotoDuringAnimation();
+
 	return true
+
+};
+
+header.hideIfLivePhotoNotPlaying = function() {
+
+	// Hides the header, if current live photo is not playing
+	if (photo.isLivePhotoPlaying()==true) return false;
+	return header.hide();
 
 };
 
@@ -120,6 +130,8 @@ header.hide = function() {
 
 		lychee.imageview.addClass('full');
 		header.dom().addClass('header--hidden');
+
+		photo.updateSizeLivePhotoDuringAnimation();
 
 		return true
 
