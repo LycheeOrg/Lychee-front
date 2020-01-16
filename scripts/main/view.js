@@ -747,7 +747,13 @@ view.photo = {
 			let nextPhotoID = album.getByID(photoID).nextPhoto;
 			let nextPhoto = album.getByID(nextPhotoID);
 
-			$nextArrow.css('background-image', lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("${nextPhoto.thumbUrl}")`)
+			// Check if thumbUrl exists (for videos w/o ffmpeg, we add a play-icon)
+			let thumbUrl = nextPhoto.thumbUrl;
+
+			if (thumbUrl === 'uploads/thumb/' && nextPhoto.type.indexOf('video') > -1) {
+					thumbUrl = 'img/play-icon.png'
+			}
+			$nextArrow.css('background-image', lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("${thumbUrl}")`)
 
 		}
 
@@ -760,7 +766,13 @@ view.photo = {
 			let previousPhotoID = album.getByID(photoID).previousPhoto;
 			let previousPhoto = album.getByID(previousPhotoID);
 
-			$previousArrow.css('background-image', lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("${previousPhoto.thumbUrl}")`)
+			// Check if thumbUrl exists (for videos w/o ffmpeg, we add a play-icon)
+			let thumbUrl = previousPhoto.thumbUrl;
+
+			if (thumbUrl === 'uploads/thumb/' && previousPhoto.type.indexOf('video') > -1) {
+					thumbUrl = 'img/play-icon.png'
+			}
+			$previousArrow.css('background-image', lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("${thumbUrl}")`)
 
 		}
 
