@@ -23,18 +23,18 @@ leftMenu.build = function () {
 	if (lychee.api_V2)
 	{
 		html += lychee.html`
-		<a class="linkMenu" id="button_users">${    build.iconic('person') } ${             lychee.locale['USERS'] } </a>
-		<a class="linkMenu" id="button_sharing">${  build.iconic('cloud') } ${              lychee.locale['SHARING'] }</a>`
+		<a class="linkMenu" id="button_users">${    build.iconic('person') }${             lychee.locale['USERS'] } </a>
+		<a class="linkMenu" id="button_sharing">${  build.iconic('cloud') }${              lychee.locale['SHARING'] }</a>`
 	}
 	html += lychee.html`
-		<a class="linkMenu" id="button_logs">${         build.iconic('align-left') } ${     lychee.locale['LOGS'] }</a>
-		<a class="linkMenu" id="button_diagnostics">${  build.iconic('wrench') } ${         lychee.locale['DIAGNOSTICS'] }</a>
-		<a class="linkMenu" id="button_about">${        build.iconic('info') } ${           lychee.locale['ABOUT_LYCHEE'] }</a>
-		<a class="linkMenu" id="button_signout">${      build.iconic('account-logout') } ${ lychee.locale['SIGN_OUT'] }</a>`;
+		<a class="linkMenu" id="button_logs">${         build.iconic('align-left') }${     lychee.locale['LOGS'] }</a>
+		<a class="linkMenu" id="button_diagnostics">${  build.iconic('wrench') }${         lychee.locale['DIAGNOSTICS'] }</a>
+		<a class="linkMenu" id="button_about">${        build.iconic('info') }${           lychee.locale['ABOUT_LYCHEE'] }</a>
+		<a class="linkMenu" id="button_signout">${      build.iconic('account-logout') }${ lychee.locale['SIGN_OUT'] }</a>`;
 	if (lychee.api_V2 && lychee.update_available)
 	{
 		html += lychee.html`
-		<a class="linkMenu" id="button_update">${ build.iconic('timer')} ${ lychee.locale['UPDATE_AVAILABLE']}</a>
+		<a class="linkMenu" id="button_update">${ build.iconic('timer')}${ lychee.locale['UPDATE_AVAILABLE']}</a>
 		`
 	}
 	leftMenu._dom.html(html)
