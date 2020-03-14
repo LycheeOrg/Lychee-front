@@ -295,7 +295,9 @@ sidebar.createStructure.photo = function(data) {
 				{ title: lychee.locale['PHOTO_LATITUDE'],    kind:'latitude',   value: (data.latitude) ? DecimalToDegreeMinutesSeconds(data.latitude, true) : '' },
 				{ title: lychee.locale['PHOTO_LONGITUDE'],    kind:'longitude',   value: (data.longitude) ? DecimalToDegreeMinutesSeconds(data.longitude, false) : ''},
 				// No point in displaying sub-mm precision; 10cm is more than enough.
-				{ title: lychee.locale['PHOTO_ALTITUDE'],    kind:'altitude',   value: (data.altitude) ? (Math.round(parseFloat(data.altitude) * 10) / 10).toString() + 'm' : ''}
+				{ title: lychee.locale['PHOTO_ALTITUDE'],    kind:'altitude',   value: (data.altitude) ? (Math.round(parseFloat(data.altitude) * 10) / 10).toString() + 'm' : ''},
+				{ title: lychee.locale['PHOTO_LOCATION'],    kind:'location',   value: (data.location) ? data.location : ''}
+
 			]
 		};
 		if (data.imgDirection) {
@@ -517,7 +519,7 @@ sidebar.render = function(structure) {
 			let _has_latitude = false;
 			let _has_longitude = false;
 
-			section.rows.forEach(function(row) {
+			section.rows.forEach(function(row, index, object) {
 				if ((row.kind=='latitude') && (row.value!=='')) {
 					_has_latitude = true;
 				}
@@ -526,6 +528,17 @@ sidebar.render = function(structure) {
 					_has_longitude = true;
 				}
 
+				// Do not show location is not enabled
+				if ((row.kind=='location') && ((lychee.publicMode===true && !lychee.location_show_public) || (!lychee.location_show))) {
+					object.splice(index, 1);
+				}
+
+				// Explode location string into an array to keep street, city etc separate
+				if (row.kind=='location') {
+					section.rows[index].value = row.value.split(',').map(function(item) {
+																	  return item.trim();
+																	});
+				}
 			});
 
 			if ((_has_latitude) && (_has_longitude) && (lychee.map_display)) {
@@ -543,7 +556,18 @@ sidebar.render = function(structure) {
 			if ((!(value==='' || value==null)) || (row.editable===true)) {
 
 				// Wrap span-element around value for easier selecting on change
-				value = lychee.html`<span class='attr_${ row.kind }'>$${ value }</span>`;
+				if (Array.isArray(row.value)) {
+					value = '';
+					row.value.forEach(function(v) {
+						  // Add separator if needed
+						  if (!(value==='')) {
+								value += lychee.html`<span class='attr_${ row.kind }'>, </span>`;
+							}
+					    value += lychee.html`<span class='attr_${ row.kind }'>$${ v }</span>`;
+					});
+				} else {
+					value = lychee.html`<span class='attr_${ row.kind }'>$${ value }</span>`;
+				}
 
 				// Add edit-icon to the value when editable
 				if (row.editable===true) value += ' ' + build.editIcon('edit_' + row.kind);
@@ -591,7 +615,6 @@ sidebar.render = function(structure) {
 
 		if (section.type===sidebar.types.DEFAULT)   html += renderDefault(section);
 		else if (section.type===sidebar.types.TAGS) html += renderTags(section)
-
 	});
 
 	return html

@@ -1222,7 +1222,75 @@ view.settings = {
 
 			settings.bind('#MapIncludeSubalbums', '.setMapIncludeSubalbums', settings.changeMapIncludeSubalbums);
 
+			msg = `
+			<div class="setLocationDecoding">
+			<p>${lychee.locale['LOCATION_DECODING']}
+			<label class="switch">
+			  <input id="LocationDecoding" type="checkbox">
+			  <span class="slider round"></span>
+			</label>
+			</p>
+			</div>
+			`;
 
+			$(".settings_view").append(msg);
+			if (lychee.location_decoding) $('#LocationDecoding').click();
+
+			settings.bind('#LocationDecoding', '.setLocationDecoding', settings.changeLocationDecoding);
+
+			msg = `
+			<div class="setLocationDecodingCachingType">
+			<p>${lychee.locale['LOCATION_DECODING_CACHING_TYPE']}
+			<span class="select" style="width:90px">
+				<select name="LocationDecodingCachingType" id="LocationDecodingCachingType">
+					<option value="None">None</option>
+					<option value="Memory">In-Memory</option>
+					<option value="Harddisk">Harddisk</option>
+				</select>
+			</span>
+			<div class="basicModal__buttons">
+				<a id="basicModal__action_set_location_decoding_caching_type" class="basicModal__button">${lychee.locale['SET_LOCATION_DECODING_CACHING_TYPE']}</a>
+			</div>
+			</div>
+			`
+
+			$(".settings_view").append(msg);
+
+
+			$('select#LocationDecodingCachingType').val(!lychee.location_decoding_caching_type ? 'Harddisk' : lychee.location_decoding_caching_type);
+			settings.bind('#basicModal__action_set_location_decoding_caching_type', '.setLocationDecodingCachingType', settings.setLocationDecodingCachingType);
+
+			msg = `
+			<div class="setLocationShow">
+			<p>${lychee.locale['LOCATION_SHOW']}
+			<label class="switch">
+			  <input id="LocationShow" type="checkbox">
+			  <span class="slider round"></span>
+			</label>
+			</p>
+			</div>
+			`;
+
+			$(".settings_view").append(msg);
+			if (lychee.location_show) $('#LocationShow').click();
+
+			settings.bind('#LocationShow', '.setLocationShow', settings.changeLocationShow);
+
+			msg = `
+			<div class="setLocationShowPublic">
+			<p>${lychee.locale['LOCATION_SHOW_PUBLIC']}
+			<label class="switch">
+				<input id="LocationShowPublic" type="checkbox">
+				<span class="slider round"></span>
+			</label>
+			</p>
+			</div>
+			`;
+
+			$(".settings_view").append(msg);
+			if (lychee.location_show_public) $('#LocationShowPublic').click();
+
+			settings.bind('#LocationShowPublic', '.setLocationShowPublic', settings.changeLocationShowPublic);
 		},
 
 

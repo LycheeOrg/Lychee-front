@@ -24,6 +24,7 @@ lychee.locale = {
 		'SET_LICENSE'		: 'Set License',
 		'SET_OVERLAY_TYPE'	: 'Set Overlay',
 		'SET_MAP_PROVIDER'	: 'Set OpenStreetMap tiles provider',
+		'SET_LOCATION_DECODING_CACHING_TYPE'	: 'Set location decoder caching',
 		'SAVE_RISK'			: 'Save my modifications, I accept the Risk!',
 		'MORE'              : 'More',
 
@@ -351,6 +352,10 @@ lychee.locale = {
 		'MAP_DISPLAY_TEXT'		: 'Enable maps (provided by OpenStreetMap):',
 		'MAP_DISPLAY_PUBLIC_TEXT' : 'Enable maps for public albums (provided by OpenStreetMap):',
 		'MAP_INCLUDE_SUBALBUMS_TEXT': 'Include photos of subalbums on map:',
+		'LOCATION_DECODING_CACHING' : 'Decode GPS data into location name',
+		'LOCATION_DECODING_CACHING_TYPE' : 'Caching mode of location decoding (harddisk recommended)',
+		'LOCATION_SHOW' : 'Show location name',
+		'LOCATION_SHOW_PUBLIC' : 'Show location name for public mode',
 
 		'VIEW_NO_RESULT'			: 'No results',
 		'VIEW_NO_PUBLIC_ALBUMS'		: 'No public albums',

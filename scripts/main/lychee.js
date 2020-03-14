@@ -33,6 +33,11 @@ lychee = {
 	map_display_public			: false,	// display photos of public album on map (user not logged in)
 	map_provider				: 'Wikimedia', // Provider of OSM Tiles
 	map_include_subalbums		: false,	// include photos of subalbums on map
+	location_decoding : false, // retrieve location name from GPS data
+	location_decoding_caching_type : 'Harddisk', // caching mode for GPS data decoding
+	location_show : false, // show location name
+	location_show_public : false, // show location name for public albums
+
 	landing_page_enabled        : false,    // is landing page enabled ?
 	delete_imported				: false,
 
@@ -179,6 +184,11 @@ lychee.init = function() {
 			lychee.map_display_public		= (data.config.map_display_public && data.config.map_display_public === '1')  || false;
 			lychee.map_provider			    = (!data.config.map_provider) ? 'Wikimedia' : data.config.map_provider;
 			lychee.map_include_subalbums = (data.config.map_include_subalbums && data.config.map_include_subalbums === '1')  || false;
+			lychee.location_decoding		          = (data.config.location_decoding && data.config.location_decoding === '1')  || false;
+			lychee.location_decoding_caching_type	= (!data.config.location_decoding_caching_type) ? 'Harddisk' : data.config.location_decoding_caching_type;
+			lychee.location_show		              = (data.config.location_show && data.config.location_show === '1')  || false;
+			lychee.location_show_public		        = (data.config.location_show_public && data.config.location_show_public === '1')  || false;
+
 			lychee.default_license				= data.config.default_license	|| 'none';
 			lychee.css							= data.config.css				|| '';
 			lychee.full_photo					= (data.config.full_photo == null) || (data.config.full_photo === '1');
@@ -222,6 +232,8 @@ lychee.init = function() {
 			lychee.map_display_public		= (data.config.map_display_public && data.config.map_display_public === '1') || false;
 			lychee.map_provider			    = (!data.config.map_provider) ? 'Wikimedia' : data.config.map_provider;
 			lychee.map_include_subalbums = (data.config.map_include_subalbums && data.config.map_include_subalbums === '1')  || false;
+			lychee.location_show		              = (data.config.location_show && data.config.location_show === '1')  || false;
+			lychee.location_show_public		        = (data.config.location_show_public && data.config.location_show_public === '1')  || false;
 
 			// console.log(lychee.full_photo);
 			lychee.setMode('public');
