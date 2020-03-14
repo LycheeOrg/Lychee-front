@@ -76,6 +76,13 @@ sidebar.bind = function() {
 			else if (visible.album()) album.setLicense(album.getID())
 		})
 
+		sidebar
+			.dom('.attr_location')
+			.off(eventName)
+			.on(eventName, function() {
+				sidebar.triggerSearch($(this).text())
+			});
+
 	return true
 
 };
@@ -561,9 +568,9 @@ sidebar.render = function(structure) {
 					row.value.forEach(function(v) {
 						  // Add separator if needed
 						  if (!(value==='')) {
-								value += lychee.html`<span class='attr_${ row.kind }'>, </span>`;
+								value += lychee.html`<span class='attr_${ row.kind }_separator'>, </span>`;
 							}
-					    value += lychee.html`<span class='attr_${ row.kind }'>$${ v }</span>`;
+					    value += lychee.html`<span class='attr_${ row.kind } search'>$${ v }</span>`;
 					});
 				} else {
 					value = lychee.html`<span class='attr_${ row.kind }'>$${ value }</span>`;
