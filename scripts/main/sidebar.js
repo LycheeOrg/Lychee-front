@@ -538,14 +538,15 @@ sidebar.render = function(structure) {
 				// Do not show location is not enabled
 				if ((row.kind=='location') && ((lychee.publicMode===true && !lychee.location_show_public) || (!lychee.location_show))) {
 					object.splice(index, 1);
+				} else {
+					// Explode location string into an array to keep street, city etc separate
+					if (!(row.value==='' || row.value==null)) {
+						section.rows[index].value = row.value.split(',').map(function(item) {
+																		  return item.trim();
+																		});
+					}
 				}
 
-				// Explode location string into an array to keep street, city etc separate
-				if (row.kind=='location') {
-					section.rows[index].value = row.value.split(',').map(function(item) {
-																	  return item.trim();
-																	});
-				}
 			});
 
 			if ((_has_latitude) && (_has_longitude) && (lychee.map_display)) {
@@ -566,6 +567,9 @@ sidebar.render = function(structure) {
 				if (Array.isArray(row.value)) {
 					value = '';
 					row.value.forEach(function(v) {
+					  	if (v==='' || v==null) {
+								return; 
+							}
 						  // Add separator if needed
 						  if (!(value==='')) {
 								value += lychee.html`<span class='attr_${ row.kind }_separator'>, </span>`;
