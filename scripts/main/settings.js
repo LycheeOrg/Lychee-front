@@ -518,22 +518,6 @@ settings.changeLocationDecoding = function () {
 
 };
 
-settings.setLocationDecodingCachingType = function () {
-	// validate the input
-	let params = {};
-	params.location_decoding_caching_type = $('#LocationDecodingCachingType').val();
-
-
-	api.post('Settings::setLocationDecodingCachingType', params, function (data) {
-		if (data === true) {
-			loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_MAP_DISPLAY']);
-			lychee.location_decoding_caching_type = params.location_decoding_caching_type;
-
-		} else lychee.error(null, params, data)
-
-	})
-};
-
 settings.changeLocationShow = function () {
 	var params = {};
 	if ($('#LocationShow:checked').length === 1) {

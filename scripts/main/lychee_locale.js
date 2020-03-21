@@ -353,7 +353,6 @@ lychee.locale = {
 		'MAP_DISPLAY_PUBLIC_TEXT' : 'Enable maps for public albums (provided by OpenStreetMap):',
 		'MAP_INCLUDE_SUBALBUMS_TEXT': 'Include photos of subalbums on map:',
 		'LOCATION_DECODING_CACHING' : 'Decode GPS data into location name',
-		'LOCATION_DECODING_CACHING_TYPE' : 'Caching mode of location decoding (harddisk recommended)',
 		'LOCATION_SHOW' : 'Show location name',
 		'LOCATION_SHOW_PUBLIC' : 'Show location name for public mode',
 

@@ -1239,28 +1239,6 @@ view.settings = {
 			settings.bind('#LocationDecoding', '.setLocationDecoding', settings.changeLocationDecoding);
 
 			msg = `
-			<div class="setLocationDecodingCachingType">
-			<p>${lychee.locale['LOCATION_DECODING_CACHING_TYPE']}
-			<span class="select" style="width:90px">
-				<select name="LocationDecodingCachingType" id="LocationDecodingCachingType">
-					<option value="None">None</option>
-					<option value="Memory">In-Memory</option>
-					<option value="Harddisk">Harddisk</option>
-				</select>
-			</span>
-			<div class="basicModal__buttons">
-				<a id="basicModal__action_set_location_decoding_caching_type" class="basicModal__button">${lychee.locale['SET_LOCATION_DECODING_CACHING_TYPE']}</a>
-			</div>
-			</div>
-			`
-
-			$(".settings_view").append(msg);
-
-
-			$('select#LocationDecodingCachingType').val(!lychee.location_decoding_caching_type ? 'Harddisk' : lychee.location_decoding_caching_type);
-			settings.bind('#basicModal__action_set_location_decoding_caching_type', '.setLocationDecodingCachingType', settings.setLocationDecodingCachingType);
-
-			msg = `
 			<div class="setLocationShow">
 			<p>${lychee.locale['LOCATION_SHOW']}
 			<label class="switch">
