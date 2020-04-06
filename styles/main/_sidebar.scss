@@ -226,4 +226,10 @@
 		float: left;
 	}
 
+	.attr_location {
+		&.search {
+				cursor: pointer;
+		}
+	}
+
 }

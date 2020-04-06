@@ -76,6 +76,13 @@ sidebar.bind = function() {
 			else if (visible.album()) album.setLicense(album.getID())
 		})
 
+		sidebar
+			.dom('.attr_location')
+			.off(eventName)
+			.on(eventName, function() {
+				sidebar.triggerSearch($(this).text())
+			});
+
 	return true
 
 };
@@ -295,7 +302,9 @@ sidebar.createStructure.photo = function(data) {
 				{ title: lychee.locale['PHOTO_LATITUDE'],    kind:'latitude',   value: (data.latitude) ? DecimalToDegreeMinutesSeconds(data.latitude, true) : '' },
 				{ title: lychee.locale['PHOTO_LONGITUDE'],    kind:'longitude',   value: (data.longitude) ? DecimalToDegreeMinutesSeconds(data.longitude, false) : ''},
 				// No point in displaying sub-mm precision; 10cm is more than enough.
-				{ title: lychee.locale['PHOTO_ALTITUDE'],    kind:'altitude',   value: (data.altitude) ? (Math.round(parseFloat(data.altitude) * 10) / 10).toString() + 'm' : ''}
+				{ title: lychee.locale['PHOTO_ALTITUDE'],    kind:'altitude',   value: (data.altitude) ? (Math.round(parseFloat(data.altitude) * 10) / 10).toString() + 'm' : ''},
+				{ title: lychee.locale['PHOTO_LOCATION'],    kind:'location',   value: (data.location) ? data.location : ''}
+
 			]
 		};
 		if (data.imgDirection) {
@@ -517,13 +526,25 @@ sidebar.render = function(structure) {
 			let _has_latitude = false;
 			let _has_longitude = false;
 
-			section.rows.forEach(function(row) {
+			section.rows.forEach(function(row, index, object) {
 				if ((row.kind=='latitude') && (row.value!=='')) {
 					_has_latitude = true;
 				}
 
 				if((row.kind=='longitude') && (row.value!=='')) {
 					_has_longitude = true;
+				}
+
+				// Do not show location is not enabled
+				if ((row.kind=='location') && ((lychee.publicMode===true && !lychee.location_show_public) || (!lychee.location_show))) {
+					object.splice(index, 1);
+				} else {
+					// Explode location string into an array to keep street, city etc separate
+					if (!(row.value==='' || row.value==null)) {
+						section.rows[index].value = row.value.split(',').map(function(item) {
+																		  return item.trim();
+																		});
+					}
 				}
 
 			});
@@ -543,7 +564,21 @@ sidebar.render = function(structure) {
 			if ((!(value==='' || value==null)) || (row.editable===true)) {
 
 				// Wrap span-element around value for easier selecting on change
-				value = lychee.html`<span class='attr_${ row.kind }'>$${ value }</span>`;
+				if (Array.isArray(row.value)) {
+					value = '';
+					row.value.forEach(function(v) {
+					  	if (v==='' || v==null) {
+								return; 
+							}
+						  // Add separator if needed
+						  if (!(value==='')) {
+								value += lychee.html`<span class='attr_${ row.kind }_separator'>, </span>`;
+							}
+					    value += lychee.html`<span class='attr_${ row.kind } search'>$${ v }</span>`;
+					});
+				} else {
+					value = lychee.html`<span class='attr_${ row.kind }'>$${ value }</span>`;
+				}
 
 				// Add edit-icon to the value when editable
 				if (row.editable===true) value += ' ' + build.editIcon('edit_' + row.kind);
@@ -591,7 +626,6 @@ sidebar.render = function(structure) {
 
 		if (section.type===sidebar.types.DEFAULT)   html += renderDefault(section);
 		else if (section.type===sidebar.types.TAGS) html += renderTags(section)
-
 	});
 
 	return html

@@ -1222,7 +1222,53 @@ view.settings = {
 
 			settings.bind('#MapIncludeSubalbums', '.setMapIncludeSubalbums', settings.changeMapIncludeSubalbums);
 
+			msg = `
+			<div class="setLocationDecoding">
+			<p>${lychee.locale['LOCATION_DECODING']}
+			<label class="switch">
+			  <input id="LocationDecoding" type="checkbox">
+			  <span class="slider round"></span>
+			</label>
+			</p>
+			</div>
+			`;
 
+			$(".settings_view").append(msg);
+			if (lychee.location_decoding) $('#LocationDecoding').click();
+
+			settings.bind('#LocationDecoding', '.setLocationDecoding', settings.changeLocationDecoding);
+
+			msg = `
+			<div class="setLocationShow">
+			<p>${lychee.locale['LOCATION_SHOW']}
+			<label class="switch">
+			  <input id="LocationShow" type="checkbox">
+			  <span class="slider round"></span>
+			</label>
+			</p>
+			</div>
+			`;
+
+			$(".settings_view").append(msg);
+			if (lychee.location_show) $('#LocationShow').click();
+
+			settings.bind('#LocationShow', '.setLocationShow', settings.changeLocationShow);
+
+			msg = `
+			<div class="setLocationShowPublic">
+			<p>${lychee.locale['LOCATION_SHOW_PUBLIC']}
+			<label class="switch">
+				<input id="LocationShowPublic" type="checkbox">
+				<span class="slider round"></span>
+			</label>
+			</p>
+			</div>
+			`;
+
+			$(".settings_view").append(msg);
+			if (lychee.location_show_public) $('#LocationShowPublic').click();
+
+			settings.bind('#LocationShowPublic', '.setLocationShowPublic', settings.changeLocationShowPublic);
 		},
 
 
