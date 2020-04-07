@@ -29,6 +29,9 @@ $(document).ready(function() {
 
 	// Keyboard
 	Mousetrap
+		.bind([ 'l' ], function() {
+			lychee.loginDialog(); return false
+		})
 		.bind([ 'left' ], function() {
 			if (visible.photo()) { $('#imageview a#previous').click(); return false }
 		})
