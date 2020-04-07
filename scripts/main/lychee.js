@@ -545,6 +545,10 @@ lychee.setMode = function(mode) {
 	}
 
 	if (mode === 'logged_in') {
+		// we are logged in, we do not need that short cut anymore. :)
+		Mousetrap
+			.unbind([ 'l' ]);
+
 		// The code searches by class, so remove the other instance.
 		$('.header__search, .header__clear', '.header__toolbar--public').remove();
 		return;
