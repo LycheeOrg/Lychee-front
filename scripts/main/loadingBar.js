@@ -2,7 +2,7 @@
  * @description This module is used to show and hide the loading bar.
  */
 
-loadingBar = {
+let loadingBar = {
 
 	status : null,
 	_dom   : $('#loading')

@@ -2,7 +2,7 @@
  * @description Takes care of every action an album can handle and execute.
  */
 
-upload = {};
+let upload = {};
 
 upload.show = function(title, files, callback) {
 
@@ -43,7 +43,7 @@ upload.start = {
 		let error   = false;
 		let warning = false;
 
-		const process = function(files, file) {
+		const process = function(_files, file) {
 
 			let formData          = new FormData();
 			let xhr               = new XMLHttpRequest();
@@ -166,9 +166,9 @@ upload.start = {
 				}
 
 				// Check if there are file which are not finished
-				for (let i = 0; i < files.length; i++) {
+				for (let i = 0; i < _files.length; i++) {
 
-					if (files[i].ready===false) {
+					if (_files[i].ready===false) {
 						wait = true;
 						break
 					}
@@ -271,11 +271,11 @@ upload.start = {
 						albumID
 					};
 
-					api.post('Import::url', params, function(data) {
+					api.post('Import::url', params, function(_data) {
 
 						// Same code as in import.dropbox()
 
-						if (data!==true) {
+						if (_data!==true) {
 
 							$('.basicModal .rows .row p.notice')
 								.html(lychee.locale['UPLOAD_IMPORT_WARN_ERR'])
@@ -289,7 +289,7 @@ upload.start = {
 							$('.basicModal #basicModal__action.hidden').show();
 
 							// Log error
-							lychee.error(null, params, data)
+							lychee.error(null, params, _data)
 
 						} else {
 
@@ -354,12 +354,12 @@ upload.start = {
 				};
 
 				if (lychee.api_V2 === false) {
-					api.post('Import::server', params, function(data) {
+					api.post('Import::server', params, function(_data) {
 
 						albums.refresh();
 						upload.notify(lychee.locale['UPLOAD_IMPORT_COMPLETE']);
 
-						if (data==='Notice: Import only contained albums!') {
+						if (_data==='Notice: Import only contained albums!') {
 
 							// No error, but the folder only contained albums
 
@@ -371,7 +371,7 @@ upload.start = {
 
 							return true
 
-						} else if (data==='Warning: Folder empty or no readable files to process!') {
+						} else if (_data==='Warning: Folder empty or no readable files to process!') {
 
 							// Error because the import could not start
 
@@ -384,10 +384,10 @@ upload.start = {
 								.addClass('error');
 
 							// Log error
-							lychee.error(lychee.locale['UPLOAD_IMPORT_SERVER_EMPT'], params, data)
+							lychee.error(lychee.locale['UPLOAD_IMPORT_SERVER_EMPT'], params, _data)
 
 						} else {
-							if (data !== true) {
+							if (_data !== true) {
 
 								// Maybe an error, maybe just some skipped photos
 
@@ -400,7 +400,7 @@ upload.start = {
 									.addClass('warning');
 
 								// Log error
-								lychee.error(null, params, data)
+								lychee.error(null, params, _data)
 
 							} else {
 
@@ -520,9 +520,9 @@ upload.start = {
 						}) // forEach (resp)
 					}; // processIncremental
 
-					api.post('Import::server', params, function(data) {
-						// data is already JSON-parsed.
-						processIncremental(data);
+					api.post('Import::server', params, function(_data) {
+						// _data is already JSON-parsed.
+						processIncremental(_data);
 
 						albums.refresh();
 

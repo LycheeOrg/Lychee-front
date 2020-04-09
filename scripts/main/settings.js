@@ -2,15 +2,10 @@
  * @description Lets you change settings.
  */
 
-settings = {};
+let settings = {};
 
 settings.open = function () {
-	if (lychee.api_V2) {
-		// we may do something else here later
-		view.settings.init()
-	} else {
-		view.settings.init()
-	}
+	view.settings.init()
 };
 
 settings.createConfig = function () {
@@ -39,12 +34,12 @@ settings.createConfig = function () {
 			dbTablePrefix
 		};
 
-		api.post('Config::create', params, function (data) {
+		api.post('Config::create', params, function (_data) {
 
-			if (data !== true) {
+			if (_data !== true) {
 
 				// Connection failed
-				if (data === 'Warning: Connection failed!') {
+				if (_data === 'Warning: Connection failed!') {
 
 					basicModal.show({
 						body: '<p>' + lychee.locale['ERROR_DB_1'] + '</p>',
@@ -61,7 +56,7 @@ settings.createConfig = function () {
 				}
 
 				// Creation failed
-				if (data === 'Warning: Creation failed!') {
+				if (_data === 'Warning: Creation failed!') {
 
 					basicModal.show({
 						body: '<p>' + lychee.locale['ERROR_DB_2'] + '</p>',
@@ -78,7 +73,7 @@ settings.createConfig = function () {
 				}
 
 				// Could not create file
-				if (data === 'Warning: Could not create file!') {
+				if (_data === 'Warning: Could not create file!') {
 
 					basicModal.show({
 						body: "<p>" + lychee.locale['ERROR_CONFIG_FILE'] + "</p>",
@@ -174,9 +169,9 @@ settings.createLogin = function () {
 			password
 		};
 
-		api.post('Settings::setLogin', params, function (data) {
+		api.post('Settings::setLogin', params, function (_data) {
 
-			if (data !== true) {
+			if (_data !== true) {
 
 				basicModal.show({
 					body: '<p>' + lychee.locale['ERROR_LOGIN'] + '</p>',

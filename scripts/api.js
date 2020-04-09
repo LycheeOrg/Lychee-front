@@ -2,7 +2,7 @@
  * @description This module communicates with Lychee's API
  */
 
-api = {
+let api = {
 
 	path    : 'php/index.php',
 	onError : null

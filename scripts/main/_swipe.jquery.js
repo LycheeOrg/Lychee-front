@@ -30,7 +30,7 @@
 
 			this.swipeStart(e, e.pageX, e.pageY);
 
-			this.el.on('mousemove', function(e) { self.mouseMove(e) });
+			this.el.on('mousemove', function(_e) { self.mouseMove(_e) });
 			this.el.on('mouseup', function() { self.mouseUp() })
 		},
 

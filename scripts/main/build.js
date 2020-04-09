@@ -2,7 +2,7 @@
  * @description This module is used to generate HTML-Code.
  */
 
-build = {};
+let build = {};
 
 build.iconic = function (icon, classes = '') {
 
@@ -306,9 +306,9 @@ build.imageview = function (data, visibleControls, autoplay) {
 		} else {
 
 			if (data.medium !== '') {
-				medium_dims = data.medium_dim.split("x");
-				medium_width = medium_dims[0];
-				medium_height = medium_dims[1];
+				let medium_dims = data.medium_dim.split("x");
+				let medium_width = medium_dims[0];
+				let medium_height = medium_dims[1];
 				// It's a live photo
 				img = `<div id='livephoto' data-live-photo data-proactively-loads-video='true' data-photo-src='${data.medium}' data-video-src='${data.livePhotoUrl}'  style='width: ${medium_width}px; height: ${medium_height}px'></div>`
 

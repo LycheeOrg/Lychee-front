@@ -2,7 +2,7 @@
  * @description This module takes care of the map view of a full album and its sub-albums.
  */
 
-map_provider_layer_attribution = {
+const map_provider_layer_attribution = {
 	'Wikimedia':
 			{
 				layer: 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png',
@@ -30,7 +30,7 @@ map_provider_layer_attribution = {
 			},
 };
 
-mapview = {
+let mapview = {
 		map: null,
 		photoLayer: null,
 		min_lat: null,
@@ -161,7 +161,7 @@ mapview.open = function(albumID = null) {
 
 
 	// Adjusts zoom and position of map to show all images
-	updateZoom = function() {
+	const updateZoom = function() {
 		if((mapview.min_lat)&&(mapview.min_lng)&&(mapview.max_lat)&&(mapview.max_lng)){
 			var dist_lat = mapview.max_lat - mapview.min_lat;
 			var dist_lng = mapview.max_lng - mapview.min_lng;
@@ -172,12 +172,12 @@ mapview.open = function(albumID = null) {
 	}
 
 	// Adds photos to the map
-	addPhotosToMap = function(album) {
+	const addPhotosToMap = function(album) {
 
 		// check if empty
 		if(!album.photos) return;
 
-		photos = [];
+		let photos = [];
 
 		album.photos.forEach(function (element, index) {
 			if((element.latitude) || (element.longitude)) {
@@ -220,7 +220,7 @@ mapview.open = function(albumID = null) {
 	// Call backend, retrieve information of photos and display them
 	// This function is called recursively to retrieve data for sub-albums
 	// Possible enhancement could be to only have a single ajax call
-	getAlbumData = function(_albumID, _includeSubAlbums = true) {
+	const getAlbumData = function(_albumID, _includeSubAlbums = true) {
 
 		if (_albumID !== '' && _albumID !== null) {
 			// _ablumID has been to a specific album
@@ -237,9 +237,9 @@ mapview.open = function(albumID = null) {
 
 						params.password = password.value;
 
-						api.post('Album::getPositionData', params, function (data) {
-							addPhotosToMap(data);
-							mapview.title(_albumID, data.title);
+						api.post('Album::getPositionData', params, function (_data) {
+							addPhotosToMap(_data);
+							mapview.title(_albumID, _data.title);
 						})
 					})
 				} else {
@@ -262,9 +262,9 @@ mapview.open = function(albumID = null) {
 
 						params.password = password.value;
 
-						api.post('Albums::getPositionData', params, function (data) {
-							addPhotosToMap(data);
-							mapview.title(_albumID, data.title);
+						api.post('Albums::getPositionData', params, function (_data) {
+							addPhotosToMap(_data);
+							mapview.title(_albumID, _data.title);
 						})
 					})
 				} else {

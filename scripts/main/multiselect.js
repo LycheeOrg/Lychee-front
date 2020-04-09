@@ -9,7 +9,7 @@ const isSelectKeyPressed = function(e) {
 };
 
 
-multiselect = {
+let multiselect = {
 
 	ids            : [],
 	albumsSelected : 0,
@@ -265,7 +265,7 @@ multiselect.show = function(e) {
 
 	$(document)
 		.on('mousemove', multiselect.resize)
-		.on('mouseup', (e) => { if (e.which===1) multiselect.getSelection(e) })
+		.on('mouseup', (_e) => { if (_e.which===1) multiselect.getSelection(_e) })
 
 };
 

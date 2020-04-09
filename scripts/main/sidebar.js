@@ -2,7 +2,7 @@
  * @description This module takes care of the sidebar.
  */
 
-sidebar = {
+let sidebar = {
 
 	_dom: $('.sidebar'),
 	types: {
@@ -170,6 +170,7 @@ sidebar.createStructure.photo = function(data) {
 	let structure = {};
 	let _public   = '';
 	let isVideo = data.type && data.type.indexOf('video') > -1;
+	let license;
 
 	// Set the license string for a photo
 	switch (data.license) {
@@ -422,7 +423,7 @@ sidebar.createStructure.album = function(data) {
 		]
 	};
 
-	videoCount = 0;
+	let videoCount = 0;
 	$.each(data.photos, function () {
 		if (this.type && this.type.indexOf('video') > -1) {
 			videoCount++;
@@ -571,7 +572,7 @@ sidebar.render = function(structure) {
 								return; 
 							}
 						  // Add separator if needed
-						  if (!(value==='')) {
+						  if (value!=='') {
 								value += lychee.html`<span class='attr_${ row.kind }_separator'>, </span>`;
 							}
 					    value += lychee.html`<span class='attr_${ row.kind } search'>$${ v }</span>`;
@@ -637,11 +638,11 @@ function DecimalToDegreeMinutesSeconds(decimal, type) {
 	let degrees = 0;
 	let minutes = 0;
 	let seconds = 0;
-	let direction = 'X';
+	let direction;
 
 	//decimal must be integer or float no larger than 180;
 	//type must be Boolean
-	if( Math.abs(decimal) > 180 || (!(typeof type === "boolean"))) {
+	if( Math.abs(decimal) > 180 || (typeof type !== "boolean")) {
 		return false;
 	}
 
@@ -679,4 +680,4 @@ function DecimalToDegreeMinutesSeconds(decimal, type) {
 
   return  degrees + '° ' + minutes + '\' ' + seconds + '\" ' + direction;
 
-};
+}

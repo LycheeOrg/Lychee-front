@@ -2,7 +2,7 @@
  * @description Controls the access to password-protected albums and photos.
  */
 
-password = {
+let password = {
 
 	value: ''
 
@@ -19,9 +19,9 @@ password.getDialog = function(albumID, callback) {
 			password: passwd
 		};
 
-		api.post('Album::getPublic', params, function(data) {
+		api.post('Album::getPublic', params, function(_data) {
 
-			if (data===true) {
+			if (_data===true) {
 				basicModal.close();
 				password.value = passwd;
 				callback()

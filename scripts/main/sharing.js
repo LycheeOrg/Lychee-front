@@ -1,4 +1,4 @@
-sharing = {
+let sharing = {
 	json: null
 };
 

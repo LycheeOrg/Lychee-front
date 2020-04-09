@@ -2,7 +2,7 @@
  * @description Takes care of every action albums can handle and execute.
  */
 
-albums = {
+let albums = {
 
 	json: null
 
@@ -18,7 +18,7 @@ albums.load = function () {
 
 		api.post('Albums::get', {}, function (data) {
 
-			let waitTime = 0;
+			let waitTime;
 
 			// Smart Albums
 			if (data.smartalbums != null) albums._createSmartAlbums(data.smartalbums);
