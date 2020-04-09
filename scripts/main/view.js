@@ -1701,18 +1701,22 @@ view.diagnostics = {
 					view.diagnostics.clearContent(data.update);
 					let html = '';
 					let i;
-					html += '<pre>\n\n\n\n';
+					html += '<pre id="content_diag_error">\n\n\n\n';
 					html += '    Diagnostics\n' +
 						'    -----------\n';
 					for (i = 0; i < data.errors.length; i++) {
 						html += '    ' + data.errors[i] + '\n';
 					}
+					html += '</pre>\n';
+					html += '<pre id="content_diag_sys">\n\n\n\n';
 					html += '\n' +
 						'    System Information\n' +
 						'    ------------------\n';
 					for (i = 0; i < data.infos.length; i++) {
 						html += '    ' + data.infos[i] + '\n';
 					}
+					html += '</pre>\n';
+					html += '<pre id="content_diag_conf">\n\n\n\n';
 					html += '\n' +
 						'    Config Information\n' +
 						'    ------------------\n';
