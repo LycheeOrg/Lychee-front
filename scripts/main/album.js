@@ -15,7 +15,7 @@ album.isSmartID = function (id) {
 
 album.getParent = function () {
 
-	if (album.json == null || album.isSmartID(album.json.id) === true || !album.json.parent_id || album.json.parent_id === 0) return '';
+	if (album.json == null || album.isSmartID(album.json.id) === true || !album.json.parent_id || album.json.parent_id === 0) { return ''; }
 	return album.json.parent_id
 
 };
@@ -26,7 +26,7 @@ album.getID = function () {
 
 	// this is a Lambda
 	let isID = (_id) => {
-		if (_id === '0' || _id === 'f' || _id === 's' || _id === 'r') return true;
+		if (_id === '0' || _id === 'f' || _id === 's' || _id === 'r') { return true; }
 		return $.isNumeric(_id)
 	};
 
@@ -274,7 +274,7 @@ album.setTitle = function (albumIDs) {
 	let msg = '';
 
 	if (!albumIDs) return false;
-	if (!(albumIDs instanceof Array)) albumIDs = [albumIDs];
+	if (!(albumIDs instanceof Array)) { albumIDs = [albumIDs]; }
 
 	if (albumIDs.length === 1) {
 
@@ -330,7 +330,7 @@ album.setTitle = function (albumIDs) {
 
 		api.post('Album::setTitle', params, function (_data) {
 
-			if (_data !== true) lychee.error(null, params, _data)
+			if (_data !== true) { lychee.error(null, params, _data); }
 
 		})
 
@@ -379,7 +379,7 @@ album.setDescription = function (albumID) {
 
 		api.post('Album::setDescription', params, function (_data) {
 
-			if (_data !== true) lychee.error(null, params, _data)
+			if (_data !== true) { lychee.error(null, params, _data); }
 
 		})
 

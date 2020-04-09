@@ -43,6 +43,8 @@ swipe.move = function(e) {
 		'transform'       : 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)'
 	})
 
+	return;
+
 };
 
 swipe.stop = function(e, left, right) {
@@ -83,4 +85,5 @@ swipe.stop = function(e, left, right) {
 	swipe.offsetX        = 0;
 	swipe.offsetY        = 0
 
+	return;
 };

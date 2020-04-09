@@ -418,6 +418,8 @@ upload.start = {
 						// Show close button
 						$('.basicModal #basicModal__action.hidden').show()
 
+						return;
+
 					})
 				} else {
 					// Variables holding state across the invocations of
