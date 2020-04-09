@@ -1772,7 +1772,7 @@ view.update = {
 };
 
 view.preify = function (data, css) {
-	html = '<pre class="' + css + '">';
+	let html = '<pre class="' + css + '">';
 	if (Array.isArray(data)) {
 		for (let i = 0; i < data.length; i++) {
 			html += '    ' + data[i] + '\n';
