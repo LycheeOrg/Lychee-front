@@ -265,7 +265,9 @@ multiselect.show = function(e) {
 
 	$(document)
 		.on('mousemove', multiselect.resize)
-		.on('mouseup', (_e) => { if (_e.which===1) multiselect.getSelection(_e) })
+		.on('mouseup', (_e) => {
+			if (_e.which===1) { multiselect.getSelection(_e) };
+		})
 
 };
 

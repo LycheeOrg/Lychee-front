@@ -467,7 +467,7 @@ photo.setTitle = function(photoIDs) {
 
 		api.post('Photo::setTitle', params, function(_data) {
 
-			if (_data!==true) lychee.error(null, params, _data)
+			if (_data!==true) { lychee.error(null, params, _data); }
 
 		})
 
@@ -822,7 +822,7 @@ photo.setDescription = function(photoID) {
 		};
 
 		api.post('Photo::setDescription', params, function(_data) {
-			if (_data!==true) lychee.error(null, params, _data)
+			if (_data!==true) { lychee.error(null, params, _data); }
 
 		})
 

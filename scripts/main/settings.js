@@ -107,6 +107,7 @@ settings.createConfig = function () {
 				// Configuration successful
 				window.location.reload()
 
+				return false
 			}
 
 		})
