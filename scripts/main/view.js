@@ -806,7 +806,6 @@ view.photo = {
 
 			if (!photo.json.imgDirection || photo.json.imgDirection === '') {
 				// Add Marker to map, direction is not set
-				// var marker = 
 				L.marker([photo.json.latitude, photo.json.longitude]).addTo(mymap);
 			} else {
 				// Add Marker, direction has been set
