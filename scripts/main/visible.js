@@ -2,7 +2,7 @@
  * @description This module is used to check if elements are visible or not.
  */
 
-visible = {};
+let visible = {};
 
 visible.albums = function() {
 	if (header.dom('.header__toolbar--public').hasClass('header__toolbar--visible')) return true;

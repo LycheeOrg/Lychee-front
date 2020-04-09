@@ -106,7 +106,8 @@ frame.refreshPicture = function () {
 
 		$('#background').attr('src', data.thumbUrl);
 
-		srcset = '';
+		let srcset = '';
+		let src = '';
 		this.frame.photo = null;
 		if (data.medium != '') {
 			src = data.medium;

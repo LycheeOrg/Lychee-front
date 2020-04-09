@@ -2,7 +2,7 @@
  * @description This module is used for the context menu.
  */
 
-leftMenu = {
+let leftMenu = {
 
 	_dom: $('.leftMenu')
 

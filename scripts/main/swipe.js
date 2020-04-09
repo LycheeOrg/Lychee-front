@@ -2,7 +2,7 @@
  * @description Swipes and moves an object.
  */
 
-swipe = {
+let swipe = {
 
 	obj            : null,
 	tolerance_X    : 150,
@@ -24,12 +24,15 @@ swipe.start = function(obj, tolerance_X, tolerance_Y) {
 
 swipe.move = function(e) {
 
-	if (swipe.obj===null) return false;
+	if (swipe.obj===null)
+	{
+		return false;
+	}
 
-  if (Math.abs(e.x) > Math.abs(e.y)) {
-	  swipe.offsetX = -1 * e.x;
-	  swipe.offsetY = 0.0;
-  } else {
+	if (Math.abs(e.x) > Math.abs(e.y)) {
+		swipe.offsetX = -1 * e.x;
+		swipe.offsetY = 0.0;
+	} else {
 	  swipe.offsetX = 0.0;
 	  swipe.offsetY = +1 * e.y;
 	}
@@ -45,9 +48,12 @@ swipe.move = function(e) {
 swipe.stop = function(e, left, right) {
 
 	// Only execute once
-	if (swipe.obj==null)            return false;
+	if (swipe.obj==null)
+	{
+		return false;
+	}
 
-  if (e.y<=-swipe.tolerance_Y) {
+	if (e.y<=-swipe.tolerance_Y) {
 
       lychee.goto(album.getID());
 

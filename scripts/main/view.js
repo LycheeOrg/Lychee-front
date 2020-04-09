@@ -2,7 +2,7 @@
  * @description Responsible to reflect data changes to the UI.
  */
 
-view = {};
+let view = {};
 
 view.albums = {
 
@@ -81,7 +81,7 @@ view.albums = {
 
 			if (lychee.api_V2) {
 				let current_owner = '';
-				let i = 0;
+				let i;
 				// Shared
 				if (albums.json.shared_albums && albums.json.shared_albums.length !== 0) {
 
@@ -296,7 +296,7 @@ view.album = {
 				// Only when search is not active
 				if (album.json) {
 					if (visible.sidebar()) {
-						videoCount = 0;
+						let videoCount = 0;
 						$.each(album.json.photos, function () {
 							if (this.type && this.type.indexOf('video') > -1) {
 								videoCount++;
@@ -452,6 +452,7 @@ view.album = {
 
 	license: function () {
 
+		let license;
 		switch (album.json.license) {
 			case 'none'    :
 				license = ''; // none is displayed as - thus is empty.
@@ -805,16 +806,17 @@ view.photo = {
 
 			if (!photo.json.imgDirection || photo.json.imgDirection === '') {
 				// Add Marker to map, direction is not set
-				var marker = L.marker([photo.json.latitude, photo.json.longitude]).addTo(mymap);
+				// var marker = 
+				L.marker([photo.json.latitude, photo.json.longitude]).addTo(mymap);
 			} else {
 				// Add Marker, direction has been set
-				var viewDirectionIcon = L.icon({
+				let viewDirectionIcon = L.icon({
 					iconUrl: 'img/view-angle-icon.png',
 					iconRetinaUrl: 'img/view-angle-icon-2x.png',
 					iconSize: [100, 58], // size of the icon
 					iconAnchor: [50, 49],  // point of the icon which will correspond to marker's location
 				});
-				var marker = L.marker([photo.json.latitude, photo.json.longitude], {icon: viewDirectionIcon}).addTo(mymap);
+				let marker = L.marker([photo.json.latitude, photo.json.longitude], {icon: viewDirectionIcon}).addTo(mymap);
 				marker.setRotationAngle(photo.json.imgDirection);
 			}
 
@@ -1677,7 +1679,7 @@ view.diagnostics = {
 	bind: function () {
 		$("#Update_Lychee").on('click', function () {
 			api.post('Update::Apply', [], function (data) {
-				html = view.preify(data, '');
+				let html = view.preify(data, '');
 				$("#Update_Lychee").remove();
 				$(html).prependTo(".logs_diagnostics_view");
 			});

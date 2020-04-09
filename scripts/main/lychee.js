@@ -2,7 +2,7 @@
  * @description This module provides the basic functions of Lychee.
  */
 
-lychee = {
+let lychee = {
 
 	title					: document.title,
 	version					: '',
@@ -259,9 +259,9 @@ lychee.login = function(data) {
 		password
 	};
 
-	api.post('Session::login', params, function(data) {
+	api.post('Session::login', params, function(_data) {
 
-		if (data===true) {
+		if (_data===true) {
 
 			window.location.reload()
 
@@ -378,7 +378,7 @@ lychee.load = function(autoplay = true) {
 		} else if (albumID=='search') {
 
 			// Search has been triggered
-			search_string = decodeURIComponent(photoID);
+			const search_string = decodeURIComponent(photoID);
 
 			if(search_string.trim()==="") {
 				// do nothing on "only space" search strings
@@ -808,9 +808,9 @@ lychee.adjustContentHeight = function() {
 };
 
 lychee.getBaseUrl = function() {
-	if (location.href.indexOf('index.html') > 0) {
+	if (location.href.includes('index.html')) {
 		return location.href.replace('index.html' + location.hash, '')
-	} else if (location.href.indexOf('gallery#') > 0) {
+	} else if (location.href.includes('gallery#')) {
 		return location.href.replace('gallery' + location.hash, '')
 	} else {
 		return location.href.replace(location.hash, '')

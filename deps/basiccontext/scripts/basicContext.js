@@ -232,9 +232,7 @@ const visible = function() {
 
 	let elem = dom()
 
-	if (elem==null || elem.length===0) return false
-	else                               return true
-
+	return !(elem==null || elem.length===0);
 }
 
 const close = function() {

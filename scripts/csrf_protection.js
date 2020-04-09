@@ -1,4 +1,4 @@
-csrf = {};
+let csrf = {};
 
 csrf.addLaravelCSRF = function (event, jqxhr, settings) {
 	if (settings.url !== lychee.updatePath) {

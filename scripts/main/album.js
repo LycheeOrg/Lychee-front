@@ -2,7 +2,7 @@
  * @description Takes care of every action an album can handle and execute.
  */
 
-album = {
+let album = {
 
 	json: null
 };
@@ -24,9 +24,10 @@ album.getID = function () {
 
 	let id = null;
 
-	let isID = (id) => {
-		if (id === '0' || id === 'f' || id === 's' || id === 'r') return true;
-		return $.isNumeric(id)
+	// this is a Lambda
+	let isID = (_id) => {
+		if (_id === '0' || _id === 'f' || _id === 's' || _id === 'r') return true;
+		return $.isNumeric(_id)
 	};
 
 	if (photo.json) id = photo.json.album;
@@ -192,9 +193,9 @@ album.load = function (albumID, refresh = false) {
 
 				params.password = password.value;
 
-				api.post('Album::get', params, function (data) {
+				api.post('Album::get', params, function (_data) {
 					albums.refresh();
-					processData(data)
+					processData(_data)
 				})
 			})
 		} else {
@@ -233,17 +234,17 @@ album.add = function (IDs = null, callback = null) {
 			params.parent_id = photo.json.album;
 		}
 
-		api.post('Album::add', params, function (data) {
+		api.post('Album::add', params, function (_data) {
 
-			if (data !== false && isNumber(data)) {
+			if (_data !== false && isNumber(_data)) {
 				if (IDs != null && callback != null) {
-					callback(IDs, data, false); // we do not confirm
+					callback(IDs, _data, false); // we do not confirm
 				} else {
 					albums.refresh();
-					lychee.goto(data)
+					lychee.goto(_data)
 				}
 			} else {
-				lychee.error(null, params, data)
+				lychee.error(null, params, _data)
 			}
 
 		})
@@ -273,7 +274,7 @@ album.setTitle = function (albumIDs) {
 	let msg = '';
 
 	if (!albumIDs) return false;
-	if (!albumIDs instanceof Array) albumIDs = [albumIDs];
+	if (!(albumIDs instanceof Array)) albumIDs = [albumIDs];
 
 	if (albumIDs.length === 1) {
 
@@ -327,9 +328,9 @@ album.setTitle = function (albumIDs) {
 			title: newTitle
 		};
 
-		api.post('Album::setTitle', params, function (data) {
+		api.post('Album::setTitle', params, function (_data) {
 
-			if (data !== true) lychee.error(null, params, data)
+			if (_data !== true) lychee.error(null, params, _data)
 
 		})
 
@@ -376,9 +377,9 @@ album.setDescription = function (albumID) {
 			description
 		};
 
-		api.post('Album::setDescription', params, function (data) {
+		api.post('Album::setDescription', params, function (_data) {
 
-			if (data !== true) lychee.error(null, params, data)
+			if (_data !== true) lychee.error(null, params, _data)
 
 		})
 
@@ -418,10 +419,10 @@ album.setLicense = function (albumID) {
 			license
 		};
 
-		api.post('Album::setLicense', params, function (data) {
+		api.post('Album::setLicense', params, function (_data) {
 
-			if (data !== true) {
-				lychee.error(null, params, data);
+			if (_data !== true) {
+				lychee.error(null, params, _data);
 			} else {
 				if (visible.album()) {
 					album.json.license = params.license;

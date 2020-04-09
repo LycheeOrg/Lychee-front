@@ -2,7 +2,7 @@
  * @description Takes care of every action a photo can handle and execute.
  */
 
-photo = {
+let photo = {
 
 	json             : null,
 	cache            : null,
@@ -465,9 +465,9 @@ photo.setTitle = function(photoIDs) {
 			title    : newTitle
 		};
 
-		api.post('Photo::setTitle', params, function(data) {
+		api.post('Photo::setTitle', params, function(_data) {
 
-			if (data!==true) lychee.error(null, params, data)
+			if (_data!==true) lychee.error(null, params, _data)
 
 		})
 
@@ -821,8 +821,8 @@ photo.setDescription = function(photoID) {
 			description
 		};
 
-		api.post('Photo::setDescription', params, function(data) {
-			if (data!==true) lychee.error(null, params, data)
+		api.post('Photo::setDescription', params, function(_data) {
+			if (_data!==true) lychee.error(null, params, _data)
 
 		})
 
@@ -985,10 +985,10 @@ photo.setLicense = function(photoID) {
 			license
 		};
 
-		api.post('Photo::setLicense', params, function(data) {
+		api.post('Photo::setLicense', params, function(_data) {
 
-			if (data!==true) {
-				lychee.error(null, params, data)
+			if (_data!==true) {
+				lychee.error(null, params, _data)
 			} else {
 				// update the photo JSON and reload the license in the sidebar
 				photo.json.license = params.license;

@@ -2,7 +2,7 @@
  * @description This module takes care of the header.
  */
 
-header = {
+let header = {
 
 	_dom: $('.header')
 

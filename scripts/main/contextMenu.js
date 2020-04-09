@@ -3,7 +3,7 @@
  */
 
 
-contextMenu = {};
+let contextMenu = {};
 
 contextMenu.add = function(e) {
 
@@ -90,8 +90,7 @@ contextMenu.buildList = function(lists, exclude, action, parent = 0, layer = 0) 
 
 	const find = function(excl,id)
 	{
-		let i;
-		for (i = 0; i < excl.length; i++)
+		for (let i = 0; i < excl.length; i++)
 		{
 			if(parseInt(excl[i],10) === parseInt(id,10)) return true;
 		}
@@ -326,7 +325,7 @@ contextMenu.photoMore = function(photoID, e) {
 contextMenu.getSubIDs = function(albums, albumID) {
 
 	let ids = [ parseInt(albumID,10) ];
-	let a, id;
+	let a;
 
 	for (a = 0; a < albums.length ; a++) {
 		if (parseInt(albums[a].parent_id,10)===parseInt(albumID,10)) {
@@ -348,7 +347,7 @@ contextMenu.move = function(IDs, e, callback, kind = 'UNSORTED', display_root = 
 
 	api.post('Albums::get', {}, function(data) {
 
-		addItems = function(albums) {
+		const addItems = function(albums) {
 
 			// Disable all children
 			// It's not possible to move us into them

@@ -2,7 +2,7 @@
  * @description Searches through your photos and albums.
  */
 
-search = {
+let search = {
 
 	hash: null
 
