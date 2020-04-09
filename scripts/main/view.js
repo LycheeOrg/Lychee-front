@@ -1764,7 +1764,7 @@ view.update = {
 
 			// code duplicate
 			api.post('Update::Apply', [], function (data) {
-				html = view.preify(data, 'logs_diagnostics_view');
+				let html = view.preify(data, 'logs_diagnostics_view');
 				lychee.content.html(html);
 			});
 		}
