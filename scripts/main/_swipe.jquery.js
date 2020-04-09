@@ -101,7 +101,8 @@
 	};
 
 	$.fn.swipe = function() {
-		let swipe = new Swipe(this);
+		// let swipe = new Swipe(this);
+		new Swipe(this);
 
 		return this
 	}
