@@ -109,10 +109,10 @@ $(document).ready(function() {
 				// prevent triggering event 'mousemove'
 				e.preventDefault();
 
-				if ((typeof swipe.obj === undefined) || (Math.abs(swipe.offsetX)<=5 && Math.abs(swipe.offsetY)<=5)) {
+				if ((typeof swipe.obj === 'undefined') || (Math.abs(swipe.offsetX)<=5 && Math.abs(swipe.offsetY)<=5)) {
 					// Toogle header only if we're not moving to next/previous photo;
 					// In this case, swipe.preventNextHeaderToggle is set to true
-					if((typeof swipe.preventNextHeaderToggle === undefined) || (!swipe.preventNextHeaderToggle)) {
+					if((typeof swipe.preventNextHeaderToggle === 'undefined') || (!swipe.preventNextHeaderToggle)) {
 						if (visible.header()) {
 							header.hide(e);
 						} else {
