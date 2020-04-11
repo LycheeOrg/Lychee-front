@@ -15,9 +15,15 @@ let swipe = {
 
 swipe.start = function(obj, tolerance_X, tolerance_Y) {
 
-	if (obj)            swipe.obj         = obj;
-	if (tolerance_X)    swipe.tolerance_X = tolerance_X;
-	if (tolerance_Y)    swipe.tolerance_Y = tolerance_Y;
+	if (obj) {
+		swipe.obj         = obj;
+	}
+	if (tolerance_X) {
+		swipe.tolerance_X = tolerance_X;
+	}
+	if (tolerance_Y) {
+		swipe.tolerance_Y = tolerance_Y;
+	}
 
 	return true
 
@@ -38,13 +44,14 @@ swipe.move = function(e) {
 	  swipe.offsetY = +1 * e.y;
 	}
 
+	translate_string = 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)';
 	swipe.obj.css({
-		'WebkitTransform' : 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)',
-		'MozTransform'    : 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)',
-		'transform'       : 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)'
+		'WebkitTransform' : translate_string,
+		'MozTransform'    : translate_string,
+		'transform'       : translate_string
 	})
 
-	return;
+	return true;
 
 };
 
@@ -84,10 +91,11 @@ swipe.stop = function(e, left, right) {
 
 	} else {
 
+		translate_string = 'translate(0px, 0px)';
 		swipe.obj.css({
-			WebkitTransform : 'translate(0px, 0px)',
-			MozTransform    : 'translate(0px, 0px)',
-			transform       : 'translate(0px, 0px)'
+			WebkitTransform : translate_string,
+			MozTransform    : translate_string,
+			transform       : translate_string
 		})
 
 	}
@@ -96,5 +104,5 @@ swipe.stop = function(e, left, right) {
 	swipe.offsetX        = 0;
 	swipe.offsetY        = 0
 
-	return;
+	return true;
 };

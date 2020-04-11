@@ -33,69 +33,124 @@ $(document).ready(function() {
 			lychee.loginDialog(); return false
 		})
 		.bind([ 'left' ], function() {
-			if (visible.photo()) { $('#imageview a#previous').click(); return false }
+			if (visible.photo()) {
+				$('#imageview a#previous').click();
+			}
+			return false;
 		})
 		.bind([ 'right' ], function() {
-			if (visible.photo()) { $('#imageview a#next').click(); return false }
+			if (visible.photo()) {
+				$('#imageview a#next').click();
+			}
+			return false;
 		})
 		.bind([ 'u' ], function() {
-			if (!visible.photo() && album.isUploadable()) { $('#upload_files').click(); return false }
+			if (!visible.photo() && album.isUploadable()) {
+				$('#upload_files').click();
+			}
+			return false;
 		})
 		.bind([ 'n' ], function() {
-			if (!visible.photo() && album.isUploadable()) { album.add(); return false }
+			if (!visible.photo() && album.isUploadable()) {
+				 album.add();
+			 }
+			 return false;
 		})
 		.bind([ 's' ], function() {
-			if (visible.photo() && album.isUploadable()) { header.dom('#button_star').click(); return false }
-			else if (visible.albums()) { header.dom('.header__search').focus(); return false }
+			if (visible.photo() && album.isUploadable()) {
+				header.dom('#button_star').click();
+			} else if (visible.albums()) {
+				header.dom('.header__search').focus();
+			}
+			return false;
 		})
 		.bind([ 'r' ], function() {
 			if (album.isUploadable()) {
-				if (visible.album())      { album.setTitle(album.getID()); return false }
-				else if (visible.photo()) { photo.setTitle([photo.getID()]); return false }
+				if (visible.album()) {
+					album.setTitle(album.getID());
+				} else if (visible.photo()) {
+					photo.setTitle([photo.getID()]);
+				}
+				return false;
 			}
 		})
 		.bind([ 'd' ], function() {
 			if (album.isUploadable()) {
-				if (visible.photo())      { photo.setDescription(photo.getID()); return false }
-				else if (visible.album()) { album.setDescription(album.getID()); return false }
+				if (visible.photo()) {
+					photo.setDescription(photo.getID());
+				} else if (visible.album()) {
+					album.setDescription(album.getID());
+				}
+				return false;
 			}
 		})
 		.bind([ 't' ], function() {
-			if (visible.photo() && album.isUploadable()) { photo.editTags([photo.getID()]); return false }
+			if (visible.photo() && album.isUploadable()) {
+				photo.editTags([photo.getID()]);
+			}
+			return false;
 		})
 		.bind([ 'i' ], function() {
-			if (!visible.multiselect()) { sidebar.toggle(); return false }
+			if (!visible.multiselect()) {
+				sidebar.toggle();
+			}
+			return false;
 		})
 		.bind([ 'command+backspace', 'ctrl+backspace' ], function() {
 			if (album.isUploadable()) {
-				if (visible.photo() && basicModal.visible()===false)      { photo.delete([photo.getID()]); return false }
-				else if (visible.album() && basicModal.visible()===false) { album.delete([album.getID()]); return false }
+				if (visible.photo() && basicModal.visible()===false) {
+					photo.delete([photo.getID()]);
+				} else if (visible.album() && basicModal.visible()===false) {
+					album.delete([album.getID()]);
+				}
+				return false;
 			}
 		})
 		.bind([ 'command+a', 'ctrl+a' ], function() {
-			if (visible.album() && basicModal.visible()===false)       { multiselect.selectAll(); return false }
-			else if (visible.albums() && basicModal.visible()===false) { multiselect.selectAll(); return false }
+			if (visible.album() && basicModal.visible()===false) {
+				multiselect.selectAll();
+			} else if (visible.albums() && basicModal.visible()===false) {
+				multiselect.selectAll();
+			}
+			return false;
 		})
 		.bind([ 'o' ], function() {
-			if(visible.photo()) { photo.update_overlay_type(); return false }
+			if(visible.photo()) {
+				photo.update_overlay_type();
+			}
+			return false;
 		})
 		.bind([ 'f' ], function() {
-			if (visible.album() || visible.photo()) { lychee.fullscreenToggle(); return false }
+			if (visible.album() || visible.photo()) {
+				lychee.fullscreenToggle();
+			}
+			return false;
 		});
 
 	Mousetrap.bindGlobal('enter', function() {
-		if (basicModal.visible()===true) basicModal.action()
+		if (basicModal.visible()===true) {
+			basicModal.action();
+		}
 	});
 
 	Mousetrap.bindGlobal([ 'esc', 'command+up' ], function() {
-		if (basicModal.visible()===true)                                             basicModal.cancel();
-		else if (visible.leftMenu())												 leftMenu.close();
-		else if (visible.contextMenu())                                              contextMenu.close();
-		else if (visible.photo())                                                    lychee.goto(album.getID());
-		else if (visible.album() && !album.json.parent_id)                           lychee.goto();
-		else if (visible.album())													 lychee.goto(album.getParent());
-		else if (visible.albums() && search.hash !== null) search.reset();
-		else if (visible.mapview())                                                  mapview.close();
+		if (basicModal.visible()===true) {
+		  basicModal.cancel();
+		} else if (visible.leftMenu()) {
+			leftMenu.close();
+		} else if (visible.contextMenu()) {
+			contextMenu.close();
+		} else if (visible.photo()) {
+			lychee.goto(album.getID());
+		} else if (visible.album() && !album.json.parent_id) {
+			lychee.goto();
+		} else if (visible.album()) {
+			lychee.goto(album.getParent());
+		} else if (visible.albums() && search.hash !== null) {
+			search.reset();
+		} else if (visible.mapview()) {
+			mapview.close();
+		}
 		return false
 	});
 
@@ -126,9 +181,21 @@ $(document).ready(function() {
 			});
 		$('#imageview')
 			// Swipe on mobile
-			.swipe().on('swipeStart', function() { if (visible.photo()) swipe.start($('#imageview #image, #imageview #livephoto')) })
-			.swipe().on('swipeMove',  function(e) { if (visible.photo()) swipe.move(e.swipe) })
-			.swipe().on('swipeEnd',   function(e) { if (visible.photo()) swipe.stop(e.swipe, photo.previous, photo.next) })
+			.swipe().on('swipeStart', function() {
+				if (visible.photo()) {
+					swipe.start($('#imageview #image, #imageview #livephoto'))
+				}
+			})
+			.swipe().on('swipeMove',  function(e) {
+				if (visible.photo()) {
+					swipe.move(e.swipe)
+				}
+			})
+			.swipe().on('swipeEnd',   function(e) {
+				if (visible.photo()) {
+					swipe.stop(e.swipe, photo.previous, photo.next)
+				}
+			})
 
 	}
 
@@ -158,9 +225,11 @@ $(document).ready(function() {
 		}
 
 		// Detect if dropped item is a file or a link
-		if (e.originalEvent.dataTransfer.files.length>0)                upload.start.local(e.originalEvent.dataTransfer.files);
-		else if (e.originalEvent.dataTransfer.getData('Text').length>3) upload.start.url(e.originalEvent.dataTransfer.getData('Text'));
-
+		if (e.originalEvent.dataTransfer.files.length>0) {
+			upload.start.local(e.originalEvent.dataTransfer.files);
+		} else if (e.originalEvent.dataTransfer.getData('Text').length>3) {
+			upload.start.url(e.originalEvent.dataTransfer.getData('Text'));
+		}
 		return false
 
 	})
@@ -192,6 +261,7 @@ $(document).ready(function() {
 				return false
 			}
 		}
+		return true;
 	})
 
 	// Fullscreen
@@ -200,8 +270,13 @@ $(document).ready(function() {
 	$(window)
 	// resize
 	.on('resize', function () {
-		if(visible.album() || visible.search()) view.album.content.justify();
-		if(visible.photo()) view.photo.onresize();
+		if(visible.album() || visible.search()) {
+			view.album.content.justify();
+		}
+
+		if(visible.photo()) {
+			view.photo.onresize();
+		}
 	});
 
 	// Init
