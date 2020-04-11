@@ -109,12 +109,15 @@ $(document).ready(function() {
 				// prevent triggering event 'mousemove'
 				e.preventDefault();
 
-				if ((swipe.obj==null) || ((Math.abs(swipe.offsetX)<=5 && Math.abs(swipe.offsetY)<=5))) {
+				if ((typeof swipe.obj === undefined) || (Math.abs(swipe.offsetX)<=5 && Math.abs(swipe.offsetY)<=5)) {
 					// Toogle header only if we're not moving to next/previous photo;
 					// In this case, swipe.preventNextHeaderToggle is set to true
-					if((swipe.preventNextHeaderToggle==null) || (swipe.preventNextHeaderToggle==false)) {
-						if (visible.header()) header.hide(e);
-						else                  header.show();
+					if((typeof swipe.preventNextHeaderToggle === undefined) || (!swipe.preventNextHeaderToggle)) {
+						if (visible.header()) {
+							header.hide(e);
+						} else {
+						  header.show();
+						}
 					}
 
 					// For next 'touchend', behave again as normal and toogle header
