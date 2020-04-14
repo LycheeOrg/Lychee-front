@@ -1711,7 +1711,7 @@ view.diagnostics = {
 
 				html += view.diagnostics.content.block('error', 'Diagnostics', data.errors);
 				html += view.diagnostics.content.block('sys', 'System Information', data.infos);
-				html += lychee.html`<a id="Get_Size_Lychee" class="basicModal__button">${lychee.locale['DIAGNOSTICS_GET_SIZE']}</a>`;
+				html += lychee.html`<a id="Get_Size_Lychee" class="basicModal__button button_left"><svg class="iconic"><use xlink:href="#reload"></use></svg> ${lychee.locale['DIAGNOSTICS_GET_SIZE']}</a>`;
 				html += view.diagnostics.content.block('conf', 'Config Information', data.configs);
 
 				$(".logs_diagnostics_view").html(html);
