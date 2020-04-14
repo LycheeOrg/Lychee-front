@@ -8,7 +8,8 @@ let swipe = {
 	tolerance_X    : 150,
 	tolerance_Y    : 250,
 	offsetX        : 0,
-	offsetY        : 0
+	offsetY        : 0,
+	preventNextHeaderToggle : false
 
 };
 
@@ -65,11 +66,21 @@ swipe.stop = function(e, left, right) {
 
 	} else if (e.x<=-swipe.tolerance_X) {
 
-		left(true)
+		left(true);
+
+		// 'touchend' will be called after 'swipeEnd'
+		// in case of moving to next image, we want to skip
+		// the toggling of the header
+		swipe.preventNextHeaderToggle = true;
 
 	} else if (e.x>=swipe.tolerance_X) {
 
-		right(true)
+		right(true);
+
+		// 'touchend' will be called after 'swipeEnd'
+		// in case of moving to next image, we want to skip
+		// the toggling of the header
+		swipe.preventNextHeaderToggle = true;
 
 	} else {
 

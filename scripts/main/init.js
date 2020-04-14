@@ -105,9 +105,23 @@ $(document).ready(function() {
 
 			// Fullscreen on mobile
 			.on('touchend', '#imageview #image', function(e) {
-				if (swipe.obj==null || (swipe.offsetX>=-5&&swipe.offsetX<=5)) {
-					if (visible.header()) header.hide(e);
-					else                  header.show()
+
+				// prevent triggering event 'mousemove'
+				e.preventDefault();
+
+				if ((typeof swipe.obj === 'undefined') || (Math.abs(swipe.offsetX)<=5 && Math.abs(swipe.offsetY)<=5)) {
+					// Toogle header only if we're not moving to next/previous photo;
+					// In this case, swipe.preventNextHeaderToggle is set to true
+					if((typeof swipe.preventNextHeaderToggle === 'undefined') || (!swipe.preventNextHeaderToggle)) {
+						if (visible.header()) {
+							header.hide(e);
+						} else {
+						  header.show();
+						}
+					}
+
+					// For next 'touchend', behave again as normal and toogle header
+					swipe.preventNextHeaderToggle = false;
 				}
 			});
 		$('#imageview')
