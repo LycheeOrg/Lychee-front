@@ -1285,7 +1285,9 @@ view.settings = {
 
 			$(".settings_view").append(msg);
 
-			api.get('dist/user.css', function (data) {
+			let css_addr = $($("link")[1]).attr('href');
+
+			api.get(css_addr, function (data) {
 				$("#css").html(data);
 			});
 
