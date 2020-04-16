@@ -505,7 +505,14 @@ lychee.getUpdate = function() {
 
 lychee.setTitle = function(title, editable) {
 
-	document.title = lychee.title + ' - ' + title;
+	if (lychee.title === title)
+	{
+		document.title = lychee.title + ' - ' + lychee.locale['ALBUMS'];
+	}
+	else
+	{
+		document.title = lychee.title + ' - ' + title;
+	}
 
 	header.setEditable(editable);
 	header.setTitle(title)
