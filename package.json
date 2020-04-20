@@ -16,11 +16,13 @@
   "dependencies": {
     "babel-preset-env": "^1.7.0",
     "basicmodal": "^3.3.8",
+    "git-rev-sync": "^2.0.0",
     "gulp": "^4.0.0",
     "gulp-autoprefixer": "^6.0.0",
     "gulp-babel": "^6.1.2",
     "gulp-clean-css": "^3.10.0",
     "gulp-concat": "^2.6.1",
+    "gulp-file": "^0.4.0",
     "gulp-inject": "^4.2.0",
     "gulp-load-plugins": "^1.5.0",
     "gulp-rimraf": "^0.2.1",
