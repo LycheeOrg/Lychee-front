@@ -1,7 +1,10 @@
 let gulp = require('gulp'),
     plugins = require('gulp-load-plugins')(),
     cleanCSS = require('gulp-clean-css'),
-    paths = {};
+	paths = {},
+	file = require('gulp-file'),
+	git = require('git-rev-sync');
+
 
 /* Error Handler -------------------------------- */
 
@@ -71,7 +74,7 @@ gulp.task('view--svg', function() {
 	return gulp.src(paths.view.php, {allowEmpty: true})
 	           .pipe(plugins.inject(gulp.src(paths.view.svg), {
 	           	starttag: '<!-- inject:svg -->',
-	           	transform: function(filePath, file) { return file.contents.toString('utf8') }
+	           	transform: function(filePath, _file) { return _file.contents.toString('utf8') }
 	           }))
 	           .pipe(gulp.dest('../'))
 
@@ -166,7 +169,7 @@ gulp.task('main--svg', function() {
 	return gulp.src(paths.main.html, {allowEmpty: true})
 	           .pipe(plugins.inject(gulp.src(paths.main.svg), {
 	           	starttag: '<!-- inject:svg -->',
-	           	transform: function(filePath, file) { return file.contents.toString('utf8') }
+	           	transform: function(filePath, _file) { return _file.contents.toString('utf8') }
 	           }))
 	           .pipe(gulp.dest('../'))
 
@@ -375,6 +378,19 @@ gulp.task('clean', function() {
 
 });
 
+/* Version --------------------------------------- */
+
+gulp.task('version', function() {
+
+	let pkg = require('./package.json');
+	let output = {version: pkg.version, commit: git.short()};
+
+	return gulp.src('nothing/*')
+		.pipe(file('version.md', JSON.stringify(output)))
+		.on('error', catchError)
+		.pipe(gulp.dest('../dist'));
+});
+
 /* Tasks ----------------------------------------- */
 
 gulp.task('default', gulp.series(gulp.parallel('view--svg', 'view--scripts',
@@ -382,7 +398,7 @@ gulp.task('default', gulp.series(gulp.parallel('view--svg', 'view--scripts',
 												'frame--scripts', 'frame--styles',
 												'landing--scripts', 'landing--styles', 'page--styles',
 												'images--copy', 'leafletMarkerclusterMapFile--copy',
-                        'leafletMarkerclusterSourceFiles--copy'
+						                        'leafletMarkerclusterSourceFiles--copy', 'version'
 	), 'clean'));
 
 gulp.task('watch', gulp.series('default', function() {
