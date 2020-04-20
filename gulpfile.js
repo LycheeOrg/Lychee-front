@@ -74,7 +74,7 @@ gulp.task('view--svg', function() {
 	return gulp.src(paths.view.php, {allowEmpty: true})
 	           .pipe(plugins.inject(gulp.src(paths.view.svg), {
 	           	starttag: '<!-- inject:svg -->',
-	           	transform: function(filePath, file) { return file.contents.toString('utf8') }
+	           	transform: function(filePath, _file) { return _file.contents.toString('utf8') }
 	           }))
 	           .pipe(gulp.dest('../'))
 
@@ -169,7 +169,7 @@ gulp.task('main--svg', function() {
 	return gulp.src(paths.main.html, {allowEmpty: true})
 	           .pipe(plugins.inject(gulp.src(paths.main.svg), {
 	           	starttag: '<!-- inject:svg -->',
-	           	transform: function(filePath, file) { return file.contents.toString('utf8') }
+	           	transform: function(filePath, _file) { return _file.contents.toString('utf8') }
 	           }))
 	           .pipe(gulp.dest('../'))
 
@@ -384,7 +384,7 @@ gulp.task('version', function() {
 
 	let pkg = require('./package.json');
 	let output = {version: pkg.version, commit: git.short()};
-	
+
 	return gulp.src('nothing/*')
 		.pipe(file('version.md', JSON.stringify(output)))
 		.on('error', catchError)
