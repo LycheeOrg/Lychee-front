@@ -386,7 +386,7 @@ gulp.task('version', function() {
 	let output = {version: pkg.version, commit: git.short()};
 
 	return gulp.src('nothing/*')
-		.pipe(file('version.md', JSON.stringify(output)))
+		.pipe(file('version.json', JSON.stringify(output)))
 		.on('error', catchError)
 		.pipe(gulp.dest('../dist'));
 });
