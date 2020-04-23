@@ -3,13 +3,13 @@ language: node_js
 matrix:
   include:
     - os: linux
-      dist: xenial #16.04
+      dist: bionic #18.04
   allow_failures:
     - os: linux
-      dist: trusty #14.04
+      dist: xenial #16.04
 
 node_js:
-  - "node"
+  - 13
 
 before_script:
   - npm install
