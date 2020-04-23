@@ -1667,6 +1667,10 @@ view.diagnostics = {
 		if (update === 2) {
 			html += view.diagnostics.button('', lychee.locale['UPDATE_AVAILABLE']);
 		}
+		else if (update === 3)
+		{
+			html += view.diagnostics.button('', lychee.locale['MIGRATION_AVAILABLE']);
+		}
 		else if (update > 0 ) {
 			html += view.diagnostics.button('Check_', lychee.locale['CHECK_FOR_UPDATE']);
 		}
