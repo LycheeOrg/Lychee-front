@@ -1,10 +1,7 @@
 let gulp = require('gulp'),
     plugins = require('gulp-load-plugins')(),
     cleanCSS = require('gulp-clean-css'),
-	paths = {},
-	file = require('gulp-file'),
-	git = require('git-rev-sync');
-
+    paths = {};
 
 /* Error Handler -------------------------------- */
 
@@ -378,19 +375,6 @@ gulp.task('clean', function() {
 
 });
 
-/* Version --------------------------------------- */
-
-gulp.task('version', function() {
-
-	let pkg = require('./package.json');
-	let output = {version: pkg.version, commit: git.short()};
-
-	return gulp.src('nothing/*')
-		.pipe(file('version.json', JSON.stringify(output)))
-		.on('error', catchError)
-		.pipe(gulp.dest('../dist'));
-});
-
 /* Tasks ----------------------------------------- */
 
 gulp.task('default', gulp.series(gulp.parallel('view--svg', 'view--scripts',
@@ -398,7 +382,7 @@ gulp.task('default', gulp.series(gulp.parallel('view--svg', 'view--scripts',
 												'frame--scripts', 'frame--styles',
 												'landing--scripts', 'landing--styles', 'page--styles',
 												'images--copy', 'leafletMarkerclusterMapFile--copy',
-						                        'leafletMarkerclusterSourceFiles--copy', 'version'
+                        'leafletMarkerclusterSourceFiles--copy'
 	), 'clean'));
 
 gulp.task('watch', gulp.series('default', function() {
