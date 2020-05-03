@@ -360,11 +360,11 @@ view.album = {
 				}
 				let ratio = [];
 				$.each(album.json.photos, function (i) {
-					if (album.json.photos[i].orientation >= 5) {
-						let tmpWidth = album.json.photos[i].width;
-						let tmpHeight = album.json.photos[i].height;
-						album.json.photos[i].width = tmpHeight;
-						album.json.photos[i].height = tmpWidth;
+					if (this.orientation >= 5) {
+						let tmpWidth = this.width;
+						let tmpHeight = this.height;
+						this.width = tmpHeight;
+						this.height = tmpWidth;
 					}
 
 					ratio[i] = this.height > 0 ? this.width / this.height : 1;
@@ -393,6 +393,11 @@ view.album = {
 					$(this).css('width', layoutGeometry.boxes[i].width);
 					$(this).css('height', layoutGeometry.boxes[i].height);
 					$(this).css('left', layoutGeometry.boxes[i].left);
+
+					if (album.json.photos[i].orientation >= 5) {
+						$(this).find('img').css('width', layoutGeometry.boxes[i].height);
+						$(this).find('img').css('height', layoutGeometry.boxes[i].width);
+					}
 
 					let imgs = $(this).find(".thumbimg > img");
 					if (imgs.length > 0 && imgs[0].getAttribute('data-srcset')) {
@@ -440,8 +445,15 @@ view.album = {
 						height = width / ratio;
 					}
 
-					$(this).css('width', width + 'px');
-					$(this).css('height', height + 'px');
+					if (album.json.photos[i].orientation >= 5) {
+						console.log('rotating');
+						$(this).css('width', height + 'px');
+						$(this).css('height', width + 'px');
+					} else {
+						$(this).css('width', width + 'px');
+						$(this).css('height', height + 'px');
+					}
+
 					if (imgs.length > 0 && imgs[0].getAttribute('data-srcset')) {
 						imgs[0].setAttribute('sizes', width + 'px');
 					}
