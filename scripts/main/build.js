@@ -88,7 +88,7 @@ build.album = function (data, disabled = false) {
 	}
 
 	html += lychee.html`
-			<div class='album ${(disabled ? `disabled` : ``)}' data-id='${data.id}'>
+			<div class='album ${(disabled ? `disabled` : ``)}' data-id='${data.id}' tabindex='${tabindex.get_next_tab_index()}'>
 				  ${build.getAlbumThumb(data, 2)}
 				  ${build.getAlbumThumb(data, 1)}
 				  ${build.getAlbumThumb(data, 0)}
@@ -202,7 +202,7 @@ build.photo = function (data, disabled = false) {
 	}
 
 	html += lychee.html`
-			<div class='photo ${(disabled ? `disabled` : ``)}' data-album-id='${data.album}' data-id='${data.id}'>
+			<div class='photo ${(disabled ? `disabled` : ``)}' data-album-id='${data.album}' data-id='${data.id}' tabindex='${tabindex.get_next_tab_index()}'>
 				${thumbnail}
 				<div class='overlay'>
 					<h1 title='$${data.title}'>$${data.title}</h1>

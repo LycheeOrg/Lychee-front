@@ -344,6 +344,7 @@ lychee.load = function(autoplay = true) {
 
 	contextMenu.close();
 	multiselect.close();
+	tabindex.reset();
 
 	if (hash[0]!=null) albumID = hash[0];
 	if (hash[1]!=null) photoID = hash[1];
@@ -666,6 +667,8 @@ lychee.loadDropbox = function(callback) {
 lychee.getEventName = function() {
 
 	let touchendSupport = (/Android|iPhone|iPad|iPod/i).test(navigator.userAgent || navigator.vendor || window.opera) && ('ontouchend' in document.documentElement);
+  // TODO: Only for debug
+	return 'click';
 	return (touchendSupport === true ? 'touchend' : 'click')
 
 };

@@ -23,8 +23,8 @@ $(document).ready(function() {
 
 	// Image View
 	lychee.imageview
-		.on(eventName, '.arrow_wrapper--previous', photo.previous)
-		.on(eventName, '.arrow_wrapper--next',     photo.next)
+		.on('click', '.arrow_wrapper--previous', photo.previous)
+		.on('click', '.arrow_wrapper--next',     photo.next)
 		.on('click', 'img, #livephoto', photo.update_display_overlay);
 
 	// Keyboard
@@ -33,10 +33,24 @@ $(document).ready(function() {
 			lychee.loginDialog(); return false
 		})
 		.bind([ 'left' ], function() {
-			if (visible.photo()) { $('#imageview a#previous').click(); return false }
+			if (visible.photo()) {
+				$('#imageview a#previous').click();
+				return false;
+			} else {
+				tab_idx_to_select = tabindex.get_left_tab_index();
+				$('[tabindex=' + tab_idx_to_select + ']').focus();
+				return false;
+			}
 		})
 		.bind([ 'right' ], function() {
-			if (visible.photo()) { $('#imageview a#next').click(); return false }
+			if (visible.photo()) {
+				 $('#imageview a#next').click();
+				 return false;
+			} else {
+				 tab_idx_to_select = tabindex.get_right_tab_index();
+				 $('[tabindex=' + tab_idx_to_select + ']').focus();
+				 return false;
+			}
 		})
 		.bind([ 'u' ], function() {
 			if (!visible.photo() && album.isUploadable()) { $('#upload_files').click(); return false }
@@ -83,12 +97,38 @@ $(document).ready(function() {
 			if (visible.album() || visible.photo()) { lychee.fullscreenToggle(); return false }
 		});
 
+		Mousetrap.addKeycodes({
+    	179	: 'play_pause'
+		});
+		Mousetrap.bind([ 'play_pause' ], function() {
+			// If it's a video, we toggle play/pause
+			video = $("video");
+
+			if (video.length !== 0) {
+				if(video[0].paused) {
+					video[0].play();
+				} else {
+					video[0].pause();
+				}
+			}
+		});
+
 	Mousetrap.bindGlobal('enter', function() {
-		if (basicModal.visible()===true) basicModal.action()
+		if (basicModal.visible()===true) {
+			basicModal.action();
+		} else {
+			focussed_element = $(':focus');
+			// focus is on an element
+			if (focussed_element.length !== 0) {
+				// trigger a click
+				//focussed_element.click();
+			}
+		}
+
 	});
 
 	Mousetrap.bindGlobal([ 'esc', 'command+up' ], function() {
-		if (basicModal.visible()===true)                                             basicModal.cancel();
+		/*if (basicModal.visible()===true)                                             basicModal.cancel();
 		else if (visible.leftMenu())												 leftMenu.close();
 		else if (visible.contextMenu())                                              contextMenu.close();
 		else if (visible.photo())                                                    lychee.goto(album.getID());
@@ -96,7 +136,7 @@ $(document).ready(function() {
 		else if (visible.album())													 lychee.goto(album.getParent());
 		else if (visible.albums() && search.hash !== null) search.reset();
 		else if (visible.mapview())                                                  mapview.close();
-		return false
+		return false*/
 	});
 
 	if (eventName==='touchend') {
