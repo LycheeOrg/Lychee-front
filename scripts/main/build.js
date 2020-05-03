@@ -134,6 +134,7 @@ build.photo = function (data, disabled = false) {
 	let isVideo = data.type && data.type.indexOf('video') > -1;
 	let isRaw = data.type && data.type.indexOf('raw') > -1;
 	let isLivePhoto = (data.livePhotoUrl!=='' && data.livePhotoUrl!==null);
+	let orientationClass = `orientation-${data.orientation}`;
 
 	if (data.thumbUrl === 'uploads/thumb/' && isLivePhoto) {
 		thumbnail = `<span class="thumbimg"><img src='img/live-photo-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
@@ -155,7 +156,7 @@ build.photo = function (data, disabled = false) {
 		}
 
 		thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}${isLivePhoto ? ' livephoto' : ''}">`;
-		thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.thumbUrl}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
+		thumbnail += `<img class='lazyload ${orientationClass}' src='img/placeholder.png' data-src='${data.thumbUrl}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
 		thumbnail += `</span>`
 	} else {
 
@@ -165,7 +166,7 @@ build.photo = function (data, disabled = false) {
 			}
 
 			thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}${isLivePhoto ? ' livephoto' : ''}">`;
-			thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.small}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
+			thumbnail += `<img class='lazyload ${orientationClass}' src='img/placeholder.png' data-src='${data.small}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
 			thumbnail += `</span>`
 		} else if (data.medium !== '') {
 			if (data.hasOwnProperty('medium2x') && data.medium2x !== '') {
@@ -173,12 +174,12 @@ build.photo = function (data, disabled = false) {
 			}
 
 			thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}${isLivePhoto ? ' livephoto' : ''}">`;
-			thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.medium}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`
+			thumbnail += `<img class='lazyload ${orientationClass}' src='img/placeholder.png' data-src='${data.medium}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`
 			thumbnail += `</span>`
 		} else if (!isVideo) {
 			// Fallback for images with no small or medium.
 			thumbnail = `<span class="thumbimg${isLivePhoto ? ' livephoto' : ''}">`;
-			thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.url}' alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
+			thumbnail += `<img class='lazyload ${orientationClass}' src='img/placeholder.png' data-src='${data.url}' alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
 			thumbnail += `</span>`
 		} else {
 			// Fallback for videos with no small (the case of no thumb is
@@ -195,7 +196,7 @@ build.photo = function (data, disabled = false) {
 			}
 
 			thumbnail = `<span class="thumbimg video">`;
-			thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.thumbUrl}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
+			thumbnail += `<img class='lazyload ${orientationClass}' src='img/placeholder.png' data-src='${data.thumbUrl}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
 			thumbnail += `</span>`
 		}
 

@@ -71,6 +71,38 @@
 		.thumbimg > img {
 			width: 100%;
 			height: 100%;
+
+			&.orientation-2 {
+				transform: rotateY(180deg);
+			}
+
+			&.orientation-3 {
+				transform: rotate(180deg);
+			}
+
+			&.orientation-4 {
+				transform: rotate(180deg) rotateY(180deg);
+			}
+
+			&.orientation-5 {
+				transform: rotate(270deg) rotateY(180deg);
+				transform-origin: top left;
+			}
+
+			&.orientation-6 {
+				transform: translateY(-100%) rotate(90deg);
+				transform-origin: bottom left;
+			}
+
+			&.orientation-7 {
+				transform: translateY(-100%) translateX(-100%) rotate(90deg) rotateY(180deg);
+				transform-origin: bottom right;
+			}
+
+			&.orientation-8 {
+				transform: translateX(-100%) rotate(270deg);
+				transform-origin: top right;
+			}
 		}
 
 		&:hover .thumbimg,
