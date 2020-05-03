@@ -360,6 +360,13 @@ view.album = {
 				}
 				let ratio = [];
 				$.each(album.json.photos, function (i) {
+					if (album.json.photos[i].orientation >= 5) {
+						let tmpWidth = album.json.photos[i].width;
+						let tmpHeight = album.json.photos[i].height;
+						album.json.photos[i].width = tmpHeight;
+						album.json.photos[i].height = tmpWidth;
+					}
+
 					ratio[i] = this.height > 0 ? this.width / this.height : 1;
 					if (this.type && this.type.indexOf('video') > -1) {
 						// Video.  If there's no small and medium, we have
