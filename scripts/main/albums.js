@@ -72,7 +72,7 @@ albums._createSmartAlbums = function (data) {
 
 	if (data.unsorted) {
 		data.unsorted = {
-			id: 0,
+			id: 'unsorted',
 			title: lychee.locale['UNSORTED'],
 			sysdate: data.unsorted.num + ' ' + lychee.locale['NUM_PHOTOS'],
 			unsorted: '1',
@@ -84,7 +84,7 @@ albums._createSmartAlbums = function (data) {
 
 	if (data.starred) {
 		data.starred = {
-			id: 'f',
+			id: 'starred',
 			title: lychee.locale['STARRED'],
 			sysdate: data.starred.num + ' ' + lychee.locale['NUM_PHOTOS'],
 			star: '1',
@@ -96,7 +96,7 @@ albums._createSmartAlbums = function (data) {
 
 	if (data.public) {
 		data.public = {
-			id: 's',
+			id: 'public',
 			title: lychee.locale['PUBLIC'],
 			sysdate: data.public.num + ' ' + lychee.locale['NUM_PHOTOS'],
 			public: '1',
@@ -109,7 +109,7 @@ albums._createSmartAlbums = function (data) {
 
 	if (data.recent) {
 		data.recent = {
-			id: 'r',
+			id: 'recent',
 			title: lychee.locale['RECENT'],
 			sysdate: data.recent.num + ' ' + lychee.locale['NUM_PHOTOS'],
 			recent: '1',

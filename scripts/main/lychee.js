@@ -4,66 +4,65 @@
 
 let lychee = {
 
-	title					: document.title,
-	version					: '',
-	versionCode				: '', // not really needed anymore
+	title: document.title,
+	version: '',
+	versionCode: '', // not really needed anymore
 
-	updatePath				: 'https://LycheeOrg.github.io/update.json',
-	updateURL				: 'https://github.com/LycheeOrg/Lychee/releases',
-	website					: 'https://LycheeOrg.github.io',
+	updatePath: 'https://LycheeOrg.github.io/update.json',
+	updateURL: 'https://github.com/LycheeOrg/Lychee/releases',
+	website: 'https://LycheeOrg.github.io',
 
-	publicMode					: false,
-	viewMode					: false,
-	full_photo					: true,
-	downloadable				: false,
-	share_button_visible		: false,	// enable only v4+
-	api_V2						: false,	// enable api_V2
-	sub_albums					: false,	// enable sub_albums features
-	admin						: false,	// enable admin mode (multi-user)
-	upload						: false,	// enable possibility to upload (multi-user)
-	lock						: false,	// locked user (multi-user)
-	username					: null,
-	layout						: '1',		// 0: Use default, "square" layout. 1: Use Flickr-like "justified" layout. 2: Use Google-like "unjustified" layout
-	public_search				: false,	// display Search in publicMode
-	image_overlay				: false,	// display Overlay like in Lightroom
-	image_overlay_default		: false,	// display Overlay like in Lightroom by default
-	image_overlay_type			: 'exif',	// current Overlay display type
-	image_overlay_type_default	: 'exif',	// image overlay type default type
-	map_display					: false,	// display photo coordinates on map
-	map_display_public			: false,	// display photos of public album on map (user not logged in)
-	map_provider				: 'Wikimedia', // Provider of OSM Tiles
-	map_include_subalbums		: false,	// include photos of subalbums on map
-	location_decoding : false, // retrieve location name from GPS data
-	location_decoding_caching_type : 'Harddisk', // caching mode for GPS data decoding
-	location_show : false, // show location name
-	location_show_public : false, // show location name for public albums
+	publicMode: false,
+	viewMode: false,
+	full_photo: true,
+	downloadable: false,
+	share_button_visible: false,	// enable only v4+
+	api_V2: false,	// enable api_V2
+	sub_albums: false,	// enable sub_albums features
+	admin: false,	// enable admin mode (multi-user)
+	upload: false,	// enable possibility to upload (multi-user)
+	lock: false,	// locked user (multi-user)
+	username: null,
+	layout: '1',		// 0: Use default, "square" layout. 1: Use Flickr-like "justified" layout. 2: Use Google-like "unjustified" layout
+	public_search: false,	// display Search in publicMode
+	image_overlay: false,	// display Overlay like in Lightroom
+	image_overlay_default: false,	// display Overlay like in Lightroom by default
+	image_overlay_type: 'exif',	// current Overlay display type
+	image_overlay_type_default: 'exif',	// image overlay type default type
+	map_display: false,	// display photo coordinates on map
+	map_display_public: false,	// display photos of public album on map (user not logged in)
+	map_provider: 'Wikimedia', // Provider of OSM Tiles
+	map_include_subalbums: false,	// include photos of subalbums on map
+	location_decoding: false, // retrieve location name from GPS data
+	location_decoding_caching_type: 'Harddisk', // caching mode for GPS data decoding
+	location_show: false, // show location name
+	location_show_public: false, // show location name for public albums
 
-	landing_page_enabled        : false,    // is landing page enabled ?
-	delete_imported				: false,
+	landing_page_enabled: false,    // is landing page enabled ?
+	delete_imported: false,
 
-	checkForUpdates			: '1',
-	update_json 			: 0,
-	update_available		: false,
-	sortingPhotos			: '',
-	sortingAlbums			: '',
-	location				: '',
+	checkForUpdates: '1',
+	update_json: 0,
+	update_available: false,
+	sortingPhotos: '',
+	sortingAlbums: '',
+	location: '',
 
-	lang					: '',
-	lang_available			: {},
+	lang: '',
+	lang_available: {},
 
-	dropbox					: false,
-	dropboxKey				: '',
+	dropbox: false,
+	dropboxKey: '',
 
-	content					: $('.content'),
-	imageview				: $('#imageview'),
-	footer                  : $('#footer'),
+	content: $('.content'),
+	imageview: $('#imageview'),
+	footer: $('#footer'),
 
-	locale					: {}
+	locale: {}
 };
 
-lychee.diagnostics = function() {
-	if(lychee.api_V2)
-	{
+lychee.diagnostics = function () {
+	if (lychee.api_V2) {
 		return '/Diagnostics'
 	}
 	else {
@@ -71,9 +70,8 @@ lychee.diagnostics = function() {
 	}
 };
 
-lychee.logs = function() {
-	if(lychee.api_V2)
-	{
+lychee.logs = function () {
+	if (lychee.api_V2) {
 		return '/Logs'
 	}
 	else {
@@ -81,13 +79,13 @@ lychee.logs = function() {
 	}
 };
 
-lychee.aboutDialog = function() {
+lychee.aboutDialog = function () {
 
 	let msg = lychee.html`
-				<h1>Lychee ${ lychee.version }</h1>
-				<div class='version'><span><a target='_blank' href='${ lychee.updateURL }'>${ lychee.locale['UPDATE_AVAILABLE'] }</a></span></div>
-				<h1>${ lychee.locale['ABOUT_SUBTITLE'] }</h1>
-				<p><a target='_blank' href='${ lychee.website }'>Lychee</a> ${ lychee.locale['ABOUT_DESCRIPTION'] }</p>
+				<h1>Lychee ${ lychee.version}</h1>
+				<div class='version'><span><a target='_blank' href='${ lychee.updateURL}'>${lychee.locale['UPDATE_AVAILABLE']}</a></span></div>
+				<h1>${ lychee.locale['ABOUT_SUBTITLE']}</h1>
+				<p><a target='_blank' href='${ lychee.website}'>Lychee</a> ${lychee.locale['ABOUT_DESCRIPTION']}</p>
 			  `;
 
 	basicModal.show({
@@ -100,19 +98,19 @@ lychee.aboutDialog = function() {
 		}
 	});
 
-	if (lychee.checkForUpdates==='1') lychee.getUpdate()
+	if (lychee.checkForUpdates === '1') lychee.getUpdate()
 
 };
 
-lychee.init = function() {
+lychee.init = function () {
 
 	lychee.adjustContentHeight();
 
-	api.post('Session::init', {}, function(data) {
+	api.post('Session::init', {}, function (data) {
 
 		lychee.api_V2 = data.api_V2 || false;
 
-		if (data.status===0) {
+		if (data.status === 0) {
 
 			// No configuration
 
@@ -132,16 +130,13 @@ lychee.init = function() {
 		lychee.update_available = data.update_available;
 		lychee.landing_page_enable = (data.config.landing_page_enable && data.config.landing_page_enable === '1') || false;
 
-		if (lychee.api_V2)
-		{
+		if (lychee.api_V2) {
 			lychee.versionCode = data.config.version;
 		}
-		else
-		{
+		else {
 			lychee.versionCode = data.config.version.slice(7, data.config.version.length);
 		}
-		if (lychee.versionCode !== '')
-		{
+		if (lychee.versionCode !== '') {
 			let digits = lychee.versionCode.match(/.{1,2}/g);
 			lychee.version = parseInt(digits[0]).toString() + '.' + parseInt(digits[1]).toString() + '.' + parseInt(digits[2]).toString();
 		}
@@ -163,10 +158,11 @@ lychee.init = function() {
 		// 0 = No configuration
 		// 1 = Logged out
 		// 2 = Logged in
-		if (data.status===2) {
+		if (data.status === 2) {
 
 			// Logged in
 
+<<<<<<< HEAD
 			lychee.sortingPhotos				= data.config.sorting_Photos    || data.config.sortingPhotos		|| '';
 			lychee.sortingAlbums				= data.config.sorting_Albums    || data.config.sortingAlbums		|| '';
 			lychee.dropboxKey					= data.config.dropbox_key       || data.config.dropboxKey		    || '';
@@ -200,42 +196,74 @@ lychee.init = function() {
 
 			lychee.upload	= !lychee.api_V2;
 			lychee.admin	= !lychee.api_V2;
+=======
+			lychee.sortingPhotos = data.config.sorting_Photos || data.config.sortingPhotos || '';
+			lychee.sortingAlbums = data.config.sorting_Albums || data.config.sortingAlbums || '';
+			lychee.dropboxKey = data.config.dropbox_key || data.config.dropboxKey || '';
+			lychee.location = data.config.location || '';
+			lychee.checkForUpdates = data.config.check_for_updates || data.config.checkForUpdates || '1';
+			lychee.lang = data.config.lang || '';
+			lychee.lang_available = data.config.lang_available || {};
+			lychee.layout = data.config.layout || '1';
+			lychee.public_search = (data.config.public_search && data.config.public_search === '1') || false;
+			lychee.image_overlay_default = (data.config.image_overlay && data.config.image_overlay === '1') || false;
+			lychee.image_overlay = lychee.image_overlay_default;
+			lychee.image_overlay_type = (!data.config.image_overlay_type) ? 'exif' : data.config.image_overlay_type;
+			lychee.image_overlay_type_default = lychee.image_overlay_type;
+			lychee.map_display = (data.config.map_display && data.config.map_display === '1') || false;
+			lychee.map_display_public = (data.config.map_display_public && data.config.map_display_public === '1') || false;
+			lychee.map_provider = (!data.config.map_provider) ? 'Wikimedia' : data.config.map_provider;
+			lychee.map_include_subalbums = (data.config.map_include_subalbums && data.config.map_include_subalbums === '1') || false;
+			lychee.location_decoding = (data.config.location_decoding && data.config.location_decoding === '1') || false;
+			lychee.location_decoding_caching_type = (!data.config.location_decoding_caching_type) ? 'Harddisk' : data.config.location_decoding_caching_type;
+			lychee.location_show = (data.config.location_show && data.config.location_show === '1') || false;
+			lychee.location_show_public = (data.config.location_show_public && data.config.location_show_public === '1') || false;
+
+			lychee.default_license = data.config.default_license || 'none';
+			lychee.css = data.config.css || '';
+			lychee.full_photo = (data.config.full_photo == null) || (data.config.full_photo === '1');
+			lychee.downloadable = (data.config.downloadable && data.config.downloadable === '1') || false;
+			lychee.share_button_visible = (data.config.share_button_visible && data.config.share_button_visible === '1') || false;
+			lychee.delete_imported = (data.config.delete_imported && data.config.delete_imported === '1');
+
+			lychee.upload = !lychee.api_V2;
+			lychee.admin = !lychee.api_V2;
+>>>>>>> 00aa0f7... change f, s, r, 0 for starred, public, recent, unsorted
 
 			// leftMenu
 			leftMenu.build();
 			leftMenu.bind();
 
-			if (lychee.api_V2)
-			{
-				lychee.upload	= data.admin || data.upload;
-				lychee.admin	= data.admin;
-				lychee.lock		= data.lock;
+			if (lychee.api_V2) {
+				lychee.upload = data.admin || data.upload;
+				lychee.admin = data.admin;
+				lychee.lock = data.lock;
 				lychee.username = data.username;
 			}
 			lychee.setMode('logged_in');
 
 			// Show dialog when there is no username and password
-			if (data.config.login===false) settings.createLogin()
+			if (data.config.login === false) settings.createLogin()
 
-		} else if (data.status===1) {
+		} else if (data.status === 1) {
 
 			// Logged out
 
 			// TODO remove sortingPhoto once the v4 is out
-			lychee.sortingPhotos				= data.config.sorting_Photos    || data.config.sortingPhotos		|| '';
-			lychee.sortingAlbums				= data.config.sorting_Albums    || data.config.sortingAlbums		|| '';
-			lychee.checkForUpdates				= data.config.check_for_updates || data.config.checkForUpdates	|| '1';
-			lychee.layout						= data.config.layout				|| '1';
-			lychee.public_search				= (data.config.public_search && data.config.public_search === '1') || false;
-			lychee.image_overlay				= (data.config.image_overlay && data.config.image_overlay === '1') || false;
-			lychee.image_overlay_type			= (!data.config.image_overlay_type) ? 'exif' : data.config.image_overlay_type;
-			lychee.image_overlay_type_default	= lychee.image_overlay_type;
-			lychee.map_display					= (data.config.map_display && data.config.map_display === '1') || false;
-			lychee.map_display_public		= (data.config.map_display_public && data.config.map_display_public === '1') || false;
-			lychee.map_provider			    = (!data.config.map_provider) ? 'Wikimedia' : data.config.map_provider;
-			lychee.map_include_subalbums = (data.config.map_include_subalbums && data.config.map_include_subalbums === '1')  || false;
-			lychee.location_show		              = (data.config.location_show && data.config.location_show === '1')  || false;
-			lychee.location_show_public		        = (data.config.location_show_public && data.config.location_show_public === '1')  || false;
+			lychee.sortingPhotos = data.config.sorting_Photos || data.config.sortingPhotos || '';
+			lychee.sortingAlbums = data.config.sorting_Albums || data.config.sortingAlbums || '';
+			lychee.checkForUpdates = data.config.check_for_updates || data.config.checkForUpdates || '1';
+			lychee.layout = data.config.layout || '1';
+			lychee.public_search = (data.config.public_search && data.config.public_search === '1') || false;
+			lychee.image_overlay = (data.config.image_overlay && data.config.image_overlay === '1') || false;
+			lychee.image_overlay_type = (!data.config.image_overlay_type) ? 'exif' : data.config.image_overlay_type;
+			lychee.image_overlay_type_default = lychee.image_overlay_type;
+			lychee.map_display = (data.config.map_display && data.config.map_display === '1') || false;
+			lychee.map_display_public = (data.config.map_display_public && data.config.map_display_public === '1') || false;
+			lychee.map_provider = (!data.config.map_provider) ? 'Wikimedia' : data.config.map_provider;
+			lychee.map_include_subalbums = (data.config.map_include_subalbums && data.config.map_include_subalbums === '1') || false;
+			lychee.location_show = (data.config.location_show && data.config.location_show === '1') || false;
+			lychee.location_show_public = (data.config.location_show_public && data.config.location_show_public === '1') || false;
 
 			// console.log(lychee.full_photo);
 			lychee.setMode('public');
@@ -251,19 +279,19 @@ lychee.init = function() {
 
 };
 
-lychee.login = function(data) {
+lychee.login = function (data) {
 
-	let user	= data.username;
-	let password= data.password;
+	let user = data.username;
+	let password = data.password;
 
 	let params = {
 		user,
 		password
 	};
 
-	api.post('Session::login', params, function(_data) {
+	api.post('Session::login', params, function (_data) {
 
-		if (_data===true) {
+		if (_data === true) {
 
 			window.location.reload()
 
@@ -278,15 +306,15 @@ lychee.login = function(data) {
 
 };
 
-lychee.loginDialog = function() {
+lychee.loginDialog = function () {
 
 	let msg = lychee.html`
 			<form>
 				<p class='signIn'>
-					<input class='text' name='username' autocomplete='on' type='text' placeholder='$${ lychee.locale['USERNAME'] }' autocapitalize='off'>
-					<input class='text' name='password' autocomplete='current-password' type='password' placeholder='$${ lychee.locale['PASSWORD'] }'>
+					<input class='text' name='username' autocomplete='on' type='text' placeholder='$${ lychee.locale['USERNAME']}' autocapitalize='off'>
+					<input class='text' name='password' autocomplete='current-password' type='password' placeholder='$${ lychee.locale['PASSWORD']}'>
 				</p>
-				<p class='version'>Lychee ${ lychee.version }<span> &#8211; <a target='_blank' href='${ lychee.updateURL }'>${ lychee.locale['UPDATE_AVAILABLE'] }</a><span></p>
+				<p class='version'>Lychee ${ lychee.version}<span> &#8211; <a target='_blank' href='${lychee.updateURL}'>${lychee.locale['UPDATE_AVAILABLE']}</a><span></p>
 			</form>
 			`;
 
@@ -304,21 +332,21 @@ lychee.loginDialog = function() {
 		}
 	});
 
-	if (lychee.checkForUpdates==='1') lychee.getUpdate()
+	if (lychee.checkForUpdates === '1') lychee.getUpdate()
 
 };
 
-lychee.logout = function() {
+lychee.logout = function () {
 
-	api.post('Session::logout', {}, function() {
+	api.post('Session::logout', {}, function () {
 		window.location.reload()
 	})
 
 };
 
-lychee.goto = function(url = '', autoplay = true) {
+lychee.goto = function (url = '', autoplay = true) {
 
-	if(url===false) url = '';
+	if (url === false) url = '';
 
 	url = '#' + url;
 
@@ -327,7 +355,7 @@ lychee.goto = function(url = '', autoplay = true) {
 
 };
 
-lychee.gotoMap = function(albumID = '', autoplay = true) {
+lychee.gotoMap = function (albumID = '', autoplay = true) {
 
 	// If map functionality is disabled -> go to album
 	if (!lychee.map_display) {
@@ -338,21 +366,21 @@ lychee.gotoMap = function(albumID = '', autoplay = true) {
 
 };
 
-lychee.load = function(autoplay = true) {
+lychee.load = function (autoplay = true) {
 
-	let albumID	= '';
-	let photoID	= '';
-	let hash	= document.location.hash.replace('#', '').split('/');
+	let albumID = '';
+	let photoID = '';
+	let hash = document.location.hash.replace('#', '').split('/');
 
 	contextMenu.close();
 	multiselect.close();
 
-	if (hash[0]!=null) albumID = hash[0];
-	if (hash[1]!=null) photoID = hash[1];
+	if (hash[0] != null) albumID = hash[0];
+	if (hash[1] != null) photoID = hash[1];
 
 	if (albumID && photoID) {
 
-		if(albumID=='map') {
+		if (albumID == 'map') {
 
 			// If map functionality is disabled -> do nothing
 			if (!lychee.map_display) {
@@ -370,24 +398,24 @@ lychee.load = function(autoplay = true) {
 			// Show Album -> it's below the map
 			if (visible.photo()) view.photo.hide();
 			if (visible.sidebar()) sidebar.toggle();
-			if (album.json && albumID===album.json.id) {
+			if (album.json && albumID === album.json.id) {
 				view.album.title();
 			}
 			mapview.open(albumID);
 			lychee.footer_hide();
 
 
-		} else if (albumID=='search') {
+		} else if (albumID == 'search') {
 
 			// Search has been triggered
 			const search_string = decodeURIComponent(photoID);
 
-			if(search_string.trim()==="") {
+			if (search_string.trim() === "") {
 				// do nothing on "only space" search strings
 				return;
 			}
 			// If public search is diabled -> do nothing
-			if (lychee.publicMode===true && !lychee.public_search) {
+			if (lychee.publicMode === true && !lychee.public_search) {
 				loadingBar.show('error', lychee.locale['ERROR_SEARCH_DEACTIVATED']);
 				return;
 			}
@@ -405,7 +433,7 @@ lychee.load = function(autoplay = true) {
 			photo.json = null;
 
 			// Show Photo
-			if (lychee.content.html()==='' || album.json==null || (header.dom('.header__search').length && header.dom('.header__search').val().length!==0)) {
+			if (lychee.content.html() === '' || album.json == null || (header.dom('.header__search').length && header.dom('.header__search').val().length !== 0)) {
 				lychee.content.hide();
 				album.load(albumID, true)
 			}
@@ -417,7 +445,7 @@ lychee.load = function(autoplay = true) {
 	} else if (albumID) {
 
 
-		if(albumID=='map') {
+		if (albumID == 'map') {
 
 			$('.no_content').remove();
 			// Show map of all albums
@@ -436,7 +464,7 @@ lychee.load = function(autoplay = true) {
 			mapview.open();
 			lychee.footer_hide();
 
-		} else if(albumID=='search') {
+		} else if (albumID == 'search') {
 			// search string is empty -> do nothing
 		} else {
 
@@ -447,8 +475,8 @@ lychee.load = function(autoplay = true) {
 			// Show Album
 			if (visible.photo()) view.photo.hide();
 			if (visible.mapview()) mapview.close();
-			if (visible.sidebar() && (albumID==='0' || albumID==='f' || albumID==='s' || albumID==='r')) sidebar.toggle();
-			if (album.json && albumID===album.json.id) view.album.title();
+			if (visible.sidebar() && album.isSmartID($albumID)) sidebar.toggle();
+			if (album.json && albumID === album.json.id) view.album.title();
 			else album.load(albumID);
 			lychee.footer_show();
 		}
@@ -457,7 +485,7 @@ lychee.load = function(autoplay = true) {
 
 		$('.no_content').remove();
 		// Trash albums.json when filled with search results
-		if (search.hash!=null) {
+		if (search.hash != null) {
 			albums.json = null;
 			search.hash = null
 		}
@@ -480,39 +508,34 @@ lychee.load = function(autoplay = true) {
 
 };
 
-lychee.getUpdate = function() {
+lychee.getUpdate = function () {
 
 	// console.log(lychee.update_available);
 	// console.log(lychee.update_json);
 
-	if(lychee.update_json !== 0)
-	{
-		if(lychee.update_available)
-		{
+	if (lychee.update_json !== 0) {
+		if (lychee.update_available) {
 			$('.version span').show()
 		}
 	}
-	else
-	{
-		const success = function(data) {
+	else {
+		const success = function (data) {
 			if (data.lychee.version > parseInt(lychee.versionCode)) $('.version span').show()
 		};
 
 		$.ajax({
-			url		: lychee.updatePath,
-			success	: success
+			url: lychee.updatePath,
+			success: success
 		})
 	}
 };
 
-lychee.setTitle = function(title, editable) {
+lychee.setTitle = function (title, editable) {
 
-	if (lychee.title === title)
-	{
+	if (lychee.title === title) {
 		document.title = lychee.title + ' - ' + lychee.locale['ALBUMS'];
 	}
-	else
-	{
+	else {
 		document.title = lychee.title + ' - ' + title;
 	}
 
@@ -521,42 +544,39 @@ lychee.setTitle = function(title, editable) {
 
 };
 
-lychee.setMode = function(mode) {
+lychee.setMode = function (mode) {
 
-	if (lychee.lock)
-	{
+	if (lychee.lock) {
 		$('#button_settings_open').remove();
 	}
-	if (!lychee.upload)
-	{
+	if (!lychee.upload) {
 		$('#button_sharing').remove();
 
 		$(document)
-			.off('click',		'.header__title--editable')
-			.off('touchend',	'.header__title--editable')
-			.off('contextmenu',	'.photo')
-			.off('contextmenu',	'.album')
+			.off('click', '.header__title--editable')
+			.off('touchend', '.header__title--editable')
+			.off('contextmenu', '.photo')
+			.off('contextmenu', '.album')
 			.off('drop');
 
 		Mousetrap
-			.unbind([ 'u' ])
-			.unbind([ 's' ])
-			.unbind([ 'n' ])
-			.unbind([ 'r' ])
-			.unbind([ 'd' ])
-			.unbind([ 't' ])
-			.unbind([ 'command+backspace', 'ctrl+backspace' ])
-			.unbind([ 'command+a', 'ctrl+a' ]);
+			.unbind(['u'])
+			.unbind(['s'])
+			.unbind(['n'])
+			.unbind(['r'])
+			.unbind(['d'])
+			.unbind(['t'])
+			.unbind(['command+backspace', 'ctrl+backspace'])
+			.unbind(['command+a', 'ctrl+a']);
 	}
-	if (!lychee.admin)
-	{
+	if (!lychee.admin) {
 		$('#button_users, #button_logs, #button_diagnostics').remove();
 	}
 
 	if (mode === 'logged_in') {
 		// we are logged in, we do not need that short cut anymore. :)
 		Mousetrap
-			.unbind([ 'l' ]);
+			.unbind(['l']);
 
 		// The code searches by class, so remove the other instance.
 		$('.header__search, .header__clear', '.header__toolbar--public').remove();
@@ -575,19 +595,19 @@ lychee.setMode = function(mode) {
 
 	$('#button_settings, .header__divider, .leftMenu').remove();
 
-	if (mode==='public') {
+	if (mode === 'public') {
 
 		lychee.publicMode = true
 
-	} else if (mode==='view') {
+	} else if (mode === 'view') {
 
-		Mousetrap.unbind([ 'esc', 'command+up' ]);
+		Mousetrap.unbind(['esc', 'command+up']);
 
 		$('#button_back, a#next, a#previous').remove();
 		$('.no_content').remove();
 
 		lychee.publicMode = true;
-		lychee.viewMode   = true
+		lychee.viewMode = true
 
 	}
 
@@ -596,18 +616,18 @@ lychee.setMode = function(mode) {
 
 };
 
-lychee.animate = function(obj, animation) {
+lychee.animate = function (obj, animation) {
 
 	let animations = [
-		[ 'fadeIn', 'fadeOut' ],
-		[ 'contentZoomIn', 'contentZoomOut' ]
+		['fadeIn', 'fadeOut'],
+		['contentZoomIn', 'contentZoomOut']
 	];
 
 	if (!obj.jQuery) obj = $(obj);
 
 	for (let i = 0; i < animations.length; i++) {
 		for (let x = 0; x < animations[i].length; x++) {
-			if (animations[i][x]==animation) {
+			if (animations[i][x] == animation) {
 				obj.removeClass(animations[i][0] + ' ' + animations[i][1]).addClass(animation);
 				return true
 			}
@@ -618,12 +638,12 @@ lychee.animate = function(obj, animation) {
 
 };
 
-lychee.retinize = function(path = '') {
+lychee.retinize = function (path = '') {
 
 	let extention = path.split('.').pop();
-	let isPhoto   = extention!=='svg';
+	let isPhoto = extention !== 'svg';
 
-	if (isPhoto===true) {
+	if (isPhoto === true) {
 
 		path = path.replace(/\.[^/.]+$/, '');
 		path = path + '@2x' + '.' + extention
@@ -637,30 +657,30 @@ lychee.retinize = function(path = '') {
 
 };
 
-lychee.loadDropbox = function(callback) {
+lychee.loadDropbox = function (callback) {
 
-	if (lychee.dropbox===false && lychee.dropboxKey!=null && lychee.dropboxKey!=='') {
+	if (lychee.dropbox === false && lychee.dropboxKey != null && lychee.dropboxKey !== '') {
 
 		loadingBar.show();
 
 		let g = document.createElement('script');
 		let s = document.getElementsByTagName('script')[0];
 
-		g.src   = 'https://www.dropbox.com/static/api/1/dropins.js';
-		g.id    = 'dropboxjs';
-		g.type  = 'text/javascript';
+		g.src = 'https://www.dropbox.com/static/api/1/dropins.js';
+		g.id = 'dropboxjs';
+		g.type = 'text/javascript';
 		g.async = 'true';
 		g.setAttribute('data-app-key', lychee.dropboxKey);
-		g.onload = g.onreadystatechange = function() {
+		g.onload = g.onreadystatechange = function () {
 			let rs = this.readyState;
-			if (rs && rs!=='complete' && rs!=='loaded') return;
+			if (rs && rs !== 'complete' && rs !== 'loaded') return;
 			lychee.dropbox = true;
 			loadingBar.hide();
 			callback()
 		};
 		s.parentNode.insertBefore(g, s)
 
-	} else if (lychee.dropbox===true && lychee.dropboxKey!=null && lychee.dropboxKey!=='') {
+	} else if (lychee.dropbox === true && lychee.dropboxKey != null && lychee.dropboxKey !== '') {
 
 		callback()
 
@@ -672,35 +692,35 @@ lychee.loadDropbox = function(callback) {
 
 };
 
-lychee.getEventName = function() {
+lychee.getEventName = function () {
 
 	let touchendSupport = (/Android|iPhone|iPad|iPod/i).test(navigator.userAgent || navigator.vendor || window.opera) && ('ontouchend' in document.documentElement);
 	return (touchendSupport === true ? 'touchend' : 'click')
 
 };
 
-lychee.escapeHTML = function(html = '') {
+lychee.escapeHTML = function (html = '') {
 
 	// Ensure that html is a string
 	html += '';
 
 	// Escape all critical characters
 	html = html.replace(/&/g, '&amp;')
-			   .replace(/</g, '&lt;')
-			   .replace(/>/g, '&gt;')
-			   .replace(/"/g, '&quot;')
-			   .replace(/'/g, '&#039;')
-			   .replace(/`/g, '&#96;');
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#039;')
+		.replace(/`/g, '&#96;');
 
 	return html
 
 };
 
-lychee.html = function(literalSections, ...substs) {
+lychee.html = function (literalSections, ...substs) {
 
 	// Use raw literal sections: we don’t want
 	// backslashes (\n etc.) to be interpreted
-	let raw    = literalSections.raw;
+	let raw = literalSections.raw;
 	let result = '';
 
 	substs.forEach((subst, i) => {
@@ -711,9 +731,9 @@ lychee.html = function(literalSections, ...substs) {
 
 		// If the substitution is preceded by a dollar sign,
 		// we escape special characters in it
-		if (lit.slice(-1)==='$') {
+		if (lit.slice(-1) === '$') {
 			subst = lychee.escapeHTML(subst);
-			lit   = lit.slice(0, -1)
+			lit = lit.slice(0, -1)
 		}
 
 		result += lit;
@@ -730,7 +750,7 @@ lychee.html = function(literalSections, ...substs) {
 
 };
 
-lychee.error = function(errorThrown, params = '', data = '') {
+lychee.error = function (errorThrown, params = '', data = '') {
 
 	loadingBar.show('error', errorThrown);
 
@@ -742,15 +762,15 @@ lychee.error = function(errorThrown, params = '', data = '') {
 	}
 	else {
 		console.error({
-			description	: errorThrown,
-			params		: params,
-			response	: data
+			description: errorThrown,
+			params: params,
+			response: data
 		})
 	}
 
 };
 
-lychee.fullscreenEnter = function() {
+lychee.fullscreenEnter = function () {
 	let elem = document.documentElement;
 	if (elem.requestFullscreen) {
 		elem.requestFullscreen();
@@ -763,7 +783,7 @@ lychee.fullscreenEnter = function() {
 	}
 };
 
-lychee.fullscreenExit = function() {
+lychee.fullscreenExit = function () {
 	if (document.exitFullscreen) {
 		document.exitFullscreen();
 	} else if (document.mozCancelFullScreen) { /* Firefox */
@@ -775,7 +795,7 @@ lychee.fullscreenExit = function() {
 	}
 };
 
-lychee.fullscreenToggle = function() {
+lychee.fullscreenToggle = function () {
 	if (lychee.fullscreenStatus()) {
 		lychee.fullscreenExit();
 	}
@@ -784,12 +804,12 @@ lychee.fullscreenToggle = function() {
 	}
 };
 
-lychee.fullscreenStatus = function() {
+lychee.fullscreenStatus = function () {
 	let elem = (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
 	return (elem ? true : false);
 };
 
-lychee.fullscreenUpdate = function() {
+lychee.fullscreenUpdate = function () {
 	if (lychee.fullscreenStatus()) {
 		$('#button_fs_album_enter,#button_fs_enter').hide();
 		$('#button_fs_album_exit,#button_fs_exit').show();
@@ -814,7 +834,7 @@ lychee.footer_hide = function () {
 
 // Because the height of the footer can vary, we need to set some
 // dimensions dynamically, at startup.
-lychee.adjustContentHeight = function() {
+lychee.adjustContentHeight = function () {
 	if (lychee.footer.length > 0) {
 		lychee.content.css('min-height', 'calc(100vh - ' + lychee.content.css('padding-top') + ' - ' + lychee.content.css('padding-bottom') + ' - ' + lychee.footer.outerHeight() + 'px)');
 		$('#container').css('padding-bottom', lychee.footer.outerHeight())
@@ -823,7 +843,7 @@ lychee.adjustContentHeight = function() {
 	}
 };
 
-lychee.getBaseUrl = function() {
+lychee.getBaseUrl = function () {
 	if (location.href.includes('index.html')) {
 		return location.href.replace('index.html' + location.hash, '')
 	} else if (location.href.includes('gallery#')) {
@@ -834,7 +854,7 @@ lychee.getBaseUrl = function() {
 };
 
 // Copied from https://github.com/feross/clipboard-copy/blob/9eba597c774feed48301fef689099599d612387c/index.js
-lychee.clipboardCopy = function(text) {
+lychee.clipboardCopy = function (text) {
 
 	// Use the Async Clipboard API when available. Requires a secure browsing
 	// context (i.e. HTTPS)
@@ -877,7 +897,7 @@ lychee.clipboardCopy = function(text) {
 	window.document.body.removeChild(span);
 
 	return success
-		// ? Promise.resolve()
-		// : Promise.reject(new DOMException('The request is not allowed', 'NotAllowedError'))
+	// ? Promise.resolve()
+	// : Promise.reject(new DOMException('The request is not allowed', 'NotAllowedError'))
 
 };
