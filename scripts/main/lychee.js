@@ -41,6 +41,10 @@ let lychee = {
 	landing_page_enabled        : false,    // is landing page enabled ?
 	delete_imported				: false,
 
+	header_auto_hide : true,
+	history_update_for_photos : true,
+	enable_esc_for_exit : true,
+
 	checkForUpdates			: '1',
 	update_json 			: 0,
 	update_available		: false,
@@ -189,6 +193,10 @@ lychee.init = function() {
 			lychee.location_show		              = (data.config.location_show && data.config.location_show === '1')  || false;
 			lychee.location_show_public		        = (data.config.location_show_public && data.config.location_show_public === '1')  || false;
 
+			lychee.header_auto_hide          = data.config.header_auto_hide;
+			lychee.history_update_for_photos = data.config.history_update_for_photos;
+			lychee.enable_esc_for_exit       = data.config.enable_esc_for_exit;
+
 			lychee.default_license				= data.config.default_license	|| 'none';
 			lychee.css							= data.config.css				|| '';
 			lychee.full_photo					= (data.config.full_photo == null) || (data.config.full_photo === '1');
@@ -234,6 +242,10 @@ lychee.init = function() {
 			lychee.map_include_subalbums = (data.config.map_include_subalbums && data.config.map_include_subalbums === '1')  || false;
 			lychee.location_show		              = (data.config.location_show && data.config.location_show === '1')  || false;
 			lychee.location_show_public		        = (data.config.location_show_public && data.config.location_show_public === '1')  || false;
+
+			lychee.header_auto_hide          = data.config.header_auto_hide;
+			lychee.history_update_for_photos = data.config.history_update_for_photos;
+			lychee.enable_esc_for_exit       = data.config.enable_esc_for_exit;
 
 			// console.log(lychee.full_photo);
 			lychee.setMode('public');
@@ -281,13 +293,14 @@ lychee.loginDialog = function() {
 	let msg = lychee.html`
 			<form>
 				<p class='signIn'>
-					<input class='text' name='username' autocomplete='on' type='text' placeholder='$${ lychee.locale['USERNAME'] }' autocapitalize='off'>
-					<input class='text' name='password' autocomplete='current-password' type='password' placeholder='$${ lychee.locale['PASSWORD'] }'>
+					<input class='text' name='username' autocomplete='on' type='text' placeholder='$${ lychee.locale['USERNAME'] }' autocapitalize='off' data-tabindex='${tabindex.get_next_tab_index()}'>
+					<input class='text' name='password' autocomplete='current-password' type='password' placeholder='$${ lychee.locale['PASSWORD'] }' data-tabindex='${tabindex.get_next_tab_index()}'>
 				</p>
-				<p class='version'>Lychee ${ lychee.version }<span> &#8211; <a target='_blank' href='${ lychee.updateURL }'>${ lychee.locale['UPDATE_AVAILABLE'] }</a><span></p>
+				<p class='version'>Lychee ${ lychee.version }<span> &#8211; <a target='_blank' href='${ lychee.updateURL }' data-tabindex='-1'>${ lychee.locale['UPDATE_AVAILABLE'] }</a><span></p>
 			</form>
 			`;
 
+	// TODO: Tabindex missing
 	basicModal.show({
 		body: msg,
 		buttons: {
@@ -321,6 +334,7 @@ lychee.goto = function(url = '', autoplay = true) {
 	url = '#' + url;
 
 	history.pushState(null, null, url);
+
 	lychee.load(autoplay)
 
 };
@@ -409,6 +423,10 @@ lychee.load = function(autoplay = true) {
 				album.load(albumID, true)
 			}
 			photo.load(photoID, albumID, autoplay);
+			// TODO: imageview not yet loaded
+			tabindex.makeFocusable(lychee.imageview);
+
+			tabindex.makeUnfocusable(lychee.content);
 			lychee.footer_hide();
 		}
 
@@ -444,11 +462,18 @@ lychee.load = function(autoplay = true) {
 			photo.json = null;
 
 			// Show Album
-			if (visible.photo()) view.photo.hide();
+			if (visible.photo()) {
+				view.photo.hide();
+				tabindex.makeUnfocusable(lychee.imageview);
+			}
 			if (visible.mapview()) mapview.close();
 			if (visible.sidebar() && (albumID==='0' || albumID==='f' || albumID==='s' || albumID==='r')) sidebar.toggle();
-			if (album.json && albumID===album.json.id) view.album.title();
-			else album.load(albumID);
+			if (album.json && albumID===album.json.id) {
+				view.album.title();
+				tabindex.makeFocusable(lychee.content);
+			} else {
+				album.load(albumID);
+			}
 			lychee.footer_show();
 		}
 
@@ -469,7 +494,10 @@ lychee.load = function(autoplay = true) {
 		if (visible.sidebar()) sidebar.toggle();
 
 		// Show Albums
-		if (visible.photo()) view.photo.hide();
+		if (visible.photo()) {
+			view.photo.hide();
+			tabindex.makeUnfocusable(lychee.imageview);
+		}
 		if (visible.mapview()) mapview.close();
 		lychee.content.show();
 		lychee.footer_show();

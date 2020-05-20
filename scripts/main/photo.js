@@ -68,7 +68,8 @@ photo.load = function(photoID, albumID, autoplay) {
 		lychee.imageview.show();
 
 		setTimeout(() => {
-			lychee.content.show()
+			lychee.content.show();
+			tabindex.makeUnfocusable(lychee.content);
 		}, 300)
 
 	})

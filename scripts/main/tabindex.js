@@ -9,6 +9,58 @@ let tabindex = {
 
 };
 
+tabindex.saveSettings = function(elem) {
+	// Todo: Make shorter noation
+	// Get all elements which have a tabindex
+	tmp = $(elem).find("[tabindex]");
+
+	// iterate over all elements and set tabindex to stored value (i.e. make is not focussable)
+	tmp.each(function(i, e) {
+		// TODO: shorter notation
+		a = $(e).attr("tabindex");
+		$(this).data("tabindex-saved", a);
+	});
+}
+
+tabindex.restoreSettings = function(elem) {
+	// Todo: Make shorter noation
+	// Get all elements which have a tabindex
+	tmp = $(elem).find("[tabindex]");
+
+	// iterate over all elements and set tabindex to stored value (i.e. make is not focussable)
+	tmp.each(function(i, e) {
+		// TODO: shorter notation
+		a = $(e).data("tabindex-saved");
+		$(e).attr("tabindex", a);
+	});
+}
+
+tabindex.makeUnfocusable = function(elem) {
+
+	// Todo: Make shorter noation
+	// Get all elements which have a tabindex
+	tmp = $(elem).find("[tabindex]");
+
+	// iterate over all elements and set tabindex to -1 (i.e. make is not focussable)
+	tmp.each(function(i, e) {
+		$(e).attr("tabindex", "-1");
+	});
+
+};
+
+tabindex.makeFocusable = function(elem) {
+
+	// Todo: Make shorter noation
+	// Get all elements which have a tabindex
+	tmp = $(elem).find("[data-tabindex]");
+
+	// iterate over all elements and set tabindex to stored value (i.e. make is not focussable)
+	tmp.each(function(i, e) {
+		$(e).attr("tabindex", $(e).data("tabindex"));
+	});
+
+};
+
 tabindex.get_next_tab_index = function() {
 
 	tabindex.next_tab_index = tabindex.next_tab_index + 1;
