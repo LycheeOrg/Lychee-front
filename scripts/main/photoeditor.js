@@ -8,9 +8,9 @@ photoeditor = {
 
 photoeditor.rotate = function(photoID, direction) {
 
-	var invertDims = function(d){
+	var swapDims = function(d){
 		let p = d.indexOf('x');
-		if ( p != -1 ){
+		if ( p !== -1 ){
 			return d.substr(0, p) + "x" + d.substr(p+1);
 		}
 		return d;
@@ -39,19 +39,19 @@ photoeditor.rotate = function(photoID, direction) {
 			$( sel_thumb ).prop('srcset', $( sel_thumb ).attr('src') );
 			var arrayLength = album.json.photos.length;
 			for (var i = 0; i < arrayLength; i++) {
-				if ( album.json.photos[i].id == photoID ){
+				if ( album.json.photos[i].id === photoID ){
 					let w = album.json.photos[i].width;					
 					let h = album.json.photos[i].height;					
 					album.json.photos[i].height = w;
 					album.json.photos[i].width = h;
 					album.json.photos[i].small += mr;
-					album.json.photos[i].small_dim = invertDims(album.json.photos[i].small_dim);
+					album.json.photos[i].small_dim = swapDims(album.json.photos[i].small_dim);
 					album.json.photos[i].small2x += mr;
-					album.json.photos[i].small2x_dim = invertDims(album.json.photos[i].small2x_dim);
+					album.json.photos[i].small2x_dim = swapDims(album.json.photos[i].small2x_dim);
 					album.json.photos[i].medium += mr;
-					album.json.photos[i].medium_dim = invertDims(album.json.photos[i].medium_dim);
+					album.json.photos[i].medium_dim = swapDims(album.json.photos[i].medium_dim);
 					album.json.photos[i].medium2x += mr;
-					album.json.photos[i].medium2x_dim = invertDims(album.json.photos[i].medium2x_dim);
+					album.json.photos[i].medium2x_dim = swapDims(album.json.photos[i].medium2x_dim);
 					album.json.photos[i].thumb2x += mr;
 					album.json.photos[i].thumbUrl += mr;
 					album.json.photos[i].url += mr;
