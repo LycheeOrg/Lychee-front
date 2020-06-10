@@ -196,6 +196,8 @@ lychee.init = function() {
 			lychee.share_button_visible			= (data.config.share_button_visible && data.config.share_button_visible === '1') || false;
 			lychee.delete_imported				= (data.config.delete_imported && data.config.delete_imported === '1');
 
+			lychee.editor_enabled                           = (data.config.editor_enabled && data.config.editor_enabled === '1') || false;
+
 			lychee.upload	= !lychee.api_V2;
 			lychee.admin	= !lychee.api_V2;
 
@@ -558,10 +560,17 @@ lychee.setMode = function(mode) {
 
 		// The code searches by class, so remove the other instance.
 		$('.header__search, .header__clear', '.header__toolbar--public').remove();
+
+		if ( !lychee.editor_enabled ) {
+			$('#button_rotate_cwise').remove();
+			$('#button_rotate_ccwise').remove();
+		}
 		return;
 	}
 	else {
 		$('.header__search, .header__clear', '.header__toolbar--albums').remove();
+		$('#button_rotate_cwise').remove();
+		$('#button_rotate_ccwise').remove();
 	}
 
 	$('#button_settings, .header__divider, .leftMenu').remove();
