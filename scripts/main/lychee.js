@@ -42,8 +42,18 @@ let lychee = {
 	delete_imported				: false,
 
 	header_auto_hide : true,
-	history_update_for_photos : true,
-	enable_esc_for_exit : true,
+	active_focus_on_page_load : false,
+	enable_button_visibility : true,
+	enable_button_share : true,
+	enable_button_archive : true,
+	enable_button_move : true,
+	enable_button_trash : true,
+	enable_button_fullscreen : true,
+  enable_button_download : true,
+	enable_button_add : true,
+	enable_button_more : true,
+	enable_close_tab_on_esc : false,
+	enable_tabindex : false,
 
 	checkForUpdates			: '1',
 	update_json 			: 0,
@@ -194,8 +204,20 @@ lychee.init = function() {
 			lychee.location_show_public		        = (data.config.location_show_public && data.config.location_show_public === '1')  || false;
 
 			lychee.header_auto_hide          = data.config.header_auto_hide;
-			lychee.history_update_for_photos = data.config.history_update_for_photos;
-			lychee.enable_esc_for_exit       = data.config.enable_esc_for_exit;
+			lychee.active_focus_on_page_load = data.config.active_focus_on_page_load;
+			lychee.enable_button_visibility    = data.config.enable_button_visibility;
+			lychee.enable_button_share         = data.config.enable_button_share;
+			lychee.enable_button_archive       = data.config.enable_button_archive;
+			lychee.enable_button_move          = data.config.enable_button_move;
+			lychee.enable_button_trash         = data.config.enable_button_trash;
+			lychee.enable_button_fullscreen    = data.config.enable_button_fullscreen;
+			lychee.enable_button_download      = data.config.enable_button_download;
+			lychee.enable_button_add           = data.config.enable_button_add;
+			lychee.enable_button_more          = data.config.enable_button_more;
+			lychee.enable_close_tab_on_esc     = data.config.enable_close_tab_on_esc;
+			lychee.enable_tabindex             = data.config.enable_tabindex;
+
+
 
 			lychee.default_license				= data.config.default_license	|| 'none';
 			lychee.css							= data.config.css				|| '';
@@ -244,8 +266,18 @@ lychee.init = function() {
 			lychee.location_show_public		        = (data.config.location_show_public && data.config.location_show_public === '1')  || false;
 
 			lychee.header_auto_hide          = data.config.header_auto_hide;
-			lychee.history_update_for_photos = data.config.history_update_for_photos;
-			lychee.enable_esc_for_exit       = data.config.enable_esc_for_exit;
+			lychee.active_focus_on_page_load = data.config.active_focus_on_page_load;
+			lychee.enable_button_visibility    = data.config.enable_button_visibility;
+			lychee.enable_button_share         = data.config.enable_button_share;
+			lychee.enable_button_archive       = data.config.enable_button_archive;
+			lychee.enable_button_move          = data.config.enable_button_move;
+			lychee.enable_button_trash         = data.config.enable_button_trash;
+			lychee.enable_button_fullscreen    = data.config.enable_button_fullscreen;
+			lychee.enable_button_download      = data.config.enable_button_download;
+			lychee.enable_button_add           = data.config.enable_button_add;
+			lychee.enable_button_more          = data.config.enable_button_more;
+			lychee.enable_close_tab_on_esc     = data.config.enable_close_tab_on_esc;
+			lychee.enable_tabindex             = data.config.enable_tabindex;
 
 			// console.log(lychee.full_photo);
 			lychee.setMode('public');
@@ -290,6 +322,11 @@ lychee.login = function(data) {
 
 lychee.loginDialog = function() {
 
+  // Make background make unfocusable
+	tabindex.makeUnfocusable(header.dom());
+	tabindex.makeUnfocusable(lychee.content);
+	tabindex.makeUnfocusable(lychee.imageview);
+
 	let msg = lychee.html`
 			<form>
 				<p class='signIn'>
@@ -300,22 +337,27 @@ lychee.loginDialog = function() {
 			</form>
 			`;
 
-	// TODO: Tabindex missing
+	tab_index_login = tabindex.get_next_tab_index();
+	tab_index_cancel = tabindex.get_next_tab_index();
 	basicModal.show({
 		body: msg,
 		buttons: {
 			action: {
 				title: lychee.locale['SIGN_IN'],
-				fn: lychee.login
+				fn: lychee.login,
+				attributes: [["data-tabindex", tabindex.get_next_tab_index()]]
 			},
 			cancel: {
 				title: lychee.locale['CANCEL'],
-				fn: basicModal.close
+				fn: basicModal.close,
+				attributes: [["data-tabindex", tabindex.get_next_tab_index()]]
 			}
 		}
 	});
 
-	if (lychee.checkForUpdates==='1') lychee.getUpdate()
+	if (lychee.checkForUpdates==='1') lychee.getUpdate();
+
+	tabindex.makeFocusable(basicModal.dom());
 
 };
 
@@ -426,7 +468,8 @@ lychee.load = function(autoplay = true) {
 			// TODO: imageview not yet loaded
 			tabindex.makeFocusable(lychee.imageview);
 
-			tabindex.makeUnfocusable(lychee.content);
+			// Make thumbnails unfocusable and store which element had focus
+			tabindex.makeUnfocusable(lychee.content, true);
 			lychee.footer_hide();
 		}
 
@@ -470,7 +513,7 @@ lychee.load = function(autoplay = true) {
 			if (visible.sidebar() && (albumID==='0' || albumID==='f' || albumID==='s' || albumID==='r')) sidebar.toggle();
 			if (album.json && albumID===album.json.id) {
 				view.album.title();
-				tabindex.makeFocusable(lychee.content);
+				tabindex.makeFocusable(lychee.content, true);
 			} else {
 				album.load(albumID);
 			}
@@ -695,8 +738,7 @@ lychee.loadDropbox = function(callback) {
 lychee.getEventName = function() {
 
 	let touchendSupport = (/Android|iPhone|iPad|iPod/i).test(navigator.userAgent || navigator.vendor || window.opera) && ('ontouchend' in document.documentElement);
-  // TODO: Only for debug
-	return 'click';
+
 	return (touchendSupport === true ? 'touchend' : 'click')
 
 };

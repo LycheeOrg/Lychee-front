@@ -23,6 +23,9 @@ tabindex.saveSettings = function(elem) {
 }
 
 tabindex.restoreSettings = function(elem) {
+
+	if(!lychee.enable_tabindex) return;
+
 	// Todo: Make shorter noation
 	// Get all elements which have a tabindex
 	tmp = $(elem).find("[tabindex]");
@@ -35,7 +38,25 @@ tabindex.restoreSettings = function(elem) {
 	});
 }
 
-tabindex.makeUnfocusable = function(elem) {
+tabindex.makeUnfocusable = function(elem, saveFocusElement = false) {
+
+	// Todo: Make shorter noation
+	// Get all elements which have a tabindex
+	tmp = $(elem).find("[tabindex]");
+
+	// iterate over all elements and set tabindex to -1 (i.e. make is not focussable)
+	tmp.each(function(i, e) {
+		$(e).attr("tabindex", "-1");
+		// Save which element had focus before we make it unfocusable
+		if (saveFocusElement && $(e).is(":focus")) {
+			$(e).data("tabindex-focus", true);
+			// Remove focus
+			$(e).blur();
+		}
+	});
+};
+
+tabindex.makeUnfocusablePermanent = function(elem) {
 
 	// Todo: Make shorter noation
 	// Get all elements which have a tabindex
@@ -46,9 +67,17 @@ tabindex.makeUnfocusable = function(elem) {
 		$(e).attr("tabindex", "-1");
 	});
 
+	// Get all elements which have a tabindex
+	tmp = $(elem).find("[data-tabindex]");
+
+	tmp.each(function(i, e) {
+		$(e).data("tabindex", "-1");
+	});
 };
 
-tabindex.makeFocusable = function(elem) {
+tabindex.makeFocusable = function(elem, restoreFocusElement = false) {
+
+	if(!lychee.enable_tabindex) return;
 
 	// Todo: Make shorter noation
 	// Get all elements which have a tabindex
@@ -57,6 +86,13 @@ tabindex.makeFocusable = function(elem) {
 	// iterate over all elements and set tabindex to stored value (i.e. make is not focussable)
 	tmp.each(function(i, e) {
 		$(e).attr("tabindex", $(e).data("tabindex"));
+		// restore focus elemente if wanted
+		if(restoreFocusElement) {
+			if($(e).data("tabindex-focus") && lychee.active_focus_on_page_load) {
+				$(e).focus();
+				$(e).removeData("tabindex-focus");
+			}
+		}
 	});
 
 };

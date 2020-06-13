@@ -79,12 +79,6 @@
 			border-color: $colorBlue;
 		}
 
-		&:focus {
-			outline-style: solid;
-			outline-color: $colorBlue;
-			outline-width: 10px;
-		}
-
 		&:active .thumbimg {
 			transition: none;
 			border-color: darken($colorBlue, 15%);

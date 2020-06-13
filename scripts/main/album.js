@@ -185,16 +185,19 @@ album.load = function (albumID, refresh = false) {
 			}
 
 			tabindex.makeFocusable(lychee.content);
-			// Put focus on first element - either album or photo
-			first_album = $(".album:first");
-			if (first_album.length !== 0) {
-				first_album.focus();
-			} else {
-				first_photo = $(".photo:first");
-				if (first_photo.length !== 0) {
-					first_photo.focus();
+			if (lychee.active_focus_on_page_load) {
+				// Put focus on first element - either album or photo
+				first_album = $(".album:first");
+				if (first_album.length !== 0) {
+					first_album.focus();
+				} else {
+					first_photo = $(".photo:first");
+					if (first_photo.length !== 0) {
+						first_photo.focus();
+					}
 				}
 			}
+
 
 		}, waitTime)
 	};
@@ -215,14 +218,17 @@ album.load = function (albumID, refresh = false) {
 			processData(data);
 
 			tabindex.makeFocusable(lychee.content);
-			// Put focus on first element - either album or photo
-			first_album = $(".album:first");
-			if (first_album.length !== 0) {
-				first_album.focus();
-			} else {
-				first_photo = $(".photo:first");
-				if (first_photo.length !== 0) {
-					first_photo.focus();
+
+			if(lychee.active_focus_on_page_load) {
+				// Put focus on first element - either album or photo
+				first_album = $(".album:first");
+				if (first_album.length !== 0) {
+					first_album.focus();
+				} else {
+					first_photo = $(".photo:first");
+					if (first_photo.length !== 0) {
+						first_photo.focus();
+					}
 				}
 			}
 		}

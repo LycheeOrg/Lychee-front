@@ -1,0 +1,26 @@
+.setLogin, .setSorting, .setDropBox, .setLang, .setLayout, .setPublicSearch, .setOverlay, .setOverlayType, .setMapDisplay, .setMapDisplayPublic, .setMapProvider, .setMapIncludeSubalbums, .setLocationDecoding, .setLocationDecodingCachingType, .setLocationShow, .setLocationShowPublic, .setDefaultLicense, .setCSS {
+
+	.basicModal__button:focus {
+		background: #2293EC;
+		color: #FFFFFF;
+		cursor: pointer;
+		outline-style: none;
+	}
+
+}
+
+.content {
+
+	.photo {
+		&:focus {
+			outline-style: solid;
+			outline-color: $colorBlue;
+			outline-width: 10px;
+		}
+
+		&:focus .thumbimg {
+			border-color: $colorBlue;
+		}
+	}
+
+}

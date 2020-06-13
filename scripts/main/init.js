@@ -4,11 +4,8 @@
 
 $(document).ready(function() {
 
-	// Event Name
-	let eventName = lychee.getEventName();
-
 	// set CSRF protection (Laravel)
-    csrf.bind();
+  csrf.bind();
 
 	// Set API error handler
 	api.onError = lychee.error;
@@ -142,41 +139,44 @@ $(document).ready(function() {
 		else if (visible.album())													 lychee.goto(album.getParent());
 		else if (visible.albums() && search.hash !== null) search.reset();
 		else if (visible.mapview())                        mapview.close();
+		else if (visible.albums() && lychee.enable_close_tab_on_esc) {
+			window.open("", "_self").close();
+		}
 		return false;
 	});
 
-	if (eventName==='touchend') {
 
-		$(document)
 
-			// Fullscreen on mobile
-			.on('touchend', '#imageview #image', function(e) {
+	$(document)
 
-				// prevent triggering event 'mousemove'
-				e.preventDefault();
+		// Fullscreen on mobile
+		.on('touchend', '#imageview #image', function(e) {
 
-				if ((typeof swipe.obj === 'undefined') || (Math.abs(swipe.offsetX)<=5 && Math.abs(swipe.offsetY)<=5)) {
-					// Toggle header only if we're not moving to next/previous photo;
-					// In this case, swipe.preventNextHeaderToggle is set to true
-					if((typeof swipe.preventNextHeaderToggle === 'undefined') || (!swipe.preventNextHeaderToggle)) {
-						if (visible.header()) {
-							header.hide(e);
-						} else {
-						  header.show();
-						}
+			// prevent triggering event 'mousemove'
+			e.preventDefault();
+
+			if ((typeof swipe.obj === 'undefined') || (Math.abs(swipe.offsetX)<=5 && Math.abs(swipe.offsetY)<=5)) {
+				// Toggle header only if we're not moving to next/previous photo;
+				// In this case, swipe.preventNextHeaderToggle is set to true
+				if((typeof swipe.preventNextHeaderToggle === 'undefined') || (!swipe.preventNextHeaderToggle)) {
+					if (visible.header()) {
+						header.hide(e);
+					} else {
+					  header.show();
 					}
-
-					// For next 'touchend', behave again as normal and toggle header
-					swipe.preventNextHeaderToggle = false;
 				}
-			});
-		$('#imageview')
-			// Swipe on mobile
-			.swipe().on('swipeStart', function() { if (visible.photo()) swipe.start($('#imageview #image, #imageview #livephoto')) })
-			.swipe().on('swipeMove',  function(e) { if (visible.photo()) swipe.move(e.swipe) })
-			.swipe().on('swipeEnd',   function(e) { if (visible.photo()) swipe.stop(e.swipe, photo.previous, photo.next) })
 
-	}
+				// For next 'touchend', behave again as normal and toggle header
+				swipe.preventNextHeaderToggle = false;
+			}
+		});
+	$('#imageview')
+		// Swipe on mobile
+		.swipe().on('swipeStart', function() { if (visible.photo()) swipe.start($('#imageview #image, #imageview #livephoto')) })
+		.swipe().on('swipeMove',  function(e) { if (visible.photo()) swipe.move(e.swipe) })
+		.swipe().on('swipeEnd',   function(e) { if (visible.photo()) swipe.stop(e.swipe, photo.previous, photo.next) })
+
+
 
 	// Document
 	$(document)

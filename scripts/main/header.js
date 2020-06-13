@@ -192,6 +192,10 @@ header.setMode = function(mode) {
 				tabindex.makeUnfocusable(e);
 			}
 
+			// Set focus on login button
+			if(lychee.active_focus_on_page_load) {
+				$('#button_signin').focus();
+			}
 			return true;
 
 		case 'albums':
@@ -213,6 +217,17 @@ header.setMode = function(mode) {
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
+
+			if(lychee.enable_button_add) {
+				e = $('.button_add', '.header__toolbar--albums');
+				e.show();
+				tabindex.makeFocusable(e);
+			} else {
+				e = $('.button_add', '.header__toolbar--albums');
+				e.hide();
+				tabindex.makeUnfocusable(e);
+			}
+
 
 			return true;
 
@@ -283,7 +298,42 @@ header.setMode = function(mode) {
 				}
 			}
 
-
+			// Remove buttons if needed
+			if(!lychee.enable_button_visibility) {
+				e = $('#button_visibility_album', '.header__toolbar--album');
+				e.hide();
+				tabindex.makeUnfocusable(e);
+			}
+			if(!lychee.enable_button_share) {
+				e = $('#button_share_album', '.header__toolbar--album');
+				e.hide();
+				tabindex.makeUnfocusable(e);
+			}
+			if(!lychee.enable_button_archive) {
+				e = $('#button_archive', '.header__toolbar--album');
+				e.hide();
+				tabindex.makeUnfocusable(e);
+			}
+			if(!lychee.enable_button_move) {
+				e = $('#button_move_album', '.header__toolbar--album');
+				e.hide();
+				tabindex.makeUnfocusable(e);
+			}
+			if(!lychee.enable_button_trash) {
+				e = $('#button_trash_album', '.header__toolbar--album');
+				e.hide();
+				tabindex.makeUnfocusable(e);
+			}
+			if(!lychee.enable_button_fullscreen) {
+				e = $('#button_fs_album_enter', '.header__toolbar--album');
+				e.hide();
+				tabindex.makeUnfocusable(e);
+			}
+			if(!lychee.enable_button_add) {
+				e = $('.button_add', '.header__toolbar--album');
+				e.hide();
+				tabindex.makeUnfocusable(e);
+			}
 
 			return true;
 
@@ -334,6 +384,38 @@ header.setMode = function(mode) {
 				album.json && album.json.downloadable && album.json.downloadable === '1')) &&
 				!(photo.json.url && photo.json.url !== '')) {
 				e = $('#button_more');
+				e.hide();
+				tabindex.makeUnfocusable(e);
+			}
+
+			// Remove buttons if needed
+			if(!lychee.enable_button_visibility) {
+				e = $('#button_visibility', '.header__toolbar--photo');
+				e.hide();
+				tabindex.makeUnfocusable(e);
+			}
+			if(!lychee.enable_button_share) {
+				e = $('#button_share', '.header__toolbar--photo');
+				e.hide();
+				tabindex.makeUnfocusable(e);
+			}
+			if(!lychee.enable_button_move) {
+				e = $('#button_move', '.header__toolbar--photo');
+				e.hide();
+				tabindex.makeUnfocusable(e);
+			}
+			if(!lychee.enable_button_trash) {
+				e = $('#button_trash', '.header__toolbar--photo');
+				e.hide();
+				tabindex.makeUnfocusable(e);
+			}
+			if(!lychee.enable_button_fullscreen) {
+				e = $('#button_fs_enter', '.header__toolbar--photo');
+				e.hide();
+				tabindex.makeUnfocusable(e);
+			}
+			if(!lychee.enable_button_more) {
+				e = $('#button_more', '.header__toolbar--photo');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
