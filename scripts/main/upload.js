@@ -79,7 +79,7 @@ upload.start = {
 
                 albums.refresh();
 
-                if (album.getID() === false) lychee.goto('0');
+                if (album.getID() === false) lychee.goto('unsorted');
                 else album.load(albumID)
 
             };

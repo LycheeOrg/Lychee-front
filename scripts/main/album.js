@@ -9,7 +9,7 @@ let album = {
 
 album.isSmartID = function (id) {
 
-	return (id === '0' || id === 'f' || id === 's' || id === 'r')
+	return (id === 'unsorted' || id === 'starred' || id === 'public' || id === 'recent')
 
 };
 
@@ -26,7 +26,7 @@ album.getID = function () {
 
 	// this is a Lambda
 	let isID = (_id) => {
-		if (_id === '0' || _id === 'f' || _id === 's' || _id === 'r') { return true; }
+		if (album.isSmartID(_id)) { return true; }
 		return $.isNumeric(_id)
 	};
 
@@ -164,8 +164,7 @@ album.load = function (albumID, refresh = false) {
 
 		album.json = data;
 
-		if (refresh === false)
-		{
+		if (refresh === false) {
 			lychee.animate('.content', 'contentZoomOut');
 		}
 		let waitTime = 300;
@@ -557,7 +556,7 @@ album.setPublic = function (albumID, e) {
 						<span class='label'>${lychee.locale['ALBUM_PASSWORD_PROT']}</span>
 					</label>
 					<p>${lychee.locale['ALBUM_PASSWORD_PROT_EXPL']}</p>
-					<input class='text' name='passwordtext' type='text' placeholder='${ lychee.locale['PASSWORD'] }' value=''>
+					<input class='text' name='passwordtext' type='text' placeholder='${ lychee.locale['PASSWORD']}' value=''>
 				</div>
 			</form>
 		`;
@@ -961,7 +960,7 @@ album.setAlbum = function (albumIDs, albumID, confirm = true) {
 
 };
 
-album.isUploadable = function() {
+album.isUploadable = function () {
 	if (lychee.admin) {
 		return true;
 	}

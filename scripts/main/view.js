@@ -172,16 +172,16 @@ view.album = {
 		if ((visible.album() || !album.json.init) && !visible.photo()) {
 
 			switch (album.getID()) {
-				case 'f':
+				case 'starred':
 					lychee.setTitle(lychee.locale['STARRED'], true);
 					break;
-				case 's':
+				case 'public':
 					lychee.setTitle(lychee.locale['PUBLIC'], true);
 					break;
-				case 'r':
+				case 'recent':
 					lychee.setTitle(lychee.locale['RECENT'], true);
 					break;
-				case '0':
+				case 'unsorted':
 					lychee.setTitle(lychee.locale['UNSORTED'], true);
 					break;
 				default:
@@ -454,13 +454,13 @@ view.album = {
 
 		let license;
 		switch (album.json.license) {
-			case 'none'    :
+			case 'none':
 				license = ''; // none is displayed as - thus is empty.
 				break;
-			case 'reserved'    :
+			case 'reserved':
 				license = lychee.locale['ALBUM_RESERVED'];
 				break;
-			default            :
+			default:
 				license = album.json.license;
 				// console.log('default');
 				break;
@@ -637,13 +637,13 @@ view.photo = {
 
 		// Process key to display correct string
 		switch (album.json.license) {
-			case 'none'    :
+			case 'none':
 				license = ''; // none is displayed as - thus is empty (uniformity of the display).
 				break;
-			case 'reserved'    :
+			case 'reserved':
 				license = lychee.locale['PHOTO_RESERVED'];
 				break;
-			default            :
+			default:
 				license = photo.json.license;
 				break;
 		}
@@ -756,7 +756,7 @@ view.photo = {
 			let thumbUrl = nextPhoto.thumbUrl;
 
 			if (thumbUrl === 'uploads/thumb/' && nextPhoto.type.indexOf('video') > -1) {
-					thumbUrl = 'img/play-icon.png'
+				thumbUrl = 'img/play-icon.png'
 			}
 			$nextArrow.css('background-image', lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("${thumbUrl}")`)
 
@@ -775,7 +775,7 @@ view.photo = {
 			let thumbUrl = previousPhoto.thumbUrl;
 
 			if (thumbUrl === 'uploads/thumb/' && previousPhoto.type.indexOf('video') > -1) {
-					thumbUrl = 'img/play-icon.png'
+				thumbUrl = 'img/play-icon.png'
 			}
 			$previousArrow.css('background-image', lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("${thumbUrl}")`)
 
@@ -819,7 +819,7 @@ view.photo = {
 					iconSize: [100, 58], // size of the icon
 					iconAnchor: [50, 49],  // point of the icon which will correspond to marker's location
 				});
-				let marker = L.marker([photo.json.latitude, photo.json.longitude], {icon: viewDirectionIcon}).addTo(mymap);
+				let marker = L.marker([photo.json.latitude, photo.json.longitude], { icon: viewDirectionIcon }).addTo(mymap);
 				marker.setRotationAngle(photo.json.imgDirection);
 			}
 
@@ -1671,11 +1671,10 @@ view.diagnostics = {
 		if (update === 2) {
 			html += view.diagnostics.button('', lychee.locale['UPDATE_AVAILABLE']);
 		}
-		else if (update === 3)
-		{
+		else if (update === 3) {
 			html += view.diagnostics.button('', lychee.locale['MIGRATION_AVAILABLE']);
 		}
-		else if (update > 0 ) {
+		else if (update > 0) {
 			html += view.diagnostics.button('Check_', lychee.locale['CHECK_FOR_UPDATE']);
 		}
 
@@ -1708,13 +1707,13 @@ view.diagnostics = {
 			}
 		},
 
-		v_1: function() {
+		v_1: function () {
 			api.post_raw('Diagnostics', {}, function (data) {
 				$(".logs_diagnostics_view").html(data);
 			})
 		},
 
-		v_2: function() {
+		v_2: function () {
 			api.post('Diagnostics', {}, function (data) {
 				view.diagnostics.clearContent(data.update);
 				let html = '';
