@@ -329,7 +329,9 @@ paths.TVCSS = {
 gulp.task('TVCSS--styles', function () {
 	return gulp.src(paths.TVCSS.src)
 		.on('error', catchError)
-		.pipe(gulp.dest('../dist'))
+    .pipe(plugins.concat('TV.css', {newLine: "\n"}))
+		.pipe(plugins.autoprefixer('last 4 versions', '> 5%'))
+		.pipe(gulp.dest('../dist/'))
 });
 
 /* Images ----------------------------------------- */
