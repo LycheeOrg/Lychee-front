@@ -421,7 +421,15 @@ header.setMode = function(mode) {
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
-
+			if(!lychee.enable_button_rotate) {
+				e = $('#button_rotate_cwise', '.header__toolbar--photo');
+				e.hide();
+				tabindex.makeUnfocusable(e);
+				
+				e = $('#button_rotate_ccwise', '.header__toolbar--photo');
+				e.hide();
+				tabindex.makeUnfocusable(e);
+			}
 			return true;
 		case 'map':
 

@@ -52,8 +52,10 @@ let lychee = {
 	enable_button_download : true,
 	enable_button_add : true,
 	enable_button_more : true,
+	enable_button_rotate : true,
 	enable_close_tab_on_esc : false,
 	enable_tabindex : false,
+	device_type: 'Desktop',
 
 	checkForUpdates: '1',
 	update_json: 0,
@@ -214,8 +216,10 @@ lychee.init = function() {
 						lychee.enable_button_download      = data.config.enable_button_download;
 						lychee.enable_button_add           = data.config.enable_button_add;
 						lychee.enable_button_more          = data.config.enable_button_more;
+						lychee.enable_button_rotate        = data.config.enable_button_rotate;
 						lychee.enable_close_tab_on_esc     = data.config.enable_close_tab_on_esc;
 						lychee.enable_tabindex             = data.config.enable_tabindex;
+						lychee.device_type                  = data.config.device_type;
 
             lychee.editor_enabled = (data.config.editor_enabled && data.config.editor_enabled === '1') || false;
 
@@ -268,8 +272,10 @@ lychee.init = function() {
 						lychee.enable_button_download      = data.config.enable_button_download;
 						lychee.enable_button_add           = data.config.enable_button_add;
 						lychee.enable_button_more          = data.config.enable_button_more;
+						lychee.enable_button_rotate        = data.config.enable_button_rotate;
 						lychee.enable_close_tab_on_esc     = data.config.enable_close_tab_on_esc;
 						lychee.enable_tabindex             = data.config.enable_tabindex;
+						lychee.device_type                 = data.config.device_type;
 
             // console.log(lychee.full_photo);
             lychee.setMode('public');
@@ -725,9 +731,10 @@ lychee.loadDropbox = function(callback) {
 
 lychee.getEventName = function() {
 
-    let touchendSupport = (/Android|iPhone|iPad|iPod/i).test(navigator.userAgent || navigator.vendor || window.opera) && ('ontouchend' in document.documentElement);
-    return (touchendSupport === true ? 'touchend' : 'click')
-
+		if (lychee.device_type=='Mobile') {
+			return 'touchend';
+		}
+		return 'click';
 };
 
 lychee.escapeHTML = function(html = '') {
