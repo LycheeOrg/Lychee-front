@@ -24,6 +24,8 @@ header.bind = function() {
 
 		if ($(this).hasClass('header__title--editable')===false) return false;
 
+		if(lychee.enable_contextmenu_header==false) return false;
+
 		if (visible.photo()) contextMenu.photoTitle(album.getID(), photo.getID(), e);
 		else                 contextMenu.albumTitle(album.getID(), e)
 
@@ -425,7 +427,7 @@ header.setMode = function(mode) {
 				e = $('#button_rotate_cwise', '.header__toolbar--photo');
 				e.hide();
 				tabindex.makeUnfocusable(e);
-				
+
 				e = $('#button_rotate_ccwise', '.header__toolbar--photo');
 				e.hide();
 				tabindex.makeUnfocusable(e);

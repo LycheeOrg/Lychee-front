@@ -4,6 +4,9 @@
 
 $(document).ready(function() {
 
+  // Event Name
+	let eventName = lychee.getEventName();
+
 	// set CSRF protection (Laravel)
   csrf.bind();
 
@@ -20,9 +23,9 @@ $(document).ready(function() {
 
 	// Image View
 	lychee.imageview
-		.on('click', '.arrow_wrapper--previous', photo.previous)
-		.on('click', '.arrow_wrapper--next',     photo.next)
-		.on('click', 'img, #livephoto', photo.update_display_overlay);
+		.on(eventName, '.arrow_wrapper--previous', photo.previous)
+		.on(eventName, '.arrow_wrapper--next',     photo.next)
+		.on(eventName, 'img, #livephoto', photo.update_display_overlay);
 
 	// Keyboard
 
@@ -112,8 +115,13 @@ $(document).ready(function() {
 
 	Mousetrap.bindGlobal('enter', function() {
 		if (basicModal.visible()===true) {
-			basicModal.action();
-			return false;
+
+      // check if any of the input fields is focussed
+      // apply action, other do nothing
+      if($('.signIn > input').is(':focus')) {
+        basicModal.action();
+        return false;
+      }
 		} else if (visible.photo() && !lychee.header_auto_hide && ($('img#image').is(':focus') || $('img#livephoto').is(':focus') || ($(':focus').length == 0 ))) {
 			if (visible.header()) {
 				header.hide();
@@ -122,7 +130,10 @@ $(document).ready(function() {
 			}
 			return false;
 		}
-		return true;
+    $(':focus').each(function() {
+      $(this).click();
+    });
+		return false;
 	});
 
 

@@ -55,6 +55,7 @@ let lychee = {
 	enable_button_rotate : true,
 	enable_close_tab_on_esc : false,
 	enable_tabindex : false,
+	enable_contextmenu_header : true,
 	device_type: 'Desktop',
 
 	checkForUpdates: '1',
@@ -219,7 +220,8 @@ lychee.init = function() {
 						lychee.enable_button_rotate        = data.config.enable_button_rotate;
 						lychee.enable_close_tab_on_esc     = data.config.enable_close_tab_on_esc;
 						lychee.enable_tabindex             = data.config.enable_tabindex;
-						lychee.device_type                  = data.config.device_type;
+						lychee.enable_contextmenu_header   = data.config.enable_contextmenu_header;
+						lychee.device_type                 = data.config.device_type;
 
             lychee.editor_enabled = (data.config.editor_enabled && data.config.editor_enabled === '1') || false;
 
@@ -275,6 +277,7 @@ lychee.init = function() {
 						lychee.enable_button_rotate        = data.config.enable_button_rotate;
 						lychee.enable_close_tab_on_esc     = data.config.enable_close_tab_on_esc;
 						lychee.enable_tabindex             = data.config.enable_tabindex;
+						lychee.enable_contextmenu_header   = data.config.enable_contextmenu_header;
 						lychee.device_type                 = data.config.device_type;
 
             // console.log(lychee.full_photo);

@@ -302,6 +302,9 @@ mapview.close = function() {
 	$('#mapview').hide();
 	header.setMode('album');
 
+	// Make album focussable
+	tabindex.makeFocusable(lychee.content);
+
 };
 
 mapview.goto = function(elem) {

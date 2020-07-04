@@ -1,26 +1,40 @@
-.setLogin, .setSorting, .setDropBox, .setLang, .setLayout, .setPublicSearch, .setOverlay, .setOverlayType, .setMapDisplay, .setMapDisplayPublic, .setMapProvider, .setMapIncludeSubalbums, .setLocationDecoding, .setLocationDecodingCachingType, .setLocationShow, .setLocationShowPublic, .setDefaultLicense, .setCSS {
-
-	.basicModal__button:focus {
+.basicModal__button:focus {
 		background: #2293EC;
 		color: #FFFFFF;
 		cursor: pointer;
 		outline-style: none;
-	}
-
 }
 
-.content {
+.basicModal__button#basicModal__action:focus {
+		color: #FFFFFF;
+}
 
-	.photo {
-		&:focus {
+.content .photo:focus {
 			outline-style: solid;
-			outline-color: $colorBlue;
+			outline-color: #FFFFFF;
 			outline-width: 10px;
-		}
+}
 
-		&:focus .thumbimg {
-			border-color: $colorBlue;
-		}
-	}
+.content .album:focus {
+			outline-width: 0;
+}
 
+.header .button:focus {
+				outline-width: 0;
+				background-color: #FFFFFF;
+}
+
+.header__title:focus {
+				outline-width: 0;
+				background-color: #FFFFFF;
+				color: #000000;
+}
+
+.header .button:focus .iconic {
+				fill: #000000;
+}
+
+#imageview #image,
+#imageview #livephoto {
+	outline-width: 0;
 }
