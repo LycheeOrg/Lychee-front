@@ -56,6 +56,7 @@ let lychee = {
 	enable_close_tab_on_esc : false,
 	enable_tabindex : false,
 	enable_contextmenu_header : true,
+	hide_content_during_imageview : false,
 	device_type: 'Desktop',
 
 	checkForUpdates: '1',
@@ -221,6 +222,7 @@ lychee.init = function() {
 						lychee.enable_close_tab_on_esc     = data.config.enable_close_tab_on_esc;
 						lychee.enable_tabindex             = data.config.enable_tabindex;
 						lychee.enable_contextmenu_header   = data.config.enable_contextmenu_header;
+						lychee.hide_content_during_imgview = data.config.hide_content_during_imgview;
 						lychee.device_type                 = data.config.device_type;
 
             lychee.editor_enabled = (data.config.editor_enabled && data.config.editor_enabled === '1') || false;
@@ -278,6 +280,7 @@ lychee.init = function() {
 						lychee.enable_close_tab_on_esc     = data.config.enable_close_tab_on_esc;
 						lychee.enable_tabindex             = data.config.enable_tabindex;
 						lychee.enable_contextmenu_header   = data.config.enable_contextmenu_header;
+						lychee.hide_content_during_imgview = data.config.hide_content_during_imgview;
 						lychee.device_type                 = data.config.device_type;
 
             // console.log(lychee.full_photo);
@@ -471,6 +474,10 @@ lychee.load = function(autoplay = true) {
 
 						// Make thumbnails unfocusable and store which element had focus
 						tabindex.makeUnfocusable(lychee.content, true);
+
+						// hide contentview if requested
+						if(lychee.hide_content_during_imgview) lychee.content.hide();
+
             lychee.footer_hide();
         }
 
@@ -514,6 +521,7 @@ lychee.load = function(autoplay = true) {
             if (visible.sidebar() && album.isSmartID($albumID)) sidebar.toggle();
             if (album.json && albumID === album.json.id) {
 							view.album.title();
+							lychee.content.show();
 							tabindex.makeFocusable(lychee.content, true);
             } else {
 							album.load(albumID);

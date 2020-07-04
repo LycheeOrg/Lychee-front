@@ -67,11 +67,12 @@ photo.load = function(photoID, albumID, autoplay) {
 		view.photo.init(autoplay);
 		lychee.imageview.show();
 
-		setTimeout(() => {
-			lychee.content.show();
-			tabindex.makeUnfocusable(lychee.content);
-		}, 300)
-
+		if (!lychee.hide_content_during_imgview) {
+			setTimeout(() => {
+				lychee.content.show();
+				tabindex.makeUnfocusable(lychee.content);
+			}, 300);
+		}
 	})
 
 };
