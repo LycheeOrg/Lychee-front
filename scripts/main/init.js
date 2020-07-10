@@ -41,14 +41,14 @@ $(document).ready(function() {
 			lychee.loginDialog(); return false
 		})
 		.bind([ 'left' ], function() {
-			if (visible.photo() && (!visible.header() || $('img#image').is(':focus') || $('img#livephoto').is(':focus') || ($(':focus').length == 0 ))) {
+			if (visible.photo() && (!visible.header() || $('img#image').is(':focus') || $('img#livephoto').is(':focus') || ($(':focus').length === 0 ))) {
 				$('#imageview a#previous').click();
 				return false;
 			}
 			return true;
 		})
 		.bind([ 'right' ], function() {
-			if (visible.photo() && (!visible.header() || $('img#image').is(':focus') || $('img#livephoto').is(':focus') || ($(':focus').length == 0 ))) {
+			if (visible.photo() && (!visible.header() || $('img#image').is(':focus') || $('img#livephoto').is(':focus') || ($(':focus').length === 0 ))) {
 				 $('#imageview a#next').click();
 				 return false;
 			}
@@ -102,7 +102,7 @@ $(document).ready(function() {
 
 		Mousetrap.bind([ 'play_pause' ], function() {
 			// If it's a video, we toggle play/pause
-			video = $("video");
+			let video = $("video");
 
 			if (video.length !== 0) {
 				if(video[0].paused) {
@@ -122,7 +122,7 @@ $(document).ready(function() {
         basicModal.action();
         return false;
       }
-		} else if (visible.photo() && !lychee.header_auto_hide && ($('img#image').is(':focus') || $('img#livephoto').is(':focus') || ($(':focus').length == 0 ))) {
+		} else if (visible.photo() && !lychee.header_auto_hide && ($('img#image').is(':focus') || $('img#livephoto').is(':focus') || ($(':focus').length === 0 ))) {
 			if (visible.header()) {
 				header.hide();
 			} else {

@@ -24,7 +24,7 @@ header.bind = function() {
 
 		if ($(this).hasClass('header__title--editable')===false) return false;
 
-		if(lychee.enable_contextmenu_header==false) return false;
+		if(lychee.enable_contextmenu_header===false) return false;
 
 		if (visible.photo()) contextMenu.photoTitle(album.getID(), photo.getID(), e);
 		else                 contextMenu.albumTitle(album.getID(), e)
@@ -176,22 +176,22 @@ header.setMode = function(mode) {
 			tabindex.makeUnfocusable(header.dom('.header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map'));
 
 			if (lychee.public_search) {
-				e = $('.header__search, .header__clear', '.header__toolbar--public');
+				let e = $('.header__search, .header__clear', '.header__toolbar--public');
 				e.show();
 				tabindex.makeFocusable(e);
 			} else {
-				e = $('.header__search, .header__clear', '.header__toolbar--public');
+				let e = $('.header__search, .header__clear', '.header__toolbar--public');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 
 			// Set icon in Public mode
 			if (lychee.map_display_public) {
-				e = $('.button--map-albums', '.header__toolbar--public');
+				let e = $('.button--map-albums', '.header__toolbar--public');
 				e.show();
 				tabindex.makeFocusable(e);
 			} else {
-				e = $('.button--map-albums', '.header__toolbar--public')
+				let e = $('.button--map-albums', '.header__toolbar--public')
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
@@ -213,21 +213,21 @@ header.setMode = function(mode) {
 
 			// If map is disabled, we should hide the icon
 			if (lychee.map_display) {
-				e = $('.button--map-albums', '.header__toolbar--albums');
+				let e = $('.button--map-albums', '.header__toolbar--albums');
 				e.show();
 				tabindex.makeFocusable(e);
 			} else {
-				e = $('.button--map-albums', '.header__toolbar--albums');
+				let e = $('.button--map-albums', '.header__toolbar--albums');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 
 			if(lychee.enable_button_add) {
-				e = $('.button_add', '.header__toolbar--albums');
+				let e = $('.button_add', '.header__toolbar--albums');
 				e.show();
 				tabindex.makeFocusable(e);
 			} else {
-				e = $('.button_add', '.header__toolbar--albums');
+				let e = $('.button_add', '.header__toolbar--albums');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
@@ -250,32 +250,32 @@ header.setMode = function(mode) {
 			// Hide download button when album empty or we are not allowed to
 			// upload to it and it's not explicitly marked as downloadable.
 			if (!album.json || (album.json.photos === false && album.json.albums && album.json.albums.length === 0) || (!album.isUploadable() && album.json.downloadable === '0')) {
-				e = $('#button_archive');
+				let e = $('#button_archive');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			} else {
-				e = $('#button_archive');
+				let e = $('#button_archive');
 				e.show();
 				tabindex.makeFocusable(e);
 			}
 
 			if (album.json && album.json.hasOwnProperty('share_button_visible') && album.json.share_button_visible !== '1') {
-				e = $('#button_share_album');
+				let e = $('#button_share_album');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			} else {
-				e = $('#button_share_album');
+				let e = $('#button_share_album');
 				e.show();
 				tabindex.makeFocusable(e);
 			}
 
 			// If map is disabled, we should hide the icon
 			if (lychee.publicMode===true ? lychee.map_display_public : lychee.map_display) {
-				e = $('#button_map_album');
+				let e = $('#button_map_album');
 				e.show();
 				tabindex.makeFocusable(e);
 			} else {
-				e = $('#button_map_album');
+				let e = $('#button_map_album');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
@@ -304,37 +304,37 @@ header.setMode = function(mode) {
 
 			// Remove buttons if needed
 			if(!lychee.enable_button_visibility) {
-				e = $('#button_visibility_album', '.header__toolbar--album');
+				let e = $('#button_visibility_album', '.header__toolbar--album');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 			if(!lychee.enable_button_share) {
-				e = $('#button_share_album', '.header__toolbar--album');
+				let e = $('#button_share_album', '.header__toolbar--album');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 			if(!lychee.enable_button_archive) {
-				e = $('#button_archive', '.header__toolbar--album');
+				let e = $('#button_archive', '.header__toolbar--album');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 			if(!lychee.enable_button_move) {
-				e = $('#button_move_album', '.header__toolbar--album');
+				let e = $('#button_move_album', '.header__toolbar--album');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 			if(!lychee.enable_button_trash) {
-				e = $('#button_trash_album', '.header__toolbar--album');
+				let e = $('#button_trash_album', '.header__toolbar--album');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 			if(!lychee.enable_button_fullscreen) {
-				e = $('#button_fs_album_enter', '.header__toolbar--album');
+				let e = $('#button_fs_album_enter', '.header__toolbar--album');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 			if(!lychee.enable_button_add) {
-				e = $('.button_add', '.header__toolbar--album');
+				let e = $('.button_add', '.header__toolbar--album');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
@@ -351,31 +351,31 @@ header.setMode = function(mode) {
 			tabindex.makeUnfocusable(header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--map'));
 			// If map is disabled, we should hide the icon
 			if (lychee.publicMode===true ? lychee.map_display_public : lychee.map_display) {
-				e = $('#button_map');
+				let e = $('#button_map');
 				e.show();
 				tabindex.makeFocusable(e);
 			} else {
-				e = $('#button_map');
+				let e = $('#button_map');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 
 			if (album.isUploadable()) {
-				e = $('#button_trash, #button_move, #button_visibility, #button_star');
+				let e = $('#button_trash, #button_move, #button_visibility, #button_star');
 				e.show();
 				tabindex.makeFocusable(e);
 			} else {
-				e = $('#button_trash, #button_move, #button_visibility, #button_star');
+				let e = $('#button_trash, #button_move, #button_visibility, #button_star');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 
 			if (photo.json && photo.json.hasOwnProperty('share_button_visible') && photo.json.share_button_visible !== '1') {
-				e = $('#button_share');
+				let e = $('#button_share');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			} else {
-				e = $('#button_share');
+				let e = $('#button_share');
 				e.show();
 				tabindex.makeFocusable(e);
 			}
@@ -387,44 +387,44 @@ header.setMode = function(mode) {
 				(photo.json.hasOwnProperty('downloadable') ? photo.json.downloadable === '1' :
 				album.json && album.json.downloadable && album.json.downloadable === '1')) &&
 				!(photo.json.url && photo.json.url !== '')) {
-				e = $('#button_more');
+				let e = $('#button_more');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 
 			// Remove buttons if needed
 			if(!lychee.enable_button_visibility) {
-				e = $('#button_visibility', '.header__toolbar--photo');
+				let e = $('#button_visibility', '.header__toolbar--photo');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 			if(!lychee.enable_button_share) {
-				e = $('#button_share', '.header__toolbar--photo');
+				let e = $('#button_share', '.header__toolbar--photo');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 			if(!lychee.enable_button_move) {
-				e = $('#button_move', '.header__toolbar--photo');
+				let e = $('#button_move', '.header__toolbar--photo');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 			if(!lychee.enable_button_trash) {
-				e = $('#button_trash', '.header__toolbar--photo');
+				let e = $('#button_trash', '.header__toolbar--photo');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 			if(!lychee.enable_button_fullscreen) {
-				e = $('#button_fs_enter', '.header__toolbar--photo');
+				let e = $('#button_fs_enter', '.header__toolbar--photo');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 			if(!lychee.enable_button_more) {
-				e = $('#button_more', '.header__toolbar--photo');
+				let e = $('#button_more', '.header__toolbar--photo');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 			if(!lychee.enable_button_rotate) {
-				e = $('#button_rotate_cwise', '.header__toolbar--photo');
+				let e = $('#button_rotate_cwise', '.header__toolbar--photo');
 				e.hide();
 				tabindex.makeUnfocusable(e);
 
