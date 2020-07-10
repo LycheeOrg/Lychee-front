@@ -208,22 +208,22 @@ lychee.init = function() {
             lychee.share_button_visible = (data.config.share_button_visible && data.config.share_button_visible === '1') || false;
             lychee.delete_imported = (data.config.delete_imported && data.config.delete_imported === '1');
 
-            lychee.header_auto_hide = data.config_device.header_auto_hide || true;
-            lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load || false;
-            lychee.enable_button_visibility = data.config_device.enable_button_visibility || true;
-            lychee.enable_button_share = data.config_device.enable_button_share || true;
-            lychee.enable_button_archive = data.config_device.enable_button_archive || true;
-            lychee.enable_button_move = data.config_device.enable_button_move || true;
-            lychee.enable_button_trash = data.config_device.enable_button_trash || true;
-            lychee.enable_button_fullscreen = data.config_device.enable_button_fullscreen || true;
-            lychee.enable_button_download = data.config_device.enable_button_download || true;
-            lychee.enable_button_add = data.config_device.enable_button_add || true;
-            lychee.enable_button_more = data.config_device.enable_button_more || true;
-            lychee.enable_button_rotate = data.config_device.enable_button_rotate || true;
-            lychee.enable_close_tab_on_esc = data.config_device.enable_close_tab_on_esc || false;
-            lychee.enable_tabindex = data.config_device.enable_tabindex || false;
-            lychee.enable_contextmenu_header = data.config_device.enable_contextmenu_header || true;
-            lychee.hide_content_during_imgview = data.config_device.hide_content_during_imgview || false;
+            lychee.header_auto_hide = data.config_device.header_auto_hide;
+            lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
+            lychee.enable_button_visibility = data.config_device.enable_button_visibility;
+            lychee.enable_button_share = data.config_device.enable_button_share;
+            lychee.enable_button_archive = data.config_device.enable_button_archive;
+            lychee.enable_button_move = data.config_device.enable_button_move;
+            lychee.enable_button_trash = data.config_device.enable_button_trash;
+            lychee.enable_button_fullscreen = data.config_device.enable_button_fullscreen;
+            lychee.enable_button_download = data.config_device.enable_button_download;
+            lychee.enable_button_add = data.config_device.enable_button_add;
+            lychee.enable_button_more = data.config_device.enable_button_more;
+            lychee.enable_button_rotate = data.config_device.enable_button_rotate;
+            lychee.enable_close_tab_on_esc = data.config_device.enable_close_tab_on_esc;
+            lychee.enable_tabindex = data.config_device.enable_tabindex;
+            lychee.enable_contextmenu_header = data.config_device.enable_contextmenu_header;
+            lychee.hide_content_during_imgview = data.config_device.hide_content_during_imgview;
             lychee.device_type = data.config_device.device_type || 'desktop'; // we set default as Desktop
 
             lychee.editor_enabled = (data.config.editor_enabled && data.config.editor_enabled === '1') || false;
@@ -266,22 +266,22 @@ lychee.init = function() {
             lychee.location_show = (data.config.location_show && data.config.location_show === '1') || false;
             lychee.location_show_public = (data.config.location_show_public && data.config.location_show_public === '1') || false;
 
-            lychee.header_auto_hide = data.config_device.header_auto_hide || true;
-            lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load || false;
-            lychee.enable_button_visibility = data.config_device.enable_button_visibility || true;
-            lychee.enable_button_share = data.config_device.enable_button_share || true;
-            lychee.enable_button_archive = data.config_device.enable_button_archive || true;
-            lychee.enable_button_move = data.config_device.enable_button_move || true;
-            lychee.enable_button_trash = data.config_device.enable_button_trash || true;
-            lychee.enable_button_fullscreen = data.config_device.enable_button_fullscreen || true;
-            lychee.enable_button_download = data.config_device.enable_button_download || true;
-            lychee.enable_button_add = data.config_device.enable_button_add || true;
-            lychee.enable_button_more = data.config_device.enable_button_more || true;
-            lychee.enable_button_rotate = data.config_device.enable_button_rotate || true;
-            lychee.enable_close_tab_on_esc = data.config_device.enable_close_tab_on_esc || false;
-            lychee.enable_tabindex = data.config_device.enable_tabindex || false;
-            lychee.enable_contextmenu_header = data.config_device.enable_contextmenu_header || true;
-            lychee.hide_content_during_imgview = data.config_device.hide_content_during_imgview || false;
+            lychee.header_auto_hide = data.config_device.header_auto_hide;
+            lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
+            lychee.enable_button_visibility = data.config_device.enable_button_visibility;
+            lychee.enable_button_share = data.config_device.enable_button_share;
+            lychee.enable_button_archive = data.config_device.enable_button_archive;
+            lychee.enable_button_move = data.config_device.enable_button_move;
+            lychee.enable_button_trash = data.config_device.enable_button_trash;
+            lychee.enable_button_fullscreen = data.config_device.enable_button_fullscreen;
+            lychee.enable_button_download = data.config_device.enable_button_download;
+            lychee.enable_button_add = data.config_device.enable_button_add;
+            lychee.enable_button_more = data.config_device.enable_button_more;
+            lychee.enable_button_rotate = data.config_device.enable_button_rotate;
+            lychee.enable_close_tab_on_esc = data.config_device.enable_close_tab_on_esc;
+            lychee.enable_tabindex = data.config_device.enable_tabindex;
+            lychee.enable_contextmenu_header = data.config_device.enable_contextmenu_header;
+            lychee.hide_content_during_imgview = data.config_device.hide_content_during_imgview;
             lychee.device_type = data.config_device.device_type || 'desktop'; // we set default as Desktop
 
             // console.log(lychee.full_photo);
