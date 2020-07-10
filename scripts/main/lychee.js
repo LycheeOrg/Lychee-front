@@ -58,7 +58,7 @@ let lychee = {
     enable_tabindex: false,
     enable_contextmenu_header: true,
     hide_content_during_imageview: false,
-    device_type: 'Desktop',
+    device_type: 'desktop',
 
     checkForUpdates: '1',
     update_json: 0,
@@ -224,7 +224,7 @@ lychee.init = function() {
             lychee.enable_tabindex = data.config_device.enable_tabindex || false;
             lychee.enable_contextmenu_header = data.config_device.enable_contextmenu_header || true;
             lychee.hide_content_during_imgview = data.config_device.hide_content_during_imgview || false;
-            lychee.device_type = data.config_device.device_type || 'Desktop'; // we set default as Desktop
+            lychee.device_type = data.config_device.device_type || 'desktop'; // we set default as Desktop
 
             lychee.editor_enabled = (data.config.editor_enabled && data.config.editor_enabled === '1') || false;
 
@@ -282,7 +282,7 @@ lychee.init = function() {
             lychee.enable_tabindex = data.config_device.enable_tabindex || false;
             lychee.enable_contextmenu_header = data.config_device.enable_contextmenu_header || true;
             lychee.hide_content_during_imgview = data.config_device.hide_content_during_imgview || false;
-            lychee.device_type = data.config_device.device_type || 'Desktop'; // we set default as Desktop
+            lychee.device_type = data.config_device.device_type || 'desktop'; // we set default as Desktop
 
             // console.log(lychee.full_photo);
             lychee.setMode('public');
@@ -745,7 +745,7 @@ lychee.loadDropbox = function(callback) {
 
 lychee.getEventName = function() {
 
-    if (lychee.device_type === 'Mobile') {
+    if (lychee.device_type === 'mobile') {
         return 'touchend';
     }
     return 'click';
