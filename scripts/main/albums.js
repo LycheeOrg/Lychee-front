@@ -38,6 +38,22 @@ albums.load = function () {
 				header.setMode('albums');
 				view.albums.init();
 				lychee.animate(lychee.content, 'contentZoomIn');
+
+				tabindex.makeFocusable(lychee.content);
+
+				if(lychee.active_focus_on_page_load) {
+					// Put focus on first element - either album or photo
+					let first_album = $(".album:first");
+					if (first_album.length !== 0) {
+						first_album.focus();
+					} else {
+						first_photo = $(".photo:first");
+						if (first_photo.length !== 0) {
+							first_photo.focus();
+						}
+					}
+				}
+
 				setTimeout(() => {
 					lychee.footer_show();
 				},
@@ -51,7 +67,23 @@ albums.load = function () {
 		setTimeout(() => {
 			header.setMode('albums');
 			view.albums.init();
-			lychee.animate(lychee.content, 'contentZoomIn')
+			lychee.animate(lychee.content, 'contentZoomIn');
+
+			tabindex.makeFocusable(lychee.content);
+
+			if(lychee.active_focus_on_page_load) {
+				// Put focus on first element - either album or photo
+				first_album = $(".album:first");
+				if (first_album.length !== 0) {
+					first_album.focus();
+				} else {
+					first_photo = $(".photo:first");
+					if (first_photo.length !== 0) {
+						first_photo.focus();
+					}
+				}
+			}
+
 		}, 300)
 
 	}

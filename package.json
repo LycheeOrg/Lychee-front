@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "babel-preset-env": "^1.7.0",
-    "basicmodal": "^3.3.8",
+    "basicmodal": "github:LycheeOrg/basicmodal#master",
     "gulp": "^4.0.0",
     "gulp-autoprefixer": "^6.0.0",
     "gulp-babel": "^6.1.2",

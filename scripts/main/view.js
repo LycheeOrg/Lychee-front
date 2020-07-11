@@ -575,7 +575,7 @@ view.photo = {
 		$(document).bind('mousemove', function () {
 			clearTimeout(timeout);
 			// For live Photos: header animtion only if LivePhoto is not playing
-			if (!photo.isLivePhotoPlaying()) {
+			if(!photo.isLivePhotoPlaying() && lychee.header_auto_hide) {
 				header.show();
 				timeout = setTimeout(header.hideIfLivePhotoNotPlaying, 2500);
 			}
@@ -585,7 +585,10 @@ view.photo = {
 		});
 
 		// we also put this timeout to enable it by default when you directly click on a picture.
-		setTimeout(header.hideIfLivePhotoNotPlaying, 2500);
+		if(lychee.header_auto_hide) {
+			setTimeout(header.hideIfLivePhotoNotPlaying, 2500);
+		}
+
 
 		lychee.animate(lychee.imageview, 'fadeIn')
 
@@ -702,6 +705,7 @@ view.photo = {
 
 		let ret = build.imageview(photo.json, visible.header(), autoplay);
 		lychee.imageview.html(ret.html);
+		tabindex.makeFocusable(lychee.imageview);
 
 		// Init Live Photo if needed
 		if (photo.isLivePhoto()) {

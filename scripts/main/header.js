@@ -24,6 +24,8 @@ header.bind = function() {
 
 		if ($(this).hasClass('header__title--editable')===false) return false;
 
+		if(lychee.enable_contextmenu_header===false) return false;
+
 		if (visible.photo()) contextMenu.photoTitle(album.getID(), photo.getID(), e);
 		else                 contextMenu.albumTitle(album.getID(), e)
 
@@ -112,6 +114,8 @@ header.show = function() {
 	lychee.imageview.removeClass('full');
 	header.dom().removeClass('header--hidden');
 
+	tabindex.restoreSettings(header.dom());
+
 	photo.updateSizeLivePhotoDuringAnimation();
 
 	return true
@@ -129,6 +133,9 @@ header.hideIfLivePhotoNotPlaying = function() {
 header.hide = function() {
 
 	if (visible.photo() && !visible.sidebar() && !visible.contextMenu() && basicModal.visible()===false) {
+
+		tabindex.saveSettings(header.dom());
+		tabindex.makeUnfocusable(header.dom());
 
 		lychee.imageview.addClass('full');
 		header.dom().addClass('header--hidden');
@@ -165,19 +172,34 @@ header.setMode = function(mode) {
 			header.dom().removeClass('header--view');
 			header.dom('.header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--public').addClass('header__toolbar--visible');
+			tabindex.makeFocusable(header.dom('.header__toolbar--public'));
+			tabindex.makeUnfocusable(header.dom('.header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map'));
+
 			if (lychee.public_search) {
-				$('.header__search, .header__clear', '.header__toolbar--public').show()
+				let e = $('.header__search, .header__clear', '.header__toolbar--public');
+				e.show();
+				tabindex.makeFocusable(e);
 			} else {
-				$('.header__search, .header__clear', '.header__toolbar--public').hide()
+				let e = $('.header__search, .header__clear', '.header__toolbar--public');
+				e.hide();
+				tabindex.makeUnfocusable(e);
 			}
 
 			// Set icon in Public mode
 			if (lychee.map_display_public) {
-				$('.button--map-albums', '.header__toolbar--public').show();
+				let e = $('.button--map-albums', '.header__toolbar--public');
+				e.show();
+				tabindex.makeFocusable(e);
 			} else {
-				$('.button--map-albums', '.header__toolbar--public').hide();
+				let e = $('.button--map-albums', '.header__toolbar--public')
+				e.hide();
+				tabindex.makeUnfocusable(e);
 			}
 
+			// Set focus on login button
+			if(lychee.active_focus_on_page_load) {
+				$('#button_signin').focus();
+			}
 			return true;
 
 		case 'albums':
@@ -186,13 +208,29 @@ header.setMode = function(mode) {
 			header.dom('.header__toolbar--public, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--albums').addClass('header__toolbar--visible');
 
+			tabindex.makeFocusable(header.dom('.header__toolbar--albums'));
+			tabindex.makeUnfocusable(header.dom('.header__toolbar--public, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map'));
+
 			// If map is disabled, we should hide the icon
 			if (lychee.map_display) {
-				$('.button--map-albums', '.header__toolbar--albums').show();
-
+				let e = $('.button--map-albums', '.header__toolbar--albums');
+				e.show();
+				tabindex.makeFocusable(e);
 			} else {
-				$('.button--map-albums', '.header__toolbar--albums').hide();
+				let e = $('.button--map-albums', '.header__toolbar--albums');
+				e.hide();
+				tabindex.makeUnfocusable(e);
 			}
+
+			if(lychee.enable_button_add) {
+				let e = $('.button_add', '.header__toolbar--albums');
+				e.show();
+				tabindex.makeFocusable(e);
+			} else {
+				let e = $('.button_add', '.header__toolbar--albums');
+				e.remove();
+			}
+
 
 			return true;
 
@@ -204,43 +242,94 @@ header.setMode = function(mode) {
 			header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--map').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--album').addClass('header__toolbar--visible');
 
+			tabindex.makeFocusable(header.dom('.header__toolbar--album'));
+			tabindex.makeUnfocusable(header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--map'));
+
+
 			// Hide download button when album empty or we are not allowed to
 			// upload to it and it's not explicitly marked as downloadable.
 			if (!album.json || (album.json.photos === false && album.json.albums && album.json.albums.length === 0) || (!album.isUploadable() && album.json.downloadable === '0')) {
-				$('#button_archive').hide();
+				let e = $('#button_archive');
+				e.hide();
+				tabindex.makeUnfocusable(e);
 			} else {
-				$('#button_archive').show();
+				let e = $('#button_archive');
+				e.show();
+				tabindex.makeFocusable(e);
 			}
 
 			if (album.json && album.json.hasOwnProperty('share_button_visible') && album.json.share_button_visible !== '1') {
-				$('#button_share_album').hide();
+				let e = $('#button_share_album');
+				e.hide();
+				tabindex.makeUnfocusable(e);
 			} else {
-				$('#button_share_album').show();
+				let e = $('#button_share_album');
+				e.show();
+				tabindex.makeFocusable(e);
 			}
 
 			// If map is disabled, we should hide the icon
 			if (lychee.publicMode===true ? lychee.map_display_public : lychee.map_display) {
-				$('#button_map_album').show();
+				let e = $('#button_map_album');
+				e.show();
+				tabindex.makeFocusable(e);
 			} else {
-				$('#button_map_album').hide();
+				let e = $('#button_map_album');
+				e.hide();
+				tabindex.makeUnfocusable(e);
 			}
 
 			if (albumID==='s' || albumID==='f' || albumID==='r') {
 				$('#button_info_album, #button_trash_album, #button_visibility_album, #button_move_album').hide();
-				$('.button_add, .header__divider', '.header__toolbar--album').show()
+				$('.button_add, .header__divider', '.header__toolbar--album').show();
+				tabindex.makeFocusable($('.button_add, .header__divider', '.header__toolbar--album').show());
+				tabindex.makeUnfocusable($('#button_info_album, #button_trash_album, #button_visibility_album, #button_move_album'));
 			} else if (albumID==='0') {
 				$('#button_info_album, #button_visibility_album, #button_move_album').hide();
-				$('#button_trash_album, .button_add, .header__divider', '.header__toolbar--album').show()
+				$('#button_trash_album, .button_add, .header__divider', '.header__toolbar--album').show();
+				tabindex.makeFocusable($('#button_trash_album, .button_add, .header__divider', '.header__toolbar--album'));
+				tabindex.makeUnfocusable($('#button_info_album, #button_visibility_album, #button_move_album'));
 			} else {
 				$('#button_info_album, #button_visibility_album').show();
+				tabindex.makeFocusable($('#button_info_album, #button_visibility_album'));
 				if (album.isUploadable()) {
-					$('#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album').show()
+					$('#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album').show();
+					tabindex.makeFocusable($('#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album'));
 				} else {
-					$('#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album').hide()
+					$('#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album').hide();
+					tabindex.makeUnfocusable($('#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album'));
 				}
 			}
 
-
+			// Remove buttons if needed
+			if(!lychee.enable_button_visibility) {
+				let e = $('#button_visibility_album', '.header__toolbar--album');
+				e.remove();
+			}
+			if(!lychee.enable_button_share) {
+				let e = $('#button_share_album', '.header__toolbar--album');
+				e.remove();
+			}
+			if(!lychee.enable_button_archive) {
+				let e = $('#button_archive', '.header__toolbar--album');
+				e.remove();
+			}
+			if(!lychee.enable_button_move) {
+				let e = $('#button_move_album', '.header__toolbar--album');
+				e.remove();
+			}
+			if(!lychee.enable_button_trash) {
+				let e = $('#button_trash_album', '.header__toolbar--album');
+				e.remove();
+			}
+			if(!lychee.enable_button_fullscreen) {
+				let e = $('#button_fs_album_enter', '.header__toolbar--album');
+				e.remove();
+			}
+			if(!lychee.enable_button_add) {
+				let e = $('.button_add', '.header__toolbar--album');
+				e.remove();
+			}
 
 			return true;
 
@@ -250,34 +339,83 @@ header.setMode = function(mode) {
 			header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--map').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--photo').addClass('header__toolbar--visible');
 
+			tabindex.makeFocusable(header.dom('.header__toolbar--photo'));
+			tabindex.makeUnfocusable(header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--map'));
 			// If map is disabled, we should hide the icon
 			if (lychee.publicMode===true ? lychee.map_display_public : lychee.map_display) {
-				$('#button_map').show();
+				let e = $('#button_map');
+				e.show();
+				tabindex.makeFocusable(e);
 			} else {
-				$('#button_map').hide();
+				let e = $('#button_map');
+				e.hide();
+				tabindex.makeUnfocusable(e);
 			}
 
 			if (album.isUploadable()) {
-				$('#button_trash, #button_move, #button_visibility, #button_star').show()
+				let e = $('#button_trash, #button_move, #button_visibility, #button_star');
+				e.show();
+				tabindex.makeFocusable(e);
 			} else {
-				$('#button_trash, #button_move, #button_visibility, #button_star').hide();
+				let e = $('#button_trash, #button_move, #button_visibility, #button_star');
+				e.hide();
+				tabindex.makeUnfocusable(e);
 			}
 
 			if (photo.json && photo.json.hasOwnProperty('share_button_visible') && photo.json.share_button_visible !== '1') {
-				$('#button_share').hide();
+				let e = $('#button_share');
+				e.hide();
+				tabindex.makeUnfocusable(e);
 			} else {
-				$('#button_share').show();
+				let e = $('#button_share');
+				e.show();
+				tabindex.makeFocusable(e);
 			}
 
 			// Hide More menu if empty (see contextMenu.photoMore)
 			$('#button_more').show();
+			tabindex.makeFocusable($('#button_more'));
 			if (!(album.isUploadable() ||
 				(photo.json.hasOwnProperty('downloadable') ? photo.json.downloadable === '1' :
 				album.json && album.json.downloadable && album.json.downloadable === '1')) &&
 				!(photo.json.url && photo.json.url !== '')) {
-				$('#button_more').hide();
+				let e = $('#button_more');
+				e.hide();
+				tabindex.makeUnfocusable(e);
 			}
 
+			// Remove buttons if needed
+			if(!lychee.enable_button_visibility) {
+				let e = $('#button_visibility', '.header__toolbar--photo');
+				e.remove();
+			}
+			if(!lychee.enable_button_share) {
+				let e = $('#button_share', '.header__toolbar--photo');
+				e.remove();
+			}
+			if(!lychee.enable_button_move) {
+				let e = $('#button_move', '.header__toolbar--photo');
+				e.remove();
+			}
+			if(!lychee.enable_button_trash) {
+				let e = $('#button_trash', '.header__toolbar--photo');
+				e.remove();
+			}
+			if(!lychee.enable_button_fullscreen) {
+				let e = $('#button_fs_enter', '.header__toolbar--photo');
+				e.remove();
+			}
+			if(!lychee.enable_button_more) {
+				let e = $('#button_more', '.header__toolbar--photo');
+				e.remove();
+			}
+			if(!lychee.enable_button_rotate) {
+				let e = $('#button_rotate_cwise', '.header__toolbar--photo');
+				e.remove();
+
+				e = $('#button_rotate_ccwise', '.header__toolbar--photo');
+				e.remove();
+			}
 			return true;
 		case 'map':
 
@@ -285,6 +423,8 @@ header.setMode = function(mode) {
 			header.dom('.header__toolbar--public, .header__toolbar--album, .header__toolbar--albums, .header__toolbar--photo').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--map').addClass('header__toolbar--visible');
 
+			tabindex.makeFocusable(header.dom('.header__toolbar--map'));
+			tabindex.makeUnfocusable(header.dom('.header__toolbar--public, .header__toolbar--album, .header__toolbar--albums, .header__toolbar--photo'));
 			return true;
 
 	}

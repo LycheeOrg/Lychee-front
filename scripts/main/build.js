@@ -88,7 +88,7 @@ build.album = function (data, disabled = false) {
 	}
 
 	html += lychee.html`
-			<div class='album ${(disabled ? `disabled` : ``)}' data-id='${data.id}'>
+			<div class='album ${(disabled ? `disabled` : ``)}' data-id='${data.id}' data-tabindex='${tabindex.get_next_tab_index()}'>
 				  ${build.getAlbumThumb(data, 2)}
 				  ${build.getAlbumThumb(data, 1)}
 				  ${build.getAlbumThumb(data, 0)}
@@ -136,12 +136,12 @@ build.photo = function (data, disabled = false) {
 	let isLivePhoto = (data.livePhotoUrl!=='' && data.livePhotoUrl!==null);
 
 	if (data.thumbUrl === 'uploads/thumb/' && isLivePhoto) {
-		thumbnail = `<span class="thumbimg"><img src='img/live-photo-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+		thumbnail = `<span class="thumbimg"><img src='img/live-photo-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false' data-tabindex='${tabindex.get_next_tab_index()}'></span>`
 	}
 	if (data.thumbUrl === 'uploads/thumb/' && isVideo) {
-		thumbnail = `<span class="thumbimg"><img src='img/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+		thumbnail = `<span class="thumbimg"><img src='img/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false' data-tabindex='${tabindex.get_next_tab_index()}'></span>`
 	} else if (data.thumbUrl === 'uploads/thumb/' && isRaw) {
-		thumbnail = `<span class="thumbimg"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+		thumbnail = `<span class="thumbimg"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false' data-tabindex='${tabindex.get_next_tab_index()}'></span>`
 	} else if (lychee.layout === '0') {
 
 		if (data.hasOwnProperty('thumb2x')) { // Lychee v4
@@ -155,7 +155,7 @@ build.photo = function (data, disabled = false) {
 		}
 
 		thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}${isLivePhoto ? ' livephoto' : ''}">`;
-		thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.thumbUrl}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
+		thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.thumbUrl}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false' >`;
 		thumbnail += `</span>`
 	} else {
 
@@ -165,7 +165,7 @@ build.photo = function (data, disabled = false) {
 			}
 
 			thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}${isLivePhoto ? ' livephoto' : ''}">`;
-			thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.small}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
+			thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.small}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false' >`;
 			thumbnail += `</span>`
 		} else if (data.medium !== '') {
 			if (data.hasOwnProperty('medium2x') && data.medium2x !== '') {
@@ -173,12 +173,12 @@ build.photo = function (data, disabled = false) {
 			}
 
 			thumbnail = `<span class="thumbimg${isVideo ? ' video' : ''}${isLivePhoto ? ' livephoto' : ''}">`;
-			thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.medium}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`
+			thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.medium}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false' >`
 			thumbnail += `</span>`
 		} else if (!isVideo) {
 			// Fallback for images with no small or medium.
 			thumbnail = `<span class="thumbimg${isLivePhoto ? ' livephoto' : ''}">`;
-			thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.url}' alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
+			thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.url}' alt='Photo thumbnail' data-overlay='false' draggable='false' >`;
 			thumbnail += `</span>`
 		} else {
 			// Fallback for videos with no small (the case of no thumb is
@@ -195,14 +195,14 @@ build.photo = function (data, disabled = false) {
 			}
 
 			thumbnail = `<span class="thumbimg video">`;
-			thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.thumbUrl}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false'>`;
+			thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.thumbUrl}' ` + thumb2x + ` alt='Photo thumbnail' data-overlay='false' draggable='false' >`;
 			thumbnail += `</span>`
 		}
 
 	}
 
 	html += lychee.html`
-			<div class='photo ${(disabled ? `disabled` : ``)}' data-album-id='${data.album}' data-id='${data.id}'>
+			<div class='photo ${(disabled ? `disabled` : ``)}' data-album-id='${data.album}' data-id='${data.id}' data-tabindex='${tabindex.get_next_tab_index()}'>
 				${thumbnail}
 				<div class='overlay'>
 					<h1 title='$${data.title}'>$${data.title}</h1>
@@ -272,9 +272,9 @@ build.imageview = function (data, visibleControls, autoplay) {
 	let thumb = '';
 
 	if (data.type.indexOf('video') > -1) {
-		html += lychee.html`<video width="auto" height="auto" id='image' controls class='${visibleControls === true ? '' : 'full'}' ${autoplay ? 'autoplay' : ''}><source src='${data.url}'>Your browser does not support the video tag.</video>`
+		html += lychee.html`<video width="auto" height="auto" id='image' controls class='${visibleControls === true ? '' : 'full'}' autobuffer ${autoplay ? 'autoplay' : ''} data-tabindex='${tabindex.get_next_tab_index()}'><source src='${data.url}'>Your browser does not support the video tag.</video>`
 	} else if (data.type.indexOf('raw') > -1 && data.medium === '') {
-		html += lychee.html`<img id='image' class='${visibleControls === true ? '' : 'full'}' src='img/placeholder.png' draggable='false' alt='big'>`
+		html += lychee.html`<img id='image' class='${visibleControls === true ? '' : 'full'}' src='img/placeholder.png' draggable='false' alt='big' data-tabindex='${tabindex.get_next_tab_index()}'>`
 	} else {
 		let img = '';
 
@@ -298,10 +298,10 @@ build.imageview = function (data, visibleControls, autoplay) {
 				if (data.hasOwnProperty('medium2x') && data.medium2x !== '') {
 					medium = `srcset='${data.medium} ${parseInt(data.medium_dim, 10)}w, ${data.medium2x} ${parseInt(data.medium2x_dim, 10)}w'`;
 				}
-				img = `<img id='image' class='${visibleControls === true ? '' : 'full'}' src='${data.medium}' ` + medium + `  draggable='false' alt='medium'>`
+				img = `<img id='image' class='${visibleControls === true ? '' : 'full'}' src='${data.medium}' ` + medium + `  draggable='false' alt='medium' data-tabindex='${tabindex.get_next_tab_index()}'>`
 
 			} else {
-				img = `<img id='image' class='${visibleControls === true ? '' : 'full'}' src='${data.url}' draggable='false' alt='big'>`
+				img = `<img id='image' class='${visibleControls === true ? '' : 'full'}' src='${data.url}' draggable='false' alt='big' data-tabindex='${tabindex.get_next_tab_index()}'>`
 			}
 		} else {
 
@@ -310,11 +310,11 @@ build.imageview = function (data, visibleControls, autoplay) {
 				let medium_width = medium_dims[0];
 				let medium_height = medium_dims[1];
 				// It's a live photo
-				img = `<div id='livephoto' data-live-photo data-proactively-loads-video='true' data-photo-src='${data.medium}' data-video-src='${data.livePhotoUrl}'  style='width: ${medium_width}px; height: ${medium_height}px'></div>`
+				img = `<div id='livephoto' data-live-photo data-proactively-loads-video='true' data-photo-src='${data.medium}' data-video-src='${data.livePhotoUrl}'  style='width: ${medium_width}px; height: ${medium_height}px' data-tabindex='${tabindex.get_next_tab_index()}'></div>`
 
 			} else {
 				// It's a live photo
-				img = `<div id='livephoto' data-live-photo data-proactively-loads-video='true' data-photo-src='${data.url}' data-video-src='${data.livePhotoUrl}'  style='width: ${data.width}px; height: ${data.height}px'></div>`
+				img = `<div id='livephoto' data-live-photo data-proactively-loads-video='true' data-photo-src='${data.url}' data-video-src='${data.livePhotoUrl}'  style='width: ${data.width}px; height: ${data.height}px' data-tabindex='${tabindex.get_next_tab_index()}'></div>`
 			}
 
 		}

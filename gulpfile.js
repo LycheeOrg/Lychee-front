@@ -317,6 +317,23 @@ gulp.task('page--styles', function() {
 
 });
 
+
+/* Page -----------------------------------------  */
+
+paths.TVCSS = {
+	src: [
+		'./styles/devices/TV.scss'
+	]
+};
+
+gulp.task('TVCSS--styles', function () {
+	return gulp.src(paths.TVCSS.src)
+		.on('error', catchError)
+    .pipe(plugins.concat('TV.css', {newLine: "\n"}))
+		.pipe(plugins.autoprefixer('last 4 versions', '> 5%'))
+		.pipe(gulp.dest('../dist/'))
+});
+
 /* Images ----------------------------------------- */
 
 
@@ -380,7 +397,7 @@ gulp.task('clean', function() {
 gulp.task('default', gulp.series(gulp.parallel('view--svg', 'view--scripts',
 												'main--svg', 'main--scripts', 'main--styles',
 												'frame--scripts', 'frame--styles',
-												'landing--scripts', 'landing--styles', 'page--styles',
+												'landing--scripts', 'landing--styles', 'page--styles', 'TVCSS--styles',
 												'images--copy', 'leafletMarkerclusterMapFile--copy',
                         'leafletMarkerclusterSourceFiles--copy'
 	), 'clean'));

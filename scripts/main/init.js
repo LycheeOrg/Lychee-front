@@ -4,11 +4,11 @@
 
 $(document).ready(function() {
 
-	// Event Name
+  // Event Name
 	let eventName = lychee.getEventName();
 
 	// set CSRF protection (Laravel)
-    csrf.bind();
+  csrf.bind();
 
 	// Set API error handler
 	api.onError = lychee.error;
@@ -25,18 +25,34 @@ $(document).ready(function() {
 	lychee.imageview
 		.on(eventName, '.arrow_wrapper--previous', photo.previous)
 		.on(eventName, '.arrow_wrapper--next',     photo.next)
-		.on('click', 'img, #livephoto', photo.update_display_overlay);
+		.on(eventName, 'img, #livephoto', photo.update_display_overlay);
 
 	// Keyboard
+
+	Mousetrap.addKeycodes({
+		18  : 'ContextMenu',
+		179	: 'play_pause',
+		227	: 'rewind',
+		228	: 'forward'
+	});
+
 	Mousetrap
 		.bind([ 'l' ], function() {
 			lychee.loginDialog(); return false
 		})
 		.bind([ 'left' ], function() {
-			if (visible.photo()) { $('#imageview a#previous').click(); return false }
+			if (visible.photo() && (!visible.header() || $('img#image').is(':focus') || $('img#livephoto').is(':focus') || ($(':focus').length === 0 ))) {
+				$('#imageview a#previous').click();
+				return false;
+			}
+			return true;
 		})
 		.bind([ 'right' ], function() {
-			if (visible.photo()) { $('#imageview a#next').click(); return false }
+			if (visible.photo() && (!visible.header() || $('img#image').is(':focus') || $('img#livephoto').is(':focus') || ($(':focus').length === 0 ))) {
+				 $('#imageview a#next').click();
+				 return false;
+			}
+			return true;
 		})
 		.bind([ 'u' ], function() {
 			if (!visible.photo() && album.isUploadable()) { $('#upload_files').click(); return false }
@@ -63,7 +79,7 @@ $(document).ready(function() {
 		.bind([ 't' ], function() {
 			if (visible.photo() && album.isUploadable()) { photo.editTags([photo.getID()]); return false }
 		})
-		.bind([ 'i' ], function() {
+		.bind([ 'i' , 'ContextMenu'], function() {
 			if (!visible.multiselect()) { sidebar.toggle(); return false }
 		})
 		.bind([ 'command+backspace', 'ctrl+backspace' ], function() {
@@ -83,54 +99,95 @@ $(document).ready(function() {
 			if (visible.album() || visible.photo()) { lychee.fullscreenToggle(); return false }
 		});
 
+
+		Mousetrap.bind([ 'play_pause' ], function() {
+			// If it's a video, we toggle play/pause
+			let video = $("video");
+
+			if (video.length !== 0) {
+				if(video[0].paused) {
+					video[0].play();
+				} else {
+					video[0].pause();
+				}
+			}
+		});
+
 	Mousetrap.bindGlobal('enter', function() {
-		if (basicModal.visible()===true) basicModal.action()
+		if (basicModal.visible()===true) {
+
+      // check if any of the input fields is focussed
+      // apply action, other do nothing
+      if($('.signIn > input').is(':focus')) {
+        basicModal.action();
+        return false;
+      }
+		} else if (visible.photo() && !lychee.header_auto_hide && ($('img#image').is(':focus') || $('img#livephoto').is(':focus') || ($(':focus').length === 0 ))) {
+			if (visible.header()) {
+				header.hide();
+			} else {
+				header.show();
+			}
+			return false;
+		}
+    $(':focus').each(function() {
+      $(this).click();
+    });
+		return false;
 	});
+
+
+	// Prevent 'esc keyup' event to trigger 'go back in history'
+	// and 'alt keyup' to show a webapp context menu for Fire TV
+	Mousetrap.bindGlobal([ 'esc', 'ContextMenu' ], function() { return false;	}, 'keyup');
 
 	Mousetrap.bindGlobal([ 'esc', 'command+up' ], function() {
-		if (basicModal.visible()===true)                                             basicModal.cancel();
-		else if (visible.leftMenu())												 leftMenu.close();
-		else if (visible.contextMenu())                                              contextMenu.close();
-		else if (visible.photo())                                                    lychee.goto(album.getID());
-		else if (visible.album() && !album.json.parent_id)                           lychee.goto();
+		if (basicModal.visible()===true)                   basicModal.cancel();
+		else if (visible.leftMenu())											 leftMenu.close();
+		else if (visible.contextMenu())                    contextMenu.close();
+		else if (visible.photo())                          lychee.goto(album.getID());
+		else if (visible.album() && !album.json.parent_id) lychee.goto();
 		else if (visible.album())													 lychee.goto(album.getParent());
 		else if (visible.albums() && search.hash !== null) search.reset();
-		else if (visible.mapview())                                                  mapview.close();
-		return false
+		else if (visible.mapview())                        mapview.close();
+		else if (visible.albums() && lychee.enable_close_tab_on_esc) {
+			window.open("", "_self").close();
+		}
+		return false;
 	});
 
-	if (eventName==='touchend') {
 
-		$(document)
 
-			// Fullscreen on mobile
-			.on('touchend', '#imageview #image', function(e) {
+	$(document)
 
-				// prevent triggering event 'mousemove'
-				e.preventDefault();
+		// Fullscreen on mobile
+		.on('touchend', '#imageview #image', function(e) {
 
-				if ((typeof swipe.obj === 'undefined') || (Math.abs(swipe.offsetX)<=5 && Math.abs(swipe.offsetY)<=5)) {
-					// Toogle header only if we're not moving to next/previous photo;
-					// In this case, swipe.preventNextHeaderToggle is set to true
-					if((typeof swipe.preventNextHeaderToggle === 'undefined') || (!swipe.preventNextHeaderToggle)) {
-						if (visible.header()) {
-							header.hide(e);
-						} else {
-						  header.show();
-						}
+			// prevent triggering event 'mousemove'
+			e.preventDefault();
+
+			if ((typeof swipe.obj === 'undefined') || (Math.abs(swipe.offsetX)<=5 && Math.abs(swipe.offsetY)<=5)) {
+				// Toggle header only if we're not moving to next/previous photo;
+				// In this case, swipe.preventNextHeaderToggle is set to true
+				if((typeof swipe.preventNextHeaderToggle === 'undefined') || (!swipe.preventNextHeaderToggle)) {
+					if (visible.header()) {
+						header.hide(e);
+					} else {
+					  header.show();
 					}
-
-					// For next 'touchend', behave again as normal and toogle header
-					swipe.preventNextHeaderToggle = false;
 				}
-			});
-		$('#imageview')
-			// Swipe on mobile
-			.swipe().on('swipeStart', function() { if (visible.photo()) swipe.start($('#imageview #image, #imageview #livephoto')) })
-			.swipe().on('swipeMove',  function(e) { if (visible.photo()) swipe.move(e.swipe) })
-			.swipe().on('swipeEnd',   function(e) { if (visible.photo()) swipe.stop(e.swipe, photo.previous, photo.next) })
 
-	}
+				// For next 'touchend', behave again as normal and toggle header
+				swipe.preventNextHeaderToggle = false;
+			}
+		});
+	$('#imageview')
+		// Swipe on mobile
+		.swipe().on('swipeStart', function() { if (visible.photo()) swipe.start($('#imageview #image, #imageview #livephoto')) })
+		.swipe().on('swipeMove',  function(e) { if (visible.photo()) swipe.move(e.swipe) })
+		.swipe().on('swipeEnd',   function(e) { if (visible.photo()) swipe.stop(e.swipe, photo.previous, photo.next) })
+
+
 
 	// Document
 	$(document)
@@ -205,6 +262,6 @@ $(document).ready(function() {
 	});
 
 	// Init
-	lychee.init()
+	lychee.init();
 
 });
