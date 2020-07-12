@@ -636,7 +636,7 @@ view.photo = {
 		let license;
 
 		// Process key to display correct string
-		switch (album.json.license) {
+		switch (photo.json.license) {
 			case 'none':
 				license = ''; // none is displayed as - thus is empty (uniformity of the display).
 				break;
