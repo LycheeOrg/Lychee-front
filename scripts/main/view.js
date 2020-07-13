@@ -636,7 +636,7 @@ view.photo = {
 		let license;
 
 		// Process key to display correct string
-		switch (album.json.license) {
+		switch (photo.json.license) {
 			case 'none':
 				license = ''; // none is displayed as - thus is empty (uniformity of the display).
 				break;
@@ -1047,12 +1047,36 @@ view.settings = {
 					<option value="none">${lychee.locale['PHOTO_LICENSE_NONE']}</option>
 					<option value="reserved">${lychee.locale['PHOTO_RESERVED']}</option>
 					<option value="CC0">CC0 - Public Domain</option>
-					<option value="CC-BY">CC Attribution 4.0</option>
-					<option value="CC-BY-ND">CC Attribution-NoDerivatives 4.0</option>
-					<option value="CC-BY-SA">CC Attribution-ShareAlike 4.0</option>
-					<option value="CC-BY-NC">CC Attribution-NonCommercial 4.0</option>
-					<option value="CC-BY-NC-ND">CC Attribution-NonCommercial-NoDerivatives 4.0</option>
-					<option value="CC-BY-NC-SA">CC Attribution-NonCommercial-ShareAlike 4.0</option>
+					<option value="CC-BY-1.0">CC Attribution 1.0</option>
+					<option value="CC-BY-2.0">CC Attribution 2.0</option>
+					<option value="CC-BY-2.5">CC Attribution 2.5</option>
+					<option value="CC-BY-3.0">CC Attribution 3.0</option>
+					<option value="CC-BY-4.0">CC Attribution 4.0</option>
+					<option value="CC-BY-ND-1.0">CC Attribution-NoDerivatives 1.0</option>
+					<option value="CC-BY-ND-2.0">CC Attribution-NoDerivatives 2.0</option>
+					<option value="CC-BY-ND-2.5">CC Attribution-NoDerivatives 2.5</option>
+					<option value="CC-BY-ND-3.0">CC Attribution-NoDerivatives 3.0</option>
+					<option value="CC-BY-ND-4.0">CC Attribution-NoDerivatives 4.0</option>
+					<option value="CC-BY-SA-1.0">CC Attribution-ShareAlike 1.0</option>
+					<option value="CC-BY-SA-2.0">CC Attribution-ShareAlike 2.0</option>
+					<option value="CC-BY-SA-2.5">CC Attribution-ShareAlike 2.5</option>
+					<option value="CC-BY-SA-3.0">CC Attribution-ShareAlike 3.0</option>
+					<option value="CC-BY-SA-4.0">CC Attribution-ShareAlike 4.0</option>
+					<option value="CC-BY-NC-1.0">CC Attribution-NonCommercial 1.0</option>
+					<option value="CC-BY-NC-2.0">CC Attribution-NonCommercial 2.0</option>
+					<option value="CC-BY-NC-2.5">CC Attribution-NonCommercial 2.5</option>
+					<option value="CC-BY-NC-3.0">CC Attribution-NonCommercial 3.0</option>
+					<option value="CC-BY-NC-4.0">CC Attribution-NonCommercial 4.0</option>
+					<option value="CC-BY-NC-ND-1.0">CC Attribution-NonCommercial-NoDerivatives 1.0</option>
+					<option value="CC-BY-NC-ND-2.0">CC Attribution-NonCommercial-NoDerivatives 2.0</option>
+					<option value="CC-BY-NC-ND-2.5">CC Attribution-NonCommercial-NoDerivatives 2.5</option>
+					<option value="CC-BY-NC-ND-3.0">CC Attribution-NonCommercial-NoDerivatives 3.0</option>
+					<option value="CC-BY-NC-ND-4.0">CC Attribution-NonCommercial-NoDerivatives 4.0</option>
+					<option value="CC-BY-NC-SA-1.0">CC Attribution-NonCommercial-ShareAlike 1.0</option>
+					<option value="CC-BY-NC-SA-2.0">CC Attribution-NonCommercial-ShareAlike 2.0</option>
+					<option value="CC-BY-NC-SA-2.5">CC Attribution-NonCommercial-ShareAlike 2.5</option>
+					<option value="CC-BY-NC-SA-3.0">CC Attribution-NonCommercial-ShareAlike 3.0</option>
+					<option value="CC-BY-NC-SA-4.0">CC Attribution-NonCommercial-ShareAlike 4.0</option>
 				</select>
 			</span>
 			<br />
