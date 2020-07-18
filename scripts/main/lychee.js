@@ -521,7 +521,7 @@ lychee.load = function(autoplay = true) {
                 tabindex.makeUnfocusable(lychee.imageview);
             }
             if (visible.mapview()) mapview.close();
-            if (visible.sidebar() && album.isSmartID($albumID)) sidebar.toggle();
+            if (visible.sidebar() && album.isSmartID(albumID)) sidebar.toggle();
             if (album.json && albumID === album.json.id) {
                 view.album.title();
                 lychee.content.show();
