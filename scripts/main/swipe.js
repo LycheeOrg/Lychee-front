@@ -5,19 +5,18 @@
 let swipe = {
 
 	obj            : null,
-	tolerance_X    : 150,
-	tolerance_Y    : 250,
 	offsetX        : 0,
 	offsetY        : 0,
-	preventNextHeaderToggle : false
+	preventNextHeaderToggle : false,
+	disable_Y_drag : false
 
 };
 
-swipe.start = function(obj, tolerance_X, tolerance_Y) {
+swipe.start = function(obj, disable_Y_drag) {
+	if (obj)            swipe.obj         	 = obj;
 
-	if (obj)            swipe.obj         = obj;
-	if (tolerance_X)    swipe.tolerance_X = tolerance_X;
-	if (tolerance_Y)    swipe.tolerance_Y = tolerance_Y;
+ 	// this will be set for swipe-navigating photos, so the user is not confused by the photo moving up or down
+	if (disable_Y_drag === true) swipe.disable_Y_drag = disable_Y_drag; 
 
 	return true
 
@@ -38,11 +37,19 @@ swipe.move = function(e) {
 	  swipe.offsetY = +1 * e.y;
 	}
 
-	swipe.obj.css({
-		'WebkitTransform' : 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)',
-		'MozTransform'    : 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)',
-		'transform'       : 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)'
-	})
+	if (swipe.disable_Y_drag) {
+		swipe.obj.css({
+			'WebkitTransform' : 'translate(' + swipe.offsetX + 'px, 0px)',
+			'MozTransform'    : 'translate(' + swipe.offsetX + 'px, 0px)',
+			'transform'       : 'translate(' + swipe.offsetX + 'px, 0px)'
+		})
+	} else {
+		swipe.obj.css({
+			'WebkitTransform' : 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)',
+			'MozTransform'    : 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)',
+			'transform'       : 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)'
+		})
+	}
 
 	return;
 
@@ -56,15 +63,15 @@ swipe.stop = function(e, left, right) {
 		return false;
 	}
 
-	if (e.y<=-swipe.tolerance_Y) {
+	if (e.y<=-lychee.swipe_tolerance_y) {
 
       lychee.goto(album.getID());
 
-	} else if (e.y>=swipe.tolerance_Y) {
+	} else if (e.y>=lychee.swipe_tolerance_y) {
 
      lychee.goto(album.getID());
 
-	} else if (e.x<=-swipe.tolerance_X) {
+	} else if (e.x<=-lychee.swipe_tolerance_x) {
 
 		left(true);
 
@@ -73,7 +80,7 @@ swipe.stop = function(e, left, right) {
 		// the toggling of the header
 		swipe.preventNextHeaderToggle = true;
 
-	} else if (e.x>=swipe.tolerance_X) {
+	} else if (e.x>=lychee.swipe_tolerance_x) {
 
 		right(true);
 
@@ -95,6 +102,7 @@ swipe.stop = function(e, left, right) {
 	swipe.obj            = null;
 	swipe.offsetX        = 0;
 	swipe.offsetY        = 0
+	swipe.disable_Y_drag = false;
 
 	return;
 };

@@ -37,6 +37,8 @@ let lychee = {
     location_decoding_caching_type: 'Harddisk', // caching mode for GPS data decoding
     location_show: false, // show location name
     location_show_public: false, // show location name for public albums
+    swipe_tolerance_x: 150, // tolerance for navigating when swiping images to the left and right on mobile
+    swipe_tolerance_y: 250, // tolerance for navigating when swiping images up and down
 
     landing_page_enabled: false, // is landing page enabled ?
     delete_imported: false,
@@ -200,6 +202,8 @@ lychee.init = function() {
             lychee.location_decoding_caching_type = (!data.config.location_decoding_caching_type) ? 'Harddisk' : data.config.location_decoding_caching_type;
             lychee.location_show = (data.config.location_show && data.config.location_show === '1') || false;
             lychee.location_show_public = (data.config.location_show_public && data.config.location_show_public === '1') || false;
+            lychee.swipe_tolerance_x = (data.config.swipe_tolerance_x && parseInt(data.config.swipe_tolerance_x) !== NaN && parseInt(data.config.swipe_tolerance_x)) || 150;
+            lychee.swipe_tolerance_y = (data.config.swipe_tolerance_y && parseInt(data.config.swipe_tolerance_y) !== NaN && parseInt(data.config.swipe_tolerance_y)) || 250;
 
             lychee.default_license = data.config.default_license || 'none';
             lychee.css = data.config.css || '';
@@ -265,6 +269,8 @@ lychee.init = function() {
             lychee.map_include_subalbums = (data.config.map_include_subalbums && data.config.map_include_subalbums === '1') || false;
             lychee.location_show = (data.config.location_show && data.config.location_show === '1') || false;
             lychee.location_show_public = (data.config.location_show_public && data.config.location_show_public === '1') || false;
+            lychee.swipe_tolerance_x = (data.config.swipe_tolerance_x && parseInt(data.config.swipe_tolerance_x) !== NaN && parseInt(data.config.swipe_tolerance_x)) || 150;
+            lychee.swipe_tolerance_y = (data.config.swipe_tolerance_y && parseInt(data.config.swipe_tolerance_y) !== NaN && parseInt(data.config.swipe_tolerance_y)) || 250;
 
             lychee.header_auto_hide = data.config_device.header_auto_hide;
             lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;

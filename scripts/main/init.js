@@ -183,7 +183,7 @@ $(document).ready(function() {
 		});
 	$('#imageview')
 		// Swipe on mobile
-		.swipe().on('swipeStart', function() { if (visible.photo()) swipe.start($('#imageview #image, #imageview #livephoto')) })
+		.swipe().on('swipeStart', function() { if (visible.photo()) swipe.start($('#imageview #image, #imageview #livephoto'), true) })
 		.swipe().on('swipeMove',  function(e) { if (visible.photo()) swipe.move(e.swipe) })
 		.swipe().on('swipeEnd',   function(e) { if (visible.photo()) swipe.stop(e.swipe, photo.previous, photo.next) })
 
