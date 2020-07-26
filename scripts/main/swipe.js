@@ -16,7 +16,7 @@ swipe.start = function(obj, disable_Y_drag) {
 	if (obj)            swipe.obj         	 = obj;
 
  	// this will be set for swipe-navigating photos, so the user is not confused by the photo moving up or down
-	if (disable_Y_drag === true) swipe.disable_Y_drag = disable_Y_drag; 
+	if (disable_Y_drag === true) swipe.disable_Y_drag = disable_Y_drag;
 
 	return true
 
@@ -38,16 +38,18 @@ swipe.move = function(e) {
 	}
 
 	if (swipe.disable_Y_drag) {
+		const value = 'translate(' + swipe.offsetX + 'px, 0px)';
 		swipe.obj.css({
-			'WebkitTransform' : 'translate(' + swipe.offsetX + 'px, 0px)',
-			'MozTransform'    : 'translate(' + swipe.offsetX + 'px, 0px)',
-			'transform'       : 'translate(' + swipe.offsetX + 'px, 0px)'
+			'WebkitTransform' : value,
+			'MozTransform'    : value,
+			'transform'       : value
 		})
 	} else {
+		const value = 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)';
 		swipe.obj.css({
-			'WebkitTransform' : 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)',
-			'MozTransform'    : 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)',
-			'transform'       : 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)'
+			'WebkitTransform' : value,
+			'MozTransform'    : value,
+			'transform'       : value
 		})
 	}
 
@@ -90,11 +92,11 @@ swipe.stop = function(e, left, right) {
 		swipe.preventNextHeaderToggle = true;
 
 	} else {
-
+		const value = 'translate(0px, 0px)';
 		swipe.obj.css({
-			WebkitTransform : 'translate(0px, 0px)',
-			MozTransform    : 'translate(0px, 0px)',
-			transform       : 'translate(0px, 0px)'
+			WebkitTransform : value,
+			MozTransform    : value,
+			transform       : value 
 		})
 
 	}
