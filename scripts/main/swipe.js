@@ -5,22 +5,14 @@
 let swipe = {
 
 	obj            : null,
-	tolerance_X    : 150,
-	tolerance_Y    : 250,
 	offsetX        : 0,
 	offsetY        : 0,
 	preventNextHeaderToggle : false
-
 };
 
-swipe.start = function(obj, tolerance_X, tolerance_Y) {
-
-	if (obj)            swipe.obj         = obj;
-	if (tolerance_X)    swipe.tolerance_X = tolerance_X;
-	if (tolerance_Y)    swipe.tolerance_Y = tolerance_Y;
-
+swipe.start = function(obj) {
+	if (obj)            swipe.obj         	 = obj;
 	return true
-
 };
 
 swipe.move = function(e) {
@@ -38,12 +30,12 @@ swipe.move = function(e) {
 	  swipe.offsetY = +1 * e.y;
 	}
 
+	const value = 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)';
 	swipe.obj.css({
-		'WebkitTransform' : 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)',
-		'MozTransform'    : 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)',
-		'transform'       : 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)'
+		'WebkitTransform' : value,
+		'MozTransform'    : value,
+		'transform'       : value
 	})
-
 	return;
 
 };
@@ -56,15 +48,15 @@ swipe.stop = function(e, left, right) {
 		return false;
 	}
 
-	if (e.y<=-swipe.tolerance_Y) {
+	if (e.y<=-lychee.swipe_tolerance_y) {
 
       lychee.goto(album.getID());
 
-	} else if (e.y>=swipe.tolerance_Y) {
+	} else if (e.y>=lychee.swipe_tolerance_y) {
 
      lychee.goto(album.getID());
 
-	} else if (e.x<=-swipe.tolerance_X) {
+	} else if (e.x<=-lychee.swipe_tolerance_x) {
 
 		left(true);
 
@@ -73,7 +65,7 @@ swipe.stop = function(e, left, right) {
 		// the toggling of the header
 		swipe.preventNextHeaderToggle = true;
 
-	} else if (e.x>=swipe.tolerance_X) {
+	} else if (e.x>=lychee.swipe_tolerance_x) {
 
 		right(true);
 
@@ -83,11 +75,11 @@ swipe.stop = function(e, left, right) {
 		swipe.preventNextHeaderToggle = true;
 
 	} else {
-
+		const value = 'translate(0px, 0px)';
 		swipe.obj.css({
-			WebkitTransform : 'translate(0px, 0px)',
-			MozTransform    : 'translate(0px, 0px)',
-			transform       : 'translate(0px, 0px)'
+			WebkitTransform : value,
+			MozTransform    : value,
+			transform       : value
 		})
 
 	}
