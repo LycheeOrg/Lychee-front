@@ -7,19 +7,12 @@ let swipe = {
 	obj            : null,
 	offsetX        : 0,
 	offsetY        : 0,
-	preventNextHeaderToggle : false,
-	disable_Y_drag : false
-
+	preventNextHeaderToggle : false
 };
 
-swipe.start = function(obj, disable_Y_drag) {
+swipe.start = function(obj) {
 	if (obj)            swipe.obj         	 = obj;
-
- 	// this will be set for swipe-navigating photos, so the user is not confused by the photo moving up or down
-	if (disable_Y_drag === true) swipe.disable_Y_drag = disable_Y_drag;
-
 	return true
-
 };
 
 swipe.move = function(e) {
@@ -37,22 +30,12 @@ swipe.move = function(e) {
 	  swipe.offsetY = +1 * e.y;
 	}
 
-	if (swipe.disable_Y_drag) {
-		const value = 'translate(' + swipe.offsetX + 'px, 0px)';
-		swipe.obj.css({
-			'WebkitTransform' : value,
-			'MozTransform'    : value,
-			'transform'       : value
-		})
-	} else {
-		const value = 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)';
-		swipe.obj.css({
-			'WebkitTransform' : value,
-			'MozTransform'    : value,
-			'transform'       : value
-		})
-	}
-
+	const value = 'translate(' + swipe.offsetX + 'px, ' +  swipe.offsetY + 'px)';
+	swipe.obj.css({
+		'WebkitTransform' : value,
+		'MozTransform'    : value,
+		'transform'       : value
+	})
 	return;
 
 };
@@ -96,7 +79,7 @@ swipe.stop = function(e, left, right) {
 		swipe.obj.css({
 			WebkitTransform : value,
 			MozTransform    : value,
-			transform       : value 
+			transform       : value
 		})
 
 	}
@@ -104,7 +87,6 @@ swipe.stop = function(e, left, right) {
 	swipe.obj            = null;
 	swipe.offsetX        = 0;
 	swipe.offsetY        = 0
-	swipe.disable_Y_drag = false;
 
 	return;
 };
