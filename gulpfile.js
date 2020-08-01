@@ -29,6 +29,7 @@ paths.view = {
 		'./scripts/main/sidebar.js',
 		'./scripts/main/mapview.js',
 		'./scripts/main/lychee_locale.js',
+		'./scripts/main/tabindex.js',
 		'./deps/basiccontext/scripts/basicContext.js',
 	],
 	scripts: [
