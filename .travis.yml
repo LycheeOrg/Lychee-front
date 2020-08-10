@@ -9,7 +9,9 @@ matrix:
       dist: xenial #16.04
 
 node_js:
-  - "node"
+  - 10
+  - 12
+  - 14
 
 before_script:
   - npm install
