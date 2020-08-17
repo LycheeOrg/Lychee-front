@@ -265,6 +265,11 @@
 			background: $colorBlue;
 		}
 
+		&--tag {
+			display: inline-block;
+			background: $colorGreen;
+		}
+
 		.iconic {
 			fill: #fff;
 			width: 16px;
