@@ -256,7 +256,7 @@ album.add = function (IDs = null, callback = null) {
 			parent_id: 0
 		};
 
-		if (visible.albums()) {
+		if (visible.albums() || album.isSmartID(album.json.id)) {
 			params.parent_id = 0;
 		} else if (visible.album()) {
 			params.parent_id = album.json.id;
