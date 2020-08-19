@@ -116,12 +116,12 @@ $(document).ready(function() {
 	Mousetrap.bindGlobal('enter', function() {
 		if (basicModal.visible()===true) {
 
-      // check if any of the input fields is focussed
-      // apply action, other do nothing
-      if($('.signIn > input').is(':focus')) {
-        basicModal.action();
-        return false;
-      }
+			// check if any of the input fields is focussed
+			// apply action, other do nothing
+			if($('.basicModal__content input').is(':focus')) {
+				basicModal.action();
+				return false;
+			}
 		} else if (visible.photo() && !lychee.header_auto_hide && ($('img#image').is(':focus') || $('img#livephoto').is(':focus') || ($(':focus').length === 0 ))) {
 			if (visible.header()) {
 				header.hide();
@@ -130,10 +130,16 @@ $(document).ready(function() {
 			}
 			return false;
 		}
-    $(':focus').each(function() {
-      $(this).click();
-    });
-		return false;
+		let clicked = false;
+		$(':focus').each(function() {
+			if (!$(this).is('input')) {
+				$(this).click();
+				clicked = true;
+			}
+		});
+		if (clicked) {
+			return false;
+		}
 	});
 
 
