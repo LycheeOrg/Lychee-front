@@ -282,7 +282,7 @@ header.setMode = function(mode) {
 			if (albumID==='s' || albumID==='f' || albumID==='r') {
 				$('#button_info_album, #button_trash_album, #button_visibility_album, #button_move_album').hide();
 				$('.button_add, .header__divider', '.header__toolbar--album').show();
-				tabindex.makeFocusable($('.button_add, .header__divider', '.header__toolbar--album').show());
+				tabindex.makeFocusable($('.button_add, .header__divider', '.header__toolbar--album'));
 				tabindex.makeUnfocusable($('#button_info_album, #button_trash_album, #button_visibility_album, #button_move_album'));
 			} else if (albumID==='0') {
 				$('#button_info_album, #button_visibility_album, #button_move_album').hide();
