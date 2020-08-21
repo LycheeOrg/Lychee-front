@@ -62,6 +62,12 @@ view.albums = {
 					smartData += build.album(albums.json.smartalbums.recent)
 				}
 
+				Object.entries(albums.json.smartalbums).forEach(([albumName, albumData]) => {
+					if (albumName.startsWith('tag-')) {
+						albums.parse(albumData);
+						smartData += build.album(albumData)
+					}
+				});
 			}
 
 			// Albums
