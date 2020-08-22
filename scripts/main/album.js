@@ -301,14 +301,36 @@ album.add = function (IDs = null, callback = null) {
 album.addByTags = function (IDs = null, callback = null) {
 
 	const action = function (data) {
-		alert(data);
+
+		basicModal.close();
+
+		let params = {
+			title: data.title,
+			tags: data.tags,
+			parent_id: 0
+		};
+
+		api.post('Album::addByTags', params, function (_data) {
+			const isNumber = (n) => (!isNaN(parseInt(n, 10)) && isFinite(n));
+			if (_data !== false && isNumber(_data)) {
+				if (IDs != null && callback != null) {
+					callback(IDs, _data, false); // we do not confirm
+				} else {
+					albums.refresh();
+					lychee.goto(_data)
+				}
+			} else {
+				lychee.error(null, params, _data)
+			}
+
+		})
 
 	};
 
 	basicModal.show({
 		body: lychee.html`<p>${lychee.locale['TITLE_NEW_ALBUM']}
 							<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'>
-							<input class='text' name='tags' type='text' placeholder='Tags' value=''>
+							<input class='text' name='tags' type='text' minlength='1' placeholder='Tags' value=''>
 						</p>`,
 		buttons: {
 			action: {
