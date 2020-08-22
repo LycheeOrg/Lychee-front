@@ -17,6 +17,10 @@ contextMenu.add = function(e) {
 		{ title: build.iconic('folder') + lychee.locale['NEW_ALBUM'],                   fn: album.add }
 	];
 
+	if (visible.albums()) {
+		items.push({ title: build.iconic('tags') + lychee.locale['NEW_TAG_ALBUM'], fn: album.addByTags });
+	}
+
     if (lychee.api_V2 && !lychee.admin)
     {
         items.splice(3, 2);

@@ -298,6 +298,31 @@ album.add = function (IDs = null, callback = null) {
 };
 
 
+album.addByTags = function (IDs = null, callback = null) {
+
+	const action = function (data) {
+		alert(data);
+
+	};
+
+	basicModal.show({
+		body: lychee.html`<p>${lychee.locale['TITLE_NEW_ALBUM']}
+							<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'>
+							<input class='text' name='tags' type='text' placeholder='Tags' value=''>
+						</p>`,
+		buttons: {
+			action: {
+				title: lychee.locale['CREATE_TAG_ALBUM'],
+				fn: action
+			},
+			cancel: {
+				title: lychee.locale['CANCEL'],
+				fn: basicModal.close
+			}
+		}
+	})
+}
+
 album.setTitle = function (albumIDs) {
 
 	let oldTitle = '';

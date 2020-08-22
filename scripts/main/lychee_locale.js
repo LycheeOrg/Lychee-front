@@ -88,6 +88,7 @@ lychee.locale = {
 		'IMPORT_DROPBOX'				: 'Import from Dropbox',
 		'IMPORT_SERVER'					: 'Import from Server',
 		'NEW_ALBUM'						: 'New Album',
+		'NEW_TAG_ALBUM'					: 'New Tag Album',
 
 		'TITLE_NEW_ALBUM'			: 'Enter a title for the new album:',
 		'UNTITLED'					: 'Untilted',
@@ -98,6 +99,7 @@ lychee.locale = {
 		'NUM_PHOTOS'				: 'Photos',
 
 		'CREATE_ALBUM'				: 'Create Album',
+		'CREATE_TAG_ALBUM'			: 'Create Tag Album',
 
 		'STAR_PHOTO'				: 'Star Photo',
 		'STAR'						: 'Star',
