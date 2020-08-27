@@ -152,12 +152,12 @@ albums._createSmartAlbums = function (data) {
 	}
 
 	Object.entries(data).forEach(([albumName, albumData]) => {
-		if (albumName.startsWith('tag-')) {
+		if (albumData['tag_album'] === '1') {
 			data[albumName] = {
-				id: albumName,
+				id: albumData.id,
 				title: albumName,
 				sysdate: albumData.num + ' ' + lychee.locale['NUM_PHOTOS'],
-				tag: '1',
+				tag_album: '1',
 				thumbs: albumData.thumbs,
 				thumbs2x: albumData.thumbs2x ? albumData.thumbs2x : null,
 				types: albumData.types

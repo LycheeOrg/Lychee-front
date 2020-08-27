@@ -63,7 +63,7 @@ view.albums = {
 				}
 
 				Object.entries(albums.json.smartalbums).forEach(([albumName, albumData]) => {
-					if (albumName.startsWith('tag-')) {
+					if (albumData['tag_album'] === '1') {
 						albums.parse(albumData);
 						smartData += build.album(albumData)
 					}

@@ -43,6 +43,10 @@ album.getID = function () {
 
 };
 
+album.isTagAlbum = function() {
+	return album.json['tag_album'] === '1';
+}
+
 album.getByID = function (photoID) {
 
 	// Function returns the JSON of a photo
