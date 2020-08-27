@@ -349,6 +349,53 @@ album.addByTags = function (IDs = null, callback = null) {
 	})
 }
 
+album.setShowTags = function (albumID) {
+
+	let oldShowTags = album.json.show_tags;
+
+	const action = function (data) {
+
+		let show_tags = data.show_tags;
+		basicModal.close();
+
+		if (visible.album()) {
+			album.json.show_tags = show_tags;
+			view.album.show_tags()
+		}
+		let params = {
+			albumID: albumID,
+			show_tags: show_tags
+		};
+
+
+		api.post('Album::setShowTags', params, function (_data) {
+
+			if (_data !== true) {
+				lychee.error(null, params, _data);
+			} else {
+				album.reload();
+			}
+
+		})
+	};
+
+	basicModal.show({
+		body: lychee.html`<p>${lychee.locale['ALBUM_NEW_SHOWTAGS']}
+							<input class='text' name='show_tags' type='text' minlength='1' placeholder='Tags' value='$${oldShowTags}'>
+						</p>`,
+		buttons: {
+			action: {
+				title: lychee.locale['ALBUM_SET_SHOWTAGS'],
+				fn: action
+			},
+			cancel: {
+				title: lychee.locale['CANCEL'],
+				fn: basicModal.close
+			}
+		}
+	})
+}
+
 album.setTitle = function (albumIDs) {
 
 	let oldTitle = '';

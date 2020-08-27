@@ -456,6 +456,12 @@ view.album = {
 
 	},
 
+	show_tags: function () {
+
+		sidebar.changeAttr('show_tags', album.json.show_tags)
+
+	},
+
 	license: function () {
 
 		let license;
@@ -532,7 +538,7 @@ view.album = {
 
 		if ((visible.album() || !album.json.init) && !visible.photo()) {
 
-			let structure = sidebar.createStructure.album(album.json);
+			let structure = sidebar.createStructure.album(album);
 			let html = sidebar.render(structure);
 
 			sidebar.dom('.sidebar__wrapper').html(html);
