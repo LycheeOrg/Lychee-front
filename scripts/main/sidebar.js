@@ -340,7 +340,7 @@ sidebar.createStructure.photo = function(data) {
 
 sidebar.createStructure.album = function(album) {
 
-	data = album.json;
+	let data = album.json;
 
 	if (data==null || data==='') return false;
 
