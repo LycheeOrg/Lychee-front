@@ -1,6 +1,7 @@
 let gulp = require('gulp'),
     plugins = require('gulp-load-plugins')(),
     cleanCSS = require('gulp-clean-css'),
+    del = require('del'),
     paths = {};
 
 /* Error Handler -------------------------------- */
@@ -387,9 +388,7 @@ gulp.task('leafletMarkerclusterSourceFiles--copy', function () {
 
 gulp.task('clean', function() {
 
-	return gulp.src('../dist/_*.*', { read: false })
-	           .pipe(plugins.rimraf({ force: true }))
-	           .on('error', catchError)
+    return del(['../dist/_*.*'], {force: true}).catch((error) => console.log(error))
 
 });
 

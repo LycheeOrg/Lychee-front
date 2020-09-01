@@ -26,7 +26,6 @@
     "gulp-concat": "^2.6.1",
     "gulp-inject": "^4.2.0",
     "gulp-load-plugins": "^1.5.0",
-    "gulp-rimraf": "^0.2.1",
     "gulp-sass": "^4.0.2",
     "gulp-uglify": "^3.0.2",
     "jquery": "^3.4.0",
@@ -45,5 +44,8 @@
     "scroll-lock": "^2.1.2",
     "spin.js": "^2.3.2",
     "uglify-js": "^3.7.2"
+  },
+  "devDependencies": {
+    "del": "^5.1.0"
   }
 }
