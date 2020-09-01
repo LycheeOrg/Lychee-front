@@ -13,6 +13,9 @@
     "start": "gulp watch",
     "compile": "gulp"
   },
+  "engines": {
+    "node": ">= 10"
+  },
   "dependencies": {
     "babel-preset-env": "^1.7.0",
     "basicmodal": "github:LycheeOrg/basicmodal#master",
