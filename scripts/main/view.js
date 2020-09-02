@@ -371,7 +371,8 @@ view.album = {
 				});
 				let layoutGeometry = require('justified-layout')(ratio, {
 					containerWidth: containerWidth,
-					containerPadding: 0
+					containerPadding: 0,
+					targetRowHeight: parseFloat($('.photo').css('height'), 10)
 				});
 				// if (lychee.admin) console.log(layoutGeometry);
 				$('.justified-layout').css('height', layoutGeometry.containerHeight + 'px');
