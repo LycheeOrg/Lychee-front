@@ -44,7 +44,7 @@ album.getID = function () {
 };
 
 album.isTagAlbum = function() {
-	return album.json['tag_album'] === '1';
+	return album.json.tag_album === '1';
 }
 
 album.getByID = function (photoID) {
@@ -302,7 +302,7 @@ album.add = function (IDs = null, callback = null) {
 };
 
 
-album.addByTags = function (IDs = null, callback = null) {
+album.addByTags = function () {
 
 	const action = function (data) {
 
@@ -317,12 +317,8 @@ album.addByTags = function (IDs = null, callback = null) {
 		api.post('Album::addByTags', params, function (_data) {
 			const isNumber = (n) => (!isNaN(parseInt(n, 10)) && isFinite(n));
 			if (_data !== false && isNumber(_data)) {
-				if (IDs != null && callback != null) {
-					callback(IDs, _data, false); // we do not confirm
-				} else {
-					albums.refresh();
-					lychee.goto(_data)
-				}
+				albums.refresh();
+				lychee.goto(_data)
 			} else {
 				lychee.error(null, params, _data)
 			}
