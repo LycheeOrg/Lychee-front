@@ -310,8 +310,7 @@ album.addByTags = function () {
 
 		let params = {
 			title: data.title,
-			tags: data.tags,
-			parent_id: 0
+			tags: data.tags
 		};
 
 		api.post('Album::addByTags', params, function (_data) {
