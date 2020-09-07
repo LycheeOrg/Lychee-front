@@ -48,6 +48,13 @@ sidebar.bind = function() {
 		});
 
 	sidebar
+		.dom('#edit_showtags')
+		.off(eventName)
+		.on(eventName, function() {
+			album.setShowTags(album.getID());
+		});
+
+	sidebar
 		.dom('#edit_tags')
 		.off(eventName)
 		.on(eventName, function() {
@@ -331,7 +338,9 @@ sidebar.createStructure.photo = function(data) {
 
 };
 
-sidebar.createStructure.album = function(data) {
+sidebar.createStructure.album = function(album) {
+
+	let data = album.json;
 
 	if (data==null || data==='') return false;
 
@@ -422,6 +431,10 @@ sidebar.createStructure.album = function(data) {
 			{ title: lychee.locale['ALBUM_DESCRIPTION'], kind: 'description',   value: data.description, editable }
 		]
 	};
+
+	if (album.isTagAlbum()) {
+		structure.basics.rows.push({ title: lychee.locale['ALBUM_SHOW_TAGS'], kind: 'showtags',      value: data.show_tags, editable });
+	}
 
 	let videoCount = 0;
 	$.each(data.photos, function () {
@@ -569,7 +582,7 @@ sidebar.render = function(structure) {
 					value = '';
 					row.value.forEach(function(v) {
 					  	if (v==='' || v==null) {
-								return; 
+								return;
 							}
 						  // Add separator if needed
 						  if (value!=='') {

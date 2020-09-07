@@ -41,13 +41,13 @@ albums.load = function () {
 
 				tabindex.makeFocusable(lychee.content);
 
-				if(lychee.active_focus_on_page_load) {
+				if (lychee.active_focus_on_page_load) {
 					// Put focus on first element - either album or photo
 					let first_album = $(".album:first");
 					if (first_album.length !== 0) {
 						first_album.focus();
 					} else {
-						first_photo = $(".photo:first");
+						let first_photo = $(".photo:first");
 						if (first_photo.length !== 0) {
 							first_photo.focus();
 						}
@@ -151,6 +151,19 @@ albums._createSmartAlbums = function (data) {
 		}
 	}
 
+	Object.entries(data).forEach(([albumName, albumData]) => {
+		if (albumData['tag_album'] === '1') {
+			data[albumName] = {
+				id: albumData.id,
+				title: albumName,
+				sysdate: albumData.num + ' ' + lychee.locale['NUM_PHOTOS'],
+				tag_album: '1',
+				thumbs: albumData.thumbs,
+				thumbs2x: albumData.thumbs2x ? albumData.thumbs2x : null,
+				types: albumData.types
+			}
+		}
+	})
 };
 
 albums.isShared = function (albumID) {

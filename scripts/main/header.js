@@ -279,19 +279,33 @@ header.setMode = function(mode) {
 				tabindex.makeUnfocusable(e);
 			}
 
-			if (albumID==='s' || albumID==='f' || albumID==='r') {
+			if (albumID==='starred' || albumID === 'public' || albumID==='recent') {
 				$('#button_info_album, #button_trash_album, #button_visibility_album, #button_move_album').hide();
 				$('.button_add, .header__divider', '.header__toolbar--album').show();
 				tabindex.makeFocusable($('.button_add, .header__divider', '.header__toolbar--album'));
 				tabindex.makeUnfocusable($('#button_info_album, #button_trash_album, #button_visibility_album, #button_move_album'));
-			} else if (albumID==='0') {
+			} else if (albumID==='unsorted') {
 				$('#button_info_album, #button_visibility_album, #button_move_album').hide();
 				$('#button_trash_album, .button_add, .header__divider', '.header__toolbar--album').show();
 				tabindex.makeFocusable($('#button_trash_album, .button_add, .header__divider', '.header__toolbar--album'));
 				tabindex.makeUnfocusable($('#button_info_album, #button_visibility_album, #button_move_album'));
+			} else if (album.isTagAlbum()) {
+				$('#button_info_album').show();
+				$('#button_move_album').hide();
+				$('.button_add, .header__divider', '.header__toolbar--album').hide();
+				tabindex.makeFocusable($('#button_info_album'));
+				tabindex.makeUnfocusable($('#button_move_album'));
+				tabindex.makeUnfocusable($('.button_add, .header__divider', '.header__toolbar--album'));
+				if (album.isUploadable()) {
+					$('#button_visibility_album, #button_trash_album').show();
+					tabindex.makeFocusable($('#button_visibility_album, #button_trash_album'));
+				} else {
+					$('#button_visibility_album, #button_trash_album').hide();
+					tabindex.makeUnfocusable($('#button_visibility_album, #button_trash_album'));
+				}
 			} else {
-				$('#button_info_album, #button_visibility_album').show();
-				tabindex.makeFocusable($('#button_info_album, #button_visibility_album'));
+				$('#button_info_album').show();
+				tabindex.makeFocusable($('#button_info_album'));
 				if (album.isUploadable()) {
 					$('#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album').show();
 					tabindex.makeFocusable($('#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album'));

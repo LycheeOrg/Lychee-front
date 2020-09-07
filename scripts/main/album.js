@@ -43,6 +43,10 @@ album.getID = function () {
 
 };
 
+album.isTagAlbum = function() {
+	return album.json.tag_album === '1';
+}
+
 album.getByID = function (photoID) {
 
 	// Function returns the JSON of a photo
@@ -297,6 +301,95 @@ album.add = function (IDs = null, callback = null) {
 
 };
 
+
+album.addByTags = function () {
+
+	const action = function (data) {
+
+		basicModal.close();
+
+		let params = {
+			title: data.title,
+			tags: data.tags
+		};
+
+		api.post('Album::addByTags', params, function (_data) {
+			const isNumber = (n) => (!isNaN(parseInt(n, 10)) && isFinite(n));
+			if (_data !== false && isNumber(_data)) {
+				albums.refresh();
+				lychee.goto(_data)
+			} else {
+				lychee.error(null, params, _data)
+			}
+
+		})
+
+	};
+
+	basicModal.show({
+		body: lychee.html`<p>${lychee.locale['TITLE_NEW_ALBUM']}
+							<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'>
+							<input class='text' name='tags' type='text' minlength='1' placeholder='Tags' value=''>
+						</p>`,
+		buttons: {
+			action: {
+				title: lychee.locale['CREATE_TAG_ALBUM'],
+				fn: action
+			},
+			cancel: {
+				title: lychee.locale['CANCEL'],
+				fn: basicModal.close
+			}
+		}
+	})
+}
+
+album.setShowTags = function (albumID) {
+
+	let oldShowTags = album.json.show_tags;
+
+	const action = function (data) {
+
+		let show_tags = data.show_tags;
+		basicModal.close();
+
+		if (visible.album()) {
+			album.json.show_tags = show_tags;
+			view.album.show_tags()
+		}
+		let params = {
+			albumID: albumID,
+			show_tags: show_tags
+		};
+
+
+		api.post('Album::setShowTags', params, function (_data) {
+
+			if (_data !== true) {
+				lychee.error(null, params, _data);
+			} else {
+				album.reload();
+			}
+
+		})
+	};
+
+	basicModal.show({
+		body: lychee.html`<p>${lychee.locale['ALBUM_NEW_SHOWTAGS']}
+							<input class='text' name='show_tags' type='text' minlength='1' placeholder='Tags' value='$${oldShowTags}'>
+						</p>`,
+		buttons: {
+			action: {
+				title: lychee.locale['ALBUM_SET_SHOWTAGS'],
+				fn: action
+			},
+			cancel: {
+				title: lychee.locale['CANCEL'],
+				fn: basicModal.close
+			}
+		}
+	})
+}
 
 album.setTitle = function (albumIDs) {
 

@@ -107,6 +107,7 @@ build.album = function (data, disabled = false) {
 					<a class='badge ${(data.unsorted === '1' ? 'badge--visible' : '')}'>${build.iconic('list')}</a>
 					<a class='badge ${(data.recent === '1' ? 'badge--visible badge--list' : '')}'>${build.iconic('clock')}</a>
 					<a class='badge ${(data.password === '1' ? 'badge--visible' : '')}'>${build.iconic('lock-locked')}</a>
+					<a class='badge ${(data.tag_album === '1' ? 'badge--tag' : '')}'>${build.iconic('tag')}</a>
 				</div>
 				`
 
