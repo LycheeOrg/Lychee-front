@@ -30,7 +30,7 @@
     "gulp-uglify": "^3.0.2",
     "jquery": "^3.4.0",
     "justified-layout": "^2.1.1",
-    "lazysizes": "^4.1.7",
+    "lazysizes": "^5.2.2",
     "leaflet": "^1.6.0",
     "leaflet-rotatedmarker": "^0.2.0",
     "leaflet-spin": "^1.1.0",
