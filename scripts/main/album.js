@@ -286,7 +286,7 @@ album.add = function (IDs = null, callback = null) {
 	};
 
 	basicModal.show({
-		body: lychee.html`<p>${lychee.locale['TITLE_NEW_ALBUM']} <input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'></p>`,
+		body: lychee.html`<p>${lychee.locale['TITLE_NEW_ALBUM']} <input class='text' name='title' type='text' maxlength='100' placeholder='Title' value='Untitled'></p>`,
 		buttons: {
 			action: {
 				title: lychee.locale['CREATE_ALBUM'],
@@ -328,7 +328,7 @@ album.addByTags = function () {
 
 	basicModal.show({
 		body: lychee.html`<p>${lychee.locale['TITLE_NEW_ALBUM']}
-							<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'>
+							<input class='text' name='title' type='text' maxlength='100' placeholder='Title' value='Untitled'>
 							<input class='text' name='tags' type='text' minlength='1' placeholder='Tags' value=''>
 						</p>`,
 		buttons: {
@@ -459,7 +459,7 @@ album.setTitle = function (albumIDs) {
 
 	};
 
-	let input = lychee.html`<input class='text' name='title' type='text' maxlength='50' placeholder='$${lychee.locale['ALBUM_TITLE']}' value='$${oldTitle}'>`;
+	let input = lychee.html`<input class='text' name='title' type='text' maxlength='100' placeholder='$${lychee.locale['ALBUM_TITLE']}' value='$${oldTitle}'>`;
 
 	if (albumIDs.length === 1) msg = lychee.html`<p>${lychee.locale['ALBUM_NEW_TITLE']} ${input}</p>`;
 	else msg = lychee.html`<p>${lychee.locale['ALBUMS_NEW_TITLE_1']} $${albumIDs.length} ${lychee.locale['ALBUMS_NEW_TITLE_2']} ${input}</p>`;
