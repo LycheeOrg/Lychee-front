@@ -475,7 +475,7 @@ photo.setTitle = function(photoIDs) {
 
 	};
 
-	let input = lychee.html`<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='$${ oldTitle }'>`;
+	let input = lychee.html`<input class='text' name='title' type='text' maxlength='100' placeholder='Title' value='$${ oldTitle }'>`;
 
 	if (photoIDs.length===1) msg = lychee.html`<p>${ lychee.locale['PHOTO_NEW_TITLE'] } ${ input }</p>`;
 	else                     msg = lychee.html`<p>${ lychee.locale['PHOTOS_NEW_TITLE_1'] } ${ photoIDs.length } ${ lychee.locale['PHOTOS_NEW_TITLE_2'] } ${ input }</p>`;
