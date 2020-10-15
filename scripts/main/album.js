@@ -618,6 +618,82 @@ album.setLicense = function (albumID) {
 
 };
 
+album.setSorting = function(albumID) {
+
+    const callback = function() {
+        $('select#sortingCol').val(album.json.sorting_col);
+        $('select#sortingOrder').val(album.json.sorting_order);
+        return false;
+    };
+
+    const action = function(data) {
+
+        let typePhotos = data.sortingCol;
+        let orderPhotos = data.sortingOrder;
+
+        basicModal.close();
+
+        let params = {
+            albumID,
+            typePhotos,
+            orderPhotos
+        };
+
+        api.post('Album::setSorting', params, function(_data) {
+
+            if (_data !== true) {
+                lychee.error(null, params, _data);
+            } else {
+                if (visible.album()) {
+                    album.reload()
+                }
+            }
+        })
+
+    };
+
+    let msg = lychee.html `
+	<div>
+		<p>` + lychee.locale['SORT_PHOTO_BY_1'] + `
+		<span class="select">
+			<select id="sortingCol" name="sortingCol">
+				<option value=''>-</option>
+				<option value='id'>` + lychee.locale['SORT_PHOTO_SELECT_1'] + `</option>
+				<option value='takestamp'>` + lychee.locale['SORT_PHOTO_SELECT_2'] + `</option>
+				<option value='title'>` + lychee.locale['SORT_PHOTO_SELECT_3'] + `</option>
+				<option value='description'>` + lychee.locale['SORT_PHOTO_SELECT_4'] + `</option>
+				<option value='public'>` + lychee.locale['SORT_PHOTO_SELECT_5'] + `</option>
+				<option value='star'>` + lychee.locale['SORT_PHOTO_SELECT_6'] + `</option>
+				<option value='type'>` + lychee.locale['SORT_PHOTO_SELECT_7'] + `</option>
+			</select>
+		</span>
+		` + lychee.locale['SORT_PHOTO_BY_2'] + `
+		<span class="select">
+			<select id="sortingOrder" name="sortingOrder">
+				<option value='ASC'>` + lychee.locale['SORT_ASCENDING'] + `</option>
+				<option value='DESC'>` + lychee.locale['SORT_DESCENDING'] + `</option>
+			</select>
+		</span>
+		` + lychee.locale['SORT_PHOTO_BY_3'] + `
+		</p>
+	</div>`;
+
+    basicModal.show({
+        body: msg,
+        callback: callback,
+        buttons: {
+            action: {
+                title: lychee.locale['ALBUM_SET_ORDER'],
+                fn: action
+            },
+            cancel: {
+                title: lychee.locale['CANCEL'],
+                fn: basicModal.close
+            }
+        }
+	})
+};
+
 album.setPublic = function (albumID, e) {
 
 	let password = '';

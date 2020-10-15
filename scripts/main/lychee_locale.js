@@ -28,6 +28,7 @@ lychee.locale = {
 		'SET_MAP_PROVIDER'		: 'Set OpenStreetMap tiles provider',
 		'SAVE_RISK'				: 'Save my modifications, I accept the Risk!',
 		'MORE'              	: 'More',
+		'DEFAULT'              	: 'Default',
 
 
 		'SMART_ALBUMS'			: 'Smart albums',
@@ -166,6 +167,8 @@ lychee.locale = {
 		'ALBUM_LICENSE_HELP'		: 'Need help choosing?',
 		'ALBUM_LICENSE_NONE'		: 'None',
 		'ALBUM_RESERVED'			: 'All Rights Reserved',
+		'ALBUM_SET_ORDER'			: 'Set Order',
+		'ALBUM_ORDERING'			: 'Order by',
 
 		'PHOTO_ABOUT'				: 'About',
 		'PHOTO_BASICS'				: 'Basics',
