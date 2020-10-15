@@ -83,12 +83,19 @@ sidebar.bind = function() {
 			else if (visible.album()) album.setLicense(album.getID())
 		})
 
-		sidebar
-			.dom('.attr_location')
-			.off(eventName)
-			.on(eventName, function() {
-				sidebar.triggerSearch($(this).text())
-			});
+	sidebar
+		.dom('#edit_sorting')
+		.off(eventName)
+		.on(eventName, function() {
+			album.setSorting(album.getID())
+		})
+
+	sidebar
+		.dom('.attr_location')
+		.off(eventName)
+		.on(eventName, function() {
+			sidebar.triggerSearch($(this).text())
+		});
 
 	return true
 
@@ -352,6 +359,7 @@ sidebar.createStructure.album = function(album) {
 	let share_button_visible = '';
 	let password     = '';
 	let license 	 = '';
+	let sorting 	 = '';
 
 	// Set value for public
 	switch (data.public) {
@@ -423,6 +431,13 @@ sidebar.createStructure.album = function(album) {
 							break;
 	}
 
+	if (data.sorting_col === '') {
+		sorting = lychee.locale['DEFAULT'];
+	} else {
+		sorting = data.sorting_col + ' ' + data.sorting_order;
+	}
+
+
 	structure.basics = {
 		title : lychee.locale['ALBUM_BASICS'],
 		type  : sidebar.types.DEFAULT,
@@ -463,6 +478,10 @@ sidebar.createStructure.album = function(album) {
 	if (videoCount > 0) {
 		structure.album.rows.push({ title: lychee.locale['ALBUM_VIDEOS'],
 									kind: 'videos', value: videoCount });
+	}
+
+	if (data.photos) {
+		structure.album.rows.push({ title: lychee.locale['ALBUM_ORDERING'], kind: 'sorting', value: sorting, editable: editable})
 	}
 
 	structure.share = {
