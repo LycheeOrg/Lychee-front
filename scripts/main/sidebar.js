@@ -359,6 +359,7 @@ sidebar.createStructure.album = function(album) {
 	let share_button_visible = '';
 	let password     = '';
 	let license 	 = '';
+	let sorting 	 = '';
 
 	// Set value for public
 	switch (data.public) {
