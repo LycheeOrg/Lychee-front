@@ -148,7 +148,7 @@ frame.resize = function() {
 frame.error = function(errorThrown, params = '', data = '') {
 
 	loadingBar.show('error', errorThrown);
-	
+
 	console.error({
 		description: errorThrown,
 		params: params,
