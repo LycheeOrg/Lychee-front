@@ -337,9 +337,12 @@ sidebar.createStructure.photo = function(data) {
 		structure.tags,
 		structure.exif,
 		structure.location,
-		structure.sharing,
 		structure.license
 	];
+
+	if (!lychee.publicMode) {
+		structure.push(structure.sharing);
+	}
 
 	return structure
 
@@ -510,14 +513,16 @@ sidebar.createStructure.album = function(album) {
 	};
 
 	// Construct all parts of the structure
-	structure = [
+	structure_ret = [
 		structure.basics,
 		structure.album,
-		structure.share,
 		structure.license
 	];
+	if (!lychee.publicMode) {
+		structure_ret.push(structure.share);
+	}
 
-	return structure
+	return structure_ret
 
 };
 
