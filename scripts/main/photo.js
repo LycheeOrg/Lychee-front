@@ -568,8 +568,6 @@ photo.setAlbum = function(photoIDs, albumID) {
 		} else {
 			lychee.goto(album.getID())
 		}
-	} else if (!visible.albums()) {
-		lychee.goto(album.getID())
 	}
 
 	let params = {
@@ -589,12 +587,6 @@ photo.setAlbum = function(photoIDs, albumID) {
 			// null), we need to reload.
 			if (visible.album()) {
 				album.reload();
-			}
-			else {
-				// We're most likely in photo view.  We still need to
-				// refresh the album but we don't want to reload it
-				// since that would switch the view being displayed.
-				album.refresh();
 			}
 		}
 
