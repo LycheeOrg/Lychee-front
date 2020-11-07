@@ -868,6 +868,7 @@ view.settings = {
 
 		multiselect.clearSelection();
 
+		view.photo.hide();
 		view.settings.title();
 		view.settings.content.init()
 
@@ -1439,6 +1440,7 @@ view.users = {
 
 		multiselect.clearSelection();
 
+		view.photo.hide();
 		view.users.title();
 		view.users.content.init()
 
@@ -1526,6 +1528,7 @@ view.sharing = {
 
 		multiselect.clearSelection();
 
+		view.photo.hide();
 		view.sharing.title();
 		view.sharing.content.init()
 
@@ -1649,6 +1652,7 @@ view.logs = {
 
 		multiselect.clearSelection();
 
+		view.photo.hide();
 		view.logs.title();
 		view.logs.content.init()
 
@@ -1691,6 +1695,7 @@ view.diagnostics = {
 
 		multiselect.clearSelection();
 
+		view.photo.hide();
 		view.diagnostics.title('Diagnostics');
 		view.diagnostics.content.init()
 
@@ -1822,6 +1827,7 @@ view.update = {
 
 		multiselect.clearSelection();
 
+		view.photo.hide();
 		view.update.title();
 		view.update.content.init()
 
