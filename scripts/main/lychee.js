@@ -387,8 +387,6 @@ lychee.logout = function() {
 
 lychee.goto = function(url = '', autoplay = true) {
 
-    if (url === false) url = '';
-
     url = '#' + url;
 
     history.pushState(null, null, url);
