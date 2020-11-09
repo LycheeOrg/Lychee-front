@@ -216,6 +216,9 @@ albums.getByID = function (albumID) {
 	if (json === undefined && albums.json.shared_albums !== null)
 		$.each(albums.json.shared_albums, func);
 
+	if (json === undefined && albums.json.smartalbums !== null)
+		$.each(albums.json.smartalbums, func);
+
 	return json;
 
 };
@@ -248,6 +251,18 @@ albums.deleteByID = function (albumID) {
 
 			if (parseInt(albums.json.shared_albums[i].id) === parseInt(albumID)) {
 				albums.json.shared_albums.splice(i, 1);
+				deleted = true;
+				return false // stop the loop
+			}
+		});
+	}
+
+	if (deleted === false) {
+		if (!albums.json.smartalbums) return undefined;
+		$.each(albums.json.smartalbums, function (i) {
+
+			if (parseInt(albums.json.smartalbums[i].id) === parseInt(albumID)) {
+				albums.json.smartalbums.splice(i, 1);
 				deleted = true;
 				return false // stop the loop
 			}
