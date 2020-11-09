@@ -100,6 +100,7 @@ albums.parse = function (album) {
 
 };
 
+// TODO: REFACTOR THIS
 albums._createSmartAlbums = function (data) {
 
 	if (data.unsorted) {
@@ -262,7 +263,7 @@ albums.deleteByID = function (albumID) {
 		$.each(albums.json.smartalbums, function (i) {
 
 			if (parseInt(albums.json.smartalbums[i].id) === parseInt(albumID)) {
-				albums.json.smartalbums.splice(i, 1);
+				delete albums.json.smartalbums[i];
 				deleted = true;
 				return false // stop the loop
 			}
