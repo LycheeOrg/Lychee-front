@@ -450,7 +450,7 @@ contextMenu.shareAlbum = function(albumID, e) {
 		{ title: build.iconic('envelope-closed') + 'Mail', fn: () => album.share('mail') },
 		{ title: build.iconic('link-intact') + lychee.locale['DIRECT_LINK'], fn: () => {
 			var url = window.location.origin + "/r/" + albumID;
-			if (album.json.password === '1') { // Re-Copy the url with prefilled password param
+			if (album.json.password === '1') { // Copy the url with prefilled password param
 				url += "?password=";
 			}
 			if (lychee.clipboardCopy(url)) {
