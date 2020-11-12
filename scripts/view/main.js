@@ -208,7 +208,7 @@ $(document).ready(function () {
 
 	// Load photo
 	loadPhotoInfo(photoID)
-	
+
 });
 
 const loadPhotoInfo = function (photoID) {
@@ -274,7 +274,7 @@ const rememberScrollPage = function(scrollPos) {
     let urlScroll = scrollPos;
 
     urls[urlWindow] = urlScroll;
-	
+
 	if (urlScroll < 1) {
         delete urls[urlWindow];
     }
