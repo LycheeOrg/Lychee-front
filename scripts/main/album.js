@@ -220,20 +220,19 @@ album.load = function (albumID, refresh = false) {
 		} else {
 			processData(data);
 
-			// scroll to the last saved position for this URL
-		    setTimeout(function () {
-				let UrlsObj = localStorage.getItem('scroll');
-				let urlsArr = JSON.parse(UrlsObj);
+			// save scroll position for this URL
+			setTimeout(function () {
+				let urls = JSON.parse(localStorage.getItem('scroll'));
 				let urlWindow = window.location.href;
 
-				if (urlsArr.length != 0) {
-					urlsArr.forEach(function (el, index) {
-							if (el.url === urlWindow) {
-									$(window).scrollTop(el.scroll);
-									return;
-							}
-					});
+				if (urls != null && urls[urlWindow]) {
+					$(window).scrollTop(urls[urlWindow]);
 				}
+
+				$(window).scroll(function (event) {
+					let topScroll = $(window).scrollTop();
+					rememberScrollPage(topScroll);
+				});
 			}
 			,500);
 
