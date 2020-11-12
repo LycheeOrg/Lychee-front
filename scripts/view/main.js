@@ -274,6 +274,10 @@ const rememberScrollPage = function(scrollPos) {
     let urlScroll = scrollPos;
 
     urls[urlWindow] = urlScroll;
+	
+	if (urlScroll < 1) {
+        delete urls[urlWindow];
+    }
 
     localStorage.setItem('scroll', JSON.stringify(urls));
 
