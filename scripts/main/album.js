@@ -220,6 +220,23 @@ album.load = function (albumID, refresh = false) {
 		} else {
 			processData(data);
 
+			// scroll to the last saved position for this URL
+		    setTimeout(function () {
+				let UrlsObj = localStorage.getItem('scroll');
+				let urlsArr = JSON.parse(UrlsObj);
+				let urlWindow = window.location.href;
+
+				if (urlsArr.length != 0) {
+					urlsArr.forEach(function (el, index) {
+							if (el.url === urlWindow) {
+									$(window).scrollTop(el.scroll);
+									return;
+							}
+					});
+				}
+			}
+			,500);
+
 			tabindex.makeFocusable(lychee.content);
 
 			if(lychee.active_focus_on_page_load) {

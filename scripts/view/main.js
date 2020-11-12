@@ -208,6 +208,12 @@ $(document).ready(function () {
 
 	// Load photo
 	loadPhotoInfo(photoID)
+	
+	// save scroll position for this URL
+	$(window).scroll(function (event) {
+        let topScroll = $(window).scrollTop();
+        rememberScrollPage(topScroll);
+    });
 
 });
 
@@ -262,6 +268,50 @@ const loadPhotoInfo = function (photoID) {
 	})
 
 };
+
+const rememberScrollPage = function(scrollPos) {
+
+        let UrlsObj = localStorage.getItem('scroll');
+        let urlsArr = JSON.parse(UrlsObj);
+
+        if (urlsArr == null) {
+            urlsArr = [];
+        }
+
+        if (urlsArr.length == 0) {
+            urlsArr = [];
+        }
+
+        let urlWindow = window.location.href;
+        let urlScroll = scrollPos;
+        let urlObj = {url: urlWindow, scroll: scrollPos};
+        let matchedUrl = false;
+        let matchedIndex = 0;
+
+        if (urlsArr.length != 0) {
+            urlsArr.forEach(function (el, index) {
+
+                if (el.url === urlWindow) {
+                    matchedUrl = true;
+                    matchedIndex = index;
+                }
+
+            });
+
+            if (matchedUrl === true) {
+                urlsArr[matchedIndex].scroll = urlScroll;
+            } else {
+                urlsArr.push(urlObj);
+            }
+
+
+        } else {
+            urlsArr.push(urlObj);
+        }
+
+        localStorage.setItem('scroll', JSON.stringify(urlsArr));
+
+    }
 
 const error = function (errorThrown, params, data) {
 
