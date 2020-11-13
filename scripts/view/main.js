@@ -208,6 +208,12 @@ $(document).ready(function () {
 
 	// Load photo
 	loadPhotoInfo(photoID)
+	
+	// remember scroll positions
+	$(window).scroll(function (event) {
+		let topScroll = $(window).scrollTop();
+		rememberScrollPage(topScroll);
+	});
 
 });
 
