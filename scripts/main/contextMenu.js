@@ -449,7 +449,7 @@ contextMenu.shareAlbum = function(albumID, e) {
 		{ title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => album.share('facebook') },
 		{ title: build.iconic('envelope-closed') + 'Mail', fn: () => album.share('mail') },
 		{ title: build.iconic('link-intact') + lychee.locale['DIRECT_LINK'], fn: () => {
-			var url = window.location.origin + "/r/" + albumID;
+			let url = window.location.origin + "/r/" + albumID;
 			if (album.json.password === '1') { // Copy the url with prefilled password param
 				url += "?password=";
 			}
