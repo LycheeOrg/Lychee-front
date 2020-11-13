@@ -208,13 +208,6 @@ $(document).ready(function () {
 
 	// Load photo
 	loadPhotoInfo(photoID)
-	
-	// remember scroll positions
-	$(window).scroll(function (event) {
-		let topScroll = $(window).scrollTop();
-		rememberScrollPage(topScroll);
-	});
-
 });
 
 const loadPhotoInfo = function (photoID) {
@@ -268,29 +261,6 @@ const loadPhotoInfo = function (photoID) {
 	})
 
 };
-
-const rememberScrollPage = function(scrollPos) {
-
-    // only for albums with subalbums
-	if (album && album.json && album.json.albums && album.json.albums.length > 0) {
-		let urls = JSON.parse(localStorage.getItem('scroll'));
-		if (urls == null || urls.length < 1) {
-			urls = {};
-		}
-
-		let urlWindow = window.location.href;
-		let urlScroll = scrollPos;
-
-		urls[urlWindow] = urlScroll;
-
-		if (urlScroll < 1) {
-			delete urls[urlWindow];
-		}
-
-		localStorage.setItem('scroll', JSON.stringify(urls));
-	}
-
-}
 
 const error = function (errorThrown, params, data) {
 
