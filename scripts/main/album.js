@@ -220,21 +220,18 @@ album.load = function (albumID, refresh = false) {
 		} else {
 			processData(data);
 
-			// save scroll position for this URL
-			setTimeout(function () {
-				let urls = JSON.parse(localStorage.getItem('scroll'));
-				let urlWindow = window.location.href;
+				// save scroll position for this URL
+				if (data !== null && data.albums !== null && data.albums.length > 0) {
+				setTimeout(function () {
+					let urls = JSON.parse(localStorage.getItem('scroll'));
+					let urlWindow = window.location.href;
 
-				if (urls != null && urls[urlWindow]) {
-					$(window).scrollTop(urls[urlWindow]);
+					if (urls != null && urls[urlWindow]) {
+						$(window).scrollTop(urls[urlWindow]);
+					}
 				}
-
-				$(window).scroll(function (event) {
-					let topScroll = $(window).scrollTop();
-					rememberScrollPage(topScroll);
-				});
+				,500);
 			}
-			,500);
 
 			tabindex.makeFocusable(lychee.content);
 
