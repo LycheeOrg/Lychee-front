@@ -260,11 +260,38 @@ $(document).ready(function() {
 	// Fullscreen
 	.on('fullscreenchange mozfullscreenchange webkitfullscreenchange msfullscreenchange', lychee.fullscreenUpdate);
 
+	const rememberScrollPage = function(scrollPos) {
+
+		// only for albums with subalbums
+		if (album && album.json && album.json.albums && album.json.albums.length > 0) {
+			let urls = JSON.parse(localStorage.getItem('scroll'));
+			if (urls == null || urls.length < 1) {
+				urls = {};
+			}
+
+			let urlWindow = window.location.href;
+			let urlScroll = scrollPos;
+
+			urls[urlWindow] = urlScroll;
+
+			if (urlScroll < 1) {
+				delete urls[urlWindow];
+			}
+
+			localStorage.setItem('scroll', JSON.stringify(urls));
+		}
+	}
+
 	$(window)
 	// resize
 	.on('resize', function () {
 		if(visible.album() || visible.search()) view.album.content.justify();
 		if(visible.photo()) view.photo.onresize();
+	})
+	// remember scroll positions
+	.on('scroll',function () {
+		let topScroll = $(window).scrollTop();
+		rememberScrollPage(topScroll);
 	});
 
 	// Init
