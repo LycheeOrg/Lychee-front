@@ -271,21 +271,24 @@ const loadPhotoInfo = function (photoID) {
 
 const rememberScrollPage = function(scrollPos) {
 
-    let urls = JSON.parse(localStorage.getItem('scroll'));
-    if (urls == null || urls.length < 1) {
-        urls = {};
-    }
+    // only for albums with subalbums
+	if (album && album.json && album.json.albums && album.json.albums.length > 0) {
+		let urls = JSON.parse(localStorage.getItem('scroll'));
+		if (urls == null || urls.length < 1) {
+			urls = {};
+		}
 
-    let urlWindow = window.location.href;
-    let urlScroll = scrollPos;
+		let urlWindow = window.location.href;
+		let urlScroll = scrollPos;
 
-    urls[urlWindow] = urlScroll;
+		urls[urlWindow] = urlScroll;
 
-	if (urlScroll < 1) {
-        delete urls[urlWindow];
-    }
+		if (urlScroll < 1) {
+			delete urls[urlWindow];
+		}
 
-    localStorage.setItem('scroll', JSON.stringify(urls));
+		localStorage.setItem('scroll', JSON.stringify(urls));
+	}
 
 }
 
