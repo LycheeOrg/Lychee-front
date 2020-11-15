@@ -208,7 +208,6 @@ $(document).ready(function () {
 
 	// Load photo
 	loadPhotoInfo(photoID)
-
 });
 
 const loadPhotoInfo = function (photoID) {
