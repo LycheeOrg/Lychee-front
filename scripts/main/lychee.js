@@ -309,11 +309,11 @@ lychee.init = function() {
 
 lychee.login = function(data) {
 
-    let user = data.username;
+    let username = data.username;
     let password = data.password;
 
     let params = {
-        user,
+        username,
         password
     };
 
