@@ -4,90 +4,90 @@
 
 let build = {};
 
-build.iconic = function (icon, classes = '') {
+build.iconic = function(icon, classes = '') {
 
-	let html = '';
+    let html = '';
 
-	html += lychee.html`<svg class='iconic ${classes}'><use xlink:href='#${icon}' /></svg>`;
+    html += lychee.html `<svg class='iconic ${classes}'><use xlink:href='#${icon}' /></svg>`;
 
-	return html
-
-};
-
-build.divider = function (title) {
-
-	let html = '';
-
-	html += lychee.html`<div class='divider'><h1>${title}</h1></div>`;
-
-	return html
+    return html
 
 };
 
-build.editIcon = function (id) {
+build.divider = function(title) {
 
-	let html = '';
+    let html = '';
 
-	html += lychee.html`<div id='${id}' class='edit'>${build.iconic('pencil')}</div>`;
+    html += lychee.html `<div class='divider'><h1>${title}</h1></div>`;
 
-	return html
-
-};
-
-build.multiselect = function (top, left) {
-
-	return lychee.html`<div id='multiselect' style='top: ${top}px; left: ${left}px;'></div>`
+    return html
 
 };
 
-build.getAlbumThumb = function (data, i) {
-	let isVideo = data.types[i] && data.types[i].indexOf('video') > -1;
-	let isRaw = data.types[i] && data.types[i].indexOf('raw') > -1;
-	let thumb = data.thumbs[i];
+build.editIcon = function(id) {
 
-	if (thumb === 'uploads/thumb/' && isVideo) {
-		return `<span class="thumbimg"><img src='img/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
-	}
-	if (thumb === 'uploads/thumb/' && isRaw) {
-		return `<span class="thumbimg"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
-	}
+    let html = '';
 
-	thumb2x = '';
-	if (data.thumbs2x) {
-		if (data.thumbs2x[i]) {
-			thumb2x = data.thumbs2x[i]
-		}
-	} else { // Fallback code for Lychee v3
-		var {path: thumb2x, isPhoto: isPhoto} = lychee.retinize(data.thumbs[i])
-		if (!isPhoto) {
-			thumb2x = ''
-		}
-	}
+    html += lychee.html `<div id='${id}' class='edit'>${build.iconic('pencil')}</div>`;
 
-	return `<span class="thumbimg${isVideo ? ' video' : ''}"><img class='lazyload' src='img/placeholder.png' data-src='${thumb}' ${(thumb2x !== '') ? 'data-srcset=\'' + thumb2x + ' 2x\'' : ''} alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+    return html
+
 };
 
-build.album = function (data, disabled = false) {
-	let html = '';
-	let date_stamp = data.sysdate;
-	let sortingAlbums = [];
+build.multiselect = function(top, left) {
 
-	// In the special case of take date sorting use the take stamps as title
-	if (lychee.sortingAlbums !== '' && data.min_takestamp && data.max_takestamp) {
+    return lychee.html `<div id='multiselect' style='top: ${top}px; left: ${left}px;'></div>`
 
-		sortingAlbums = lychee.sortingAlbums.replace('ORDER BY ', '').split(' ');
-		if (sortingAlbums[0] === 'max_takestamp' || sortingAlbums[0] === 'min_takestamp') {
-			if (data.min_takestamp !== '' && data.max_takestamp !== '') {
-				date_stamp = (data.min_takestamp === data.max_takestamp ? data.max_takestamp : data.min_takestamp + ' - ' + data.max_takestamp)
-			} else if (data.min_takestamp !== '' && sortingAlbums[0] === 'min_takestamp') {
-				date_stamp = data.min_takestamp
-			} else if (data.max_takestamp !== '' && sortingAlbums[0] === 'max_takestamp') {
-				date_stamp = data.max_takestamp
-			}
-		}
-	}
+};
 
-	html += lychee.html`
+build.getAlbumThumb = function(data, i) {
+    let isVideo = data.types[i] && data.types[i].indexOf('video') > -1;
+    let isRaw = data.types[i] && data.types[i].indexOf('raw') > -1;
+    let thumb = data.thumbs[i];
+
+    if (thumb === 'uploads/thumb/' && isVideo) {
+        return `<span class="thumbimg"><img src='img/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+    }
+    if (thumb === 'uploads/thumb/' && isRaw) {
+        return `<span class="thumbimg"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+    }
+
+    thumb2x = '';
+    if (data.thumbs2x) {
+        if (data.thumbs2x[i]) {
+            thumb2x = data.thumbs2x[i]
+        }
+    } else { // Fallback code for Lychee v3
+        var { path: thumb2x, isPhoto: isPhoto } = lychee.retinize(data.thumbs[i])
+        if (!isPhoto) {
+            thumb2x = ''
+        }
+    }
+
+    return `<span class="thumbimg${isVideo ? ' video' : ''}"><img class='lazyload' src='img/placeholder.png' data-src='${thumb}' ${(thumb2x !== '') ? 'data-srcset=\'' + thumb2x + ' 2x\'' : ''} alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`
+};
+
+build.album = function(data, disabled = false) {
+        let html = '';
+        let date_stamp = data.sysdate;
+        let sortingAlbums = [];
+
+        // In the special case of take date sorting use the take stamps as title
+        if (lychee.sortingAlbums !== '' && data.min_takestamp && data.max_takestamp) {
+
+            sortingAlbums = lychee.sortingAlbums.replace('ORDER BY ', '').split(' ');
+            if (sortingAlbums[0] === 'max_takestamp' || sortingAlbums[0] === 'min_takestamp') {
+                if (data.min_takestamp !== '' && data.max_takestamp !== '') {
+                    date_stamp = (data.min_takestamp === data.max_takestamp ? data.max_takestamp : data.min_takestamp + ' - ' + data.max_takestamp)
+                } else if (data.min_takestamp !== '' && sortingAlbums[0] === 'min_takestamp') {
+                    date_stamp = data.min_takestamp
+                } else if (data.max_takestamp !== '' && sortingAlbums[0] === 'max_takestamp') {
+                    date_stamp = data.max_takestamp
+                }
+            }
+        }
+
+        html += lychee.html `
 			<div class='album ${(disabled ? `disabled` : ``)}' data-id='${data.id}' data-tabindex='${tabindex.get_next_tab_index()}'>
 				  ${build.getAlbumThumb(data, 2)}
 				  ${build.getAlbumThumb(data, 1)}
@@ -470,6 +470,31 @@ build.user = function (user) {
 			</p>
 			<a id="UserUpdate${user.id}"  class="basicModal__button basicModal__button_OK">Save</a>
 			<a id="UserDelete${user.id}"  class="basicModal__button basicModal__button_DEL">Delete</a>
+		</div>
+		`;
+
+	return html;
+};
+
+build.u2f = function (credential) {
+	let html = lychee.html`<div class="u2f_view_line">
+			<p id="CredentialData${credential.id}">
+			<input name="id" type="hidden" value="${credential.id}" />
+			<span class="text">${credential.id}</span>
+			<!--- <span class="choice" title="Allow uploads">
+			<label>
+			<input type="checkbox" name="upload" />
+			<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
+			</label>
+			</span>
+			<span class="choice" title="Restricted account">
+			<label>
+			<input type="checkbox" name="lock" />
+			<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
+			</label>
+			</span>--->
+			</p>
+			<a id="CredentialDelete${credential.id}"  class="basicModal__button basicModal__button_DEL">Delete</a>
 		</div>
 		`;
 

@@ -185,6 +185,10 @@ settings.createLogin = function () {
 				})
 
 			}
+			// else
+			// {
+			// 	window.location.reload()
+			// }
 
 		})
 

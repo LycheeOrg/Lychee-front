@@ -131,7 +131,7 @@ leftMenu.Users = function () {
 };
 
 leftMenu.u2f = function () {
-	view.u2f.init();
+	u2f.list();
 };
 
 leftMenu.Sharing = function () {

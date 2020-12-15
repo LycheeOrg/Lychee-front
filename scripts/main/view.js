@@ -1485,7 +1485,6 @@ view.users = {
 
             $.each(users.json, function() {
                 $(".users_view").append(build.user(this));
-                // photosData += build.photo(this)
                 settings.bind('#UserUpdate' + this.id, '#UserData' + this.id, users.update);
                 settings.bind('#UserDelete' + this.id, '#UserData' + this.id, users.delete);
                 if (this.upload === 1) {
@@ -1901,30 +1900,46 @@ view.u2f = {
 
             view.u2f.clearContent();
 
-            const register = (event) => {
-                event.preventDefault()
-                larapass = new Larapass({
-                    register: 'webauthn/register',
-                    registerOptions: 'webauthn/register/gen'
-                })
-                if (Larapass.supportsWebAuthn()) {
-                    larapass.register()
-                        .then(response => alert('Registration successful!'))
-                        .catch(response => alert('Something went wrong, try again!'))
-                } else {
-                    alert('U2F not supported. Sorry.')
-                }
+            let html = '';
+
+            if (u2f.json.length === 0) {
+                $(".u2f_view").append('<div class="u2f_view_line" style="margin-bottom: 50px;"><p style="text-align: center">Credentials list is empty!</p></div>');
+            } else {
+
+                html += '<div class="u2f_view_line">' +
+                    '<p>' +
+                    '<span class="text">Credential</span>' +
+                    // '<span class="text_icon" title="Allow uploads">' + build.iconic('data-transfer-upload') + '</span>' +
+                    // '<span class="text_icon" title="Restricted account">' + build.iconic('lock-locked') + '</span>' +
+                    '</p>' +
+                    '</div>';
+
+                $(".u2f_view").append(html);
+
+                $.each(u2f.json, function() {
+                    $(".u2f_view").append(build.u2f(this));
+                    settings.bind('#CredentialDelete' + this.id, '#CredentialData' + this.id, u2f.delete);
+                    // if (this.upload === 1) {
+                    //     $('#UserData' + this.id + ' .choice input[name="upload"]').click();
+                    // }
+                    // if (this.lock === 1) {
+                    //     $('#UserData' + this.id + ' .choice input[name="lock"]').click();
+                    // }
+
+                });
             }
 
-            html = '<div id="RegisterU2F">' +
+
+            html = '<div class="u2f_view_line"';
+
+            if (u2f.json.length === 0) {
+                html += ' style="padding-top: 0px;"';
+            }
+            html += '>' +
                 '<a id="RegisterU2FButton"  class="basicModal__button basicModal__button_CREATE">Register new device.</a>' +
                 '</div>';
             $(".u2f_view").append(html);
-            // settings.bind('#UserCreate_button', '#UserCreate', users.create);
-            $("#RegisterU2FButton").on('click', register);
-
-
-            // document.getElementById('register-form').addEventListener('submit', register)
+            $("#RegisterU2FButton").on('click', u2f.register);
         }
-    },
-}
+    }
+};
