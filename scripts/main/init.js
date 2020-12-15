@@ -40,6 +40,9 @@ $(document).ready(function() {
 		.bind([ 'l' ], function() {
 			lychee.loginDialog(); return false
 		})
+		.bind(['k'], function() {
+			lychee.login_passwordless(); return false
+		})
 		.bind([ 'left' ], function() {
 			if (visible.photo() && (!visible.header() || $('img#image').is(':focus') || $('img#livephoto').is(':focus') || ($(':focus').length === 0 ))) {
 				$('#imageview a#previous').click();

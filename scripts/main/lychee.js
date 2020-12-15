@@ -334,6 +334,23 @@ lychee.login = function(data) {
 
 };
 
+lychee.login_passwordless = function() {
+
+    if (!window.isSecureContext && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        alert('not_secured');
+        return;
+    }
+
+    new Larapass({
+            login: 'webauthn/login',
+            loginOptions: 'webauthn/login/gen'
+        }).login({}).then(function(data) {
+            alert('Authentication successful!');
+            // window.location.reload()
+        })
+        .catch(error => alert('Something went wrong, try again!'))
+}
+
 lychee.loginDialog = function() {
 
     // Make background make unfocusable

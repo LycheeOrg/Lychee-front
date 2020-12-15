@@ -1,15 +1,15 @@
 let gulp = require('gulp'),
-    plugins = require('gulp-load-plugins')(),
-    cleanCSS = require('gulp-clean-css'),
-    del = require('del'),
-    paths = {};
+	plugins = require('gulp-load-plugins')(),
+	cleanCSS = require('gulp-clean-css'),
+	del = require('del'),
+	paths = {};
 
 /* Error Handler -------------------------------- */
 
 const catchError = function (err) {
 
-    console.log(err.toString());
-    this.emit('end')
+	console.log(err.toString());
+	this.emit('end')
 
 };
 
@@ -46,36 +46,36 @@ paths.view = {
 
 gulp.task('view--js', function() {
 
-    const babel = plugins.babel({
-        presets: ['env']
-    });
+	const babel = plugins.babel({
+		presets: ['env']
+	});
 
-    return gulp.src(paths.view.js)
-	           .pipe(plugins.concat('_view--javascript.js', {newLine: "\n"}))
-	           .pipe(babel)
-	           .on('error', catchError)
-	           .pipe(gulp.dest('../dist/'))
+	return gulp.src(paths.view.js)
+			   .pipe(plugins.concat('_view--javascript.js', {newLine: "\n"}))
+			   .pipe(babel)
+			   .on('error', catchError)
+			   .pipe(gulp.dest('../dist/'))
 
 });
 
 gulp.task('view--scripts', gulp.series('view--js', function() {
 
 	return gulp.src(paths.view.scripts)
-	           .pipe(plugins.concat('view.js', {newLine: "\n"}))
-	           // .pipe(plugins.uglify())
-	           .on('error', catchError)
-	           .pipe(gulp.dest('../dist/'))
+			   .pipe(plugins.concat('view.js', {newLine: "\n"}))
+			   // .pipe(plugins.uglify())
+			   .on('error', catchError)
+			   .pipe(gulp.dest('../dist/'))
 
 }));
 
 gulp.task('view--svg', function() {
 
 	return gulp.src(paths.view.php, {allowEmpty: true})
-	           .pipe(plugins.inject(gulp.src(paths.view.svg), {
-	           	starttag: '<!-- inject:svg -->',
-	           	transform: function(filePath, _file) { return _file.contents.toString('utf8') }
-	           }))
-	           .pipe(gulp.dest('../'))
+			   .pipe(plugins.inject(gulp.src(paths.view.svg), {
+			   	starttag: '<!-- inject:svg -->',
+			   	transform: function(filePath, _file) { return _file.contents.toString('utf8') }
+			   }))
+			   .pipe(gulp.dest('../'))
 
  });
 
@@ -90,6 +90,7 @@ paths.main = {
 		'./scripts/*.js',
 		'./scripts/main/*.js',
 		'./deps/basiccontext/scripts/basicContext.js',
+		// './deps/Larapass/scripts/Larapass.js',
 	],
 	scripts: [
 		'node_modules/jquery/dist/jquery.min.js',
@@ -119,7 +120,7 @@ paths.main = {
 		'./styles/main/main.scss',
 		'node_modules/leaflet/dist/leaflet.css',
 		'node_modules/leaflet.markercluster/dist/MarkerCluster.css',
-    'modules/Leaflet.Photo-gh-pages/Leaflet.Photo.css'
+		'modules/Leaflet.Photo-gh-pages/Leaflet.Photo.css'
 	],
 	svg: [
 		'./images/iconic.svg',
@@ -129,48 +130,48 @@ paths.main = {
 
 gulp.task('main--js', function() {
 
-    const babel = plugins.babel({
-        presets: ['env']
-    });
+	const babel = plugins.babel({
+		presets: ['env']
+	});
 
-    return gulp.src(paths.main.js)
-	           .pipe(plugins.concat('_main--javascript.js', {newLine: "\n"}))
-	           .pipe(babel)
-	           .on('error', catchError)
-	           .pipe(gulp.dest('../dist/'))
+	return gulp.src(paths.main.js)
+			   .pipe(plugins.concat('_main--javascript.js', {newLine: "\n"}))
+			   .pipe(babel)
+			   .on('error', catchError)
+			   .pipe(gulp.dest('../dist/'))
 
 });
 
 gulp.task('main--scripts', gulp.series('main--js', function() {
 
 	return gulp.src(paths.main.scripts)
-	           .pipe(plugins.concat('main.js', {newLine: "\n"}))
-	           // .pipe(plugins.uglify())
-	           .on('error', catchError)
-	           .pipe(gulp.dest('../dist/'))
+			   .pipe(plugins.concat('main.js', {newLine: "\n"}))
+			   // .pipe(plugins.uglify())
+			   .on('error', catchError)
+			   .pipe(gulp.dest('../dist/'))
 
 }));
 
 gulp.task('main--styles', function() {
 
 	return gulp.src(paths.main.styles)
-	           .pipe(plugins.sass())
-	           .on('error', catchError)
-	           .pipe(plugins.concat('main.css', {newLine: "\n"}))
-	           .pipe(plugins.autoprefixer('last 4 versions', '> 5%'))
-	           .pipe(cleanCSS({level: 2}))
-	           .pipe(gulp.dest('../dist/'))
+			   .pipe(plugins.sass())
+			   .on('error', catchError)
+			   .pipe(plugins.concat('main.css', {newLine: "\n"}))
+			   .pipe(plugins.autoprefixer('last 4 versions', '> 5%'))
+			   .pipe(cleanCSS({level: 2}))
+			   .pipe(gulp.dest('../dist/'))
 
 });
 
 gulp.task('main--svg', function() {
 
 	return gulp.src(paths.main.html, {allowEmpty: true})
-	           .pipe(plugins.inject(gulp.src(paths.main.svg), {
-	           	starttag: '<!-- inject:svg -->',
-	           	transform: function(filePath, _file) { return _file.contents.toString('utf8') }
-	           }))
-	           .pipe(gulp.dest('../'))
+			   .pipe(plugins.inject(gulp.src(paths.main.svg), {
+			   	starttag: '<!-- inject:svg -->',
+			   	transform: function(filePath, _file) { return _file.contents.toString('utf8') }
+			   }))
+			   .pipe(gulp.dest('../'))
 
  });
 
@@ -331,7 +332,7 @@ paths.TVCSS = {
 gulp.task('TVCSS--styles', function () {
 	return gulp.src(paths.TVCSS.src)
 		.on('error', catchError)
-    .pipe(plugins.concat('TV.css', {newLine: "\n"}))
+	.pipe(plugins.concat('TV.css', {newLine: "\n"}))
 		.pipe(plugins.autoprefixer('last 4 versions', '> 5%'))
 		.pipe(gulp.dest('../dist/'))
 });
@@ -388,7 +389,7 @@ gulp.task('leafletMarkerclusterSourceFiles--copy', function () {
 
 gulp.task('clean', function() {
 
-    return del(['../dist/_*.*'], {force: true}).catch((error) => console.log(error))
+	return del(['../dist/_*.*'], {force: true}).catch((error) => console.log(error))
 
 });
 
@@ -399,7 +400,7 @@ gulp.task('default', gulp.series(gulp.parallel('view--svg', 'view--scripts',
 												'frame--scripts', 'frame--styles',
 												'landing--scripts', 'landing--styles', 'page--styles', 'TVCSS--styles',
 												'images--copy', 'leafletMarkerclusterMapFile--copy',
-                        'leafletMarkerclusterSourceFiles--copy'
+												'leafletMarkerclusterSourceFiles--copy'
 	), 'clean'));
 
 gulp.task('watch', gulp.series('default', function() {
