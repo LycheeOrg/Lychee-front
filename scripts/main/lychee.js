@@ -342,6 +342,7 @@ lychee.loginDialog = function() {
     tabindex.makeUnfocusable(lychee.imageview);
 
     let msg = lychee.html `
+			<a class='signInKeyLess' id='signInKeyLess'>${build.iconic('key')}</a>
 			<form>
 				<p class='signIn'>
 					<input class='text' name='username' autocomplete='on' type='text' placeholder='$${ lychee.locale['USERNAME'] }' autocapitalize='off' data-tabindex='${tabindex.get_next_tab_index()}'>
@@ -370,6 +371,7 @@ lychee.loginDialog = function() {
             }
         }
     });
+    $("#signInKeyLess").on('click', u2f.login);
 
     if (lychee.checkForUpdates === '1') lychee.getUpdate();
 

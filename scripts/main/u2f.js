@@ -26,8 +26,6 @@ u2f.is_available = function() {
 u2f.login = function() {
     if (!u2f.is_available()) return;
 
-
-
     new Larapass({
             login: '/api/webauthn::login',
             loginOptions: '/api/webauthn::login/gen'

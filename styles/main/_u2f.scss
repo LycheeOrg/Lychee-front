@@ -190,3 +190,28 @@
         }
     }
 }
+
+
+/* When you mouse over the navigation links, change their color */
+
+.signInKeyLess {
+    display: block;
+    padding: 10px 10px;
+    position: absolute;
+    cursor: pointer;
+    .iconic {
+        display: inline-block;
+        margin: 0 0px 0 0px;
+        width: 20px;
+        height: 20px;
+        fill: #818181;
+    }
+    .iconic.ionicons {
+        margin: 0 8px -2px 0;
+        width: 18px;
+        height: 18px;
+    }
+    &:hover .iconic {
+        fill: #ffffff;
+    }
+}
