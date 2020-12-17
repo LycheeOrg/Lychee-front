@@ -24,7 +24,7 @@ u2f.is_available = function() {
 
 
 u2f.login = function() {
-    if (!u2f.is_available()) return;
+    if (!u2f.is_available()) { return; }
 
     new Larapass({
             login: '/api/webauthn::login',
@@ -41,9 +41,9 @@ u2f.login = function() {
 
 
 u2f.register = function() {
-    if (!u2f.is_available()) return;
+    if (!u2f.is_available()) { return; }
 
-    larapass = new Larapass({
+    let larapass = new Larapass({
         register: '/api/webauthn::register',
         registerOptions: '/api/webauthn::register/gen'
     })

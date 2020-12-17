@@ -477,7 +477,7 @@ build.user = function (user) {
 };
 
 build.u2f = function (credential) {
-	let html = lychee.html`<div class="u2f_view_line">
+	return lychee.html`<div class="u2f_view_line">
 			<p id="CredentialData${credential.id}">
 			<input name="id" type="hidden" value="${credential.id}" />
 			<span class="text">${credential.id}</span>
@@ -497,6 +497,4 @@ build.u2f = function (credential) {
 			<a id="CredentialDelete${credential.id}"  class="basicModal__button basicModal__button_DEL">Delete</a>
 		</div>
 		`;
-
-	return html;
 };
