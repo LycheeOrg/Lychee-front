@@ -88,7 +88,11 @@ build.album = function(data, disabled = false) {
         }
 
         html += lychee.html `
+<<<<<<< HEAD
 			<div class='album ${(disabled ? `disabled` : ``)}' data-id='${data.id}' data-tabindex='${tabindex.get_next_tab_index()}'>
+=======
+			<div class='album ${(disabled ? `disabled` : ``)}' data-id='${data.id}' data-nsfw='${data.nsfw && data.nsfw === '1' ? `1` : `0`}' data-tabindex='${tabindex.get_next_tab_index()}'>
+>>>>>>> d258039 (adding some UI component, still WIP, [skip ci])
 				  ${build.getAlbumThumb(data, 2)}
 				  ${build.getAlbumThumb(data, 1)}
 				  ${build.getAlbumThumb(data, 0)}
@@ -102,6 +106,7 @@ build.album = function(data, disabled = false) {
 
 		html += lychee.html`
 				<div class='badges'>
+					<a class='badge ${(data.nsfw === '1' ? 'badge--nsfw' : '')} icn-star'>${build.iconic('star')}</a>
 					<a class='badge ${(data.star === '1' ? 'badge--star' : '')} icn-star'>${build.iconic('star')}</a>
 					<a class='badge ${(data.public === '1' ? 'badge--visible' : '')} ${(data.visible === '1' ? 'badge--not--hidden' : 'badge--hidden')} icn-share'>${build.iconic('eye')}</a>
 					<a class='badge ${(data.unsorted === '1' ? 'badge--visible' : '')}'>${build.iconic('list')}</a>

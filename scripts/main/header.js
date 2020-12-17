@@ -307,10 +307,10 @@ header.setMode = function(mode) {
 				$('#button_info_album').show();
 				tabindex.makeFocusable($('#button_info_album'));
 				if (album.isUploadable()) {
-					$('#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album').show();
+					$('#button_nsfw_album, #button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album').show();
 					tabindex.makeFocusable($('#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album'));
 				} else {
-					$('#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album').hide();
+					$('#button_nsfw_album, #button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album').hide();
 					tabindex.makeUnfocusable($('#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album'));
 				}
 			}

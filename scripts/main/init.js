@@ -73,6 +73,7 @@ $(document).ready(function() {
 				else if (visible.photo()) { photo.setTitle([photo.getID()]); return false }
 			}
 		})
+		.bind([ 'h' ], album.toggle_nsfw_filter)
 		.bind([ 'd' ], function() {
 			if (album.isUploadable()) {
 				if (visible.photo())      { photo.setDescription(photo.getID()); return false }

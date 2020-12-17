@@ -43,6 +43,12 @@ let lychee = {
     landing_page_enabled: false, // is landing page enabled ?
     delete_imported: false,
 
+    nsfw_visible: true,
+    nsfw_blur: false,
+    nsfw_warning: false,
+    nsfw_warning_text: '<b>Sensitive content</b><br><p>This album contains sensitive content which some people may find offensive or disturbing.</p>',
+
+
     // this is device specific config, in this case default is Desktop.
     header_auto_hide: true,
     active_focus_on_page_load: false,
@@ -215,6 +221,11 @@ lychee.init = function() {
             lychee.share_button_visible = (data.config.share_button_visible && data.config.share_button_visible === '1') || false;
             lychee.delete_imported = (data.config.delete_imported && data.config.delete_imported === '1');
 
+            lychee.nsfw_visible = (data.nsfw_visible && nsfw_visible === '1') || false;
+            lychee.nsfw_blur = (data.nsfw_blur && nsfw_blur === '1') || false;
+            lychee.nsfw_warning = (data.nsfw_warning && nsfw_warning === '1') || false;
+            lychee.nsfw_warning_text = data.nsfw_warning_text || '<b>Sensitive content</b><br><p>This album contains sensitive content which some people may find offensive or disturbing.</p>';
+
             lychee.header_auto_hide = data.config_device.header_auto_hide;
             lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
             lychee.enable_button_visibility = data.config_device.enable_button_visibility;
@@ -274,6 +285,11 @@ lychee.init = function() {
             lychee.location_show_public = (data.config.location_show_public && data.config.location_show_public === '1') || false;
             lychee.swipe_tolerance_x = validatedSwipeToleranceX;
             lychee.swipe_tolerance_y = validatedSwipeToleranceY;
+
+            lychee.nsfw_visible = (data.nsfw_visible && nsfw_visible === '1') || false;
+            lychee.nsfw_blur = (data.nsfw_blur && nsfw_blur === '1') || false;
+            lychee.nsfw_warning = (data.nsfw_warning && nsfw_warning === '1') || false;
+            lychee.nsfw_warning_text = data.nsfw_warning_text || '<b>Sensitive content</b><br><p>This album contains sensitive content which some people may find offensive or disturbing.</p>';
 
             lychee.header_auto_hide = data.config_device.header_auto_hide;
             lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;

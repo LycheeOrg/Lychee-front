@@ -12,7 +12,6 @@ view.albums = {
 
         view.albums.title();
         view.albums.content.init();
-
     },
 
     title: function() {
@@ -102,15 +101,6 @@ view.albums = {
                             sharedData += build.album(alb, !lychee.admin);
                         }
                     }
-                    // $.each(albums.json.shared_albums, function() {
-                    // 	if(!this.parent_id || this.parent_id === 0) {
-                    // 		albums.parse(this);
-                    // 		sharedData += build.album(this, true)
-                    // 	}
-                    // });
-                    //
-                    // // Add divider
-                    // if (lychee.publicMode===false) sharedData = build.divider(lychee.locale['SHARED_ALBUMS']) + sharedData
                 }
             }
 
@@ -121,6 +111,7 @@ view.albums = {
                 lychee.content.html(smartData + albumsData + sharedData)
             }
 
+            album.apply_nsfw_filter();
             // Restore scroll position
             if (view.albums.content.scrollPosition != null && view.albums.content.scrollPosition !== 0) {
                 $(document).scrollTop(view.albums.content.scrollPosition)
@@ -246,6 +237,8 @@ view.album = {
 
             // Add photos to view
             lychee.content.html(html);
+            album.apply_nsfw_filter();
+
             view.album.content.justify();
 
         },
@@ -378,10 +371,6 @@ view.album = {
                 let layoutGeometry = require('justified-layout')(ratio, {
                     containerWidth: containerWidth,
                     containerPadding: 0,
-                    boxSpacing: {
-                        horizontal: 42,
-                        vertical: 150
-                    },
                     targetRowHeight: parseFloat($('.photo').css('--lychee-default-height'), 10)
                 });
                 // if (lychee.admin) console.log(layoutGeometry);
