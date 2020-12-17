@@ -221,7 +221,7 @@ album.load = function (albumID, refresh = false) {
 			processData(data);
 
 				// save scroll position for this URL
-				if (data !== null && data.albums !== null && data.albums.length > 0) {
+				if (data !== null && undefined !== data.albums && !== null && data.albums.length > 0) {
 				setTimeout(function () {
 					let urls = JSON.parse(localStorage.getItem('scroll'));
 					let urlWindow = window.location.href;
