@@ -1908,7 +1908,7 @@ view.u2f = {
 
                 html += '<div class="u2f_view_line">' +
                     '<p>' +
-                    '<span class="text">Credential</span>' +
+                    '<span class="text">' + lychee.locale['U2F_CREDENTIALS'] + '</span>' +
                     // '<span class="text_icon" title="Allow uploads">' + build.iconic('data-transfer-upload') + '</span>' +
                     // '<span class="text_icon" title="Restricted account">' + build.iconic('lock-locked') + '</span>' +
                     '</p>' +
@@ -1936,7 +1936,7 @@ view.u2f = {
                 html += ' style="padding-top: 0px;"';
             }
             html += '>' +
-                '<a id="RegisterU2FButton"  class="basicModal__button basicModal__button_CREATE">Register new device.</a>' +
+                '<a id="RegisterU2FButton"  class="basicModal__button basicModal__button_CREATE">' + lychee.locale['U2F_REGISTER_KEY'] + '</a>' +
                 '</div>';
             $(".u2f_view").append(html);
             $("#RegisterU2FButton").on('click', u2f.register);

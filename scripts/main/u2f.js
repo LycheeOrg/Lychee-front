@@ -4,7 +4,7 @@ let u2f = {
 
 u2f.is_available = function() {
     if (!window.isSecureContext && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-        let msg = lychee.html `<h1>Environment not secured. U2F not available</h1>`;
+        let msg = lychee.html `<h1>${lychee.locale['U2F_NOT_SECURE']}</h1>`;
 
         basicModal.show({
             body: msg,
@@ -32,7 +32,7 @@ u2f.login = function() {
         }).login({
             user_id: 0 // for now it is only available to Admin user via a secret key shortcut.
         }).then(function(data) {
-            loadingBar.show('success', 'Authentication successful!');
+            loadingBar.show('success', lychee.locale['U2F_AUTHENTIFICATION_SUCCESS']);
             window.location.reload()
         })
         .catch(error => loadingBar.show('error', 'Something went wrong!'))
@@ -50,48 +50,15 @@ u2f.register = function() {
     if (Larapass.supportsWebAuthn()) {
         larapass.register()
             .then(function(response) {
-                loadingBar.show('success', 'Registration successful!');
+                loadingBar.show('success', lychee.locale['U2F_REGISTRATION_SUCCESS']);
                 u2f.list() // reload credential list
             })
             .catch(response =>
                 loadingBar.show('error', 'Something went wrong!'))
     } else {
-        loadingBar.show('error', 'U2F not supported. Sorry.')
+        loadingBar.show('error', lychee.locale['U2F_NOT_SUPPORTED'])
     }
 }
-
-
-// u2f.tmp = function() {
-//     let msg = lychee.html `
-//     <form>
-//         <p class='signIn'>
-//             <input class='text' name='username' autocomplete='on' type='text' placeholder='$${ lychee.locale['USERNAME'] }' autocapitalize='off' data-tabindex='${tabindex.get_next_tab_index()}'>
-//             <input class='text' name='password' autocomplete='current-password' type='password' placeholder='$${ lychee.locale['PASSWORD'] }' data-tabindex='${tabindex.get_next_tab_index()}'>
-//         </p>
-//         <p class='version'>Lychee ${ lychee.version }<span> &#8211; <a target='_blank' href='${ lychee.updateURL }' data-tabindex='-1'>${ lychee.locale['UPDATE_AVAILABLE'] }</a><span></p>
-//     </form>
-//     `;
-
-//     basicModal.show({
-//         body: msg,
-//         buttons: {
-//             action: {
-//                 title: lychee.locale['SIGN_IN'],
-//                 fn: lychee.login,
-//                 attributes: [
-//                     ["data-tabindex", tabindex.get_next_tab_index()]
-//                 ]
-//             },
-//             cancel: {
-//                 title: lychee.locale['CANCEL'],
-//                 fn: basicModal.close,
-//                 attributes: [
-//                     ["data-tabindex", tabindex.get_next_tab_index()]
-//                 ]
-//             }
-//         }
-//     });
-// }
 
 u2f.delete = function(params) {
 
@@ -100,7 +67,7 @@ u2f.delete = function(params) {
             loadingBar.show('error', data.description);
             lychee.error(null, params, data)
         } else {
-            loadingBar.show('success', 'Credential deleted!');
+            loadingBar.show('success', lychee.locale['U2F_CREDENTIALS_DELETED']);
             u2f.list() // reload credential list
         }
     })
