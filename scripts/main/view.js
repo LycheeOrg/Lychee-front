@@ -1903,7 +1903,7 @@ view.u2f = {
             let html = '';
 
             if (u2f.json.length === 0) {
-                $(".u2f_view").append('<div class="u2f_view_line" style="margin-bottom: 50px;"><p style="text-align: center">Credentials list is empty!</p></div>');
+                $(".u2f_view").append('<div class="u2f_view_line"><p class="single">Credentials list is empty!</p></div>');
             } else {
 
                 html += '<div class="u2f_view_line">' +
@@ -1932,9 +1932,9 @@ view.u2f = {
 
             html = '<div class="u2f_view_line"';
 
-            if (u2f.json.length === 0) {
-                html += ' style="padding-top: 0px;"';
-            }
+            // if (u2f.json.length === 0) {
+            //     html += ' style="padding-top: 0px;"';
+            // }
             html += '>' +
                 '<a id="RegisterU2FButton"  class="basicModal__button basicModal__button_CREATE">' + lychee.locale['U2F_REGISTER_KEY'] + '</a>' +
                 '</div>';

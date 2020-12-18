@@ -63,7 +63,8 @@ u2f.register = function() {
 u2f.delete = function(params) {
 
     api.post('webauthn::delete', params, function(data) {
-        if (data !== 'true') {
+        console.log(data);
+        if (!data) {
             loadingBar.show('error', data.description);
             lychee.error(null, params, data)
         } else {
