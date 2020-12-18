@@ -21,7 +21,7 @@
     "jquery": "^3.4.0",
     "justified-layout": "^2.1.1",
     "lazysizes": "^5.2.2",
-    "leaflet": "^1.6.0",
+    "leaflet": "^1.7.1",
     "leaflet-rotatedmarker": "^0.2.0",
     "leaflet-spin": "^1.1.0",
     "leaflet.markercluster": "^1.4.1",
@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "babel-preset-env": "^1.7.0",
+    "del": "^5.1.0",
     "gulp": "^4.0.0",
     "gulp-autoprefixer": "^6.0.0",
     "gulp-babel": "^6.1.2",
@@ -43,9 +44,8 @@
     "gulp-load-plugins": "^1.5.0",
     "gulp-sass": "^4.0.2",
     "gulp-uglify": "^3.0.2",
-    "del": "^5.1.0",
-    "uglify-js": "^3.7.2",
     "node-sass": "^4.13.0",
-    "npm": "^6.13.4"
+    "npm": "^6.14.9",
+    "uglify-js": "^3.12.1"
   }
 }

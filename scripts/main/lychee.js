@@ -309,11 +309,11 @@ lychee.init = function() {
 
 lychee.login = function(data) {
 
-    let user = data.username;
+    let username = data.username;
     let password = data.password;
 
     let params = {
-        user,
+        username,
         password
     };
 
@@ -342,6 +342,7 @@ lychee.loginDialog = function() {
     tabindex.makeUnfocusable(lychee.imageview);
 
     let msg = lychee.html `
+			<a class='signInKeyLess' id='signInKeyLess'>${build.iconic('key')}</a>
 			<form>
 				<p class='signIn'>
 					<input class='text' name='username' autocomplete='on' type='text' placeholder='$${ lychee.locale['USERNAME'] }' autocapitalize='off' data-tabindex='${tabindex.get_next_tab_index()}'>
@@ -370,6 +371,7 @@ lychee.loginDialog = function() {
             }
         }
     });
+    $("#signInKeyLess").on('click', u2f.login);
 
     if (lychee.checkForUpdates === '1') lychee.getUpdate();
 
@@ -635,7 +637,8 @@ lychee.setMode = function(mode) {
     if (mode === 'logged_in') {
         // we are logged in, we do not need that short cut anymore. :)
         Mousetrap
-            .unbind(['l']);
+            .unbind(['l'])
+            .unbind(['k']);
 
         // The code searches by class, so remove the other instance.
         $('.header__search, .header__clear', '.header__toolbar--public').remove();

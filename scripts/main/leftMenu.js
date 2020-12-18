@@ -24,6 +24,7 @@ leftMenu.build = function () {
 	{
 		html += lychee.html`
 		<a class="linkMenu" id="button_users" data-tabindex="-1">${    build.iconic('person') }${             lychee.locale['USERS'] } </a>
+		<a class="linkMenu" id="button_u2f" data-tabindex="-1">${      build.iconic('key') }${                lychee.locale['U2F'] } </a>
 		<a class="linkMenu" id="button_sharing" data-tabindex="-1">${  build.iconic('cloud') }${              lychee.locale['SHARING'] }</a>`
 	}
 	html += lychee.html`
@@ -90,6 +91,7 @@ leftMenu.bind = function() {
 	if (lychee.api_V2)
 	{
 		leftMenu.dom('#button_users')         .on(eventName, leftMenu.Users);
+		leftMenu.dom('#button_u2f')           .on(eventName, leftMenu.u2f);
 		leftMenu.dom('#button_sharing')       .on(eventName, leftMenu.Sharing);
 		leftMenu.dom('#button_update')        .on(eventName, leftMenu.Update);
 	}
@@ -126,6 +128,10 @@ leftMenu.Update = function() {
 
 leftMenu.Users = function () {
 	users.list();
+};
+
+leftMenu.u2f = function () {
+	u2f.list();
 };
 
 leftMenu.Sharing = function () {
