@@ -531,7 +531,7 @@ settings.changeNSFWVisible = function() {
             loadingBar.show('success', lychee.locale['SETTINGS_SUCCESS_NSFW_VISIBLE']);
             lychee.nsfw_visible = (params.nsfw_visible === '1');
             lychee.nsfw_visible_saved = lychee.nsfw_visible;
-        } else lychee.error(null, params, data);
+        } else { lychee.error(null, params, data); }
     });
 
 };

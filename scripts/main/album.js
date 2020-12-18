@@ -845,28 +845,46 @@ album.setPublic = function(albumID, e) {
     albums.refresh();
 
     // Set public
-    if ($('.basicModal .switch input[name="nsfw"]:checked').length === 1) album.json.nsfw = '1';
-    else album.json.nsfw = '0';
+    if ($('.basicModal .switch input[name="nsfw"]:checked').length === 1) {
+        album.json.nsfw = '1';
+    } else {
+        album.json.nsfw = '0';
+    }
 
     // Set public
-    if ($('.basicModal .switch input[name="public"]:checked').length === 1) album.json.public = '1';
-    else album.json.public = '0';
+    if ($('.basicModal .switch input[name="public"]:checked').length === 1) {
+        album.json.public = '1';
+    } else {
+        album.json.public = '0';
+    }
 
     // Set full photo
-    if ($('.basicModal .choice input[name="full_photo"]:checked').length === 1) album.json.full_photo = '1';
-    else album.json.full_photo = '0';
+    if ($('.basicModal .choice input[name="full_photo"]:checked').length === 1) {
+        album.json.full_photo = '1';
+    } else {
+        album.json.full_photo = '0';
+    }
 
     // Set visible
-    if ($('.basicModal .choice input[name="hidden"]:checked').length === 1) album.json.visible = '0';
-    else album.json.visible = '1';
+    if ($('.basicModal .choice input[name="hidden"]:checked').length === 1) {
+        album.json.visible = '0';
+    } else {
+        album.json.visible = '1';
+    }
 
     // Set downloadable
-    if ($('.basicModal .choice input[name="downloadable"]:checked').length === 1) album.json.downloadable = '1';
-    else album.json.downloadable = '0';
+    if ($('.basicModal .choice input[name="downloadable"]:checked').length === 1) {
+        album.json.downloadable = '1';
+    } else {
+        album.json.downloadable = '0';
+    }
 
     // Set share_button_visible
-    if ($('.basicModal .choice input[name="share_button_visible"]:checked').length === 1) album.json.share_button_visible = '1';
-    else album.json.share_button_visible = '0';
+    if ($('.basicModal .choice input[name="share_button_visible"]:checked').length === 1) {
+        album.json.share_button_visible = '1';
+    } else {
+        album.json.share_button_visible = '0';
+    }
 
     // Set password
     let oldPassword = album.json.password;
