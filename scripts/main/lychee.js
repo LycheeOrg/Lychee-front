@@ -249,7 +249,7 @@ lychee.init = function() {
 
             lychee.upload = !lychee.api_V2;
             lychee.admin = !lychee.api_V2;
-            lychee.nsfw_visible_saved = nsfw_visible;
+            lychee.nsfw_visible_saved = lychee.nsfw_visible;
 
             // leftMenu
             leftMenu.build();
