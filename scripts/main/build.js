@@ -88,11 +88,7 @@ build.album = function(data, disabled = false) {
         }
 
         html += lychee.html `
-<<<<<<< HEAD
-			<div class='album ${(disabled ? `disabled` : ``)}' data-id='${data.id}' data-tabindex='${tabindex.get_next_tab_index()}'>
-=======
 			<div class='album ${(disabled ? `disabled` : ``)}' data-id='${data.id}' data-nsfw='${data.nsfw && data.nsfw === '1' ? `1` : `0`}' data-tabindex='${tabindex.get_next_tab_index()}'>
->>>>>>> d258039 (adding some UI component, still WIP, [skip ci])
 				  ${build.getAlbumThumb(data, 2)}
 				  ${build.getAlbumThumb(data, 1)}
 				  ${build.getAlbumThumb(data, 0)}
