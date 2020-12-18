@@ -1173,7 +1173,7 @@ view.settings = {
 			`;
 
             $(".settings_view").append(msg);
-            if (lychee.nsfw_visible_saved) $('#NSFWVisible').click();
+            if (lychee.nsfw_visible_saved) { $('#NSFWVisible').click(); }
 
             settings.bind('#NSFWVisible', '.setNSFWVisible', settings.changeNSFWVisible);
         },

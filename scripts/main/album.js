@@ -947,7 +947,7 @@ album.setNSFW = function(albumID, e) {
 
     api.post('Album::setNSFW', params, function(data) {
 
-        if (data !== true) lychee.error(null, params, data)
+        if (data !== true) { lychee.error(null, params, data); }
 
     })
 
