@@ -158,6 +158,7 @@ view.album = {
         view.album.sidebar();
         view.album.title();
         view.album.public();
+        view.album.nsfw();
         view.album.content.init();
 
         album.json.init = 1
@@ -504,6 +505,24 @@ view.album = {
 
         if (album.json.visible === '1') sidebar.changeAttr('hidden', lychee.locale['ALBUM_SHR_NO']);
         else sidebar.changeAttr('hidden', lychee.locale['ALBUM_SHR_YES'])
+
+    },
+
+    nsfw: function() {
+
+        if (album.json.nsfw === '1') {
+
+            // Sensitive
+            $('#button_nsfw_album')
+                .addClass('active')
+                .attr('title', lychee.locale['ALBUM_UNMARK_NSFW'])
+
+        } else {
+
+            // Unensitive
+            $('#button_nsfw_album').removeClass('active').attr('title', lychee.locale['ALBUM_MARK_NSFW'])
+
+        }
 
     },
 
@@ -891,6 +910,7 @@ view.settings = {
                 view.settings.content.setOverlay();
                 view.settings.content.setOverlayType();
                 view.settings.content.setMapDisplay();
+                view.settings.content.setNSFWVisible();
                 view.settings.content.setCSS();
                 view.settings.content.moreButton();
             }
@@ -1138,6 +1158,26 @@ view.settings = {
 
             settings.bind('#PublicSearch', '.setPublicSearch', settings.changePublicSearch);
         },
+
+        setNSFWVisible: function() {
+            let msg = `
+			<div class="setNSFWVisible">
+			<p>${lychee.locale['NSFW_VISIBLE_TEXT_1']}
+			<label class="switch">
+			  <input id="NSFWVisible" type="checkbox">
+			  <span class="slider round"></span>
+			</label></p>
+			<p>${lychee.locale['NSFW_VISIBLE_TEXT_2']}
+			</p>
+			</div>
+			`;
+
+            $(".settings_view").append(msg);
+            if (lychee.nsfw_visible_saved) $('#NSFWVisible').click();
+
+            settings.bind('#NSFWVisible', '.setNSFWVisible', settings.changeNSFWVisible);
+        },
+        // TODO: extend to the other settings.
 
         setOverlay: function() {
             let msg = `

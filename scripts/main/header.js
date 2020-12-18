@@ -55,6 +55,7 @@ header.bind = function() {
 	header.dom('.button_add')         .on(eventName, contextMenu.add);
 	header.dom('#button_more')        .on(eventName, function(e) { contextMenu.photoMore(photo.getID(), e) });
 	header.dom('#button_move_album')  .on(eventName, function(e) { contextMenu.move([ album.getID() ], e, album.setAlbum, 'ROOT', album.getParent() != '') });
+	header.dom('#button_nsfw_album')  .on(eventName, function(e) { album.setNSFW(album.getID()) });
 	header.dom('#button_move')        .on(eventName, function(e) { contextMenu.move([ photo.getID() ], e, photo.setAlbum) });
 	header.dom('.header__hostedwith') .on(eventName, function() { window.open(lychee.website) });
 	header.dom('#button_trash_album') .on(eventName, function() { album.delete([ album.getID() ]) });

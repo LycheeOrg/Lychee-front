@@ -143,6 +143,10 @@ lychee.locale = {
     'ALBUM_FULL_EXPL': 'Full size pictures are available',
     'ALBUM_HIDDEN': 'Hidden',
     'ALBUM_HIDDEN_EXPL': 'Only people with the direct link can view this album.',
+    'ALBUM_MARK_NSFW': 'Mark album as sensitive',
+    'ALBUM_UNMARK_NSFW': 'Unmark album as sensitive',
+    'ALBUM_NSFW': 'Sensitive',
+    'ALBUM_NSFW_EXPL': 'Album is marked to contain sensitive content.',
     'ALBUM_DOWNLOADABLE': 'Downloadable',
     'ALBUM_DOWNLOADABLE_EXPL': 'Visitors of your Lychee can download this album.',
     'ALBUM_SHARE_BUTTON_VISIBLE': 'Share button is visible',
@@ -374,6 +378,10 @@ lychee.locale = {
     'LOCATION_DECODING': 'Decode GPS data into location name',
     'LOCATION_SHOW': 'Show location name',
     'LOCATION_SHOW_PUBLIC': 'Show location name for public mode',
+
+    'NSFW_VISIBLE_TEXT_1': 'Make Sensitive albums visible by default.',
+    'NSFW_VISIBLE_TEXT_2': 'If the album is public, it is still accessible, just hidden from the view and <b>can be revealed by pressing <hkb>H</hkb></b>.',
+    'SETTINGS_SUCCESS_NSFW_VISIBLE': 'Default sensitive album visibility updated with success.',
 
     'VIEW_NO_RESULT': 'No results',
     'VIEW_NO_PUBLIC_ALBUMS': 'No public albums',

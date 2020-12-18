@@ -44,6 +44,7 @@ let lychee = {
     delete_imported: false,
 
     nsfw_visible: true,
+    nsfw_visible_saved: true,
     nsfw_blur: false,
     nsfw_warning: false,
     nsfw_warning_text: '<b>Sensitive content</b><br><p>This album contains sensitive content which some people may find offensive or disturbing.</p>',
@@ -221,10 +222,10 @@ lychee.init = function() {
             lychee.share_button_visible = (data.config.share_button_visible && data.config.share_button_visible === '1') || false;
             lychee.delete_imported = (data.config.delete_imported && data.config.delete_imported === '1');
 
-            lychee.nsfw_visible = (data.nsfw_visible && nsfw_visible === '1') || false;
-            lychee.nsfw_blur = (data.nsfw_blur && nsfw_blur === '1') || false;
-            lychee.nsfw_warning = (data.nsfw_warning && nsfw_warning === '1') || false;
-            lychee.nsfw_warning_text = data.nsfw_warning_text || '<b>Sensitive content</b><br><p>This album contains sensitive content which some people may find offensive or disturbing.</p>';
+            lychee.nsfw_visible = (data.config.nsfw_visible && data.config.nsfw_visible === '1') || false;
+            lychee.nsfw_blur = (data.config.nsfw_blur && data.config.nsfw_blur === '1') || false;
+            lychee.nsfw_warning = (data.config.nsfw_warning && data.config.nsfw_warning === '1') || false;
+            lychee.nsfw_warning_text = data.config.nsfw_warning_text || '<b>Sensitive content</b><br><p>This album contains sensitive content which some people may find offensive or disturbing.</p>';
 
             lychee.header_auto_hide = data.config_device.header_auto_hide;
             lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
@@ -248,6 +249,7 @@ lychee.init = function() {
 
             lychee.upload = !lychee.api_V2;
             lychee.admin = !lychee.api_V2;
+            lychee.nsfw_visible_saved = nsfw_visible;
 
             // leftMenu
             leftMenu.build();
@@ -286,10 +288,10 @@ lychee.init = function() {
             lychee.swipe_tolerance_x = validatedSwipeToleranceX;
             lychee.swipe_tolerance_y = validatedSwipeToleranceY;
 
-            lychee.nsfw_visible = (data.nsfw_visible && nsfw_visible === '1') || false;
-            lychee.nsfw_blur = (data.nsfw_blur && nsfw_blur === '1') || false;
-            lychee.nsfw_warning = (data.nsfw_warning && nsfw_warning === '1') || false;
-            lychee.nsfw_warning_text = data.nsfw_warning_text || '<b>Sensitive content</b><br><p>This album contains sensitive content which some people may find offensive or disturbing.</p>';
+            lychee.nsfw_visible = (data.config.nsfw_visible && data.config.nsfw_visible === '1') || false;
+            lychee.nsfw_blur = (data.config.nsfw_blur && data.config.nsfw_blur === '1') || false;
+            lychee.nsfw_warning = (data.config.nsfw_warning && data.config.nsfw_warning === '1') || false;
+            lychee.nsfw_warning_text = data.config.nsfw_warning_text || '<b>Sensitive content</b><br><p>This album contains sensitive content which some people may find offensive or disturbing.</p>';
 
             lychee.header_auto_hide = data.config_device.header_auto_hide;
             lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
@@ -308,6 +310,7 @@ lychee.init = function() {
             lychee.enable_contextmenu_header = data.config_device.enable_contextmenu_header;
             lychee.hide_content_during_imgview = data.config_device.hide_content_during_imgview;
             lychee.device_type = data.config_device.device_type || 'desktop'; // we set default as Desktop
+            lychee.nsfw_visible_saved = nsfw_visible;
 
             // console.log(lychee.full_photo);
             lychee.setMode('public');

@@ -5,7 +5,7 @@
 	margin-right: auto;
 }
 
-.setLogin, .setSorting, .setDropBox, .setLang, .setLayout, .setPublicSearch, .setOverlay, .setOverlayType, .setMapDisplay, .setMapDisplayPublic, .setMapProvider, .setMapIncludeSubalbums, .setLocationDecoding, .setLocationDecodingCachingType, .setLocationShow, .setLocationShowPublic, .setDefaultLicense, .setCSS {
+.setLogin, .setSorting, .setDropBox, .setLang, .setLayout, .setPublicSearch, .setOverlay, .setOverlayType, .setMapDisplay, .setMapDisplayPublic, .setMapProvider, .setMapIncludeSubalbums, .setLocationDecoding, .setLocationDecodingCachingType, .setLocationShow, .setLocationShowPublic, .setDefaultLicense, .setCSS, .setNSFWVisible {
 	font-size: 14px;
 	width: 100%;
 	padding: 5%;
@@ -14,6 +14,7 @@
 		margin: 0 0 5%;
 		width: 100%;
 		color: #CCC;
+		line-height: 16px;
 
 		a {
 			color: rgba(255, 255, 255, .9);
