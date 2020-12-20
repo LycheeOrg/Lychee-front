@@ -37,19 +37,11 @@
 	}
 
 	&__item:not(.basicContext__item--disabled):hover &__data {
-		background: linear-gradient(
-			to bottom,
-			$colorBlue,
-			darken($colorBlue, 5%)
-		);
+		background: linear-gradient(to bottom, $colorBlue, darken($colorBlue, 5%));
 	}
 
 	&__item:not(.basicContext__item--disabled):active &__data {
-		background: linear-gradient(
-			to bottom,
-			darken($colorBlue, 10%),
-			darken($colorBlue, 15%)
-		);
+		background: linear-gradient(to bottom, darken($colorBlue, 10%), darken($colorBlue, 15%));
 	}
 
 	&__icon {

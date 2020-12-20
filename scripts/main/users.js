@@ -8,18 +8,12 @@ users.update = function (params) {
 		return false;
 	}
 
-	if (
-		$("#UserData" + params.id + ' .choice input[name="upload"]:checked')
-			.length === 1
-	) {
+	if ($("#UserData" + params.id + ' .choice input[name="upload"]:checked').length === 1) {
 		params.upload = "1";
 	} else {
 		params.upload = "0";
 	}
-	if (
-		$("#UserData" + params.id + ' .choice input[name="lock"]:checked')
-			.length === 1
-	) {
+	if ($("#UserData" + params.id + ' .choice input[name="lock"]:checked').length === 1) {
 		params.lock = "1";
 	} else {
 		params.lock = "0";

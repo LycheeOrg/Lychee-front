@@ -26,8 +26,7 @@ $timingBounce: cubic-bezier(0.51, 0.92, 0.24, 1.15);
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-	transition: color 0.3s, opacity 0.3s ease-out, transform 0.3s ease-out,
-		box-shadow 0.3s;
+	transition: color 0.3s, opacity 0.3s ease-out, transform 0.3s ease-out, box-shadow 0.3s;
 }
 
 html,

@@ -158,8 +158,7 @@
 		outline: none;
 		border-radius: 50px;
 		opacity: 0.6;
-		transition: opacity 0.3s ease-out, box-shadow 0.3s ease-out,
-			width 0.2s ease-out;
+		transition: opacity 0.3s ease-out, box-shadow 0.3s ease-out, width 0.2s ease-out;
 
 		&:focus {
 			width: 140px;

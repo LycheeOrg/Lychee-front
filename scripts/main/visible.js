@@ -5,28 +5,13 @@
 let visible = {};
 
 visible.albums = function () {
-	if (
-		header
-			.dom(".header__toolbar--public")
-			.hasClass("header__toolbar--visible")
-	)
-		return true;
-	if (
-		header
-			.dom(".header__toolbar--albums")
-			.hasClass("header__toolbar--visible")
-	)
-		return true;
+	if (header.dom(".header__toolbar--public").hasClass("header__toolbar--visible")) return true;
+	if (header.dom(".header__toolbar--albums").hasClass("header__toolbar--visible")) return true;
 	return false;
 };
 
 visible.album = function () {
-	if (
-		header
-			.dom(".header__toolbar--album")
-			.hasClass("header__toolbar--visible")
-	)
-		return true;
+	if (header.dom(".header__toolbar--album").hasClass("header__toolbar--visible")) return true;
 	return false;
 };
 
@@ -52,8 +37,7 @@ visible.sidebar = function () {
 
 visible.sidebarbutton = function () {
 	if (visible.photo()) return true;
-	if (visible.album() && $("#button_info_album:visible").length > 0)
-		return true;
+	if (visible.album() && $("#button_info_album:visible").length > 0) return true;
 	return false;
 };
 

@@ -46,8 +46,7 @@ let lychee = {
 	nsfw_visible_saved: true,
 	nsfw_blur: false,
 	nsfw_warning: false,
-	nsfw_warning_text:
-		"<b>Sensitive content</b><br><p>This album contains sensitive content which some people may find offensive or disturbing.</p>",
+	nsfw_warning_text: "<b>Sensitive content</b><br><p>This album contains sensitive content which some people may find offensive or disturbing.</p>",
 
 	// this is device specific config, in this case default is Desktop.
 	header_auto_hide: true,
@@ -147,27 +146,16 @@ lychee.init = function () {
 		lychee.sub_albums = data.sub_albums || false;
 		lychee.update_json = data.update_json;
 		lychee.update_available = data.update_available;
-		lychee.landing_page_enable =
-			(data.config.landing_page_enable &&
-				data.config.landing_page_enable === "1") ||
-			false;
+		lychee.landing_page_enable = (data.config.landing_page_enable && data.config.landing_page_enable === "1") || false;
 
 		if (lychee.api_V2) {
 			lychee.versionCode = data.config.version;
 		} else {
-			lychee.versionCode = data.config.version.slice(
-				7,
-				data.config.version.length
-			);
+			lychee.versionCode = data.config.version.slice(7, data.config.version.length);
 		}
 		if (lychee.versionCode !== "") {
 			let digits = lychee.versionCode.match(/.{1,2}/g);
-			lychee.version =
-				parseInt(digits[0]).toString() +
-				"." +
-				parseInt(digits[1]).toString() +
-				"." +
-				parseInt(digits[2]).toString();
+			lychee.version = parseInt(digits[0]).toString() + "." + parseInt(digits[1]).toString() + "." + parseInt(digits[2]).toString();
 		}
 
 		// we copy the locale that exists only.
@@ -184,15 +172,9 @@ lychee.init = function () {
 		}
 
 		const validatedSwipeToleranceX =
-			(data.config.swipe_tolerance_x &&
-				!isNaN(parseInt(data.config.swipe_tolerance_x)) &&
-				parseInt(data.config.swipe_tolerance_x)) ||
-			150;
+			(data.config.swipe_tolerance_x && !isNaN(parseInt(data.config.swipe_tolerance_x)) && parseInt(data.config.swipe_tolerance_x)) || 150;
 		const validatedSwipeToleranceY =
-			(data.config.swipe_tolerance_y &&
-				!isNaN(parseInt(data.config.swipe_tolerance_y)) &&
-				parseInt(data.config.swipe_tolerance_y)) ||
-			250;
+			(data.config.swipe_tolerance_y && !isNaN(parseInt(data.config.swipe_tolerance_y)) && parseInt(data.config.swipe_tolerance_y)) || 250;
 
 		// Check status
 		// 0 = No configuration
@@ -201,129 +183,65 @@ lychee.init = function () {
 		if (data.status === 2) {
 			// Logged in
 
-			lychee.sortingPhotos =
-				data.config.sorting_Photos || data.config.sortingPhotos || "";
-			lychee.sortingAlbums =
-				data.config.sorting_Albums || data.config.sortingAlbums || "";
-			lychee.dropboxKey =
-				data.config.dropbox_key || data.config.dropboxKey || "";
+			lychee.sortingPhotos = data.config.sorting_Photos || data.config.sortingPhotos || "";
+			lychee.sortingAlbums = data.config.sorting_Albums || data.config.sortingAlbums || "";
+			lychee.dropboxKey = data.config.dropbox_key || data.config.dropboxKey || "";
 			lychee.location = data.config.location || "";
-			lychee.checkForUpdates =
-				data.config.check_for_updates ||
-				data.config.checkForUpdates ||
-				"1";
+			lychee.checkForUpdates = data.config.check_for_updates || data.config.checkForUpdates || "1";
 			lychee.lang = data.config.lang || "";
 			lychee.lang_available = data.config.lang_available || {};
 			lychee.layout = data.config.layout || "1";
-			lychee.public_search =
-				(data.config.public_search &&
-					data.config.public_search === "1") ||
-				false;
-			lychee.image_overlay_default =
-				(data.config.image_overlay &&
-					data.config.image_overlay === "1") ||
-				false;
+			lychee.public_search = (data.config.public_search && data.config.public_search === "1") || false;
+			lychee.image_overlay_default = (data.config.image_overlay && data.config.image_overlay === "1") || false;
 			lychee.image_overlay = lychee.image_overlay_default;
-			lychee.image_overlay_type = !data.config.image_overlay_type
-				? "exif"
-				: data.config.image_overlay_type;
+			lychee.image_overlay_type = !data.config.image_overlay_type ? "exif" : data.config.image_overlay_type;
 			lychee.image_overlay_type_default = lychee.image_overlay_type;
-			lychee.map_display =
-				(data.config.map_display && data.config.map_display === "1") ||
-				false;
-			lychee.map_display_public =
-				(data.config.map_display_public &&
-					data.config.map_display_public === "1") ||
-				false;
-			lychee.map_provider = !data.config.map_provider
-				? "Wikimedia"
-				: data.config.map_provider;
-			lychee.map_include_subalbums =
-				(data.config.map_include_subalbums &&
-					data.config.map_include_subalbums === "1") ||
-				false;
-			lychee.location_decoding =
-				(data.config.location_decoding &&
-					data.config.location_decoding === "1") ||
-				false;
-			lychee.location_decoding_caching_type = !data.config
-				.location_decoding_caching_type
+			lychee.map_display = (data.config.map_display && data.config.map_display === "1") || false;
+			lychee.map_display_public = (data.config.map_display_public && data.config.map_display_public === "1") || false;
+			lychee.map_provider = !data.config.map_provider ? "Wikimedia" : data.config.map_provider;
+			lychee.map_include_subalbums = (data.config.map_include_subalbums && data.config.map_include_subalbums === "1") || false;
+			lychee.location_decoding = (data.config.location_decoding && data.config.location_decoding === "1") || false;
+			lychee.location_decoding_caching_type = !data.config.location_decoding_caching_type
 				? "Harddisk"
 				: data.config.location_decoding_caching_type;
-			lychee.location_show =
-				(data.config.location_show &&
-					data.config.location_show === "1") ||
-				false;
-			lychee.location_show_public =
-				(data.config.location_show_public &&
-					data.config.location_show_public === "1") ||
-				false;
+			lychee.location_show = (data.config.location_show && data.config.location_show === "1") || false;
+			lychee.location_show_public = (data.config.location_show_public && data.config.location_show_public === "1") || false;
 			lychee.swipe_tolerance_x = validatedSwipeToleranceX;
 			lychee.swipe_tolerance_y = validatedSwipeToleranceY;
 
 			lychee.default_license = data.config.default_license || "none";
 			lychee.css = data.config.css || "";
-			lychee.full_photo =
-				data.config.full_photo == null ||
-				data.config.full_photo === "1";
-			lychee.downloadable =
-				(data.config.downloadable &&
-					data.config.downloadable === "1") ||
-				false;
-			lychee.share_button_visible =
-				(data.config.share_button_visible &&
-					data.config.share_button_visible === "1") ||
-				false;
-			lychee.delete_imported =
-				data.config.delete_imported &&
-				data.config.delete_imported === "1";
+			lychee.full_photo = data.config.full_photo == null || data.config.full_photo === "1";
+			lychee.downloadable = (data.config.downloadable && data.config.downloadable === "1") || false;
+			lychee.share_button_visible = (data.config.share_button_visible && data.config.share_button_visible === "1") || false;
+			lychee.delete_imported = data.config.delete_imported && data.config.delete_imported === "1";
 
-			lychee.nsfw_visible =
-				(data.config.nsfw_visible &&
-					data.config.nsfw_visible === "1") ||
-				false;
-			lychee.nsfw_blur =
-				(data.config.nsfw_blur && data.config.nsfw_blur === "1") ||
-				false;
-			lychee.nsfw_warning =
-				(data.config.nsfw_warning &&
-					data.config.nsfw_warning === "1") ||
-				false;
+			lychee.nsfw_visible = (data.config.nsfw_visible && data.config.nsfw_visible === "1") || false;
+			lychee.nsfw_blur = (data.config.nsfw_blur && data.config.nsfw_blur === "1") || false;
+			lychee.nsfw_warning = (data.config.nsfw_warning && data.config.nsfw_warning === "1") || false;
 			lychee.nsfw_warning_text =
 				data.config.nsfw_warning_text ||
 				"<b>Sensitive content</b><br><p>This album contains sensitive content which some people may find offensive or disturbing.</p>";
 
 			lychee.header_auto_hide = data.config_device.header_auto_hide;
-			lychee.active_focus_on_page_load =
-				data.config_device.active_focus_on_page_load;
-			lychee.enable_button_visibility =
-				data.config_device.enable_button_visibility;
+			lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
+			lychee.enable_button_visibility = data.config_device.enable_button_visibility;
 			lychee.enable_button_share = data.config_device.enable_button_share;
-			lychee.enable_button_archive =
-				data.config_device.enable_button_archive;
+			lychee.enable_button_archive = data.config_device.enable_button_archive;
 			lychee.enable_button_move = data.config_device.enable_button_move;
 			lychee.enable_button_trash = data.config_device.enable_button_trash;
-			lychee.enable_button_fullscreen =
-				data.config_device.enable_button_fullscreen;
-			lychee.enable_button_download =
-				data.config_device.enable_button_download;
+			lychee.enable_button_fullscreen = data.config_device.enable_button_fullscreen;
+			lychee.enable_button_download = data.config_device.enable_button_download;
 			lychee.enable_button_add = data.config_device.enable_button_add;
 			lychee.enable_button_more = data.config_device.enable_button_more;
-			lychee.enable_button_rotate =
-				data.config_device.enable_button_rotate;
-			lychee.enable_close_tab_on_esc =
-				data.config_device.enable_close_tab_on_esc;
+			lychee.enable_button_rotate = data.config_device.enable_button_rotate;
+			lychee.enable_close_tab_on_esc = data.config_device.enable_close_tab_on_esc;
 			lychee.enable_tabindex = data.config_device.enable_tabindex;
-			lychee.enable_contextmenu_header =
-				data.config_device.enable_contextmenu_header;
-			lychee.hide_content_during_imgview =
-				data.config_device.hide_content_during_imgview;
+			lychee.enable_contextmenu_header = data.config_device.enable_contextmenu_header;
+			lychee.hide_content_during_imgview = data.config_device.hide_content_during_imgview;
 			lychee.device_type = data.config_device.device_type || "desktop"; // we set default as Desktop
 
-			lychee.editor_enabled =
-				(data.config.editor_enabled &&
-					data.config.editor_enabled === "1") ||
-				false;
+			lychee.editor_enabled = (data.config.editor_enabled && data.config.editor_enabled === "1") || false;
 
 			lychee.upload = !lychee.api_V2;
 			lychee.admin = !lychee.api_V2;
@@ -347,92 +265,46 @@ lychee.init = function () {
 			// Logged out
 
 			// TODO remove sortingPhoto once the v4 is out
-			lychee.sortingPhotos =
-				data.config.sorting_Photos || data.config.sortingPhotos || "";
-			lychee.sortingAlbums =
-				data.config.sorting_Albums || data.config.sortingAlbums || "";
-			lychee.checkForUpdates =
-				data.config.check_for_updates ||
-				data.config.checkForUpdates ||
-				"1";
+			lychee.sortingPhotos = data.config.sorting_Photos || data.config.sortingPhotos || "";
+			lychee.sortingAlbums = data.config.sorting_Albums || data.config.sortingAlbums || "";
+			lychee.checkForUpdates = data.config.check_for_updates || data.config.checkForUpdates || "1";
 			lychee.layout = data.config.layout || "1";
-			lychee.public_search =
-				(data.config.public_search &&
-					data.config.public_search === "1") ||
-				false;
-			lychee.image_overlay =
-				(data.config.image_overlay &&
-					data.config.image_overlay === "1") ||
-				false;
-			lychee.image_overlay_type = !data.config.image_overlay_type
-				? "exif"
-				: data.config.image_overlay_type;
+			lychee.public_search = (data.config.public_search && data.config.public_search === "1") || false;
+			lychee.image_overlay = (data.config.image_overlay && data.config.image_overlay === "1") || false;
+			lychee.image_overlay_type = !data.config.image_overlay_type ? "exif" : data.config.image_overlay_type;
 			lychee.image_overlay_type_default = lychee.image_overlay_type;
-			lychee.map_display =
-				(data.config.map_display && data.config.map_display === "1") ||
-				false;
-			lychee.map_display_public =
-				(data.config.map_display_public &&
-					data.config.map_display_public === "1") ||
-				false;
-			lychee.map_provider = !data.config.map_provider
-				? "Wikimedia"
-				: data.config.map_provider;
-			lychee.map_include_subalbums =
-				(data.config.map_include_subalbums &&
-					data.config.map_include_subalbums === "1") ||
-				false;
-			lychee.location_show =
-				(data.config.location_show &&
-					data.config.location_show === "1") ||
-				false;
-			lychee.location_show_public =
-				(data.config.location_show_public &&
-					data.config.location_show_public === "1") ||
-				false;
+			lychee.map_display = (data.config.map_display && data.config.map_display === "1") || false;
+			lychee.map_display_public = (data.config.map_display_public && data.config.map_display_public === "1") || false;
+			lychee.map_provider = !data.config.map_provider ? "Wikimedia" : data.config.map_provider;
+			lychee.map_include_subalbums = (data.config.map_include_subalbums && data.config.map_include_subalbums === "1") || false;
+			lychee.location_show = (data.config.location_show && data.config.location_show === "1") || false;
+			lychee.location_show_public = (data.config.location_show_public && data.config.location_show_public === "1") || false;
 			lychee.swipe_tolerance_x = validatedSwipeToleranceX;
 			lychee.swipe_tolerance_y = validatedSwipeToleranceY;
 
-			lychee.nsfw_visible =
-				(data.config.nsfw_visible &&
-					data.config.nsfw_visible === "1") ||
-				false;
-			lychee.nsfw_blur =
-				(data.config.nsfw_blur && data.config.nsfw_blur === "1") ||
-				false;
-			lychee.nsfw_warning =
-				(data.config.nsfw_warning &&
-					data.config.nsfw_warning === "1") ||
-				false;
+			lychee.nsfw_visible = (data.config.nsfw_visible && data.config.nsfw_visible === "1") || false;
+			lychee.nsfw_blur = (data.config.nsfw_blur && data.config.nsfw_blur === "1") || false;
+			lychee.nsfw_warning = (data.config.nsfw_warning && data.config.nsfw_warning === "1") || false;
 			lychee.nsfw_warning_text =
 				data.config.nsfw_warning_text ||
 				"<b>Sensitive content</b><br><p>This album contains sensitive content which some people may find offensive or disturbing.</p>";
 
 			lychee.header_auto_hide = data.config_device.header_auto_hide;
-			lychee.active_focus_on_page_load =
-				data.config_device.active_focus_on_page_load;
-			lychee.enable_button_visibility =
-				data.config_device.enable_button_visibility;
+			lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
+			lychee.enable_button_visibility = data.config_device.enable_button_visibility;
 			lychee.enable_button_share = data.config_device.enable_button_share;
-			lychee.enable_button_archive =
-				data.config_device.enable_button_archive;
+			lychee.enable_button_archive = data.config_device.enable_button_archive;
 			lychee.enable_button_move = data.config_device.enable_button_move;
 			lychee.enable_button_trash = data.config_device.enable_button_trash;
-			lychee.enable_button_fullscreen =
-				data.config_device.enable_button_fullscreen;
-			lychee.enable_button_download =
-				data.config_device.enable_button_download;
+			lychee.enable_button_fullscreen = data.config_device.enable_button_fullscreen;
+			lychee.enable_button_download = data.config_device.enable_button_download;
 			lychee.enable_button_add = data.config_device.enable_button_add;
 			lychee.enable_button_more = data.config_device.enable_button_more;
-			lychee.enable_button_rotate =
-				data.config_device.enable_button_rotate;
-			lychee.enable_close_tab_on_esc =
-				data.config_device.enable_close_tab_on_esc;
+			lychee.enable_button_rotate = data.config_device.enable_button_rotate;
+			lychee.enable_close_tab_on_esc = data.config_device.enable_close_tab_on_esc;
 			lychee.enable_tabindex = data.config_device.enable_tabindex;
-			lychee.enable_contextmenu_header =
-				data.config_device.enable_contextmenu_header;
-			lychee.hide_content_during_imgview =
-				data.config_device.hide_content_during_imgview;
+			lychee.enable_contextmenu_header = data.config_device.enable_contextmenu_header;
+			lychee.hide_content_during_imgview = data.config_device.hide_content_during_imgview;
 			lychee.device_type = data.config_device.device_type || "desktop"; // we set default as Desktop
 			lychee.nsfw_visible_saved = nsfw_visible;
 
@@ -483,11 +355,9 @@ lychee.loginDialog = function () {
 						lychee.locale["PASSWORD"]
 					}' data-tabindex='${tabindex.get_next_tab_index()}'>
 				</p>
-				<p class='version'>Lychee ${
-					lychee.version
-				}<span> &#8211; <a target='_blank' href='${
-		lychee.updateURL
-	}' data-tabindex='-1'>${lychee.locale["UPDATE_AVAILABLE"]}</a><span></p>
+				<p class='version'>Lychee ${lychee.version}<span> &#8211; <a target='_blank' href='${lychee.updateURL}' data-tabindex='-1'>${
+		lychee.locale["UPDATE_AVAILABLE"]
+	}</a><span></p>
 			</form>
 			`;
 
@@ -551,10 +421,7 @@ lychee.load = function (autoplay = true) {
 		if (albumID == "map") {
 			// If map functionality is disabled -> do nothing
 			if (!lychee.map_display) {
-				loadingBar.show(
-					"error",
-					lychee.locale["ERROR_MAP_DEACTIVATED"]
-				);
+				loadingBar.show("error", lychee.locale["ERROR_MAP_DEACTIVATED"]);
 				return;
 			}
 			$(".no_content").remove();
@@ -583,10 +450,7 @@ lychee.load = function (autoplay = true) {
 			}
 			// If public search is diabled -> do nothing
 			if (lychee.publicMode === true && !lychee.public_search) {
-				loadingBar.show(
-					"error",
-					lychee.locale["ERROR_SEARCH_DEACTIVATED"]
-				);
+				loadingBar.show("error", lychee.locale["ERROR_SEARCH_DEACTIVATED"]);
 				return;
 			}
 
@@ -605,8 +469,7 @@ lychee.load = function (autoplay = true) {
 			if (
 				lychee.content.html() === "" ||
 				album.json == null ||
-				(header.dom(".header__search").length &&
-					header.dom(".header__search").val().length !== 0)
+				(header.dom(".header__search").length && header.dom(".header__search").val().length !== 0)
 			) {
 				lychee.content.hide();
 				album.load(albumID, true);
@@ -630,10 +493,7 @@ lychee.load = function (autoplay = true) {
 			// Show map of all albums
 			// If map functionality is disabled -> do nothing
 			if (!lychee.map_display) {
-				loadingBar.show(
-					"error",
-					lychee.locale["ERROR_MAP_DEACTIVATED"]
-				);
+				loadingBar.show("error", lychee.locale["ERROR_MAP_DEACTIVATED"]);
 				return;
 			}
 
@@ -705,8 +565,7 @@ lychee.getUpdate = function () {
 		}
 	} else {
 		const success = function (data) {
-			if (data.lychee.version > parseInt(lychee.versionCode))
-				$(".version span").show();
+			if (data.lychee.version > parseInt(lychee.versionCode)) $(".version span").show();
 		};
 
 		$.ajax({
@@ -759,10 +618,7 @@ lychee.setMode = function (mode) {
 		Mousetrap.unbind(["l"]).unbind(["k"]);
 
 		// The code searches by class, so remove the other instance.
-		$(
-			".header__search, .header__clear",
-			".header__toolbar--public"
-		).remove();
+		$(".header__search, .header__clear", ".header__toolbar--public").remove();
 
 		if (!lychee.editor_enabled) {
 			$("#button_rotate_cwise").remove();
@@ -770,10 +626,7 @@ lychee.setMode = function (mode) {
 		}
 		return;
 	} else {
-		$(
-			".header__search, .header__clear",
-			".header__toolbar--albums"
-		).remove();
+		$(".header__search, .header__clear", ".header__toolbar--albums").remove();
 		$("#button_rotate_cwise").remove();
 		$("#button_rotate_ccwise").remove();
 	}
@@ -807,9 +660,7 @@ lychee.animate = function (obj, animation) {
 	for (let i = 0; i < animations.length; i++) {
 		for (let x = 0; x < animations[i].length; x++) {
 			if (animations[i][x] == animation) {
-				obj.removeClass(
-					animations[i][0] + " " + animations[i][1]
-				).addClass(animation);
+				obj.removeClass(animations[i][0] + " " + animations[i][1]).addClass(animation);
 				return true;
 			}
 		}
@@ -834,11 +685,7 @@ lychee.retinize = function (path = "") {
 };
 
 lychee.loadDropbox = function (callback) {
-	if (
-		lychee.dropbox === false &&
-		lychee.dropboxKey != null &&
-		lychee.dropboxKey !== ""
-	) {
+	if (lychee.dropbox === false && lychee.dropboxKey != null && lychee.dropboxKey !== "") {
 		loadingBar.show();
 
 		let g = document.createElement("script");
@@ -857,11 +704,7 @@ lychee.loadDropbox = function (callback) {
 			callback();
 		};
 		s.parentNode.insertBefore(g, s);
-	} else if (
-		lychee.dropbox === true &&
-		lychee.dropboxKey != null &&
-		lychee.dropboxKey !== ""
-	) {
+	} else if (lychee.dropbox === true && lychee.dropboxKey != null && lychee.dropboxKey !== "") {
 		callback();
 	} else {
 		settings.setDropboxKey(callback);
@@ -978,11 +821,7 @@ lychee.fullscreenToggle = function () {
 };
 
 lychee.fullscreenStatus = function () {
-	let elem =
-		document.fullscreenElement ||
-		document.mozFullScreenElement ||
-		document.webkitFullscreenElement ||
-		document.msFullscreenElement;
+	let elem = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
 	return elem ? true : false;
 };
 
@@ -1022,14 +861,7 @@ lychee.adjustContentHeight = function () {
 		);
 		$("#container").css("padding-bottom", lychee.footer.outerHeight());
 	} else {
-		lychee.content.css(
-			"min-height",
-			"calc(100vh - " +
-				lychee.content.css("padding-top") +
-				" - " +
-				lychee.content.css("padding-bottom") +
-				")"
-		);
+		lychee.content.css("min-height", "calc(100vh - " + lychee.content.css("padding-top") + " - " + lychee.content.css("padding-bottom") + ")");
 	}
 };
 
@@ -1049,12 +881,7 @@ lychee.clipboardCopy = function (text) {
 	// context (i.e. HTTPS)
 	if (navigator.clipboard) {
 		return navigator.clipboard.writeText(text).catch(function (err) {
-			throw err !== undefined
-				? err
-				: new DOMException(
-						"The request is not allowed",
-						"NotAllowedError"
-				  );
+			throw err !== undefined ? err : new DOMException("The request is not allowed", "NotAllowedError");
 		});
 	}
 

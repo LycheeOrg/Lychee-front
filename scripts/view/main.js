@@ -58,9 +58,7 @@ lychee.html = function (literalSections, ...substs) {
 
 lychee.getEventName = function () {
 	let touchendSupport =
-		/Android|iPhone|iPad|iPod/i.test(
-			navigator.userAgent || navigator.vendor || window.opera
-		) && "ontouchend" in document.documentElement;
+		/Android|iPhone|iPad|iPod/i.test(navigator.userAgent || navigator.vendor || window.opera) && "ontouchend" in document.documentElement;
 	return touchendSupport === true ? "touchend" : "click";
 };
 
@@ -78,9 +76,7 @@ photo.share = function (photoID, service) {
 			window.open(`https://twitter.com/share?url=${encodeURI(url)}`);
 			break;
 		case "facebook":
-			window.open(
-				`https://www.facebook.com/sharer.php?u=${encodeURI(url)}`
-			);
+			window.open(`https://www.facebook.com/sharer.php?u=${encodeURI(url)}`);
 			break;
 		case "mail":
 			location.href = `mailto:?subject=&body=${encodeURI(url)}`;
@@ -124,17 +120,10 @@ photo.hide = function () {
 
 photo.onresize = function () {
 	// Copy of view.photo.onresize
-	if (
-		photo.json.medium === "" ||
-		!photo.json.medium2x ||
-		photo.json.medium2x === ""
-	)
-		return;
+	if (photo.json.medium === "" || !photo.json.medium2x || photo.json.medium2x === "") return;
 
 	let imgWidth = parseInt(photo.json.medium_dim);
-	let imgHeight = photo.json.medium_dim.substr(
-		photo.json.medium_dim.lastIndexOf("x") + 1
-	);
+	let imgHeight = photo.json.medium_dim.substr(photo.json.medium_dim.lastIndexOf("x") + 1);
 	let containerWidth = parseFloat($("#imageview").width(), 10);
 	let containerHeight = parseFloat($("#imageview").height(), 10);
 
@@ -219,13 +208,8 @@ const loadPhotoInfo = function (photoID) {
 	};
 
 	api.post("Photo::get", params, function (data) {
-		if (
-			data === "Warning: Photo private!" ||
-			data === "Warning: Wrong password!"
-		) {
-			$("body")
-				.append(build.no_content("question-mark"))
-				.removeClass("view");
+		if (data === "Warning: Photo private!" || data === "Warning: Wrong password!") {
+			$("body").append(build.no_content("question-mark")).removeClass("view");
 			header.dom().remove();
 			return false;
 		}

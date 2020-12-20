@@ -40,20 +40,13 @@ search.find = function (term) {
 					let albums_divider = lychee.locale["ALBUMS"];
 					let photos_divider = lychee.locale["PHOTOS"];
 
-					if (albumsData !== "")
-						albums_divider += " (" + data.albums.length + ")";
+					if (albumsData !== "") albums_divider += " (" + data.albums.length + ")";
 					if (photosData !== "") {
 						photos_divider += " (" + data.photos.length + ")";
 						if (lychee.layout === "1") {
-							photosData =
-								'<div class="justified-layout">' +
-								photosData +
-								"</div>";
+							photosData = '<div class="justified-layout">' + photosData + "</div>";
 						} else if (lychee.layout === "2") {
-							photosData =
-								'<div class="unjustified-layout">' +
-								photosData +
-								"</div>";
+							photosData = '<div class="unjustified-layout">' + photosData + "</div>";
 						}
 					}
 
@@ -62,16 +55,9 @@ search.find = function (term) {
 					// 3. Only albums
 					// 4. Albums and photos
 					if (albumsData === "" && photosData === "") html = "error";
-					else if (albumsData === "")
-						html = build.divider(photos_divider) + photosData;
-					else if (photosData === "")
-						html = build.divider(albums_divider) + albumsData;
-					else
-						html =
-							build.divider(albums_divider) +
-							albumsData +
-							build.divider(photos_divider) +
-							photosData;
+					else if (albumsData === "") html = build.divider(photos_divider) + photosData;
+					else if (photosData === "") html = build.divider(albums_divider) + albumsData;
+					else html = build.divider(albums_divider) + albumsData + build.divider(photos_divider) + photosData;
 
 					// Only refresh view when search results are different
 					if (search.hash !== data.hash) {
@@ -90,18 +76,13 @@ search.find = function (term) {
 
 							if (html === "error") {
 								lychee.content.html("");
-								$("body").append(
-									build.no_content("magnifying-glass")
-								);
+								$("body").append(build.no_content("magnifying-glass"));
 							} else {
 								lychee.content.html(html);
 								view.album.content.justify();
 								lychee.animate(lychee.content, "contentZoomIn");
 							}
-							lychee.setTitle(
-								lychee.locale["SEARCH_RESULTS"],
-								false
-							);
+							lychee.setTitle(lychee.locale["SEARCH_RESULTS"], false);
 						}, 300);
 					}
 				});

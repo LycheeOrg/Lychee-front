@@ -16,8 +16,7 @@ albums.load = function () {
 			let waitTime;
 
 			// Smart Albums
-			if (data.smartalbums != null)
-				albums._createSmartAlbums(data.smartalbums);
+			if (data.smartalbums != null) albums._createSmartAlbums(data.smartalbums);
 
 			albums.json = data;
 
@@ -27,8 +26,7 @@ albums.load = function () {
 			else waitTime = 300 - durationTime;
 
 			// Skip delay when opening a blank Lychee
-			if (!visible.albums() && !visible.photo() && !visible.album())
-				waitTime = 0;
+			if (!visible.albums() && !visible.photo() && !visible.album()) waitTime = 0;
 			if (visible.album() && lychee.content.html() === "") waitTime = 0;
 
 			setTimeout(() => {
@@ -84,10 +82,7 @@ albums.parse = function (album) {
 	let i;
 	for (i = 0; i < 3; i++) {
 		if (!album.thumbs[i]) {
-			album.thumbs[i] =
-				album.password === "1"
-					? "img/password.svg"
-					: "img/no_images.svg";
+			album.thumbs[i] = album.password === "1" ? "img/password.svg" : "img/no_images.svg";
 		}
 	}
 };
@@ -175,8 +170,7 @@ albums.isShared = function (albumID) {
 		}
 	};
 
-	if (albums.json.shared_albums !== null)
-		$.each(albums.json.shared_albums, func);
+	if (albums.json.shared_albums !== null) $.each(albums.json.shared_albums, func);
 
 	return found;
 };
@@ -202,11 +196,9 @@ albums.getByID = function (albumID) {
 
 	$.each(albums.json.albums, func);
 
-	if (json === undefined && albums.json.shared_albums !== null)
-		$.each(albums.json.shared_albums, func);
+	if (json === undefined && albums.json.shared_albums !== null) $.each(albums.json.shared_albums, func);
 
-	if (json === undefined && albums.json.smartalbums !== null)
-		$.each(albums.json.smartalbums, func);
+	if (json === undefined && albums.json.smartalbums !== null) $.each(albums.json.smartalbums, func);
 
 	return json;
 };
@@ -233,9 +225,7 @@ albums.deleteByID = function (albumID) {
 	if (deleted === false) {
 		if (!albums.json.shared_albums) return undefined;
 		$.each(albums.json.shared_albums, function (i) {
-			if (
-				parseInt(albums.json.shared_albums[i].id) === parseInt(albumID)
-			) {
+			if (parseInt(albums.json.shared_albums[i].id) === parseInt(albumID)) {
 				albums.json.shared_albums.splice(i, 1);
 				deleted = true;
 				return false; // stop the loop

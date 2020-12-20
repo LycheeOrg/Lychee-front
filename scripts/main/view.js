@@ -54,14 +54,12 @@ view.albums = {
 					smartData += build.album(albums.json.smartalbums.recent);
 				}
 
-				Object.entries(albums.json.smartalbums).forEach(
-					([albumName, albumData]) => {
-						if (albumData["tag_album"] === "1") {
-							albums.parse(albumData);
-							smartData += build.album(albumData);
-						}
+				Object.entries(albums.json.smartalbums).forEach(([albumName, albumData]) => {
+					if (albumData["tag_album"] === "1") {
+						albums.parse(albumData);
+						smartData += build.album(albumData);
 					}
-				);
+				});
 			}
 
 			// Albums
@@ -74,27 +72,19 @@ view.albums = {
 				});
 
 				// Add divider
-				if (lychee.publicMode === false)
-					albumsData =
-						build.divider(lychee.locale["ALBUMS"]) + albumsData;
+				if (lychee.publicMode === false) albumsData = build.divider(lychee.locale["ALBUMS"]) + albumsData;
 			}
 
 			if (lychee.api_V2) {
 				let current_owner = "";
 				let i;
 				// Shared
-				if (
-					albums.json.shared_albums &&
-					albums.json.shared_albums.length !== 0
-				) {
+				if (albums.json.shared_albums && albums.json.shared_albums.length !== 0) {
 					for (i = 0; i < albums.json.shared_albums.length; ++i) {
 						let alb = albums.json.shared_albums[i];
 						if (!alb.parent_id || alb.parent_id === 0) {
 							albums.parse(alb);
-							if (
-								current_owner !== alb.owner &&
-								lychee.publicMode === false
-							) {
+							if (current_owner !== alb.owner && lychee.publicMode === false) {
 								sharedData += build.divider(alb.owner);
 								current_owner = alb.owner;
 							}
@@ -113,10 +103,7 @@ view.albums = {
 
 			album.apply_nsfw_filter();
 			// Restore scroll position
-			if (
-				view.albums.content.scrollPosition != null &&
-				view.albums.content.scrollPosition !== 0
-			) {
+			if (view.albums.content.scrollPosition != null && view.albums.content.scrollPosition !== 0) {
 				$(document).scrollTop(view.albums.content.scrollPosition);
 			}
 		},
@@ -142,8 +129,7 @@ view.albums = {
 					300,
 					function () {
 						$(this).remove();
-						if (albums.json.albums.length <= 0)
-							lychee.content.find(".divider:last-child").remove();
+						if (albums.json.albums.length <= 0) lychee.content.find(".divider:last-child").remove();
 					}
 				);
 		},
@@ -181,8 +167,7 @@ view.album = {
 					lychee.setTitle(lychee.locale["UNSORTED"], true);
 					break;
 				default:
-					if (album.json.init)
-						sidebar.changeAttr("title", album.json.title);
+					if (album.json.init) sidebar.changeAttr("title", album.json.title);
 					lychee.setTitle(album.json.title, true);
 					break;
 			}
@@ -210,15 +195,9 @@ view.album = {
 
 			if (photosData !== "") {
 				if (lychee.layout === "1") {
-					photosData =
-						'<div class="justified-layout">' +
-						photosData +
-						"</div>";
+					photosData = '<div class="justified-layout">' + photosData + "</div>";
 				} else if (lychee.layout === "2") {
-					photosData =
-						'<div class="unjustified-layout">' +
-						photosData +
-						"</div>";
+					photosData = '<div class="unjustified-layout">' + photosData + "</div>";
 				}
 			}
 
@@ -265,16 +244,14 @@ view.album = {
 		star: function (photoID) {
 			let $badge = $('.photo[data-id="' + photoID + '"] .icn-star');
 
-			if (album.getByID(photoID).star === "1")
-				$badge.addClass("badge--star");
+			if (album.getByID(photoID).star === "1") $badge.addClass("badge--star");
 			else $badge.removeClass("badge--star");
 		},
 
 		public: function (photoID) {
 			let $badge = $('.photo[data-id="' + photoID + '"] .icn-share');
 
-			if (album.getByID(photoID).public === "1")
-				$badge.addClass("badge--visible badge--hidden");
+			if (album.getByID(photoID).public === "1") $badge.addClass("badge--visible badge--hidden");
 			else $badge.removeClass("badge--visible badge--hidden");
 		},
 
@@ -294,18 +271,12 @@ view.album = {
 							if (visible.sidebar()) {
 								let videoCount = 0;
 								$.each(album.json.photos, function () {
-									if (
-										this.type &&
-										this.type.indexOf("video") > -1
-									) {
+									if (this.type && this.type.indexOf("video") > -1) {
 										videoCount++;
 									}
 								});
 								if (album.json.photos.length - videoCount > 0) {
-									sidebar.changeAttr(
-										"images",
-										album.json.photos.length - videoCount
-									);
+									sidebar.changeAttr("images", album.json.photos.length - videoCount);
 								} else {
 									sidebar.hideAttr("images");
 								}
@@ -343,10 +314,7 @@ view.album = {
 							}
 							if (visible.sidebar()) {
 								if (album.json.albums.length > 0) {
-									sidebar.changeAttr(
-										"subalbums",
-										album.json.albums.length
-									);
+									sidebar.changeAttr("subalbums", album.json.albums.length);
 								} else {
 									sidebar.hideAttr("subalbums");
 								}
@@ -357,29 +325,15 @@ view.album = {
 		},
 
 		justify: function () {
-			if (
-				!album.json ||
-				!album.json.photos ||
-				album.json.photos === false
-			)
-				return;
+			if (!album.json || !album.json.photos || album.json.photos === false) return;
 			if (lychee.layout === "1") {
-				let containerWidth = parseFloat(
-					$(".justified-layout").width(),
-					10
-				);
+				let containerWidth = parseFloat($(".justified-layout").width(), 10);
 				if (containerWidth == 0) {
 					// Triggered on Reload in photo view.
 					containerWidth =
 						$(window).width() -
-						parseFloat(
-							$(".justified-layout").css("margin-left"),
-							10
-						) -
-						parseFloat(
-							$(".justified-layout").css("margin-right"),
-							10
-						) -
+						parseFloat($(".justified-layout").css("margin-left"), 10) -
+						parseFloat($(".justified-layout").css("margin-right"), 10) -
 						parseFloat($(".content").css("padding-right"), 10);
 				}
 				let ratio = [];
@@ -400,16 +354,10 @@ view.album = {
 					//     horizontal: 42,
 					//     vertical: 150
 					// },
-					targetRowHeight: parseFloat(
-						$(".photo").css("--lychee-default-height"),
-						10
-					),
+					targetRowHeight: parseFloat($(".photo").css("--lychee-default-height"), 10),
 				});
 				// if (lychee.admin) console.log(layoutGeometry);
-				$(".justified-layout").css(
-					"height",
-					layoutGeometry.containerHeight + "px"
-				);
+				$(".justified-layout").css("height", layoutGeometry.containerHeight + "px");
 				$(".justified-layout > div").each(function (i) {
 					if (!layoutGeometry.boxes[i]) {
 						// Race condition in search.find -- window content
@@ -423,33 +371,18 @@ view.album = {
 					$(this).css("left", layoutGeometry.boxes[i].left);
 
 					let imgs = $(this).find(".thumbimg > img");
-					if (
-						imgs.length > 0 &&
-						imgs[0].getAttribute("data-srcset")
-					) {
-						imgs[0].setAttribute(
-							"sizes",
-							layoutGeometry.boxes[i].width + "px"
-						);
+					if (imgs.length > 0 && imgs[0].getAttribute("data-srcset")) {
+						imgs[0].setAttribute("sizes", layoutGeometry.boxes[i].width + "px");
 					}
 				});
 			} else if (lychee.layout === "2") {
-				let containerWidth = parseFloat(
-					$(".unjustified-layout").width(),
-					10
-				);
+				let containerWidth = parseFloat($(".unjustified-layout").width(), 10);
 				if (containerWidth == 0) {
 					// Triggered on Reload in photo view.
 					containerWidth =
 						$(window).width() -
-						parseFloat(
-							$(".unjustified-layout").css("margin-left"),
-							10
-						) -
-						parseFloat(
-							$(".unjustified-layout").css("margin-right"),
-							10
-						) -
+						parseFloat($(".unjustified-layout").css("margin-left"), 10) -
+						parseFloat($(".unjustified-layout").css("margin-right"), 10) -
 						parseFloat($(".content").css("padding-right"), 10);
 				}
 				// For whatever reason, the calculation of margin is
@@ -465,21 +398,11 @@ view.album = {
 						// query is being modified.
 						return false;
 					}
-					let ratio =
-						album.json.photos[i].height > 0
-							? album.json.photos[i].width /
-							  album.json.photos[i].height
-							: 1;
-					if (
-						album.json.photos[i].type &&
-						album.json.photos[i].type.indexOf("video") > -1
-					) {
+					let ratio = album.json.photos[i].height > 0 ? album.json.photos[i].width / album.json.photos[i].height : 1;
+					if (album.json.photos[i].type && album.json.photos[i].type.indexOf("video") > -1) {
 						// Video.  If there's no small and medium, we have
 						// to fall back to the square thumb.
-						if (
-							album.json.photos[i].small === "" &&
-							album.json.photos[i].medium === ""
-						) {
+						if (album.json.photos[i].small === "" && album.json.photos[i].medium === "") {
 							ratio = 1;
 						}
 					}
@@ -495,10 +418,7 @@ view.album = {
 
 					$(this).css("width", width + "px");
 					$(this).css("height", height + "px");
-					if (
-						imgs.length > 0 &&
-						imgs[0].getAttribute("data-srcset")
-					) {
+					if (imgs.length > 0 && imgs[0].getAttribute("data-srcset")) {
 						imgs[0].setAttribute("sizes", width + "px");
 					}
 				});
@@ -533,9 +453,7 @@ view.album = {
 	},
 
 	public: function () {
-		$("#button_visibility_album").removeClass(
-			"active--not-hidden active--hidden"
-		);
+		$("#button_visibility_album").removeClass("active--not-hidden active--hidden");
 
 		if (album.json.public === "1") {
 			if (album.json.visible === "0") {
@@ -546,56 +464,39 @@ view.album = {
 
 			$(".photo .iconic-share").remove();
 
-			if (album.json.init)
-				sidebar.changeAttr("public", lychee.locale["ALBUM_SHR_YES"]);
+			if (album.json.init) sidebar.changeAttr("public", lychee.locale["ALBUM_SHR_YES"]);
 		} else {
-			if (album.json.init)
-				sidebar.changeAttr("public", lychee.locale["ALBUM_SHR_NO"]);
+			if (album.json.init) sidebar.changeAttr("public", lychee.locale["ALBUM_SHR_NO"]);
 		}
 	},
 
 	hidden: function () {
-		if (album.json.visible === "1")
-			sidebar.changeAttr("hidden", lychee.locale["ALBUM_SHR_NO"]);
+		if (album.json.visible === "1") sidebar.changeAttr("hidden", lychee.locale["ALBUM_SHR_NO"]);
 		else sidebar.changeAttr("hidden", lychee.locale["ALBUM_SHR_YES"]);
 	},
 
 	nsfw: function () {
 		if (album.json.nsfw === "1") {
 			// Sensitive
-			$("#button_nsfw_album")
-				.addClass("active")
-				.attr("title", lychee.locale["ALBUM_UNMARK_NSFW"]);
+			$("#button_nsfw_album").addClass("active").attr("title", lychee.locale["ALBUM_UNMARK_NSFW"]);
 		} else {
 			// Unensitive
-			$("#button_nsfw_album")
-				.removeClass("active")
-				.attr("title", lychee.locale["ALBUM_MARK_NSFW"]);
+			$("#button_nsfw_album").removeClass("active").attr("title", lychee.locale["ALBUM_MARK_NSFW"]);
 		}
 	},
 
 	downloadable: function () {
-		if (album.json.downloadable === "1")
-			sidebar.changeAttr("downloadable", lychee.locale["ALBUM_SHR_YES"]);
+		if (album.json.downloadable === "1") sidebar.changeAttr("downloadable", lychee.locale["ALBUM_SHR_YES"]);
 		else sidebar.changeAttr("downloadable", lychee.locale["ALBUM_SHR_NO"]);
 	},
 
 	shareButtonVisible: () => {
-		if (album.json.share_button_visible === "1")
-			sidebar.changeAttr(
-				"share_button_visible",
-				lychee.locale["ALBUM_SHR_YES"]
-			);
-		else
-			sidebar.changeAttr(
-				"share_button_visible",
-				lychee.locale["ALBUM_SHR_NO"]
-			);
+		if (album.json.share_button_visible === "1") sidebar.changeAttr("share_button_visible", lychee.locale["ALBUM_SHR_YES"]);
+		else sidebar.changeAttr("share_button_visible", lychee.locale["ALBUM_SHR_NO"]);
 	},
 
 	password: function () {
-		if (album.json.password === "1")
-			sidebar.changeAttr("password", lychee.locale["ALBUM_SHR_YES"]);
+		if (album.json.password === "1") sidebar.changeAttr("password", lychee.locale["ALBUM_SHR_YES"]);
 		else sidebar.changeAttr("password", lychee.locale["ALBUM_SHR_NO"]);
 	},
 
@@ -686,8 +587,7 @@ view.photo = {
 	},
 
 	description: function () {
-		if (photo.json.init)
-			sidebar.changeAttr("description", photo.json.description);
+		if (photo.json.init) sidebar.changeAttr("description", photo.json.description);
 	},
 
 	license: function () {
@@ -713,21 +613,15 @@ view.photo = {
 	star: function () {
 		if (photo.json.star === "1") {
 			// Starred
-			$("#button_star")
-				.addClass("active")
-				.attr("title", lychee.locale["UNSTAR_PHOTO"]);
+			$("#button_star").addClass("active").attr("title", lychee.locale["UNSTAR_PHOTO"]);
 		} else {
 			// Unstarred
-			$("#button_star")
-				.removeClass("active")
-				.attr("title", lychee.locale["STAR_PHOTO"]);
+			$("#button_star").removeClass("active").attr("title", lychee.locale["STAR_PHOTO"]);
 		}
 	},
 
 	public: function () {
-		$("#button_visibility").removeClass(
-			"active--hidden active--not-hidden"
-		);
+		$("#button_visibility").removeClass("active--hidden active--not-hidden");
 
 		if (photo.json.public === "1" || photo.json.public === "2") {
 			// Photo public
@@ -737,8 +631,7 @@ view.photo = {
 				$("#button_visibility").addClass("active--not-hidden");
 			}
 
-			if (photo.json.init)
-				sidebar.changeAttr("public", lychee.locale["PHOTO_SHR_YES"]);
+			if (photo.json.init) sidebar.changeAttr("public", lychee.locale["PHOTO_SHR_YES"]);
 		} else {
 			// Photo private
 			if (photo.json.init) sidebar.changeAttr("public", "No");
@@ -760,9 +653,7 @@ view.photo = {
 			// Package gives warning that function will be remove and
 			// shoud be replaced by LivePhotosKit.augementElementAsPlayer
 			// But, LivePhotosKit.augementElementAsPlayer is not yet available
-			photo.LivePhotosObject = LivePhotosKit.Player(
-				document.getElementById("livephoto")
-			);
+			photo.LivePhotosObject = LivePhotosKit.Player(document.getElementById("livephoto"));
 		}
 
 		view.photo.onresize();
@@ -785,17 +676,11 @@ view.photo = {
 
 		let img = $("img#image");
 		if (img.length > 0) {
-			if (
-				!img[0].complete ||
-				(img[0].currentSrc !== null && img[0].currentSrc === "")
-			) {
+			if (!img[0].complete || (img[0].currentSrc !== null && img[0].currentSrc === "")) {
 				// Image is still loading.  Display the thumb version in the
 				// background.
 				if (ret.thumb !== "") {
-					img.css(
-						"background-image",
-						lychee.html`url("${ret.thumb}")`
-					);
+					img.css("background-image", lychee.html`url("${ret.thumb}")`);
 				}
 
 				// Don't preload next/prev until the requested image is
@@ -817,16 +702,10 @@ view.photo = {
 			// Check if thumbUrl exists (for videos w/o ffmpeg, we add a play-icon)
 			let thumbUrl = nextPhoto.thumbUrl;
 
-			if (
-				thumbUrl === "uploads/thumb/" &&
-				nextPhoto.type.indexOf("video") > -1
-			) {
+			if (thumbUrl === "uploads/thumb/" && nextPhoto.type.indexOf("video") > -1) {
 				thumbUrl = "img/play-icon.png";
 			}
-			$nextArrow.css(
-				"background-image",
-				lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("${thumbUrl}")`
-			);
+			$nextArrow.css("background-image", lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("${thumbUrl}")`);
 		}
 
 		if (hasPrevious === false || lychee.viewMode === true) {
@@ -838,24 +717,17 @@ view.photo = {
 			// Check if thumbUrl exists (for videos w/o ffmpeg, we add a play-icon)
 			let thumbUrl = previousPhoto.thumbUrl;
 
-			if (
-				thumbUrl === "uploads/thumb/" &&
-				previousPhoto.type.indexOf("video") > -1
-			) {
+			if (thumbUrl === "uploads/thumb/" && previousPhoto.type.indexOf("video") > -1) {
 				thumbUrl = "img/play-icon.png";
 			}
-			$previousArrow.css(
-				"background-image",
-				lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("${thumbUrl}")`
-			);
+			$previousArrow.css("background-image", lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("${thumbUrl}")`);
 		}
 	},
 
 	sidebar: function () {
 		let structure = sidebar.createStructure.photo(photo.json);
 		let html = sidebar.render(structure);
-		let has_location =
-			photo.json.latitude && photo.json.longitude ? true : false;
+		let has_location = photo.json.latitude && photo.json.longitude ? true : false;
 
 		sidebar.dom(".sidebar__wrapper").html(html);
 		sidebar.bind();
@@ -870,25 +742,15 @@ view.photo = {
 				shadowUrl: "img/marker-shadow.png",
 			});
 
-			var mymap = L.map("leaflet_map_single_photo").setView(
-				[photo.json.latitude, photo.json.longitude],
-				13
-			);
+			var mymap = L.map("leaflet_map_single_photo").setView([photo.json.latitude, photo.json.longitude], 13);
 
-			L.tileLayer(
-				map_provider_layer_attribution[lychee.map_provider].layer,
-				{
-					attribution:
-						map_provider_layer_attribution[lychee.map_provider]
-							.attribution,
-				}
-			).addTo(mymap);
+			L.tileLayer(map_provider_layer_attribution[lychee.map_provider].layer, {
+				attribution: map_provider_layer_attribution[lychee.map_provider].attribution,
+			}).addTo(mymap);
 
 			if (!photo.json.imgDirection || photo.json.imgDirection === "") {
 				// Add Marker to map, direction is not set
-				L.marker([photo.json.latitude, photo.json.longitude]).addTo(
-					mymap
-				);
+				L.marker([photo.json.latitude, photo.json.longitude]).addTo(mymap);
 			} else {
 				// Add Marker, direction has been set
 				let viewDirectionIcon = L.icon({
@@ -897,30 +759,19 @@ view.photo = {
 					iconSize: [100, 58], // size of the icon
 					iconAnchor: [50, 49], // point of the icon which will correspond to marker's location
 				});
-				let marker = L.marker(
-					[photo.json.latitude, photo.json.longitude],
-					{ icon: viewDirectionIcon }
-				).addTo(mymap);
+				let marker = L.marker([photo.json.latitude, photo.json.longitude], { icon: viewDirectionIcon }).addTo(mymap);
 				marker.setRotationAngle(photo.json.imgDirection);
 			}
 		}
 	},
 
 	onresize: function () {
-		if (
-			!photo.json ||
-			photo.json.medium === "" ||
-			!photo.json.medium2x ||
-			photo.json.medium2x === ""
-		)
-			return;
+		if (!photo.json || photo.json.medium === "" || !photo.json.medium2x || photo.json.medium2x === "") return;
 
 		// Calculate the width of the image in the current window without
 		// borders and set 'sizes' to it.
 		let imgWidth = parseInt(photo.json.medium_dim);
-		let imgHeight = photo.json.medium_dim.substr(
-			photo.json.medium_dim.lastIndexOf("x") + 1
-		);
+		let imgHeight = photo.json.medium_dim.substr(photo.json.medium_dim.lastIndexOf("x") + 1);
 		let containerWidth = $(window).outerWidth();
 		let containerHeight = $(window).outerHeight();
 
@@ -1012,17 +863,11 @@ view.settings = {
 
 			$(".settings_view").append(msg);
 
-			settings.bind(
-				"#basicModal__action_password_change",
-				".setLogin",
-				settings.changeLogin
-			);
+			settings.bind("#basicModal__action_password_change", ".setLogin", settings.changeLogin);
 		},
 
 		clearLogin: function () {
-			$(
-				"input[name=oldUsername], input[name=oldPassword], input[name=username], input[name=password], input[name=confirm]"
-			).val("");
+			$("input[name=oldUsername], input[name=oldPassword], input[name=username], input[name=password], input[name=confirm]").val("");
 		},
 
 		setSorting: function () {
@@ -1131,36 +976,20 @@ view.settings = {
 			$(".settings_view").append(msg);
 
 			if (lychee.sortingAlbums !== "") {
-				sortingAlbums = lychee.sortingAlbums
-					.replace("ORDER BY ", "")
-					.split(" ");
+				sortingAlbums = lychee.sortingAlbums.replace("ORDER BY ", "").split(" ");
 
-				$(".setSorting select#settings_albums_type").val(
-					sortingAlbums[0]
-				);
-				$(".setSorting select#settings_albums_order").val(
-					sortingAlbums[1]
-				);
+				$(".setSorting select#settings_albums_type").val(sortingAlbums[0]);
+				$(".setSorting select#settings_albums_order").val(sortingAlbums[1]);
 			}
 
 			if (lychee.sortingPhotos !== "") {
-				sortingPhotos = lychee.sortingPhotos
-					.replace("ORDER BY ", "")
-					.split(" ");
+				sortingPhotos = lychee.sortingPhotos.replace("ORDER BY ", "").split(" ");
 
-				$(".setSorting select#settings_photos_type").val(
-					sortingPhotos[0]
-				);
-				$(".setSorting select#settings_photos_order").val(
-					sortingPhotos[1]
-				);
+				$(".setSorting select#settings_photos_type").val(sortingPhotos[0]);
+				$(".setSorting select#settings_photos_order").val(sortingPhotos[1]);
 			}
 
-			settings.bind(
-				"#basicModal__action_sorting_change",
-				".setSorting",
-				settings.changeSorting
-			);
+			settings.bind("#basicModal__action_sorting_change", ".setSorting", settings.changeSorting);
 		},
 
 		setDropboxKey: function () {
@@ -1176,11 +1005,7 @@ view.settings = {
 			  `;
 
 			$(".settings_view").append(msg);
-			settings.bind(
-				"#basicModal__action_dropbox_change",
-				".setDropBox",
-				settings.changeDropboxKey
-			);
+			settings.bind("#basicModal__action_dropbox_change", ".setDropBox", settings.changeDropboxKey);
 		},
 
 		setLang: function () {
@@ -1192,12 +1017,7 @@ view.settings = {
 			let i = 0;
 			while (i < lychee.lang_available.length) {
 				let lang_av = lychee.lang_available[i];
-				msg +=
-					`<option ` +
-					(lychee.lang === lang_av ? "selected" : "") +
-					`>` +
-					lang_av +
-					`</option>`;
+				msg += `<option ` + (lychee.lang === lang_av ? "selected" : "") + `>` + lang_av + `</option>`;
 				i += 1;
 			}
 			msg += `
@@ -1210,11 +1030,7 @@ view.settings = {
 			</div>`;
 
 			$(".settings_view").append(msg);
-			settings.bind(
-				"#basicModal__action_set_lang",
-				".setLang",
-				settings.changeLang
-			);
+			settings.bind("#basicModal__action_set_lang", ".setLang", settings.changeLang);
 		},
 
 		setDefaultLicense: function () {
@@ -1267,14 +1083,8 @@ view.settings = {
 			</div>
 			`;
 			$(".settings_view").append(msg);
-			$("select#license").val(
-				lychee.default_license === "" ? "none" : lychee.default_license
-			);
-			settings.bind(
-				"#basicModal__action_set_license",
-				".setDefaultLicense",
-				settings.setDefaultLicense
-			);
+			$("select#license").val(lychee.default_license === "" ? "none" : lychee.default_license);
+			settings.bind("#basicModal__action_set_license", ".setDefaultLicense", settings.setDefaultLicense);
 		},
 
 		setLayout: function () {
@@ -1296,11 +1106,7 @@ view.settings = {
 			`;
 			$(".settings_view").append(msg);
 			$("select#layout").val(lychee.layout);
-			settings.bind(
-				"#basicModal__action_set_layout",
-				".setLayout",
-				settings.setLayout
-			);
+			settings.bind("#basicModal__action_set_layout", ".setLayout", settings.setLayout);
 		},
 
 		setPublicSearch: function () {
@@ -1318,11 +1124,7 @@ view.settings = {
 			$(".settings_view").append(msg);
 			if (lychee.public_search) $("#PublicSearch").click();
 
-			settings.bind(
-				"#PublicSearch",
-				".setPublicSearch",
-				settings.changePublicSearch
-			);
+			settings.bind("#PublicSearch", ".setPublicSearch", settings.changePublicSearch);
 		},
 
 		setNSFWVisible: function () {
@@ -1343,11 +1145,7 @@ view.settings = {
 				$("#NSFWVisible").click();
 			}
 
-			settings.bind(
-				"#NSFWVisible",
-				".setNSFWVisible",
-				settings.changeNSFWVisible
-			);
+			settings.bind("#NSFWVisible", ".setNSFWVisible", settings.changeNSFWVisible);
 		},
 		// TODO: extend to the other settings.
 
@@ -1366,11 +1164,7 @@ view.settings = {
 			$(".settings_view").append(msg);
 			if (lychee.image_overlay_default) $("#ImageOverlay").click();
 
-			settings.bind(
-				"#ImageOverlay",
-				".setOverlay",
-				settings.changeImageOverlay
-			);
+			settings.bind("#ImageOverlay", ".setOverlay", settings.changeImageOverlay);
 		},
 
 		setOverlayType: function () {
@@ -1393,19 +1187,10 @@ view.settings = {
 			$(".settings_view").append(msg);
 
 			// Enable based on image_overlay setting
-			if (!lychee.image_overlay)
-				$("select#ImgOverlayType").attr("disabled", true);
+			if (!lychee.image_overlay) $("select#ImgOverlayType").attr("disabled", true);
 
-			$("select#ImgOverlayType").val(
-				!lychee.image_overlay_type_default
-					? "exif"
-					: lychee.image_overlay_type_default
-			);
-			settings.bind(
-				"#basicModal__action_set_overlay_type",
-				".setOverlayType",
-				settings.setOverlayType
-			);
+			$("select#ImgOverlayType").val(!lychee.image_overlay_type_default ? "exif" : lychee.image_overlay_type_default);
+			settings.bind("#basicModal__action_set_overlay_type", ".setOverlayType", settings.setOverlayType);
 		},
 
 		setMapDisplay: function () {
@@ -1423,11 +1208,7 @@ view.settings = {
 			$(".settings_view").append(msg);
 			if (lychee.map_display) $("#MapDisplay").click();
 
-			settings.bind(
-				"#MapDisplay",
-				".setMapDisplay",
-				settings.changeMapDisplay
-			);
+			settings.bind("#MapDisplay", ".setMapDisplay", settings.changeMapDisplay);
 
 			msg = `
 			<div class="setMapDisplayPublic">
@@ -1443,11 +1224,7 @@ view.settings = {
 			$(".settings_view").append(msg);
 			if (lychee.map_display_public) $("#MapDisplayPublic").click();
 
-			settings.bind(
-				"#MapDisplayPublic",
-				".setMapDisplayPublic",
-				settings.changeMapDisplayPublic
-			);
+			settings.bind("#MapDisplayPublic", ".setMapDisplayPublic", settings.changeMapDisplayPublic);
 
 			msg = `
 			<div class="setMapProvider">
@@ -1469,14 +1246,8 @@ view.settings = {
 
 			$(".settings_view").append(msg);
 
-			$("select#MapProvider").val(
-				!lychee.map_provider ? "Wikimedia" : lychee.map_provider
-			);
-			settings.bind(
-				"#basicModal__action_set_map_provider",
-				".setMapProvider",
-				settings.setMapProvider
-			);
+			$("select#MapProvider").val(!lychee.map_provider ? "Wikimedia" : lychee.map_provider);
+			settings.bind("#basicModal__action_set_map_provider", ".setMapProvider", settings.setMapProvider);
 
 			msg = `
 			<div class="setMapIncludeSubalbums">
@@ -1492,11 +1263,7 @@ view.settings = {
 			$(".settings_view").append(msg);
 			if (lychee.map_include_subalbums) $("#MapIncludeSubalbums").click();
 
-			settings.bind(
-				"#MapIncludeSubalbums",
-				".setMapIncludeSubalbums",
-				settings.changeMapIncludeSubalbums
-			);
+			settings.bind("#MapIncludeSubalbums", ".setMapIncludeSubalbums", settings.changeMapIncludeSubalbums);
 
 			msg = `
 			<div class="setLocationDecoding">
@@ -1512,11 +1279,7 @@ view.settings = {
 			$(".settings_view").append(msg);
 			if (lychee.location_decoding) $("#LocationDecoding").click();
 
-			settings.bind(
-				"#LocationDecoding",
-				".setLocationDecoding",
-				settings.changeLocationDecoding
-			);
+			settings.bind("#LocationDecoding", ".setLocationDecoding", settings.changeLocationDecoding);
 
 			msg = `
 			<div class="setLocationShow">
@@ -1532,11 +1295,7 @@ view.settings = {
 			$(".settings_view").append(msg);
 			if (lychee.location_show) $("#LocationShow").click();
 
-			settings.bind(
-				"#LocationShow",
-				".setLocationShow",
-				settings.changeLocationShow
-			);
+			settings.bind("#LocationShow", ".setLocationShow", settings.changeLocationShow);
 
 			msg = `
 			<div class="setLocationShowPublic">
@@ -1552,11 +1311,7 @@ view.settings = {
 			$(".settings_view").append(msg);
 			if (lychee.location_show_public) $("#LocationShowPublic").click();
 
-			settings.bind(
-				"#LocationShowPublic",
-				".setLocationShowPublic",
-				settings.changeLocationShowPublic
-			);
+			settings.bind("#LocationShowPublic", ".setLocationShowPublic", settings.changeLocationShowPublic);
 		},
 
 		setCSS: function () {
@@ -1577,11 +1332,7 @@ view.settings = {
 				$("#css").html(data);
 			});
 
-			settings.bind(
-				"#basicModal__action_set_css",
-				".setCSS",
-				settings.changeCSS
-			);
+			settings.bind("#basicModal__action_set_css", ".setCSS", settings.changeCSS);
 		},
 
 		moreButton: function () {
@@ -1656,11 +1407,7 @@ view.full_settings = {
 			`;
 				$(".settings_view").append(msg);
 
-				settings.bind(
-					"#FullSettingsSave_button",
-					"#fullSettings",
-					settings.save
-				);
+				settings.bind("#FullSettingsSave_button", "#fullSettings", settings.save);
 
 				$("#fullSettings").on("keypress", function (e) {
 					settings.save_enter(e);
@@ -1717,25 +1464,13 @@ view.users = {
 
 			$.each(users.json, function () {
 				$(".users_view").append(build.user(this));
-				settings.bind(
-					"#UserUpdate" + this.id,
-					"#UserData" + this.id,
-					users.update
-				);
-				settings.bind(
-					"#UserDelete" + this.id,
-					"#UserData" + this.id,
-					users.delete
-				);
+				settings.bind("#UserUpdate" + this.id, "#UserData" + this.id, users.update);
+				settings.bind("#UserDelete" + this.id, "#UserData" + this.id, users.delete);
 				if (this.upload === 1) {
-					$(
-						"#UserData" + this.id + ' .choice input[name="upload"]'
-					).click();
+					$("#UserData" + this.id + ' .choice input[name="upload"]').click();
 				}
 				if (this.lock === 1) {
-					$(
-						"#UserData" + this.id + ' .choice input[name="lock"]'
-					).click();
+					$("#UserData" + this.id + ' .choice input[name="lock"]').click();
 				}
 			});
 
@@ -1806,12 +1541,7 @@ view.sharing = {
 					<select name="from" id="albums_list" class="form-control select" size="13" multiple="multiple">`;
 
 			$.each(sharing.json.albums, function () {
-				html +=
-					`<option value="` +
-					this.id +
-					`">` +
-					this.title +
-					`</option>`;
+				html += `<option value="` + this.id + `">` + this.title + `</option>`;
 			});
 
 			html +=
@@ -1847,12 +1577,7 @@ view.sharing = {
 					<select name="from" id="user_list" class="form-control select" size="13" multiple="multiple">`;
 
 			$.each(sharing.json.users, function () {
-				html +=
-					`<option value="` +
-					this.id +
-					`">` +
-					this.username +
-					`</option>`;
+				html += `<option value="` + this.id + `">` + this.username + `</option>`;
 			});
 
 			html +=
@@ -1915,9 +1640,7 @@ view.sharing = {
 					$("#albums_list_to, #user_list_to").addClass("borderBlue");
 				})
 				.on("mouseleave", function () {
-					$("#albums_list_to, #user_list_to").removeClass(
-						"borderBlue"
-					);
+					$("#albums_list_to, #user_list_to").removeClass("borderBlue");
 				});
 
 			$("#Remove_button").on("click", sharing.delete);
@@ -1980,20 +1703,11 @@ view.diagnostics = {
 		let html = "";
 
 		if (update === 2) {
-			html += view.diagnostics.button(
-				"",
-				lychee.locale["UPDATE_AVAILABLE"]
-			);
+			html += view.diagnostics.button("", lychee.locale["UPDATE_AVAILABLE"]);
 		} else if (update === 3) {
-			html += view.diagnostics.button(
-				"",
-				lychee.locale["MIGRATION_AVAILABLE"]
-			);
+			html += view.diagnostics.button("", lychee.locale["MIGRATION_AVAILABLE"]);
 		} else if (update > 0) {
-			html += view.diagnostics.button(
-				"Check_",
-				lychee.locale["CHECK_FOR_UPDATE"]
-			);
+			html += view.diagnostics.button("Check_", lychee.locale["CHECK_FOR_UPDATE"]);
 		}
 
 		html += '<pre class="logs_diagnostics_view"></pre>';
@@ -2011,10 +1725,7 @@ view.diagnostics = {
 
 	bind: function () {
 		$("#Update_Lychee").on("click", view.diagnostics.call_apply_update);
-		$("#Check_Update_Lychee").on(
-			"click",
-			view.diagnostics.call_check_update
-		);
+		$("#Check_Update_Lychee").on("click", view.diagnostics.call_check_update);
 	},
 
 	content: {
@@ -2039,36 +1750,19 @@ view.diagnostics = {
 				view.diagnostics.clearContent(data.update);
 				let html = "";
 
-				html += view.diagnostics.content.block(
-					"error",
-					"Diagnostics",
-					data.errors
-				);
-				html += view.diagnostics.content.block(
-					"sys",
-					"System Information",
-					data.infos
-				);
-				html +=
-					'<a id="Get_Size_Lychee" class="basicModal__button button_left">';
-				html +=
-					'<svg class="iconic"><use xlink:href="#reload"></use></svg>';
+				html += view.diagnostics.content.block("error", "Diagnostics", data.errors);
+				html += view.diagnostics.content.block("sys", "System Information", data.infos);
+				html += '<a id="Get_Size_Lychee" class="basicModal__button button_left">';
+				html += '<svg class="iconic"><use xlink:href="#reload"></use></svg>';
 				html += lychee.html`${lychee.locale["DIAGNOSTICS_GET_SIZE"]}`;
 				html += "</a>";
-				html += view.diagnostics.content.block(
-					"conf",
-					"Config Information",
-					data.configs
-				);
+				html += view.diagnostics.content.block("conf", "Config Information", data.configs);
 
 				$(".logs_diagnostics_view").html(html);
 
 				view.diagnostics.bind();
 
-				$("#Get_Size_Lychee").on(
-					"click",
-					view.diagnostics.call_get_size
-				);
+				$("#Get_Size_Lychee").on("click", view.diagnostics.call_get_size);
 			});
 		},
 
@@ -2187,9 +1881,7 @@ view.u2f = {
 			let html = "";
 
 			if (u2f.json.length === 0) {
-				$(".u2f_view").append(
-					'<div class="u2f_view_line"><p class="single">Credentials list is empty!</p></div>'
-				);
+				$(".u2f_view").append('<div class="u2f_view_line"><p class="single">Credentials list is empty!</p></div>');
 			} else {
 				html +=
 					'<div class="u2f_view_line">' +
@@ -2206,11 +1898,7 @@ view.u2f = {
 
 				$.each(u2f.json, function () {
 					$(".u2f_view").append(build.u2f(this));
-					settings.bind(
-						"#CredentialDelete" + this.id,
-						"#CredentialData" + this.id,
-						u2f.delete
-					);
+					settings.bind("#CredentialDelete" + this.id, "#CredentialData" + this.id, u2f.delete);
 					// if (this.upload === 1) {
 					//     $('#UserData' + this.id + ' .choice input[name="upload"]').click();
 					// }

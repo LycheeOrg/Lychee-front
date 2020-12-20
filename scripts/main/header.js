@@ -20,8 +20,7 @@ header.bind = function () {
 
 		if (lychee.enable_contextmenu_header === false) return false;
 
-		if (visible.photo())
-			contextMenu.photoTitle(album.getID(), photo.getID(), e);
+		if (visible.photo()) contextMenu.photoTitle(album.getID(), photo.getID(), e);
 		else contextMenu.albumTitle(album.getID(), e);
 	});
 
@@ -57,13 +56,7 @@ header.bind = function () {
 		contextMenu.photoMore(photo.getID(), e);
 	});
 	header.dom("#button_move_album").on(eventName, function (e) {
-		contextMenu.move(
-			[album.getID()],
-			e,
-			album.setAlbum,
-			"ROOT",
-			album.getParent() != ""
-		);
+		contextMenu.move([album.getID()], e, album.setAlbum, "ROOT", album.getParent() != "");
 	});
 	header.dom("#button_nsfw_album").on(eventName, function (e) {
 		album.setNSFW(album.getID());
@@ -105,13 +98,8 @@ header.bind = function () {
 	header.dom("#button_back_map").on(eventName, function () {
 		lychee.goto(album.getID());
 	});
-	header
-		.dom("#button_fs_album_enter,#button_fs_enter")
-		.on(eventName, lychee.fullscreenEnter);
-	header
-		.dom("#button_fs_album_exit,#button_fs_exit")
-		.on(eventName, lychee.fullscreenExit)
-		.hide();
+	header.dom("#button_fs_album_enter,#button_fs_enter").on(eventName, lychee.fullscreenEnter);
+	header.dom("#button_fs_album_exit,#button_fs_exit").on(eventName, lychee.fullscreenExit).hide();
 
 	header.dom(".header__search").on("keyup click", function () {
 		if ($(this).val().length > 0) {
@@ -161,12 +149,7 @@ header.hideIfLivePhotoNotPlaying = function () {
 };
 
 header.hide = function () {
-	if (
-		visible.photo() &&
-		!visible.sidebar() &&
-		!visible.contextMenu() &&
-		basicModal.visible() === false
-	) {
+	if (visible.photo() && !visible.sidebar() && !visible.contextMenu() && basicModal.visible() === false) {
 		tabindex.saveSettings(header.dom());
 		tabindex.makeUnfocusable(header.dom());
 
@@ -197,32 +180,18 @@ header.setMode = function (mode) {
 		case "public":
 			header.dom().removeClass("header--view");
 			header
-				.dom(
-					".header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map"
-				)
+				.dom(".header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map")
 				.removeClass("header__toolbar--visible");
-			header
-				.dom(".header__toolbar--public")
-				.addClass("header__toolbar--visible");
+			header.dom(".header__toolbar--public").addClass("header__toolbar--visible");
 			tabindex.makeFocusable(header.dom(".header__toolbar--public"));
-			tabindex.makeUnfocusable(
-				header.dom(
-					".header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map"
-				)
-			);
+			tabindex.makeUnfocusable(header.dom(".header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map"));
 
 			if (lychee.public_search) {
-				let e = $(
-					".header__search, .header__clear",
-					".header__toolbar--public"
-				);
+				let e = $(".header__search, .header__clear", ".header__toolbar--public");
 				e.show();
 				tabindex.makeFocusable(e);
 			} else {
-				let e = $(
-					".header__search, .header__clear",
-					".header__toolbar--public"
-				);
+				let e = $(".header__search, .header__clear", ".header__toolbar--public");
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
@@ -247,20 +216,12 @@ header.setMode = function (mode) {
 		case "albums":
 			header.dom().removeClass("header--view");
 			header
-				.dom(
-					".header__toolbar--public, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map"
-				)
+				.dom(".header__toolbar--public, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map")
 				.removeClass("header__toolbar--visible");
-			header
-				.dom(".header__toolbar--albums")
-				.addClass("header__toolbar--visible");
+			header.dom(".header__toolbar--albums").addClass("header__toolbar--visible");
 
 			tabindex.makeFocusable(header.dom(".header__toolbar--albums"));
-			tabindex.makeUnfocusable(
-				header.dom(
-					".header__toolbar--public, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map"
-				)
-			);
+			tabindex.makeUnfocusable(header.dom(".header__toolbar--public, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map"));
 
 			// If map is disabled, we should hide the icon
 			if (lychee.map_display) {
@@ -289,28 +250,20 @@ header.setMode = function (mode) {
 
 			header.dom().removeClass("header--view");
 			header
-				.dom(
-					".header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--map"
-				)
+				.dom(".header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--map")
 				.removeClass("header__toolbar--visible");
-			header
-				.dom(".header__toolbar--album")
-				.addClass("header__toolbar--visible");
+			header.dom(".header__toolbar--album").addClass("header__toolbar--visible");
 
 			tabindex.makeFocusable(header.dom(".header__toolbar--album"));
 			tabindex.makeUnfocusable(
-				header.dom(
-					".header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--map"
-				)
+				header.dom(".header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--map")
 			);
 
 			// Hide download button when album empty or we are not allowed to
 			// upload to it and it's not explicitly marked as downloadable.
 			if (
 				!album.json ||
-				(album.json.photos === false &&
-					album.json.albums &&
-					album.json.albums.length === 0) ||
+				(album.json.photos === false && album.json.albums && album.json.albums.length === 0) ||
 				(!album.isUploadable() && album.json.downloadable === "0")
 			) {
 				let e = $("#button_archive");
@@ -322,11 +275,7 @@ header.setMode = function (mode) {
 				tabindex.makeFocusable(e);
 			}
 
-			if (
-				album.json &&
-				album.json.hasOwnProperty("share_button_visible") &&
-				album.json.share_button_visible !== "1"
-			) {
+			if (album.json && album.json.hasOwnProperty("share_button_visible") && album.json.share_button_visible !== "1") {
 				let e = $("#button_share_album");
 				e.hide();
 				tabindex.makeUnfocusable(e);
@@ -337,11 +286,7 @@ header.setMode = function (mode) {
 			}
 
 			// If map is disabled, we should hide the icon
-			if (
-				lychee.publicMode === true
-					? lychee.map_display_public
-					: lychee.map_display
-			) {
+			if (lychee.publicMode === true ? lychee.map_display_public : lychee.map_display) {
 				let e = $("#button_map_album");
 				e.show();
 				tabindex.makeFocusable(e);
@@ -351,73 +296,29 @@ header.setMode = function (mode) {
 				tabindex.makeUnfocusable(e);
 			}
 
-			if (
-				albumID === "starred" ||
-				albumID === "public" ||
-				albumID === "recent"
-			) {
-				$(
-					"#button_info_album, #button_trash_album, #button_visibility_album, #button_move_album"
-				).hide();
-				$(
-					".button_add, .header__divider",
-					".header__toolbar--album"
-				).show();
-				tabindex.makeFocusable(
-					$(
-						".button_add, .header__divider",
-						".header__toolbar--album"
-					)
-				);
-				tabindex.makeUnfocusable(
-					$(
-						"#button_info_album, #button_trash_album, #button_visibility_album, #button_move_album"
-					)
-				);
+			if (albumID === "starred" || albumID === "public" || albumID === "recent") {
+				$("#button_info_album, #button_trash_album, #button_visibility_album, #button_move_album").hide();
+				$(".button_add, .header__divider", ".header__toolbar--album").show();
+				tabindex.makeFocusable($(".button_add, .header__divider", ".header__toolbar--album"));
+				tabindex.makeUnfocusable($("#button_info_album, #button_trash_album, #button_visibility_album, #button_move_album"));
 			} else if (albumID === "unsorted") {
-				$(
-					"#button_info_album, #button_visibility_album, #button_move_album"
-				).hide();
-				$(
-					"#button_trash_album, .button_add, .header__divider",
-					".header__toolbar--album"
-				).show();
-				tabindex.makeFocusable(
-					$(
-						"#button_trash_album, .button_add, .header__divider",
-						".header__toolbar--album"
-					)
-				);
-				tabindex.makeUnfocusable(
-					$(
-						"#button_info_album, #button_visibility_album, #button_move_album"
-					)
-				);
+				$("#button_info_album, #button_visibility_album, #button_move_album").hide();
+				$("#button_trash_album, .button_add, .header__divider", ".header__toolbar--album").show();
+				tabindex.makeFocusable($("#button_trash_album, .button_add, .header__divider", ".header__toolbar--album"));
+				tabindex.makeUnfocusable($("#button_info_album, #button_visibility_album, #button_move_album"));
 			} else if (album.isTagAlbum()) {
 				$("#button_info_album").show();
 				$("#button_move_album").hide();
-				$(
-					".button_add, .header__divider",
-					".header__toolbar--album"
-				).hide();
+				$(".button_add, .header__divider", ".header__toolbar--album").hide();
 				tabindex.makeFocusable($("#button_info_album"));
 				tabindex.makeUnfocusable($("#button_move_album"));
-				tabindex.makeUnfocusable(
-					$(
-						".button_add, .header__divider",
-						".header__toolbar--album"
-					)
-				);
+				tabindex.makeUnfocusable($(".button_add, .header__divider", ".header__toolbar--album"));
 				if (album.isUploadable()) {
 					$("#button_visibility_album, #button_trash_album").show();
-					tabindex.makeFocusable(
-						$("#button_visibility_album, #button_trash_album")
-					);
+					tabindex.makeFocusable($("#button_visibility_album, #button_trash_album"));
 				} else {
 					$("#button_visibility_album, #button_trash_album").hide();
-					tabindex.makeUnfocusable(
-						$("#button_visibility_album, #button_trash_album")
-					);
+					tabindex.makeUnfocusable($("#button_visibility_album, #button_trash_album"));
 				}
 			} else {
 				$("#button_info_album").show();
@@ -449,10 +350,7 @@ header.setMode = function (mode) {
 
 			// Remove buttons if needed
 			if (!lychee.enable_button_visibility) {
-				let e = $(
-					"#button_visibility_album",
-					".header__toolbar--album"
-				);
+				let e = $("#button_visibility_album", ".header__toolbar--album");
 				e.remove();
 			}
 			if (!lychee.enable_button_share) {
@@ -485,26 +383,16 @@ header.setMode = function (mode) {
 		case "photo":
 			header.dom().addClass("header--view");
 			header
-				.dom(
-					".header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--map"
-				)
+				.dom(".header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--map")
 				.removeClass("header__toolbar--visible");
-			header
-				.dom(".header__toolbar--photo")
-				.addClass("header__toolbar--visible");
+			header.dom(".header__toolbar--photo").addClass("header__toolbar--visible");
 
 			tabindex.makeFocusable(header.dom(".header__toolbar--photo"));
 			tabindex.makeUnfocusable(
-				header.dom(
-					".header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--map"
-				)
+				header.dom(".header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--map")
 			);
 			// If map is disabled, we should hide the icon
-			if (
-				lychee.publicMode === true
-					? lychee.map_display_public
-					: lychee.map_display
-			) {
+			if (lychee.publicMode === true ? lychee.map_display_public : lychee.map_display) {
 				let e = $("#button_map");
 				e.show();
 				tabindex.makeFocusable(e);
@@ -515,24 +403,16 @@ header.setMode = function (mode) {
 			}
 
 			if (album.isUploadable()) {
-				let e = $(
-					"#button_trash, #button_move, #button_visibility, #button_star"
-				);
+				let e = $("#button_trash, #button_move, #button_visibility, #button_star");
 				e.show();
 				tabindex.makeFocusable(e);
 			} else {
-				let e = $(
-					"#button_trash, #button_move, #button_visibility, #button_star"
-				);
+				let e = $("#button_trash, #button_move, #button_visibility, #button_star");
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 
-			if (
-				photo.json &&
-				photo.json.hasOwnProperty("share_button_visible") &&
-				photo.json.share_button_visible !== "1"
-			) {
+			if (photo.json && photo.json.hasOwnProperty("share_button_visible") && photo.json.share_button_visible !== "1") {
 				let e = $("#button_share");
 				e.hide();
 				tabindex.makeUnfocusable(e);
@@ -550,9 +430,7 @@ header.setMode = function (mode) {
 					album.isUploadable() ||
 					(photo.json.hasOwnProperty("downloadable")
 						? photo.json.downloadable === "1"
-						: album.json &&
-						  album.json.downloadable &&
-						  album.json.downloadable === "1")
+						: album.json && album.json.downloadable && album.json.downloadable === "1")
 				) &&
 				!(photo.json.url && photo.json.url !== "")
 			) {
@@ -597,19 +475,13 @@ header.setMode = function (mode) {
 		case "map":
 			header.dom().removeClass("header--view");
 			header
-				.dom(
-					".header__toolbar--public, .header__toolbar--album, .header__toolbar--albums, .header__toolbar--photo"
-				)
+				.dom(".header__toolbar--public, .header__toolbar--album, .header__toolbar--albums, .header__toolbar--photo")
 				.removeClass("header__toolbar--visible");
-			header
-				.dom(".header__toolbar--map")
-				.addClass("header__toolbar--visible");
+			header.dom(".header__toolbar--map").addClass("header__toolbar--visible");
 
 			tabindex.makeFocusable(header.dom(".header__toolbar--map"));
 			tabindex.makeUnfocusable(
-				header.dom(
-					".header__toolbar--public, .header__toolbar--album, .header__toolbar--albums, .header__toolbar--photo"
-				)
+				header.dom(".header__toolbar--public, .header__toolbar--album, .header__toolbar--albums, .header__toolbar--photo")
 			);
 			return true;
 	}
@@ -650,8 +522,6 @@ header.applyTranslations = function () {
 	};
 
 	for (let selector in selector_locale) {
-		header
-			.dom(selector)
-			.prop("title", lychee.locale[selector_locale[selector]]);
+		header.dom(selector).prop("title", lychee.locale[selector_locale[selector]]);
 	}
 };

@@ -18,34 +18,18 @@ leftMenu.build = function () {
 		<a class="linkMenu" id="button_settings_open" data-tabindex="-1"><svg class="iconic"><use xlink:href="#cog"></use></svg>${lychee.locale["SETTINGS"]}</a>`;
 	if (lychee.api_V2) {
 		html += lychee.html`
-		<a class="linkMenu" id="button_users" data-tabindex="-1">${build.iconic(
-			"person"
-		)}${lychee.locale["USERS"]} </a>
-		<a class="linkMenu" id="button_u2f" data-tabindex="-1">${build.iconic("key")}${
-			lychee.locale["U2F"]
-		} </a>
-		<a class="linkMenu" id="button_sharing" data-tabindex="-1">${build.iconic(
-			"cloud"
-		)}${lychee.locale["SHARING"]}</a>`;
+		<a class="linkMenu" id="button_users" data-tabindex="-1">${build.iconic("person")}${lychee.locale["USERS"]} </a>
+		<a class="linkMenu" id="button_u2f" data-tabindex="-1">${build.iconic("key")}${lychee.locale["U2F"]} </a>
+		<a class="linkMenu" id="button_sharing" data-tabindex="-1">${build.iconic("cloud")}${lychee.locale["SHARING"]}</a>`;
 	}
 	html += lychee.html`
-		<a class="linkMenu" id="button_logs" data-tabindex="-1">${build.iconic(
-			"align-left"
-		)}${lychee.locale["LOGS"]}</a>
-		<a class="linkMenu" id="button_diagnostics" data-tabindex="-1">${build.iconic(
-			"wrench"
-		)}${lychee.locale["DIAGNOSTICS"]}</a>
-		<a class="linkMenu" id="button_about" data-tabindex="-1">${build.iconic(
-			"info"
-		)}${lychee.locale["ABOUT_LYCHEE"]}</a>
-		<a class="linkMenu" id="button_signout" data-tabindex="21">${build.iconic(
-			"account-logout"
-		)}${lychee.locale["SIGN_OUT"]}</a>`;
+		<a class="linkMenu" id="button_logs" data-tabindex="-1">${build.iconic("align-left")}${lychee.locale["LOGS"]}</a>
+		<a class="linkMenu" id="button_diagnostics" data-tabindex="-1">${build.iconic("wrench")}${lychee.locale["DIAGNOSTICS"]}</a>
+		<a class="linkMenu" id="button_about" data-tabindex="-1">${build.iconic("info")}${lychee.locale["ABOUT_LYCHEE"]}</a>
+		<a class="linkMenu" id="button_signout" data-tabindex="21">${build.iconic("account-logout")}${lychee.locale["SIGN_OUT"]}</a>`;
 	if (lychee.api_V2 && lychee.update_available) {
 		html += lychee.html`
-		<a class="linkMenu" id="button_update"  data-tabindex="-1">${build.iconic(
-			"timer"
-		)}${lychee.locale["UPDATE_AVAILABLE"]}</a>
+		<a class="linkMenu" id="button_update"  data-tabindex="-1">${build.iconic("timer")}${lychee.locale["UPDATE_AVAILABLE"]}</a>
 		`;
 	}
 	leftMenu._dom.html(html);

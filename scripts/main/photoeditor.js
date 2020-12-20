@@ -41,21 +41,13 @@ photoeditor.rotate = function (photoID, direction) {
 					album.json.photos[i].height = w;
 					album.json.photos[i].width = h;
 					album.json.photos[i].small += mr;
-					album.json.photos[i].small_dim = swapDims(
-						album.json.photos[i].small_dim
-					);
+					album.json.photos[i].small_dim = swapDims(album.json.photos[i].small_dim);
 					album.json.photos[i].small2x += mr;
-					album.json.photos[i].small2x_dim = swapDims(
-						album.json.photos[i].small2x_dim
-					);
+					album.json.photos[i].small2x_dim = swapDims(album.json.photos[i].small2x_dim);
 					album.json.photos[i].medium += mr;
-					album.json.photos[i].medium_dim = swapDims(
-						album.json.photos[i].medium_dim
-					);
+					album.json.photos[i].medium_dim = swapDims(album.json.photos[i].medium_dim);
 					album.json.photos[i].medium2x += mr;
-					album.json.photos[i].medium2x_dim = swapDims(
-						album.json.photos[i].medium2x_dim
-					);
+					album.json.photos[i].medium2x_dim = swapDims(album.json.photos[i].medium2x_dim);
 					album.json.photos[i].thumb2x += mr;
 					album.json.photos[i].thumbUrl += mr;
 					album.json.photos[i].url += mr;

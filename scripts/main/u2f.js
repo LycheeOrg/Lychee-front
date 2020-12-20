@@ -3,11 +3,7 @@ let u2f = {
 };
 
 u2f.is_available = function () {
-	if (
-		!window.isSecureContext &&
-		window.location.hostname !== "localhost" &&
-		window.location.hostname !== "127.0.0.1"
-	) {
+	if (!window.isSecureContext && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
 		let msg = lychee.html`<h1>${lychee.locale["U2F_NOT_SECURE"]}</h1>`;
 
 		basicModal.show({
@@ -38,10 +34,7 @@ u2f.login = function () {
 			user_id: 0, // for now it is only available to Admin user via a secret key shortcut.
 		})
 		.then(function (data) {
-			loadingBar.show(
-				"success",
-				lychee.locale["U2F_AUTHENTIFICATION_SUCCESS"]
-			);
+			loadingBar.show("success", lychee.locale["U2F_AUTHENTIFICATION_SUCCESS"]);
 			window.location.reload();
 		})
 		.catch((error) => loadingBar.show("error", "Something went wrong!"));
@@ -60,15 +53,10 @@ u2f.register = function () {
 		larapass
 			.register()
 			.then(function (response) {
-				loadingBar.show(
-					"success",
-					lychee.locale["U2F_REGISTRATION_SUCCESS"]
-				);
+				loadingBar.show("success", lychee.locale["U2F_REGISTRATION_SUCCESS"]);
 				u2f.list(); // reload credential list
 			})
-			.catch((response) =>
-				loadingBar.show("error", "Something went wrong!")
-			);
+			.catch((response) => loadingBar.show("error", "Something went wrong!"));
 	} else {
 		loadingBar.show("error", lychee.locale["U2F_NOT_SUPPORTED"]);
 	}
@@ -81,10 +69,7 @@ u2f.delete = function (params) {
 			loadingBar.show("error", data.description);
 			lychee.error(null, params, data);
 		} else {
-			loadingBar.show(
-				"success",
-				lychee.locale["U2F_CREDENTIALS_DELETED"]
-			);
+			loadingBar.show("success", lychee.locale["U2F_CREDENTIALS_DELETED"]);
 			u2f.list(); // reload credential list
 		}
 	});

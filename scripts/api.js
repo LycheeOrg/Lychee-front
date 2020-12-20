@@ -55,13 +55,7 @@ api.post = function (fn, params, callback, responseProgressCB = null) {
 	};
 
 	const error = (jqXHR, textStatus, errorThrown) => {
-		api.onError(
-			api.isTimeout(errorThrown, jqXHR)
-				? "Session timed out."
-				: "Server error or API not found.",
-			params,
-			errorThrown
-		);
+		api.onError(api.isTimeout(errorThrown, jqXHR) ? "Session timed out." : "Server error or API not found.", params, errorThrown);
 	};
 
 	let ajaxParams = {
@@ -98,13 +92,7 @@ api.get = function (url, callback) {
 	};
 
 	const error = (jqXHR, textStatus, errorThrown) => {
-		api.onError(
-			api.isTimeout(errorThrown, jqXHR)
-				? "Session timed out."
-				: "Server error or API not found.",
-			{},
-			errorThrown
-		);
+		api.onError(api.isTimeout(errorThrown, jqXHR) ? "Session timed out." : "Server error or API not found.", {}, errorThrown);
 	};
 
 	$.ajax({
@@ -137,13 +125,7 @@ api.post_raw = function (fn, params, callback) {
 	};
 
 	const error = (jqXHR, textStatus, errorThrown) => {
-		api.onError(
-			api.isTimeout(errorThrown, jqXHR)
-				? "Session timed out."
-				: "Server error or API not found.",
-			params,
-			errorThrown
-		);
+		api.onError(api.isTimeout(errorThrown, jqXHR) ? "Session timed out." : "Server error or API not found.", params, errorThrown);
 	};
 
 	$.ajax({

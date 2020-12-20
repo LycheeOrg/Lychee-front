@@ -54,9 +54,7 @@ lychee.html = function (literalSections, ...substs) {
 
 lychee.getEventName = function () {
 	let touchendSupport =
-		/Android|iPhone|iPad|iPod/i.test(
-			navigator.userAgent || navigator.vendor || window.opera
-		) && "ontouchend" in document.documentElement;
+		/Android|iPhone|iPad|iPod/i.test(navigator.userAgent || navigator.vendor || window.opera) && "ontouchend" in document.documentElement;
 	return touchendSupport === true ? "touchend" : "click";
 };
 
@@ -97,9 +95,7 @@ frame.refreshPicture = function () {
 			src = data.medium;
 
 			if (data.medium2x && data.medium2 !== "") {
-				srcset = `${data.medium} ${parseInt(data.medium_dim, 10)}w, ${
-					data.medium2x
-				} ${parseInt(data.medium2x_dim, 10)}w`;
+				srcset = `${data.medium} ${parseInt(data.medium_dim, 10)}w, ${data.medium2x} ${parseInt(data.medium2x_dim, 10)}w`;
 				// We use it in the resize callback.
 				this.frame.photo = data;
 			}
@@ -126,8 +122,7 @@ frame.set = function (data) {
 
 frame.resize = function () {
 	if (this.photo) {
-		let ratio =
-			this.photo.height > 0 ? this.photo.width / this.photo.height : 1;
+		let ratio = this.photo.height > 0 ? this.photo.width / this.photo.height : 1;
 		let winWidth = $(window).width();
 		let winHeight = $(window).height();
 

@@ -32,13 +32,7 @@ L.Photo = L.FeatureGroup.extend({
 							'<img src="' +
 							photo.thumbnail +
 							'" ' +
-							(photo.thumbnail2x !== ""
-								? 'srcset="' +
-								  photo.thumbnail +
-								  " 1x, " +
-								  photo.thumbnail2x +
-								  ' 2x"'
-								: "") +
+							(photo.thumbnail2x !== "" ? 'srcset="' + photo.thumbnail + " 1x, " + photo.thumbnail2x + ' 2x"' : "") +
 							"></img>​",
 						className: "leaflet-marker-photo",
 					},
@@ -70,17 +64,13 @@ if (L.MarkerClusterGroup) {
 							className: "leaflet-marker-photo",
 							html:
 								'<img src="' +
-								cluster.getAllChildMarkers()[0].photo
-									.thumbnail +
+								cluster.getAllChildMarkers()[0].photo.thumbnail +
 								'" ' +
-								(cluster.getAllChildMarkers()[0].photo
-									.thumbnail2x !== ""
+								(cluster.getAllChildMarkers()[0].photo.thumbnail2x !== ""
 									? 'srcset="' +
-									  cluster.getAllChildMarkers()[0].photo
-											.thumbnail +
+									  cluster.getAllChildMarkers()[0].photo.thumbnail +
 									  " 1x, " +
-									  cluster.getAllChildMarkers()[0].photo
-											.thumbnail2x +
+									  cluster.getAllChildMarkers()[0].photo.thumbnail2x +
 									  ' 2x"'
 									: "") +
 								"></img>​<b>" +

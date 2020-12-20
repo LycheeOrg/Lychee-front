@@ -29,11 +29,7 @@ paths.view = {
 		"./scripts/main/tabindex.js",
 		"./deps/basiccontext/scripts/basicContext.js",
 	],
-	scripts: [
-		"node_modules/jquery/dist/jquery.min.js",
-		"node_modules/lazysizes/lazysizes.min.js",
-		"../dist/_view--javascript.js",
-	],
+	scripts: ["node_modules/jquery/dist/jquery.min.js", "node_modules/lazysizes/lazysizes.min.js", "../dist/_view--javascript.js"],
 	svg: ["./images/iconic.svg", "./images/ionicons.svg"],
 };
 
@@ -82,11 +78,7 @@ gulp.task("view--svg", function () {
 
 paths.main = {
 	html: ["../index.html"],
-	js: [
-		"./scripts/*.js",
-		"./scripts/main/*.js",
-		"./deps/basiccontext/scripts/basicContext.js",
-	],
+	js: ["./scripts/*.js", "./scripts/main/*.js", "./deps/basiccontext/scripts/basicContext.js"],
 	scripts: [
 		"node_modules/jquery/dist/jquery.min.js",
 		"node_modules/lazysizes/lazysizes.min.js",
@@ -173,12 +165,7 @@ gulp.task("main--svg", function () {
 /* Frame -----------------------------------------  */
 
 paths.frame = {
-	js: [
-		"./scripts/_gup.js",
-		"./scripts/api.js",
-		"./scripts/csrf_protection.js",
-		"./scripts/frame/main.js",
-	],
+	js: ["./scripts/_gup.js", "./scripts/api.js", "./scripts/csrf_protection.js", "./scripts/frame/main.js"],
 	scss: ["./styles/frame/*.scss"],
 	styles: ["./styles/frame/frame.scss"],
 	scripts: [
@@ -231,11 +218,7 @@ gulp.task(
 
 paths.landing = {
 	js: ["./scripts/_gup.js", "./scripts/landing/*.js"],
-	scripts: [
-		"node_modules/jquery/dist/jquery.min.js",
-		"node_modules/lazysizes/lazysizes.min.js",
-		"../dist/_landing--javascript.js",
-	],
+	scripts: ["node_modules/jquery/dist/jquery.min.js", "node_modules/lazysizes/lazysizes.min.js", "../dist/_landing--javascript.js"],
 	scss: [
 		"./styles/landing/*.scss",
 		"./styles/page/fonts.scss",
@@ -324,35 +307,21 @@ gulp.task("TVCSS--styles", function () {
 /* Images ----------------------------------------- */
 
 paths.images = {
-	src: [
-		"./images/password.svg",
-		"./images/no_cover.svg",
-		"./images/no_images.svg",
-		"./node_modules/leaflet/dist/images/*png",
-		"./images/*png",
-	],
+	src: ["./images/password.svg", "./images/no_cover.svg", "./images/no_images.svg", "./node_modules/leaflet/dist/images/*png", "./images/*png"],
 };
 
 gulp.task("images--copy", function () {
-	return gulp
-		.src(paths.images.src)
-		.on("error", catchError)
-		.pipe(gulp.dest("../img"));
+	return gulp.src(paths.images.src).on("error", catchError).pipe(gulp.dest("../img"));
 });
 
 /* leaflet.markercluster.js.map ----------------------------------------- */
 
 paths.leafletMarkerclusterMapFile = {
-	src: [
-		"./node_modules/leaflet.markercluster/dist/leaflet.markercluster.js.map",
-	],
+	src: ["./node_modules/leaflet.markercluster/dist/leaflet.markercluster.js.map"],
 };
 
 gulp.task("leafletMarkerclusterMapFile--copy", function () {
-	return gulp
-		.src(paths.leafletMarkerclusterMapFile.src)
-		.on("error", catchError)
-		.pipe(gulp.dest("../dist"));
+	return gulp.src(paths.leafletMarkerclusterMapFile.src).on("error", catchError).pipe(gulp.dest("../dist"));
 });
 
 paths.leafletMarkerclusterSourceFiles = {
@@ -360,18 +329,13 @@ paths.leafletMarkerclusterSourceFiles = {
 };
 
 gulp.task("leafletMarkerclusterSourceFiles--copy", function () {
-	return gulp
-		.src(paths.leafletMarkerclusterSourceFiles.src)
-		.on("error", catchError)
-		.pipe(gulp.dest("../src"));
+	return gulp.src(paths.leafletMarkerclusterSourceFiles.src).on("error", catchError).pipe(gulp.dest("../src"));
 });
 
 /* Clean ----------------------------------------- */
 
 gulp.task("clean", function () {
-	return del(["../dist/_*.*"], { force: true }).catch((error) =>
-		console.log(error)
-	);
+	return del(["../dist/_*.*"], { force: true }).catch((error) => console.log(error));
 });
 
 /* Tasks ----------------------------------------- */

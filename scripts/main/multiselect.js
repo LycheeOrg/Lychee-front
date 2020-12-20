@@ -57,10 +57,7 @@ multiselect.addItem = function (object, id) {
 
 	let isAlbum = object.hasClass("album");
 
-	if (
-		(isAlbum && multiselect.photosSelected > 0) ||
-		(!isAlbum && multiselect.albumsSelected > 0)
-	) {
+	if ((isAlbum && multiselect.photosSelected > 0) || (!isAlbum && multiselect.albumsSelected > 0)) {
 		lychee.error("Please select either albums or photos!");
 		return;
 	}
@@ -109,34 +106,14 @@ multiselect.albumClick = function (e, albumObj) {
 				// Click with Shift. Select all elements between the current
 				// element and the last clicked-on one.
 
-				if (
-					albumObj
-						.prevAll(".album")
-						.toArray()
-						.includes(multiselect.lastClicked[0])
-				) {
-					albumObj
-						.prevUntil(multiselect.lastClicked, ".album")
-						.each(function () {
-							multiselect.addItem(
-								$(this),
-								$(this).attr("data-id")
-							);
-						});
-				} else if (
-					albumObj
-						.nextAll(".album")
-						.toArray()
-						.includes(multiselect.lastClicked[0])
-				) {
-					albumObj
-						.nextUntil(multiselect.lastClicked, ".album")
-						.each(function () {
-							multiselect.addItem(
-								$(this),
-								$(this).attr("data-id")
-							);
-						});
+				if (albumObj.prevAll(".album").toArray().includes(multiselect.lastClicked[0])) {
+					albumObj.prevUntil(multiselect.lastClicked, ".album").each(function () {
+						multiselect.addItem($(this), $(this).attr("data-id"));
+					});
+				} else if (albumObj.nextAll(".album").toArray().includes(multiselect.lastClicked[0])) {
+					albumObj.nextUntil(multiselect.lastClicked, ".album").each(function () {
+						multiselect.addItem($(this), $(this).attr("data-id"));
+					});
 				}
 			}
 
@@ -160,34 +137,14 @@ multiselect.photoClick = function (e, photoObj) {
 				// Click with Shift. Select all elements between the current
 				// element and the last clicked-on one.
 
-				if (
-					photoObj
-						.prevAll(".photo")
-						.toArray()
-						.includes(multiselect.lastClicked[0])
-				) {
-					photoObj
-						.prevUntil(multiselect.lastClicked, ".photo")
-						.each(function () {
-							multiselect.addItem(
-								$(this),
-								$(this).attr("data-id")
-							);
-						});
-				} else if (
-					photoObj
-						.nextAll(".photo")
-						.toArray()
-						.includes(multiselect.lastClicked[0])
-				) {
-					photoObj
-						.nextUntil(multiselect.lastClicked, ".photo")
-						.each(function () {
-							multiselect.addItem(
-								$(this),
-								$(this).attr("data-id")
-							);
-						});
+				if (photoObj.prevAll(".photo").toArray().includes(multiselect.lastClicked[0])) {
+					photoObj.prevUntil(multiselect.lastClicked, ".photo").each(function () {
+						multiselect.addItem($(this), $(this).attr("data-id"));
+					});
+				} else if (photoObj.nextAll(".photo").toArray().includes(multiselect.lastClicked[0])) {
+					photoObj.nextUntil(multiselect.lastClicked, ".photo").each(function () {
+						multiselect.addItem($(this), $(this).attr("data-id"));
+					});
 				}
 			}
 
@@ -255,9 +212,7 @@ multiselect.show = function (e) {
 	multiselect.position.bottom = $(document).height() - e.pageY;
 	multiselect.position.left = e.pageX;
 
-	$("body").append(
-		build.multiselect(multiselect.position.top, multiselect.position.left)
-	);
+	$("body").append(build.multiselect(multiselect.position.top, multiselect.position.left));
 
 	$(document)
 		.on("mousemove", multiselect.resize)
@@ -290,9 +245,7 @@ multiselect.resize = function (e) {
 	if (e.pageY >= multiselect.position.top) {
 		newCSS.top = multiselect.position.top;
 		newCSS.bottom = "inherit";
-		newCSS.height =
-			Math.min(e.pageY, $(document).height() - 3) -
-			multiselect.position.top;
+		newCSS.height = Math.min(e.pageY, $(document).height() - 3) - multiselect.position.top;
 	} else {
 		newCSS.top = "inherit";
 		newCSS.bottom = multiselect.position.bottom;
@@ -302,9 +255,7 @@ multiselect.resize = function (e) {
 	if (e.pageX >= multiselect.position.left) {
 		newCSS.right = "inherit";
 		newCSS.left = multiselect.position.left;
-		newCSS.width =
-			Math.min(e.pageX, $(document).width() - 3) -
-			multiselect.position.left;
+		newCSS.width = Math.min(e.pageX, $(document).width() - 3) - multiselect.position.left;
 	} else {
 		newCSS.right = multiselect.position.right;
 		newCSS.left = "inherit";

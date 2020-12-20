@@ -24,16 +24,11 @@
 
 		// Add disabled class when item disabled
 		if (item.disabled !== true) item.disabled = false;
-		if (item.disabled === true)
-			item.class += " basicContext__item--disabled";
+		if (item.disabled === true) item.class += " basicContext__item--disabled";
 
 		// Item requires a function when
 		// it's not a separator and not disabled
-		if (
-			item.fn == null &&
-			item.type !== SEPARATOR &&
-			item.disabled === false
-		) {
+		if (item.fn == null && item.type !== SEPARATOR && item.disabled === false) {
 			console.warn(`Missing fn for item '${item.title}'`);
 			return false;
 		}
@@ -55,8 +50,7 @@
 		item.num = num;
 
 		// Generate span/icon-element
-		if (item.icon !== null)
-			span = `<span class='basicContext__icon ${item.icon}'></span>`;
+		if (item.icon !== null) span = `<span class='basicContext__icon ${item.icon}'></span>`;
 
 		// Generate item
 		if (item.type === ITEM) {
@@ -142,10 +136,8 @@
 		};
 
 		// Fix position based on context and browser size
-		if (x + contextSize.width > browserSize.width)
-			x = x - (x + contextSize.width - browserSize.width);
-		if (y + contextSize.height > browserSize.height)
-			y = y - (y + contextSize.height - browserSize.height);
+		if (x + contextSize.width > browserSize.width) x = x - (x + contextSize.width - browserSize.width);
+		if (y + contextSize.height > browserSize.height) y = y - (y + contextSize.height - browserSize.height);
 
 		// Make context scrollable and start at the top of the browser
 		// when context is higher than the browser

@@ -67,8 +67,7 @@ settings.createConfig = function () {
 				// Could not create file
 				if (_data === "Warning: Could not create file!") {
 					basicModal.show({
-						body:
-							"<p>" + lychee.locale["ERROR_CONFIG_FILE"] + "</p>",
+						body: "<p>" + lychee.locale["ERROR_CONFIG_FILE"] + "</p>",
 						buttons: {
 							action: {
 								title: lychee.locale["RETRY"],
@@ -220,9 +219,7 @@ settings.createLogin = function () {
 // from https://github.com/electerious/basicModal/blob/master/src/scripts/main.js
 settings.getValues = function (form_name) {
 	let values = {};
-	let inputs_select = $(
-		form_name + " input[name], " + form_name + " select[name]"
-	);
+	let inputs_select = $(form_name + " input[name], " + form_name + " select[name]");
 
 	// Get value from all inputs
 	$(inputs_select).each(function () {
@@ -289,16 +286,8 @@ settings.changeLogin = function (params) {
 settings.changeSorting = function (params) {
 	api.post("Settings::setSorting", params, function (data) {
 		if (data === true) {
-			lychee.sortingAlbums =
-				"ORDER BY " +
-				params["typeAlbums"] +
-				" " +
-				params["orderAlbums"];
-			lychee.sortingPhotos =
-				"ORDER BY " +
-				params["typePhotos"] +
-				" " +
-				params["orderPhotos"];
+			lychee.sortingAlbums = "ORDER BY " + params["typeAlbums"] + " " + params["orderAlbums"];
+			lychee.sortingPhotos = "ORDER BY " + params["typePhotos"] + " " + params["orderPhotos"];
 			albums.refresh();
 			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_SORT"]);
 		} else lychee.error(null, params, data);
@@ -317,10 +306,7 @@ settings.changeDropboxKey = function (params) {
 		if (data === true) {
 			lychee.dropboxKey = params.key;
 			// if (callback) lychee.loadDropbox(callback)
-			loadingBar.show(
-				"success",
-				lychee.locale["SETTINGS_SUCCESS_DROPBOX"]
-			);
+			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_DROPBOX"]);
 		} else lychee.error(null, params, data);
 	});
 };
@@ -338,10 +324,7 @@ settings.setDefaultLicense = function (params) {
 	api.post("Settings::setDefaultLicense", params, function (data) {
 		if (data === true) {
 			lychee.default_license = params.license;
-			loadingBar.show(
-				"success",
-				lychee.locale["SETTINGS_SUCCESS_LICENSE"]
-			);
+			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_LICENSE"]);
 		} else lychee.error(null, params, data);
 	});
 };
@@ -350,10 +333,7 @@ settings.setLayout = function (params) {
 	api.post("Settings::setLayout", params, function (data) {
 		if (data === true) {
 			lychee.layout = params.layout;
-			loadingBar.show(
-				"success",
-				lychee.locale["SETTINGS_SUCCESS_LAYOUT"]
-			);
+			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_LAYOUT"]);
 		} else lychee.error(null, params, data);
 	});
 };
@@ -367,10 +347,7 @@ settings.changePublicSearch = function () {
 	}
 	api.post("Settings::setPublicSearch", params, function (data) {
 		if (data === true) {
-			loadingBar.show(
-				"success",
-				lychee.locale["SETTINGS_SUCCESS_PUBLIC_SEARCH"]
-			);
+			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_PUBLIC_SEARCH"]);
 			lychee.public_search = params.public_search === "1";
 		} else lychee.error(null, params, data);
 	});
@@ -391,10 +368,7 @@ settings.changeImageOverlay = function () {
 	}
 	api.post("Settings::setImageOverlay", params, function (data) {
 		if (data === true) {
-			loadingBar.show(
-				"success",
-				lychee.locale["SETTINGS_SUCCESS_IMAGE_OVERLAY"]
-			);
+			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_IMAGE_OVERLAY"]);
 			lychee.image_overlay_default = params.image_overlay === "1";
 			lychee.image_overlay = lychee.image_overlay_default;
 		} else lychee.error(null, params, data);
@@ -406,15 +380,9 @@ settings.setOverlayType = function () {
 	let params = {};
 	if ($("#ImageOverlay:checked") && $("#ImgOverlayType").val() === "exif") {
 		params.image_overlay_type = "exif";
-	} else if (
-		$("#ImageOverlay:checked") &&
-		$("#ImgOverlayType").val() === "desc"
-	) {
+	} else if ($("#ImageOverlay:checked") && $("#ImgOverlayType").val() === "desc") {
 		params.image_overlay_type = "desc";
-	} else if (
-		$("#ImageOverlay:checked") &&
-		$("#ImgOverlayType").val() === "takedate"
-	) {
+	} else if ($("#ImageOverlay:checked") && $("#ImgOverlayType").val() === "takedate") {
 		params.image_overlay_type = "takedate";
 	} else {
 		params.image_overlay_type = "exif";
@@ -423,10 +391,7 @@ settings.setOverlayType = function () {
 
 	api.post("Settings::setOverlayType", params, function (data) {
 		if (data === true) {
-			loadingBar.show(
-				"success",
-				lychee.locale["SETTINGS_SUCCESS_IMAGE_OVERLAY"]
-			);
+			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_IMAGE_OVERLAY"]);
 			lychee.image_overlay_type = params.image_overlay_type;
 			lychee.image_overlay_type_default = params.image_overlay_type;
 		} else lychee.error(null, params, data);
@@ -442,10 +407,7 @@ settings.changeMapDisplay = function () {
 	}
 	api.post("Settings::setMapDisplay", params, function (data) {
 		if (data === true) {
-			loadingBar.show(
-				"success",
-				lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]
-			);
+			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
 			lychee.map_display = params.map_display === "1";
 		} else lychee.error(null, params, data);
 	});
@@ -471,10 +433,7 @@ settings.changeMapDisplayPublic = function () {
 	}
 	api.post("Settings::setMapDisplayPublic", params, function (data) {
 		if (data === true) {
-			loadingBar.show(
-				"success",
-				lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY_PUBLIC"]
-			);
+			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY_PUBLIC"]);
 			lychee.map_display_public = params.map_display_public === "1";
 		} else lychee.error(null, params, data);
 	});
@@ -487,10 +446,7 @@ settings.setMapProvider = function () {
 
 	api.post("Settings::setMapProvider", params, function (data) {
 		if (data === true) {
-			loadingBar.show(
-				"success",
-				lychee.locale["SETTINGS_SUCCESS_MAP_PROVIDER"]
-			);
+			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_PROVIDER"]);
 			lychee.map_provider = params.map_provider;
 		} else lychee.error(null, params, data);
 	});
@@ -505,10 +461,7 @@ settings.changeMapIncludeSubalbums = function () {
 	}
 	api.post("Settings::setMapIncludeSubalbums", params, function (data) {
 		if (data === true) {
-			loadingBar.show(
-				"success",
-				lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]
-			);
+			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
 			lychee.map_include_subalbums = params.map_include_subalbums === "1";
 		} else lychee.error(null, params, data);
 	});
@@ -523,10 +476,7 @@ settings.changeLocationDecoding = function () {
 	}
 	api.post("Settings::setLocationDecoding", params, function (data) {
 		if (data === true) {
-			loadingBar.show(
-				"success",
-				lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]
-			);
+			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
 			lychee.location_decoding = params.location_decoding === "1";
 		} else lychee.error(null, params, data);
 	});
@@ -541,10 +491,7 @@ settings.changeNSFWVisible = function () {
 	}
 	api.post("Settings::setNSFWVisible", params, function (data) {
 		if (data === true) {
-			loadingBar.show(
-				"success",
-				lychee.locale["SETTINGS_SUCCESS_NSFW_VISIBLE"]
-			);
+			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_NSFW_VISIBLE"]);
 			lychee.nsfw_visible = params.nsfw_visible === "1";
 			lychee.nsfw_visible_saved = lychee.nsfw_visible;
 		} else {
@@ -572,10 +519,7 @@ settings.changeLocationShow = function () {
 	}
 	api.post("Settings::setLocationShow", params, function (data) {
 		if (data === true) {
-			loadingBar.show(
-				"success",
-				lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]
-			);
+			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
 			lychee.location_show = params.location_show === "1";
 		} else lychee.error(null, params, data);
 	});
@@ -595,10 +539,7 @@ settings.changeLocationShowPublic = function () {
 	}
 	api.post("Settings::setLocationShowPublic", params, function (data) {
 		if (data === true) {
-			loadingBar.show(
-				"success",
-				lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]
-			);
+			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
 			lychee.location_show_public = params.location_show_public === "1";
 		} else lychee.error(null, params, data);
 	});
@@ -619,10 +560,7 @@ settings.changeCSS = function () {
 settings.save = function (params) {
 	api.post("Settings::saveAll", params, function (data) {
 		if (data === true) {
-			loadingBar.show(
-				"success",
-				lychee.locale["SETTINGS_SUCCESS_UPDATE"]
-			);
+			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_UPDATE"]);
 			view.full_settings.init();
 			// lychee.init();
 		} else lychee.error("Check the Logs", params, data);

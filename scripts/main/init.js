@@ -46,10 +46,7 @@ $(document).ready(function () {
 		.bind(["left"], function () {
 			if (
 				visible.photo() &&
-				(!visible.header() ||
-					$("img#image").is(":focus") ||
-					$("img#livephoto").is(":focus") ||
-					$(":focus").length === 0)
+				(!visible.header() || $("img#image").is(":focus") || $("img#livephoto").is(":focus") || $(":focus").length === 0)
 			) {
 				$("#imageview a#previous").click();
 				return false;
@@ -59,10 +56,7 @@ $(document).ready(function () {
 		.bind(["right"], function () {
 			if (
 				visible.photo() &&
-				(!visible.header() ||
-					$("img#image").is(":focus") ||
-					$("img#livephoto").is(":focus") ||
-					$(":focus").length === 0)
+				(!visible.header() || $("img#image").is(":focus") || $("img#livephoto").is(":focus") || $(":focus").length === 0)
 			) {
 				$("#imageview a#next").click();
 				return false;
@@ -182,9 +176,7 @@ $(document).ready(function () {
 		} else if (
 			visible.photo() &&
 			!lychee.header_auto_hide &&
-			($("img#image").is(":focus") ||
-				$("img#livephoto").is(":focus") ||
-				$(":focus").length === 0)
+			($("img#image").is(":focus") || $("img#livephoto").is(":focus") || $(":focus").length === 0)
 		) {
 			if (visible.header()) {
 				header.hide();
@@ -236,16 +228,10 @@ $(document).ready(function () {
 			// prevent triggering event 'mousemove'
 			e.preventDefault();
 
-			if (
-				typeof swipe.obj === "undefined" ||
-				(Math.abs(swipe.offsetX) <= 5 && Math.abs(swipe.offsetY) <= 5)
-			) {
+			if (typeof swipe.obj === "undefined" || (Math.abs(swipe.offsetX) <= 5 && Math.abs(swipe.offsetY) <= 5)) {
 				// Toggle header only if we're not moving to next/previous photo;
 				// In this case, swipe.preventNextHeaderToggle is set to true
-				if (
-					typeof swipe.preventNextHeaderToggle === "undefined" ||
-					!swipe.preventNextHeaderToggle
-				) {
+				if (typeof swipe.preventNextHeaderToggle === "undefined" || !swipe.preventNextHeaderToggle) {
 					if (visible.header()) {
 						header.hide(e);
 					} else {
@@ -261,8 +247,7 @@ $(document).ready(function () {
 		// Swipe on mobile
 		.swipe()
 		.on("swipeStart", function () {
-			if (visible.photo())
-				swipe.start($("#imageview #image, #imageview #livephoto"));
+			if (visible.photo()) swipe.start($("#imageview #image, #imageview #livephoto"));
 		})
 		.swipe()
 		.on("swipeMove", function (e) {
@@ -270,8 +255,7 @@ $(document).ready(function () {
 		})
 		.swipe()
 		.on("swipeEnd", function (e) {
-			if (visible.photo())
-				swipe.stop(e.swipe, photo.previous, photo.next);
+			if (visible.photo()) swipe.stop(e.swipe, photo.previous, photo.next);
 		});
 
 	// Document
@@ -318,10 +302,8 @@ $(document).ready(function () {
 			}
 
 			// Detect if dropped item is a file or a link
-			if (e.originalEvent.dataTransfer.files.length > 0)
-				upload.start.local(e.originalEvent.dataTransfer.files);
-			else if (e.originalEvent.dataTransfer.getData("Text").length > 3)
-				upload.start.url(e.originalEvent.dataTransfer.getData("Text"));
+			if (e.originalEvent.dataTransfer.files.length > 0) upload.start.local(e.originalEvent.dataTransfer.files);
+			else if (e.originalEvent.dataTransfer.getData("Text").length > 3) upload.start.url(e.originalEvent.dataTransfer.getData("Text"));
 
 			return false;
 		})
@@ -339,10 +321,7 @@ $(document).ready(function () {
 
 				// Search clipboard items for an image
 				for (let i = 0; i < items.length; i++) {
-					if (
-						items[i].type.indexOf("image") !== -1 ||
-						items[i].type.indexOf("video") !== -1
-					) {
+					if (items[i].type.indexOf("image") !== -1 || items[i].type.indexOf("video") !== -1) {
 						filesToUpload.push(items[i].getAsFile());
 					}
 				}
@@ -366,19 +345,11 @@ $(document).ready(function () {
 		})
 
 		// Fullscreen
-		.on(
-			"fullscreenchange mozfullscreenchange webkitfullscreenchange msfullscreenchange",
-			lychee.fullscreenUpdate
-		);
+		.on("fullscreenchange mozfullscreenchange webkitfullscreenchange msfullscreenchange", lychee.fullscreenUpdate);
 
 	const rememberScrollPage = function (scrollPos) {
 		// only for albums with subalbums
-		if (
-			album &&
-			album.json &&
-			album.json.albums &&
-			album.json.albums.length > 0
-		) {
+		if (album && album.json && album.json.albums && album.json.albums.length > 0) {
 			let urls = JSON.parse(localStorage.getItem("scroll"));
 			if (urls == null || urls.length < 1) {
 				urls = {};
@@ -400,8 +371,7 @@ $(document).ready(function () {
 	$(window)
 		// resize
 		.on("resize", function () {
-			if (visible.album() || visible.search())
-				view.album.content.justify();
+			if (visible.album() || visible.search()) view.album.content.justify();
 			if (visible.photo()) view.photo.onresize();
 		})
 		// remember scroll positions

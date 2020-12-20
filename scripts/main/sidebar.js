@@ -131,11 +131,7 @@ sidebar.setSelectable = function (selectable = true) {
 	else sidebar.dom().addClass("notSelectable");
 };
 
-sidebar.changeAttr = function (
-	attr,
-	value = "-",
-	dangerouslySetInnerHTML = false
-) {
+sidebar.changeAttr = function (attr, value = "-", dangerouslySetInnerHTML = false) {
 	if (attr == null || attr === "") return false;
 
 	// Set a default for the value
@@ -163,25 +159,14 @@ sidebar.secondsToHMS = function (d) {
 	var m = Math.floor((d % 3600) / 60);
 	var s = Math.floor(d % 60);
 
-	return (
-		(h > 0 ? h.toString() + "h" : "") +
-		(m > 0 ? m.toString() + "m" : "") +
-		(s > 0 || (h == 0 && m == 0) ? s.toString() + "s" : "")
-	);
+	return (h > 0 ? h.toString() + "h" : "") + (m > 0 ? m.toString() + "m" : "") + (s > 0 || (h == 0 && m == 0) ? s.toString() + "s" : "");
 };
 
 sidebar.createStructure.photo = function (data) {
 	if (data == null || data === "") return false;
 
 	let editable = typeof album !== "undefined" ? album.isUploadable() : false;
-	let exifHash =
-		data.takedate +
-		data.make +
-		data.model +
-		data.shutter +
-		data.aperture +
-		data.focal +
-		data.iso;
+	let exifHash = data.takedate + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
 	let locationHash = data.longitude + data.latitude + data.altitude;
 	let structure = {};
 	let _public = "";
@@ -404,26 +389,18 @@ sidebar.createStructure.photo = function (data) {
 				{
 					title: lychee.locale["PHOTO_LATITUDE"],
 					kind: "latitude",
-					value: data.latitude
-						? DecimalToDegreeMinutesSeconds(data.latitude, true)
-						: "",
+					value: data.latitude ? DecimalToDegreeMinutesSeconds(data.latitude, true) : "",
 				},
 				{
 					title: lychee.locale["PHOTO_LONGITUDE"],
 					kind: "longitude",
-					value: data.longitude
-						? DecimalToDegreeMinutesSeconds(data.longitude, false)
-						: "",
+					value: data.longitude ? DecimalToDegreeMinutesSeconds(data.longitude, false) : "",
 				},
 				// No point in displaying sub-mm precision; 10cm is more than enough.
 				{
 					title: lychee.locale["PHOTO_ALTITUDE"],
 					kind: "altitude",
-					value: data.altitude
-						? (
-								Math.round(parseFloat(data.altitude) * 10) / 10
-						  ).toString() + "m"
-						: "",
+					value: data.altitude ? (Math.round(parseFloat(data.altitude) * 10) / 10).toString() + "m" : "",
 				},
 				{
 					title: lychee.locale["PHOTO_LOCATION"],
@@ -445,14 +422,7 @@ sidebar.createStructure.photo = function (data) {
 	}
 
 	// Construct all parts of the structure
-	let structure_ret = [
-		structure.basics,
-		structure.image,
-		structure.tags,
-		structure.exif,
-		structure.location,
-		structure.license,
-	];
+	let structure_ret = [structure.basics, structure.image, structure.tags, structure.exif, structure.location, structure.license];
 
 	if (!lychee.publicMode) {
 		structure_ret.push(structure.sharing);
@@ -701,8 +671,7 @@ sidebar.createStructure.album = function (album) {
 };
 
 sidebar.has_location = function (structure) {
-	if (structure == null || structure === "" || structure === false)
-		return false;
+	if (structure == null || structure === "" || structure === false) return false;
 
 	let _has_location = false;
 
@@ -716,8 +685,7 @@ sidebar.has_location = function (structure) {
 };
 
 sidebar.render = function (structure) {
-	if (structure == null || structure === "" || structure === false)
-		return false;
+	if (structure == null || structure === "" || structure === false) return false;
 
 	let html = "";
 
@@ -745,21 +713,14 @@ sidebar.render = function (structure) {
 				}
 
 				// Do not show location is not enabled
-				if (
-					row.kind == "location" &&
-					((lychee.publicMode === true &&
-						!lychee.location_show_public) ||
-						!lychee.location_show)
-				) {
+				if (row.kind == "location" && ((lychee.publicMode === true && !lychee.location_show_public) || !lychee.location_show)) {
 					object.splice(index, 1);
 				} else {
 					// Explode location string into an array to keep street, city etc separate
 					if (!(row.value === "" || row.value == null)) {
-						section.rows[index].value = row.value
-							.split(",")
-							.map(function (item) {
-								return item.trim();
-							});
+						section.rows[index].value = row.value.split(",").map(function (item) {
+							return item.trim();
+						});
 					}
 				}
 			});
@@ -794,8 +755,7 @@ sidebar.render = function (structure) {
 				}
 
 				// Add edit-icon to the value when editable
-				if (row.editable === true)
-					value += " " + build.editIcon("edit_" + row.kind);
+				if (row.editable === true) value += " " + build.editIcon("edit_" + row.kind);
 
 				_html += lychee.html`
 						 <tr>
@@ -834,10 +794,8 @@ sidebar.render = function (structure) {
 	};
 
 	structure.forEach(function (section) {
-		if (section.type === sidebar.types.DEFAULT)
-			html += renderDefault(section);
-		else if (section.type === sidebar.types.TAGS)
-			html += renderTags(section);
+		if (section.type === sidebar.types.DEFAULT) html += renderDefault(section);
+		else if (section.type === sidebar.types.TAGS) html += renderTags(section);
 	});
 
 	return html;

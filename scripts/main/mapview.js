@@ -5,28 +5,23 @@
 const map_provider_layer_attribution = {
 	Wikimedia: {
 		layer: "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png",
-		attribution:
-			'<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>',
+		attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>',
 	},
 	"OpenStreetMap.org": {
 		layer: "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
-		attribution:
-			'&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+		attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
 	},
 	"OpenStreetMap.de": {
 		layer: "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png ",
-		attribution:
-			'&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+		attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
 	},
 	"OpenStreetMap.fr": {
 		layer: "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png ",
-		attribution:
-			'&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+		attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
 	},
 	RRZE: {
 		layer: "https://{s}.osm.rrze.fau.de/osmhd/{z}/{x}/{y}.png",
-		attribution:
-			'&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+		attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
 	},
 };
 
@@ -74,10 +69,7 @@ mapview.title = function (_albumID, _albumTitle) {
 // Open the map view
 mapview.open = function (albumID = null) {
 	// If map functionality is disabled -> do nothing
-	if (
-		!lychee.map_display ||
-		(lychee.publicMode === true && !lychee.map_display_public)
-	) {
+	if (!lychee.map_display || (lychee.publicMode === true && !lychee.map_display_public)) {
 		loadingBar.show("error", lychee.locale["ERROR_MAP_DEACTIVATED"]);
 		return;
 	}
@@ -103,8 +95,7 @@ mapview.open = function (albumID = null) {
 		mapview.map = L.map("leaflet_map_full").setView([0.0, 0.0], 13);
 
 		L.tileLayer(map_provider_layer_attribution[lychee.map_provider].layer, {
-			attribution:
-				map_provider_layer_attribution[lychee.map_provider].attribution,
+			attribution: map_provider_layer_attribution[lychee.map_provider].attribution,
 		}).addTo(mapview.map);
 
 		mapview.map_provider = lychee.map_provider;
@@ -115,14 +106,9 @@ mapview.open = function (albumID = null) {
 				mapview.map.removeLayer(layer);
 			});
 
-			L.tileLayer(
-				map_provider_layer_attribution[lychee.map_provider].layer,
-				{
-					attribution:
-						map_provider_layer_attribution[lychee.map_provider]
-							.attribution,
-				}
-			).addTo(mapview.map);
+			L.tileLayer(map_provider_layer_attribution[lychee.map_provider].layer, {
+				attribution: map_provider_layer_attribution[lychee.map_provider].attribution,
+			}).addTo(mapview.map);
 
 			mapview.map_provider = lychee.map_provider;
 		} else {
@@ -169,23 +155,12 @@ mapview.open = function (albumID = null) {
 
 	// Adjusts zoom and position of map to show all images
 	const updateZoom = function () {
-		if (
-			mapview.min_lat &&
-			mapview.min_lng &&
-			mapview.max_lat &&
-			mapview.max_lng
-		) {
+		if (mapview.min_lat && mapview.min_lng && mapview.max_lat && mapview.max_lng) {
 			var dist_lat = mapview.max_lat - mapview.min_lat;
 			var dist_lng = mapview.max_lng - mapview.min_lng;
 			mapview.map.fitBounds([
-				[
-					mapview.min_lat - 0.1 * dist_lat,
-					mapview.min_lng - 0.1 * dist_lng,
-				],
-				[
-					mapview.max_lat + 0.1 * dist_lat,
-					mapview.max_lng + 0.1 * dist_lng,
-				],
+				[mapview.min_lat - 0.1 * dist_lat, mapview.min_lng - 0.1 * dist_lng],
+				[mapview.max_lat + 0.1 * dist_lat, mapview.max_lng + 0.1 * dist_lng],
 			]);
 		} else {
 			mapview.map.fitWorld();
@@ -204,10 +179,7 @@ mapview.open = function (albumID = null) {
 				photos.push({
 					lat: parseFloat(element.latitude),
 					lng: parseFloat(element.longitude),
-					thumbnail:
-						element.thumbUrl !== "uploads/thumb/"
-							? element.thumbUrl
-							: "img/placeholder.png",
+					thumbnail: element.thumbUrl !== "uploads/thumb/" ? element.thumbUrl : "img/placeholder.png",
 					thumbnail2x: element.thumb2x,
 					url: element.small !== "" ? element.small : element.url,
 					url2x: element.small2x,
@@ -218,28 +190,16 @@ mapview.open = function (albumID = null) {
 				});
 
 				// Update min/max lat/lng
-				if (
-					mapview.min_lat === null ||
-					mapview.min_lat > element.latitude
-				) {
+				if (mapview.min_lat === null || mapview.min_lat > element.latitude) {
 					mapview.min_lat = parseFloat(element.latitude);
 				}
-				if (
-					mapview.min_lng === null ||
-					mapview.min_lng > element.longitude
-				) {
+				if (mapview.min_lng === null || mapview.min_lng > element.longitude) {
 					mapview.min_lng = parseFloat(element.longitude);
 				}
-				if (
-					mapview.max_lat === null ||
-					mapview.max_lat < element.latitude
-				) {
+				if (mapview.max_lat === null || mapview.max_lat < element.latitude) {
 					mapview.max_lat = parseFloat(element.latitude);
 				}
-				if (
-					mapview.max_lng === null ||
-					mapview.max_lng < element.longitude
-				) {
+				if (mapview.max_lng === null || mapview.max_lng < element.longitude) {
 					mapview.max_lng = parseFloat(element.longitude);
 				}
 			}
@@ -269,14 +229,10 @@ mapview.open = function (albumID = null) {
 					password.getDialog(_albumID, function () {
 						params.password = password.value;
 
-						api.post(
-							"Album::getPositionData",
-							params,
-							function (_data) {
-								addPhotosToMap(_data);
-								mapview.title(_albumID, _data.title);
-							}
-						);
+						api.post("Album::getPositionData", params, function (_data) {
+							addPhotosToMap(_data);
+							mapview.title(_albumID, _data.title);
+						});
 					});
 				} else {
 					addPhotosToMap(data);
@@ -296,14 +252,10 @@ mapview.open = function (albumID = null) {
 					password.getDialog(_albumID, function () {
 						params.password = password.value;
 
-						api.post(
-							"Albums::getPositionData",
-							params,
-							function (_data) {
-								addPhotosToMap(_data);
-								mapview.title(_albumID, _data.title);
-							}
-						);
+						api.post("Albums::getPositionData", params, function (_data) {
+							addPhotosToMap(_data);
+							mapview.title(_albumID, _data.title);
+						});
 					});
 				} else {
 					addPhotosToMap(data);
@@ -315,11 +267,7 @@ mapview.open = function (albumID = null) {
 
 	// If subalbums not being included and album.json already has all data
 	// -> we can reuse it
-	if (
-		lychee.map_include_subalbums === false &&
-		album.json !== null &&
-		album.json.photos !== null
-	) {
+	if (lychee.map_include_subalbums === false && album.json !== null && album.json.photos !== null) {
 		addPhotosToMap(album.json);
 	} else {
 		// Not all needed data has been  preloaded - we need to load everything

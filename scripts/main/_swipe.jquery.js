@@ -87,13 +87,9 @@
 				y = self.pos.end.y - self.pos.start.y,
 				radians = Math.atan2(y, x),
 				direction = "up",
-				distance = Math.round(
-					Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))
-				),
+				distance = Math.round(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))),
 				angle = Math.round((radians * 180) / Math.PI),
-				speed = Math.round(
-					(distance / (new Date().getTime() - self.startTime)) * 1000
-				);
+				speed = Math.round((distance / (new Date().getTime() - self.startTime)) * 1000);
 
 			if (angle < 0) {
 				angle = 360 - Math.abs(angle);

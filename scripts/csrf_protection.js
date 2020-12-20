@@ -12,9 +12,7 @@ csrf.escape = function (s) {
 
 csrf.getCookie = function (name) {
 	// we stop the selection at = (default json) but also at % to prevent any %3D at the end of the string
-	var match = document.cookie.match(
-		RegExp("(?:^|;\\s*)" + csrf.escape(name) + "=([^;^%]*)")
-	);
+	var match = document.cookie.match(RegExp("(?:^|;\\s*)" + csrf.escape(name) + "=([^;^%]*)"));
 	return match ? match[1] : null;
 };
 

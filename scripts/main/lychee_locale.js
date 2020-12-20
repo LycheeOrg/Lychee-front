@@ -53,17 +53,14 @@ lychee.locale = {
 	DELETE_ALBUM_QUESTION: "Delete Album and Photos",
 	KEEP_ALBUM: "Keep Album",
 	DELETE_ALBUM_CONFIRMATION_1: "Are you sure you want to delete the album",
-	DELETE_ALBUM_CONFIRMATION_2:
-		"and all of the photos it contains? This action can't be undone!",
+	DELETE_ALBUM_CONFIRMATION_2: "and all of the photos it contains? This action can't be undone!",
 
 	DELETE_ALBUMS_QUESTION: "Delete Albums and Photos",
 	KEEP_ALBUMS: "Keep Albums",
 	DELETE_ALBUMS_CONFIRMATION_1: "Are you sure you want to delete all",
-	DELETE_ALBUMS_CONFIRMATION_2:
-		"selected albums and all of the photos they contain? This action can't be undone!",
+	DELETE_ALBUMS_CONFIRMATION_2: "selected albums and all of the photos they contain? This action can't be undone!",
 
-	DELETE_UNSORTED_CONFIRM:
-		"Are you sure you want to delete all photos from 'Unsorted'?<br>This action can't be undone!",
+	DELETE_UNSORTED_CONFIRM: "Are you sure you want to delete all photos from 'Unsorted'?<br>This action can't be undone!",
 	CLEAR_UNSORTED: "Clear Unsorted",
 	KEEP_UNSORTED: "Keep Unsorted",
 
@@ -128,8 +125,7 @@ lychee.locale = {
 	ALBUM_SHOW_TAGS: "Tags to show",
 	ALBUM_NEW_DESCRIPTION: "Enter a new description for this album:",
 	ALBUM_SET_DESCRIPTION: "Set Description",
-	ALBUM_NEW_SHOWTAGS:
-		"Enter tags of photos that will be visible in this album:",
+	ALBUM_NEW_SHOWTAGS: "Enter tags of photos that will be visible in this album:",
 	ALBUM_SET_SHOWTAGS: "Set tags to show",
 	ALBUM_ALBUM: "Album",
 	ALBUM_CREATED: "Created",
@@ -140,8 +136,7 @@ lychee.locale = {
 	ALBUM_SHR_YES: "YES",
 	ALBUM_SHR_NO: "No",
 	ALBUM_PUBLIC: "Public",
-	ALBUM_PUBLIC_EXPL:
-		"Album can be viewed by others, subject to the restrictions below.",
+	ALBUM_PUBLIC_EXPL: "Album can be viewed by others, subject to the restrictions below.",
 	ALBUM_FULL: "Full size (v4 only)",
 	ALBUM_FULL_EXPL: "Full size pictures are available",
 	ALBUM_HIDDEN: "Hidden",
@@ -157,18 +152,15 @@ lychee.locale = {
 	ALBUM_PASSWORD: "Password",
 	ALBUM_PASSWORD_PROT: "Password protected",
 	ALBUM_PASSWORD_PROT_EXPL: "Album only accessible with a valid password.",
-	ALBUM_PASSWORD_REQUIRED:
-		"This album is protected by a password. Enter the password below to view the photos of this album:",
+	ALBUM_PASSWORD_REQUIRED: "This album is protected by a password. Enter the password below to view the photos of this album:",
 	ALBUM_MERGE_1: "Are you sure you want to merge the album",
 	ALBUM_MERGE_2: "into the album",
-	ALBUMS_MERGE:
-		"Are you sure you want to merge all selected albums into the album",
+	ALBUMS_MERGE: "Are you sure you want to merge all selected albums into the album",
 	MERGE_ALBUM: "Merge Albums",
 	DONT_MERGE: "Don't Merge",
 	ALBUM_MOVE_1: "Are you sure you want to move the album",
 	ALBUM_MOVE_2: "into the album",
-	ALBUMS_MOVE:
-		"Are you sure you want to move all selected albums into the album",
+	ALBUMS_MOVE: "Are you sure you want to move all selected albums into the album",
 	MOVE_ALBUMS: "Move Albums",
 	NOT_MOVE_ALBUMS: "Don't Move",
 	ROOT: "Root",
@@ -206,11 +198,9 @@ lychee.locale = {
 	PHOTO_FPS: "Frame rate",
 	PHOTO_TAGS: "Tags",
 	PHOTO_NOTAGS: "No Tags",
-	PHOTO_NEW_TAGS:
-		"Enter your tags for this photo. You can add multiple tags by separating them with a comma:",
+	PHOTO_NEW_TAGS: "Enter your tags for this photo. You can add multiple tags by separating them with a comma:",
 	PHOTO_NEW_TAGS_1: "Enter your tags for all",
-	PHOTO_NEW_TAGS_2:
-		"selected photos. Existing tags will be overwritten. You can add multiple tags by separating them with a comma:",
+	PHOTO_NEW_TAGS_2: "selected photos. Existing tags will be overwritten. You can add multiple tags by separating them with a comma:",
 	PHOTO_SET_TAGS: "Set Tags",
 	PHOTO_CAMERA: "Camera",
 	PHOTO_CAPTURED: "Captured",
@@ -238,21 +228,18 @@ lychee.locale = {
 		"This photo is located in a public album. To make this photo private or public, edit the visibility of the associated album.",
 	PHOTO_SHOW_ALBUM: "Show Album",
 	PHOTO_PUBLIC: "Public",
-	PHOTO_PUBLIC_EXPL:
-		"Photo can be viewed by others, subject to the restrictions below.",
+	PHOTO_PUBLIC_EXPL: "Photo can be viewed by others, subject to the restrictions below.",
 	PHOTO_FULL: "Original",
 	PHOTO_FULL_EXPL: "Full-resolution picture is available.",
 	PHOTO_HIDDEN: "Hidden",
 	PHOTO_HIDDEN_EXPL: "Only people with the direct link can view this photo.",
 	PHOTO_DOWNLOADABLE: "Downloadable",
-	PHOTO_DOWNLOADABLE_EXPL:
-		"Visitors of your gallery can download this photo.",
+	PHOTO_DOWNLOADABLE_EXPL: "Visitors of your gallery can download this photo.",
 	PHOTO_SHARE_BUTTON_VISIBLE: "Share button is visible",
 	PHOTO_SHARE_BUTTON_VISIBLE_EXPL: "Display social media sharing links.",
 	PHOTO_PASSWORD_PROT: "Password protected",
 	PHOTO_PASSWORD_PROT_EXPL: "Photo only accessible with a valid password.",
-	PHOTO_EDIT_SHARING_TEXT:
-		"The sharing properties of this photo will be changed to the following:",
+	PHOTO_EDIT_SHARING_TEXT: "The sharing properties of this photo will be changed to the following:",
 	PHOTO_NO_EDIT_SHARING_TEXT:
 		"Because this photo is located in a public album, it inherits that album's visibility settings.  Its current visibility is shown below for informational purposes only.",
 	PHOTO_EDIT_GLOBAL_SHARING_TEXT:
@@ -266,8 +253,7 @@ lychee.locale = {
 
 	LOADING: "Loading",
 	ERROR: "Error",
-	ERROR_TEXT:
-		"Whoops, it looks like something went wrong. Please reload the site and try again!",
+	ERROR_TEXT: "Whoops, it looks like something went wrong. Please reload the site and try again!",
 	ERROR_DB_1:
 		"Unable to connect to host database because access was denied. Double-check your host, username and password and ensure that access from your current location is permitted.",
 	ERROR_DB_2:
@@ -276,12 +262,9 @@ lychee.locale = {
 		"Unable to save this configuration. Permission denied in <b>'data/'</b>. Please set the read, write and execute rights for others in <b>'data/'</b> and <b>'uploads/'</b>. Take a look at the readme for more information.",
 	ERROR_UNKNOWN:
 		"Something unexpected happened. Please try again and check your installation and server. Take a look at the readme for more information.",
-	ERROR_LOGIN:
-		"Unable to save login. Please try again with another username and password!",
-	ERROR_MAP_DEACTIVATED:
-		"Map functionality has been deactivated under settings.",
-	ERROR_SEARCH_DEACTIVATED:
-		"Search functionality has been deactivated under settings.",
+	ERROR_LOGIN: "Unable to save login. Please try again with another username and password!",
+	ERROR_MAP_DEACTIVATED: "Map functionality has been deactivated under settings.",
+	ERROR_SEARCH_DEACTIVATED: "Search functionality has been deactivated under settings.",
 	SUCCESS: "OK",
 	RETRY: "Retry",
 
@@ -296,8 +279,7 @@ lychee.locale = {
 	SETTINGS_SUCCESS_PUBLIC_SEARCH: "Public search updated",
 	SETTINGS_SUCCESS_LICENSE: "Default license updated",
 	SETTINGS_SUCCESS_MAP_DISPLAY: "Map display settings updated",
-	SETTINGS_SUCCESS_MAP_DISPLAY_PUBLIC:
-		"Map display settings for public albums updated",
+	SETTINGS_SUCCESS_MAP_DISPLAY_PUBLIC: "Map display settings for public albums updated",
 	SETTINGS_SUCCESS_MAP_PROVIDER: "Map provider settings updated",
 
 	U2F_NOT_SUPPORTED: "U2F not supported. Sorry.",
@@ -315,8 +297,7 @@ lychee.locale = {
 	DB_INFO_HOST: "Database Host (optional)",
 	DB_INFO_USER: "Database Username",
 	DB_INFO_PASSWORD: "Database Password",
-	DB_INFO_TEXT:
-		"Lychee will create its own database. If required, you can enter the name of an existing database instead:",
+	DB_INFO_TEXT: "Lychee will create its own database. If required, you can enter the name of an existing database instead:",
 	DB_NAME: "Database Name (optional)",
 	DB_PREFIX: "Table prefix (optional)",
 	DB_CONNECT: "Connect",
@@ -330,15 +311,12 @@ lychee.locale = {
 	PASSWORD_TITLE: "Enter your current username and password:",
 	USERNAME_CURRENT: "Current Username",
 	PASSWORD_CURRENT: "Current Password",
-	PASSWORD_TEXT:
-		"Your username and password will be changed to the following:",
+	PASSWORD_TEXT: "Your username and password will be changed to the following:",
 	PASSWORD_CHANGE: "Change Login",
 
 	EDIT_SHARING_TITLE: "Edit Sharing",
-	EDIT_SHARING_TEXT:
-		"The sharing-properties of this album will be changed to the following:",
-	SHARE_ALBUM_TEXT:
-		"This album will be shared with the following properties:",
+	EDIT_SHARING_TEXT: "The sharing-properties of this album will be changed to the following:",
+	SHARE_ALBUM_TEXT: "This album will be shared with the following properties:",
 	ALBUM_SHARING_CONFIRM: "Save",
 
 	SORT_ALBUM_BY_1: "Sort albums by",
@@ -400,8 +378,7 @@ lychee.locale = {
 	MAP_PROVIDER_RRZE: "University of Erlangen, Germany (only retina)",
 
 	MAP_DISPLAY_TEXT: "Enable maps (provided by OpenStreetMap):",
-	MAP_DISPLAY_PUBLIC_TEXT:
-		"Enable maps for public albums (provided by OpenStreetMap):",
+	MAP_DISPLAY_PUBLIC_TEXT: "Enable maps for public albums (provided by OpenStreetMap):",
 	MAP_INCLUDE_SUBALBUMS_TEXT: "Include photos of subalbums on map:",
 	LOCATION_DECODING: "Decode GPS data into location name",
 	LOCATION_SHOW: "Show location name",
@@ -410,8 +387,7 @@ lychee.locale = {
 	NSFW_VISIBLE_TEXT_1: "Make Sensitive albums visible by default.",
 	NSFW_VISIBLE_TEXT_2:
 		"If the album is public, it is still accessible, just hidden from the view and <b>can be revealed by pressing <hkb>H</hkb></b>.",
-	SETTINGS_SUCCESS_NSFW_VISIBLE:
-		"Default sensitive album visibility updated with success.",
+	SETTINGS_SUCCESS_NSFW_VISIBLE: "Default sensitive album visibility updated with success.",
 
 	VIEW_NO_RESULT: "No results",
 	VIEW_NO_PUBLIC_ALBUMS: "No public albums",
@@ -432,17 +408,14 @@ lychee.locale = {
 	UPLOAD_FAILED_ERROR: "Upload failed. Server returned an error!",
 	UPLOAD_FAILED_WARNING: "Upload failed. Server returned a warning!",
 	UPLOAD_SKIPPED: "Skipped",
-	UPLOAD_ERROR_CONSOLE:
-		"Please take a look at the console of your browser for further details.",
-	UPLOAD_UNKNOWN:
-		"Server returned an unknown response. Please take a look at the console of your browser for further details.",
+	UPLOAD_ERROR_CONSOLE: "Please take a look at the console of your browser for further details.",
+	UPLOAD_UNKNOWN: "Server returned an unknown response. Please take a look at the console of your browser for further details.",
 	UPLOAD_ERROR_UNKNOWN: "Upload failed. Server returned an unkown error!",
 	UPLOAD_IN_PROGRESS: "Lychee is currently uploading!",
 	UPLOAD_IMPORT_WARN_ERR:
 		"The import has been finished, but returned warnings or errors. Please take a look at the log (Settings -> Show Log) for further details.",
 	UPLOAD_IMPORT_COMPLETE: "Import complete",
-	UPLOAD_IMPORT_INSTR:
-		"Please enter the direct link to a photo to import it:",
+	UPLOAD_IMPORT_INSTR: "Please enter the direct link to a photo to import it:",
 	UPLOAD_IMPORT: "Import",
 	UPLOAD_IMPORT_SERVER: "Importing from server",
 	UPLOAD_IMPORT_SERVER_FOLD:
@@ -450,8 +423,7 @@ lychee.locale = {
 	UPLOAD_IMPORT_SERVER_INSTR:
 		"This action will import all photos, folders and sub-folders which are located in the following directory. The <b>original files will be deleted</b> after the import when possible.",
 	UPLOAD_ABSOLUTE_PATH: "Absolute path to directory",
-	UPLOAD_IMPORT_SERVER_EMPT:
-		"Could not start import because the folder was empty!",
+	UPLOAD_IMPORT_SERVER_EMPT: "Could not start import because the folder was empty!",
 
 	ABOUT_SUBTITLE: "Self-hosted photo-management done right",
 	ABOUT_DESCRIPTION:
