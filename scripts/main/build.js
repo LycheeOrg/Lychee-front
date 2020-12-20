@@ -4,108 +4,108 @@
 
 let build = {};
 
-build.iconic = function (icon, classes = "") {
-	let html = "";
+build.iconic = function(icon, classes = "") {
+    let html = "";
 
-	html += lychee.html`<svg class='iconic ${classes}'><use xlink:href='#${icon}' /></svg>`;
+    html += lychee.html `<svg class='iconic ${classes}'><use xlink:href='#${icon}' /></svg>`;
 
-	return html;
+    return html;
 };
 
-build.divider = function (title) {
-	let html = "";
+build.divider = function(title) {
+    let html = "";
 
-	html += lychee.html`<div class='divider'><h1>${title}</h1></div>`;
+    html += lychee.html `<div class='divider'><h1>${title}</h1></div>`;
 
-	return html;
+    return html;
 };
 
-build.editIcon = function (id) {
-	let html = "";
+build.editIcon = function(id) {
+    let html = "";
 
-	html += lychee.html`<div id='${id}' class='edit'>${build.iconic(
+    html += lychee.html `<div id='${id}' class='edit'>${build.iconic(
 		"pencil"
 	)}</div>`;
 
-	return html;
+    return html;
 };
 
-build.multiselect = function (top, left) {
-	return lychee.html`<div id='multiselect' style='top: ${top}px; left: ${left}px;'></div>`;
+build.multiselect = function(top, left) {
+    return lychee.html `<div id='multiselect' style='top: ${top}px; left: ${left}px;'></div>`;
 };
 
-build.getAlbumThumb = function (data, i) {
-	let isVideo = data.types[i] && data.types[i].indexOf("video") > -1;
-	let isRaw = data.types[i] && data.types[i].indexOf("raw") > -1;
-	let thumb = data.thumbs[i];
+build.getAlbumThumb = function(data, i) {
+    let isVideo = data.types[i] && data.types[i].indexOf("video") > -1;
+    let isRaw = data.types[i] && data.types[i].indexOf("raw") > -1;
+    let thumb = data.thumbs[i];
+    var thumb2x = "";
 
-	if (thumb === "uploads/thumb/" && isVideo) {
-		return `<span class="thumbimg"><img src='img/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
-	}
-	if (thumb === "uploads/thumb/" && isRaw) {
-		return `<span class="thumbimg"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
-	}
+    if (thumb === "uploads/thumb/" && isVideo) {
+        return `<span class="thumbimg"><img src='img/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
+    }
+    if (thumb === "uploads/thumb/" && isRaw) {
+        return `<span class="thumbimg"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
+    }
 
-	thumb2x = "";
-	if (data.thumbs2x) {
-		if (data.thumbs2x[i]) {
-			thumb2x = data.thumbs2x[i];
-		}
-	} else {
-		// Fallback code for Lychee v3
-		var { path: thumb2x, isPhoto: isPhoto } = lychee.retinize(
-			data.thumbs[i]
-		);
-		if (!isPhoto) {
-			thumb2x = "";
-		}
-	}
+    if (data.thumbs2x) {
+        if (data.thumbs2x[i]) {
+            thumb2x = data.thumbs2x[i];
+        }
+    } else {
+        // Fallback code for Lychee v3
+        var { path: thumb2x, isPhoto: isPhoto } = lychee.retinize(
+            data.thumbs[i]
+        );
+        if (!isPhoto) {
+            thumb2x = "";
+        }
+    }
 
-	return `<span class="thumbimg${
+    return `<span class="thumbimg${
 		isVideo ? " video" : ""
 	}"><img class='lazyload' src='img/placeholder.png' data-src='${thumb}' ${
 		thumb2x !== "" ? "data-srcset='" + thumb2x + " 2x'" : ""
 	} alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
 };
 
-build.album = function (data, disabled = false) {
-	let html = "";
-	let date_stamp = data.sysdate;
-	let sortingAlbums = [];
+build.album = function(data, disabled = false) {
+        let html = "";
+        let date_stamp = data.sysdate;
+        let sortingAlbums = [];
 
-	// In the special case of take date sorting use the take stamps as title
-	if (
-		lychee.sortingAlbums !== "" &&
-		data.min_takestamp &&
-		data.max_takestamp
-	) {
-		sortingAlbums = lychee.sortingAlbums
-			.replace("ORDER BY ", "")
-			.split(" ");
-		if (
-			sortingAlbums[0] === "max_takestamp" ||
-			sortingAlbums[0] === "min_takestamp"
-		) {
-			if (data.min_takestamp !== "" && data.max_takestamp !== "") {
-				date_stamp =
-					data.min_takestamp === data.max_takestamp
-						? data.max_takestamp
-						: data.min_takestamp + " - " + data.max_takestamp;
-			} else if (
-				data.min_takestamp !== "" &&
-				sortingAlbums[0] === "min_takestamp"
-			) {
-				date_stamp = data.min_takestamp;
-			} else if (
-				data.max_takestamp !== "" &&
-				sortingAlbums[0] === "max_takestamp"
-			) {
-				date_stamp = data.max_takestamp;
-			}
-		}
-	}
+        // In the special case of take date sorting use the take stamps as title
+        if (
+            lychee.sortingAlbums !== "" &&
+            data.min_takestamp &&
+            data.max_takestamp
+        ) {
+            sortingAlbums = lychee.sortingAlbums
+                .replace("ORDER BY ", "")
+                .split(" ");
+            if (
+                sortingAlbums[0] === "max_takestamp" ||
+                sortingAlbums[0] === "min_takestamp"
+            ) {
+                if (data.min_takestamp !== "" && data.max_takestamp !== "") {
+                    date_stamp =
+                        data.min_takestamp === data.max_takestamp ?
+                        data.max_takestamp :
+                        data.min_takestamp + " - " + data.max_takestamp;
+                } else if (
+                    data.min_takestamp !== "" &&
+                    sortingAlbums[0] === "min_takestamp"
+                ) {
+                    date_stamp = data.min_takestamp;
+                } else if (
+                    data.max_takestamp !== "" &&
+                    sortingAlbums[0] === "max_takestamp"
+                ) {
+                    date_stamp = data.max_takestamp;
+                }
+            }
+        }
 
-	html += lychee.html`
+        html += lychee.html `
 			<div class='album ${disabled ? `disabled` : ``}'
 				data-id='${data.id}'
 				data-nsfw='${data.nsfw && data.nsfw === "1" ? `1` : `0`}'
