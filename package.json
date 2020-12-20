@@ -12,7 +12,8 @@
 	"scripts": {
 		"start": "gulp watch",
 		"compile": "gulp",
-		"check-formatting": "prettier --check ."
+		"check-formatting": "prettier --check .",
+		"format": "prettier --write ."
 	},
 	"engines": {
 		"node": ">= 10"
