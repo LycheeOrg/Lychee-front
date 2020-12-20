@@ -396,6 +396,10 @@ view.album = {
 				let layoutGeometry = require("justified-layout")(ratio, {
 					containerWidth: containerWidth,
 					containerPadding: 0,
+					// boxSpacing: {
+					//     horizontal: 42,
+					//     vertical: 150
+					// },
 					targetRowHeight: parseFloat(
 						$(".photo").css("--lychee-default-height"),
 						10
