@@ -99,7 +99,8 @@ echo "\n${GREEN}pre commit hook finish${NO_COLOR}\n"
 
 This can easilly be installed by doing:
 ```
-cp pre-commit ../../.git/modules/public/Lychee-front/hooks 
+cp pre-commit ../../.git/modules/public/Lychee-front/hooks
+chmod 755 ../../.git/modules/public/Lychee-front/hooks/pre-commit
 ```
 
 ### Watch for changes
