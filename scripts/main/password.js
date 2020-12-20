@@ -3,47 +3,43 @@
  */
 
 let password = {
-
-	value: ''
-
+	value: "",
 };
 
-password.getDialog = function(albumID, callback) {
-
+password.getDialog = function (albumID, callback) {
 	const action = (data) => {
-
 		let passwd = data.password;
 
 		let params = {
 			albumID,
-			password: passwd
+			password: passwd,
 		};
 
-		api.post('Album::getPublic', params, function(_data) {
-
-			if (_data===true) {
+		api.post("Album::getPublic", params, function (_data) {
+			if (_data === true) {
 				basicModal.close();
 				password.value = passwd;
-				callback()
+				callback();
 			} else {
-				basicModal.error('password')
+				basicModal.error("password");
 			}
-
-		})
-
+		});
 	};
 
 	const cancel = () => {
-
 		basicModal.close();
-		if (!visible.albums() && !visible.album()) lychee.goto()
-
+		if (!visible.albums() && !visible.album()) lychee.goto();
 	};
 
-	let msg = `
+	let msg =
+		`
 			  <p>
-				  ` + lychee.locale['ALBUM_PASSWORD_REQUIRED'] + `
-				  <input name='password' class='text' type='password' placeholder='` + lychee.locale['PASSWORD'] + `' value=''>
+				  ` +
+		lychee.locale["ALBUM_PASSWORD_REQUIRED"] +
+		`
+				  <input name='password' class='text' type='password' placeholder='` +
+		lychee.locale["PASSWORD"] +
+		`' value=''>
 			  </p>
 			  `;
 
@@ -51,14 +47,13 @@ password.getDialog = function(albumID, callback) {
 		body: msg,
 		buttons: {
 			action: {
-				title: lychee.locale['ENTER'],
-				fn: action
+				title: lychee.locale["ENTER"],
+				fn: action,
 			},
 			cancel: {
-				title: lychee.locale['CANCEL'],
-				fn: cancel
-			}
-		}
-	})
-
+				title: lychee.locale["CANCEL"],
+				fn: cancel,
+			},
+		},
+	});
 };

@@ -9,18 +9,19 @@
 	font-size: 14px;
 	width: 100%;
 
-	&:last-child, &:first-child {
+	&:last-child,
+	&:first-child {
 		padding-top: 50px;
 	}
 
 	p {
 		width: 550px;
 		margin: 0 0 5%;
-		color: #CCC;
+		color: #ccc;
 		display: inline-block;
 
 		a {
-			color: rgba(255, 255, 255, .9);
+			color: rgba(255, 255, 255, 0.9);
 			text-decoration: none;
 			border-bottom: 1px dashed #888;
 		}
@@ -50,7 +51,7 @@
 				width: 15px;
 				height: 14px;
 				margin: 0 15px 0 1px;
-				fill: #FFFFFF;
+				fill: #ffffff;
 			}
 		}
 	}
@@ -64,17 +65,17 @@
 		border: none;
 		border-bottom: 1px solid #222;
 		border-radius: 0;
-		box-shadow: 0 1px 0 rgba(255, 255, 255, .05);
+		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
 		outline: 0;
 		margin-bottom: 10px;
 
 		&:focus {
-			border-bottom-color: #2293EC
+			border-bottom-color: #2293ec;
 		}
 	}
 
 	input.text.error {
-		border-bottom-color: #d92c34
+		border-bottom-color: #d92c34;
 	}
 
 	.choice label input:checked ~ .checkbox .iconic {
@@ -91,7 +92,7 @@
 		input {
 			position: absolute;
 			margin: 0;
-			opacity: 0
+			opacity: 0;
 		}
 
 		.checkbox {
@@ -100,25 +101,27 @@
 			height: 16px;
 			margin-top: 10px;
 			margin-left: 2px;
-			background: rgba(0, 0, 0, .5);
+			background: rgba(0, 0, 0, 0.5);
 			border-radius: 3px;
-			box-shadow: 0 0 0 1px rgba(0, 0, 0, .7);
+			box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.7);
 
 			.iconic {
 				box-sizing: border-box;
-				fill: #2293EC;
+				fill: #2293ec;
 				padding: 2px;
 				opacity: 0;
 				-ms-transform: scale(0);
 				transform: scale(0);
-				transition: opacity .2s cubic-bezier(.51, .92, .24, 1), transform .2s cubic-bezier(.51, .92, .24, 1)
+				transition: opacity 0.2s cubic-bezier(0.51, 0.92, 0.24, 1),
+					transform 0.2s cubic-bezier(0.51, 0.92, 0.24, 1);
 			}
 		}
 	}
 
 	.basicModal__button {
 		display: inline-block;
-		box-shadow: inset 0 1px 0 rgba(255, 255, 255, .02), inset 1px 0 0 rgba(0, 0, 0, .2);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02),
+			inset 1px 0 0 rgba(0, 0, 0, 0.2);
 		width: 10%;
 		min-width: 50px;
 		border-radius: 0 0 0 0;
@@ -129,12 +132,12 @@
 	}
 
 	.basicModal__button_OK {
-		color: #2293EC;
+		color: #2293ec;
 		border-radius: 5px 0 0 5px;
 
 		&:hover {
-			background: #2293EC;
-			color: #FFFFFF;
+			background: #2293ec;
+			color: #ffffff;
 		}
 	}
 
@@ -144,7 +147,7 @@
 
 		&:hover {
 			background: #b22027;
-			color: #FFFFFF;
+			color: #ffffff;
 		}
 	}
 
@@ -155,12 +158,12 @@
 
 		&:hover {
 			background: #009900;
-			color: #FFFFFF;
+			color: #ffffff;
 		}
 	}
 
 	input:hover {
-		border-bottom: #2293EC solid 1px;
+		border-bottom: #2293ec solid 1px;
 	}
 
 	.select {
@@ -170,14 +173,14 @@
 		width: 110px;
 		color: #fff;
 		border-radius: 3px;
-		border: 1px solid rgba(0, 0, 0, .2);
-		box-shadow: 0 1px 0 rgba(255, 255, 255, .02);
+		border: 1px solid rgba(0, 0, 0, 0.2);
+		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
 		font-size: 11px;
 		line-height: 16px;
 		overflow: hidden;
 		outline: 0;
 		vertical-align: middle;
-		background: rgba(0, 0, 0, .3);
+		background: rgba(0, 0, 0, 0.3);
 		display: inline-block;
 
 		select {
@@ -207,10 +210,10 @@
 
 		&::after {
 			position: absolute;
-			content: '≡';
+			content: "≡";
 			right: 8px;
 			top: 4px;
-			color: #2293EC;
+			color: #2293ec;
 			font-size: 16px;
 			line-height: 16px;
 			font-weight: 700;

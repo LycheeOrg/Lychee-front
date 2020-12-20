@@ -1,12 +1,11 @@
 // Vars -------------------------------------------------------------- //
-@import '../vars';
+@import "../vars";
 
 // Dark Theme ------------------------------------------------------- //
 .basicContext {
-
 	padding: 6px 0;
 	background-color: rgba(40, 40, 40, 0.98);
-	box-shadow: 0 2px 15px rgba(0, 0, 0, .4), 0 0 0 1px #222;
+	box-shadow: 0 2px 15px rgba(0, 0, 0, 0.4), 0 0 0 1px #222;
 	border-radius: 3px;
 
 	&__item {
@@ -18,7 +17,7 @@
 		}
 
 		&--disabled {
-			opacity: .5;
+			opacity: 0.5;
 		}
 
 		&:last-child {
@@ -44,5 +43,4 @@
 		width: 12px;
 		text-align: center;
 	}
-
 }

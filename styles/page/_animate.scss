@@ -1,11 +1,14 @@
-.pop-in.toggled, .pop-out.toggled, .pop-in-last.toggled {
+.pop-in.toggled,
+.pop-out.toggled,
+.pop-in-last.toggled {
 	opacity: 1;
 	transform: scale(1);
 	-webkit-transform: scale(1);
 	-moz-transform: scale(1);
 	-o-transform: scale(1);
 }
-.pop-in, .pop-in-last {
+.pop-in,
+.pop-in-last {
 	opacity: 0;
 	transform: scale(1.1);
 	-webkit-transform: scale(1.1);
@@ -13,13 +16,14 @@
 	-o-transform: scale(1.1);
 }
 .animate_slower {
-	transition: all 2s ease-in-out!important;
-	-webkit-transition: all 2s ease-in-out!important;
-	-moz-transition: all 2s ease-in-out!important;
-	-o-transition: all 2s ease-in-out!important;
+	transition: all 2s ease-in-out !important;
+	-webkit-transition: all 2s ease-in-out !important;
+	-moz-transition: all 2s ease-in-out !important;
+	-o-transition: all 2s ease-in-out !important;
 }
 
-.animate-up.toggled, .animate-down.toggled {
+.animate-up.toggled,
+.animate-down.toggled {
 	opacity: 1;
 	transform: translateY(0px);
 	-webkit-transform: translateY(0px);
@@ -49,4 +53,3 @@
 	-moz-transition: all 1s ease-in-out;
 	-o-transition: all 1s ease-in-out;
 }
-

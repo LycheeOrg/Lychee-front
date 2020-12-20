@@ -3,42 +3,39 @@
  */
 
 let api = {
-
-	path    : 'php/index.php',
-	onError : null
-
+	path: "php/index.php",
+	onError: null,
 };
 
-api.get_url = function(fn) {
+api.get_url = function (fn) {
+	let api_url = "";
 
-		let api_url = '';
-
-		if(lychee.api_V2)
-		{
+	if (lychee.api_V2) {
 		// because the api is defined directly by the function called in the route.php
-			api_url = 'api/' + fn;
-		}
-		else
-		{
-			api_url = api.path;
-		}
+		api_url = "api/" + fn;
+	} else {
+		api_url = api.path;
+	}
 
-		return api_url;
-
+	return api_url;
 };
 
-api.isTimeout = function(errorThrown, jqXHR) {
-	if (errorThrown && errorThrown === 'Bad Request' &&
-			jqXHR && jqXHR.responseJSON && jqXHR.responseJSON.error &&
-			jqXHR.responseJSON.error === 'Session timed out') {
+api.isTimeout = function (errorThrown, jqXHR) {
+	if (
+		errorThrown &&
+		errorThrown === "Bad Request" &&
+		jqXHR &&
+		jqXHR.responseJSON &&
+		jqXHR.responseJSON.error &&
+		jqXHR.responseJSON.error === "Session timed out"
+	) {
 		return true;
 	}
 
 	return false;
 };
 
-api.post = function(fn, params, callback, responseProgressCB = null) {
-
+api.post = function (fn, params, callback, responseProgressCB = null) {
 	loadingBar.show();
 
 	params = $.extend({ function: fn }, params);
@@ -46,79 +43,78 @@ api.post = function(fn, params, callback, responseProgressCB = null) {
 	let api_url = api.get_url(fn);
 
 	const success = (data) => {
-
 		setTimeout(loadingBar.hide, 100);
 
 		// Catch errors
-		if (typeof data==='string' && data.substring(0, 7)==='Error: ') {
+		if (typeof data === "string" && data.substring(0, 7) === "Error: ") {
 			api.onError(data.substring(7, data.length), params, data);
-			return false
+			return false;
 		}
 
-		callback(data)
-
+		callback(data);
 	};
 
 	const error = (jqXHR, textStatus, errorThrown) => {
-
-		api.onError((api.isTimeout(errorThrown, jqXHR) ? 'Session timed out.' :
-					 'Server error or API not found.'), params, errorThrown)
-
+		api.onError(
+			api.isTimeout(errorThrown, jqXHR)
+				? "Session timed out."
+				: "Server error or API not found.",
+			params,
+			errorThrown
+		);
 	};
 
 	let ajaxParams = {
-		type: 'POST',
+		type: "POST",
 		url: api_url,
 		data: params,
-		dataType: 'json',
+		dataType: "json",
 		success,
-		error
+		error,
 	};
 
 	if (responseProgressCB !== null) {
 		ajaxParams.xhrFields = {
-			onprogress: responseProgressCB
-		}
+			onprogress: responseProgressCB,
+		};
 	}
 
-	$.ajax(ajaxParams)
-
+	$.ajax(ajaxParams);
 };
 
-api.get = function(url, callback) {
-
+api.get = function (url, callback) {
 	loadingBar.show();
 
 	const success = (data) => {
-
 		setTimeout(loadingBar.hide, 100);
 
 		// Catch errors
-		if (typeof data==='string' && data.substring(0, 7)==='Error: ') {
+		if (typeof data === "string" && data.substring(0, 7) === "Error: ") {
 			api.onError(data.substring(7, data.length), params, data);
-			return false
+			return false;
 		}
 
-		callback(data)
-
+		callback(data);
 	};
 
 	const error = (jqXHR, textStatus, errorThrown) => {
-
-		api.onError((api.isTimeout(errorThrown, jqXHR) ? 'Session timed out.' :
-					 'Server error or API not found.'), {}, errorThrown)
-
+		api.onError(
+			api.isTimeout(errorThrown, jqXHR)
+				? "Session timed out."
+				: "Server error or API not found.",
+			{},
+			errorThrown
+		);
 	};
 
 	$.ajax({
-		type: 'GET',
+		type: "GET",
 		url: url,
 		data: {},
-		dataType: 'text',
+		dataType: "text",
 		success,
-		error
-	})
-
+		error,
+	});
 };
 
 api.post_raw = function (fn, params, callback) {
@@ -129,33 +125,33 @@ api.post_raw = function (fn, params, callback) {
 	let api_url = api.get_url(fn);
 
 	const success = (data) => {
-
 		setTimeout(loadingBar.hide, 100);
 
 		// Catch errors
-		if (typeof data==='string' && data.substring(0, 7)==='Error: ') {
+		if (typeof data === "string" && data.substring(0, 7) === "Error: ") {
 			api.onError(data.substring(7, data.length), params, data);
-			return false
+			return false;
 		}
 
-		callback(data)
-
+		callback(data);
 	};
 
 	const error = (jqXHR, textStatus, errorThrown) => {
-
-		api.onError((api.isTimeout(errorThrown, jqXHR) ? 'Session timed out.' :
-					 'Server error or API not found.'), params, errorThrown)
-
+		api.onError(
+			api.isTimeout(errorThrown, jqXHR)
+				? "Session timed out."
+				: "Server error or API not found.",
+			params,
+			errorThrown
+		);
 	};
 
 	$.ajax({
-		type: 'POST',
+		type: "POST",
 		url: api_url,
 		data: params,
-		dataType: 'text',
+		dataType: "text",
 		success,
-		error
-	})
-
+		error,
+	});
 };

@@ -1,12 +1,11 @@
 // Default Theme ----------------------------------------------------- //
 .basicContext {
-
 	padding: 5px 0 6px;
 	background: linear-gradient(to bottom, #333, #252525);
-	box-shadow: 0 1px 4px black(.2), inset 0 1px 0 white(.05);
+	box-shadow: 0 1px 4px black(0.2), inset 0 1px 0 white(0.05);
 	border-radius: 5px;
-	border: 1px solid black(.7);
-	border-bottom: 1px solid black(.8);
+	border: 1px solid black(0.7);
+	border-bottom: 1px solid black(0.8);
 	transition: none;
 
 	&__item {
@@ -16,12 +15,12 @@
 		&--separator {
 			margin: 4px 0;
 			height: 2px;
-			background: black(.2);
-			border-bottom: 1px solid white(.06);
+			background: black(0.2);
+			border-bottom: 1px solid white(0.06);
 		}
 
 		&--disabled {
-			opacity: .5;
+			opacity: 0.5;
 		}
 
 		&:last-child {
@@ -38,11 +37,19 @@
 	}
 
 	&__item:not(.basicContext__item--disabled):hover &__data {
-		background: linear-gradient(to bottom, $colorBlue, darken($colorBlue, 5%));
+		background: linear-gradient(
+			to bottom,
+			$colorBlue,
+			darken($colorBlue, 5%)
+		);
 	}
 
 	&__item:not(.basicContext__item--disabled):active &__data {
-		background: linear-gradient(to bottom, darken($colorBlue, 10%), darken($colorBlue, 15%));
+		background: linear-gradient(
+			to bottom,
+			darken($colorBlue, 10%),
+			darken($colorBlue, 15%)
+		);
 	}
 
 	&__icon {
@@ -50,5 +57,4 @@
 		width: 12px;
 		text-align: center;
 	}
-
 }

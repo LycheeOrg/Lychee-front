@@ -5,20 +5,20 @@
 	bottom: 0;
 	text-align: center;
 	padding: 5px 0 5px 0;
-	transition: color .3s, opacity .3s ease-out, transform .3s ease-out, box-shadow .3s, margin-left .5s;
+	transition: color 0.3s, opacity 0.3s ease-out, transform 0.3s ease-out,
+		box-shadow 0.3s, margin-left 0.5s;
 
 	p {
-		color: #CCCCCC;
+		color: #cccccc;
 		font-size: 0.5em;
 		font-weight: 400;
 
 		a {
-			color: #CCC;
+			color: #ccc;
 		}
 		a:visited {
-			color: #CCC;
+			color: #ccc;
 		}
-
 	}
 
 	// p.hosted_by {
@@ -27,7 +27,8 @@
 	// p.personal_text {
 	// }
 
-	p.hosted_by, p.home_copyright {
+	p.hosted_by,
+	p.home_copyright {
 		text-transform: uppercase;
 	}
 

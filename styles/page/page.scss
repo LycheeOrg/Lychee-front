@@ -1,28 +1,29 @@
 // Rest -------------------------------------------------------------------- //
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700,900');
-@import '../reset';
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,700,900");
+@import "../reset";
 
 * {
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	user-select: none;
-	transition: color .3s, opacity .3s ease-out, transform .3s ease-out, box-shadow .3s;
+	transition: color 0.3s, opacity 0.3s ease-out, transform 0.3s ease-out,
+		box-shadow 0.3s;
 }
 
-
-html, body {
-	font-family: 'Roboto', sans-serif;
-	background: #FFFFFF;
+html,
+body {
+	font-family: "Roboto", sans-serif;
+	background: #ffffff;
 }
 
-ol, ul {
+ol,
+ul {
 	list-style: none;
 }
 
 a {
 	text-decoration: none;
 }
-
 
 @import "fonts";
 @import "animate";
@@ -34,7 +35,7 @@ a {
 
 #footer {
 	position: fixed;
-	background: #FFFFFF;
+	background: #ffffff;
 	color: #707070;
 	padding: 20px 0 20px 0;
 
@@ -43,4 +44,3 @@ a {
 		font-size: 0.75em;
 	}
 }
-
