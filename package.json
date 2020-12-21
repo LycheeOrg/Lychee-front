@@ -1,51 +1,54 @@
 {
-  "name": "lychee",
-  "version": "4.0.1",
-  "description": "Self-hosted photo-management done right.",
-  "authors": "Tobias Reich <tobias@electerious.com>",
-  "license": "MIT",
-  "private": true,
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/LycheeOrg/Lychee.git"
-  },
-  "scripts": {
-    "start": "gulp watch",
-    "compile": "gulp"
-  },
-  "engines": {
-    "node": ">= 10"
-  },
-  "dependencies": {
-    "basicmodal": "github:LycheeOrg/basicmodal#master",
-    "jquery": "^3.4.0",
-    "justified-layout": "^2.1.1",
-    "lazysizes": "^5.2.2",
-    "leaflet": "^1.7.1",
-    "leaflet-rotatedmarker": "^0.2.0",
-    "leaflet-spin": "^1.1.0",
-    "leaflet.markercluster": "^1.4.1",
-    "livephotoskit": "^1.5.6",
-    "mousetrap": "^1.6.0",
-    "multiselect-two-sides": "^2.5.5",
-    "require": "^2.4.20",
-    "scroll-lock": "^2.1.2",
-    "spin.js": "^2.3.2"
-  },
-  "devDependencies": {
-    "babel-preset-env": "^1.7.0",
-    "del": "^5.1.0",
-    "gulp": "^4.0.0",
-    "gulp-autoprefixer": "^6.0.0",
-    "gulp-babel": "^6.1.2",
-    "gulp-clean-css": "^3.10.0",
-    "gulp-concat": "^2.6.1",
-    "gulp-inject": "^4.2.0",
-    "gulp-load-plugins": "^1.5.0",
-    "gulp-sass": "^4.0.2",
-    "gulp-uglify": "^3.0.2",
-    "node-sass": "^4.13.0",
-    "npm": "^6.14.9",
-    "uglify-js": "^3.12.1"
-  }
+	"name": "lychee",
+	"version": "4.0.1",
+	"description": "Self-hosted photo-management done right.",
+	"authors": "Tobias Reich <tobias@electerious.com>",
+	"license": "MIT",
+	"private": true,
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/LycheeOrg/Lychee.git"
+	},
+	"scripts": {
+		"start": "gulp watch",
+		"compile": "gulp",
+		"check-formatting": "prettier --check .",
+		"format": "prettier --write ."
+	},
+	"engines": {
+		"node": ">= 10"
+	},
+	"dependencies": {
+		"basicmodal": "github:LycheeOrg/basicmodal#master",
+		"jquery": "^3.4.0",
+		"justified-layout": "^2.1.1",
+		"lazysizes": "^5.2.2",
+		"leaflet": "^1.7.1",
+		"leaflet-rotatedmarker": "^0.2.0",
+		"leaflet-spin": "^1.1.0",
+		"leaflet.markercluster": "^1.4.1",
+		"livephotoskit": "^1.5.6",
+		"mousetrap": "^1.6.0",
+		"multiselect-two-sides": "^2.5.5",
+		"require": "^2.4.20",
+		"scroll-lock": "^2.1.2",
+		"spin.js": "^2.3.2"
+	},
+	"devDependencies": {
+		"babel-preset-env": "^1.7.0",
+		"del": "^5.1.0",
+		"gulp": "^4.0.0",
+		"gulp-autoprefixer": "^6.0.0",
+		"gulp-babel": "^6.1.2",
+		"gulp-clean-css": "^3.10.0",
+		"gulp-concat": "^2.6.1",
+		"gulp-inject": "^4.2.0",
+		"gulp-load-plugins": "^1.5.0",
+		"gulp-sass": "^4.0.2",
+		"gulp-uglify": "^3.0.2",
+		"node-sass": "^4.13.0",
+		"npm": "^6.14.9",
+		"prettier": "2.2.1",
+		"uglify-js": "^3.12.1"
+	}
 }

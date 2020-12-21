@@ -7,7 +7,7 @@
 
 #### A great looking and easy-to-use photo-management-system.
 
-*Since the 1st of April 2018 this project has moved to it's own Organisation (https://github.com/LycheeOrg) where people are able to submit their fixes to it. We, the Organisation owners, want to thank electerious (Tobias Reich) for the opportunity to make this project live on.*
+_Since the 1st of April 2018 this project has moved to it's own Organisation (https://github.com/LycheeOrg) where people are able to submit their fixes to it. We, the Organisation owners, want to thank electerious (Tobias Reich) for the opportunity to make this project live on._
 
 ![Lychee](https://camo.githubusercontent.com/b9010f02c634219795950e034f511f4cf4af5c60/68747470733a2f2f732e656c6563746572696f75732e636f6d2f696d616765732f6c79636865652f312e6a706567)
 ![Lychee](https://camo.githubusercontent.com/5484591f0b15b6ba27d4845b292cc5d3a988b3b9/68747470733a2f2f732e656c6563746572696f75732e636f6d2f696d616765732f6c79636865652f322e6a706567)
@@ -47,8 +47,8 @@ cd Lychee-front
 
 First you have to install the following dependencies:
 
-- `node` [Node.js](http://nodejs.org) v10.0.0 or later
-- `npm` [Node Packaged Modules](https://www.npmjs.org)
+-   `node` [Node.js](http://nodejs.org) v10.0.0 or later
+-   `npm` [Node Packaged Modules](https://www.npmjs.org)
 
 After [installing Node.js](http://nodejs.org) you can use the included `npm` package manager to download all dependencies:
 

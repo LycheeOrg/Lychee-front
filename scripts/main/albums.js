@@ -3,21 +3,16 @@
  */
 
 let albums = {
-
-	json: null
-
+	json: null,
 };
 
 albums.load = function () {
-
 	let startTime = new Date().getTime();
 
-	lychee.animate('.content', 'contentZoomOut');
+	lychee.animate(".content", "contentZoomOut");
 
 	if (albums.json === null) {
-
-		api.post('Albums::get', {}, function (data) {
-
+		api.post("Albums::get", {}, function (data) {
 			let waitTime;
 
 			// Smart Albums
@@ -26,18 +21,18 @@ albums.load = function () {
 			albums.json = data;
 
 			// Calculate delay
-			let durationTime = (new Date().getTime() - startTime);
+			let durationTime = new Date().getTime() - startTime;
 			if (durationTime > 300) waitTime = 0;
 			else waitTime = 300 - durationTime;
 
 			// Skip delay when opening a blank Lychee
 			if (!visible.albums() && !visible.photo() && !visible.album()) waitTime = 0;
-			if (visible.album() && lychee.content.html() === '') waitTime = 0;
+			if (visible.album() && lychee.content.html() === "") waitTime = 0;
 
 			setTimeout(() => {
-				header.setMode('albums');
+				header.setMode("albums");
 				view.albums.init();
-				lychee.animate(lychee.content, 'contentZoomIn');
+				lychee.animate(lychee.content, "contentZoomIn");
 
 				tabindex.makeFocusable(lychee.content);
 
@@ -56,22 +51,18 @@ albums.load = function () {
 
 				setTimeout(() => {
 					lychee.footer_show();
-				},
-					300)
-			}, waitTime)
-
-		})
-
+				}, 300);
+			}, waitTime);
+		});
 	} else {
-
 		setTimeout(() => {
-			header.setMode('albums');
+			header.setMode("albums");
 			view.albums.init();
-			lychee.animate(lychee.content, 'contentZoomIn');
+			lychee.animate(lychee.content, "contentZoomIn");
 
 			tabindex.makeFocusable(lychee.content);
 
-			if(lychee.active_focus_on_page_load) {
+			if (lychee.active_focus_on_page_load) {
 				// Put focus on first element - either album or photo
 				first_album = $(".album:first");
 				if (first_album.length !== 0) {
@@ -83,92 +74,86 @@ albums.load = function () {
 					}
 				}
 			}
-
-		}, 300)
-
+		}, 300);
 	}
 };
 
 albums.parse = function (album) {
-
 	let i;
 	for (i = 0; i < 3; i++) {
 		if (!album.thumbs[i]) {
-			album.thumbs[i] = (album.password === '1' ? 'img/password.svg' : 'img/no_images.svg');
+			album.thumbs[i] = album.password === "1" ? "img/password.svg" : "img/no_images.svg";
 		}
 	}
-
 };
 
 // TODO: REFACTOR THIS
 albums._createSmartAlbums = function (data) {
-
 	if (data.unsorted) {
 		data.unsorted = {
-			id: 'unsorted',
-			title: lychee.locale['UNSORTED'],
-			sysdate: data.unsorted.num + ' ' + lychee.locale['NUM_PHOTOS'],
-			unsorted: '1',
+			id: "unsorted",
+			title: lychee.locale["UNSORTED"],
+			sysdate: data.unsorted.num + " " + lychee.locale["NUM_PHOTOS"],
+			unsorted: "1",
 			thumbs: data.unsorted.thumbs,
 			thumbs2x: data.unsorted.thumbs2x ? data.unsorted.thumbs2x : null,
-			types: data.unsorted.types
-		}
+			types: data.unsorted.types,
+		};
 	}
 
 	if (data.starred) {
 		data.starred = {
-			id: 'starred',
-			title: lychee.locale['STARRED'],
-			sysdate: data.starred.num + ' ' + lychee.locale['NUM_PHOTOS'],
-			star: '1',
+			id: "starred",
+			title: lychee.locale["STARRED"],
+			sysdate: data.starred.num + " " + lychee.locale["NUM_PHOTOS"],
+			star: "1",
 			thumbs: data.starred.thumbs,
 			thumbs2x: data.starred.thumbs2x ? data.starred.thumbs2x : null,
-			types: data.starred.types
-		}
+			types: data.starred.types,
+		};
 	}
 
 	if (data.public) {
 		data.public = {
-			id: 'public',
-			title: lychee.locale['PUBLIC'],
-			sysdate: data.public.num + ' ' + lychee.locale['NUM_PHOTOS'],
-			public: '1',
+			id: "public",
+			title: lychee.locale["PUBLIC"],
+			sysdate: data.public.num + " " + lychee.locale["NUM_PHOTOS"],
+			public: "1",
 			thumbs: data.public.thumbs,
 			thumbs2x: data.public.thumbs2x ? data.public.thumbs2x : null,
-			visible: '0',
-			types: data.public.types
-		}
+			visible: "0",
+			types: data.public.types,
+		};
 	}
 
 	if (data.recent) {
 		data.recent = {
-			id: 'recent',
-			title: lychee.locale['RECENT'],
-			sysdate: data.recent.num + ' ' + lychee.locale['NUM_PHOTOS'],
-			recent: '1',
+			id: "recent",
+			title: lychee.locale["RECENT"],
+			sysdate: data.recent.num + " " + lychee.locale["NUM_PHOTOS"],
+			recent: "1",
 			thumbs: data.recent.thumbs,
 			thumbs2x: data.recent.thumbs2x ? data.recent.thumbs2x : null,
-			types: data.recent.types
-		}
+			types: data.recent.types,
+		};
 	}
 
 	Object.entries(data).forEach(([albumName, albumData]) => {
-		if (albumData['tag_album'] === '1') {
+		if (albumData["tag_album"] === "1") {
 			data[albumName] = {
 				id: albumData.id,
 				title: albumName,
-				sysdate: albumData.num + ' ' + lychee.locale['NUM_PHOTOS'],
-				tag_album: '1',
+				sysdate: albumData.num + " " + lychee.locale["NUM_PHOTOS"],
+				tag_album: "1",
 				thumbs: albumData.thumbs,
 				thumbs2x: albumData.thumbs2x ? albumData.thumbs2x : null,
-				types: albumData.types
-			}
+				types: albumData.types,
+			};
 		}
-	})
+	});
 };
 
 albums.isShared = function (albumID) {
-
 	if (albumID == null) return false;
 	if (!albums.json) return false;
 	if (!albums.json.albums) return false;
@@ -181,19 +166,16 @@ albums.isShared = function (albumID) {
 			return false; // stop the loop
 		}
 		if (this.albums) {
-			$.each(this.albums, func)
+			$.each(this.albums, func);
 		}
 	};
 
-	if (albums.json.shared_albums !== null)
-		$.each(albums.json.shared_albums, func);
+	if (albums.json.shared_albums !== null) $.each(albums.json.shared_albums, func);
 
 	return found;
-
 };
 
 albums.getByID = function (albumID) {
-
 	// Function returns the JSON of an album
 
 	if (albumID == null) return undefined;
@@ -208,24 +190,20 @@ albums.getByID = function (albumID) {
 			return false; // stop the loop
 		}
 		if (this.albums) {
-			$.each(this.albums, func)
+			$.each(this.albums, func);
 		}
 	};
 
 	$.each(albums.json.albums, func);
 
-	if (json === undefined && albums.json.shared_albums !== null)
-		$.each(albums.json.shared_albums, func);
+	if (json === undefined && albums.json.shared_albums !== null) $.each(albums.json.shared_albums, func);
 
-	if (json === undefined && albums.json.smartalbums !== null)
-		$.each(albums.json.smartalbums, func);
+	if (json === undefined && albums.json.smartalbums !== null) $.each(albums.json.smartalbums, func);
 
 	return json;
-
 };
 
 albums.deleteByID = function (albumID) {
-
 	// Function returns the JSON of an album
 	// This function is only ever invoked for top-level albums so it
 	// doesn't need to descend down the albums tree.
@@ -237,23 +215,20 @@ albums.deleteByID = function (albumID) {
 	let deleted = false;
 
 	$.each(albums.json.albums, function (i) {
-
 		if (parseInt(albums.json.albums[i].id) === parseInt(albumID)) {
 			albums.json.albums.splice(i, 1);
 			deleted = true;
-			return false  // stop the loop
+			return false; // stop the loop
 		}
-
 	});
 
 	if (deleted === false) {
 		if (!albums.json.shared_albums) return undefined;
 		$.each(albums.json.shared_albums, function (i) {
-
 			if (parseInt(albums.json.shared_albums[i].id) === parseInt(albumID)) {
 				albums.json.shared_albums.splice(i, 1);
 				deleted = true;
-				return false // stop the loop
+				return false; // stop the loop
 			}
 		});
 	}
@@ -261,20 +236,17 @@ albums.deleteByID = function (albumID) {
 	if (deleted === false) {
 		if (!albums.json.smartalbums) return undefined;
 		$.each(albums.json.smartalbums, function (i) {
-
 			if (parseInt(albums.json.smartalbums[i].id) === parseInt(albumID)) {
 				delete albums.json.smartalbums[i];
 				deleted = true;
-				return false // stop the loop
+				return false; // stop the loop
 			}
 		});
 	}
 
-	return deleted
-
+	return deleted;
 };
 
 albums.refresh = function () {
-	albums.json = null
-
+	albums.json = null;
 };

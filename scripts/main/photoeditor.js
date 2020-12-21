@@ -2,16 +2,13 @@
  * @description Takes care of every action a photoeditor can handle and execute.
  */
 
-photoeditor = {
+photoeditor = {};
 
-};
-
-photoeditor.rotate = function(photoID, direction) {
-
-	var swapDims = function(d){
-		let p = d.indexOf('x');
-		if ( p !== -1 ){
-			return d.substr(0, p) + "x" + d.substr(p+1);
+photoeditor.rotate = function (photoID, direction) {
+	var swapDims = function (d) {
+		let p = d.indexOf("x");
+		if (p !== -1) {
+			return d.substr(0, p) + "x" + d.substr(p + 1);
 		}
 		return d;
 	};
@@ -21,27 +18,26 @@ photoeditor.rotate = function(photoID, direction) {
 
 	let params = {
 		photoID: photoID,
-		direction: direction
+		direction: direction,
 	};
 
-	api.post('PhotoEditor::rotate', params, function(data) {
-
-		if (data!==true) {
-			lychee.error(null, params, data)
+	api.post("PhotoEditor::rotate", params, function (data) {
+		if (data !== true) {
+			lychee.error(null, params, data);
 		} else {
-			let mr = "?"+Math.random();
-			let sel_big = 'img#image';
-			let sel_thumb = 'div[data-id='+photoID+'] > span > img';
-			let sel_div = 'div[data-id='+photoID+']';
-			$( sel_big ).prop('src', $( sel_big ).attr('src') + mr );
-			$( sel_big ).prop('srcset', $( sel_big ).attr('src') );
-			$( sel_thumb ).prop('src', $( sel_thumb ).attr('src') + mr );
-			$( sel_thumb ).prop('srcset', $( sel_thumb ).attr('src') );
+			let mr = "?" + Math.random();
+			let sel_big = "img#image";
+			let sel_thumb = "div[data-id=" + photoID + "] > span > img";
+			let sel_div = "div[data-id=" + photoID + "]";
+			$(sel_big).prop("src", $(sel_big).attr("src") + mr);
+			$(sel_big).prop("srcset", $(sel_big).attr("src"));
+			$(sel_thumb).prop("src", $(sel_thumb).attr("src") + mr);
+			$(sel_thumb).prop("srcset", $(sel_thumb).attr("src"));
 			var arrayLength = album.json.photos.length;
 			for (var i = 0; i < arrayLength; i++) {
-				if ( album.json.photos[i].id === photoID ){
-					let w = album.json.photos[i].width;					
-					let h = album.json.photos[i].height;					
+				if (album.json.photos[i].id === photoID) {
+					let w = album.json.photos[i].width;
+					let h = album.json.photos[i].height;
 					album.json.photos[i].height = w;
 					album.json.photos[i].width = h;
 					album.json.photos[i].small += mr;
@@ -60,8 +56,5 @@ photoeditor.rotate = function(photoID, direction) {
 				}
 			}
 		}
-
-	})
-
+	});
 };
-

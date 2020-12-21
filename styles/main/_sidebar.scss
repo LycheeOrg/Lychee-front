@@ -1,34 +1,33 @@
 .sidebar {
-
 	position: fixed;
 	top: 50px;
 	right: -360px;
 	width: 350px;
 	height: calc(100% - 50px);
-	background-color: rgba(25, 25, 25, .98);
-	border-left: 1px solid black(.2);
+	background-color: rgba(25, 25, 25, 0.98);
+	border-left: 1px solid black(0.2);
 	transform: translateX(0);
-	transition: transform .3s $timing;
+	transition: transform 0.3s $timing;
 	z-index: 4;
 
 	&.active {
 		transform: translateX(-360px);
 	}
 
-//	Doesn't seem to be needed when user-select is globally disabled in main.scss.
-//	&.notSelectable {
-//		-webkit-user-select: none !important;
-//		-moz-user-select: none !important;
-//		-ms-user-select: none !important;
-//		user-select: none !important;
-//	}
+	//	Doesn't seem to be needed when user-select is globally disabled in main.scss.
+	//	&.notSelectable {
+	//		-webkit-user-select: none !important;
+	//		-moz-user-select: none !important;
+	//		-ms-user-select: none !important;
+	//		user-select: none !important;
+	//	}
 
 	// Header -------------------------------------------------------------- //
 	&__header {
 		float: left;
 		height: 49px;
 		width: 100%;
-		background: linear-gradient(to bottom, white(.02), black(0));
+		background: linear-gradient(to bottom, white(0.02), black(0));
 		border-top: 1px solid $colorBlue;
 	}
 
@@ -60,7 +59,7 @@
 		float: left;
 		padding: 12px 0 8px;
 		width: 100%;
-		border-top: 1px solid white(.02);
+		border-top: 1px solid white(0.02);
 		box-shadow: $shadow;
 
 		&:first-child {
@@ -70,7 +69,7 @@
 
 		h1 {
 			margin: 0 0 0 20px;
-			color: white(.6);
+			color: white(0.6);
 			font-size: 14px;
 			font-weight: bold;
 			-webkit-user-select: text;
@@ -89,8 +88,8 @@
 		.iconic {
 			width: 10px;
 			height: 10px;
-			fill: white(.5);
-			transition: fill .2s ease-out;
+			fill: white(0.5);
+			transition: fill 0.2s ease-out;
 		}
 
 		&:hover .iconic {
@@ -99,7 +98,7 @@
 
 		&:active .iconic {
 			transition: none;
-			fill: white(.8);
+			fill: white(0.8);
 		}
 	}
 
@@ -170,19 +169,19 @@
 		display: inline-block;
 		padding: 6px 10px;
 		margin: 0 6px 8px 0;
-		background-color: black(.5);
+		background-color: black(0.5);
 		border-radius: 100px;
 		font-size: 12px;
-		transition: background-color .2s;
+		transition: background-color 0.2s;
 		-webkit-user-select: text;
 		-moz-user-select: text;
 		-ms-user-select: text;
 		user-select: text;
 
 		&:hover {
-			background-color: black(.3);
+			background-color: black(0.3);
 
-		&.search {
+			&.search {
 				cursor: pointer;
 			}
 		}
@@ -195,7 +194,7 @@
 		width: 0;
 		overflow: hidden;
 		transform: scale(0);
-		transition: width .2s, margin .2s, transform .2s, fill .2s ease-out;
+		transition: width 0.2s, margin 0.2s, transform 0.2s, fill 0.2s ease-out;
 
 		.iconic {
 			fill: $colorRed;
@@ -228,8 +227,7 @@
 
 	.attr_location {
 		&.search {
-				cursor: pointer;
+			cursor: pointer;
 		}
 	}
-
 }

@@ -23,22 +23,25 @@
 	margin: 5px;
 }
 
-.justified-layout > .photo > .thumbimg > img, .justified-layout > .photo > .thumbimg, .unjustified-layout > .photo > .thumbimg > img, .unjustified-layout > .photo > .thumbimg {
+.justified-layout > .photo > .thumbimg > img,
+.justified-layout > .photo > .thumbimg,
+.unjustified-layout > .photo > .thumbimg > img,
+.unjustified-layout > .photo > .thumbimg {
 	width: 100%;
 	height: 100%;
 	border: none;
 	object-fit: cover;
 }
 
-.justified-layout > .photo > .overlay, .unjustified-layout > .photo > .overlay
-{
+.justified-layout > .photo > .overlay,
+.unjustified-layout > .photo > .overlay {
 	width: 100%;
 	bottom: 0;
 	margin: 0 0 0 0;
 }
 
-.justified-layout > .photo > .overlay > h1, .unjustified-layout > .photo > .overlay > h1
-{
+.justified-layout > .photo > .overlay > h1,
+.unjustified-layout > .photo > .overlay > h1 {
 	width: auto;
 	margin-right: 15px;
 }

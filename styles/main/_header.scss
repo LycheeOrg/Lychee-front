@@ -1,12 +1,11 @@
 .header {
-
 	position: fixed;
 	height: 49px;
 	width: 100%;
 	background: linear-gradient(to bottom, #222222, #1a1a1a);
 	border-bottom: 1px solid #0f0f0f;
 	z-index: 1;
-	transition: transform .3s ease-out;
+	transition: transform 0.3s ease-out;
 
 	// Modes -------------------------------------------------------------- //
 	&--hidden {
@@ -26,7 +25,7 @@
 		border-bottom: none;
 
 		&.header--error {
-			background-color: rgba(10, 10, 10, .99);
+			background-color: rgba(10, 10, 10, 0.99);
 		}
 	}
 
@@ -57,15 +56,15 @@
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
-		transition: margin-left .5s;
+		transition: margin-left 0.5s;
 
 		.iconic {
 			display: none;
 			margin: 0 0 0 5px;
 			width: 10px;
 			height: 10px;
-			fill: white(.5);
-			transition: fill .2s ease-out;
+			fill: white(0.5);
+			transition: fill 0.2s ease-out;
 		}
 
 		&:hover .iconic {
@@ -74,7 +73,7 @@
 
 		&:active .iconic {
 			transition: none;
-			fill: white(.8);
+			fill: white(0.8);
 		}
 
 		&--editable .iconic {
@@ -91,8 +90,8 @@
 		.iconic {
 			width: 15px;
 			height: 15px;
-			fill: white(.5);
-			transition: fill .2s ease-out;
+			fill: white(0.5);
+			transition: fill 0.2s ease-out;
 		}
 
 		&:hover .iconic {
@@ -101,7 +100,7 @@
 
 		&:active .iconic {
 			transition: none;
-			fill: white(.8);
+			fill: white(0.8);
 		}
 
 		&--star.active .iconic {
@@ -131,7 +130,8 @@
 		}
 	}
 
-	#button_settings, #button_signin {
+	#button_settings,
+	#button_signin {
 		padding: 16px 48px 16px 8px;
 	}
 
@@ -149,12 +149,12 @@
 		padding: 5px 12px 6px 12px;
 		background-color: #1d1d1d;
 		color: #fff;
-		border: 1px solid black(.9);
-		box-shadow: 0 1px 0 white(.04);
+		border: 1px solid black(0.9);
+		box-shadow: 0 1px 0 white(0.04);
 		outline: none;
 		border-radius: 50px;
-		opacity: .6;
-		transition: opacity .3s ease-out, box-shadow .3s ease-out, width .2s ease-out;
+		opacity: 0.6;
+		transition: opacity 0.3s ease-out, box-shadow 0.3s ease-out, width 0.2s ease-out;
 
 		&:focus {
 			width: 140px;
@@ -176,16 +176,15 @@
 		position: absolute;
 		right: 90px;
 		padding: 0;
-		color: white(.5);
+		color: white(0.5);
 		font-size: 30px;
 		opacity: 0;
-		transition: color .2s ease-out;
+		transition: color 0.2s ease-out;
 		cursor: default;
 
 		&:hover {
 			color: white(1);
 		}
-
 	}
 
 	&__clear_nomap {
@@ -207,7 +206,7 @@
 		cursor: default;
 
 		&:hover {
-			background-color: black(.3);
+			background-color: black(0.3);
 		}
 	}
 

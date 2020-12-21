@@ -1,12 +1,14 @@
 // Effect --------------------------------------------------------- //
 @keyframes basicContext__popIn {
-	0% { transform: scale(0); }
-	100% { transform: scale(1); }
+	0% {
+		transform: scale(0);
+	}
+	100% {
+		transform: scale(1);
+	}
 }
 
 // Styles --------------------------------------------------------- //
 .basicContext {
-
-	animation: basicContext__popIn .3s cubic-bezier(.51, .92, .24, 1.2);
-
+	animation: basicContext__popIn 0.3s cubic-bezier(0.51, 0.92, 0.24, 1.2);
 }

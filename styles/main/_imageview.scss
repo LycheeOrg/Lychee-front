@@ -1,13 +1,12 @@
 #imageview {
-
 	position: fixed;
 	display: none;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(10, 10, 10, .98);
-	transition: background-color .3s;
+	background-color: rgba(10, 10, 10, 0.98);
+	transition: background-color 0.3s;
 
 	// Modes -------------------------------------------------------------- //
 	&.view {
@@ -31,10 +30,10 @@
 		max-height: calc(100% - 90px);
 		width: auto;
 		height: auto;
-		transition: top .3s, right .3s, bottom .3s, left .3s, max-width .3s, max-height .3s;
+		transition: top 0.3s, right 0.3s, bottom 0.3s, left 0.3s, max-width 0.3s, max-height 0.3s;
 
 		animation-name: zoomIn;
-		animation-duration: .3s;
+		animation-duration: 0.3s;
 		animation-timing-function: $timingBounce;
 		background-size: contain;
 		background-position: center;
@@ -61,10 +60,10 @@
 		max-height: calc(100% - 90px);
 		width: auto;
 		height: auto;
-		transition: top .3s, right .3s, bottom .3s, left .3s, max-width .3s, max-height .3s;
+		transition: top 0.3s, right 0.3s, bottom 0.3s, left 0.3s, max-width 0.3s, max-height 0.3s;
 
 		animation-name: zoomIn;
-		animation-duration: .3s;
+		animation-duration: 0.3s;
 		animation-timing-function: $timingBounce;
 		background-size: contain;
 		background-position: center;
@@ -122,16 +121,16 @@
 		position: absolute;
 		bottom: 30px;
 		left: 30px;
-		color: #FFFFFF;
+		color: #ffffff;
 		text-shadow: 1px 1px 2px #000000;
 		z-index: 3;
 
 		h1 {
 			visibility: hidden;
-			opacity:0;
+			opacity: 0;
 			font-size: 28px;
 			font-weight: 500;
-			transition:visibility .3s linear, opacity .3s linear;
+			transition: visibility 0.3s linear, opacity 0.3s linear;
 		}
 
 		p {
@@ -143,11 +142,10 @@
 
 	&.full #image_overlay h1 {
 		visibility: visible;
-		opacity:1;
+		opacity: 1;
 	}
 
-
-		// Previous/Next Buttons -------------------------------------------------------------- //
+	// Previous/Next Buttons -------------------------------------------------------------- //
 	.arrow_wrapper {
 		position: fixed;
 		width: 15%;
@@ -176,10 +174,10 @@
 			// The background-image will be styled dynamically via JS
 			// background-image: linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url('');
 			background-size: 100% 100%;
-			border: 1px solid white(.8);
-			opacity: .6;
+			border: 1px solid white(0.8);
+			opacity: 0.6;
 			z-index: 2;
-			transition: transform .2s ease-out, opacity .2s ease-out;
+			transition: transform 0.2s ease-out, opacity 0.2s ease-out;
 			will-change: transform;
 
 			&#previous {
@@ -203,7 +201,7 @@
 		}
 
 		.iconic {
-			fill: white(.8);
+			fill: white(0.8);
 		}
 	}
 
@@ -225,5 +223,4 @@
 	video {
 		z-index: 1;
 	}
-
 }
