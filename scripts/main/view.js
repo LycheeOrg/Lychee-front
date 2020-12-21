@@ -146,6 +146,7 @@ view.album = {
 		view.album.title();
 		view.album.public();
 		view.album.nsfw();
+		view.album.nsfw_warning.init();
 		view.album.content.init();
 
 		album.json.init = 1;
@@ -172,6 +173,26 @@ view.album = {
 					break;
 			}
 		}
+	},
+
+	nsfw_warning: {
+		init: function () {
+			if (!lychee.nsfw_warning) {
+				$("#sensitive_warning").hide();
+				return;
+			}
+
+			if (album.json.nsfw && album.json.nsfw === "1" && !lychee.nsfw_unlocked_albums.includes(album.json.id)) {
+				$("#sensitive_warning").show();
+			} else {
+				$("#sensitive_warning").hide();
+			}
+		},
+
+		next: function () {
+			lychee.nsfw_unlocked_albums.push(album.json.id);
+			$("#sensitive_warning").hide();
+		},
 	},
 
 	content: {

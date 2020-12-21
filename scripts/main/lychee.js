@@ -85,6 +85,8 @@ let lychee = {
 	footer: $("#footer"),
 
 	locale: {},
+
+	nsfw_unlocked_albums: [],
 };
 
 lychee.diagnostics = function () {
@@ -218,7 +220,7 @@ lychee.init = function () {
 
 			lychee.nsfw_visible = (data.config.nsfw_visible && data.config.nsfw_visible === "1") || false;
 			lychee.nsfw_blur = (data.config.nsfw_blur && data.config.nsfw_blur === "1") || false;
-			lychee.nsfw_warning = (data.config.nsfw_warning && data.config.nsfw_warning === "1") || false;
+			lychee.nsfw_warning = (data.config.nsfw_warning_admin && data.config.nsfw_warning_admin === "1") || false;
 			lychee.nsfw_warning_text =
 				data.config.nsfw_warning_text ||
 				"<b>Sensitive content</b><br><p>This album contains sensitive content which some people may find offensive or disturbing.</p>";
@@ -519,6 +521,7 @@ lychee.load = function (autoplay = true) {
 			}
 			if (visible.mapview()) mapview.close();
 			if (visible.sidebar() && album.isSmartID(albumID)) sidebar.toggle();
+			$("#sensitive_warning").hide();
 			if (album.json && albumID === album.json.id) {
 				view.album.title();
 				lychee.content.show();
@@ -530,6 +533,7 @@ lychee.load = function (autoplay = true) {
 		}
 	} else {
 		$(".no_content").remove();
+
 		// Trash albums.json when filled with search results
 		if (search.hash != null) {
 			albums.json = null;
@@ -549,6 +553,7 @@ lychee.load = function (autoplay = true) {
 			tabindex.makeUnfocusable(lychee.imageview);
 		}
 		if (visible.mapview()) mapview.close();
+		$("#sensitive_warning").hide();
 		lychee.content.show();
 		lychee.footer_show();
 		albums.load();

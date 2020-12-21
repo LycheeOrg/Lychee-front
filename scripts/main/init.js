@@ -3,6 +3,8 @@
  */
 
 $(document).ready(function () {
+	$("#sensitive_warning").hide();
+
 	// Event Name
 	let eventName = lychee.getEventName();
 
@@ -243,6 +245,7 @@ $(document).ready(function () {
 				swipe.preventNextHeaderToggle = false;
 			}
 		});
+
 	$("#imageview")
 		// Swipe on mobile
 		.swipe()
@@ -267,7 +270,6 @@ $(document).ready(function () {
 		.on("click", ".photo", function (e) {
 			multiselect.photoClick(e, $(this));
 		})
-
 		// Context Menu
 		.on("contextmenu", ".photo", function (e) {
 			multiselect.photoContextMenu(e, $(this));
@@ -275,13 +277,11 @@ $(document).ready(function () {
 		.on("contextmenu", ".album", function (e) {
 			multiselect.albumContextMenu(e, $(this));
 		})
-
 		// Upload
 		.on("change", "#upload_files", function () {
 			basicModal.close();
 			upload.start.local(this.files);
 		})
-
 		// Drag and Drop upload
 		.on(
 			"dragover",
@@ -307,12 +307,10 @@ $(document).ready(function () {
 
 			return false;
 		})
-
 		// click on thumbnail on map
 		.on("click", ".image-leaflet-popup", function (e) {
 			mapview.goto($(this));
 		})
-
 		// Paste upload
 		.on("paste", function (e) {
 			if (e.originalEvent.clipboardData.items) {
@@ -343,9 +341,10 @@ $(document).ready(function () {
 				}
 			}
 		})
-
 		// Fullscreen
 		.on("fullscreenchange mozfullscreenchange webkitfullscreenchange msfullscreenchange", lychee.fullscreenUpdate);
+
+	$("#sensitive_warning").on("click", view.album.nsfw_warning.next);
 
 	const rememberScrollPage = function (scrollPos) {
 		// only for albums with subalbums
