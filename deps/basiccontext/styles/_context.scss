@@ -1,5 +1,4 @@
 .basicContext {
-
 	position: absolute;
 	opacity: 0;
 	-moz-user-select: none;
@@ -7,7 +6,9 @@
 	user-select: none;
 
 	box-sizing: border-box;
-	* { box-sizing: border-box; }
+	* {
+		box-sizing: border-box;
+	}
 
 	// Item -------------------------------------------------------------- //
 	&__item {
@@ -46,5 +47,4 @@
 	&--scrollable &__data {
 		min-width: 160px;
 	}
-
 }

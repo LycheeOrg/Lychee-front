@@ -1,16 +1,14 @@
 .basicModalContainer {
-	background-color: black(.85);
+	background-color: black(0.85);
 
 	&--error {
 		transform: translateY(40px);
 	}
-
 }
 
 .basicModal {
-
 	background: linear-gradient(to bottom, #444, #333);
-	box-shadow: 0 1px 4px black(.2), inset 0 1px 0 white(.05);
+	box-shadow: 0 1px 4px black(0.2), inset 0 1px 0 white(0.05);
 
 	&--error {
 		transform: translateY(-40px);
@@ -32,7 +30,7 @@
 	// Text -------------------------------------------------------------- //
 	p {
 		padding: 10px 30px;
-		color: white(.9);
+		color: white(0.9);
 		font-size: 14px;
 		text-align: left;
 		line-height: 20px;
@@ -43,7 +41,7 @@
 		}
 
 		a {
-			color: white(.9);
+			color: white(0.9);
 			text-decoration: none;
 			border-bottom: 1px dashed #888;
 		}
@@ -81,25 +79,25 @@
 	// Buttons -------------------------------------------------------------- //
 	&__button {
 		padding: 13px 0 15px;
-		background: black(.02);
-		color: white(.5);
-		border-top: 1px solid black(.2);
-		box-shadow: inset 0 1px 0 white(.02);
+		background: black(0.02);
+		color: white(0.5);
+		border-top: 1px solid black(0.2);
+		box-shadow: inset 0 1px 0 white(0.02);
 		cursor: default;
 
 		&:hover {
-			background: white(.02);
+			background: white(0.02);
 		}
 
 		&:active,
 		&--active {
 			transition: none;
-			background: black(.1);
+			background: black(0.1);
 		}
 
 		&#basicModal__action {
 			color: $colorBlue;
-			box-shadow: inset 0 1px 0 white(.02), inset 1px 0 0 black(.2);
+			box-shadow: inset 0 1px 0 white(0.02), inset 1px 0 0 black(0.2);
 		}
 
 		&#basicModal__action.red {
@@ -122,7 +120,7 @@
 		// to avoid a blurry line in Safari on non-retina screens
 		border-bottom: 1px solid #222;
 		border-radius: 0;
-		box-shadow: 0 1px 0 white(.05);
+		box-shadow: 0 1px 0 white(0.05);
 		outline: none;
 
 		&:focus {
@@ -170,9 +168,9 @@
 			display: block;
 			width: 16px;
 			height: 16px;
-			background: black(.5);
+			background: black(0.5);
 			border-radius: 3px;
-			box-shadow: 0 0 0 1px black(.7);
+			box-shadow: 0 0 0 1px black(0.7);
 
 			.iconic {
 				box-sizing: border-box;
@@ -180,13 +178,13 @@
 				padding: 2px;
 				opacity: 0;
 				transform: scale(0);
-				transition: opacity .2s $timing, transform .2s $timing;
+				transition: opacity 0.2s $timing, transform 0.2s $timing;
 			}
 		}
 
 		// Checked
 		label input:checked ~ .checkbox {
-			background: black(.5);
+			background: black(0.5);
 			.iconic {
 				opacity: 1;
 				transform: scale(1);
@@ -195,14 +193,14 @@
 
 		// Active
 		label input:active ~ .checkbox {
-			background: black(.3);
+			background: black(0.3);
 			.iconic {
-				opacity: .8;
+				opacity: 0.8;
 			}
 		}
 
 		label input:disabled ~ .checkbox {
-			background: black(.2);
+			background: black(0.2);
 			.iconic {
 				opacity: 0.3;
 			}
@@ -210,7 +208,7 @@
 		}
 
 		label input:disabled ~ .label {
-			color: white(.6);
+			color: white(0.6);
 		}
 
 		label .label {
@@ -222,7 +220,7 @@
 			padding: 2px 0 0 35px;
 			margin: 0;
 			width: 100%;
-			color: white(.6);
+			color: white(0.6);
 			font-size: 13px;
 		}
 
@@ -236,7 +234,6 @@
 		input.text:disabled {
 			cursor: not-allowed;
 		}
-
 	}
 
 	// Select -------------------------------------------------------------- //
@@ -246,11 +243,11 @@
 		margin: 5px 7px;
 		padding: 0;
 		width: 210px;
-		background: black(.3);
+		background: black(0.3);
 		color: #fff;
 		border-radius: 3px;
-		border: 1px solid black(.2);
-		box-shadow: 0 1px 0 white(.02);
+		border: 1px solid black(0.2);
+		box-shadow: 0 1px 0 white(0.02);
 		font-size: 11px;
 		line-height: 16px;
 		overflow: hidden;
@@ -259,7 +256,7 @@
 
 		&::after {
 			position: absolute;
-			content: '≡';
+			content: "≡";
 			right: 8px;
 			top: 4px;
 			color: $colorBlue;
@@ -304,7 +301,7 @@
 	.version {
 		margin: -5px 0 0;
 		padding: 0 30px 30px !important;
-		color: white(.3);
+		color: white(0.3);
 		font-size: 12px;
 		text-align: right;
 
@@ -313,9 +310,8 @@
 		}
 
 		span a {
-			color: white(.3);
+			color: white(0.3);
 		}
-
 	}
 	div.version {
 		position: absolute;
@@ -339,11 +335,11 @@
 		margin: 0 8px 8px;
 		width: calc(100% - 16px);
 		height: 300px;
-		background-color: black(.4);
+		background-color: black(0.4);
 		overflow: hidden;
 		overflow-y: auto;
 		border-radius: 3px;
-		box-shadow: inset 0 0 3px black(.4);
+		box-shadow: inset 0 0 3px black(0.4);
 	}
 
 	// Row -------------------------------------------------------------- //
@@ -351,7 +347,7 @@
 		float: left;
 		padding: 8px 0;
 		width: 100%;
-		background-color: white(.02);
+		background-color: white(0.02);
 
 		&:nth-child(2n) {
 			background-color: white(0);
@@ -371,7 +367,7 @@
 			float: left;
 			padding: 5px 10px;
 			width: 30%;
-			color: white(.5);
+			color: white(0.5);
 			font-size: 14px;
 			text-align: right;
 
@@ -404,7 +400,7 @@
 			float: left;
 			padding: 2px 10px 5px;
 			width: 100%;
-			color: white(.5);
+			color: white(0.5);
 			font-size: 12px;
 			overflow: hidden;
 			line-height: 16px;
@@ -444,11 +440,11 @@
 			bottom: -6px;
 			position: relative;
 			cursor: pointer;
-			border: 1px solid rgba(0, 0, 0, .2);
-			box-shadow: 0 1px 0 rgba(255, 255, 255, .02);
-			background: rgba(0, 0, 0, .3);
-			-webkit-transition: .4s;
-			transition: .4s;
+			border: 1px solid rgba(0, 0, 0, 0.2);
+			box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
+			background: rgba(0, 0, 0, 0.3);
+			-webkit-transition: 0.4s;
+			transition: 0.4s;
 		}
 
 		.slider:before {
@@ -459,8 +455,8 @@
 			left: 3px;
 			bottom: 3px;
 			background-color: $colorBlue;
-			-webkit-transition: .4s;
-			transition: .4s;
+			-webkit-transition: 0.4s;
+			transition: 0.4s;
 		}
 
 		input:checked + .slider {
@@ -470,7 +466,7 @@
 		input:checked + .slider:before {
 			-ms-transform: translateX(20px);
 			transform: translateX(20px);
-			background-color: #FFFFFF;
+			background-color: #ffffff;
 		}
 
 		/* Rounded sliders */
@@ -483,7 +479,7 @@
 		}
 
 		label input:disabled ~ .slider {
-			background: black(.2);
+			background: black(0.2);
 			.iconic {
 				opacity: 0.3;
 			}
@@ -491,7 +487,7 @@
 		}
 
 		.label--disabled {
-			color: white(.6);
+			color: white(0.6);
 		}
 
 		p {
@@ -499,9 +495,8 @@
 			padding: 2px 0 0;
 			margin: 0;
 			width: 100%;
-			color: white(.6);
+			color: white(0.6);
 			font-size: 13px;
 		}
 	}
-
 }
