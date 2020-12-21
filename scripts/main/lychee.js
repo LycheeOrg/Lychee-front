@@ -46,7 +46,6 @@ let lychee = {
 	nsfw_visible_saved: true,
 	nsfw_blur: false,
 	nsfw_warning: false,
-	nsfw_warning_text: "<b>Sensitive content</b><br><p>This album contains sensitive content which some people may find offensive or disturbing.</p>",
 
 	// this is device specific config, in this case default is Desktop.
 	header_auto_hide: true,
@@ -221,9 +220,6 @@ lychee.init = function () {
 			lychee.nsfw_visible = (data.config.nsfw_visible && data.config.nsfw_visible === "1") || false;
 			lychee.nsfw_blur = (data.config.nsfw_blur && data.config.nsfw_blur === "1") || false;
 			lychee.nsfw_warning = (data.config.nsfw_warning_admin && data.config.nsfw_warning_admin === "1") || false;
-			lychee.nsfw_warning_text =
-				data.config.nsfw_warning_text ||
-				"<b>Sensitive content</b><br><p>This album contains sensitive content which some people may find offensive or disturbing.</p>";
 
 			lychee.header_auto_hide = data.config_device.header_auto_hide;
 			lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
@@ -287,9 +283,6 @@ lychee.init = function () {
 			lychee.nsfw_visible = (data.config.nsfw_visible && data.config.nsfw_visible === "1") || false;
 			lychee.nsfw_blur = (data.config.nsfw_blur && data.config.nsfw_blur === "1") || false;
 			lychee.nsfw_warning = (data.config.nsfw_warning && data.config.nsfw_warning === "1") || false;
-			lychee.nsfw_warning_text =
-				data.config.nsfw_warning_text ||
-				"<b>Sensitive content</b><br><p>This album contains sensitive content which some people may find offensive or disturbing.</p>";
 
 			lychee.header_auto_hide = data.config_device.header_auto_hide;
 			lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
