@@ -245,7 +245,6 @@ $(document).ready(function () {
 				swipe.preventNextHeaderToggle = false;
 			}
 		});
-
 	$("#imageview")
 		// Swipe on mobile
 		.swipe()

@@ -144,22 +144,10 @@ contextMenu.sharePhoto = function (photoID, e) {
 	let iconClass = "ionicons";
 
 	let items = [
-		{
-			title: build.iconic("twitter", iconClass) + "Twitter",
-			fn: () => photo.share(photoID, "twitter"),
-		},
-		{
-			title: build.iconic("facebook", iconClass) + "Facebook",
-			fn: () => photo.share(photoID, "facebook"),
-		},
-		{
-			title: build.iconic("envelope-closed") + "Mail",
-			fn: () => photo.share(photoID, "mail"),
-		},
-		{
-			title: build.iconic("link-intact") + "Direct Link",
-			fn: () => window.open(photo.getDirectLink(), "_newtab"),
-		},
+		{ title: build.iconic("twitter", iconClass) + "Twitter", fn: () => photo.share(photoID, "twitter") },
+		{ title: build.iconic("facebook", iconClass) + "Facebook", fn: () => photo.share(photoID, "facebook") },
+		{ title: build.iconic("envelope-closed") + "Mail", fn: () => photo.share(photoID, "mail") },
+		{ title: build.iconic("link-intact") + "Direct Link", fn: () => window.open(photo.getDirectLink(), "_newtab") },
 	];
 
 	basicContext.show(items, e.originalEvent);
