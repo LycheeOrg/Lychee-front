@@ -125,6 +125,10 @@
 			height: 18px;
 		}
 
+		&--nsfw.active .iconic {
+			fill: $colorPink;
+		}
+
 		&--info.active .iconic {
 			fill: $colorBlue;
 		}

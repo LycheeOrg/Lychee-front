@@ -10,7 +10,6 @@
 	transition: margin-left 0.5s;
 	-webkit-overflow-scrolling: touch;
 	max-width: calc(100vw - 10px);
-
 	&::before {
 		content: "";
 		position: absolute;
@@ -19,30 +18,24 @@
 		height: 1px;
 		background: white(0.02);
 	}
-
 	&--sidebar {
 		width: calc(100% - 380px);
 	}
-
 	// Animations -------------------------------------------------------------- //
 	&.contentZoomIn .album,
 	&.contentZoomIn .photo {
 		animation-name: zoomIn;
 	}
-
 	&.contentZoomIn .divider {
 		animation-name: fadeIn;
 	}
-
 	&.contentZoomOut .album,
 	&.contentZoomOut .photo {
 		animation-name: zoomOut;
 	}
-
 	&.contentZoomOut .divider {
 		animation-name: fadeOut;
 	}
-
 	// Albums and Photos ------------------------------------------------------ //
 	.album,
 	.photo {
@@ -55,7 +48,6 @@
 		animation-duration: 0.2s;
 		animation-fill-mode: forwards;
 		animation-timing-function: $timing;
-
 		.thumbimg {
 			position: absolute;
 			width: 200px;
@@ -66,27 +58,22 @@
 			border: 1px solid white(0.5);
 			transition: opacity 0.3s ease-out, transform 0.3s ease-out, border-color 0.3s ease-out;
 		}
-
 		.thumbimg > img {
 			width: 100%;
 			height: 100%;
 		}
-
 		&:hover .thumbimg,
 		&:focus .thumbimg,
 		&.active .thumbimg {
 			border-color: $colorBlue;
 		}
-
 		&:active .thumbimg {
 			transition: none;
 			border-color: darken($colorBlue, 15%);
 		}
-
 		&.selected img {
 			outline: 1px solid $colorBlue;
 		}
-
 		.video {
 			&::before {
 				content: "";
@@ -103,7 +90,6 @@
 				opacity: 0.75;
 			}
 		}
-
 		.livephoto {
 			&::before {
 				content: "";
@@ -122,7 +108,6 @@
 			}
 		}
 	}
-
 	// Album -------------------------------------------------------------- //
 	.album {
 		.thumbimg:first-child,
@@ -130,7 +115,6 @@
 			transform: rotate(0) translateY(0) translateX(0);
 			opacity: 0;
 		}
-
 		&:hover .thumbimg:nth-child(1),
 		&:hover .thumbimg:nth-child(2),
 		&:focus .thumbimg:nth-child(1),
@@ -141,18 +125,25 @@
 			// See https://github.com/electerious/Lychee/pull/626 for more.
 			will-change: transform;
 		}
-
 		&:hover .thumbimg:nth-child(1),
 		&:focus .thumbimg:nth-child(1) {
 			transform: rotate(-2deg) translateY(10px) translateX(-12px);
 		}
-
 		&:hover .thumbimg:nth-child(2),
 		&:focus .thumbimg:nth-child(2) {
 			transform: rotate(5deg) translateY(-8px) translateX(12px);
 		}
 	}
-
+	.blurred {
+		span {
+			overflow: hidden;
+		}
+		img {
+			/* Safari 6.0 - 9.0 */
+			-webkit-filter: blur(5px);
+			filter: blur(5px);
+		}
+	}
 	// Overlay -------------------------------------------------------------- //
 	.album .overlay,
 	.photo .overlay {
@@ -162,22 +153,18 @@
 		background: linear-gradient(to bottom, black(0), black(0.6));
 		bottom: 1px;
 	}
-
 	// No overlay for empty albums
 	.album .thumbimg[data-overlay="false"] + .overlay {
 		background: none;
 	}
-
 	.photo .overlay {
 		opacity: 0;
 	}
-
 	.photo:hover .overlay,
 	.photo:focus .overlay,
 	.photo.active .overlay {
 		opacity: 1;
 	}
-
 	.album .overlay h1,
 	.photo .overlay h1 {
 		min-height: 19px;
@@ -191,7 +178,6 @@
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
-
 	.album .overlay a,
 	.photo .overlay a {
 		display: block;
@@ -200,7 +186,6 @@
 		color: #ccc;
 		text-shadow: 0 1px 3px black(0.4);
 	}
-
 	.photo .overlay a .iconic {
 		fill: #ccc;
 		margin: 0 5px 0 0;
@@ -212,21 +197,18 @@
 	.album .thumbimg[data-overlay="false"] + .overlay a {
 		text-shadow: none;
 	}
-
 	// Badge -------------------------------------------------------------- //
 	.album .badges,
 	.photo .badges {
 		position: relative;
 		margin: -1px 0 0 6px;
 	}
-
 	.album .subalbum_badge {
 		position: absolute;
 		right: 0;
 		top: 0;
 		//margin: -1px 0 0 6px;
 	}
-
 	.album .badge,
 	.photo .badge {
 		display: none;
@@ -246,48 +228,43 @@
 		&--visible {
 			display: inline-block;
 		}
-
 		&--not--hidden {
 			background: $colorGreen;
 		}
-
 		&--hidden {
 			background: $colorOrange;
 		}
-
 		&--star {
 			display: inline-block;
 			background: $colorYellow;
 		}
-
+		&--nsfw {
+			display: inline-block;
+			background: $colorPink;
+		}
 		&--list {
 			background: $colorBlue;
 		}
-
 		&--tag {
 			display: inline-block;
 			background: $colorGreen;
 		}
-
 		.iconic {
 			fill: #fff;
 			width: 16px;
 			height: 16px;
 		}
-
 		&--folder {
 			display: inline-block;
 			box-shadow: none;
 			background: none;
 			border: none;
-
 			.iconic {
 				width: 12px;
 				height: 12px;
 			}
 		}
 	}
-
 	// Divider -------------------------------------------------------------- //
 	.divider {
 		margin: 50px 0 0;
@@ -300,13 +277,11 @@
 		animation-duration: 0.2s;
 		animation-fill-mode: forwards;
 		animation-timing-function: $timing;
-
 		&:first-child {
 			margin-top: 10px;
 			border-top: 0;
 			box-shadow: none;
 		}
-
 		h1 {
 			margin: 0 0 0 30px;
 			color: white(0.6);
@@ -325,14 +300,12 @@
 	color: white(0.35);
 	text-align: center;
 	transform: translateX(-50%) translateY(-50%);
-
 	.iconic {
 		fill: white(0.3);
 		margin: 0 0 10px;
 		width: 50px;
 		height: 50px;
 	}
-
 	p {
 		font-size: 16px;
 		font-weight: bold;

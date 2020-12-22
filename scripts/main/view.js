@@ -91,15 +91,6 @@ view.albums = {
 							sharedData += build.album(alb, !lychee.admin);
 						}
 					}
-					// $.each(albums.json.shared_albums, function() {
-					// 	if(!this.parent_id || this.parent_id === 0) {
-					// 		albums.parse(this);
-					// 		sharedData += build.album(this, true)
-					// 	}
-					// });
-					//
-					// // Add divider
-					// if (lychee.publicMode===false) sharedData = build.divider(lychee.locale['SHARED_ALBUMS']) + sharedData
 				}
 			}
 
@@ -110,6 +101,7 @@ view.albums = {
 				lychee.content.html(smartData + albumsData + sharedData);
 			}
 
+			album.apply_nsfw_filter();
 			// Restore scroll position
 			if (view.albums.content.scrollPosition != null && view.albums.content.scrollPosition !== 0) {
 				$(document).scrollTop(view.albums.content.scrollPosition);
@@ -153,6 +145,8 @@ view.album = {
 		view.album.sidebar();
 		view.album.title();
 		view.album.public();
+		view.album.nsfw();
+		view.album.nsfw_warning.init();
 		view.album.content.init();
 
 		album.json.init = 1;
@@ -179,6 +173,26 @@ view.album = {
 					break;
 			}
 		}
+	},
+
+	nsfw_warning: {
+		init: function () {
+			if (!lychee.nsfw_warning) {
+				$("#sensitive_warning").hide();
+				return;
+			}
+
+			if (album.json.nsfw && album.json.nsfw === "1" && !lychee.nsfw_unlocked_albums.includes(album.json.id)) {
+				$("#sensitive_warning").show();
+			} else {
+				$("#sensitive_warning").hide();
+			}
+		},
+
+		next: function () {
+			lychee.nsfw_unlocked_albums.push(album.json.id);
+			$("#sensitive_warning").hide();
+		},
 	},
 
 	content: {
@@ -223,6 +237,8 @@ view.album = {
 
 			// Add photos to view
 			lychee.content.html(html);
+			album.apply_nsfw_filter();
+
 			view.album.content.justify();
 		},
 
@@ -478,6 +494,16 @@ view.album = {
 	hidden: function () {
 		if (album.json.visible === "1") sidebar.changeAttr("hidden", lychee.locale["ALBUM_SHR_NO"]);
 		else sidebar.changeAttr("hidden", lychee.locale["ALBUM_SHR_YES"]);
+	},
+
+	nsfw: function () {
+		if (album.json.nsfw === "1") {
+			// Sensitive
+			$("#button_nsfw_album").addClass("active").attr("title", lychee.locale["ALBUM_UNMARK_NSFW"]);
+		} else {
+			// Not Sensitive
+			$("#button_nsfw_album").removeClass("active").attr("title", lychee.locale["ALBUM_MARK_NSFW"]);
+		}
 	},
 
 	downloadable: function () {
@@ -813,6 +839,7 @@ view.settings = {
 				view.settings.content.setOverlay();
 				view.settings.content.setOverlayType();
 				view.settings.content.setMapDisplay();
+				view.settings.content.setNSFWVisible();
 				view.settings.content.setCSS();
 				view.settings.content.moreButton();
 			}
@@ -1120,6 +1147,28 @@ view.settings = {
 
 			settings.bind("#PublicSearch", ".setPublicSearch", settings.changePublicSearch);
 		},
+
+		setNSFWVisible: function () {
+			let msg = `
+			<div class="setNSFWVisible">
+			<p>${lychee.locale["NSFW_VISIBLE_TEXT_1"]}
+			<label class="switch">
+			  <input id="NSFWVisible" type="checkbox">
+			  <span class="slider round"></span>
+			</label></p>
+			<p>${lychee.locale["NSFW_VISIBLE_TEXT_2"]}
+			</p>
+			</div>
+			`;
+
+			$(".settings_view").append(msg);
+			if (lychee.nsfw_visible_saved) {
+				$("#NSFWVisible").click();
+			}
+
+			settings.bind("#NSFWVisible", ".setNSFWVisible", settings.changeNSFWVisible);
+		},
+		// TODO: extend to the other settings.
 
 		setOverlay: function () {
 			let msg = `

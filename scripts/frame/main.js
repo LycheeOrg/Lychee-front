@@ -91,10 +91,10 @@ frame.refreshPicture = function () {
 		let srcset = "";
 		let src = "";
 		this.frame.photo = null;
-		if (data.medium != "") {
+		if (data.medium !== "") {
 			src = data.medium;
 
-			if (data.medium2x && data.medium2 != "") {
+			if (data.medium2x && data.medium2x !== "") {
 				srcset = `${data.medium} ${parseInt(data.medium_dim, 10)}w, ${data.medium2x} ${parseInt(data.medium2x_dim, 10)}w`;
 				// We use it in the resize callback.
 				this.frame.photo = data;

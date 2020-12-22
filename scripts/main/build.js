@@ -36,6 +36,7 @@ build.getAlbumThumb = function (data, i) {
 	let isVideo = data.types[i] && data.types[i].indexOf("video") > -1;
 	let isRaw = data.types[i] && data.types[i].indexOf("raw") > -1;
 	let thumb = data.thumbs[i];
+	var thumb2x = "";
 
 	if (thumb === "uploads/thumb/" && isVideo) {
 		return `<span class="thumbimg"><img src='img/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
@@ -44,7 +45,6 @@ build.getAlbumThumb = function (data, i) {
 		return `<span class="thumbimg"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
 	}
 
-	thumb2x = "";
 	if (data.thumbs2x) {
 		if (data.thumbs2x[i]) {
 			thumb2x = data.thumbs2x[i];
@@ -82,7 +82,10 @@ build.album = function (data, disabled = false) {
 	}
 
 	html += lychee.html`
-			<div class='album ${disabled ? `disabled` : ``}' data-id='${data.id}' data-tabindex='${tabindex.get_next_tab_index()}'>
+			<div class='album ${disabled ? `disabled` : ``} ${data.nsfw && data.nsfw === "1" && lychee.nsfw_blur ? `blurred` : ``}'
+				data-id='${data.id}'
+				data-nsfw='${data.nsfw && data.nsfw === "1" ? `1` : `0`}'
+				data-tabindex='${tabindex.get_next_tab_index()}'>
 				  ${build.getAlbumThumb(data, 2)}
 				  ${build.getAlbumThumb(data, 1)}
 				  ${build.getAlbumThumb(data, 0)}
@@ -95,6 +98,7 @@ build.album = function (data, disabled = false) {
 	if (album.isUploadable() && !disabled) {
 		html += lychee.html`
 				<div class='badges'>
+					<a class='badge ${data.nsfw === "1" ? "badge--nsfw" : ""} icn-warning'>${build.iconic("warning")}</a>
 					<a class='badge ${data.star === "1" ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
 					<a class='badge ${data.public === "1" ? "badge--visible" : ""} ${
 			data.visible === "1" ? "badge--not--hidden" : "badge--hidden"

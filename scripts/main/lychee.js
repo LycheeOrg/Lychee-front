@@ -42,6 +42,11 @@ let lychee = {
 	landing_page_enabled: false, // is landing page enabled ?
 	delete_imported: false,
 
+	nsfw_visible: true,
+	nsfw_visible_saved: true,
+	nsfw_blur: false,
+	nsfw_warning: false,
+
 	// this is device specific config, in this case default is Desktop.
 	header_auto_hide: true,
 	active_focus_on_page_load: false,
@@ -79,6 +84,8 @@ let lychee = {
 	footer: $("#footer"),
 
 	locale: {},
+
+	nsfw_unlocked_albums: [],
 };
 
 lychee.diagnostics = function () {
@@ -210,6 +217,10 @@ lychee.init = function () {
 			lychee.share_button_visible = (data.config.share_button_visible && data.config.share_button_visible === "1") || false;
 			lychee.delete_imported = data.config.delete_imported && data.config.delete_imported === "1";
 
+			lychee.nsfw_visible = (data.config.nsfw_visible && data.config.nsfw_visible === "1") || false;
+			lychee.nsfw_blur = (data.config.nsfw_blur && data.config.nsfw_blur === "1") || false;
+			lychee.nsfw_warning = (data.config.nsfw_warning_admin && data.config.nsfw_warning_admin === "1") || false;
+
 			lychee.header_auto_hide = data.config_device.header_auto_hide;
 			lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
 			lychee.enable_button_visibility = data.config_device.enable_button_visibility;
@@ -232,6 +243,7 @@ lychee.init = function () {
 
 			lychee.upload = !lychee.api_V2;
 			lychee.admin = !lychee.api_V2;
+			lychee.nsfw_visible_saved = lychee.nsfw_visible;
 
 			// leftMenu
 			leftMenu.build();
@@ -268,6 +280,10 @@ lychee.init = function () {
 			lychee.swipe_tolerance_x = validatedSwipeToleranceX;
 			lychee.swipe_tolerance_y = validatedSwipeToleranceY;
 
+			lychee.nsfw_visible = (data.config.nsfw_visible && data.config.nsfw_visible === "1") || false;
+			lychee.nsfw_blur = (data.config.nsfw_blur && data.config.nsfw_blur === "1") || false;
+			lychee.nsfw_warning = (data.config.nsfw_warning && data.config.nsfw_warning === "1") || false;
+
 			lychee.header_auto_hide = data.config_device.header_auto_hide;
 			lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
 			lychee.enable_button_visibility = data.config_device.enable_button_visibility;
@@ -285,6 +301,7 @@ lychee.init = function () {
 			lychee.enable_contextmenu_header = data.config_device.enable_contextmenu_header;
 			lychee.hide_content_during_imgview = data.config_device.hide_content_during_imgview;
 			lychee.device_type = data.config_device.device_type || "desktop"; // we set default as Desktop
+			lychee.nsfw_visible_saved = lychee.nsfw_visible;
 
 			// console.log(lychee.full_photo);
 			lychee.setMode("public");
@@ -497,6 +514,7 @@ lychee.load = function (autoplay = true) {
 			}
 			if (visible.mapview()) mapview.close();
 			if (visible.sidebar() && album.isSmartID(albumID)) sidebar.toggle();
+			$("#sensitive_warning").hide();
 			if (album.json && albumID === album.json.id) {
 				view.album.title();
 				lychee.content.show();
@@ -527,6 +545,7 @@ lychee.load = function (autoplay = true) {
 			tabindex.makeUnfocusable(lychee.imageview);
 		}
 		if (visible.mapview()) mapview.close();
+		$("#sensitive_warning").hide();
 		lychee.content.show();
 		lychee.footer_show();
 		albums.load();

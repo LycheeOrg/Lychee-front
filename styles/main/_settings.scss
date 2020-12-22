@@ -22,7 +22,8 @@
 .setLocationShow,
 .setLocationShowPublic,
 .setDefaultLicense,
-.setCSS {
+.setCSS,
+.setNSFWVisible {
 	font-size: 14px;
 	width: 100%;
 	padding: 5%;
@@ -31,6 +32,7 @@
 		margin: 0 0 5%;
 		width: 100%;
 		color: #ccc;
+		line-height: 16px;
 
 		a {
 			color: rgba(255, 255, 255, 0.9);

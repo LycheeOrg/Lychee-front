@@ -58,6 +58,9 @@ header.bind = function () {
 	header.dom("#button_move_album").on(eventName, function (e) {
 		contextMenu.move([album.getID()], e, album.setAlbum, "ROOT", album.getParent() != "");
 	});
+	header.dom("#button_nsfw_album").on(eventName, function (e) {
+		album.setNSFW(album.getID());
+	});
 	header.dom("#button_move").on(eventName, function (e) {
 		contextMenu.move([photo.getID()], e, photo.setAlbum);
 	});
@@ -322,7 +325,7 @@ header.setMode = function (mode) {
 				tabindex.makeFocusable($("#button_info_album"));
 				if (album.isUploadable()) {
 					$(
-						"#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider",
+						"#button_nsfw_album, #button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider",
 						".header__toolbar--album"
 					).show();
 					tabindex.makeFocusable(
@@ -333,7 +336,7 @@ header.setMode = function (mode) {
 					);
 				} else {
 					$(
-						"#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider",
+						"#button_nsfw_album, #button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider",
 						".header__toolbar--album"
 					).hide();
 					tabindex.makeUnfocusable(

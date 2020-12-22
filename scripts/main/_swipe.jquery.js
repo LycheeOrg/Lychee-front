@@ -105,7 +105,14 @@
 
 			event.originalEvent = originalEvent;
 
-			event.swipe = { x: x, y: y, direction: direction, distance: distance, angle: angle, speed: speed };
+			event.swipe = {
+				x: x,
+				y: y,
+				direction: direction,
+				distance: distance,
+				angle: angle,
+				speed: speed,
+			};
 
 			$(self.el).trigger(event);
 		},

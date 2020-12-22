@@ -61,6 +61,49 @@ npm install
 The Gulpfile is located in `<path to lychee>/Lychee-front/` and can be executed using the `npm run compile` command.
 The generated files will placed into `../dist/` or `<path to lychee>/dist/`.
 
+### :warning: Style formatting
+
+Before submitting a pull request, please apply our formatting rules by executing:
+
+```
+npm run format
+```
+
+You can also just incorporate a git hook: `.git/hooks/pre-commit`
+
+```
+#!/bin/sh
+NO_COLOR="\033[0m"
+GREEN="\033[38;5;010m"
+YELLOW="\033[38;5;011m"
+
+echo "\n${GREEN}pre commit hook start${NO_COLOR}\n"
+
+PRETTIER="./node_modules/prettier/bin-prettier.js"
+
+if [ -x "$PRETTIER" ]; then
+    git status --porcelain | grep -e '^[AM]\(.*\).php$' | cut -c 3- | while read line; do
+        ${PRETTIER} --write ${line};
+        git add "$line";
+    done
+else
+    echo ""
+    echo "${YELLOW}Please install prettier, e.g.:${NO_COLOR}"
+    echo ""
+    echo "  npm install"
+    echo ""
+fi
+
+echo "\n${GREEN}pre commit hook finish${NO_COLOR}\n"
+```
+
+This can easily be installed by doing:
+
+```
+cp pre-commit ../../.git/modules/public/Lychee-front/hooks
+chmod 755 ../../.git/modules/public/Lychee-front/hooks/pre-commit
+```
+
 ### Watch for changes
 
 While developing, you might want to use the following command to automatically build Lychee everytime you save a file:

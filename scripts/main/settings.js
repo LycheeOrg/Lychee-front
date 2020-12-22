@@ -482,6 +482,29 @@ settings.changeLocationDecoding = function () {
 	});
 };
 
+settings.changeNSFWVisible = function () {
+	var params = {};
+	if ($("#NSFWVisible:checked").length === 1) {
+		params.nsfw_visible = "1";
+	} else {
+		params.nsfw_visible = "0";
+	}
+	api.post("Settings::setNSFWVisible", params, function (data) {
+		if (data === true) {
+			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_NSFW_VISIBLE"]);
+			lychee.nsfw_visible = params.nsfw_visible === "1";
+			lychee.nsfw_visible_saved = lychee.nsfw_visible;
+		} else {
+			lychee.error(null, params, data);
+		}
+	});
+};
+
+//TODO : later
+// lychee.nsfw_blur = (data.config.nsfw_blur && data.config.nsfw_blur === '1') || false;
+// lychee.nsfw_warning = (data.config.nsfw_warning && data.config.nsfw_warning === '1') || false;
+// lychee.nsfw_warning_text = data.config.nsfw_warning_text || '<b>Sensitive content</b><br><p>This album contains sensitive content which some people may find offensive or disturbing.</p>';
+
 settings.changeLocationShow = function () {
 	var params = {};
 	if ($("#LocationShow:checked").length === 1) {
