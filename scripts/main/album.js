@@ -677,14 +677,6 @@ album.setPublic = function (albumID, e) {
 			<form>
 				<div class='switch'>
 					<label>
-						${lychee.locale["ALBUM_NSFW"]}:&nbsp;
-						<input type='checkbox' name='nsfw'>
-						<span class='slider round'></span>
-					</label>
-					<p>${lychee.locale["ALBUM_NSFW_EXPL"]}</p>
-				</div>
-				<div class='switch'>
-					<label>
 						${lychee.locale["ALBUM_PUBLIC"]}:&nbsp;
 						<input type='checkbox' name='public'>
 						<span class='slider round'></span>
@@ -731,6 +723,15 @@ album.setPublic = function (albumID, e) {
 					</label>
 					<p>${lychee.locale["ALBUM_PASSWORD_PROT_EXPL"]}</p>
 					<input class='text' name='passwordtext' type='text' placeholder='${lychee.locale["PASSWORD"]}' value=''>
+				</div>
+				<div class='hr'><hr></div>
+				<div class='switch'>
+					<label>
+						${lychee.locale["ALBUM_NSFW"]}:&nbsp;
+						<input type='checkbox' name='nsfw'>
+						<span class='slider round'></span>
+					</label>
+					<p>${lychee.locale["ALBUM_NSFW_EXPL"]}</p>
 				</div>
 			</form>
 		`;
@@ -902,6 +903,8 @@ album.setNSFW = function (albumID, e) {
 	api.post("Album::setNSFW", params, function (data) {
 		if (data !== true) {
 			lychee.error(null, params, data);
+		} else {
+			albums.refresh();
 		}
 	});
 };
@@ -1145,6 +1148,7 @@ album.apply_nsfw_filter = function () {
 album.toggle_nsfw_filter = function () {
 	lychee.nsfw_visible = !lychee.nsfw_visible;
 	album.apply_nsfw_filter();
+	return false;
 };
 
 album.isUploadable = function () {
