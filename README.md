@@ -30,14 +30,11 @@ If you want to contribute and edit CSS or JS files, you need to rebuild Lychee. 
 # Clone Lychee
 git clone https://github.com/LycheeOrg/Lychee.git
 
-# Initialize the submodules (doc and frontend)
+# Initialize the frontend submodule
 git submodule init
 
-# Get the documentations
-git submodule update docs
-
 # Get the frontend
-git submodule update Lychee-front
+git submodule update
 
 # Go into the frontend
 cd Lychee-front
