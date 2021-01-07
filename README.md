@@ -2,7 +2,7 @@
 
 **This repository contains the source of the JS frontend in order to allow its use with different backends.**
 
-[![Build Status](https://travis-ci.com/LycheeOrg/Lychee-front.svg?branch=master)](https://travis-ci.com/LycheeOrg/Lychee-front)
+[![Build Status](https://github.com/LycheeOrg/Lychee-front/workflows/Node.js%20CI/badge.svg?branch=master)](https://github.com/LycheeOrg/Lychee-front/actions?query=workflow%3A%22Node.js+CI%22)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=LycheeOrg_Lychee-front&metric=alert_status)](https://sonarcloud.io/dashboard?id=LycheeOrg_Lychee-front)
 
 #### A great looking and easy-to-use photo-management-system.
