@@ -109,8 +109,17 @@ upload.start = {
 						.html(lychee.locale["UPLOAD_FINISHED"])
 						.addClass("success");
 				} else {
-					if (data.substr(0, 6) === "Error:") {
-						errorText = data.substr(6) + " " + lychee.locale["UPLOAD_ERROR_CONSOLE"];
+					if (xhr.status === 413 || data.substr(0, 6) === "Error:") {
+						if (xhr.status === 413) {
+							errorText = lychee.locale["UPLOAD_ERROR_POSTSIZE"];
+						} else {
+							errorText = data.substr(6);
+							if (errorText === " validation failed") {
+								errorText = lychee.locale["UPLOAD_ERROR_FILESIZE"];
+							} else {
+								errorText += " " + lychee.locale["UPLOAD_ERROR_CONSOLE"];
+							}
+						}
 						error = true;
 
 						// Error Status
@@ -119,7 +128,7 @@ upload.start = {
 							.addClass("error");
 
 						// Throw error
-						if (error === true) lychee.error(lychee.locale["UPLOAD_FAILED_ERROR"], xhr, data);
+						lychee.error(lychee.locale["UPLOAD_FAILED_ERROR"], xhr, data);
 					} else if (data.substr(0, 8) === "Warning:") {
 						errorText = data.substr(8);
 						warning = true;
@@ -130,7 +139,7 @@ upload.start = {
 							.addClass("warning");
 
 						// Throw error
-						if (error === true) lychee.error(lychee.locale["UPLOAD_FAILED_WARNING"], xhr, data);
+						lychee.error(lychee.locale["UPLOAD_FAILED_WARNING"], xhr, data);
 					} else {
 						errorText = lychee.locale["UPLOAD_UNKNOWN"];
 						error = true;
@@ -141,7 +150,7 @@ upload.start = {
 							.addClass("error");
 
 						// Throw error
-						if (error === true) lychee.error(lychee.locale["UPLOAD_ERROR_UNKNOWN"], xhr, data);
+						lychee.error(lychee.locale["UPLOAD_ERROR_UNKNOWN"], xhr, data);
 					}
 
 					$(".basicModal .rows .row:nth-child(" + (file.num + 1) + ") p.notice")
