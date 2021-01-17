@@ -209,13 +209,15 @@ contextMenu.albumTitle = function (albumID, e) {
 };
 
 contextMenu.photo = function (photoID, e) {
-	// Notice for 'Move':
-	// fn must call basicContext.close() first,
-	// in order to keep the selection
+// FINAL
+//	coverActive = (photoID == album.json.cover);
+// TEST
+	coverActive = (photoID == album.json.description);
 
 	let items = [
 		{ title: build.iconic("star") + lychee.locale["STAR"], fn: () => photo.setStar([photoID]) },
 		{ title: build.iconic("tag") + lychee.locale["TAGS"], fn: () => photo.editTags([photoID]) },
+		{ title: build.iconic("folder-cover", coverActive ? "active" : "") + lychee.locale[coverActive ? "REMOVE_COVER" : "SET_COVER"], fn: () => album.toggleCover(photoID) },
 		{},
 		{ title: build.iconic("pencil") + lychee.locale["RENAME"], fn: () => photo.setTitle([photoID]) },
 		{
@@ -225,6 +227,9 @@ contextMenu.photo = function (photoID, e) {
 				contextMenu.move([photoID], e, photo.copyTo, "UNSORTED");
 			},
 		},
+		// Notice for 'Move':
+		// fn must call basicContext.close() first,
+		// in order to keep the selection
 		{
 			title: build.iconic("folder") + lychee.locale["MOVE"],
 			fn: () => {

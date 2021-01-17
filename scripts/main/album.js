@@ -483,6 +483,28 @@ album.setDescription = function (albumID) {
 	});
 };
 
+album.toggleCover = function (photoID) {
+	if (!photoID) return false;
+// FINAL
+//	album.json.cover = album.json.cover == photoID ? -1 : photoID;
+//	let params = {
+//		albumID: album.json.id,
+//		cover: album.json.cover,
+//	};
+// TEST
+	album.json.description = album.json.description == "" + photoID ? "" : "" + photoID;
+	let params = {
+		albumID: album.json.id,
+		description: album.json.description,
+	};
+
+	api.post("Album::setCover", params, function (data) {
+		if (data !== true) {
+			lychee.error(null, params, data);
+		}
+	});
+};
+
 album.setLicense = function (albumID) {
 	const callback = function () {
 		$("select#license").val(album.json.license === "" ? "none" : album.json.license);

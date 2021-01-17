@@ -32,7 +32,7 @@ build.multiselect = function (top, left) {
 	return lychee.html`<div id='multiselect' style='top: ${top}px; left: ${left}px;'></div>`;
 };
 
-build.getAlbumThumb = function (data, i) {
+/*build.getAlbumThumb = function (data, i) {
 	let isVideo = data.types[i] && data.types[i].indexOf("video") > -1;
 	let isRaw = data.types[i] && data.types[i].indexOf("raw") > -1;
 	let thumb = data.thumbs[i];
@@ -52,6 +52,38 @@ build.getAlbumThumb = function (data, i) {
 	} else {
 		// Fallback code for Lychee v3
 		var { path: thumb2x, isPhoto: isPhoto } = lychee.retinize(data.thumbs[i]);
+		if (!isPhoto) {
+			thumb2x = "";
+		}
+	}
+
+	return `<span class="thumbimg${isVideo ? " video" : ""}"><img class='lazyload' src='img/placeholder.png' data-src='${thumb}' ${
+		thumb2x !== "" ? "data-srcset='" + thumb2x + " 2x'" : ""
+	} alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
+};*/
+
+// two additional images that are barely visible seems a bit overkill - use same image 3 times
+// if this simplification comes to pass data.types, data.thumbs and data.thumbs2x no longer need to be arrays
+build.getAlbumThumb = function (data) {
+	let isVideo = data.types[0] && data.types[0].indexOf("video") > -1;
+	let isRaw = data.types[0] && data.types[0].indexOf("raw") > -1;
+	let thumb = data.thumbs[0];
+	var thumb2x = "";
+
+	if (thumb === "uploads/thumb/" && isVideo) {
+		return `<span class="thumbimg"><img src='img/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
+	}
+	if (thumb === "uploads/thumb/" && isRaw) {
+		return `<span class="thumbimg"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
+	}
+
+	if (data.thumbs2x) {
+		if (data.thumbs2x[0]) {
+			thumb2x = data.thumbs2x[0];
+		}
+	} else {
+		// Fallback code for Lychee v3
+		var { path: thumb2x, isPhoto: isPhoto } = lychee.retinize(data.thumbs[0]);
 		if (!isPhoto) {
 			thumb2x = "";
 		}
@@ -86,9 +118,9 @@ build.album = function (data, disabled = false) {
 				data-id='${data.id}'
 				data-nsfw='${data.nsfw && data.nsfw === "1" ? `1` : `0`}'
 				data-tabindex='${tabindex.get_next_tab_index()}'>
-				  ${build.getAlbumThumb(data, 2)}
-				  ${build.getAlbumThumb(data, 1)}
-				  ${build.getAlbumThumb(data, 0)}
+				  ${build.getAlbumThumb(data)}
+				  ${build.getAlbumThumb(data)}
+				  ${build.getAlbumThumb(data)}
 				<div class='overlay'>
 					<h1 title='$${data.title}'>$${data.title}</h1>
 					<a>$${date_stamp}</a>
