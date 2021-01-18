@@ -1011,7 +1011,7 @@ album.delete = function (albumIDs) {
 				});
 			} else if (visible.album()) {
 				albums.refresh();
-				if (albumIDs.length === 1 && parseInt(album.getID()) === parseInt(albumIDs[0])) {
+				if (albumIDs.length === 1 && album.getID() == albumIDs[0]) {
 					lychee.goto(album.getParent());
 				} else {
 					albumIDs.forEach(function (id) {
@@ -1025,7 +1025,7 @@ album.delete = function (albumIDs) {
 		});
 	};
 
-	if (albumIDs.toString() === "0") {
+	if (albumIDs.toString() === "unsorted") {
 		action.title = lychee.locale["CLEAR_UNSORTED"];
 		cancel.title = lychee.locale["KEEP_UNSORTED"];
 
