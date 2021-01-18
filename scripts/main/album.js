@@ -490,7 +490,7 @@ album.toggleCover = function (photoID) {
 
 	let params = {
 		albumID: album.json.id,
-		cover_id: album.json.cover_id,
+		photoID: album.json.cover_id,
 	};
 
 	api.post("Album::setCover", params, function (data) {
