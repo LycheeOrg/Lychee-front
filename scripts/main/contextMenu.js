@@ -65,16 +65,12 @@ contextMenu.album = function (albumID, e) {
 
 	if (album.json) {
 		// not top level
-		myalbum = album.getSubByID(albumID);
-		photoID = myalbum.thumbIDs[0];
-		//FINAL
-		//		coverActive = (album.json.cover == photoID);
-		//TEST
-		coverActive = album.json.description == "" + photoID;
+		let myalbum = album.getSubByID(albumID);
+		let coverActive = myalbum.cover_id !== album.json.cover_id;
 		// prepend context menu item
 		items.unshift({
 			title: build.iconic("folder-cover", coverActive ? "active" : "") + lychee.locale[coverActive ? "REMOVE_COVER" : "SET_COVER"],
-			fn: () => album.toggleCover(photoID),
+			fn: () => album.toggleCover(myalbum.cover_id),
 		});
 	}
 
