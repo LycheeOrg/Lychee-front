@@ -71,7 +71,7 @@ build.getAlbumThumb = function (data) {
 
 	if (lychee.api_V2) {
 		isVideo = data.thumb.type && data.thumb.type.indexOf("video") > -1;
-		isRaw = data.thumb.type && data.thumb.types.indexOf("raw") > -1;
+		isRaw = data.thumb.type && data.thumb.type.indexOf("raw") > -1;
 		thumb = data.thumb.thumb;
 	} else {
 		isVideo = data.types[0] && data.type.indexOf("video") > -1;
