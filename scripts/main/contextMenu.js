@@ -66,12 +66,14 @@ contextMenu.album = function (albumID, e) {
 	if (album.json) {
 		// not top level
 		let myalbum = album.getSubByID(albumID);
-		let coverActive = myalbum.cover_id !== album.json.cover_id;
-		// prepend context menu item
-		items.unshift({
-			title: build.iconic("folder-cover", coverActive ? "active" : "") + lychee.locale[coverActive ? "REMOVE_COVER" : "SET_COVER"],
-			fn: () => album.toggleCover(myalbum.cover_id),
-		});
+		if (myalbum.thumb.id) {
+			let coverActive = (myalbum.thumb.id === album.json.cover_id);
+			// prepend context menu item
+			items.unshift({
+				title: build.iconic("folder-cover", coverActive ? "active" : "") + lychee.locale[coverActive ? "REMOVE_COVER" : "SET_COVER"],
+				fn: () => album.toggleCover(myalbum.thumb.id),
+			});
+		}
 	}
 
 	$('.album[data-id="' + albumID + '"]').addClass("active");
@@ -220,7 +222,7 @@ contextMenu.albumTitle = function (albumID, e) {
 };
 
 contextMenu.photo = function (photoID, e) {
-	let coverActive = photoID === album.json.cover_id;
+	let coverActive = (photoID === album.json.cover_id);
 
 	let items = [
 		{ title: build.iconic("star") + lychee.locale["STAR"], fn: () => photo.setStar([photoID]) },

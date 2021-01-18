@@ -76,6 +76,7 @@ build.album = function (data, disabled = false) {
 	let html = "";
 	let date_stamp = data.sysdate;
 	let sortingAlbums = [];
+	let isCover = (album.json && album.json.cover_id && data.thumb.id === album.json.cover_id);
 
 	// In the special case of take date sorting use the take stamps as title
 	if (lychee.sortingAlbums !== "" && data.min_takestamp && data.max_takestamp) {
@@ -117,6 +118,7 @@ build.album = function (data, disabled = false) {
 					<a class='badge ${data.recent === "1" ? "badge--visible badge--list" : ""}'>${build.iconic("clock")}</a>
 					<a class='badge ${data.password === "1" ? "badge--visible" : ""}'>${build.iconic("lock-locked")}</a>
 					<a class='badge ${data.tag_album === "1" ? "badge--tag" : ""}'>${build.iconic("tag")}</a>
+					<a class='badge ${isCover ? "badge--cover" : ""} icn-cover'>${build.iconic("folder-cover")}</a>
 				</div>
 				`;
 	}
@@ -137,7 +139,7 @@ build.photo = function (data, disabled = false) {
 	let html = "";
 	let thumbnail = "";
 	var thumb2x = "";
-	let isCover = data.id === album.json.cover_id;
+	let isCover = (data.id === album.json.cover_id);
 
 	let isVideo = data.type && data.type.indexOf("video") > -1;
 	let isRaw = data.type && data.type.indexOf("raw") > -1;
@@ -237,10 +239,9 @@ build.photo = function (data, disabled = false) {
 	if (album.isUploadable()) {
 		html += lychee.html`
 				<div class='badges'>
-				<a class='badge ${isCover ? "badge--cover" : ""} icn-cover'>${build.iconic("folder-cover")}</a>
 				<a class='badge ${data.star === "1" ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
 				<a class='badge ${data.public === "1" && album.json.public !== "1" ? "badge--visible badge--hidden" : ""} icn-share'>${build.iconic("eye")}</a>
-					
+				<a class='badge ${isCover ? "badge--cover" : ""} icn-cover'>${build.iconic("folder-cover")}</a>
 				</div>
 				`;
 	}
