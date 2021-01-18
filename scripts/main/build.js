@@ -111,11 +111,11 @@ build.album = function (data, disabled = false) {
 				<div class='badges'>
 					<a class='badge ${data.nsfw === "1" ? "badge--nsfw" : ""} icn-warning'>${build.iconic("warning")}</a>
 					<a class='badge ${data.star === "1" ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
+					<a class='badge ${data.recent === "1" ? "badge--visible badge--list" : ""}'>${build.iconic("clock")}</a>
 					<a class='badge ${data.public === "1" ? "badge--visible" : ""} ${
 			data.visible === "1" ? "badge--not--hidden" : "badge--hidden"
 		} icn-share'>${build.iconic("eye")}</a>
 					<a class='badge ${data.unsorted === "1" ? "badge--visible" : ""}'>${build.iconic("list")}</a>
-					<a class='badge ${data.recent === "1" ? "badge--visible badge--list" : ""}'>${build.iconic("clock")}</a>
 					<a class='badge ${data.password === "1" ? "badge--visible" : ""}'>${build.iconic("lock-locked")}</a>
 					<a class='badge ${data.tag_album === "1" ? "badge--tag" : ""}'>${build.iconic("tag")}</a>
 					<a class='badge ${isCover ? "badge--cover" : ""} icn-cover'>${build.iconic("folder-cover")}</a>
