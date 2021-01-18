@@ -498,6 +498,9 @@ album.toggleCover = function (photoID) {
 			lychee.error(null, params, data);
 		} else {
 			view.album.content.cover(photoID);
+			if (!album.getParent()) {
+				albums.refresh();
+			}
 		}
 	});
 };
