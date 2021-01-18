@@ -276,6 +276,13 @@ view.album = {
 			else $badge.removeClass("badge--visible badge--hidden");
 		},
 
+		cover: function (photoID) {
+			let $badge = $('.photo[data-id="' + photoID + '"] .icn-cover');
+
+			if (album.json.cover_id === photoID) $badge.addClass("badge--cover");
+			else $badge.removeClass("badge--cover");
+		},
+
 		delete: function (photoID, justify = false) {
 			$('.photo[data-id="' + photoID + '"]')
 				.css("opacity", 0)

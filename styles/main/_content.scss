@@ -234,6 +234,10 @@
 		&--hidden {
 			background: $colorOrange;
 		}
+		&--cover {
+			display: "inline-block";
+			background: $colorOrange;
+		}
 		&--star {
 			display: inline-block;
 			background: $colorYellow;

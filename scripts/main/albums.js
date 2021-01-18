@@ -81,8 +81,18 @@ albums.load = function () {
 albums.parse = function (album) {
 	let i;
 	for (i = 0; i < 3; i++) {
-		if (!album.thumbs[i]) {
-			album.thumbs[i] = album.password === "1" ? "img/password.svg" : "img/no_images.svg";
+		if (lychee.api_V2) {
+			if (!album.thumb) {
+				album.thumb = {};
+				album.thumb.id = "";
+				album.thumb.thumb = album.password === "1" ? "img/password.svg" : "img/no_images.svg";
+				album.thumb.type = "";
+				album.thumb.thumb2x = "";
+			}
+		} else {
+			if (!album.thumbs[i]) {
+				album.thumbs[i] = album.password === "1" ? "img/password.svg" : "img/no_images.svg";
+			}
 		}
 	}
 };

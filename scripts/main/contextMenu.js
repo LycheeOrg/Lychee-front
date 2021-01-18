@@ -67,14 +67,15 @@ contextMenu.album = function (albumID, e) {
 		// not top level
 		myalbum = album.getSubByID(albumID);
 		photoID = myalbum.thumbIDs[0];
-//FINAL
-//		coverActive = (album.json.cover == photoID);
-//TEST
-		coverActive = (album.json.description == ""+photoID);
+		//FINAL
+		//		coverActive = (album.json.cover == photoID);
+		//TEST
+		coverActive = album.json.description == "" + photoID;
 		// prepend context menu item
-		items.unshift(
-			{ title: build.iconic("folder-cover", coverActive ? "active" : "") + lychee.locale[coverActive ? "REMOVE_COVER" : "SET_COVER"], fn: () => album.toggleCover(photoID) }
-			);
+		items.unshift({
+			title: build.iconic("folder-cover", coverActive ? "active" : "") + lychee.locale[coverActive ? "REMOVE_COVER" : "SET_COVER"],
+			fn: () => album.toggleCover(photoID),
+		});
 	}
 
 	$('.album[data-id="' + albumID + '"]').addClass("active");
@@ -223,15 +224,16 @@ contextMenu.albumTitle = function (albumID, e) {
 };
 
 contextMenu.photo = function (photoID, e) {
-// FINAL
-//	coverActive = (photoID == album.json.cover);
-// TEST
-	coverActive = (photoID == album.json.description);
+	let coverActive = photoID === album.json.cover_id;
 
 	let items = [
 		{ title: build.iconic("star") + lychee.locale["STAR"], fn: () => photo.setStar([photoID]) },
 		{ title: build.iconic("tag") + lychee.locale["TAGS"], fn: () => photo.editTags([photoID]) },
-		{ title: build.iconic("folder-cover", coverActive ? "active" : "") + lychee.locale[coverActive ? "REMOVE_COVER" : "SET_COVER"], fn: () => album.toggleCover(photoID) },
+		// for future work, use a list of all the ancestors.
+		{
+			title: build.iconic("folder-cover", coverActive ? "active" : "") + lychee.locale[coverActive ? "REMOVE_COVER" : "SET_COVER"],
+			fn: () => album.toggleCover(photoID),
+		},
 		{},
 		{ title: build.iconic("pencil") + lychee.locale["RENAME"], fn: () => photo.setTitle([photoID]) },
 		{

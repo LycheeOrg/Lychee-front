@@ -485,22 +485,19 @@ album.setDescription = function (albumID) {
 
 album.toggleCover = function (photoID) {
 	if (!photoID) return false;
-// FINAL
-//	album.json.cover = album.json.cover == photoID ? -1 : photoID;
-//	let params = {
-//		albumID: album.json.id,
-//		cover: album.json.cover,
-//	};
-// TEST
-	album.json.description = album.json.description == "" + photoID ? "" : "" + photoID;
+
+	album.json.cover_id = album.json.cover_id === photoID ? "" : photoID;
+
 	let params = {
 		albumID: album.json.id,
-		description: album.json.description,
+		cover_id: album.json.cover_id,
 	};
 
 	api.post("Album::setCover", params, function (data) {
 		if (data !== true) {
 			lychee.error(null, params, data);
+		} else {
+			view.album.content.cover(photoID);
 		}
 	});
 };

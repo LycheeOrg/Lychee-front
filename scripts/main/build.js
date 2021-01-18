@@ -65,9 +65,19 @@ build.multiselect = function (top, left) {
 // two additional images that are barely visible seems a bit overkill - use same image 3 times
 // if this simplification comes to pass data.types, data.thumbs and data.thumbs2x no longer need to be arrays
 build.getAlbumThumb = function (data) {
-	let isVideo = data.types[0] && data.types[0].indexOf("video") > -1;
-	let isRaw = data.types[0] && data.types[0].indexOf("raw") > -1;
-	let thumb = data.thumbs[0];
+	let isVideo;
+	let isRaw;
+	let thumb;
+
+	if (lychee.api_V2) {
+		isVideo = data.thumb.type && data.thumb.type.indexOf("video") > -1;
+		isRaw = data.thumb.type && data.thumb.types.indexOf("raw") > -1;
+		thumb = data.thumb.thumb;
+	} else {
+		isVideo = data.types[0] && data.type.indexOf("video") > -1;
+		isRaw = data.types[0] && data.types[0].indexOf("raw") > -1;
+		thumb = data.thumbs[0];
+	}
 	var thumb2x = "";
 
 	if (thumb === "uploads/thumb/" && isVideo) {
@@ -77,10 +87,8 @@ build.getAlbumThumb = function (data) {
 		return `<span class="thumbimg"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
 	}
 
-	if (data.thumbs2x) {
-		if (data.thumbs2x[0]) {
-			thumb2x = data.thumbs2x[0];
-		}
+	if (lychee.api_V2) {
+		thumb2x = data.thumb.thumb2x;
 	} else {
 		// Fallback code for Lychee v3
 		var { path: thumb2x, isPhoto: isPhoto } = lychee.retinize(data.thumbs[0]);
@@ -159,6 +167,7 @@ build.photo = function (data, disabled = false) {
 	let html = "";
 	let thumbnail = "";
 	var thumb2x = "";
+	let isCover = data.id === album.json.cover_id;
 
 	let isVideo = data.type && data.type.indexOf("video") > -1;
 	let isRaw = data.type && data.type.indexOf("raw") > -1;
@@ -258,8 +267,10 @@ build.photo = function (data, disabled = false) {
 	if (album.isUploadable()) {
 		html += lychee.html`
 				<div class='badges'>
-					<a class='badge ${data.star === "1" ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
-					<a class='badge ${data.public === "1" && album.json.public !== "1" ? "badge--visible badge--hidden" : ""} icn-share'>${build.iconic("eye")}</a>
+				<a class='badge ${isCover ? "badge--cover" : ""} icn-cover'>${build.iconic("folder-cover")}</a>
+				<a class='badge ${data.star === "1" ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
+				<a class='badge ${data.public === "1" && album.json.public !== "1" ? "badge--visible badge--hidden" : ""} icn-share'>${build.iconic("eye")}</a>
+					
 				</div>
 				`;
 	}
