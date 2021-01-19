@@ -338,6 +338,11 @@ album.setShowTags = function (albumID) {
 	let oldShowTags = album.json.show_tags;
 
 	const action = function (data) {
+		if (!data.show_tags.trim()) {
+			basicModal.error("show_tags");
+			return;
+		}
+
 		let show_tags = data.show_tags;
 		basicModal.close();
 
