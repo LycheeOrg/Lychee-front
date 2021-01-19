@@ -823,7 +823,7 @@ photo.setTags = function (photoIDs, tags) {
 		if (data !== true) {
 			lychee.error(null, params, data);
 		} else if (albums.json && albums.json.smartalbums) {
-			$.each(Object.entries(albums.json.smartalbums), function() {
+			$.each(Object.entries(albums.json.smartalbums), function () {
 				if (this.length == 2 && this[1]["tag_album"] === "1") {
 					// If we have any tag albums, force a refresh.
 					albums.refresh();

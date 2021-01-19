@@ -305,7 +305,9 @@ header.setMode = function (mode) {
 					$(".button_add, .header__divider", ".header__toolbar--album").hide();
 					tabindex.makeUnfocusable($(".button_add, .header__divider", ".header__toolbar--album"));
 				}
-				tabindex.makeUnfocusable($("#button_nsfw_album, #button_info_album, #button_trash_album, #button_visibility_album, #button_move_album"));
+				tabindex.makeUnfocusable(
+					$("#button_nsfw_album, #button_info_album, #button_trash_album, #button_visibility_album, #button_move_album")
+				);
 			} else if (albumID === "unsorted") {
 				$("#button_nsfw_album, #button_info_album, #button_visibility_album, #button_move_album").hide();
 				$("#button_trash_album, .button_add, .header__divider", ".header__toolbar--album").show();
