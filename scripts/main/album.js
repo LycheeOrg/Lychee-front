@@ -238,6 +238,11 @@ album.add = function (IDs = null, callback = null) {
 
 		const isNumber = (n) => !isNaN(parseInt(n, 10)) && isFinite(n);
 
+		if (!data.title.trim()) {
+			basicModal.error("title");
+			return;
+		}
+
 		basicModal.close();
 
 		let params = {
@@ -284,6 +289,15 @@ album.add = function (IDs = null, callback = null) {
 
 album.addByTags = function () {
 	const action = function (data) {
+		if (!data.title.trim()) {
+			basicModal.error("title");
+			return;
+		}
+		if (!data.tags.trim()) {
+			basicModal.error("tags");
+			return;
+		}
+
 		basicModal.close();
 
 		let params = {
@@ -382,6 +396,11 @@ album.setTitle = function (albumIDs) {
 	}
 
 	const action = function (data) {
+		if (!data.title.trim()) {
+			basicModal.error("title");
+			return;
+		}
+
 		basicModal.close();
 
 		let newTitle = data.title;

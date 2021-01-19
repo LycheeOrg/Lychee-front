@@ -318,6 +318,15 @@ lychee.login = function (data) {
 	let username = data.username;
 	let password = data.password;
 
+	if (!username.trim()) {
+		basicModal.error("username");
+		return;
+	}
+	if (!password.trim()) {
+		basicModal.error("password");
+		return;
+	}
+
 	let params = {
 		username,
 		password,

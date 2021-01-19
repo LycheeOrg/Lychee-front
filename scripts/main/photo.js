@@ -381,6 +381,11 @@ photo.setTitle = function (photoIDs) {
 	}
 
 	const action = function (data) {
+		if (!data.title.trim()) {
+			basicModal.error("title");
+			return;
+		}
+
 		basicModal.close();
 
 		let newTitle = data.title;

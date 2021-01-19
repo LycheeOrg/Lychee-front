@@ -146,12 +146,12 @@ settings.createLogin = function () {
 		let password = data.password;
 		let confirm = data.confirm;
 
-		if (username.length < 1) {
+		if (!username.trim()) {
 			basicModal.error("username");
 			return false;
 		}
 
-		if (password.length < 1) {
+		if (!password.trim()) {
 			basicModal.error("password");
 			return false;
 		}
