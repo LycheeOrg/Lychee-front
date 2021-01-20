@@ -234,7 +234,7 @@ upload.start = {
 		const action = function (data) {
 			let files = [];
 
-			if (data.link && data.link.length > 3) {
+			if (data.link && data.link.trim().length > 3) {
 				basicModal.close();
 
 				files[0] = {
@@ -300,6 +300,11 @@ upload.start = {
 		if (albumID === false) albumID = 0;
 
 		const action = function (data) {
+			if (!data.path.trim()) {
+				basicModal.error("path");
+				return;
+			}
+
 			let files = [];
 
 			files[0] = {

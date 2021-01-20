@@ -381,6 +381,11 @@ photo.setTitle = function (photoIDs) {
 	}
 
 	const action = function (data) {
+		if (!data.title.trim()) {
+			basicModal.error("title");
+			return;
+		}
+
 		basicModal.close();
 
 		let newTitle = data.title;
@@ -815,7 +820,17 @@ photo.setTags = function (photoIDs, tags) {
 	};
 
 	api.post("Photo::setTags", params, function (data) {
-		if (data !== true) lychee.error(null, params, data);
+		if (data !== true) {
+			lychee.error(null, params, data);
+		} else if (albums.json && albums.json.smartalbums) {
+			$.each(Object.entries(albums.json.smartalbums), function () {
+				if (this.length == 2 && this[1]["tag_album"] === "1") {
+					// If we have any tag albums, force a refresh.
+					albums.refresh();
+					return false;
+				}
+			});
+		}
 	});
 };
 
