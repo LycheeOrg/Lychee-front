@@ -277,15 +277,15 @@ view.album = {
 		},
 
 		cover: function (photoID) {
-			$('.album .icn-cover').removeClass("badge--cover");
-			$('.photo .icn-cover').removeClass("badge--cover");
+			$(".album .icn-cover").removeClass("badge--cover");
+			$(".photo .icn-cover").removeClass("badge--cover");
 
 			if (album.json.cover_id === photoID) {
 				let badge = $('.photo[data-id="' + photoID + '"] .icn-cover');
 				if (badge.length > 0) {
 					badge.addClass("badge--cover");
 				} else {
-					$.each(album.json.albums, function() {
+					$.each(album.json.albums, function () {
 						if (this.thumb.id === photoID) {
 							$('.album[data-id="' + this.id + '"] .icn-cover').addClass("badge--cover");
 							return false;
