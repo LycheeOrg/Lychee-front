@@ -32,10 +32,22 @@ build.multiselect = function (top, left) {
 	return lychee.html`<div id='multiselect' style='top: ${top}px; left: ${left}px;'></div>`;
 };
 
-build.getAlbumThumb = function (data, i) {
-	let isVideo = data.types[i] && data.types[i].indexOf("video") > -1;
-	let isRaw = data.types[i] && data.types[i].indexOf("raw") > -1;
-	let thumb = data.thumbs[i];
+// two additional images that are barely visible seems a bit overkill - use same image 3 times
+// if this simplification comes to pass data.types, data.thumbs and data.thumbs2x no longer need to be arrays
+build.getAlbumThumb = function (data) {
+	let isVideo;
+	let isRaw;
+	let thumb;
+
+	if (lychee.api_V2) {
+		isVideo = data.thumb.type && data.thumb.type.indexOf("video") > -1;
+		isRaw = data.thumb.type && data.thumb.type.indexOf("raw") > -1;
+		thumb = data.thumb.thumb;
+	} else {
+		isVideo = data.types[0] && data.type.indexOf("video") > -1;
+		isRaw = data.types[0] && data.types[0].indexOf("raw") > -1;
+		thumb = data.thumbs[0];
+	}
 	var thumb2x = "";
 
 	if (thumb === "uploads/thumb/" && isVideo) {
@@ -45,13 +57,11 @@ build.getAlbumThumb = function (data, i) {
 		return `<span class="thumbimg"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
 	}
 
-	if (data.thumbs2x) {
-		if (data.thumbs2x[i]) {
-			thumb2x = data.thumbs2x[i];
-		}
+	if (lychee.api_V2) {
+		thumb2x = data.thumb.thumb2x;
 	} else {
 		// Fallback code for Lychee v3
-		var { path: thumb2x, isPhoto: isPhoto } = lychee.retinize(data.thumbs[i]);
+		var { path: thumb2x, isPhoto: isPhoto } = lychee.retinize(data.thumbs[0]);
 		if (!isPhoto) {
 			thumb2x = "";
 		}
@@ -66,6 +76,7 @@ build.album = function (data, disabled = false) {
 	let html = "";
 	let date_stamp = data.sysdate;
 	let sortingAlbums = [];
+	let isCover = (album.json && album.json.cover_id && data.thumb.id === album.json.cover_id);
 
 	// In the special case of take date sorting use the take stamps as title
 	if (lychee.sortingAlbums !== "" && data.min_takestamp && data.max_takestamp) {
@@ -86,9 +97,9 @@ build.album = function (data, disabled = false) {
 				data-id='${data.id}'
 				data-nsfw='${data.nsfw && data.nsfw === "1" ? `1` : `0`}'
 				data-tabindex='${tabindex.get_next_tab_index()}'>
-				  ${build.getAlbumThumb(data, 2)}
-				  ${build.getAlbumThumb(data, 1)}
-				  ${build.getAlbumThumb(data, 0)}
+				  ${build.getAlbumThumb(data)}
+				  ${build.getAlbumThumb(data)}
+				  ${build.getAlbumThumb(data)}
 				<div class='overlay'>
 					<h1 title='$${data.title}'>$${data.title}</h1>
 					<a>$${date_stamp}</a>
@@ -100,13 +111,14 @@ build.album = function (data, disabled = false) {
 				<div class='badges'>
 					<a class='badge ${data.nsfw === "1" ? "badge--nsfw" : ""} icn-warning'>${build.iconic("warning")}</a>
 					<a class='badge ${data.star === "1" ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
+					<a class='badge ${data.recent === "1" ? "badge--visible badge--list" : ""}'>${build.iconic("clock")}</a>
 					<a class='badge ${data.public === "1" ? "badge--visible" : ""} ${
 			data.visible === "1" ? "badge--not--hidden" : "badge--hidden"
 		} icn-share'>${build.iconic("eye")}</a>
 					<a class='badge ${data.unsorted === "1" ? "badge--visible" : ""}'>${build.iconic("list")}</a>
-					<a class='badge ${data.recent === "1" ? "badge--visible badge--list" : ""}'>${build.iconic("clock")}</a>
 					<a class='badge ${data.password === "1" ? "badge--visible" : ""}'>${build.iconic("lock-locked")}</a>
 					<a class='badge ${data.tag_album === "1" ? "badge--tag" : ""}'>${build.iconic("tag")}</a>
+					<a class='badge ${isCover ? "badge--cover" : ""} icn-cover'>${build.iconic("folder-cover")}</a>
 				</div>
 				`;
 	}
@@ -127,6 +139,7 @@ build.photo = function (data, disabled = false) {
 	let html = "";
 	let thumbnail = "";
 	var thumb2x = "";
+	let isCover = (data.id === album.json.cover_id);
 
 	let isVideo = data.type && data.type.indexOf("video") > -1;
 	let isRaw = data.type && data.type.indexOf("raw") > -1;
@@ -226,8 +239,9 @@ build.photo = function (data, disabled = false) {
 	if (album.isUploadable()) {
 		html += lychee.html`
 				<div class='badges'>
-					<a class='badge ${data.star === "1" ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
-					<a class='badge ${data.public === "1" && album.json.public !== "1" ? "badge--visible badge--hidden" : ""} icn-share'>${build.iconic("eye")}</a>
+				<a class='badge ${data.star === "1" ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
+				<a class='badge ${data.public === "1" && album.json.public !== "1" ? "badge--visible badge--hidden" : ""} icn-share'>${build.iconic("eye")}</a>
+				<a class='badge ${isCover ? "badge--cover" : ""} icn-cover'>${build.iconic("folder-cover")}</a>
 				</div>
 				`;
 	}

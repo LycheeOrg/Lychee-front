@@ -20,6 +20,10 @@
 		fill: white(1);
 	}
 
+	&__data .iconic.active {
+		fill: $colorOrange;
+	}
+
 	&__data .iconic.ionicons {
 		margin: 0 8px -2px 0;
 		width: 14px;

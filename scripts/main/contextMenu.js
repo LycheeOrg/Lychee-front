@@ -63,6 +63,19 @@ contextMenu.album = function (albumID, e) {
 		{ title: build.iconic("cloud-download") + lychee.locale["DOWNLOAD"], fn: () => album.getArchive([albumID]) },
 	];
 
+	if (album.json) {
+		// not top level
+		let myalbum = album.getSubByID(albumID);
+		if (myalbum.thumb.id) {
+			let coverActive = (myalbum.thumb.id === album.json.cover_id);
+			// prepend context menu item
+			items.unshift({
+				title: build.iconic("folder-cover", coverActive ? "active" : "") + lychee.locale[coverActive ? "REMOVE_COVER" : "SET_COVER"],
+				fn: () => album.toggleCover(myalbum.thumb.id),
+			});
+		}
+	}
+
 	$('.album[data-id="' + albumID + '"]').addClass("active");
 
 	basicContext.show(items, e.originalEvent, contextMenu.close);
@@ -209,13 +222,16 @@ contextMenu.albumTitle = function (albumID, e) {
 };
 
 contextMenu.photo = function (photoID, e) {
-	// Notice for 'Move':
-	// fn must call basicContext.close() first,
-	// in order to keep the selection
+	let coverActive = (photoID === album.json.cover_id);
 
 	let items = [
 		{ title: build.iconic("star") + lychee.locale["STAR"], fn: () => photo.setStar([photoID]) },
 		{ title: build.iconic("tag") + lychee.locale["TAGS"], fn: () => photo.editTags([photoID]) },
+		// for future work, use a list of all the ancestors.
+		{
+			title: build.iconic("folder-cover", coverActive ? "active" : "") + lychee.locale[coverActive ? "REMOVE_COVER" : "SET_COVER"],
+			fn: () => album.toggleCover(photoID),
+		},
 		{},
 		{ title: build.iconic("pencil") + lychee.locale["RENAME"], fn: () => photo.setTitle([photoID]) },
 		{
@@ -225,6 +241,9 @@ contextMenu.photo = function (photoID, e) {
 				contextMenu.move([photoID], e, photo.copyTo, "UNSORTED");
 			},
 		},
+		// Notice for 'Move':
+		// fn must call basicContext.close() first,
+		// in order to keep the selection
 		{
 			title: build.iconic("folder") + lychee.locale["MOVE"],
 			fn: () => {

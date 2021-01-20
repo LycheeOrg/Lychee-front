@@ -507,6 +507,28 @@ album.setDescription = function (albumID) {
 	});
 };
 
+album.toggleCover = function (photoID) {
+	if (!photoID) return false;
+
+	album.json.cover_id = album.json.cover_id === photoID ? "" : photoID;
+
+	let params = {
+		albumID: album.json.id,
+		photoID: album.json.cover_id,
+	};
+
+	api.post("Album::setCover", params, function (data) {
+		if (data !== true) {
+			lychee.error(null, params, data);
+		} else {
+			view.album.content.cover(photoID);
+			if (!album.getParent()) {
+				albums.refresh();
+			}
+		}
+	});
+};
+
 album.setLicense = function (albumID) {
 	const callback = function () {
 		$("select#license").val(album.json.license === "" ? "none" : album.json.license);
