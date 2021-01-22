@@ -81,14 +81,12 @@ build.album = function (data, disabled = false) {
 	// In the special case of take date sorting use the take stamps as title
 	if (lychee.sortingAlbums !== "" && data.min_takestamp && data.max_takestamp) {
 		sortingAlbums = lychee.sortingAlbums.replace("ORDER BY ", "").split(" ");
-		if (sortingAlbums[0] === "max_takestamp" || sortingAlbums[0] === "min_takestamp") {
-			if (data.min_takestamp !== "" && data.max_takestamp !== "") {
-				date_stamp = data.min_takestamp === data.max_takestamp ? data.max_takestamp : data.min_takestamp + " - " + data.max_takestamp;
-			} else if (data.min_takestamp !== "" && sortingAlbums[0] === "min_takestamp") {
-				date_stamp = data.min_takestamp;
-			} else if (data.max_takestamp !== "" && sortingAlbums[0] === "max_takestamp") {
-				date_stamp = data.max_takestamp;
-			}
+		if (data.min_takestamp !== "" && data.max_takestamp !== "") {
+			date_stamp = data.min_takestamp === data.max_takestamp ? data.max_takestamp : data.min_takestamp + " - " + data.max_takestamp;
+		} else if (data.min_takestamp !== "" && sortingAlbums[0] === "min_takestamp") {
+			date_stamp = data.min_takestamp;
+		} else if (data.max_takestamp !== "" && sortingAlbums[0] === "max_takestamp") {
+			date_stamp = data.max_takestamp;
 		}
 	}
 
@@ -252,36 +250,49 @@ build.photo = function (data, disabled = false) {
 };
 
 build.overlay_image = function (data) {
-	let exifHash = data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
-
 	// Get the stored setting for the overlay_image
 	let type = lychee.image_overlay_type;
-	let html = ``;
+	let html = lychee.html`
+				<div id="image_overlay">
+				<h1>$${data.title}</h1>
+				`;
+	if( data.takedate && data.takedate !== '') html += `<p>${data.takedate}</p>
+				`;
+	else html += `<p>${data.sysdate}</p>
+				`;
 
 	if (type && type === "desc" && data.description !== "") {
-		html = lychee.html`
-					<div id="image_overlay">
-						<h1>$${data.title}</h1>
-						<p>$${data.description}</p>
-					</div>
+		html += `<p>$${data.description}</p>
 				`;
 	} else if (type && type === "takedate" && data.takedate !== "") {
-		html = lychee.html`
-			<div id="image_overlay">
-				<h1>$${data.title}</h1>
-				<p>${data.takedate}</p>
-			</div>
+		html += `<p>$${data.takedate}</p>
 		`;
 	}
 	// fall back to exif data if there is no description
-	else if (exifHash !== "") {
-		html += lychee.html`
-			<div id="image_overlay"><h1>$${data.title}</h1>
-			<p>${data.shutter.replace("s", "sec")} at ${data.aperture.replace("f/", "&fnof; / ")}, ${lychee.locale["PHOTO_ISO"]} ${data.iso}<br>
-			${data.focal} ${data.lens && data.lens !== "" ? "(" + data.lens + ")" : ""}</p>
-			</div>
-		`;
-	}
+	else {
+		let exifHash = data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
+		if (exifHash !== "") {
+			let takedata = ``;
+			if (data.shutter && data.shutter !== "" ) takedata = data.shutter.replace("s", "sec");
+			if (data.aperture && data.aperture !== "") {
+				if (takedata !== "") takedata += " at ";
+				takedata += data.aperture.replace("f/", "&fnof; / ");
+			}
+			if (data.iso && data.iso !== "") {
+				if (takedata !== "") takedata += ", ";
+					takedata += lychee.locale["PHOTO_ISO"] + " " + data.iso;
+				}
+				if (data.focal && data.focal !== "") {
+					if (takedata !== "") takedata += "<br>";
+					takedata += data.lens && data.lens !== "" ? "(" + data.lens + ")" : "";
+				}
+				if (takedata !== "") html += `
+					<p>${takedata}</p>
+					`;
+			}
+        }
+       html += `</div>
+			`;
 
 	return html;
 };
