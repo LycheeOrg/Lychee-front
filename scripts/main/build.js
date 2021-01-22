@@ -256,9 +256,11 @@ build.overlay_image = function (data) {
 				<div id="image_overlay">
 				<h1>$${data.title}</h1>
 				`;
-	if( data.takedate && data.takedate !== '') html += `<p>${data.takedate}</p>
+	if (data.takedate && data.takedate !== "")
+		html += `<p>${data.takedate}</p>
 				`;
-	else html += `<p>${data.sysdate}</p>
+	else
+		html += `<p>${data.sysdate}</p>
 				`;
 
 	if (type && type === "desc" && data.description !== "") {
@@ -273,25 +275,26 @@ build.overlay_image = function (data) {
 		let exifHash = data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
 		if (exifHash !== "") {
 			let takedata = ``;
-			if (data.shutter && data.shutter !== "" ) takedata = data.shutter.replace("s", "sec");
+			if (data.shutter && data.shutter !== "") takedata = data.shutter.replace("s", "sec");
 			if (data.aperture && data.aperture !== "") {
 				if (takedata !== "") takedata += " at ";
 				takedata += data.aperture.replace("f/", "&fnof; / ");
 			}
 			if (data.iso && data.iso !== "") {
 				if (takedata !== "") takedata += ", ";
-					takedata += lychee.locale["PHOTO_ISO"] + " " + data.iso;
-				}
-				if (data.focal && data.focal !== "") {
-					if (takedata !== "") takedata += "<br>";
-					takedata += data.lens && data.lens !== "" ? "(" + data.lens + ")" : "";
-				}
-				if (takedata !== "") html += `
+				takedata += lychee.locale["PHOTO_ISO"] + " " + data.iso;
+			}
+			if (data.focal && data.focal !== "") {
+				if (takedata !== "") takedata += "<br>";
+				takedata += data.lens && data.lens !== "" ? "(" + data.lens + ")" : "";
+			}
+			if (takedata !== "")
+				html += `
 					<p>${takedata}</p>
 					`;
-			}
-        }
-       html += `</div>
+		}
+	}
+	html += `</div>
 			`;
 
 	return html;
