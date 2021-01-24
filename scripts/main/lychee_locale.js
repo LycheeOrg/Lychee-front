@@ -49,7 +49,10 @@ lychee.locale = {
 	DELETE_ALBUM: "Delete Album",
 	FULLSCREEN_ENTER: "Enter Fullscreen",
 	FULLSCREEN_EXIT: "Exit Fullscreen",
+
 	SHARING_ALBUM_USERS: "Share this album with users",
+	WAIT_FETCH_DATA: "Please wait while we get the data.",
+	SHARING_ALBUM_USERS_NO_USERS: "There's no user to share the album with.",
 
 	DELETE_ALBUM_QUESTION: "Delete Album and Photos",
 	KEEP_ALBUM: "Keep Album",

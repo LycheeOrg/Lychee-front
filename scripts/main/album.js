@@ -940,19 +940,26 @@ album.setPublic = function (albumID, e) {
 album.shareUsers = function (albumID, e) {
 
 	if (!basicModal.visible()) {
-		let msg = `<form id="sharing_people_form"></form>`
+		let msg = `<form id="sharing_people_form">
+			<p>${lychee.locale["WAIT_FETCH_DATA"]}</p>
+		</form>`
 
 		api.post("User::List", {}, (users) => {
-			$.each(users, (_, user) => {
-				$("#sharing_people_form").append(`<div class='choice'>
-					<label>
-						<input type='checkbox' name='${user.id}'>
-						<span class='checkbox'>${build.iconic("check")}</span>
-						<span class='label'>${user.username}</span>
-					</label>
-					<p></p>
-				</div>`)
-			});
+			$("#sharing_people_form").empty()
+			if (users !== {}) {
+				$.each(users, (_, user) => {
+					$("#sharing_people_form").append(`<div class='choice'>
+						<label>
+							<input type='checkbox' name='${user.id}'>
+							<span class='checkbox'>${build.iconic("check")}</span>
+							<span class='label'>${user.username}</span>
+						</label>
+						<p></p>
+					</div>`)
+				});
+			} else {
+				$("#sharing_people_form").append(`<p>${lychee.locale["SHARING_ALBUM_USERS_NO_USERS"]}</p>`)
+			}
 		});
 
 		basicModal.show({
