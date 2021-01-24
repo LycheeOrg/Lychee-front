@@ -47,6 +47,8 @@ let lychee = {
 	nsfw_blur: false,
 	nsfw_warning: false,
 
+	album_subtitle_type: "oldstyle",
+
 	// this is device specific config, in this case default is Desktop.
 	header_auto_hide: true,
 	active_focus_on_page_load: false,
@@ -186,6 +188,7 @@ lychee.init = function () {
 
 			lychee.sortingPhotos = data.config.sorting_Photos || data.config.sortingPhotos || "";
 			lychee.sortingAlbums = data.config.sorting_Albums || data.config.sortingAlbums || "";
+			lychee.album_subtitle_type = data.config.album_subtitle_type || "";
 			lychee.dropboxKey = data.config.dropbox_key || data.config.dropboxKey || "";
 			lychee.location = data.config.location || "";
 			lychee.checkForUpdates = data.config.check_for_updates || data.config.checkForUpdates || "1";
