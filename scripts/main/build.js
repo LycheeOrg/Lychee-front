@@ -74,6 +74,7 @@ build.getAlbumThumb = function (data) {
 
 build.album = function (data, disabled = false) {
 	let sortingAlbums = [];
+	let subtitle = data.sysdate;
 
 	// check setting album_subtitle_type:
 	// takedate: date range (min/max_takedate from EXIF; if missing defaults to creation)
@@ -91,12 +92,11 @@ build.album = function (data, disabled = false) {
 				subtitle = `<span title='Camera Date'>${build.iconic("camera-slr")}</span>${subtitle}`;
 				break;
 			}
+		// fall through
 		case "creation":
-			subtitle = data.sysdate;
 			break;
 		case "oldstyle":
 		default:
-			subtitle = data.sysdate;
 			if (lychee.sortingAlbums !== "" && data.min_takestamp && data.max_takestamp) {
 				sortingAlbums = lychee.sortingAlbums.replace("ORDER BY ", "").split(" ");
 				if (sortingAlbums[0] === "max_takestamp" || sortingAlbums[0] === "min_takestamp") {
@@ -126,7 +126,7 @@ build.album = function (data, disabled = false) {
 			`;
 
 	if (album.isUploadable() && !disabled) {
-		isCover = album.json && album.json.cover_id && data.thumb.id === album.json.cover_id;
+		let isCover = album.json && album.json.cover_id && data.thumb.id === album.json.cover_id;
 		html += lychee.html`
 				<div class='badges'>
 					<a class='badge ${data.nsfw === "1" ? "badge--nsfw" : ""} icn-warning'>${build.iconic("warning")}</a>
@@ -276,11 +276,11 @@ build.check_overlay_type = function (data, overlay_type, next = false) {
 	let idx = types.indexOf(overlay_type);
 	if (idx < 0) return "none";
 	if (next) idx++;
-	for (i = 0; i < types.length; i++) {
+	for (let i = 0; i < types.length; i++) {
 		let type = types[(idx + i) % types.length];
 		switch (type) {
 			case "desc":
-				if (data.description && data.description != "") return type;
+				if (data.description && data.description !== "") return type;
 				continue;
 			case "date":
 				return type;
@@ -293,6 +293,8 @@ build.check_overlay_type = function (data, overlay_type, next = false) {
 				return "none";
 		}
 	}
+	// effectively unreachable
+	return "none";
 };
 
 build.overlay_image = function (data) {

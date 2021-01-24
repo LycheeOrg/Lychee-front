@@ -104,7 +104,7 @@ photo.update_overlay_type = function () {
 
 	let oldtype = build.check_overlay_type(photo.json, lychee.image_overlay_type);
 	let newtype = build.check_overlay_type(photo.json, oldtype, true);
-	if (oldtype != newtype) {
+	if (oldtype !== newtype) {
 		lychee.image_overlay_type = newtype;
 		$("#image_overlay").remove();
 		lychee.imageview.append(build.overlay_image(photo.json));
