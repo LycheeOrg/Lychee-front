@@ -146,6 +146,10 @@
 		width: 100%;
 		color: #fff;
 
+		&:first-child {
+			padding-top: 42px;
+		}
+
 		&:last-child {
 			padding-bottom: 40px;
 		}
