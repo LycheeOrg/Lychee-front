@@ -937,6 +937,44 @@ album.setPublic = function (albumID, e) {
 	});
 };
 
+album.shareUsers = function (albumID, e) {
+
+	if (!basicModal.visible()) {
+		let msg = `<form id="sharing_people_form"></form>`
+
+		api.post("User::List", {}, (users) => {
+			$.each(users, (_, user) => {
+				$("#sharing_people_form").append(`<div class='choice'>
+					<label>
+						<input type='checkbox' name='${user.id}'>
+						<span class='checkbox'>${build.iconic("check")}</span>
+						<span class='label'>${user.username}</span>
+					</label>
+					<p></p>
+				</div>`)
+			});
+		});
+
+		basicModal.show({
+			body: msg,
+			buttons: {
+				action: {
+					title: lychee.locale["ALBUM_SHARING_CONFIRM"],
+					fn: (data) => {
+						console.log(data);
+					},
+				},
+				cancel: {
+					title: lychee.locale["CANCEL"],
+					fn: basicModal.close,
+				},
+			},
+		});
+		return true;
+	}
+
+};
+
 album.setNSFW = function (albumID, e) {
 	album.json.nsfw = album.json.nsfw === "0" ? "1" : "0";
 
