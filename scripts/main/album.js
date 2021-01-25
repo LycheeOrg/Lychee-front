@@ -1224,6 +1224,34 @@ album.isUploadable = function () {
 	return album.json.owner === lychee.username;
 };
 
+album.updatePhoto = function (data) {
+	if (album.json) {
+		$.each(album.json.photos, function () {
+			if (this.id == data.id) {
+				this.width = data.width;
+				this.height = data.height;
+				this.small = data.small;
+				this.small_dim = data.small_dim;
+				this.small2x = data.small2x;
+				this.small2x_dim = data.small2x_dim;
+				this.medium = data.medium;
+				this.medium_dim = data.medium_dim;
+				this.medium2x = data.medium2x;
+				this.medium2x_dim = data.medium2x_dim;
+				this.thumbUrl = data.thumbUrl;
+				this.thumb2x = data.thumb2x;
+				this.url = data.url;
+				this.size = data.size;
+
+				view.album.content.updatePhoto(this);
+				albums.refresh();
+
+				return false;
+			}
+		});
+	}
+};
+
 album.reload = function () {
 	let albumID = album.getID();
 
