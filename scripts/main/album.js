@@ -957,6 +957,14 @@ album.shareUsers = function (albumID, e) {
 						<p></p>
 					</div>`)
 				});
+				api.post("Sharing::List", {}, (data) => {
+					if (data !== undefined && data.shared !== []) {
+						var sharingOfAlbum = data.shared.filter(val => val.album_id == albumID)
+						sharingOfAlbum.forEach(sharing => {
+							$(`.basicModal .choice input[name="${sharing.user_id}"]`).prop('checked', true);
+						})
+					}
+				});
 			} else {
 				$("#sharing_people_form").append(`<p>${lychee.locale["SHARING_ALBUM_USERS_NO_USERS"]}</p>`)
 			}
