@@ -939,6 +939,31 @@ album.setPublic = function (albumID, e) {
 
 album.shareUsers = function (albumID, e) {
 
+	var addShare = function(listIds) {
+		var params = {
+			albumIDs: albumID,
+			UserIDs: listIds.join(','),
+		}
+		api.post("Sharing::Add", params, data => {
+			if (data !== true) {
+				loadingBar.show("error", data.description);
+				lychee.error(null, params, data);
+			} else {
+				loadingBar.show("success", "Sharing updated!");
+			}
+		});
+	}
+
+	var removeShare = function(listIds) {
+		var params = {ShareIDs: listIds.join(',')}
+		api.post("Sharing::Delete", params, function (data) {
+			if (data !== true) {
+				loadingBar.show("error", data.description);
+				lychee.error(null, params, data);
+			}
+		});
+	}
+
 	if (!basicModal.visible()) {
 		let msg = `<form id="sharing_people_form">
 			<p>${lychee.locale["WAIT_FETCH_DATA"]}</p>
@@ -976,7 +1001,7 @@ album.shareUsers = function (albumID, e) {
 				action: {
 					title: lychee.locale["ALBUM_SHARING_CONFIRM"],
 					fn: (data) => {
-						console.log(data);
+						album.shareUsers(albumID, e);
 					},
 				},
 				cancel: {
@@ -987,6 +1012,55 @@ album.shareUsers = function (albumID, e) {
 		});
 		return true;
 	}
+
+	var usersToShare = []
+	var usersNotToShare = []
+	$(".basicModal .choice input").each((_, input) => {
+		if ($(input).is(':checked')) {
+			usersToShare.push(parseInt(input.name, 10));
+		} else {
+			usersNotToShare.push(parseInt(input.name, 10));
+		}
+	});
+
+	api.post("Sharing::List", {}, (data) => {
+		var sharingToAdd = [];
+		var sharingToDelete = [];
+		if (data !== undefined && data.shared !== []) {
+			// No need to use everything: we need only the ids of the users with
+			// whom this album is already shared with, and the id of the share.
+			var sharingList = new Map(data.shared.filter(val => val.album_id == albumID).map(val => [val.user_id, val.id]));
+			var usersInSharingList = Array.from(sharingList.keys());
+			usersToShare.forEach(userId => {
+				if (!usersInSharingList.includes(userId)) {
+					// We want to share this album with this user who doesn't
+					// already have it -> add a new share for this user
+					sharingToAdd.push(userId);
+				}
+			});
+			usersNotToShare.forEach(userId => {
+				if (usersInSharingList.includes(userId)) {
+					// We don't want to share this album with this user but he
+					// already has it -> delete the share
+					sharingToDelete.push(sharingList.get(userId));
+				}
+			});
+
+		} else {
+			// There's not a single share created yet
+			sharingToAdd = usersToShare;
+		}
+		basicModal.close();
+
+		if (sharingToDelete.length > 0) {
+			removeShare(sharingToDelete);
+		}
+		if (sharingToAdd.length > 0) {
+			addShare(sharingToAdd);
+		}
+	});
+
+	return true;
 
 };
 
