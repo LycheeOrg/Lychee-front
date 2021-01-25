@@ -938,13 +938,12 @@ album.setPublic = function (albumID, e) {
 };
 
 album.shareUsers = function (albumID, e) {
-
-	var addShare = function(listIds) {
+	var addShare = function (listIds) {
 		var params = {
 			albumIDs: albumID,
-			UserIDs: listIds.join(','),
-		}
-		api.post("Sharing::Add", params, data => {
+			UserIDs: listIds.join(","),
+		};
+		api.post("Sharing::Add", params, (data) => {
 			if (data !== true) {
 				loadingBar.show("error", data.description);
 				lychee.error(null, params, data);
@@ -952,25 +951,25 @@ album.shareUsers = function (albumID, e) {
 				loadingBar.show("success", "Sharing updated!");
 			}
 		});
-	}
+	};
 
-	var removeShare = function(listIds) {
-		var params = {ShareIDs: listIds.join(',')}
+	var removeShare = function (listIds) {
+		var params = { ShareIDs: listIds.join(",") };
 		api.post("Sharing::Delete", params, function (data) {
 			if (data !== true) {
 				loadingBar.show("error", data.description);
 				lychee.error(null, params, data);
 			}
 		});
-	}
+	};
 
 	if (!basicModal.visible()) {
 		let msg = `<form id="sharing_people_form">
 			<p>${lychee.locale["WAIT_FETCH_DATA"]}</p>
-		</form>`
+		</form>`;
 
 		api.post("User::List", {}, (users) => {
-			$("#sharing_people_form").empty()
+			$("#sharing_people_form").empty();
 			if (users !== {}) {
 				$("#sharing_people_form").append(`<p>${lychee.locale["SHARING_ALBUM_USERS_LONG_MESSAGE"]}</p>`);
 				$.each(users, (_, user) => {
@@ -981,18 +980,18 @@ album.shareUsers = function (albumID, e) {
 							<span class='label'>${user.username}</span>
 						</label>
 						<p></p>
-					</div>`)
+					</div>`);
 				});
 				api.post("Sharing::List", {}, (data) => {
 					if (data !== undefined && data.shared !== []) {
-						var sharingOfAlbum = data.shared.filter(val => val.album_id == albumID)
-						sharingOfAlbum.forEach(sharing => {
-							$(`.basicModal .choice input[name="${sharing.user_id}"]`).prop('checked', true);
-						})
+						var sharingOfAlbum = data.shared.filter((val) => val.album_id == albumID);
+						sharingOfAlbum.forEach((sharing) => {
+							$(`.basicModal .choice input[name="${sharing.user_id}"]`).prop("checked", true);
+						});
 					}
 				});
 			} else {
-				$("#sharing_people_form").append(`<p>${lychee.locale["SHARING_ALBUM_USERS_NO_USERS"]}</p>`)
+				$("#sharing_people_form").append(`<p>${lychee.locale["SHARING_ALBUM_USERS_NO_USERS"]}</p>`);
 			}
 		});
 
@@ -1014,10 +1013,10 @@ album.shareUsers = function (albumID, e) {
 		return true;
 	}
 
-	var usersToShare = []
-	var usersNotToShare = []
+	var usersToShare = [];
+	var usersNotToShare = [];
 	$(".basicModal .choice input").each((_, input) => {
-		if ($(input).is(':checked')) {
+		if ($(input).is(":checked")) {
 			usersToShare.push(parseInt(input.name, 10));
 		} else {
 			usersNotToShare.push(parseInt(input.name, 10));
@@ -1030,23 +1029,22 @@ album.shareUsers = function (albumID, e) {
 		if (data !== undefined && data.shared !== []) {
 			// No need to use everything: we need only the ids of the users with
 			// whom this album is already shared with, and the id of the share.
-			var sharingList = new Map(data.shared.filter(val => val.album_id == albumID).map(val => [val.user_id, val.id]));
+			var sharingList = new Map(data.shared.filter((val) => val.album_id == albumID).map((val) => [val.user_id, val.id]));
 			var usersInSharingList = Array.from(sharingList.keys());
-			usersToShare.forEach(userId => {
+			usersToShare.forEach((userId) => {
 				if (!usersInSharingList.includes(userId)) {
 					// We want to share this album with this user who doesn't
 					// already have it -> add a new share for this user
 					sharingToAdd.push(userId);
 				}
 			});
-			usersNotToShare.forEach(userId => {
+			usersNotToShare.forEach((userId) => {
 				if (usersInSharingList.includes(userId)) {
 					// We don't want to share this album with this user but he
 					// already has it -> delete the share
 					sharingToDelete.push(sharingList.get(userId));
 				}
 			});
-
 		} else {
 			// There's not a single share created yet
 			sharingToAdd = usersToShare;
@@ -1062,7 +1060,6 @@ album.shareUsers = function (albumID, e) {
 	});
 
 	return true;
-
 };
 
 album.setNSFW = function (albumID, e) {
