@@ -51,6 +51,7 @@ lychee.locale = {
 	FULLSCREEN_EXIT: "Exit Fullscreen",
 
 	SHARING_ALBUM_USERS: "Share this album with users",
+	SHARING_ALBUM_USERS_LONG_MESSAGE: "Select the users to share this album with them",
 	WAIT_FETCH_DATA: "Please wait while we get the data.",
 	SHARING_ALBUM_USERS_NO_USERS: "There's no user to share the album with.",
 

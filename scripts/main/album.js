@@ -972,6 +972,7 @@ album.shareUsers = function (albumID, e) {
 		api.post("User::List", {}, (users) => {
 			$("#sharing_people_form").empty()
 			if (users !== {}) {
+				$("#sharing_people_form").append(`<p>${lychee.locale["SHARING_ALBUM_USERS_LONG_MESSAGE"]}</p>`);
 				$.each(users, (_, user) => {
 					$("#sharing_people_form").append(`<div class='choice'>
 						<label>
