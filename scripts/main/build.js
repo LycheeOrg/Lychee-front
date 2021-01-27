@@ -276,25 +276,14 @@ build.check_overlay_type = function (data, overlay_type, next = false) {
 	let idx = types.indexOf(overlay_type);
 	if (idx < 0) return "none";
 	if (next) idx++;
+	let exifHash = data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
+
 	for (let i = 0; i < types.length; i++) {
 		let type = types[(idx + i) % types.length];
-		switch (type) {
-			case "desc":
-				if (data.description && data.description !== "") return type;
-				continue;
-			case "date":
-				return type;
-			case "exif":
-				let exifHash = data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
-				if (exifHash !== "") return type;
-				continue;
-			default:
-				// should not happen
-				return "none";
-		}
+		if (type === "desc" && data.description && data.description !== "") return type;
+		if (type === "date") return type;
+		if (type === "exif" && exifHash !== "") return type;
 	}
-	// effectively unreachable
-	return "none";
 };
 
 build.overlay_image = function (data) {
@@ -328,6 +317,7 @@ build.overlay_image = function (data) {
 			break;
 		default:
 	}
+
 	return (
 		lychee.html`
 		<div id="image_overlay">
