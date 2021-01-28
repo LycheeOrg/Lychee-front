@@ -73,7 +73,6 @@ build.getAlbumThumb = function (data) {
 };
 
 build.album = function (data, disabled = false) {
-	let sortingAlbums = [];
 	let subtitle = data.sysdate;
 
 	// check setting album_subtitle_type:
@@ -98,7 +97,7 @@ build.album = function (data, disabled = false) {
 		case "oldstyle":
 		default:
 			if (lychee.sortingAlbums !== "" && data.min_takestamp && data.max_takestamp) {
-				sortingAlbums = lychee.sortingAlbums.replace("ORDER BY ", "").split(" ");
+				let sortingAlbums = lychee.sortingAlbums.replace("ORDER BY ", "").split(" ");
 				if (sortingAlbums[0] === "max_takestamp" || sortingAlbums[0] === "min_takestamp") {
 					if (data.min_takestamp !== "" && data.max_takestamp !== "") {
 						subtitle = data.min_takestamp === data.max_takestamp ? data.max_takestamp : data.min_takestamp + " - " + data.max_takestamp;
@@ -276,7 +275,7 @@ build.check_overlay_type = function (data, overlay_type, next = false) {
 	let idx = types.indexOf(overlay_type);
 	if (idx < 0) return "none";
 	if (next) idx++;
-	let exifHash = data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
+	let exifHash = data.make + data.model + data.shutter + data.iso + (data.type.indexOf("video") !== 0 ? data.aperture + data.focal : "");
 
 	for (let i = 0; i < types.length; i++) {
 		let type = types[(idx + i) % types.length];
@@ -311,7 +310,7 @@ build.overlay_image = function (data) {
 				}
 				if (data.focal && data.focal !== "") {
 					if (overlay !== "") overlay += "<br>";
-					overlay += data.focal + (data.lens && data.lens !== "" ? "(" + data.lens + ")" : "");
+					overlay += data.focal + (data.lens && data.lens !== "" ? " (" + data.lens + ")" : "");
 				}
 			}
 			break;
@@ -392,9 +391,9 @@ build.imageview = function (data, visibleControls, autoplay) {
 		}
 
 		html += lychee.html`${img}`;
-
-		if (lychee.image_overlay) html += build.overlay_image(data);
 	}
+
+	if (lychee.image_overlay) html += build.overlay_image(data);
 
 	html += `
 			<div class='arrow_wrapper arrow_wrapper--previous'><a id='previous'>${build.iconic("caret-left")}</a></div>
