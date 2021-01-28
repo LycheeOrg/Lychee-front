@@ -316,7 +316,7 @@ view.album = {
 					if (data.hasOwnProperty("medium2x") && data.medium2x !== "") {
 						srcset = `${data.medium} ${parseInt(data.medium_dim, 10)}w, ${data.medium2x} ${parseInt(data.medium2x_dim, 10)}w`;
 					}
-				} else if (!data.type || data.type.indexOf("video") != 0) {
+				} else if (!data.type || data.type.indexOf("video") !== 0) {
 					src = data.url;
 				} else {
 					src = data.thumbUrl;
@@ -847,7 +847,7 @@ view.photo = {
 
 	header: function () {
 		if (
-			(photo.json.type && (photo.json.type.indexOf("video") == 0 || photo.json.type == "raw")) ||
+			(photo.json.type && (photo.json.type.indexOf("video") === 0 || photo.json.type === "raw")) ||
 			(photo.json.livePhotoUrl !== "" && photo.json.livePhotoUrl !== null)
 		) {
 			$("#button_rotate_cwise, #button_rotate_ccwise").hide();

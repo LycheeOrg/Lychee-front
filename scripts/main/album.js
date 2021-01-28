@@ -1227,7 +1227,7 @@ album.isUploadable = function () {
 album.updatePhoto = function (data) {
 	if (album.json) {
 		$.each(album.json.photos, function () {
-			if (this.id == data.id) {
+			if (this.id === data.id) {
 				this.width = data.width;
 				this.height = data.height;
 				this.small = data.small;
@@ -1248,6 +1248,7 @@ album.updatePhoto = function (data) {
 
 				return false;
 			}
+			return true;
 		});
 	}
 };

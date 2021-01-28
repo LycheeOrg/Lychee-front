@@ -23,7 +23,7 @@ photoeditor.rotate = function (photoID, direction) {
 				photo.json.album = album.json.id;
 			}
 
-			image = $("img#image");
+			let image = $("img#image");
 			if (photo.json.hasOwnProperty("medium2x") && photo.json.medium2x !== "") {
 				image.prop(
 					"srcset",
