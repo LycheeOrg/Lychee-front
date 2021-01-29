@@ -621,8 +621,7 @@ upload.start = {
 		if (lychee.delete_imported) {
 			$delete.prop("checked", true);
 			$symlinks.prop("checked", false).prop("disabled", true);
-		}
-		else {
+		} else {
 			if (lychee.import_via_symlink) {
 				$symlinks.prop("checked", true);
 				$delete.prop("checked", false).prop("disabled", true);
@@ -631,8 +630,7 @@ upload.start = {
 		if (lychee.skip_duplicates) {
 			$duplicates.prop("checked", true);
 			if (lychee.resync_metadata) $resync.prop("checked", true);
-		}
-		else {
+		} else {
 			$resync.prop("disabled", true);
 		}
 	},
@@ -700,19 +698,17 @@ upload.start = {
 	},
 };
 
-upload.check = function() {
+upload.check = function () {
 	$delete = $('.basicModal .choice input[name="delete"]');
 	$symlinks = $('.basicModal .choice input[name="symlinks"]');
 
 	if ($delete.prop("checked")) {
 		$symlinks.prop("checked", false).prop("disabled", true);
-	}
-	else {
+	} else {
 		$symlinks.prop("disabled", false);
 		if ($symlinks.prop("checked")) {
 			$delete.prop("checked", false).prop("disabled", true);
-		}
-		else {
+		} else {
 			$delete.prop("disabled", false);
 		}
 	}
@@ -722,8 +718,7 @@ upload.check = function() {
 
 	if ($duplicates.prop("checked")) {
 		$resync.prop("disabled", false);
-	}
-	else {
+	} else {
 		$resync.prop("checked", false).prop("disabled", true);
 	}
-}
+};
