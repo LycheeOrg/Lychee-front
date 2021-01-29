@@ -699,8 +699,8 @@ upload.start = {
 };
 
 upload.check = function () {
-	$delete = $('.basicModal .choice input[name="delete"]');
-	$symlinks = $('.basicModal .choice input[name="symlinks"]');
+	let $delete = $('.basicModal .choice input[name="delete"]');
+	let $symlinks = $('.basicModal .choice input[name="symlinks"]');
 
 	if ($delete.prop("checked")) {
 		$symlinks.prop("checked", false).prop("disabled", true);
@@ -713,8 +713,8 @@ upload.check = function () {
 		}
 	}
 
-	$duplicates = $('.basicModal .choice input[name="skipduplicates"]');
-	$resync = $('.basicModal .choice input[name="resyncmetadata"]');
+	let $duplicates = $('.basicModal .choice input[name="skipduplicates"]');
+	let $resync = $('.basicModal .choice input[name="resyncmetadata"]');
 
 	if ($duplicates.prop("checked")) {
 		$resync.prop("disabled", false);
