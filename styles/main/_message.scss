@@ -110,7 +110,8 @@
 	}
 
 	// Inputs -------------------------------------------------------------- //
-	input.text {
+	input.text,
+	input.file {
 		padding: 9px 2px;
 		width: 100%;
 		background-color: transparent;
@@ -208,7 +209,7 @@
 		}
 
 		label input:disabled ~ .label {
-			color: white(0.6);
+			color: white(0.3);
 		}
 
 		label .label {

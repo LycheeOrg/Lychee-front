@@ -41,6 +41,8 @@ let lychee = {
 
 	landing_page_enabled: false, // is landing page enabled ?
 	delete_imported: false,
+	import_via_symlink: false,
+	skip_duplicates: false,
 
 	nsfw_visible: true,
 	nsfw_visible_saved: true,
@@ -216,7 +218,8 @@ lychee.init = function () {
 			lychee.downloadable = (data.config.downloadable && data.config.downloadable === "1") || false;
 			lychee.share_button_visible = (data.config.share_button_visible && data.config.share_button_visible === "1") || false;
 			lychee.delete_imported = data.config.delete_imported && data.config.delete_imported === "1";
-
+			lychee.import_via_symlink = data.config.import_via_symlink && data.config.import_via_symlink === "1";
+			lychee.skip_duplicates = data.config.skip_duplicates && data.config.skip_duplicates === "1";
 			lychee.nsfw_visible = (data.config.nsfw_visible && data.config.nsfw_visible === "1") || false;
 			lychee.nsfw_blur = (data.config.nsfw_blur && data.config.nsfw_blur === "1") || false;
 			lychee.nsfw_warning = (data.config.nsfw_warning_admin && data.config.nsfw_warning_admin === "1") || false;

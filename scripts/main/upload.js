@@ -312,14 +312,18 @@ upload.start = {
 			};
 
 			let delete_imported = $('.basicModal .choice input[name="delete"]').prop("checked") ? "1" : "0";
+			let import_via_symlink = $('.basicModal .choice input[name="symlinks"]').prop("checked") ? "1" : "0";
+			let skip_duplicates = $('.basicModal .choice input[name="skipduplicates"]').prop("checked") ? "1" : "0";
 
 			upload.show(lychee.locale["UPLOAD_IMPORT_SERVER"], files, function () {
 				$(".basicModal .rows .row .status").html(lychee.locale["UPLOAD_IMPORTING"]);
 
 				let params = {
-					albumID,
+					albumID: albumID,
 					path: data.path,
-					delete_imported,
+					delete_imported: delete_imported,
+					import_via_symlink: import_via_symlink,
+					skip_duplicates: skip_duplicates,
 				};
 
 				if (lychee.api_V2 === false) {
@@ -560,12 +564,36 @@ upload.start = {
 			msg += lychee.html`
 				<div class='choice'>
 					<label>
-						<input type='checkbox' name='delete'>
+						<input type='checkbox' name='delete' onchange='upload.check()'>
 						<span class='checkbox'>${build.iconic("check")}</span>
 						<span class='label'>${lychee.locale["UPLOAD_IMPORT_DELETE_ORIGINALS"]}</span>
 					</label>
 					<p>
 						${lychee.locale["UPLOAD_IMPORT_DELETE_ORIGINALS_EXPL"]}
+					</p>
+					<label>
+						<input type='checkbox' name='symlinks' onchange='upload.check()'>
+						<span class='checkbox'>${build.iconic("check")}</span>
+						<span class='label'>${lychee.locale["UPLOAD_IMPORT_VIA_SYMLINK"]}</span>
+					</label>
+					<p>
+						${lychee.locale["UPLOAD_IMPORT_VIA_SYMLINK_EXPL"]}
+					</p>
+					<label>
+						<input type='checkbox' name='skipduplicates' onchange='upload.check()'>
+						<span class='checkbox'>${build.iconic("check")}</span>
+						<span class='label'>${lychee.locale["UPLOAD_IMPORT_SKIP_DUPLICATES"]}</span>
+					</label>
+					<p>
+						${lychee.locale["UPLOAD_IMPORT_SKIP_DUPLICATES_EXPL"]}
+					</p>
+					<label>
+						<input type='checkbox' name='resyncmetadata' onchange='upload.check()'>
+						<span class='checkbox'>${build.iconic("check")}</span>
+						<span class='label'>${lychee.locale["UPLOAD_IMPORT_RESYNC_METADATA"]}</span>
+					</label>
+					<p>
+						${lychee.locale["UPLOAD_IMPORT_RESYNC_METADATA_EXPL"]}
 					</p>
 				</div>
 			`;
@@ -585,8 +613,27 @@ upload.start = {
 			},
 		});
 
+		$delete = $('.basicModal .choice input[name="delete"]');
+		$symlinks = $('.basicModal .choice input[name="symlinks"]');
+		$duplicates = $('.basicModal .choice input[name="skipduplicates"]');
+		$resync = $('.basicModal .choice input[name="resyncmetadata"]');
+
 		if (lychee.delete_imported) {
-			$('.basicModal .choice input[name="delete"]').prop("checked", true);
+			$delete.prop("checked", true);
+			$symlinks.prop("checked", false).prop("disabled", true);
+		}
+		else {
+			if (lychee.import_via_symlink) {
+				$symlinks.prop("checked", true);
+				$delete.prop("checked", false).prop("disabled", true);
+			}
+		}
+		if (lychee.skip_duplicates) {
+			$duplicates.prop("checked", true);
+			if (lychee.resync_metadata) $resync.prop("checked", true);
+		}
+		else {
+			$resync.prop("disabled", true);
 		}
 	},
 
@@ -652,3 +699,31 @@ upload.start = {
 		});
 	},
 };
+
+upload.check = function() {
+	$delete = $('.basicModal .choice input[name="delete"]');
+	$symlinks = $('.basicModal .choice input[name="symlinks"]');
+
+	if ($delete.prop("checked")) {
+		$symlinks.prop("checked", false).prop("disabled", true);
+	}
+	else {
+		$symlinks.prop("disabled", false);
+		if ($symlinks.prop("checked")) {
+			$delete.prop("checked", false).prop("disabled", true);
+		}
+		else {
+			$delete.prop("disabled", false);
+		}
+	}
+
+	$duplicates = $('.basicModal .choice input[name="skipduplicates"]');
+	$resync = $('.basicModal .choice input[name="resyncmetadata"]');
+
+	if ($duplicates.prop("checked")) {
+		$resync.prop("disabled", false);
+	}
+	else {
+		$resync.prop("checked", false).prop("disabled", true);
+	}
+}
