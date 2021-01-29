@@ -613,10 +613,10 @@ upload.start = {
 			},
 		});
 
-		$delete = $('.basicModal .choice input[name="delete"]');
-		$symlinks = $('.basicModal .choice input[name="symlinks"]');
-		$duplicates = $('.basicModal .choice input[name="skipduplicates"]');
-		$resync = $('.basicModal .choice input[name="resyncmetadata"]');
+		let $delete = $('.basicModal .choice input[name="delete"]');
+		let $symlinks = $('.basicModal .choice input[name="symlinks"]');
+		let $duplicates = $('.basicModal .choice input[name="skipduplicates"]');
+		let $resync = $('.basicModal .choice input[name="resyncmetadata"]');
 
 		if (lychee.delete_imported) {
 			$delete.prop("checked", true);
