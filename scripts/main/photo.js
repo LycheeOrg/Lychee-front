@@ -100,29 +100,14 @@ photo.isLivePhotoPlaying = function () {
 
 photo.update_overlay_type = function () {
 	// Only run if the overlay is showing
-	if (!lychee.image_overlay) {
-		return false;
-	} else {
-		// console.log('Current ' + lychee.image_overlay_type);
-		let types = ["exif", "desc", "takedate"];
+	if (!lychee.image_overlay) return false;
 
-		let i = types.indexOf(lychee.image_overlay_type);
-		let j = (i + 1) % types.length;
-		let cont = true;
-		while (i !== j && cont) {
-			if (types[j] === "desc" && photo.hasDesc()) cont = false;
-			else if (types[j] === "takedate" && photo.hasTakedate()) cont = false;
-			else if (types[j] === "exif" && photo.hasExif()) cont = false;
-			else j = (j + 1) % types.length;
-		}
-
-		if (i !== j) {
-			lychee.image_overlay_type = types[j];
-			$("#image_overlay").remove();
-			lychee.imageview.append(build.overlay_image(photo.json));
-		} else {
-			// console.log('no other data found, displaying ' + types[j]);
-		}
+	let oldtype = build.check_overlay_type(photo.json, lychee.image_overlay_type);
+	let newtype = build.check_overlay_type(photo.json, oldtype, true);
+	if (oldtype !== newtype) {
+		lychee.image_overlay_type = newtype;
+		$("#image_overlay").remove();
+		lychee.imageview.append(build.overlay_image(photo.json));
 	}
 };
 
