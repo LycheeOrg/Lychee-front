@@ -295,6 +295,45 @@ view.album = {
 			}
 		},
 
+		updatePhoto: function (data) {
+			let src,
+				srcset = "";
+
+			// This mimicks the structure of build.photo
+			if (lychee.layout === "0") {
+				src = data.thumbUrl;
+				if (data.hasOwnProperty("thumb2x") && data.thumb2x !== "") {
+					srcset = `${data.thumb2x} 2x`;
+				}
+			} else {
+				if (data.small !== "") {
+					src = data.small;
+					if (data.hasOwnProperty("small2x") && data.small2x !== "") {
+						srcset = `${data.small} ${parseInt(data.small_dim, 10)}w, ${data.small2x} ${parseInt(data.small2x_dim, 10)}w`;
+					}
+				} else if (data.medium !== "") {
+					src = data.medium;
+					if (data.hasOwnProperty("medium2x") && data.medium2x !== "") {
+						srcset = `${data.medium} ${parseInt(data.medium_dim, 10)}w, ${data.medium2x} ${parseInt(data.medium2x_dim, 10)}w`;
+					}
+				} else if (!data.type || data.type.indexOf("video") !== 0) {
+					src = data.url;
+				} else {
+					src = data.thumbUrl;
+					if (data.hasOwnProperty("thumb2x") && data.thumb2x !== "") {
+						srcset = `${data.thumbUrl} 200w, ${data.thumb2x} 400w`;
+					}
+				}
+			}
+
+			$('.photo[data-id="' + data.id + '"] > span.thumbimg > img')
+				.attr("data-src", src)
+				.attr("data-srcset", srcset)
+				.addClass("lazyload");
+
+			view.album.content.justify();
+		},
+
 		delete: function (photoID, justify = false) {
 			$('.photo[data-id="' + photoID + '"]')
 				.css("opacity", 0)
@@ -561,6 +600,7 @@ view.photo = {
 		view.photo.title();
 		view.photo.star();
 		view.photo.public();
+		view.photo.header();
 		view.photo.photo(autoplay);
 
 		photo.json.init = 1;
@@ -802,6 +842,17 @@ view.photo = {
 				let marker = L.marker([photo.json.latitude, photo.json.longitude], { icon: viewDirectionIcon }).addTo(mymap);
 				marker.setRotationAngle(photo.json.imgDirection);
 			}
+		}
+	},
+
+	header: function () {
+		if (
+			(photo.json.type && (photo.json.type.indexOf("video") === 0 || photo.json.type === "raw")) ||
+			(photo.json.livePhotoUrl !== "" && photo.json.livePhotoUrl !== null)
+		) {
+			$("#button_rotate_cwise, #button_rotate_ccwise").hide();
+		} else {
+			$("#button_rotate_cwise, #button_rotate_ccwise").show();
 		}
 	},
 
