@@ -73,26 +73,44 @@ build.getAlbumThumb = function (data) {
 };
 
 build.album = function (data, disabled = false) {
-	let html = "";
-	let date_stamp = data.sysdate;
-	let sortingAlbums = [];
-	let isCover = album.json && album.json.cover_id && data.thumb.id === album.json.cover_id;
+	let subtitle = data.sysdate;
 
-	// In the special case of take date sorting use the take stamps as title
-	if (lychee.sortingAlbums !== "" && data.min_takestamp && data.max_takestamp) {
-		sortingAlbums = lychee.sortingAlbums.replace("ORDER BY ", "").split(" ");
-		if (sortingAlbums[0] === "max_takestamp" || sortingAlbums[0] === "min_takestamp") {
-			if (data.min_takestamp !== "" && data.max_takestamp !== "") {
-				date_stamp = data.min_takestamp === data.max_takestamp ? data.max_takestamp : data.min_takestamp + " - " + data.max_takestamp;
-			} else if (data.min_takestamp !== "" && sortingAlbums[0] === "min_takestamp") {
-				date_stamp = data.min_takestamp;
-			} else if (data.max_takestamp !== "" && sortingAlbums[0] === "max_takestamp") {
-				date_stamp = data.max_takestamp;
+	// check setting album_subtitle_type:
+	// takedate: date range (min/max_takedate from EXIF; if missing defaults to creation)
+	// creation: creation date of album
+	// description: album description
+	// default: any other type defaults to old style setting subtitles based of album sorting
+	switch (lychee.album_subtitle_type) {
+		case "description":
+			subtitle = data.description ? data.description : "";
+			break;
+		case "takedate":
+			if ((data.min_takestamp && data.min_takestamp !== "") || (data.max_takestamp && data.max_takestamp !== "")) {
+				// either min_takestamp or max_takestamp set and not null
+				subtitle = data.min_takestamp === data.max_takestamp ? data.max_takestamp : data.min_takestamp + " - " + data.max_takestamp;
+				subtitle = `<span title='Camera Date'>${build.iconic("camera-slr")}</span>${subtitle}`;
+				break;
 			}
-		}
+		// fall through
+		case "creation":
+			break;
+		case "oldstyle":
+		default:
+			if (lychee.sortingAlbums !== "" && data.min_takestamp && data.max_takestamp) {
+				let sortingAlbums = lychee.sortingAlbums.replace("ORDER BY ", "").split(" ");
+				if (sortingAlbums[0] === "max_takestamp" || sortingAlbums[0] === "min_takestamp") {
+					if (data.min_takestamp !== "" && data.max_takestamp !== "") {
+						subtitle = data.min_takestamp === data.max_takestamp ? data.max_takestamp : data.min_takestamp + " - " + data.max_takestamp;
+					} else if (data.min_takestamp !== "" && sortingAlbums[0] === "min_takestamp") {
+						subtitle = data.min_takestamp;
+					} else if (data.max_takestamp !== "" && sortingAlbums[0] === "max_takestamp") {
+						subtitle = data.max_takestamp;
+					}
+				}
+			}
 	}
 
-	html += lychee.html`
+	let html = lychee.html`
 			<div class='album ${disabled ? `disabled` : ``} ${data.nsfw && data.nsfw === "1" && lychee.nsfw_blur ? `blurred` : ``}'
 				data-id='${data.id}'
 				data-nsfw='${data.nsfw && data.nsfw === "1" ? `1` : `0`}'
@@ -102,11 +120,12 @@ build.album = function (data, disabled = false) {
 				  ${build.getAlbumThumb(data)}
 				<div class='overlay'>
 					<h1 title='$${data.title}'>$${data.title}</h1>
-					<a>$${date_stamp}</a>
+					<a>${subtitle}</a>
 				</div>
 			`;
 
 	if (album.isUploadable() && !disabled) {
+		let isCover = album.json && album.json.cover_id && data.thumb.id === album.json.cover_id;
 		html += lychee.html`
 				<div class='badges'>
 					<a class='badge ${data.nsfw === "1" ? "badge--nsfw" : ""} icn-warning'>${build.iconic("warning")}</a>
@@ -251,39 +270,63 @@ build.photo = function (data, disabled = false) {
 	return html;
 };
 
+build.check_overlay_type = function (data, overlay_type, next = false) {
+	let types = ["exif", "desc", "date"];
+	let idx = types.indexOf(overlay_type);
+	if (idx < 0) return "none";
+	if (next) idx++;
+	let exifHash = data.make + data.model + data.shutter + data.iso + (data.type.indexOf("video") !== 0 ? data.aperture + data.focal : "");
+
+	for (let i = 0; i < types.length; i++) {
+		let type = types[(idx + i) % types.length];
+		if (type === "desc" && data.description && data.description !== "") return type;
+		if (type === "date") return type;
+		if (type === "exif" && exifHash !== "") return type;
+	}
+};
+
 build.overlay_image = function (data) {
-	let exifHash = data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
-
-	// Get the stored setting for the overlay_image
-	let type = lychee.image_overlay_type;
-	let html = ``;
-
-	if (type && type === "desc" && data.description !== "") {
-		html = lychee.html`
-					<div id="image_overlay">
-						<h1>$${data.title}</h1>
-						<p>$${data.description}</p>
-					</div>
-				`;
-	} else if (type && type === "takedate" && data.takedate !== "") {
-		html = lychee.html`
-			<div id="image_overlay">
-				<h1>$${data.title}</h1>
-				<p>${data.takedate}</p>
-			</div>
-		`;
+	let overlay = "";
+	switch (build.check_overlay_type(data, lychee.image_overlay_type)) {
+		case "desc":
+			overlay = data.description;
+			break;
+		case "date":
+			if (data.takedate && data.takedate !== "")
+				overlay = `<a><span title='Camera Date'>${build.iconic("camera-slr")}</span>${data.takedate}</a>`;
+			else overlay = data.sysdate;
+			break;
+		case "exif":
+			let exifHash = data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
+			if (exifHash !== "") {
+				if (data.shutter && data.shutter !== "") overlay = data.shutter.replace("s", "sec");
+				if (data.aperture && data.aperture !== "") {
+					if (overlay !== "") overlay += " at ";
+					overlay += data.aperture.replace("f/", "&fnof; / ");
+				}
+				if (data.iso && data.iso !== "") {
+					if (overlay !== "") overlay += ", ";
+					overlay += lychee.locale["PHOTO_ISO"] + " " + data.iso;
+				}
+				if (data.focal && data.focal !== "") {
+					if (overlay !== "") overlay += "<br>";
+					overlay += data.focal + (data.lens && data.lens !== "" ? " (" + data.lens + ")" : "");
+				}
+			}
+			break;
+		default:
 	}
-	// fall back to exif data if there is no description
-	else if (exifHash !== "") {
-		html += lychee.html`
-			<div id="image_overlay"><h1>$${data.title}</h1>
-			<p>${data.shutter.replace("s", "sec")} at ${data.aperture.replace("f/", "&fnof; / ")}, ${lychee.locale["PHOTO_ISO"]} ${data.iso}<br>
-			${data.focal} ${data.lens && data.lens !== "" ? "(" + data.lens + ")" : ""}</p>
-			</div>
-		`;
-	}
 
-	return html;
+	return (
+		lychee.html`
+		<div id="image_overlay">
+		<h1>$${data.title}</h1>
+		` +
+		(overlay !== "" ? `<p>${overlay}</p>` : ``) +
+		`
+		</div>
+		`
+	);
 };
 
 build.imageview = function (data, visibleControls, autoplay) {
@@ -348,9 +391,9 @@ build.imageview = function (data, visibleControls, autoplay) {
 		}
 
 		html += lychee.html`${img}`;
-
-		if (lychee.image_overlay) html += build.overlay_image(data);
 	}
+
+	if (lychee.image_overlay) html += build.overlay_image(data);
 
 	html += `
 			<div class='arrow_wrapper arrow_wrapper--previous'><a id='previous'>${build.iconic("caret-left")}</a></div>
