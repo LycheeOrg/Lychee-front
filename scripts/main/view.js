@@ -828,7 +828,7 @@ view.photo = {
 				attribution: map_provider_layer_attribution[lychee.map_provider].attribution,
 			}).addTo(mymap);
 
-			if (!photo.json.imgDirection || photo.json.imgDirection === "") {
+			if (!lychee.map_display_direction || !photo.json.imgDirection || photo.json.imgDirection === "") {
 				// Add Marker to map, direction is not set
 				L.marker([photo.json.latitude, photo.json.longitude]).addTo(mymap);
 			} else {
