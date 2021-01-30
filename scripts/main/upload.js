@@ -4,6 +4,11 @@
 
 let upload = {};
 
+const choiceDeleteSelector = '.basicModal .choice input[name="delete"]';
+const choiceSymlinkSelector = '.basicModal .choice input[name="symlinks"]';
+const choiceDuplicateSelector = '.basicModal .choice input[name="skipduplicates"]';
+const choiceResyncSelector = '.basicModal .choice input[name="resyncmetadata"]';
+
 upload.show = function (title, files, callback) {
 	basicModal.show({
 		body: build.uploadModal(title, files),
@@ -311,9 +316,10 @@ upload.start = {
 				name: data.path,
 			};
 
-			let delete_imported = $('.basicModal .choice input[name="delete"]').prop("checked") ? "1" : "0";
-			let import_via_symlink = $('.basicModal .choice input[name="symlinks"]').prop("checked") ? "1" : "0";
-			let skip_duplicates = $('.basicModal .choice input[name="skipduplicates"]').prop("checked") ? "1" : "0";
+			let delete_imported = $(choiceDeleteSelector).prop("checked") ? "1" : "0";
+			let import_via_symlink = $(choiceSymlinkSelector).prop("checked") ? "1" : "0";
+			let skip_duplicates = $(choiceDuplicateSelector).prop("checked") ? "1" : "0";
+			let resync_metadata = $(choiceResyncSelector).prop("checked") ? "1" : "0";
 
 			upload.show(lychee.locale["UPLOAD_IMPORT_SERVER"], files, function () {
 				$(".basicModal .rows .row .status").html(lychee.locale["UPLOAD_IMPORTING"]);
@@ -324,6 +330,7 @@ upload.start = {
 					delete_imported: delete_imported,
 					import_via_symlink: import_via_symlink,
 					skip_duplicates: skip_duplicates,
+					resync_metadata: resync_metadata,
 				};
 
 				if (lychee.api_V2 === false) {
@@ -613,10 +620,10 @@ upload.start = {
 			},
 		});
 
-		let $delete = $('.basicModal .choice input[name="delete"]');
-		let $symlinks = $('.basicModal .choice input[name="symlinks"]');
-		let $duplicates = $('.basicModal .choice input[name="skipduplicates"]');
-		let $resync = $('.basicModal .choice input[name="resyncmetadata"]');
+		let $delete = $(choiceDeleteSelector);
+		let $symlinks = $(choiceSymlinkSelector);
+		let $duplicates = $(choiceDuplicateSelector);
+		let $resync = $(choiceResyncSelector);
 
 		if (lychee.delete_imported) {
 			$delete.prop("checked", true);
@@ -699,8 +706,8 @@ upload.start = {
 };
 
 upload.check = function () {
-	let $delete = $('.basicModal .choice input[name="delete"]');
-	let $symlinks = $('.basicModal .choice input[name="symlinks"]');
+	let $delete = $(choiceDeleteSelector);
+	let $symlinks = $(choiceSymlinkSelector);
 
 	if ($delete.prop("checked")) {
 		$symlinks.prop("checked", false).prop("disabled", true);
@@ -713,8 +720,8 @@ upload.check = function () {
 		}
 	}
 
-	let $duplicates = $('.basicModal .choice input[name="skipduplicates"]');
-	let $resync = $('.basicModal .choice input[name="resyncmetadata"]');
+	let $duplicates = $(choiceDuplicateSelector);
+	let $resync = $(choiceResyncSelector);
 
 	if ($duplicates.prop("checked")) {
 		$resync.prop("disabled", false);
