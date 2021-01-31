@@ -562,7 +562,8 @@ settings.save = function (params) {
 		if (data === true) {
 			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_UPDATE"]);
 			view.full_settings.init();
-			// lychee.init();
+			// re-read settings
+			lychee.init();
 		} else lychee.error("Check the Logs", params, data);
 	});
 };
