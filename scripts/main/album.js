@@ -938,31 +938,6 @@ album.setPublic = function (albumID, e) {
 };
 
 album.shareUsers = function (albumID, e) {
-	var addShare = function (listIds) {
-		var params = {
-			albumIDs: albumID,
-			UserIDs: listIds.join(","),
-		};
-		api.post("Sharing::Add", params, (data) => {
-			if (data !== true) {
-				loadingBar.show("error", data.description);
-				lychee.error(null, params, data);
-			} else {
-				loadingBar.show("success", "Sharing updated!");
-			}
-		});
-	};
-
-	var removeShare = function (listIds) {
-		var params = { ShareIDs: listIds.join(",") };
-		api.post("Sharing::Delete", params, function (data) {
-			if (data !== true) {
-				loadingBar.show("error", data.description);
-				lychee.error(null, params, data);
-			}
-		});
-	};
-
 	if (!basicModal.visible()) {
 		let msg = `<form id="sharing_people_form">
 			<p>${lychee.locale["WAIT_FETCH_DATA"]}</p>
@@ -1036,10 +1011,27 @@ album.shareUsers = function (albumID, e) {
 	});
 
 	if (sharingToDelete.length > 0) {
-		removeShare(sharingToDelete);
+		var params = { ShareIDs: sharingToDelete.join(",") };
+		api.post("Sharing::Delete", params, function (data) {
+			if (data !== true) {
+				loadingBar.show("error", data.description);
+				lychee.error(null, params, data);
+			}
+		});
 	}
 	if (sharingToAdd.length > 0) {
-		addShare(sharingToAdd);
+		var params = {
+			albumIDs: albumID,
+			UserIDs: sharingToAdd.join(","),
+		};
+		api.post("Sharing::Add", params, (data) => {
+			if (data !== true) {
+				loadingBar.show("error", data.description);
+				lychee.error(null, params, data);
+			} else {
+				loadingBar.show("success", "Sharing updated!");
+			}
+		});
 	}
 
 	return true;
