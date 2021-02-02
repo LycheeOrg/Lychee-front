@@ -944,13 +944,14 @@ album.shareUsers = function (albumID, e) {
 		</form>`;
 
 		api.post("Sharing::List", {}, (data) => {
-			$("#sharing_people_form").empty();
-			if (data != undefined) {
-				if (data.users != undefined) {
-					$("#sharing_people_form").append(`<p>${lychee.locale["SHARING_ALBUM_USERS_LONG_MESSAGE"]}</p>`);
+			const sharingForm = $("#sharing_people_form");
+			sharingForm.empty();
+			if (data !== undefined) {
+				if (data.users !== undefined) {
+					sharingForm.append(`<p>${lychee.locale["SHARING_ALBUM_USERS_LONG_MESSAGE"]}</p>`);
 					// Fill with the list of users
 					data.users.forEach((user) => {
-						$("#sharing_people_form").append(lychee.html`<div class='choice'>
+						sharingForm.append(lychee.html`<div class='choice'>
 							<label>
 								<input type='checkbox' name='${user.id}'>
 								<span class='checkbox'>${build.iconic("check")}</span>
@@ -959,7 +960,7 @@ album.shareUsers = function (albumID, e) {
 							<p></p>
 						</div>`);
 					});
-					var sharingOfAlbum = data.shared != undefined ? data.shared.filter((val) => val.album_id == albumID) : [];
+					var sharingOfAlbum = data.shared !== undefined ? data.shared.filter((val) => val.album_id === albumID) : [];
 					sharingOfAlbum.forEach((sharing) => {
 						// Check all the shares who already exists, and store their sharing id on the element
 						var elem = $(`.basicModal .choice input[name="${sharing.user_id}"]`);
@@ -967,7 +968,7 @@ album.shareUsers = function (albumID, e) {
 						elem.data("sharingId", sharing.id);
 					});
 				} else {
-					$("#sharing_people_form").append(`<p>${lychee.locale["SHARING_ALBUM_USERS_NO_USERS"]}</p>`);
+					sharingForm.append(`<p>${lychee.locale["SHARING_ALBUM_USERS_NO_USERS"]}</p>`);
 				}
 			}
 		});
