@@ -968,30 +968,32 @@ album.shareUsers = function (albumID, e) {
 			<p>${lychee.locale["WAIT_FETCH_DATA"]}</p>
 		</form>`;
 
-		api.post("User::List", {}, (users) => {
+		api.post("Sharing::List", {}, (data) => {
 			$("#sharing_people_form").empty();
-			if (users !== {}) {
-				$("#sharing_people_form").append(`<p>${lychee.locale["SHARING_ALBUM_USERS_LONG_MESSAGE"]}</p>`);
-				$.each(users, (_, user) => {
-					$("#sharing_people_form").append(`<div class='choice'>
-						<label>
-							<input type='checkbox' name='${user.id}'>
-							<span class='checkbox'>${build.iconic("check")}</span>
-							<span class='label'>${user.username}</span>
-						</label>
-						<p></p>
-					</div>`);
-				});
-				api.post("Sharing::List", {}, (data) => {
-					if (data !== undefined && data.shared !== []) {
-						var sharingOfAlbum = data.shared.filter((val) => val.album_id == albumID);
-						sharingOfAlbum.forEach((sharing) => {
-							$(`.basicModal .choice input[name="${sharing.user_id}"]`).prop("checked", true);
-						});
-					}
-				});
-			} else {
-				$("#sharing_people_form").append(`<p>${lychee.locale["SHARING_ALBUM_USERS_NO_USERS"]}</p>`);
+			if (data != undefined) {
+				if (data.users != undefined) {
+					$("#sharing_people_form").append(`<p>${lychee.locale["SHARING_ALBUM_USERS_LONG_MESSAGE"]}</p>`);
+					// Fill with the list of users
+					data.users.forEach((user) => {
+						$("#sharing_people_form").append(`<div class='choice'>
+							<label>
+								<input type='checkbox' name='${user.id}'>
+								<span class='checkbox'>${build.iconic("check")}</span>
+								<span class='label'>${user.username}</span>
+							</label>
+							<p></p>
+						</div>`);
+					});
+					var sharingOfAlbum = data.shared != undefined ? data.shared.filter((val) => val.album_id == albumID) : [];
+					sharingOfAlbum.forEach((sharing) => {
+						// Check all the shares who already exists, and store their sharing id on the element
+						var elem = $(`.basicModal .choice input[name="${sharing.user_id}"]`);
+						elem.prop("checked", true);
+						elem.data("sharingId", sharing.id);
+					});
+				} else {
+					$("#sharing_people_form").append(`<p>${lychee.locale["SHARING_ALBUM_USERS_NO_USERS"]}</p>`);
+				}
 			}
 		});
 
