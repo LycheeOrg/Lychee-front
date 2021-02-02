@@ -975,7 +975,7 @@ album.shareUsers = function (albumID, e) {
 					$("#sharing_people_form").append(`<p>${lychee.locale["SHARING_ALBUM_USERS_LONG_MESSAGE"]}</p>`);
 					// Fill with the list of users
 					data.users.forEach((user) => {
-						$("#sharing_people_form").append(`<div class='choice'>
+						$("#sharing_people_form").append(lychee.html`<div class='choice'>
 							<label>
 								<input type='checkbox' name='${user.id}'>
 								<span class='checkbox'>${build.iconic("check")}</span>
