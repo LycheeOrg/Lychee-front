@@ -1015,51 +1015,32 @@ album.shareUsers = function (albumID, e) {
 		return true;
 	}
 
-	var usersToShare = [];
-	var usersNotToShare = [];
+	basicModal.close();
+
+	var sharingToAdd = [];
+	var sharingToDelete = [];
 	$(".basicModal .choice input").each((_, input) => {
-		if ($(input).is(":checked")) {
-			usersToShare.push(parseInt(input.name, 10));
+		var $input = $(input);
+		if ($input.is(":checked")) {
+			if ($input.data("sharingId") === undefined) {
+				// Input is checked but has no sharing id => new share to create
+				sharingToAdd.push(input.name);
+			}
 		} else {
-			usersNotToShare.push(parseInt(input.name, 10));
+			var sharingId = $input.data("sharingId");
+			if (sharingId !== undefined) {
+				// Input is not checked but has a sharing id => existing share to remove
+				sharingToDelete.push(sharingId);
+			}
 		}
 	});
 
-	api.post("Sharing::List", {}, (data) => {
-		var sharingToAdd = [];
-		var sharingToDelete = [];
-		if (data !== undefined && data.shared !== []) {
-			// No need to use everything: we need only the ids of the users with
-			// whom this album is already shared with, and the id of the share.
-			var sharingList = new Map(data.shared.filter((val) => val.album_id == albumID).map((val) => [val.user_id, val.id]));
-			var usersInSharingList = Array.from(sharingList.keys());
-			usersToShare.forEach((userId) => {
-				if (!usersInSharingList.includes(userId)) {
-					// We want to share this album with this user who doesn't
-					// already have it -> add a new share for this user
-					sharingToAdd.push(userId);
-				}
-			});
-			usersNotToShare.forEach((userId) => {
-				if (usersInSharingList.includes(userId)) {
-					// We don't want to share this album with this user but he
-					// already has it -> delete the share
-					sharingToDelete.push(sharingList.get(userId));
-				}
-			});
-		} else {
-			// There's not a single share created yet
-			sharingToAdd = usersToShare;
-		}
-		basicModal.close();
-
-		if (sharingToDelete.length > 0) {
-			removeShare(sharingToDelete);
-		}
-		if (sharingToAdd.length > 0) {
-			addShare(sharingToAdd);
-		}
-	});
+	if (sharingToDelete.length > 0) {
+		removeShare(sharingToDelete);
+	}
+	if (sharingToAdd.length > 0) {
+		addShare(sharingToAdd);
+	}
 
 	return true;
 };
