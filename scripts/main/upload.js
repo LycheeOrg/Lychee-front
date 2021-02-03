@@ -447,7 +447,8 @@ upload.start = {
 										.html(lychee.locale["UPLOAD_FAILED"])
 										.addClass("error");
 								} else if (matches[2] === "Skipped duplicate (resynced metadata)") {
-									$(rowSelector + " .status").html(lychee.locale["UPLOAD_UPDATED"])
+									$(rowSelector + " .status")
+										.html(lychee.locale["UPLOAD_UPDATED"])
 										.addClass("warning");
 								} else {
 									$(rowSelector + " .status")
