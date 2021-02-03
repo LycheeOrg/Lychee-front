@@ -578,6 +578,8 @@ upload.start = {
 					<p>
 						${lychee.locale["UPLOAD_IMPORT_DELETE_ORIGINALS_EXPL"]}
 					</p>
+				</div>
+				<div class='choice'>
 					<label>
 						<input type='checkbox' name='symlinks' onchange='upload.check()'>
 						<span class='checkbox'>${build.iconic("check")}</span>
@@ -586,6 +588,8 @@ upload.start = {
 					<p>
 						${lychee.locale["UPLOAD_IMPORT_VIA_SYMLINK_EXPL"]}
 					</p>
+				</div>
+				<div class='choice'>
 					<label>
 						<input type='checkbox' name='skipduplicates' onchange='upload.check()'>
 						<span class='checkbox'>${build.iconic("check")}</span>
@@ -594,6 +598,8 @@ upload.start = {
 					<p>
 						${lychee.locale["UPLOAD_IMPORT_SKIP_DUPLICATES_EXPL"]}
 					</p>
+				</div>
+				<div class='choice'>
 					<label>
 						<input type='checkbox' name='resyncmetadata' onchange='upload.check()'>
 						<span class='checkbox'>${build.iconic("check")}</span>
