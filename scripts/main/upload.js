@@ -455,26 +455,18 @@ upload.start = {
 										.html(lychee.locale["UPLOAD_SKIPPED"])
 										.addClass("warning");
 								}
+								const translations = {
+									"Given path is not a directory": "UPLOAD_IMPORT_NOT_A_DIRECTORY",
+									"Given path is reserved": "UPLOAD_IMPORT_PATH_RESERVED",
+									"Could not read file": "UPLOAD_IMPORT_UNREADABLE",
+									"Could not import file": "UPLOAD_IMPORT_FAILED",
+									"Unsupported file type": "UPLOAD_IMPORT_UNSUPPORTED",
+									"Could not create album": "UPLOAD_IMPORT_ALBUM_FAILED",
+									"Skipped duplicate": "UPLOAD_IMPORT_SKIPPED_DUPLICATE",
+									"Skipped duplicate (resynced metadata)": "UPLOAD_IMPORT_RESYNCED_DUPLICATE",
+								};
 								$(rowSelector + " .notice")
-									.html(
-										matches[2] === "Given path is not a directory"
-											? lychee.locale["UPLOAD_IMPORT_NOT_A_DIRECTORY"]
-											: matches[2] === "Given path is reserved"
-											? lychee.locale["UPLOAD_IMPORT_PATH_RESERVED"]
-											: matches[2] === "Could not read file"
-											? lychee.locale["UPLOAD_IMPORT_UNREADABLE"]
-											: matches[2] === "Could not import file"
-											? lychee.locale["UPLOAD_IMPORT_FAILED"]
-											: matches[2] === "Unsupported file type"
-											? lychee.locale["UPLOAD_IMPORT_UNSUPPORTED"]
-											: matches[2] === "Could not create album"
-											? lychee.locale["UPLOAD_IMPORT_ALBUM_FAILED"]
-											: matches[2] === "Skipped duplicate"
-											? lychee.locale["UPLOAD_IMPORT_SKIPPED_DUPLICATE"]
-											: matches[2] === "Skipped duplicate (resynced metadata)"
-											? lychee.locale["UPLOAD_IMPORT_RESYNCED_DUPLICATE"]
-											: matches[2]
-									)
+									.html(matches[2] in translations ? lychee.locale[translations[matches[2]]] : matches[2])
 									.show();
 								encounteredProblems = true;
 							} else if (resp === "Warning: Approaching memory limit") {
