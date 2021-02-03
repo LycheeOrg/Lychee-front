@@ -446,6 +446,9 @@ upload.start = {
 									$(rowSelector + " .status")
 										.html(lychee.locale["UPLOAD_FAILED"])
 										.addClass("error");
+								} else if (matches[2] === "Skipped duplicate (resynced metadata)") {
+									$(rowSelector + " .status").html(lychee.locale["UPLOAD_UPDATED"])
+										.addClass("warning");
 								} else {
 									$(rowSelector + " .status")
 										.html(lychee.locale["UPLOAD_SKIPPED"])
@@ -465,6 +468,10 @@ upload.start = {
 											? lychee.locale["UPLOAD_IMPORT_UNSUPPORTED"]
 											: matches[2] === "Could not create album"
 											? lychee.locale["UPLOAD_IMPORT_ALBUM_FAILED"]
+											: matches[2] === "Skipped duplicate"
+											? lychee.locale["UPLOAD_IMPORT_SKIPPED_DUPLICATE"]
+											: matches[2] === "Skipped duplicate (resynced metadata)"
+											? lychee.locale["UPLOAD_IMPORT_RESYNCED_DUPLICATE"]
 											: matches[2]
 									)
 									.show();
