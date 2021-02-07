@@ -937,6 +937,107 @@ album.setPublic = function (albumID, e) {
 	});
 };
 
+album.shareUsers = function (albumID, e) {
+	if (!basicModal.visible()) {
+		let msg = `<form id="sharing_people_form">
+			<p>${lychee.locale["WAIT_FETCH_DATA"]}</p>
+		</form>`;
+
+		api.post("Sharing::List", {}, (data) => {
+			const sharingForm = $("#sharing_people_form");
+			sharingForm.empty();
+			if (data !== undefined) {
+				if (data.users !== undefined) {
+					sharingForm.append(`<p>${lychee.locale["SHARING_ALBUM_USERS_LONG_MESSAGE"]}</p>`);
+					// Fill with the list of users
+					data.users.forEach((user) => {
+						sharingForm.append(lychee.html`<div class='choice'>
+							<label>
+								<input type='checkbox' name='${user.id}'>
+								<span class='checkbox'>${build.iconic("check")}</span>
+								<span class='label'>${user.username}</span>
+							</label>
+							<p></p>
+						</div>`);
+					});
+					var sharingOfAlbum = data.shared !== undefined ? data.shared.filter((val) => val.album_id === albumID) : [];
+					sharingOfAlbum.forEach((sharing) => {
+						// Check all the shares who already exists, and store their sharing id on the element
+						var elem = $(`.basicModal .choice input[name="${sharing.user_id}"]`);
+						elem.prop("checked", true);
+						elem.data("sharingId", sharing.id);
+					});
+				} else {
+					sharingForm.append(`<p>${lychee.locale["SHARING_ALBUM_USERS_NO_USERS"]}</p>`);
+				}
+			}
+		});
+
+		basicModal.show({
+			body: msg,
+			buttons: {
+				action: {
+					title: lychee.locale["ALBUM_SHARING_CONFIRM"],
+					fn: (data) => {
+						album.shareUsers(albumID, e);
+					},
+				},
+				cancel: {
+					title: lychee.locale["CANCEL"],
+					fn: basicModal.close,
+				},
+			},
+		});
+		return true;
+	}
+
+	basicModal.close();
+
+	var sharingToAdd = [];
+	var sharingToDelete = [];
+	$(".basicModal .choice input").each((_, input) => {
+		var $input = $(input);
+		if ($input.is(":checked")) {
+			if ($input.data("sharingId") === undefined) {
+				// Input is checked but has no sharing id => new share to create
+				sharingToAdd.push(input.name);
+			}
+		} else {
+			var sharingId = $input.data("sharingId");
+			if (sharingId !== undefined) {
+				// Input is not checked but has a sharing id => existing share to remove
+				sharingToDelete.push(sharingId);
+			}
+		}
+	});
+
+	if (sharingToDelete.length > 0) {
+		var params = { ShareIDs: sharingToDelete.join(",") };
+		api.post("Sharing::Delete", params, function (data) {
+			if (data !== true) {
+				loadingBar.show("error", data.description);
+				lychee.error(null, params, data);
+			}
+		});
+	}
+	if (sharingToAdd.length > 0) {
+		var params = {
+			albumIDs: albumID,
+			UserIDs: sharingToAdd.join(","),
+		};
+		api.post("Sharing::Add", params, (data) => {
+			if (data !== true) {
+				loadingBar.show("error", data.description);
+				lychee.error(null, params, data);
+			} else {
+				loadingBar.show("success", "Sharing updated!");
+			}
+		});
+	}
+
+	return true;
+};
+
 album.setNSFW = function (albumID, e) {
 	album.json.nsfw = album.json.nsfw === "0" ? "1" : "0";
 
