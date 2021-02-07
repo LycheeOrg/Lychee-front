@@ -532,13 +532,13 @@ view.album = {
 	},
 
 	public: function () {
-		$("#button_visibility_album").removeClass("active--not-hidden active--hidden");
+		$("#button_visibility_album, #button_sharing_album_users").removeClass("active--not-hidden active--hidden");
 
 		if (album.json.public === "1") {
 			if (album.json.visible === "0") {
-				$("#button_visibility_album").addClass("active--hidden");
+				$("#button_visibility_album, #button_sharing_album_users").addClass("active--hidden");
 			} else {
-				$("#button_visibility_album").addClass("active--not-hidden");
+				$("#button_visibility_album, #button_sharing_album_users").addClass("active--not-hidden");
 			}
 
 			$(".photo .iconic-share").remove();
