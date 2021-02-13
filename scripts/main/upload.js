@@ -8,6 +8,11 @@ const choiceDeleteSelector = '.basicModal .choice input[name="delete"]';
 const choiceSymlinkSelector = '.basicModal .choice input[name="symlinks"]';
 const choiceDuplicateSelector = '.basicModal .choice input[name="skipduplicates"]';
 const choiceResyncSelector = '.basicModal .choice input[name="resyncmetadata"]';
+const actionSelector = ".basicModal #basicModal__action";
+const cancelSelector = ".basicModal #basicModal__cancel";
+const lastRowSelector = ".basicModal .rows .row:last-child";
+const prelastRowSelector = ".basicModal .rows .row:nth-last-child(2)";
+var cancelUpload = false;
 
 upload.show = function (title, files, callback) {
 	basicModal.show({
@@ -16,7 +21,28 @@ upload.show = function (title, files, callback) {
 			action: {
 				title: lychee.locale["CLOSE"],
 				class: "hidden",
-				fn: basicModal.close,
+				fn: function () {
+					if ($(actionSelector).is(":visible")) basicModal.close();
+				},
+			},
+			cancel: {
+				title: lychee.locale["CANCEL"],
+				class: "red hidden",
+				fn: function () {
+					// close modal if close button is displayed
+					if ($(actionSelector).is(":visible")) basicModal.close();
+					if (!cancelUpload) {
+						// dummy params to pass validation
+						let params = {
+							albumID: -1,
+							path: "cancel",
+						};
+						api.post("Import::server_cancel", params, function (data) {
+							if (data === "success") cancelUpload = true;
+						});
+						return;
+					}
+				},
 			},
 		},
 		callback,
@@ -320,8 +346,17 @@ upload.start = {
 			let import_via_symlink = $(choiceSymlinkSelector).prop("checked") ? "1" : "0";
 			let skip_duplicates = $(choiceDuplicateSelector).prop("checked") ? "1" : "0";
 			let resync_metadata = $(choiceResyncSelector).prop("checked") ? "1" : "0";
+			cancelUpload = false;
 
 			upload.show(lychee.locale["UPLOAD_IMPORT_SERVER"], files, function () {
+				if (cancelUpload) {
+					cancelUpload = false;
+					$(actionSelector).show();
+					// re-activate cancel button to close modal panel if needed
+					$(cancelSelector).removeClass("basicModal__button--active").hide();
+					return;
+				}
+				$(cancelSelector).show();
 				$(".basicModal .rows .row .status").html(lychee.locale["UPLOAD_IMPORTING"]);
 
 				let params = {
@@ -378,7 +413,9 @@ upload.start = {
 						}
 
 						// Show close button
-						$(".basicModal #basicModal__action.hidden").show();
+						$(actionSelector).show();
+						// re-activate cancel button to close modal panel if needed
+						$(cancelSelector).removeClass("basicModal__button--active").hide();
 
 						return;
 					});
@@ -388,7 +425,7 @@ upload.start = {
 					let lastReadIdx = 0;
 					let currentDir = data.path;
 					let encounteredProblems = false;
-					let rowCount = 1;
+					let topSkip = 0;
 
 					// Worker function invoked from both the response progress
 					// callback and the completion callback.
@@ -414,7 +451,6 @@ upload.start = {
 						}
 						// Advance the counter past the last valid character.
 						lastReadIdx += newResponse.length;
-
 						newResponse.split("\n").forEach(function (resp) {
 							let matches = resp.match(/^Status: (.*): (\d+)$/);
 							if (matches !== null) {
@@ -424,23 +460,25 @@ upload.start = {
 										// the dialog box.
 										currentDir = matches[1];
 										$(".basicModal .rows").append(build.uploadNewFile(currentDir));
-										rowCount++;
+										topSkip += $(lastRowSelector).outerHeight();
 									}
-									$(".basicModal .rows .row:last-child .status").html(matches[2] + "%");
+									$(lastRowSelector + " .status").html(matches[2] + "%");
 								} else {
 									// Final status report for this directory.
-									$(".basicModal .rows .row:last-child .status").html(lychee.locale["UPLOAD_FINISHED"]).addClass("success");
+									$(lastRowSelector + " .status")
+										.html(lychee.locale["UPLOAD_FINISHED"])
+										.addClass("success");
 								}
 							} else if ((matches = resp.match(/^Problem: (.*): ([^:]*)$/)) !== null) {
 								let rowSelector;
 								if (currentDir !== matches[1]) {
-									$(".basicModal .rows .row:last-child").before(build.uploadNewFile(matches[1]));
-									rowCount++;
-									rowSelector = ".basicModal .rows .row:nth-last-child(2)";
+									$(lastRowSelector).before(build.uploadNewFile(matches[1]));
+									rowSelector = prelastRowSelector;
 								} else {
 									// The problem is with the directory
 									// itself, so alter its existing line.
-									rowSelector = ".basicModal .rows .row:last-child";
+									rowSelector = lastRowSelector;
+									topSkip -= $(rowSelector).outerHeight();
 								}
 								if (matches[2] === "Given path is not a directory" || matches[2] === "Given path is reserved") {
 									$(rowSelector + " .status")
@@ -450,6 +488,10 @@ upload.start = {
 									$(rowSelector + " .status")
 										.html(lychee.locale["UPLOAD_UPDATED"])
 										.addClass("warning");
+								} else if (matches[2] === "Import cancelled") {
+									$(rowSelector + " .status")
+										.html(lychee.locale["UPLOAD_CANCELLED"])
+										.addClass("error");
 								} else {
 									$(rowSelector + " .status")
 										.html(lychee.locale["UPLOAD_SKIPPED"])
@@ -464,18 +506,25 @@ upload.start = {
 									"Could not create album": "UPLOAD_IMPORT_ALBUM_FAILED",
 									"Skipped duplicate": "UPLOAD_IMPORT_SKIPPED_DUPLICATE",
 									"Skipped duplicate (resynced metadata)": "UPLOAD_IMPORT_RESYNCED_DUPLICATE",
+									"Import cancelled": "UPLOAD_IMPORT_CANCELLED",
 								};
 								$(rowSelector + " .notice")
 									.html(matches[2] in translations ? lychee.locale[translations[matches[2]]] : matches[2])
 									.show();
+								topSkip += $(rowSelector).outerHeight();
 								encounteredProblems = true;
 							} else if (resp === "Warning: Approaching memory limit") {
-								$(".basicModal .rows .row:last-child").before(build.uploadNewFile(lychee.locale["UPLOAD_IMPORT_LOW_MEMORY"]));
+								$(lastRowSelector).before(build.uploadNewFile(lychee.locale["UPLOAD_IMPORT_LOW_MEMORY"]));
 								rowCount++;
-								$(".basicModal .rows .row:nth-last-child(2) .status").html(lychee.locale["UPLOAD_WARNING"]).addClass("warning");
-								$(".basicModal .rows .row:nth-last-child(2) .notice").html(lychee.locale["UPLOAD_IMPORT_LOW_MEMORY_EXPL"]).show();
+								topSkip += $(prelastRowSelector).outerHeight();
+								$(prelastRowSelector + " .status")
+									.html(lychee.locale["UPLOAD_WARNING"])
+									.addClass("warning");
+								$(prelastRowSelector + " .notice")
+									.html(lychee.locale["UPLOAD_IMPORT_LOW_MEMORY_EXPL"])
+									.show();
 							}
-							$(".basicModal .rows").scrollTop((rowCount - 1) * 40);
+							$(".basicModal .rows").scrollTop(topSkip);
 						}); // forEach (resp)
 					}; // processIncremental
 
@@ -498,7 +547,9 @@ upload.start = {
 
 							if (encounteredProblems) {
 								// Show close button
-								$(".basicModal #basicModal__action.hidden").show();
+								$(actionSelector).show();
+								// re-activate cancel button to close modal panel if needed
+								$(cancelSelector).removeClass("basicModal__button--active").hide();
 							} else {
 								basicModal.close();
 							}
@@ -539,7 +590,9 @@ upload.start = {
 							} catch (e) {
 								// Most likely a SyntaxError due to something
 								// that went wrong on the server side.
-								$(".basicModal .rows .row:last-child .status").html(lychee.locale["UPLOAD_FAILED"]).addClass("error");
+								$(lastRowSelector + " .status")
+									.html(lychee.locale["UPLOAD_FAILED"])
+									.addClass("error");
 
 								albums.refresh();
 								upload.notify(lychee.locale["UPLOAD_COMPLETE"], lychee.locale["UPLOAD_COMPLETE_FAILED"]);
@@ -548,7 +601,9 @@ upload.start = {
 								else album.load(albumID);
 
 								// Show close button
-								$(".basicModal #basicModal__action.hidden").show();
+								$(actionSelector).show();
+								// re-activate cancel button to close modal panel if needed
+								$(cancelSelector).removeClass("basicModal__button--active").hide();
 
 								return;
 							}

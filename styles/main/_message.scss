@@ -100,7 +100,8 @@
 			box-shadow: inset 0 1px 0 white(0.02), inset 1px 0 0 black(0.2);
 		}
 
-		&#basicModal__action.red {
+		&#basicModal__action.red,
+		&#basicModal__cancel.red {
 			color: $colorRed;
 		}
 
