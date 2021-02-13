@@ -165,7 +165,7 @@ upload.start = {
 					(processing_count < lychee.upload_processing_limit || lychee.upload_processing_limit === 0) &&
 					next_upload < files.length
 				) {
-					process(next_upload++);
+					process(next_upload);
 				}
 
 				// Finish upload when all files are finished
@@ -199,14 +199,16 @@ upload.start = {
 
 					// Upload next file
 					if ((processing_count < lychee.upload_processing_limit || lychee.upload_processing_limit === 0) && next_upload < files.length) {
-						process(next_upload++);
+						process(next_upload);
 					}
 				}
 			};
 
+			currently_uploading = true;
+			next_upload++;
+
 			xhr.setRequestHeader("X-XSRF-TOKEN", csrf.getCookie("XSRF-TOKEN"));
 			xhr.send(formData);
-			currently_uploading = true;
 		};
 
 		if (files.length <= 0) return false;
@@ -218,7 +220,7 @@ upload.start = {
 
 		upload.show(lychee.locale["UPLOAD_UPLOADING"], files, function () {
 			// Upload first file
-			process(next_upload++);
+			process(next_upload);
 		});
 	},
 
