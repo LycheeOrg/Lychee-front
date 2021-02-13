@@ -14,6 +14,16 @@ const lastRowSelector = ".basicModal .rows .row:last-child";
 const prelastRowSelector = ".basicModal .rows .row:nth-last-child(2)";
 var cancelUpload = false;
 
+let nRowStatusSelector = function(row) {
+	return ".basicModal .rows .row:nth-child(" + row + ") .status";
+}
+
+let showCloseButton = function() {
+	$(actionSelector).show();
+	// re-activate cancel button to close modal panel if needed
+	$(cancelSelector).removeClass("basicModal__button--active").hide();
+}
+
 upload.show = function (title, files, callback) {
 	basicModal.show({
 		body: build.uploadModal(title, files),
@@ -35,7 +45,6 @@ upload.show = function (title, files, callback) {
 						api.post("Import::serverCancel", {}, function (data) {
 							if (data === "true") cancelUpload = true;
 						});
-						return;
 					}
 				},
 			},
@@ -131,7 +140,7 @@ upload.start = {
 				// Set status
 				if (xhr.status === 200 && isNumber(data)) {
 					// Success
-					$(".basicModal .rows .row:nth-child(" + (file.num + 1) + ") .status")
+					$(nRowStatusSelector(file.num + 1))
 						.html(lychee.locale["UPLOAD_FINISHED"])
 						.addClass("success");
 				} else {
@@ -149,7 +158,7 @@ upload.start = {
 						error = true;
 
 						// Error Status
-						$(".basicModal .rows .row:nth-child(" + (file.num + 1) + ") .status")
+						$(nRowStatusSelector(file.num + 1))
 							.html(lychee.locale["UPLOAD_FAILED"])
 							.addClass("error");
 
@@ -160,7 +169,7 @@ upload.start = {
 						warning = true;
 
 						// Warning Status
-						$(".basicModal .rows .row:nth-child(" + (file.num + 1) + ") .status")
+						$(nRowStatusSelector(file.num + 1))
 							.html(lychee.locale["UPLOAD_SKIPPED"])
 							.addClass("warning");
 
@@ -171,7 +180,7 @@ upload.start = {
 						error = true;
 
 						// Error Status
-						$(".basicModal .rows .row:nth-child(" + (file.num + 1) + ") .status")
+						$(nRowStatusSelector(file.num + 1))
 							.html(lychee.locale["UPLOAD_FAILED"])
 							.addClass("error");
 
@@ -204,7 +213,7 @@ upload.start = {
 
 				// Set progress when progress has changed
 				if (progress > pre_progress) {
-					$(".basicModal .rows .row:nth-child(" + (file.num + 1) + ") .status").html(progress + "%");
+					$(nRowStatusSelector(file.num + 1)).html(progress + "%");
 					pre_progress = progress;
 				}
 
@@ -215,7 +224,7 @@ upload.start = {
 					$(".basicModal .rows").scrollTop(scrollPos);
 
 					// Set status to processing
-					$(".basicModal .rows .row:nth-child(" + (file.num + 1) + ") .status").html(lychee.locale["UPLOAD_PROCESSING"]);
+					$(nRowStatusSelector(file.num + 1)).html(lychee.locale["UPLOAD_PROCESSING"]);
 
 					// Upload next file
 					if (file.next != null) {
@@ -346,9 +355,7 @@ upload.start = {
 			upload.show(lychee.locale["UPLOAD_IMPORT_SERVER"], files, function () {
 				if (cancelUpload) {
 					cancelUpload = false;
-					$(actionSelector).show();
-					// re-activate cancel button to close modal panel if needed
-					$(cancelSelector).removeClass("basicModal__button--active").hide();
+					showCloseButton();
 					return;
 				}
 				$(cancelSelector).show();
@@ -407,10 +414,7 @@ upload.start = {
 							else album.load(albumID);
 						}
 
-						// Show close button
-						$(actionSelector).show();
-						// re-activate cancel button to close modal panel if needed
-						$(cancelSelector).removeClass("basicModal__button--active").hide();
+						showCloseButton();
 
 						return;
 					});
@@ -510,7 +514,6 @@ upload.start = {
 								encounteredProblems = true;
 							} else if (resp === "Warning: Approaching memory limit") {
 								$(lastRowSelector).before(build.uploadNewFile(lychee.locale["UPLOAD_IMPORT_LOW_MEMORY"]));
-								rowCount++;
 								topSkip += $(prelastRowSelector).outerHeight();
 								$(prelastRowSelector + " .status")
 									.html(lychee.locale["UPLOAD_WARNING"])
@@ -540,14 +543,8 @@ upload.start = {
 							if (album.getID() === false) lychee.goto("0");
 							else album.load(albumID);
 
-							if (encounteredProblems) {
-								// Show close button
-								$(actionSelector).show();
-								// re-activate cancel button to close modal panel if needed
-								$(cancelSelector).removeClass("basicModal__button--active").hide();
-							} else {
-								basicModal.close();
-							}
+							if (encounteredProblems) showCloseButton();
+							else basicModal.close();
 						},
 						function (event) {
 							// We received a possibly partial response.
@@ -595,10 +592,7 @@ upload.start = {
 								if (album.getID() === false) lychee.goto("0");
 								else album.load(albumID);
 
-								// Show close button
-								$(actionSelector).show();
-								// re-activate cancel button to close modal panel if needed
-								$(cancelSelector).removeClass("basicModal__button--active").hide();
+								showCloseButton();
 
 								return;
 							}
