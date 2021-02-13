@@ -132,7 +132,7 @@ lychee.aboutDialog = function () {
 	if (lychee.checkForUpdates === "1") lychee.getUpdate();
 };
 
-lychee.init = function () {
+lychee.init = function (exitview = true) {
 	lychee.adjustContentHeight();
 
 	api.post("Session::init", {}, function (data) {
@@ -323,8 +323,10 @@ lychee.init = function () {
 			// should not happen.
 		}
 
-		$(window).bind("popstate", lychee.load);
-		lychee.load();
+		if (exitview) {
+			$(window).bind("popstate", lychee.load);
+			lychee.load();
+		}
 	});
 };
 
