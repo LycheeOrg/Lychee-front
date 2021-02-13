@@ -71,13 +71,15 @@ upload.start = {
 		let albumID = album.getID();
 		let error = false;
 		let warning = false;
+		let processing_count = 0;
+		let next_upload = 0;
+		let currently_uploading = false;
 
-		const process = function (_files, file) {
+		const process = function (file_num) {
 			let formData = new FormData();
 			let xhr = new XMLHttpRequest();
 			let pre_progress = 0;
 			let progress = 0;
-			let next_file_started = false;
 
 			const finish = function () {
 				window.onbeforeunload = null;
@@ -106,7 +108,7 @@ upload.start = {
 
 			formData.append("function", "Photo::add");
 			formData.append("albumID", albumID);
-			formData.append(0, file);
+			formData.append(0, files[file_num]);
 
 			var api_url = api.get_url("Photo::add");
 
@@ -114,7 +116,6 @@ upload.start = {
 
 			xhr.onload = function () {
 				let data = null;
-				let wait = false;
 				let errorText = "";
 
 				const isNumber = (n) => !isNaN(parseFloat(n)) && isFinite(n);
@@ -135,12 +136,10 @@ upload.start = {
 					data = "";
 				}
 
-				file.ready = true;
-
 				// Set status
 				if (xhr.status === 200 && isNumber(data)) {
 					// Success
-					$(nRowStatusSelector(file.num + 1))
+					$(nRowStatusSelector(file_num + 1))
 						.html(lychee.locale["UPLOAD_FINISHED"])
 						.addClass("success");
 				} else {
@@ -158,7 +157,7 @@ upload.start = {
 						error = true;
 
 						// Error Status
-						$(nRowStatusSelector(file.num + 1))
+						$(nRowStatusSelector(file_num + 1))
 							.html(lychee.locale["UPLOAD_FAILED"])
 							.addClass("error");
 
@@ -169,7 +168,7 @@ upload.start = {
 						warning = true;
 
 						// Warning Status
-						$(nRowStatusSelector(file.num + 1))
+						$(nRowStatusSelector(file_num + 1))
 							.html(lychee.locale["UPLOAD_SKIPPED"])
 							.addClass("warning");
 
@@ -180,7 +179,7 @@ upload.start = {
 						error = true;
 
 						// Error Status
-						$(nRowStatusSelector(file.num + 1))
+						$(nRowStatusSelector(file_num + 1))
 							.html(lychee.locale["UPLOAD_FAILED"])
 							.addClass("error");
 
@@ -188,21 +187,26 @@ upload.start = {
 						lychee.error(lychee.locale["UPLOAD_ERROR_UNKNOWN"], xhr, data);
 					}
 
-					$(".basicModal .rows .row:nth-child(" + (file.num + 1) + ") p.notice")
+					$(".basicModal .rows .row:nth-child(" + (file_num + 1) + ") p.notice")
 						.html(errorText)
 						.show();
 				}
 
-				// Check if there are file which are not finished
-				for (let i = 0; i < _files.length; i++) {
-					if (_files[i].ready === false) {
-						wait = true;
-						break;
-					}
+				processing_count--;
+
+				// Upload next file
+				if (
+					!currently_uploading &&
+					(processing_count < lychee.upload_processing_limit || lychee.upload_processing_limit === 0) &&
+					next_upload < files.length
+				) {
+					process(next_upload);
 				}
 
 				// Finish upload when all files are finished
-				if (wait === false) finish();
+				if (!currently_uploading && processing_count === 0) {
+					finish();
+				}
 			};
 
 			xhr.upload.onprogress = function (e) {
@@ -213,26 +217,28 @@ upload.start = {
 
 				// Set progress when progress has changed
 				if (progress > pre_progress) {
-					$(nRowStatusSelector(file.num + 1)).html(progress + "%");
+					$(nRowStatusSelector(file_num + 1)).html(progress + "%");
 					pre_progress = progress;
 				}
 
-				if (progress >= 100 && next_file_started === false) {
+				if (progress >= 100) {
 					// Scroll to the uploading file
 					let scrollPos = 0;
-					if (file.num + 1 > 4) scrollPos = (file.num + 1 - 4) * 40;
+					if (file_num + 1 > 4) scrollPos = (file_num + 1 - 4) * 40;
 					$(".basicModal .rows").scrollTop(scrollPos);
 
 					// Set status to processing
-					$(nRowStatusSelector(file.num + 1)).html(lychee.locale["UPLOAD_PROCESSING"]);
+					$(nRowStatusSelector(file_num + 1)).html(lychee.locale["UPLOAD_PROCESSING"]);
 
 					// Upload next file
-					if (file.next != null) {
-						process(files, file.next);
-						next_file_started = true;
+					if ((processing_count < lychee.upload_processing_limit || lychee.upload_processing_limit === 0) && next_upload < files.length) {
+						process(next_upload);
 					}
 				}
 			};
+
+			currently_uploading = true;
+			next_upload++;
 
 			xhr.setRequestHeader("X-XSRF-TOKEN", csrf.getCookie("XSRF-TOKEN"));
 			xhr.send(formData);
@@ -241,21 +247,13 @@ upload.start = {
 		if (files.length <= 0) return false;
 		if (albumID === false || visible.albums() === true) albumID = 0;
 
-		for (let i = 0; i < files.length; i++) {
-			files[i].num = i;
-			files[i].ready = false;
-
-			if (i < files.length - 1) files[i].next = files[i + 1];
-			else files[i].next = null;
-		}
-
 		window.onbeforeunload = function () {
 			return lychee.locale["UPLOAD_IN_PROGRESS"];
 		};
 
 		upload.show(lychee.locale["UPLOAD_UPLOADING"], files, function () {
 			// Upload first file
-			process(files, files[0]);
+			process(next_upload);
 		});
 	},
 

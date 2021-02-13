@@ -52,6 +52,8 @@ let lychee = {
 
 	album_subtitle_type: "oldstyle",
 
+	upload_processing_limit: 2,
+
 	// this is device specific config, in this case default is Desktop.
 	header_auto_hide: true,
 	active_focus_on_page_load: false,
@@ -252,6 +254,8 @@ lychee.init = function () {
 			lychee.upload = !lychee.api_V2;
 			lychee.admin = !lychee.api_V2;
 			lychee.nsfw_visible_saved = lychee.nsfw_visible;
+
+			lychee.upload_processing_limit = parseInt(data.config.upload_processing_limit) || 4;
 
 			// leftMenu
 			leftMenu.build();
