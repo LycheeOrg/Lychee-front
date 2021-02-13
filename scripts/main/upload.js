@@ -14,15 +14,15 @@ const lastRowSelector = ".basicModal .rows .row:last-child";
 const prelastRowSelector = ".basicModal .rows .row:nth-last-child(2)";
 var cancelUpload = false;
 
-let nRowStatusSelector = function(row) {
+let nRowStatusSelector = function (row) {
 	return ".basicModal .rows .row:nth-child(" + row + ") .status";
-}
+};
 
-let showCloseButton = function() {
+let showCloseButton = function () {
 	$(actionSelector).show();
 	// re-activate cancel button to close modal panel if needed
 	$(cancelSelector).removeClass("basicModal__button--active").hide();
-}
+};
 
 upload.show = function (title, files, callback) {
 	basicModal.show({
