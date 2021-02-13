@@ -63,7 +63,7 @@ contextMenu.album = function (albumID, e) {
 		{ title: build.iconic("cloud-download") + lychee.locale["DOWNLOAD"], fn: () => album.getArchive([albumID]) },
 	];
 
-	if (album.json) {
+	if (visible.album()) {
 		// not top level
 		let myalbum = album.getSubByID(albumID);
 		if (myalbum.thumb.id) {
