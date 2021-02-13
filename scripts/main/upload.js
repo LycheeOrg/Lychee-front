@@ -32,7 +32,7 @@ upload.show = function (title, files, callback) {
 					// close modal if close button is displayed
 					if ($(actionSelector).is(":visible")) basicModal.close();
 					if (!cancelUpload) {
-						api.post("Import::server_cancel", {}, function (data) {
+						api.post("Import::serverCancel", {}, function (data) {
 							if (data === "true") cancelUpload = true;
 						});
 						return;
