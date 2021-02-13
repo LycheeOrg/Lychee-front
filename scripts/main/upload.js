@@ -32,13 +32,8 @@ upload.show = function (title, files, callback) {
 					// close modal if close button is displayed
 					if ($(actionSelector).is(":visible")) basicModal.close();
 					if (!cancelUpload) {
-						// dummy params to pass validation
-						let params = {
-							albumID: -1,
-							path: "cancel",
-						};
-						api.post("Import::server_cancel", params, function (data) {
-							if (data === "success") cancelUpload = true;
+						api.post("Import::server_cancel", {}, function (data) {
+							if (data === "true") cancelUpload = true;
 						});
 						return;
 					}
