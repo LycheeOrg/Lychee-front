@@ -160,9 +160,11 @@ upload.start = {
 				processing_count--;
 
 				// Upload next file
-				if (!currently_uploading &&
+				if (
+					!currently_uploading &&
 					(processing_count < lychee.upload_processing_limit || lychee.upload_processing_limit === 0) &&
-					next_upload < files.length) {
+					next_upload < files.length
+				) {
 					process(next_upload++);
 				}
 
@@ -196,8 +198,7 @@ upload.start = {
 					currently_uploading = false;
 
 					// Upload next file
-					if ((processing_count < lychee.upload_processing_limit || lychee.upload_processing_limit === 0) &&
-						next_upload < files.length) {
+					if ((processing_count < lychee.upload_processing_limit || lychee.upload_processing_limit === 0) && next_upload < files.length) {
 						process(next_upload++);
 					}
 				}
