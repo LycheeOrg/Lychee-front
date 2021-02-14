@@ -230,7 +230,7 @@ upload.start = {
 					// Set status to processing
 					$(nRowStatusSelector(file_num + 1)).html(lychee.locale["UPLOAD_PROCESSING"]);
 					processing_count++;
- 					currently_uploading = false;
+					currently_uploading = false;
 
 					// Upload next file
 					if ((processing_count < lychee.upload_processing_limit || lychee.upload_processing_limit === 0) && next_upload < files.length) {
