@@ -52,7 +52,7 @@ let lychee = {
 
 	album_subtitle_type: "oldstyle",
 
-	upload_processing_limit: 2,
+	upload_processing_limit: 4,
 
 	// this is device specific config, in this case default is Desktop.
 	header_auto_hide: true,
@@ -255,7 +255,10 @@ lychee.init = function (exitview = true) {
 			lychee.admin = !lychee.api_V2;
 			lychee.nsfw_visible_saved = lychee.nsfw_visible;
 
-			lychee.upload_processing_limit = parseInt(data.config.upload_processing_limit) || 4;
+			lychee.upload_processing_limit = parseInt(data.config.upload_processing_limit);
+			// when null or any non stringified numeric value is sent from the server we get NaN.
+			// we fix this.
+			if (isNaN(lychee.upload_processing_limit)) lychee.upload_processing_limit = 4;
 
 			// leftMenu
 			leftMenu.build();
