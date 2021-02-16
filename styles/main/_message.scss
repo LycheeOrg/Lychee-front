@@ -100,12 +100,17 @@
 			box-shadow: inset 0 1px 0 white(0.02), inset 1px 0 0 black(0.2);
 		}
 
-		&#basicModal__action.red {
+		&#basicModal__action.red,
+		&#basicModal__cancel.red {
 			color: $colorRed;
 		}
 
 		&.hidden {
 			display: none;
+		}
+
+		&.busy {
+			cursor: wait;
 		}
 	}
 
@@ -212,7 +217,7 @@
 		}
 
 		label input:disabled ~ .label {
-			color: white(0.6);
+			color: white(0.3);
 		}
 
 		label .label {

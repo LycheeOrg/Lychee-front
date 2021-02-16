@@ -557,12 +557,13 @@ settings.changeCSS = function () {
 	});
 };
 
-settings.save = function (params) {
+settings.save = function (params, exitview = true) {
 	api.post("Settings::saveAll", params, function (data) {
 		if (data === true) {
 			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_UPDATE"]);
 			view.full_settings.init();
-			// lychee.init();
+			// re-read settings
+			lychee.init(exitview);
 		} else lychee.error("Check the Logs", params, data);
 	});
 };
@@ -581,7 +582,7 @@ settings.save_enter = function (e) {
 		cancel.title = lychee.locale["CANCEL"];
 
 		action.fn = function () {
-			settings.save(settings.getValues("#fullSettings"));
+			settings.save(settings.getValues("#fullSettings"), false);
 			basicModal.close();
 		};
 
