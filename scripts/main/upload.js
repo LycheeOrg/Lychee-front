@@ -12,7 +12,6 @@ const actionSelector = ".basicModal #basicModal__action";
 const cancelSelector = ".basicModal #basicModal__cancel";
 const lastRowSelector = ".basicModal .rows .row:last-child";
 const prelastRowSelector = ".basicModal .rows .row:nth-last-child(2)";
-var cancelUpload = false;
 
 let nRowStatusSelector = function (row) {
 	return ".basicModal .rows .row:nth-child(" + row + ") .status";
@@ -24,7 +23,7 @@ let showCloseButton = function () {
 	$(cancelSelector).removeClass("basicModal__button--active").hide();
 };
 
-upload.show = function (title, files, callback) {
+upload.show = function (title, files, run_callback, cancel_callback = null) {
 	basicModal.show({
 		body: build.uploadModal(title, files),
 		buttons: {
@@ -41,15 +40,14 @@ upload.show = function (title, files, callback) {
 				fn: function () {
 					// close modal if close button is displayed
 					if ($(actionSelector).is(":visible")) basicModal.close();
-					if (!cancelUpload) {
-						api.post("Import::serverCancel", {}, function (data) {
-							if (data === "true") cancelUpload = true;
-						});
+					if (cancel_callback) {
+						$(cancelSelector).addClass("busy");
+						cancel_callback();
 					}
 				},
 			},
 		},
-		callback,
+		callback: run_callback,
 	});
 };
 
@@ -74,12 +72,17 @@ upload.start = {
 		let processing_count = 0;
 		let next_upload = 0;
 		let currently_uploading = false;
+		let cancelUpload = false;
 
 		const process = function (file_num) {
 			let formData = new FormData();
 			let xhr = new XMLHttpRequest();
 			let pre_progress = 0;
 			let progress = 0;
+
+			if (file_num === 0) {
+				$(cancelSelector).show();
+			}
 
 			const finish = function () {
 				window.onbeforeunload = null;
@@ -92,11 +95,11 @@ upload.start = {
 					upload.notify(lychee.locale["UPLOAD_COMPLETE"]);
 				} else if (error === false && warning === true) {
 					// Warning
-					$(".basicModal #basicModal__action.hidden").show();
+					showCloseButton();
 					upload.notify(lychee.locale["UPLOAD_COMPLETE"]);
 				} else {
 					// Error
-					$(".basicModal #basicModal__action.hidden").show();
+					showCloseButton();
 					upload.notify(lychee.locale["UPLOAD_COMPLETE"], lychee.locale["UPLOAD_COMPLETE_FAILED"]);
 				}
 
@@ -196,7 +199,7 @@ upload.start = {
 
 				// Upload next file
 				if (
-					!currently_uploading &&
+					!currently_uploading && !cancelUpload &&
 					(processing_count < lychee.upload_processing_limit || lychee.upload_processing_limit === 0) &&
 					next_upload < files.length
 				) {
@@ -233,7 +236,7 @@ upload.start = {
 					currently_uploading = false;
 
 					// Upload next file
-					if ((processing_count < lychee.upload_processing_limit || lychee.upload_processing_limit === 0) && next_upload < files.length) {
+					if (!cancelUpload && (processing_count < lychee.upload_processing_limit || lychee.upload_processing_limit === 0) && next_upload < files.length) {
 						process(next_upload);
 					}
 				}
@@ -256,6 +259,9 @@ upload.start = {
 		upload.show(lychee.locale["UPLOAD_UPLOADING"], files, function () {
 			// Upload first file
 			process(next_upload);
+		}, function () {
+			cancelUpload = true;
+			error = true;
 		});
 	},
 
@@ -350,14 +356,9 @@ upload.start = {
 			let import_via_symlink = $(choiceSymlinkSelector).prop("checked") ? "1" : "0";
 			let skip_duplicates = $(choiceDuplicateSelector).prop("checked") ? "1" : "0";
 			let resync_metadata = $(choiceResyncSelector).prop("checked") ? "1" : "0";
-			cancelUpload = false;
+			let cancelUpload = false;
 
 			upload.show(lychee.locale["UPLOAD_IMPORT_SERVER"], files, function () {
-				if (cancelUpload) {
-					cancelUpload = false;
-					showCloseButton();
-					return;
-				}
 				$(cancelSelector).show();
 				$(".basicModal .rows .row .status").html(lychee.locale["UPLOAD_IMPORTING"]);
 
@@ -602,6 +603,12 @@ upload.start = {
 						}
 					); // api.post
 				} // lychee.api_V2
+			}, function () {
+				if (!cancelUpload) {
+					api.post("Import::serverCancel", {}, function (data) {
+						if (data === "true") cancelUpload = true;
+					});
+				}
 			}); // upload.show
 		}; // action
 
