@@ -619,8 +619,8 @@ upload.start = {
 				},
 				function () {
 					if (!cancelUpload) {
-						api.post("Import::serverCancel", {}, function (data) {
-							if (data === "true") cancelUpload = true;
+						api.post("Import::serverCancel", {}, function (resp) {
+							if (resp === "true") cancelUpload = true;
 						});
 					}
 				}
