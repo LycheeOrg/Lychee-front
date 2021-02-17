@@ -104,7 +104,7 @@ sidebar.triggerSearch = function (search_string) {
 
 	search.hash = null;
 	// We're either logged in or public search is allowed
-	lychee.goto("search/" + encodeURIComponent(search_string));
+	lychee.goto("search=" + encodeURIComponent(search_string));
 };
 
 sidebar.toggle = function () {

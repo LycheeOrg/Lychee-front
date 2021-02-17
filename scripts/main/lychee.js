@@ -463,24 +463,6 @@ lychee.load = function (autoplay = true) {
 			}
 			mapview.open(albumID);
 			lychee.footer_hide();
-		} else if (albumID == "search") {
-			// Search has been triggered
-			const search_string = decodeURIComponent(photoID);
-
-			if (search_string.trim() === "") {
-				// do nothing on "only space" search strings
-				return;
-			}
-			// If public search is diabled -> do nothing
-			if (lychee.publicMode === true && !lychee.public_search) {
-				loadingBar.show("error", lychee.locale["ERROR_SEARCH_DEACTIVATED"]);
-				return;
-			}
-
-			header.dom(".header__search").val(search_string);
-			search.find(search_string);
-
-			lychee.footer_show();
 		} else {
 			$(".no_content").remove();
 			// Show photo
@@ -489,11 +471,7 @@ lychee.load = function (autoplay = true) {
 			photo.json = null;
 
 			// Show Photo
-			if (
-				lychee.content.html() === "" ||
-				album.json == null ||
-				(header.dom(".header__search").length && header.dom(".header__search").val().length !== 0)
-			) {
+			if (lychee.content.html() === "" || album.json == null) {
 				lychee.content.hide();
 				album.load(albumID, true);
 			}
@@ -528,8 +506,6 @@ lychee.load = function (autoplay = true) {
 			if (visible.sidebar()) sidebar.toggle();
 			mapview.open();
 			lychee.footer_hide();
-		} else if (albumID == "search") {
-			// search string is empty -> do nothing
 		} else {
 			$(".no_content").remove();
 			// Trash data
@@ -541,12 +517,40 @@ lychee.load = function (autoplay = true) {
 				tabindex.makeUnfocusable(lychee.imageview);
 			}
 			if (visible.mapview()) mapview.close();
-			if (visible.sidebar() && album.isSmartID(albumID)) sidebar.toggle();
+			if (visible.sidebar() && (album.isSmartID(albumID) || album.isSearchID(albumID))) sidebar.toggle();
 			$("#sensitive_warning").hide();
 			if (album.json && albumID === album.json.id) {
-				view.album.title();
+				if (album.isSearchID(albumID)) {
+					header.setMode("albums");
+					lychee.setTitle(lychee.locale["SEARCH_RESULTS"], false);
+				} else {
+					view.album.title();
+				}
 				lychee.content.show();
 				tabindex.makeFocusable(lychee.content, true);
+			} else if (album.isSearchID(albumID)) {
+				// Search has been triggered
+				const search_string = decodeURIComponent(albumID.substr("search=".length));
+
+				if (search_string.trim() === "") {
+					// do nothing on "only space" search strings
+					return;
+				}
+				// If public search is disabled -> do nothing
+				if (lychee.publicMode === true && !lychee.public_search) {
+					loadingBar.show("error", lychee.locale["ERROR_SEARCH_DEACTIVATED"]);
+					return;
+				}
+
+				header.dom(".header__search").val(search_string);
+				search.find(search_string);
+			} else if (visible.search()) {
+				// Trash albums.json when filled with search results
+				if (search.hash != null) {
+					albums.json = null;
+					search.hash = null;
+				}
+				album.load(albumID, false, album.getID());
 			} else {
 				album.load(albumID);
 			}
