@@ -23,11 +23,18 @@ api.get_url = function (fn) {
 api.isTimeout = function (errorThrown, jqXHR) {
 	if (
 		errorThrown &&
-		errorThrown === "Bad Request" &&
-		jqXHR &&
-		jqXHR.responseJSON &&
-		jqXHR.responseJSON.error &&
-		jqXHR.responseJSON.error === "Session timed out"
+		((errorThrown === "Bad Request" &&
+			jqXHR &&
+			jqXHR.responseJSON &&
+			jqXHR.responseJSON.error &&
+			jqXHR.responseJSON.error === "Session timed out") ||
+			(errorThrown === "unknown status" &&
+				jqXHR &&
+				jqXHR.status &&
+				jqXHR.status === 419 &&
+				jqXHR.responseJSON &&
+				jqXHR.responseJSON.message &&
+				jqXHR.responseJSON.message === "CSRF token mismatch."))
 	) {
 		return true;
 	}
