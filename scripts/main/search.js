@@ -23,6 +23,9 @@ search.find = function (term) {
 					// Build albums
 					if (data && data.albums) {
 						albums.json = { albums: data.albums };
+						// Zap in case we are coming back from a search
+						// result album.
+						album.json = null;
 						$.each(albums.json.albums, function () {
 							albums.parse(this);
 							albumsData += build.album(this);
