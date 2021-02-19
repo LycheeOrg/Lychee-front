@@ -671,13 +671,12 @@ photo.setPublic = function (photoID, e) {
 				if (lychee.full_photo) {
 					$('.basicModal .choice input[name="full_photo"]').prop("checked", true);
 				}
-				// Photos shared individually are always hidden.
-				$('.basicModal .choice input[name="hidden"]').prop("checked", true);
+				if (lychee.public_photos_hidden) {
+					$('.basicModal .choice input[name="hidden"]').prop("checked", true);
+				}
 				if (lychee.downloadable) {
 					$('.basicModal .choice input[name="downloadable"]').prop("checked", true);
 				}
-				// Photos shared individually are always hidden.
-				$('.basicModal .choice input[name="hidden"]').prop("checked", true);
 				if (lychee.share_button_visible) {
 					$('.basicModal .choice input[name="share_button_visible"]').prop("checked", true);
 				}
