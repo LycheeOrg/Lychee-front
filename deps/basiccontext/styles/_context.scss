@@ -41,6 +41,7 @@
 	&--scrollable {
 		height: 100%;
 		-webkit-overflow-scrolling: touch;
+		overflow-x: hidden;
 		overflow-y: auto;
 	}
 
