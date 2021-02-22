@@ -15,6 +15,7 @@ let lychee = {
 	viewMode: false,
 	full_photo: true,
 	downloadable: false,
+	public_photos_hidden: true,
 	share_button_visible: false, // enable only v4+
 	api_V2: false, // enable api_V2
 	sub_albums: false, // enable sub_albums features
@@ -223,6 +224,7 @@ lychee.init = function (exitview = true) {
 			lychee.css = data.config.css || "";
 			lychee.full_photo = data.config.full_photo == null || data.config.full_photo === "1";
 			lychee.downloadable = (data.config.downloadable && data.config.downloadable === "1") || false;
+			lychee.public_photos_hidden = data.config.public_photos_hidden == null || data.config.public_photos_hidden === "1";
 			lychee.share_button_visible = (data.config.share_button_visible && data.config.share_button_visible === "1") || false;
 			lychee.delete_imported = data.config.delete_imported && data.config.delete_imported === "1";
 			lychee.import_via_symlink = data.config.import_via_symlink && data.config.import_via_symlink === "1";
