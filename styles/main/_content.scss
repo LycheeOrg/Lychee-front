@@ -296,6 +296,151 @@
 	}
 }
 
+// responsive web design for smaller screens
+@media only screen and (min-width: 320px) and (max-width: 567px) {
+	.content {
+		padding: 50px 0 33px 0;
+		width: 100%;
+		max-width: 100%;
+
+		.album,
+		.photo {
+			// 3 thumbnails per row
+			--size: calc((100vw - 3px) / 3);
+			width: calc(var(--size) - 3px);
+			height: calc(var(--size) - 3px);
+			margin: 3px 0 0 3px;
+			.thumbimg {
+				width: calc(var(--size) - 5px);
+				height: calc(var(--size) - 5px);
+			}
+			.overlay {
+				width: calc(var(--size) - 5px);
+				h1 {
+					min-height: 14px;
+					width: calc(var(--size) - 19px);
+					margin: 8px 0 2px 6px;
+					font-size: 12px;
+				}
+				a {
+					// suppress subtitles on small screens
+					display: none;
+				}
+			}
+			.badge {
+				padding: 4px 3px 3px;
+				width: 12px;
+				.iconic {
+					width: 12px;
+					height: 12px;
+				}
+				&--folder {
+					.iconic {
+						width: 8px;
+						height: 8px;
+					}
+				}
+			}
+		}
+	}
+}
+
+@media only screen and (min-width: 568px) and (max-width: 639px) {
+	.content {
+		padding: 50px 0 33px 0;
+		width: 100%;
+		max-width: 100%;
+
+		.album,
+		.photo {
+			// 4 thumbnails per row
+			--size: calc((100vw - 3px) / 4);
+			width: calc(var(--size) - 3px);
+			height: calc(var(--size) - 3px);
+			margin: 3px 0 0 3px;
+			.thumbimg {
+				width: calc(var(--size) - 5px);
+				height: calc(var(--size) - 5px);
+			}
+			.overlay {
+				width: calc(var(--size) - 5px);
+				h1 {
+					min-height: 14px;
+					width: calc(var(--size) - 19px);
+					margin: 8px 0 2px 6px;
+					font-size: 12px;
+				}
+				a {
+					// suppress subtitles on small screens
+					display: none;
+				}
+			}
+			.badge {
+				padding: 4px 3px 3px;
+				width: 14px;
+				.iconic {
+					width: 14px;
+					height: 14px;
+				}
+				&--folder {
+					.iconic {
+						width: 9px;
+						height: 9px;
+					}
+				}
+			}
+		}
+	}
+}
+
+@media only screen and (min-width: 640px) and (max-width: 768px) {
+	.content {
+		padding: 50px 0 33px 0;
+		width: 100%;
+		max-width: 100%;
+
+		.album,
+		.photo {
+			// 5 thumbnails per row
+			--size: calc((100vw - 5px) / 5);
+			width: calc(var(--size) - 5px);
+			height: calc(var(--size) - 5px);
+			margin: 5px 0 0 5px;
+			.thumbimg {
+				width: calc(var(--size) - 7px);
+				height: calc(var(--size) - 7px);
+			}
+			.overlay {
+				width: calc(var(--size) - 7px);
+				h1 {
+					min-height: 14px;
+					width: calc(var(--size) - 21px);
+					margin: 10px 0 3px 8px;
+					font-size: 12px;
+				}
+				a {
+					// suppress subtitles on small screens
+					display: none;
+				}
+			}
+			.badge {
+				padding: 6px 4px 4px;
+				width: 16px;
+				.iconic {
+					width: 16px;
+					height: 16px;
+				}
+				&--folder {
+					.iconic {
+						width: 10px;
+						height: 10px;
+					}
+				}
+			}
+		}
+	}
+}
+
 // No content -------------------------------------------------------------- //
 .no_content {
 	position: absolute;
