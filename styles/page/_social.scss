@@ -39,12 +39,6 @@
 	-webkit-transition: all 0.3s;
 	-moz-transition: all 0.3s;
 	-o-transition: all 0.3s;
-
-	&:hover {
-		color: #b5b5b5;
-		transform: scale(1.3);
-		-webkit-transform: scale(1.3);
-	}
 }
 
 #twitter:before {
@@ -65,4 +59,13 @@
 
 #facebook:before {
 	content: "\ea91";
+}
+
+// restrict hover features to devices that support it
+@media (hover: hover) {
+	.socialicons:hover {
+		color: #b5b5b5;
+		transform: scale(1.3);
+		-webkit-transform: scale(1.3);
+	}
 }

@@ -67,10 +67,6 @@
 			transition: fill 0.2s ease-out;
 		}
 
-		&:hover .iconic {
-			fill: white(1);
-		}
-
 		&:active .iconic {
 			transition: none;
 			fill: white(0.8);
@@ -92,10 +88,6 @@
 			height: 15px;
 			fill: white(0.5);
 			transition: fill 0.2s ease-out;
-		}
-
-		&:hover .iconic {
-			fill: white(1);
 		}
 
 		&:active .iconic {
@@ -185,10 +177,6 @@
 		opacity: 0;
 		transition: color 0.2s ease-out;
 		cursor: default;
-
-		&:hover {
-			color: white(1);
-		}
 	}
 
 	&__clear_nomap {
@@ -208,13 +196,29 @@
 		font-size: 13px;
 		border-radius: 100px;
 		cursor: default;
-
-		&:hover {
-			background-color: black(0.3);
-		}
 	}
 
 	.leftMenu__open {
 		margin-left: 250px;
+	}
+}
+
+// restrict hover features to devices that support it
+@media (hover: hover) {
+	.header {
+		&__title,
+		.button {
+			&:hover .iconic {
+				fill: white(1);
+			}
+		}
+
+		&__clear:hover {
+			color: white(1);
+		}
+
+		&__hostedwith:hover {
+			background-color: black(0.3);
+		}
 	}
 }

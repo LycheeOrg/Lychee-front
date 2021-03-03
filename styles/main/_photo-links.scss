@@ -23,15 +23,6 @@
 		}
 	}
 
-	.basicModal__button:hover {
-		background: #2293ec;
-		cursor: pointer;
-
-		.iconic {
-			fill: #ffffff;
-		}
-	}
-
 	.imageLinks {
 		margin-top: -30px;
 		padding-bottom: 40px;
@@ -66,14 +57,20 @@
 			height: 10px;
 		}
 	}
+}
 
-	.basicModal__button:hover {
-		color: #ffffff;
+// restrict hover features to devices that support it
+@media (hover: hover) {
+	.directLinks .basicModal__button:hover,
+	.downloads .basicModal__button:hover {
 		background: #2293ec;
 		cursor: pointer;
 
 		.iconic {
 			fill: #ffffff;
 		}
+	}
+	.downloads .basicModal__button:hover {
+		color: #ffffff;
 	}
 }

@@ -26,11 +26,6 @@
 	}
 }
 
-/* When you mouse over the navigation links, change their color */
-.leftMenu a:hover {
-	color: #f1f1f1;
-}
-
 /* Position and style the close button (top right corner) */
 .leftMenu .closebtn {
 	position: absolute;
@@ -50,9 +45,6 @@
 	color: #111;
 	display: inline-block;
 	width: 210px;
-	&:hover {
-		color: #818181;
-	}
 }
 
 .leftMenu .iconic {
@@ -80,5 +72,19 @@
 	}
 	.leftMenu a {
 		font-size: 18px;
+	}
+}
+
+// restrict hover features to devices that support it
+@media (hover: hover) {
+	.leftMenu {
+		.closetxt:hover {
+			color: #818181;
+		}
+
+		/* When you mouse over the navigation links, change their color */
+		a:hover {
+			color: #f1f1f1;
+		}
 	}
 }

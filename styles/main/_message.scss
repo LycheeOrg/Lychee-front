@@ -85,10 +85,6 @@
 		box-shadow: inset 0 1px 0 white(0.02);
 		cursor: default;
 
-		&:hover {
-			background: white(0.02);
-		}
-
 		&:active,
 		&--active {
 			transition: none;
@@ -507,5 +503,12 @@
 			color: white(0.6);
 			font-size: 13px;
 		}
+	}
+}
+
+// restrict hover features to devices that support it
+@media (hover: hover) {
+	.basicModal__button:hover {
+		background: white(0.02);
 	}
 }

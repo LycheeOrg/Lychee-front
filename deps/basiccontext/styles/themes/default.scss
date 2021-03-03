@@ -31,11 +31,6 @@
 		border-radius: 2px;
 	}
 
-	&__item:not(.basicContext__item--disabled):hover &__data {
-		color: white;
-		background-color: $basicContext__color;
-	}
-
 	&__item:not(.basicContext__item--disabled):active &__data {
 		background-color: darken($basicContext__color, 10%);
 	}
@@ -44,5 +39,13 @@
 		margin-right: 10px;
 		width: 12px;
 		text-align: center;
+	}
+}
+
+// restrict hover features to devices that support it
+@media (hover: hover) {
+	.basicContext__item:not(.basicContext__item--disabled):hover &__data {
+		color: white;
+		background-color: $basicContext__color;
 	}
 }

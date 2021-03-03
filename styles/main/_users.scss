@@ -123,45 +123,22 @@
 		width: 10%;
 		min-width: 50px;
 		border-radius: 0 0 0 0;
-
-		&:hover {
-			cursor: pointer;
-		}
 	}
 
 	.basicModal__button_OK {
 		color: #2293ec;
 		border-radius: 5px 0 0 5px;
-
-		&:hover {
-			background: #2293ec;
-			color: #ffffff;
-		}
 	}
 
 	.basicModal__button_DEL {
 		color: #b22027;
 		border-radius: 0 5px 5px 0;
-
-		&:hover {
-			background: #b22027;
-			color: #ffffff;
-		}
 	}
 
 	.basicModal__button_CREATE {
 		width: 20%;
 		color: #009900;
 		border-radius: 5px;
-
-		&:hover {
-			background: #009900;
-			color: #ffffff;
-		}
-	}
-
-	input:hover {
-		border-bottom: #2293ec solid 1px;
 	}
 
 	.select {
@@ -216,6 +193,34 @@
 			line-height: 16px;
 			font-weight: 700;
 			pointer-events: none;
+		}
+	}
+}
+
+// restrict hover features to devices that support it
+@media (hover: hover) {
+	.users_view_line {
+		.basicModal__button:hover {
+			cursor: pointer;
+		}
+
+		.basicModal__button_OK:hover {
+			background: #2293ec;
+			color: #ffffff;
+		}
+
+		.basicModal__button_DEL:hover {
+			background: #b22027;
+			color: #ffffff;
+		}
+
+		.basicModal__button_CREATE:hover {
+			background: #009900;
+			color: #ffffff;
+		}
+
+		input:hover {
+			border-bottom: #2293ec solid 1px;
 		}
 	}
 }

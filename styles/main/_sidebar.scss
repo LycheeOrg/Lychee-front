@@ -92,10 +92,6 @@
 			transition: fill 0.2s ease-out;
 		}
 
-		&:hover .iconic {
-			fill: white(1);
-		}
-
 		&:active .iconic {
 			transition: none;
 			fill: white(0.8);
@@ -177,14 +173,6 @@
 		-moz-user-select: text;
 		-ms-user-select: text;
 		user-select: text;
-
-		&:hover {
-			background-color: black(0.3);
-
-			&.search {
-				cursor: pointer;
-			}
-		}
 	}
 
 	#tags .tag span {
@@ -202,20 +190,10 @@
 			height: 8px;
 		}
 
-		&:hover .iconic {
-			fill: lighten($colorRed, 10%);
-		}
-
 		&:active .iconic {
 			transition: none;
 			fill: darken($colorRed, 10%);
 		}
-	}
-
-	#tags .tag:hover span {
-		width: 9px;
-		margin: 0 0 -2px 5px;
-		transform: scale(1);
 	}
 
 	#leaflet_map_single_photo {
@@ -228,6 +206,35 @@
 	.attr_location {
 		&.search {
 			cursor: pointer;
+		}
+	}
+}
+
+// restrict hover features to devices that support it
+@media (hover: hover) {
+	.sidebar {
+		.edit:hover .iconic {
+			fill: white(1);
+		}
+
+		#tags .tag {
+			&:hover {
+				background-color: black(0.3);
+
+				&.search {
+					cursor: pointer;
+				}
+
+				span {
+					width: 9px;
+					margin: 0 0 -2px 5px;
+					transform: scale(1);
+				}
+			}
+
+			span:hover .iconic {
+				fill: lighten($colorRed, 10%);
+			}
 		}
 	}
 }

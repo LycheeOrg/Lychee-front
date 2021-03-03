@@ -47,8 +47,11 @@
 	&__item--noHover &__data {
 		padding-right: 12px;
 	}
+}
 
-	&__item--noHover:hover &__data {
+// restrict hover features to devices that support it
+@media (hover: hover) {
+	.basicContext__item--noHover:hover &__data {
 		background: none !important;
 	}
 }

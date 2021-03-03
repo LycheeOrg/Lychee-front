@@ -27,24 +27,33 @@
 	-moz-transition: all 0.3s;
 	-o-transition: all 0.3s;
 }
-.socialicons:hover {
-	color: #b5b5b5;
-	-ms-transform: scale(1.3);
-	transform: scale(1.3);
-	-webkit-transform: scale(1.3);
-}
+
 #twitter:before {
 	content: "\ea96";
 }
+
 #instagram:before {
 	content: "\ea92";
 }
+
 #youtube:before {
 	content: "\ea9d";
 }
+
 #flickr:before {
 	content: "\eaa4";
 }
+
 #facebook:before {
 	content: "\ea91";
+}
+
+// restrict hover features to devices that support it
+@media (hover: hover) {
+	.socialicons:hover {
+		color: #b5b5b5;
+		-ms-transform: scale(1.3);
+		transform: scale(1.3);
+		-webkit-transform: scale(1.3);
+	}
 }

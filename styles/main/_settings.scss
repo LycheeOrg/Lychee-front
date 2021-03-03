@@ -140,24 +140,9 @@
 		border-radius: 5px;
 	}
 
-	.basicModal__button:hover {
-		background: #2293ec;
-		color: #ffffff;
-		cursor: pointer;
-	}
-
 	.basicModal__button_MORE {
 		color: #b22027;
 		border-radius: 5px;
-
-		&:hover {
-			background: #b22027;
-			color: #ffffff;
-		}
-	}
-
-	input:hover {
-		border-bottom: #2293ec solid 1px;
 	}
 
 	.select {
@@ -371,10 +356,6 @@
 				border-bottom-color: #2293ec;
 			}
 		}
-
-		input:hover {
-			border-bottom: #2293ec solid 1px;
-		}
 	}
 
 	.basicModal__button {
@@ -383,16 +364,60 @@
 		width: 100%;
 		min-width: 50px;
 		border-radius: 5px;
-
-		&:hover {
-			cursor: pointer;
-		}
 	}
 
 	.basicModal__button_SAVE {
 		color: #b22027;
+	}
+}
 
-		&:hover {
+// restrict hover features to devices that support it
+@media (hover: hover) {
+	.setLogin,
+	.setSorting,
+	.setDropBox,
+	.setLang,
+	.setLayout,
+	.setPublicSearch,
+	.setOverlay,
+	.setOverlayType,
+	.setMapDisplay,
+	.setMapDisplayPublic,
+	.setMapProvider,
+	.setMapIncludeSubalbums,
+	.setLocationDecoding,
+	.setLocationDecodingCachingType,
+	.setLocationShow,
+	.setLocationShowPublic,
+	.setDefaultLicense,
+	.setCSS,
+	.setNSFWVisible {
+		.basicModal__button:hover {
+			background: #2293ec;
+			color: #ffffff;
+			cursor: pointer;
+		}
+
+		.basicModal__button_MORE:hover {
+			background: #b22027;
+			color: #ffffff;
+		}
+
+		input:hover {
+			border-bottom: #2293ec solid 1px;
+		}
+	}
+
+	#fullSettings {
+		.setting_line input:hover {
+			border-bottom: #2293ec solid 1px;
+		}
+
+		.basicModal__button:hover {
+			cursor: pointer;
+		}
+
+		.basicModal__button_SAVE:hover {
 			background: #b22027;
 			color: #ffffff;
 		}
