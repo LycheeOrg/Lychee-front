@@ -342,6 +342,16 @@
 				}
 			}
 		}
+		.divider {
+			margin: 20px 0 0;
+			&:first-child {
+				margin-top: 0;
+			}
+			h1 {
+				margin: 0 0 6px 8px;
+				font-size: 12px;
+			}
+		}
 	}
 }
 
@@ -390,6 +400,15 @@
 				}
 			}
 		}
+		.divider {
+			margin: 24px 0 0;
+			&:first-child {
+				margin-top: 0;
+			}
+			h1 {
+				margin: 0 0 6px 10px;
+			}
+		}
 	}
 }
 
@@ -436,6 +455,15 @@
 						height: 10px;
 					}
 				}
+			}
+		}
+		.divider {
+			margin: 28px 0 0;
+			&:first-child {
+				margin-top: 0;
+			}
+			h1 {
+				margin: 0 0 6px 10px;
 			}
 		}
 	}
