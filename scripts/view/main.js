@@ -91,15 +91,6 @@ photo.getDirectLink = function () {
 		.replace(/url\(|\)$/gi, "");
 };
 
-photo.update_display_overlay = function () {
-	lychee.image_overlay = !lychee.image_overlay;
-	if (!lychee.image_overlay) {
-		$("#image_overlay").remove();
-	} else {
-		$("#imageview").append(build.overlay_image(photo.json));
-	}
-};
-
 photo.show = function () {
 	$("#imageview").removeClass("full");
 	header.dom().removeClass("header--hidden");
@@ -167,8 +158,6 @@ $(document).ready(function () {
 	csrf.bind();
 
 	// Image View
-	imageview.on("click", "img", photo.update_display_overlay);
-
 	$(window).on("resize", photo.onresize);
 
 	// Save ID of photo

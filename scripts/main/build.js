@@ -271,7 +271,7 @@ build.photo = function (data, disabled = false) {
 };
 
 build.check_overlay_type = function (data, overlay_type, next = false) {
-	let types = ["exif", "desc", "date"];
+	let types = ["desc", "date", "exif", "none"];
 	let idx = types.indexOf(overlay_type);
 	if (idx < 0) return "none";
 	if (next) idx++;
@@ -279,8 +279,8 @@ build.check_overlay_type = function (data, overlay_type, next = false) {
 
 	for (let i = 0; i < types.length; i++) {
 		let type = types[(idx + i) % types.length];
+		if (type === "date" || type === "none") return type;
 		if (type === "desc" && data.description && data.description !== "") return type;
-		if (type === "date") return type;
 		if (type === "exif" && exifHash !== "") return type;
 	}
 };
@@ -315,6 +315,8 @@ build.overlay_image = function (data) {
 			}
 			break;
 		default:
+		case "none":
+			return null;
 	}
 
 	return (
