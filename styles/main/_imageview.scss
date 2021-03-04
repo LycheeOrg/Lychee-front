@@ -126,8 +126,6 @@
 		z-index: 3;
 
 		h1 {
-			visibility: hidden;
-			opacity: 0;
 			font-size: 28px;
 			font-weight: 500;
 			transition: visibility 0.3s linear, opacity 0.3s linear;
@@ -145,11 +143,6 @@
 			width: 14px;
 			height: 14px;
 		}
-	}
-
-	&.full #image_overlay h1 {
-		visibility: visible;
-		opacity: 1;
 	}
 
 	// Previous/Next Buttons -------------------------------------------------------------- //
