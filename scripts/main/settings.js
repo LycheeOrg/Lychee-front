@@ -353,28 +353,6 @@ settings.changePublicSearch = function () {
 	});
 };
 
-settings.changeImageOverlay = function () {
-	let params = {};
-	if ($("#ImageOverlay:checked").length === 1) {
-		params.image_overlay = "1";
-
-		// enable image_overlay_type
-		$("select#ImgOverlayType").attr("disabled", false);
-	} else {
-		params.image_overlay = "0";
-
-		// disable image_overlay_type
-		$("select#ImgOverlayType").attr("disabled", true);
-	}
-	api.post("Settings::setImageOverlay", params, function (data) {
-		if (data === true) {
-			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_IMAGE_OVERLAY"]);
-			lychee.image_overlay_default = params.image_overlay === "1";
-			lychee.image_overlay = lychee.image_overlay_default;
-		} else lychee.error(null, params, data);
-	});
-};
-
 settings.setOverlayType = function () {
 	// validate the input
 	let params = {};
@@ -382,8 +360,10 @@ settings.setOverlayType = function () {
 		params.image_overlay_type = "exif";
 	} else if ($("#ImageOverlay:checked") && $("#ImgOverlayType").val() === "desc") {
 		params.image_overlay_type = "desc";
-	} else if ($("#ImageOverlay:checked") && $("#ImgOverlayType").val() === "takedate") {
-		params.image_overlay_type = "takedate";
+	} else if ($("#ImageOverlay:checked") && $("#ImgOverlayType").val() === "date") {
+		params.image_overlay_type = "date";
+	} else if ($("#ImageOverlay:checked") && $("#ImgOverlayType").val() === "none") {
+		params.image_overlay_type = "none";
 	} else {
 		params.image_overlay_type = "exif";
 		console.log("Error - default used");

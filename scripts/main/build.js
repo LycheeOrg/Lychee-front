@@ -316,7 +316,7 @@ build.overlay_image = function (data) {
 			break;
 		default:
 		case "none":
-			return null;
+			return "";
 	}
 
 	return (
@@ -395,9 +395,9 @@ build.imageview = function (data, visibleControls, autoplay) {
 		html += lychee.html`${img}`;
 	}
 
-	if (lychee.image_overlay) html += build.overlay_image(data);
-
-	html += `
+	html +=
+		build.overlay_image(data) +
+		`
 			<div class='arrow_wrapper arrow_wrapper--previous'><a id='previous'>${build.iconic("caret-left")}</a></div>
 			<div class='arrow_wrapper arrow_wrapper--next'><a id='next'>${build.iconic("caret-right")}</a></div>
 			`;

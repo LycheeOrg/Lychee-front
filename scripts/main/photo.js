@@ -105,7 +105,7 @@ photo.cycle_display_overlay = function () {
 		lychee.image_overlay_type = newtype;
 		$("#image_overlay").remove();
 		let newoverlay = build.overlay_image(photo.json);
-		if (newoverlay) lychee.imageview.append(newoverlay);
+		if (newoverlay !== "") lychee.imageview.append(newoverlay);
 	}
 };
 

@@ -370,10 +370,11 @@ lychee.locale = {
 
 	IMAGE_OVERLAY_TEXT: "Display image overlay by default:",
 
-	OVERLAY_TYPE: "Data to use in image overlay:",
-	OVERLAY_EXIF: "Photo EXIF data",
-	OVERLAY_DESCRIPTION: "Photo description",
-	OVERLAY_DATE: "Photo date taken",
+	OVERLAY_TYPE: "Photo overlay:",
+	OVERLAY_NONE: "None",
+	OVERLAY_EXIF: "EXIF data",
+	OVERLAY_DESCRIPTION: "Description",
+	OVERLAY_DATE: "Date taken",
 
 	MAP_PROVIDER: "Provider of OpenStreetMap tiles:",
 	MAP_PROVIDER_WIKIMEDIA: "Wikimedia",

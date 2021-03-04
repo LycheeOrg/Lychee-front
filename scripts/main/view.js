@@ -906,7 +906,6 @@ view.settings = {
 				view.settings.content.setDefaultLicense();
 				view.settings.content.setLayout();
 				view.settings.content.setPublicSearch();
-				view.settings.content.setOverlay();
 				view.settings.content.setOverlayType();
 				view.settings.content.setMapDisplay();
 				view.settings.content.setNSFWVisible();
@@ -1240,24 +1239,6 @@ view.settings = {
 		},
 		// TODO: extend to the other settings.
 
-		setOverlay: function () {
-			let msg = `
-			<div class="setOverlay">
-			<p>${lychee.locale["IMAGE_OVERLAY_TEXT"]}
-			<label class="switch">
-			  <input id="ImageOverlay" type="checkbox">
-			  <span class="slider round"></span>
-			</label>
-			</p>
-			</div>
-			`;
-
-			$(".settings_view").append(msg);
-			if (lychee.image_overlay_default) $("#ImageOverlay").click();
-
-			settings.bind("#ImageOverlay", ".setOverlay", settings.changeImageOverlay);
-		},
-
 		setOverlayType: function () {
 			let msg = `
 			<div class="setOverlayType">
@@ -1266,7 +1247,8 @@ view.settings = {
 				<select name="OverlayType" id="ImgOverlayType">
 					<option value="exif">${lychee.locale["OVERLAY_EXIF"]}</option>
 					<option value="desc">${lychee.locale["OVERLAY_DESCRIPTION"]}</option>
-					<option value="takedate">${lychee.locale["OVERLAY_DATE"]}</option>
+					<option value="date">${lychee.locale["OVERLAY_DATE"]}</option>
+					<option value="none">${lychee.locale["OVERLAY_NONE"]}</option>
 				</select>
 			</span>
 			<div class="basicModal__buttons">
@@ -1276,9 +1258,6 @@ view.settings = {
 			`;
 
 			$(".settings_view").append(msg);
-
-			// Enable based on image_overlay setting
-			if (!lychee.image_overlay) $("select#ImgOverlayType").attr("disabled", true);
 
 			$("select#ImgOverlayType").val(!lychee.image_overlay_type_default ? "exif" : lychee.image_overlay_type_default);
 			settings.bind("#basicModal__action_set_overlay_type", ".setOverlayType", settings.setOverlayType);
