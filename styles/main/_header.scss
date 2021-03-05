@@ -125,8 +125,9 @@
 			fill: $colorBlue;
 		}
 	}
-	#button_back {
-		// backbutton too small on small touch devices
+	#button_back,
+	#button_back_home {
+		// back button too small on small touch devices
 		// remove left padding of menu bar and add here plus more padding on
 		// the right as well
 		padding: 16px 18px;
@@ -134,7 +135,7 @@
 
 	#button_settings,
 	#button_signin {
-		padding: 16px 48px 16px 8px;
+		padding: 16px 48px 16px 18px;
 	}
 
 	// Divider -------------------------------------------------------------- //
