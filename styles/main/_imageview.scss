@@ -217,6 +217,14 @@
 			}
 		}
 	}
+
+	// reduce entries in menu bar on small screens
+	// corresponding entries are added to the 'more' menu
+	#button_move,
+	#button_trash,
+	#button_visibility {
+		display: none !important;
+	}
 }
 
 @media only screen and (min-width: 568px) and (max-width: 768px),

@@ -364,6 +364,31 @@ contextMenu.photoMore = function (photoID, e) {
 		{ title: build.iconic("fullscreen-enter") + lychee.locale["FULL_PHOTO"], visible: !!showFull, fn: () => window.open(photo.getDirectLink()) },
 		{ title: build.iconic("cloud-download") + lychee.locale["DOWNLOAD"], visible: !!showDownload, fn: () => photo.getArchive([photoID]) },
 	];
+	// prepend further buttons if menu bar is reduced on small screens
+	let button_visibility = $("#button_visibility");
+	if (button_visibility && button_visibility.css("display") === "none") {
+		items.unshift({
+			title: build.iconic("eye") + lychee.locale["VISIBILITY_PHOTO"],
+			visible: lychee.enable_button_visibility,
+			fn: (e) => photo.setPublic(photo.getID(), e),
+		});
+	}
+	let button_trash = $("#button_trash");
+	if (button_trash && button_trash.css("display") === "none") {
+		items.unshift({
+			title: build.iconic("trash") + lychee.locale["DELETE"],
+			visible: lychee.enable_button_trash,
+			fn: () => photo.delete([photo.getID()]),
+		});
+	}
+	let button_move = $("#button_move");
+	if (button_move && button_move.css("display") === "none") {
+		items.unshift({
+			title: build.iconic("folder") + lychee.locale["MOVE_ALBUM"],
+			visible: lychee.enable_button_move,
+			fn: (e) => contextMenu.move([photo.getID()], e, photo.setAlbum),
+		});
+	}
 
 	basicContext.show(items, e.originalEvent);
 };
