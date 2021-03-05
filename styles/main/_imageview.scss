@@ -219,24 +219,6 @@
 	}
 }
 
-@media only screen and (max-width: 640px) {
-	// reduce entries in menu bar on small screens
-	// corresponding entries are added to the 'more' menu
-	#button_move,
-	#button_trash,
-	#button_visibility {
-		display: none !important;
-	}
-
-	@media (max-width: 567px) {
-		// remove further buttons on tiny screens
-		#button_rotate_ccwise,
-		#button_rotate_cwise {
-			display: none !important;
-		}
-	}
-}
-
 @media only screen and (min-width: 568px) and (max-width: 768px),
 	only screen and (min-width: 568px) and (max-width: 640px) and (orientation: landscape) {
 	// sidebar on side, medium size

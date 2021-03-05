@@ -218,3 +218,25 @@
 		margin-left: 250px;
 	}
 }
+
+@media only screen and (max-width: 640px) {
+	// reduce entries in menu bar on small screens
+	// corresponding entries are added to the 'more' menu
+	#button_move,
+	#button_move_album,
+	#button_trash,
+	#button_trash_album,
+	#button_visibility,
+	#button_visibility_album,
+	#button_nsfw_album {
+		display: none !important;
+	}
+
+	@media (max-width: 567px) {
+		// remove further buttons on tiny screens
+		#button_rotate_ccwise,
+		#button_rotate_cwise {
+			display: none !important;
+		}
+	}
+}
