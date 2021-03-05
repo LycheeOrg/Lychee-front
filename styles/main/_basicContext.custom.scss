@@ -31,6 +31,12 @@
 	&__data {
 		min-width: auto;
 		padding: 6px 25px 7px 12px;
+
+		@media (hover: none) and (pointer: coarse) {
+			// increase size of menu entries for touch devices
+			padding: 12px 25px 12px 12px;
+		}
+
 		color: white(1);
 		transition: none;
 		cursor: default;
