@@ -853,7 +853,7 @@ lychee.fullscreenStatus = function () {
 };
 
 lychee.fullscreenAvailable = function () {
-	return document.requestFullscreen || document.mozRequestFullscreen || document.webkitRequestFullscreen || document.msRequestFullscreen;
+	return document.fullscreenEnabled || document.mozFullscreenEnabled || document.webkitFullscreenEnabled || document.msFullscreenEnabled;
 };
 
 lychee.fullscreenUpdate = function () {

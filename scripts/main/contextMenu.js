@@ -41,7 +41,7 @@ contextMenu.add = function (e) {
 		items.unshift({
 			title: build.iconic("folder") + lychee.locale["MOVE_ALBUM"],
 			visible: lychee.enable_button_move,
-			fn: (event) => contextMenu.move([album.getID()], event, album.setAlbum, "ROOT", album.getParent() != ""),
+			fn: (event) => contextMenu.move([album.getID()], event, album.setAlbum, "ROOT", album.getParent() !== ""),
 		});
 	}
 	let button_nsfw_album = $("#button_nsfw_album");
