@@ -387,7 +387,7 @@ header.setMode = function (mode) {
 				let e = $("#button_trash_album", ".header__toolbar--album");
 				e.remove();
 			}
-			if (!lychee.enable_button_fullscreen) {
+			if (!lychee.enable_button_fullscreen || !lychee.fullscreenAvailable()) {
 				let e = $("#button_fs_album_enter", ".header__toolbar--album");
 				e.remove();
 			}
@@ -474,7 +474,7 @@ header.setMode = function (mode) {
 				let e = $("#button_trash", ".header__toolbar--photo");
 				e.remove();
 			}
-			if (!lychee.enable_button_fullscreen) {
+			if (!lychee.enable_button_fullscreen || !lychee.fullscreenAvailable()) {
 				let e = $("#button_fs_enter", ".header__toolbar--photo");
 				e.remove();
 			}

@@ -339,9 +339,10 @@ $(document).ready(function () {
 					return false;
 				}
 			}
-		})
-		// Fullscreen
-		.on("fullscreenchange mozfullscreenchange webkitfullscreenchange msfullscreenchange", lychee.fullscreenUpdate);
+		});
+	// Fullscreen
+	if (lychee.fullscreenAvailable())
+		$(document).on("fullscreenchange mozfullscreenchange webkitfullscreenchange msfullscreenchange", lychee.fullscreenUpdate);
 
 	$("#sensitive_warning").on("click", view.album.nsfw_warning.next);
 

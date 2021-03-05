@@ -370,7 +370,7 @@ contextMenu.photoMore = function (photoID, e) {
 		items.unshift({
 			title: build.iconic("eye") + lychee.locale["VISIBILITY_PHOTO"],
 			visible: lychee.enable_button_visibility,
-			fn: (e) => photo.setPublic(photo.getID(), e),
+			fn: (event) => photo.setPublic(photo.getID(), event),
 		});
 	}
 	let button_trash = $("#button_trash");
@@ -386,7 +386,23 @@ contextMenu.photoMore = function (photoID, e) {
 		items.unshift({
 			title: build.iconic("folder") + lychee.locale["MOVE_ALBUM"],
 			visible: lychee.enable_button_move,
-			fn: (e) => contextMenu.move([photo.getID()], e, photo.setAlbum),
+			fn: (event) => contextMenu.move([photo.getID()], event, photo.setAlbum),
+		});
+	}
+	let button_rotate_cwise = $("#button_rotate_cwise");
+	if (button_rotate_cwise && button_rotate_cwise.css("display") === "none") {
+		items.unshift({
+			title: build.iconic("clockwise") + lychee.locale["PHOTO_EDIT_ROTATECWISE"],
+			visible: lychee.enable_button_move,
+			fn: () => photoeditor.rotate(photo.getID(), 1),
+		});
+	}
+	let button_rotate_ccwise = $("#button_rotate_ccwise");
+	if (button_rotate_ccwise && button_rotate_ccwise.css("display") === "none") {
+		items.unshift({
+			title: build.iconic("counterclockwise") + lychee.locale["PHOTO_EDIT_ROTATECCWISE"],
+			visible: lychee.enable_button_move,
+			fn: () => photoeditor.rotate(photo.getID(), -1),
 		});
 	}
 
