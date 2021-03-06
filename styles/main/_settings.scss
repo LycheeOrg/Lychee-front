@@ -398,3 +398,35 @@
 		}
 	}
 }
+
+// responsive web design for smaller screens
+@media only screen and (max-width: 567px), only screen and (max-width: 640px) and (orientation: portrait) {
+	.setLogin,
+	.setSorting,
+	.setDropBox,
+	.setLang,
+	.setLayout,
+	.setPublicSearch,
+	.setOverlay,
+	.setOverlayType,
+	.setMapDisplay,
+	.setMapDisplayPublic,
+	.setMapProvider,
+	.setMapIncludeSubalbums,
+	.setLocationDecoding,
+	.setLocationDecodingCachingType,
+	.setLocationShow,
+	.setLocationShowPublic,
+	.setDefaultLicense,
+	.setCSS,
+	.setNSFWVisible {
+		padding: 0;
+		font-size: 12px;
+	}
+
+	.settings_view {
+		width: 100%;
+		max-width: 100%;
+		padding: 20px;
+	}
+}

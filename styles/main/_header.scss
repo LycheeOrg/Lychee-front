@@ -21,7 +21,6 @@
 	}
 
 	&--view {
-		background: rgba(0, 0, 0, 0.6);
 		border-bottom: none;
 
 		&.header--error {
@@ -41,6 +40,16 @@
 
 		&--visible {
 			display: flex;
+		}
+
+		&--config {
+			.button .iconic {
+				transform: rotate(45deg);
+			}
+
+			.header__title {
+				padding-right: 80px;
+			}
 		}
 	}
 
@@ -135,8 +144,9 @@
 	}
 
 	#button_settings,
-	#button_signin {
-		padding: 16px 48px 16px 8px;
+	#button_signin,
+	#button_close_config {
+		padding: 16px 48px 16px 18px;
 	}
 
 	// Divider -------------------------------------------------------------- //
@@ -219,6 +229,7 @@
 	}
 }
 
+// responsive web design for smaller screens
 @media only screen and (max-width: 640px) {
 	// reduce entries in menu bar on small screens
 	// corresponding entries are added to the 'more' menu

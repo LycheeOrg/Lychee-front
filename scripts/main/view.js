@@ -580,7 +580,7 @@ view.album = {
 	},
 
 	sidebar: function () {
-		if ((visible.album() || !album.json.init) && !visible.photo()) {
+		if ((visible.album() || (album.json !== null && album.json.init !== null)) && !visible.photo()) {
 			let structure = sidebar.createStructure.album(album);
 			let html = sidebar.render(structure);
 
@@ -884,6 +884,7 @@ view.settings = {
 
 		view.photo.hide();
 		view.settings.title();
+		header.setMode("config");
 		view.settings.content.init();
 	},
 
@@ -1514,6 +1515,7 @@ view.users = {
 
 		view.photo.hide();
 		view.users.title();
+		header.setMode("config");
 		view.users.content.init();
 	},
 
@@ -1602,6 +1604,7 @@ view.sharing = {
 
 		view.photo.hide();
 		view.sharing.title();
+		header.setMode("config");
 		view.sharing.content.init();
 	},
 
@@ -1745,6 +1748,7 @@ view.logs = {
 
 		view.photo.hide();
 		view.logs.title();
+		header.setMode("config");
 		view.logs.content.init();
 	},
 
@@ -1783,6 +1787,7 @@ view.diagnostics = {
 
 		view.photo.hide();
 		view.diagnostics.title("Diagnostics");
+		header.setMode("config");
 		view.diagnostics.content.init();
 	},
 
@@ -1908,6 +1913,7 @@ view.update = {
 
 		view.photo.hide();
 		view.update.title();
+		header.setMode("config");
 		view.update.content.init();
 	},
 
@@ -1954,6 +1960,7 @@ view.u2f = {
 
 		view.photo.hide();
 		view.u2f.title();
+		header.setMode("config");
 		view.u2f.content.init();
 	},
 

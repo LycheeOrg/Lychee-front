@@ -576,3 +576,41 @@ contextMenu.close = function () {
 		multiselect.close();
 	}
 };
+
+contextMenu.config = function (e) {
+	let items = [{ title: build.iconic("cog") + lychee.locale["SETTINGS"], fn: settings.open }];
+	if (lychee.admin) {
+		items.push({ title: build.iconic("person") + lychee.locale["USERS"], fn: users.list });
+	}
+	items.push({ title: build.iconic("key") + lychee.locale["U2F"], fn: u2f.list });
+	items.push({ title: build.iconic("cloud") + lychee.locale["SHARING"], fn: sharing.list });
+	if (lychee.admin) {
+		items.push({
+			title: build.iconic("align-left") + lychee.locale["LOGS"],
+			fn: function () {
+				if (lychee.api_V2) {
+					view.logs.init();
+				} else {
+					window.open(lychee.logs());
+				}
+			},
+		});
+		items.push({
+			title: build.iconic("wrench") + lychee.locale["DIAGNOSTICS"],
+			fn: function () {
+				if (lychee.api_V2) {
+					view.diagnostics.init();
+				} else {
+					window.open(lychee.diagnostics());
+				}
+			},
+		});
+		if (lychee.api_V2 && lychee.update_available) {
+			items.push({ title: build.iconic("timer") + lychee.locale["UPDATE_AVAILABLE"], fn: view.update.init });
+		}
+	}
+	items.push({ title: build.iconic("info") + lychee.locale["ABOUT_LYCHEE"], fn: lychee.aboutDialog });
+	items.push({ title: build.iconic("account-logout") + lychee.locale["SIGN_OUT"], fn: lychee.logout });
+
+	basicContext.show(items, e.originalEvent);
+};

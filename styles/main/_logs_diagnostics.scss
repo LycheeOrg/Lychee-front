@@ -48,3 +48,32 @@
 		width: 400px;
 	}
 }
+
+// responsive web design for smaller screens
+@media only screen and (max-width: 567px), only screen and (max-width: 640px) and (orientation: portrait) {
+	.logs_diagnostics_view,
+	.clear_logs_update {
+		width: 100%;
+		max-width: 100%;
+		font-size: 11px;
+		line-height: 12px;
+
+		.basicModal__button,
+		.button_left {
+			width: 80%;
+			margin: 0 10%;
+		}
+	}
+
+	.logs_diagnostics_view {
+		padding: 10px 10px 0 0;
+	}
+
+	.clear_logs_update {
+		padding: 10px 10px 0 10px;
+	}
+
+	.clear_logs_update {
+		margin: 0;
+	}
+}

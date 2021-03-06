@@ -233,3 +233,31 @@
 		border: 1px solid $colorBlue;
 	}
 }
+
+// responsive web design for smaller screens
+@media only screen and (max-width: 567px), only screen and (max-width: 640px) and (orientation: portrait) {
+	.sharing_view {
+		width: 100%;
+		max-width: 100%;
+		padding: 10px;
+
+		.select {
+			font-size: 12px;
+		}
+
+		.iconic {
+			margin-left: -4px; // help with centering
+		}
+	}
+
+	.sharing_view_line {
+		p {
+			width: 100%;
+		}
+
+		.basicModal__button {
+			width: 80%;
+			margin: 0 10%;
+		}
+	}
+}

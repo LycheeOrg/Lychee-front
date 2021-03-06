@@ -44,7 +44,22 @@ header.bind = function () {
 	});
 
 	header.dom("#button_signin").on(eventName, lychee.loginDialog);
-	header.dom("#button_settings").on(eventName, leftMenu.open);
+	header.dom("#button_settings").on(eventName, function (e) {
+		if ($(".leftMenu").css("display") === "none") {
+			// left menu disabled on small screens
+			contextMenu.config(e);
+		} else {
+			// standard left menu
+			leftMenu.open();
+		}
+	});
+	header.dom("#button_close_config").on(eventName, function () {
+		tabindex.makeFocusable(header.dom());
+		tabindex.makeFocusable(lychee.content);
+		tabindex.makeUnfocusable(leftMenu._dom);
+		multiselect.bind();
+		lychee.load();
+	});
 	header.dom("#button_info_album").on(eventName, sidebar.toggle);
 	header.dom("#button_info").on(eventName, sidebar.toggle);
 	header.dom(".button--map-albums").on(eventName, function () {
@@ -185,11 +200,15 @@ header.setMode = function (mode) {
 		case "public":
 			header.dom().removeClass("header--view");
 			header
-				.dom(".header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map")
+				.dom(".header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map, .header__toolbar--config")
 				.removeClass("header__toolbar--visible");
 			header.dom(".header__toolbar--public").addClass("header__toolbar--visible");
 			tabindex.makeFocusable(header.dom(".header__toolbar--public"));
-			tabindex.makeUnfocusable(header.dom(".header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map"));
+			tabindex.makeUnfocusable(
+				header.dom(
+					".header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map, .header__toolbar--config"
+				)
+			);
 
 			if (lychee.public_search) {
 				let e = $(".header__search, .header__clear", ".header__toolbar--public");
@@ -221,12 +240,16 @@ header.setMode = function (mode) {
 		case "albums":
 			header.dom().removeClass("header--view");
 			header
-				.dom(".header__toolbar--public, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map")
+				.dom(".header__toolbar--public, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map, .header__toolbar--config")
 				.removeClass("header__toolbar--visible");
 			header.dom(".header__toolbar--albums").addClass("header__toolbar--visible");
 
 			tabindex.makeFocusable(header.dom(".header__toolbar--albums"));
-			tabindex.makeUnfocusable(header.dom(".header__toolbar--public, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map"));
+			tabindex.makeUnfocusable(
+				header.dom(
+					".header__toolbar--public, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map, .header__toolbar--config"
+				)
+			);
 
 			// If map is disabled, we should hide the icon
 			if (lychee.map_display) {
@@ -255,13 +278,15 @@ header.setMode = function (mode) {
 
 			header.dom().removeClass("header--view");
 			header
-				.dom(".header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--map")
+				.dom(".header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--map, .header__toolbar--config")
 				.removeClass("header__toolbar--visible");
 			header.dom(".header__toolbar--album").addClass("header__toolbar--visible");
 
 			tabindex.makeFocusable(header.dom(".header__toolbar--album"));
 			tabindex.makeUnfocusable(
-				header.dom(".header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--map")
+				header.dom(
+					".header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--map, .header__toolbar--config"
+				)
 			);
 
 			// Hide download button when album empty or we are not allowed to
@@ -401,13 +426,15 @@ header.setMode = function (mode) {
 		case "photo":
 			header.dom().addClass("header--view");
 			header
-				.dom(".header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--map")
+				.dom(".header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--map, .header__toolbar--config")
 				.removeClass("header__toolbar--visible");
 			header.dom(".header__toolbar--photo").addClass("header__toolbar--visible");
 
 			tabindex.makeFocusable(header.dom(".header__toolbar--photo"));
 			tabindex.makeUnfocusable(
-				header.dom(".header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--map")
+				header.dom(
+					".header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--map, .header__toolbar--config"
+				)
 			);
 			// If map is disabled, we should hide the icon
 			if (lychee.publicMode === true ? lychee.map_display_public : lychee.map_display) {
@@ -493,7 +520,7 @@ header.setMode = function (mode) {
 		case "map":
 			header.dom().removeClass("header--view");
 			header
-				.dom(".header__toolbar--public, .header__toolbar--album, .header__toolbar--albums, .header__toolbar--photo")
+				.dom(".header__toolbar--public, .header__toolbar--album, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--config")
 				.removeClass("header__toolbar--visible");
 			header.dom(".header__toolbar--map").addClass("header__toolbar--visible");
 
@@ -501,6 +528,13 @@ header.setMode = function (mode) {
 			tabindex.makeUnfocusable(
 				header.dom(".header__toolbar--public, .header__toolbar--album, .header__toolbar--albums, .header__toolbar--photo")
 			);
+			return true;
+		case "config":
+			header.dom().addClass("header--view");
+			header
+				.dom(".header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map")
+				.removeClass("header__toolbar--visible");
+			header.dom(".header__toolbar--config").addClass("header__toolbar--visible");
 			return true;
 	}
 
