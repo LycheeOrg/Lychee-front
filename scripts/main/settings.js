@@ -356,13 +356,15 @@ settings.changePublicSearch = function () {
 settings.setOverlayType = function () {
 	// validate the input
 	let params = {};
-	if ($("#ImageOverlay:checked") && $("#ImgOverlayType").val() === "exif") {
+	let check = $("#ImageOverlay:checked") ? true : false;
+	let type = $("#ImgOverlayType").val();
+	if (check && type === "exif") {
 		params.image_overlay_type = "exif";
-	} else if ($("#ImageOverlay:checked") && $("#ImgOverlayType").val() === "desc") {
+	} else if (check && type === "desc") {
 		params.image_overlay_type = "desc";
-	} else if ($("#ImageOverlay:checked") && $("#ImgOverlayType").val() === "date") {
+	} else if (check && type === "date") {
 		params.image_overlay_type = "date";
-	} else if ($("#ImageOverlay:checked") && $("#ImgOverlayType").val() === "none") {
+	} else if (check && type === "none") {
 		params.image_overlay_type = "none";
 	} else {
 		params.image_overlay_type = "exif";

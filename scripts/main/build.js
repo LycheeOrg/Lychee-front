@@ -314,8 +314,8 @@ build.overlay_image = function (data) {
 				}
 			}
 			break;
-		default:
 		case "none":
+		default:
 			return "";
 	}
 
