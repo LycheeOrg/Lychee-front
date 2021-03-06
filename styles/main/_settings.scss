@@ -401,6 +401,44 @@
 
 // responsive web design for smaller screens
 @media only screen and (max-width: 567px), only screen and (max-width: 640px) and (orientation: portrait) {
+	.settings_view #fullSettings {
+		max-width: 100%;
+
+		.setting_category {
+			font-size: 14px;
+			padding-left: 0;
+			margin-bottom: 4px;
+		}
+
+		.setting_line {
+			font-size: 12px;
+
+			&:first-child {
+				padding-top: 20px;
+			}
+
+			p {
+				min-width: unset;
+				line-height: 20px;
+
+				&.warning {
+					font-size: 14px;
+					line-height: 16px;
+					margin-bottom: 0;
+				}
+
+				span,
+				input {
+					padding: 0;
+				}
+			}
+		}
+
+		.basicModal__button_SAVE {
+			margin-top: 20px;
+		}
+	}
+
 	.setLogin,
 	.setSorting,
 	.setDropBox,
@@ -427,6 +465,6 @@
 	.settings_view {
 		width: 100%;
 		max-width: 100%;
-		padding: 20px;
+		padding: 20px 20px 0 20px;
 	}
 }
