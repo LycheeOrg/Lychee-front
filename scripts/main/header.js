@@ -129,7 +129,6 @@ header.bind = function () {
 		}
 	});
 	header.dom(".header__clear").on(eventName, function () {
-		header.dom(".header__search").focus();
 		search.reset();
 	});
 
