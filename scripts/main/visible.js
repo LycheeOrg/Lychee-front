@@ -25,6 +25,11 @@ visible.mapview = function () {
 	return false;
 };
 
+visible.config = function () {
+	if (header.dom(".header__toolbar--config").hasClass("header__toolbar--visible")) return true;
+	return false;
+};
+
 visible.search = function () {
 	if (search.hash != null) return true;
 	return false;

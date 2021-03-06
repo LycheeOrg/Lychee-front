@@ -526,7 +526,9 @@ header.setMode = function (mode) {
 
 			tabindex.makeFocusable(header.dom(".header__toolbar--map"));
 			tabindex.makeUnfocusable(
-				header.dom(".header__toolbar--public, .header__toolbar--album, .header__toolbar--albums, .header__toolbar--photo")
+				header.dom(
+					".header__toolbar--public, .header__toolbar--album, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--config"
+				)
 			);
 			return true;
 		case "config":
