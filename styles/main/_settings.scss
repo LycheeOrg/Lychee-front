@@ -1,53 +1,12 @@
 .settings_view {
-	width: 80%;
-	max-width: 600px;
+	width: 90%;
+	max-width: 700px;
 	margin-left: auto;
 	margin-right: auto;
-}
-
-.setLogin,
-.setSorting,
-.setDropBox,
-.setLang,
-.setLayout,
-.setPublicSearch,
-.setOverlay,
-.setOverlayType,
-.setMapDisplay,
-.setMapDisplayPublic,
-.setMapProvider,
-.setMapIncludeSubalbums,
-.setLocationDecoding,
-.setLocationDecodingCachingType,
-.setLocationShow,
-.setLocationShowPublic,
-.setDefaultLicense,
-.setCSS,
-.setNSFWVisible {
-	font-size: 14px;
-	width: 100%;
-	padding: 5%;
-
-	p {
-		margin: 0 0 5%;
-		width: 100%;
-		color: #ccc;
-		line-height: 16px;
-
-		a {
-			color: rgba(255, 255, 255, 0.9);
-			text-decoration: none;
-			border-bottom: 1px dashed #888;
-		}
-	}
-
-	p:last-of-type {
-		margin: 0;
-	}
 
 	input.text {
 		padding: 9px 2px;
-		width: 100%;
+		width: calc(50% - 4px);
 		background-color: transparent;
 		color: #fff;
 		border: none;
@@ -55,82 +14,14 @@
 		border-radius: 0;
 		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
 		outline: 0;
-	}
-
-	input.text:focus {
-		border-bottom-color: #2293ec;
-	}
-
-	input.text.error {
-		border-bottom-color: #d92c34;
-	}
-
-	input.text:first-child {
-		margin-top: 10px;
-	}
-
-	input.text:last-child {
-		margin-bottom: 10px;
-	}
-
-	textarea {
-		padding: 9px 9px;
-		width: calc(100% - 18px);
-		height: 100px;
-		background-color: transparent;
-		color: #fff;
-		border: 1px solid #666666;
-		border-radius: 0;
-		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
-		outline: 0;
-		resize: vertical;
 
 		&:focus {
-			border-color: #2293ec;
+			border-bottom-color: #2293ec;
 		}
-	}
 
-	.choice {
-		padding: 0 30px 15px;
-		width: 100%;
-		color: #fff;
-	}
-
-	.choice:last-child {
-		padding-bottom: 40px;
-	}
-
-	.choice label {
-		float: left;
-		color: #fff;
-		font-size: 14px;
-		font-weight: 700;
-	}
-
-	.choice label input {
-		position: absolute;
-		margin: 0;
-		opacity: 0;
-	}
-
-	.choice label .checkbox {
-		float: left;
-		display: block;
-		width: 16px;
-		height: 16px;
-		background: rgba(0, 0, 0, 0.5);
-		border-radius: 3px;
-		box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.7);
-	}
-
-	.choice label .checkbox .iconic {
-		box-sizing: border-box;
-		fill: #2293ec;
-		padding: 2px;
-		opacity: 0;
-		-ms-transform: scale(0);
-		transform: scale(0);
-		transition: opacity 0.2s cubic-bezier(0.51, 0.92, 0.24, 1), transform 0.2s cubic-bezier(0.51, 0.92, 0.24, 1);
+		.error {
+			border-bottom-color: #d92c34;
+		}
 	}
 
 	.basicModal__button {
@@ -140,138 +31,219 @@
 		border-radius: 5px;
 	}
 
-	.basicModal__button_MORE {
+	.basicModal__button_MORE,
+	.basicModal__button_SAVE {
 		color: #b22027;
 		border-radius: 5px;
 	}
 
-	.select {
-		position: relative;
-		margin: 1px 5px;
-		padding: 0;
-		width: 110px;
-		color: #fff;
-		border-radius: 3px;
-		border: 1px solid rgba(0, 0, 0, 0.2);
-		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
-		font-size: 11px;
-		line-height: 16px;
-		overflow: hidden;
-		outline: 0;
-		vertical-align: middle;
-		background: rgba(0, 0, 0, 0.3);
-		display: inline-block;
-		select {
-			margin: 0;
-			padding: 4px 8px;
-			width: 120%;
-			color: #fff;
-			font-size: 11px;
-			line-height: 16px;
-			border: 0;
-			outline: 0;
-			box-shadow: none;
-			border-radius: 0;
-			background-color: transparent;
-			background-image: none;
-			-moz-appearance: none;
-			-webkit-appearance: none;
-			appearance: none;
+	> div {
+		font-size: 14px;
+		width: 100%;
+		padding: 12px 0;
 
-			option {
-				margin: 0;
-				padding: 0;
-				background: #fff;
-				color: #333;
-				transition: none;
+		p {
+			margin: 0 0 5%;
+			width: 100%;
+			color: #ccc;
+			line-height: 16px;
+
+			a {
+				color: rgba(255, 255, 255, 0.9);
+				text-decoration: none;
+				border-bottom: 1px dashed #888;
 			}
 		}
-		select:disabled {
-			color: #000;
-			cursor: not-allowed;
+
+		p:last-of-type {
+			margin: 0;
+		}
+
+		input.text {
+			width: 100%;
+		}
+
+		textarea {
+			padding: 9px 9px;
+			width: calc(100% - 18px);
+			height: 100px;
+			background-color: transparent;
+			color: #fff;
+			border: 1px solid #666666;
+			border-radius: 0;
+			box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
+			outline: 0;
+			resize: vertical;
+
+			&:focus {
+				border-color: #2293ec;
+			}
+		}
+
+		.choice {
+			padding: 0 30px 15px;
+			width: 100%;
+			color: #fff;
+		}
+
+		.choice:last-child {
+			padding-bottom: 40px;
+		}
+
+		.choice label {
+			float: left;
+			color: #fff;
+			font-size: 14px;
+			font-weight: 700;
+		}
+
+		.choice label input {
+			position: absolute;
+			margin: 0;
+			opacity: 0;
+		}
+
+		.choice label .checkbox {
+			float: left;
+			display: block;
+			width: 16px;
+			height: 16px;
+			background: rgba(0, 0, 0, 0.5);
+			border-radius: 3px;
+			box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.7);
+		}
+
+		.choice label .checkbox .iconic {
+			box-sizing: border-box;
+			fill: #2293ec;
+			padding: 2px;
+			opacity: 0;
+			-ms-transform: scale(0);
+			transform: scale(0);
+			transition: opacity 0.2s cubic-bezier(0.51, 0.92, 0.24, 1), transform 0.2s cubic-bezier(0.51, 0.92, 0.24, 1);
+		}
+
+		.select {
+			position: relative;
+			margin: 1px 5px;
+			padding: 0;
+			width: 110px;
+			color: #fff;
+			border-radius: 3px;
+			border: 1px solid rgba(0, 0, 0, 0.2);
+			box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
+			font-size: 11px;
+			line-height: 16px;
+			overflow: hidden;
+			outline: 0;
+			vertical-align: middle;
+			background: rgba(0, 0, 0, 0.3);
+			display: inline-block;
+
+			select {
+				margin: 0;
+				padding: 4px 8px;
+				width: 120%;
+				color: #fff;
+				font-size: 11px;
+				line-height: 16px;
+				border: 0;
+				outline: 0;
+				box-shadow: none;
+				border-radius: 0;
+				background-color: transparent;
+				background-image: none;
+				-moz-appearance: none;
+				-webkit-appearance: none;
+				appearance: none;
+
+				option {
+					margin: 0;
+					padding: 0;
+					background: #fff;
+					color: #333;
+					transition: none;
+				}
+			}
+
+			select:disabled {
+				color: #000;
+				cursor: not-allowed;
+			}
+		}
+
+		.select::after {
+			position: absolute;
+			content: "≡";
+			right: 8px;
+			top: 4px;
+			color: #2293ec;
+			font-size: 16px;
+			line-height: 16px;
+			font-weight: 700;
+			pointer-events: none;
+		}
+
+		/* The switch - the box around the slider */
+		.switch {
+			position: relative;
+			display: inline-block;
+			width: 42px;
+			height: 22px;
+			bottom: 4px;
+		}
+
+		/* Hide default HTML checkbox */
+		.switch input {
+			opacity: 0;
+			width: 0;
+			height: 0;
+		}
+
+		/* The slider */
+		.slider {
+			position: absolute;
+			cursor: pointer;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			border: 1px solid rgba(0, 0, 0, 0.2);
+			box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
+			background: rgba(0, 0, 0, 0.3);
+			-webkit-transition: 0.4s;
+			transition: 0.4s;
+
+			&:before {
+				position: absolute;
+				content: "";
+				height: 14px;
+				width: 14px;
+				left: 3px;
+				bottom: 3px;
+				background-color: $colorBlue;
+			}
+		}
+
+		input:checked + .slider {
+			background-color: $colorBlue;
+		}
+
+		input:checked + .slider:before {
+			-ms-transform: translateX(20px);
+			transform: translateX(20px);
+			background-color: #ffffff;
+		}
+
+		/* Rounded sliders */
+		.slider.round {
+			border-radius: 20px;
+		}
+
+		.slider.round:before {
+			border-radius: 50%;
 		}
 	}
-
-	.select::after {
-		position: absolute;
-		content: "≡";
-		right: 8px;
-		top: 4px;
-		color: #2293ec;
-		font-size: 16px;
-		line-height: 16px;
-		font-weight: 700;
-		pointer-events: none;
-	}
-
-	/* The switch - the box around the slider */
-	.switch {
-		position: relative;
-		display: inline-block;
-		width: 42px;
-		height: 22px;
-		bottom: 4px;
-	}
-
-	/* Hide default HTML checkbox */
-	.switch input {
-		opacity: 0;
-		width: 0;
-		height: 0;
-	}
-
-	/* The slider */
-	.slider {
-		position: absolute;
-		cursor: pointer;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		border: 1px solid rgba(0, 0, 0, 0.2);
-		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
-		background: rgba(0, 0, 0, 0.3);
-		-webkit-transition: 0.4s;
-		transition: 0.4s;
-	}
-
-	.slider:before {
-		position: absolute;
-		content: "";
-		height: 14px;
-		width: 14px;
-		left: 3px;
-		bottom: 3px;
-		background-color: $colorBlue;
-		-webkit-transition: 0.4s;
-		transition: 0.4s;
-	}
-
-	input:checked + .slider {
-		background-color: $colorBlue;
-	}
-
-	input:checked + .slider:before {
-		-ms-transform: translateX(20px);
-		transform: translateX(20px);
-		background-color: #ffffff;
-	}
-
-	/* Rounded sliders */
-	.slider.round {
-		border-radius: 20px;
-	}
-
-	.slider.round:before {
-		border-radius: 50%;
-	}
-}
-
-#fullSettings {
-	width: 100%;
-	max-width: 700px;
-	margin-left: auto;
-	margin-right: auto;
 
 	.setting_category {
 		font-size: 20px;
@@ -310,15 +282,15 @@
 			&:last-of-type {
 				margin: 0;
 			}
-		}
 
-		p.warning {
-			margin-bottom: 30px;
-			color: $colorRed;
-			font-weight: bold;
-			font-size: 18px;
-			text-align: justify;
-			line-height: 22px;
+			.warning {
+				margin-bottom: 30px;
+				color: $colorRed;
+				font-weight: bold;
+				font-size: 18px;
+				text-align: justify;
+				line-height: 22px;
+			}
 		}
 
 		span.text {
@@ -342,63 +314,22 @@
 		}
 
 		input.text {
-			padding: 9px 2px;
 			width: calc(50% - 4px);
-			background-color: transparent;
-			color: #fff;
-			border: none;
-			border-bottom: 1px solid #222;
-			border-radius: 0;
-			box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
-			outline: 0;
-
-			&:focus {
-				border-bottom-color: #2293ec;
-			}
 		}
-	}
-
-	.basicModal__button {
-		display: inline-block;
-		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02), inset 1px 0 0 rgba(0, 0, 0, 0.2);
-		width: 100%;
-		min-width: 50px;
-		border-radius: 5px;
-	}
-
-	.basicModal__button_SAVE {
-		color: #b22027;
 	}
 }
 
 // restrict hover features to devices that support it
 @media (hover: hover) {
-	.setLogin,
-	.setSorting,
-	.setDropBox,
-	.setLang,
-	.setLayout,
-	.setPublicSearch,
-	.setOverlay,
-	.setOverlayType,
-	.setMapDisplay,
-	.setMapDisplayPublic,
-	.setMapProvider,
-	.setMapIncludeSubalbums,
-	.setLocationDecoding,
-	.setLocationDecodingCachingType,
-	.setLocationShow,
-	.setLocationShowPublic,
-	.setDefaultLicense,
-	.setCSS,
-	.setNSFWVisible {
+	.settings_view {
 		.basicModal__button:hover {
 			background: #2293ec;
 			color: #ffffff;
 			cursor: pointer;
 		}
 
-		.basicModal__button_MORE:hover {
+		.basicModal__button_MORE:hover,
+		.basicModal__button_SAVE:hover {
 			background: #b22027;
 			color: #ffffff;
 		}
@@ -407,19 +338,30 @@
 			border-bottom: #2293ec solid 1px;
 		}
 	}
+}
 
-	#fullSettings {
-		.setting_line input:hover {
+// on touch devices draw buttons in color
+@media (hover: none) {
+	.settings_view {
+		input.text {
 			border-bottom: #2293ec solid 1px;
+			margin: 6px 0;
 		}
 
-		.basicModal__button:hover {
-			cursor: pointer;
+		> div {
+			padding: 16px 0;
 		}
 
-		.basicModal__button_SAVE:hover {
-			background: #b22027;
+		.basicModal__button {
+			background: #2293ec;
 			color: #ffffff;
+			max-width: 320px;
+			margin-top: 20px;
+
+			&_MORE,
+			&_SAVE {
+				background: #b22027;
+			}
 		}
 	}
 }

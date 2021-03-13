@@ -88,3 +88,10 @@
 		}
 	}
 }
+
+// on touch devices increase space between entries
+@media (hover: none) {
+	.leftMenu a {
+		padding: 14px 8px 14px 32px;
+	}
+}

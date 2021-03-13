@@ -239,3 +239,17 @@
 		}
 	}
 }
+
+// on touch devices draw buttons in color
+@media (hover: none) {
+	.sharing_view {
+		.basicModal__button {
+			background: #2293ec;
+			color: #ffffff;
+		}
+
+		input {
+			border-bottom: #2293ec solid 1px;
+		}
+	}
+}

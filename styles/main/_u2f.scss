@@ -50,25 +50,6 @@
 			}
 		}
 	}
-	// input.text {
-	//     padding: 9px 2px;
-	//     width: 40%;
-	//     //margin: 0 2%;
-	//     background-color: transparent;
-	//     color: #fff;
-	//     border: none;
-	//     border-bottom: 1px solid #222;
-	//     border-radius: 0;
-	//     box-shadow: 0 1px 0 rgba(255, 255, 255, .05);
-	//     outline: 0;
-	//     margin-bottom: 10px;
-	//     &:focus {
-	//         border-bottom-color: #2293EC
-	//     }
-	// }
-	// input.text.error {
-	//     border-bottom-color: #d92c34
-	// }
 	.choice label input:checked ~ .checkbox .iconic {
 		opacity: 1;
 		-ms-transform: scale(1);
@@ -203,18 +184,22 @@
 		.basicModal__button:hover {
 			cursor: pointer;
 		}
+
 		.basicModal__button_OK:hover {
 			background: #2293ec;
 			color: #ffffff;
 		}
+
 		.basicModal__button_DEL:hover {
 			background: #b22027;
 			color: #ffffff;
 		}
+
 		.basicModal__button_CREATE:hover {
 			background: #009900;
 			color: #ffffff;
 		}
+
 		input:hover {
 			border-bottom: #2293ec solid 1px;
 		}
@@ -222,5 +207,30 @@
 
 	.signInKeyLess:hover .iconic {
 		fill: #ffffff;
+	}
+}
+
+// on touch devices draw buttons in color
+@media (hover: none) {
+	.u2f_view_line {
+		.basicModal__button {
+			color: #ffffff;
+
+			&_OK {
+				background: #2293ec;
+			}
+
+			&_DEL {
+				background: #b22027;
+			}
+
+			&_CREATE {
+				background: #009900;
+			}
+		}
+
+		input {
+			border-bottom: #2293ec solid 1px;
+		}
 	}
 }
