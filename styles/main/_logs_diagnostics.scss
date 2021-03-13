@@ -1,5 +1,5 @@
 .logs_diagnostics_view {
-	width: 1200px;
+	width: 90%;
 	margin-left: auto;
 	margin-right: auto;
 	color: #ccc;
@@ -12,11 +12,12 @@
 		-moz-user-select: text;
 		-ms-user-select: text;
 		user-select: text;
+		width: fit-content;
+		padding-right: 30px;
 	}
 }
 
 .clear_logs_update {
-	width: 1200px;
 	margin-left: auto;
 	margin-right: auto;
 	margin-bottom: 20px;
