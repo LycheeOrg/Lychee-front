@@ -123,10 +123,12 @@
 		let x = normalizedEvent.x,
 			y = normalizedEvent.y;
 
+		let container = document.querySelector(".basicContextContainer");
+
 		// Get size of browser
 		let browserSize = {
-			width: window.innerWidth,
-			height: window.innerHeight,
+			width: container.offsetWidth,
+			height: container.offsetHeight,
 		};
 
 		// Get size of context
