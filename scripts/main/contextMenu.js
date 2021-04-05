@@ -20,7 +20,11 @@ contextMenu.add = function (e) {
 	}
 
 	if (lychee.api_V2 && !lychee.admin) {
+		// remove import from dropbox and server if not admin
 		items.splice(3, 2);
+	} else if (!lychee.dropboxKey || lychee.dropboxKey === "") {
+		// remove import from dropbox if dropboxKey not set
+		items.splice(3, 1);
 	}
 
 	// prepend further buttons if menu bar is reduced on small screens

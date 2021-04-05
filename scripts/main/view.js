@@ -1482,12 +1482,13 @@ view.full_settings = {
 						</div>`;
 						prev = this.cat;
 					}
-
+					// prevent 'null' string for empty values
+					let val = this.value ? this.value : "";
 					msg += lychee.html`
 			<div class="setting_line">
 				<p>
 				<span class="text">$${this.key}</span>
-				<input class="text" name="$${this.key}" type="text" value="$${this.value}" placeholder="" />
+				<input class="text" name="$${this.key}" type="text" value="$${val}" placeholder="" />
 				</p>
 			</div>
 		`;
