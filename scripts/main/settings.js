@@ -295,13 +295,7 @@ settings.changeSorting = function (params) {
 };
 
 settings.changeDropboxKey = function (params) {
-	// let key = params.key;
-
-	if (params.key.length < 1) {
-		loadingBar.show("error", "key cannot be empty.");
-		return false;
-	}
-
+	// if params.key == "" key is cleared
 	api.post("Settings::setDropboxKey", params, function (data) {
 		if (data === true) {
 			lychee.dropboxKey = params.key;
