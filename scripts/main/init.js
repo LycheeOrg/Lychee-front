@@ -211,7 +211,7 @@ $(document).ready(function () {
 
 	Mousetrap.bindGlobal(["esc", "command+up"], function () {
 		if (basicModal.visible() === true) basicModal.cancel();
-		else if (visible.leftMenu()) leftMenu.close();
+		else if (visible.config() || visible.leftMenu()) leftMenu.close();
 		else if (visible.contextMenu()) contextMenu.close();
 		else if (visible.photo()) lychee.goto(album.getID());
 		else if (visible.album() && !album.json.parent_id) lychee.goto();
@@ -295,6 +295,7 @@ $(document).ready(function () {
 				visible.contextMenu() ||
 				basicModal.visible() ||
 				visible.leftMenu() ||
+				visible.config() ||
 				!(visible.album() || visible.albums())
 			) {
 				return false;
@@ -331,6 +332,7 @@ $(document).ready(function () {
 						!visible.contextMenu() &&
 						!basicModal.visible() &&
 						!visible.leftMenu() &&
+						!visible.config() &&
 						(visible.album() || visible.albums())
 					) {
 						upload.start.local(filesToUpload);
@@ -339,9 +341,10 @@ $(document).ready(function () {
 					return false;
 				}
 			}
-		})
-		// Fullscreen
-		.on("fullscreenchange mozfullscreenchange webkitfullscreenchange msfullscreenchange", lychee.fullscreenUpdate);
+		});
+	// Fullscreen
+	if (lychee.fullscreenAvailable())
+		$(document).on("fullscreenchange mozfullscreenchange webkitfullscreenchange msfullscreenchange", lychee.fullscreenUpdate);
 
 	$("#sensitive_warning").on("click", view.album.nsfw_warning.next);
 

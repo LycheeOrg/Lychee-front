@@ -19,36 +19,7 @@
 	}
 
 	// ImageView -------------------------------------------------------------- //
-	#image {
-		position: absolute;
-		top: 60px;
-		right: 30px;
-		bottom: 30px;
-		left: 30px;
-		margin: auto;
-		max-width: calc(100% - 60px);
-		max-height: calc(100% - 90px);
-		width: auto;
-		height: auto;
-		transition: top 0.3s, right 0.3s, bottom 0.3s, left 0.3s, max-width 0.3s, max-height 0.3s;
-
-		animation-name: zoomIn;
-		animation-duration: 0.3s;
-		animation-timing-function: $timingBounce;
-		background-size: contain;
-		background-position: center;
-		background-repeat: no-repeat;
-
-		@media (max-width: 640px) {
-			top: 60px;
-			right: 20px;
-			bottom: 20px;
-			left: 20px;
-			max-width: calc(100% - 40px);
-			max-height: calc(100% - 80px);
-		}
-	}
-
+	#image,
 	#livephoto {
 		position: absolute;
 		top: 60px;
@@ -68,26 +39,9 @@
 		background-size: contain;
 		background-position: center;
 		background-repeat: no-repeat;
-
-		@media (max-width: 640px) {
-			top: 60px;
-			right: 20px;
-			bottom: 20px;
-			left: 20px;
-			max-width: calc(100% - 40px);
-			max-height: calc(100% - 80px);
-		}
 	}
 
-	&.full #image {
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-		max-width: 100%;
-		max-height: 100%;
-	}
-
+	&.full #image,
 	&.full #livephoto {
 		top: 0;
 		right: 0;
@@ -97,24 +51,10 @@
 		max-height: 100%;
 	}
 
-	&.image--sidebar #image {
-		right: 380px;
-		max-width: calc(100% - 410px);
-
-		@media (max-width: 640px) {
-			right: 370px;
-			max-width: calc(100% - 390px);
-		}
-	}
-
+	&.image--sidebar #image,
 	&.image--sidebar #livephoto {
 		right: 380px;
 		max-width: calc(100% - 410px);
-
-		@media (max-width: 640px) {
-			right: 370px;
-			max-width: calc(100% - 390px);
-		}
 	}
 
 	#image_overlay {
@@ -165,10 +105,6 @@
 
 		&--next {
 			right: 0;
-		}
-
-		@media (max-width: 640px) {
-			display: none;
 		}
 
 		a {
@@ -229,5 +165,109 @@
 	// covers part of the background image.
 	video {
 		z-index: 1;
+	}
+}
+
+// responsive web design for smaller screens
+@media only screen and (max-width: 567px), only screen and (max-width: 640px) and (orientation: portrait) {
+	// sidebar as overlay, small size
+	#imageview {
+		#image,
+		#livephoto {
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			max-width: 100%;
+			max-height: 100%;
+		}
+
+		&.image--sidebar {
+			#image,
+			#livephoto {
+				right: 0;
+				max-width: 100%;
+			}
+
+			.arrow_wrapper {
+				&--next {
+					right: 0;
+				}
+
+				a#next {
+					right: -1px;
+				}
+			}
+		}
+
+		#image_overlay {
+			h1 {
+				font-size: 14px;
+			}
+
+			p {
+				margin-top: 2px;
+				font-size: 11px;
+				line-height: 13px;
+			}
+
+			a .iconic {
+				width: 9px;
+				height: 9px;
+			}
+		}
+	}
+}
+
+@media only screen and (min-width: 568px) and (max-width: 768px),
+	only screen and (min-width: 568px) and (max-width: 640px) and (orientation: landscape) {
+	// sidebar on side, medium size
+	#imageview {
+		#image,
+		#livephoto {
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			max-width: 100%;
+			max-height: 100%;
+		}
+
+		&.image--sidebar {
+			#image,
+			#livephoto {
+				top: 50px;
+				right: 280px;
+				max-width: calc(100% - 280px);
+				max-height: calc(100% - 50px);
+			}
+
+			.arrow_wrapper {
+				&--next {
+					right: 280px;
+				}
+
+				a#next {
+					right: 279px;
+				}
+			}
+		}
+
+		#image_overlay {
+			h1 {
+				font-size: 18px;
+			}
+
+			p {
+				margin-top: 4px;
+				font-size: 14px;
+				line-height: 16px;
+			}
+
+			a .iconic {
+				width: 12px;
+				height: 12px;
+			}
+		}
 	}
 }

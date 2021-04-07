@@ -21,7 +21,6 @@
 	}
 
 	&--view {
-		background: none;
 		border-bottom: none;
 
 		&.header--error {
@@ -41,6 +40,16 @@
 
 		&--visible {
 			display: flex;
+		}
+
+		&--config {
+			.button .iconic {
+				transform: rotate(45deg);
+			}
+
+			.header__title {
+				padding-right: 80px;
+			}
 		}
 	}
 
@@ -135,8 +144,9 @@
 	}
 
 	#button_settings,
-	#button_signin {
-		padding: 16px 48px 16px 8px;
+	#button_signin,
+	#button_close_config {
+		padding: 16px 48px 16px 18px;
 	}
 
 	// Divider -------------------------------------------------------------- //
@@ -174,14 +184,19 @@
 		&::-ms-clear {
 			display: none;
 		}
+
+		&__field {
+			position: relative;
+		}
 	}
 
 	&__clear {
 		position: absolute;
-		right: 90px;
+		top: -2px;
+		right: 8px;
 		padding: 0;
 		color: white(0.5);
-		font-size: 30px;
+		font-size: 24px;
 		opacity: 0;
 		transition: color 0.2s ease-out;
 		cursor: default;
@@ -216,5 +231,32 @@
 
 	.leftMenu__open {
 		margin-left: 250px;
+	}
+}
+
+// responsive web design for smaller screens
+@media only screen and (max-width: 640px) {
+	// reduce entries in menu bar on small screens
+	// corresponding entries are added to the 'more' menu
+	#button_move,
+	#button_move_album,
+	#button_trash,
+	#button_trash_album,
+	#button_visibility,
+	#button_visibility_album,
+	#button_nsfw_album {
+		display: none !important;
+	}
+
+	@media (max-width: 567px) {
+		// remove further buttons on tiny screens
+		#button_rotate_ccwise,
+		#button_rotate_cwise {
+			display: none !important;
+		}
+
+		.header__divider {
+			width: 0;
+		}
 	}
 }

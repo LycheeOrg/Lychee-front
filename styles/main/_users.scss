@@ -1,5 +1,5 @@
 .users_view {
-	width: 80%;
+	width: 90%;
 	max-width: 700px;
 	margin-left: auto;
 	margin-right: auto;
@@ -37,7 +37,7 @@
 
 	span.text {
 		display: inline-block;
-		padding: 9px 4px;
+		padding: 9px 6px 9px 0;
 		width: 40%;
 		//margin: 0 2%;
 		background-color: transparent;
@@ -46,18 +46,19 @@
 
 		&_icon {
 			width: 5%;
+			min-width: 32px;
 
 			.iconic {
 				width: 15px;
 				height: 14px;
-				margin: 0 15px 0 1px;
+				margin: 0 8px;
 				fill: #ffffff;
 			}
 		}
 	}
 
 	input.text {
-		padding: 9px 2px;
+		padding: 9px 6px 9px 0;
 		width: 40%;
 		//margin: 0 2%;
 		background-color: transparent;
@@ -67,7 +68,7 @@
 		border-radius: 0;
 		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
 		outline: 0;
-		margin-bottom: 10px;
+		margin: 0 0 10px;
 
 		&:focus {
 			border-bottom-color: #2293ec;
@@ -87,6 +88,7 @@
 	.choice {
 		display: inline-block;
 		width: 5%;
+		min-width: 32px;
 		color: #fff;
 
 		input {
@@ -99,8 +101,7 @@
 			display: inline-block;
 			width: 16px;
 			height: 16px;
-			margin-top: 10px;
-			margin-left: 2px;
+			margin: 10px 8px 0;
 			background: rgba(0, 0, 0, 0.5);
 			border-radius: 3px;
 			box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.7);
@@ -216,6 +217,32 @@
 			line-height: 16px;
 			font-weight: 700;
 			pointer-events: none;
+		}
+	}
+}
+
+// responsive web design for smaller screens
+@media only screen and (max-width: 567px), only screen and (max-width: 640px) and (orientation: portrait) {
+	.users_view {
+		width: 100%;
+		max-width: 100%;
+		padding: 20px;
+	}
+
+	.users_view_line {
+		p {
+			width: 100%;
+
+			.text,
+			input.text {
+				width: 36%;
+				font-size: smaller;
+			}
+		}
+		.choice {
+			// aligning elements is painful - should use table...
+			margin-left: -8px;
+			margin-right: 3px;
 		}
 	}
 }

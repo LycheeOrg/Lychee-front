@@ -44,7 +44,22 @@ header.bind = function () {
 	});
 
 	header.dom("#button_signin").on(eventName, lychee.loginDialog);
-	header.dom("#button_settings").on(eventName, leftMenu.open);
+	header.dom("#button_settings").on(eventName, function (e) {
+		if ($(".leftMenu").css("display") === "none") {
+			// left menu disabled on small screens
+			contextMenu.config(e);
+		} else {
+			// standard left menu
+			leftMenu.open();
+		}
+	});
+	header.dom("#button_close_config").on(eventName, function () {
+		tabindex.makeFocusable(header.dom());
+		tabindex.makeFocusable(lychee.content);
+		tabindex.makeUnfocusable(leftMenu._dom);
+		multiselect.bind();
+		lychee.load();
+	});
 	header.dom("#button_info_album").on(eventName, sidebar.toggle);
 	header.dom("#button_info").on(eventName, sidebar.toggle);
 	header.dom(".button--map-albums").on(eventName, function () {
@@ -114,7 +129,6 @@ header.bind = function () {
 		}
 	});
 	header.dom(".header__clear").on(eventName, function () {
-		header.dom(".header__search").focus();
 		search.reset();
 	});
 
@@ -185,11 +199,15 @@ header.setMode = function (mode) {
 		case "public":
 			header.dom().removeClass("header--view");
 			header
-				.dom(".header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map")
+				.dom(".header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map, .header__toolbar--config")
 				.removeClass("header__toolbar--visible");
 			header.dom(".header__toolbar--public").addClass("header__toolbar--visible");
 			tabindex.makeFocusable(header.dom(".header__toolbar--public"));
-			tabindex.makeUnfocusable(header.dom(".header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map"));
+			tabindex.makeUnfocusable(
+				header.dom(
+					".header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map, .header__toolbar--config"
+				)
+			);
 
 			if (lychee.public_search) {
 				let e = $(".header__search, .header__clear", ".header__toolbar--public");
@@ -221,12 +239,16 @@ header.setMode = function (mode) {
 		case "albums":
 			header.dom().removeClass("header--view");
 			header
-				.dom(".header__toolbar--public, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map")
+				.dom(".header__toolbar--public, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map, .header__toolbar--config")
 				.removeClass("header__toolbar--visible");
 			header.dom(".header__toolbar--albums").addClass("header__toolbar--visible");
 
 			tabindex.makeFocusable(header.dom(".header__toolbar--albums"));
-			tabindex.makeUnfocusable(header.dom(".header__toolbar--public, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map"));
+			tabindex.makeUnfocusable(
+				header.dom(
+					".header__toolbar--public, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map, .header__toolbar--config"
+				)
+			);
 
 			// If map is disabled, we should hide the icon
 			if (lychee.map_display) {
@@ -255,13 +277,15 @@ header.setMode = function (mode) {
 
 			header.dom().removeClass("header--view");
 			header
-				.dom(".header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--map")
+				.dom(".header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--map, .header__toolbar--config")
 				.removeClass("header__toolbar--visible");
 			header.dom(".header__toolbar--album").addClass("header__toolbar--visible");
 
 			tabindex.makeFocusable(header.dom(".header__toolbar--album"));
 			tabindex.makeUnfocusable(
-				header.dom(".header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--map")
+				header.dom(
+					".header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--map, .header__toolbar--config"
+				)
 			);
 
 			// Hide download button when album empty or we are not allowed to
@@ -387,7 +411,7 @@ header.setMode = function (mode) {
 				let e = $("#button_trash_album", ".header__toolbar--album");
 				e.remove();
 			}
-			if (!lychee.enable_button_fullscreen) {
+			if (!lychee.enable_button_fullscreen || !lychee.fullscreenAvailable()) {
 				let e = $("#button_fs_album_enter", ".header__toolbar--album");
 				e.remove();
 			}
@@ -401,13 +425,15 @@ header.setMode = function (mode) {
 		case "photo":
 			header.dom().addClass("header--view");
 			header
-				.dom(".header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--map")
+				.dom(".header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--map, .header__toolbar--config")
 				.removeClass("header__toolbar--visible");
 			header.dom(".header__toolbar--photo").addClass("header__toolbar--visible");
 
 			tabindex.makeFocusable(header.dom(".header__toolbar--photo"));
 			tabindex.makeUnfocusable(
-				header.dom(".header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--map")
+				header.dom(
+					".header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--map, .header__toolbar--config"
+				)
 			);
 			// If map is disabled, we should hide the icon
 			if (lychee.publicMode === true ? lychee.map_display_public : lychee.map_display) {
@@ -474,7 +500,7 @@ header.setMode = function (mode) {
 				let e = $("#button_trash", ".header__toolbar--photo");
 				e.remove();
 			}
-			if (!lychee.enable_button_fullscreen) {
+			if (!lychee.enable_button_fullscreen || !lychee.fullscreenAvailable()) {
 				let e = $("#button_fs_enter", ".header__toolbar--photo");
 				e.remove();
 			}
@@ -493,14 +519,23 @@ header.setMode = function (mode) {
 		case "map":
 			header.dom().removeClass("header--view");
 			header
-				.dom(".header__toolbar--public, .header__toolbar--album, .header__toolbar--albums, .header__toolbar--photo")
+				.dom(".header__toolbar--public, .header__toolbar--album, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--config")
 				.removeClass("header__toolbar--visible");
 			header.dom(".header__toolbar--map").addClass("header__toolbar--visible");
 
 			tabindex.makeFocusable(header.dom(".header__toolbar--map"));
 			tabindex.makeUnfocusable(
-				header.dom(".header__toolbar--public, .header__toolbar--album, .header__toolbar--albums, .header__toolbar--photo")
+				header.dom(
+					".header__toolbar--public, .header__toolbar--album, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--config"
+				)
 			);
+			return true;
+		case "config":
+			header.dom().addClass("header--view");
+			header
+				.dom(".header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map")
+				.removeClass("header__toolbar--visible");
+			header.dom(".header__toolbar--config").addClass("header__toolbar--visible");
 			return true;
 	}
 
