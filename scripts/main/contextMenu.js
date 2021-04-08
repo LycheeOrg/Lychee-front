@@ -27,6 +27,40 @@ contextMenu.add = function (e) {
 		items.splice(3, 1);
 	}
 
+	// prepend further buttons if menu bar is reduced on small screens
+	let button_visibility_album = $("#button_visibility_album");
+	if (button_visibility_album && button_visibility_album.css("display") === "none") {
+		items.unshift({
+			title: build.iconic("eye") + lychee.locale["VISIBILITY_ALBUM"],
+			visible: lychee.enable_button_visibility,
+			fn: (event) => album.setPublic(album.getID(), event),
+		});
+	}
+	let button_trash_album = $("#button_trash_album");
+	if (button_trash_album && button_trash_album.css("display") === "none") {
+		items.unshift({
+			title: build.iconic("trash") + lychee.locale["DELETE_ALBUM"],
+			visible: lychee.enable_button_trash,
+			fn: () => album.delete([album.getID()]),
+		});
+	}
+	let button_move_album = $("#button_move_album");
+	if (button_move_album && button_move_album.css("display") === "none") {
+		items.unshift({
+			title: build.iconic("folder") + lychee.locale["MOVE_ALBUM"],
+			visible: lychee.enable_button_move,
+			fn: (event) => contextMenu.move([album.getID()], event, album.setAlbum, "ROOT", album.getParent() !== ""),
+		});
+	}
+	let button_nsfw_album = $("#button_nsfw_album");
+	if (button_nsfw_album && button_nsfw_album.css("display") === "none") {
+		items.unshift({
+			title: build.iconic("warning") + lychee.locale["ALBUM_MARK_NSFW"],
+			visible: true,
+			fn: () => album.setNSFW(album.getID()),
+		});
+	}
+
 	basicContext.show(items, e.originalEvent);
 
 	upload.notify();
@@ -368,6 +402,47 @@ contextMenu.photoMore = function (photoID, e) {
 		{ title: build.iconic("fullscreen-enter") + lychee.locale["FULL_PHOTO"], visible: !!showFull, fn: () => window.open(photo.getDirectLink()) },
 		{ title: build.iconic("cloud-download") + lychee.locale["DOWNLOAD"], visible: !!showDownload, fn: () => photo.getArchive([photoID]) },
 	];
+	// prepend further buttons if menu bar is reduced on small screens
+	let button_visibility = $("#button_visibility");
+	if (button_visibility && button_visibility.css("display") === "none") {
+		items.unshift({
+			title: build.iconic("eye") + lychee.locale["VISIBILITY_PHOTO"],
+			visible: lychee.enable_button_visibility,
+			fn: (event) => photo.setPublic(photo.getID(), event),
+		});
+	}
+	let button_trash = $("#button_trash");
+	if (button_trash && button_trash.css("display") === "none") {
+		items.unshift({
+			title: build.iconic("trash") + lychee.locale["DELETE"],
+			visible: lychee.enable_button_trash,
+			fn: () => photo.delete([photo.getID()]),
+		});
+	}
+	let button_move = $("#button_move");
+	if (button_move && button_move.css("display") === "none") {
+		items.unshift({
+			title: build.iconic("folder") + lychee.locale["MOVE"],
+			visible: lychee.enable_button_move,
+			fn: (event) => contextMenu.move([photo.getID()], event, photo.setAlbum),
+		});
+	}
+	let button_rotate_cwise = $("#button_rotate_cwise");
+	if (button_rotate_cwise && button_rotate_cwise.css("display") === "none") {
+		items.unshift({
+			title: build.iconic("clockwise") + lychee.locale["PHOTO_EDIT_ROTATECWISE"],
+			visible: lychee.enable_button_move,
+			fn: () => photoeditor.rotate(photo.getID(), 1),
+		});
+	}
+	let button_rotate_ccwise = $("#button_rotate_ccwise");
+	if (button_rotate_ccwise && button_rotate_ccwise.css("display") === "none") {
+		items.unshift({
+			title: build.iconic("counterclockwise") + lychee.locale["PHOTO_EDIT_ROTATECCWISE"],
+			visible: lychee.enable_button_move,
+			fn: () => photoeditor.rotate(photo.getID(), -1),
+		});
+	}
 
 	basicContext.show(items, e.originalEvent);
 };
@@ -504,4 +579,42 @@ contextMenu.close = function () {
 	if (visible.multiselect()) {
 		multiselect.close();
 	}
+};
+
+contextMenu.config = function (e) {
+	let items = [{ title: build.iconic("cog") + lychee.locale["SETTINGS"], fn: settings.open }];
+	if (lychee.admin) {
+		items.push({ title: build.iconic("person") + lychee.locale["USERS"], fn: users.list });
+	}
+	items.push({ title: build.iconic("key") + lychee.locale["U2F"], fn: u2f.list });
+	items.push({ title: build.iconic("cloud") + lychee.locale["SHARING"], fn: sharing.list });
+	if (lychee.admin) {
+		items.push({
+			title: build.iconic("align-left") + lychee.locale["LOGS"],
+			fn: function () {
+				if (lychee.api_V2) {
+					view.logs.init();
+				} else {
+					window.open(lychee.logs());
+				}
+			},
+		});
+		items.push({
+			title: build.iconic("wrench") + lychee.locale["DIAGNOSTICS"],
+			fn: function () {
+				if (lychee.api_V2) {
+					view.diagnostics.init();
+				} else {
+					window.open(lychee.diagnostics());
+				}
+			},
+		});
+		if (lychee.api_V2 && lychee.update_available) {
+			items.push({ title: build.iconic("timer") + lychee.locale["UPDATE_AVAILABLE"], fn: view.update.init });
+		}
+	}
+	items.push({ title: build.iconic("info") + lychee.locale["ABOUT_LYCHEE"], fn: lychee.aboutDialog });
+	items.push({ title: build.iconic("account-logout") + lychee.locale["SIGN_OUT"], fn: lychee.logout });
+
+	basicContext.show(items, e.originalEvent);
 };

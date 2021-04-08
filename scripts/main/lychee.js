@@ -847,6 +847,10 @@ lychee.fullscreenStatus = function () {
 	return elem ? true : false;
 };
 
+lychee.fullscreenAvailable = function () {
+	return document.fullscreenEnabled || document.mozFullscreenEnabled || document.webkitFullscreenEnabled || document.msFullscreenEnabled;
+};
+
 lychee.fullscreenUpdate = function () {
 	if (lychee.fullscreenStatus()) {
 		$("#button_fs_album_enter,#button_fs_enter").hide();

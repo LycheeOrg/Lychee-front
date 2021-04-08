@@ -1,5 +1,5 @@
 .logs_diagnostics_view {
-	width: 1200px;
+	width: 90%;
 	margin-left: auto;
 	margin-right: auto;
 	color: #ccc;
@@ -12,11 +12,12 @@
 		-moz-user-select: text;
 		-ms-user-select: text;
 		user-select: text;
+		width: fit-content;
+		padding-right: 30px;
 	}
 }
 
 .clear_logs_update {
-	width: 1200px;
 	margin-left: auto;
 	margin-right: auto;
 	margin-bottom: 20px;
@@ -63,5 +64,31 @@
 		.iconic {
 			fill: #fff;
 		}
+	}
+}
+
+// responsive web design for smaller screens
+@media only screen and (max-width: 567px), only screen and (max-width: 640px) and (orientation: portrait) {
+	.logs_diagnostics_view,
+	.clear_logs_update {
+		width: 100%;
+		max-width: 100%;
+		font-size: 11px;
+		line-height: 12px;
+
+		.basicModal__button,
+		.button_left {
+			width: 80%;
+			margin: 0 10%;
+		}
+	}
+
+	.logs_diagnostics_view {
+		padding: 10px 10px 0 0;
+	}
+
+	.clear_logs_update {
+		padding: 10px 10px 0 10px;
+		margin: 0;
 	}
 }

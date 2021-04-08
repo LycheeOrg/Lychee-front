@@ -8,7 +8,7 @@
 	left: 0;
 	background-color: #111; /* Black*/
 	overflow-x: hidden; /* Disable horizontal scroll */
-	padding-top: 60px; /* Place content 60px from the top */
+	padding-top: 49px; /* Place content 49px from the top (same as menu bar height) */
 	transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
 
@@ -65,13 +65,11 @@
 	width: 250px;
 }
 
-/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
+// responsive web design for smaller screens
+@media only screen and (max-width: 567px), only screen and (max-width: 640px) and (orientation: portrait) {
+	// disable left menu on small devices and use context menu instead
 	.leftMenu {
-		padding-top: 15px;
-	}
-	.leftMenu a {
-		font-size: 18px;
+		display: none !important;
 	}
 }
 

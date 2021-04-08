@@ -1,9 +1,9 @@
 .sidebar {
 	position: fixed;
-	top: 50px;
+	top: 49px;
 	right: -360px;
 	width: 350px;
-	height: calc(100% - 50px);
+	height: calc(100% - 49px);
 	background-color: rgba(25, 25, 25, 0.98);
 	border-left: 1px solid black(0.2);
 	transform: translateX(0);
@@ -234,6 +234,118 @@
 
 			span:hover .iconic {
 				fill: lighten($colorRed, 10%);
+			}
+		}
+	}
+}
+
+// responsive web design for smaller screens
+@media only screen and (max-width: 567px), only screen and (max-width: 640px) and (orientation: portrait) {
+	// sidebar as overlay, small size
+	.sidebar {
+		width: 240px;
+		height: unset;
+		background-color: rgba(0, 0, 0, 0.6);
+
+		&__wrapper {
+			padding-bottom: 10px;
+		}
+
+		&__header {
+			height: 22px;
+
+			h1 {
+				margin: 6px 0;
+				font-size: 13px;
+			}
+		}
+
+		&__divider {
+			padding: 6px 0 2px;
+
+			h1 {
+				margin: 0 0 0 10px;
+				font-size: 12px;
+			}
+		}
+
+		table {
+			margin: 4px 0 6px 10px;
+			width: calc(100% - 16px);
+
+			tr td {
+				padding: 2px 0;
+				font-size: 11px;
+				line-height: 12px;
+
+				&:first-child {
+					width: 80px;
+				}
+			}
+		}
+
+		#tags {
+			margin: 4px 0 6px 10px;
+			width: calc(100% - 16px);
+
+			.empty {
+				margin: 0;
+				font-size: 11px;
+			}
+		}
+	}
+}
+
+@media only screen and (min-width: 568px) and (max-width: 768px),
+	only screen and (min-width: 568px) and (max-width: 640px) and (orientation: landscape) {
+	// sidebar on side, medium size
+	.sidebar {
+		width: 280px;
+
+		&__wrapper {
+			padding-bottom: 10px;
+		}
+
+		&__header {
+			height: 28px;
+
+			h1 {
+				margin: 8px 0;
+				font-size: 15px;
+			}
+		}
+
+		&__divider {
+			padding: 8px 0 4px;
+
+			h1 {
+				margin: 0 0 0 10px;
+				font-size: 13px;
+			}
+		}
+
+		table {
+			margin: 4px 0 6px 10px;
+			width: calc(100% - 16px);
+
+			tr td {
+				padding: 2px 0;
+				font-size: 12px;
+				line-height: 13px;
+
+				&:first-child {
+					width: 90px;
+				}
+			}
+		}
+
+		#tags {
+			margin: 4px 0 6px 10px;
+			width: calc(100% - 16px);
+
+			.empty {
+				margin: 0;
+				font-size: 12px;
 			}
 		}
 	}

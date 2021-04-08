@@ -1,5 +1,5 @@
 .u2f_view {
-	width: 80%;
+	width: 90%;
 	max-width: 700px;
 	margin-left: auto;
 	margin-right: auto;
@@ -231,6 +231,26 @@
 
 		input {
 			border-bottom: #2293ec solid 1px;
+		}
+	}
+}
+
+// responsive web design for smaller screens
+@media only screen and (max-width: 567px), only screen and (max-width: 640px) and (orientation: portrait) {
+	.u2f_view {
+		width: 100%;
+		max-width: 100%;
+		padding: 20px;
+	}
+
+	.u2f_view_line {
+		p {
+			width: 100%;
+		}
+
+		.basicModal__button_CREATE {
+			width: 80%;
+			margin: 0 10%;
 		}
 	}
 }
