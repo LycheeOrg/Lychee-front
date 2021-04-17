@@ -98,25 +98,14 @@ photo.isLivePhotoPlaying = function () {
 	return photo.LivePhotosObject.isPlaying;
 };
 
-photo.update_overlay_type = function () {
-	// Only run if the overlay is showing
-	if (!lychee.image_overlay) return false;
-
+photo.cycle_display_overlay = function () {
 	let oldtype = build.check_overlay_type(photo.json, lychee.image_overlay_type);
 	let newtype = build.check_overlay_type(photo.json, oldtype, true);
 	if (oldtype !== newtype) {
 		lychee.image_overlay_type = newtype;
 		$("#image_overlay").remove();
-		lychee.imageview.append(build.overlay_image(photo.json));
-	}
-};
-
-photo.update_display_overlay = function () {
-	lychee.image_overlay = !lychee.image_overlay;
-	if (!lychee.image_overlay) {
-		$("#image_overlay").remove();
-	} else {
-		lychee.imageview.append(build.overlay_image(photo.json));
+		let newoverlay = build.overlay_image(photo.json);
+		if (newoverlay !== "") lychee.imageview.append(newoverlay);
 	}
 };
 

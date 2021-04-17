@@ -30,11 +30,6 @@
 		color: #666;
 	}
 
-	&__item:not(.basicContext__item--disabled):hover &__data {
-		color: $basicContext__color;
-		background-color: rgba($basicContext__color, 0.1);
-	}
-
 	&__item:not(.basicContext__item--disabled):active &__data {
 		color: darken($basicContext__color, 10%);
 		background-color: rgba($basicContext__color, 0.15);
@@ -44,5 +39,13 @@
 		margin-right: 8px;
 		width: 12px;
 		text-align: center;
+	}
+}
+
+// restrict hover features to devices that support it
+@media (hover: hover) {
+	.basicContext__item:not(.basicContext__item--disabled):hover &__data {
+		color: $basicContext__color;
+		background-color: rgba($basicContext__color, 0.1);
 	}
 }

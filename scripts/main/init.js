@@ -26,10 +26,9 @@ $(document).ready(function () {
 	lychee.imageview
 		.on(eventName, ".arrow_wrapper--previous", photo.previous)
 		.on(eventName, ".arrow_wrapper--next", photo.next)
-		.on(eventName, "img, #livephoto", photo.update_display_overlay);
+		.on(eventName, "img, #livephoto", photo.cycle_display_overlay);
 
 	// Keyboard
-
 	Mousetrap.addKeycodes({
 		18: "ContextMenu",
 		179: "play_pause",
@@ -143,7 +142,7 @@ $(document).ready(function () {
 		})
 		.bind(["o"], function () {
 			if (visible.photo()) {
-				photo.update_overlay_type();
+				photo.cycle_display_overlay();
 				return false;
 			}
 		})
@@ -228,7 +227,9 @@ $(document).ready(function () {
 		// Fullscreen on mobile
 		.on("touchend", "#imageview #image", function (e) {
 			// prevent triggering event 'mousemove'
-			e.preventDefault();
+			// why? this also prevents 'click' from firing which results in unexpected behaviour
+			// unable to reproduce problems arising from 'mousemove' on iOS devices
+			//			e.preventDefault();
 
 			if (typeof swipe.obj === "undefined" || (Math.abs(swipe.offsetX) <= 5 && Math.abs(swipe.offsetY) <= 5)) {
 				// Toggle header only if we're not moving to next/previous photo;

@@ -25,8 +25,6 @@ let lychee = {
 	username: null,
 	layout: "1", // 0: Use default, "square" layout. 1: Use Flickr-like "justified" layout. 2: Use Google-like "unjustified" layout
 	public_search: false, // display Search in publicMode
-	image_overlay: false, // display Overlay like in Lightroom
-	image_overlay_default: false, // display Overlay like in Lightroom by default
 	image_overlay_type: "exif", // current Overlay display type
 	image_overlay_type_default: "exif", // image overlay type default type
 	map_display: false, // display photo coordinates on map
@@ -202,8 +200,6 @@ lychee.init = function (exitview = true) {
 			lychee.lang_available = data.config.lang_available || {};
 			lychee.layout = data.config.layout || "1";
 			lychee.public_search = (data.config.public_search && data.config.public_search === "1") || false;
-			lychee.image_overlay_default = (data.config.image_overlay && data.config.image_overlay === "1") || false;
-			lychee.image_overlay = lychee.image_overlay_default;
 			lychee.image_overlay_type = !data.config.image_overlay_type ? "exif" : data.config.image_overlay_type;
 			lychee.image_overlay_type_default = lychee.image_overlay_type;
 			lychee.map_display = (data.config.map_display && data.config.map_display === "1") || false;
@@ -286,7 +282,6 @@ lychee.init = function (exitview = true) {
 			lychee.checkForUpdates = data.config.check_for_updates || data.config.checkForUpdates || "1";
 			lychee.layout = data.config.layout || "1";
 			lychee.public_search = (data.config.public_search && data.config.public_search === "1") || false;
-			lychee.image_overlay = (data.config.image_overlay && data.config.image_overlay === "1") || false;
 			lychee.image_overlay_type = !data.config.image_overlay_type ? "exif" : data.config.image_overlay_type;
 			lychee.image_overlay_type_default = lychee.image_overlay_type;
 			lychee.map_display = (data.config.map_display && data.config.map_display === "1") || false;

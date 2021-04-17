@@ -50,6 +50,23 @@
 	}
 }
 
+// on touch devices draw buttons in color
+@media (hover: none) {
+	.clear_logs_update,
+	.logs_diagnostics_view {
+		.basicModal__button {
+			background: #2293ec;
+			color: #fff;
+			max-width: 320px;
+			margin-top: 20px;
+		}
+
+		.iconic {
+			fill: #fff;
+		}
+	}
+}
+
 // responsive web design for smaller screens
 @media only screen and (max-width: 567px), only screen and (max-width: 640px) and (orientation: portrait) {
 	.logs_diagnostics_view,

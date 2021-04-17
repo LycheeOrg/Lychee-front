@@ -11,6 +11,7 @@
 	&__item {
 		margin-bottom: 2px;
 		font-size: 14px;
+		color: #ccc;
 
 		&--separator {
 			margin: 4px 0;
@@ -31,13 +32,14 @@
 	&__data {
 		min-width: auto;
 		padding: 6px 25px 7px 12px;
-		color: white(1);
+
+		@media (hover: none) and (pointer: coarse) {
+			// increase size of menu entries for touch devices
+			padding: 12px 25px 12px 12px;
+		}
+
 		transition: none;
 		cursor: default;
-	}
-
-	&__item:not(.basicContext__item--disabled):hover &__data {
-		background: linear-gradient(to bottom, $colorBlue, darken($colorBlue, 5%));
 	}
 
 	&__item:not(.basicContext__item--disabled):active &__data {
@@ -48,5 +50,25 @@
 		margin-right: 10px;
 		width: 12px;
 		text-align: center;
+	}
+}
+
+// restrict hover features to devices that support it
+@media (hover: hover) {
+	.basicContext__item:not(.basicContext__item--disabled):hover &__data {
+		background: linear-gradient(to bottom, $colorBlue, darken($colorBlue, 5%));
+	}
+
+	.basicContext {
+		/* When you mouse over the navigation links, change their color (use same color for close and menu entries) */
+		&__item:hover {
+			color: lighten(white, 20%);
+			transition: 0.3s;
+			transform: scale(1.05);
+
+			.iconic {
+				fill: lighten(white, 20%);
+			}
+		}
 	}
 }

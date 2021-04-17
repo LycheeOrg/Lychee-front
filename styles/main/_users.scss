@@ -122,47 +122,26 @@
 		display: inline-block;
 		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02), inset 1px 0 0 rgba(0, 0, 0, 0.2);
 		width: 10%;
-		min-width: 50px;
+		min-width: 72px;
 		border-radius: 0 0 0 0;
-
-		&:hover {
-			cursor: pointer;
-		}
 	}
 
 	.basicModal__button_OK {
 		color: #2293ec;
 		border-radius: 5px 0 0 5px;
-
-		&:hover {
-			background: #2293ec;
-			color: #ffffff;
-		}
+		margin-right: -4px;
 	}
 
 	.basicModal__button_DEL {
 		color: #b22027;
 		border-radius: 0 5px 5px 0;
-
-		&:hover {
-			background: #b22027;
-			color: #ffffff;
-		}
 	}
 
 	.basicModal__button_CREATE {
 		width: 20%;
 		color: #009900;
 		border-radius: 5px;
-
-		&:hover {
-			background: #009900;
-			color: #ffffff;
-		}
-	}
-
-	input:hover {
-		border-bottom: #2293ec solid 1px;
+		min-width: 144px;
 	}
 
 	.select {
@@ -217,6 +196,59 @@
 			line-height: 16px;
 			font-weight: 700;
 			pointer-events: none;
+		}
+	}
+}
+
+// restrict hover features to devices that support it
+@media (hover: hover) {
+	.users_view_line {
+		.basicModal__button {
+			&:hover {
+				cursor: pointer;
+				color: #ffffff;
+			}
+
+			&_OK:hover {
+				background: #2293ec;
+			}
+
+			&_DEL:hover {
+				background: #b22027;
+			}
+
+			&_CREATE:hover {
+				background: #009900;
+			}
+		}
+
+		input:hover {
+			border-bottom: #2293ec solid 1px;
+		}
+	}
+}
+
+// on touch devices draw buttons in color
+@media (hover: none) {
+	.users_view_line {
+		.basicModal__button {
+			color: #ffffff;
+
+			&_OK {
+				background: #2293ec;
+			}
+
+			&_DEL {
+				background: #b22027;
+			}
+
+			&_CREATE {
+				background: #009900;
+			}
+		}
+
+		input {
+			border-bottom: #2293ec solid 1px;
 		}
 	}
 }
