@@ -19,7 +19,7 @@ contextMenu.add = function (e) {
 		items.push({ title: build.iconic("tags") + lychee.locale["NEW_TAG_ALBUM"], fn: album.addByTags });
 	}
 
-	if (lychee.api_V2 && !lychee.admin) {
+	if (!lychee.admin) {
 		// remove import from dropbox and server if not admin
 		items.splice(3, 2);
 	} else if (!lychee.dropboxKey || lychee.dropboxKey === "") {
@@ -96,7 +96,6 @@ contextMenu.album = function (albumID, e) {
 				contextMenu.move([albumID], e, album.setAlbum, "ROOT");
 			},
 		},
-		// { title: build.iconic('cloud') + lychee.locale['SHARE_WITH'],    visible: lychee.api_V2 && lychee.upload,   fn: () => alert('ho')},
 		{ title: build.iconic("trash") + lychee.locale["DELETE"], fn: () => album.delete([albumID]) },
 		{ title: build.iconic("cloud-download") + lychee.locale["DOWNLOAD"], fn: () => album.getArchive([albumID]) },
 	];
@@ -160,10 +159,6 @@ contextMenu.albumMulti = function (albumIDs, e) {
 		{ title: build.iconic("trash") + lychee.locale["DELETE_ALL"], fn: () => album.delete(albumIDs) },
 		{ title: build.iconic("cloud-download") + lychee.locale["DOWNLOAD_ALL"], fn: () => album.getArchive(albumIDs) },
 	];
-
-	if (!lychee.api_V2) {
-		items.splice(-1);
-	}
 
 	basicContext.show(items, e.originalEvent, contextMenu.close);
 };
@@ -359,10 +354,6 @@ contextMenu.photoMulti = function (photoIDs, e) {
 		{ title: build.iconic("trash") + lychee.locale["DELETE_ALL"], fn: () => photo.delete(photoIDs) },
 		{ title: build.iconic("cloud-download") + lychee.locale["DOWNLOAD_ALL"], fn: () => photo.getArchive(photoIDs, "FULL") },
 	];
-
-	if (!lychee.api_V2) {
-		items.splice(-1);
-	}
 
 	basicContext.show(items, e.originalEvent, contextMenu.close);
 };
@@ -592,24 +583,16 @@ contextMenu.config = function (e) {
 		items.push({
 			title: build.iconic("align-left") + lychee.locale["LOGS"],
 			fn: function () {
-				if (lychee.api_V2) {
-					view.logs.init();
-				} else {
-					window.open(lychee.logs());
-				}
+				view.logs.init();
 			},
 		});
 		items.push({
 			title: build.iconic("wrench") + lychee.locale["DIAGNOSTICS"],
 			fn: function () {
-				if (lychee.api_V2) {
-					view.diagnostics.init();
-				} else {
-					window.open(lychee.diagnostics());
-				}
+				view.diagnostics.init();
 			},
 		});
-		if (lychee.api_V2 && lychee.update_available) {
+		if (lychee.update_available) {
 			items.push({ title: build.iconic("timer") + lychee.locale["UPDATE_AVAILABLE"], fn: view.update.init });
 		}
 	}

@@ -16,18 +16,16 @@ leftMenu.build = function () {
 		<a id="text_settings_close" class="closetxt" data-tabindex="-1">${lychee.locale["CLOSE"]}</a>
 		<a id="button_settings_close" class="closebtn" data-tabindex="20">&times;</a>
 		<a class="linkMenu" id="button_settings_open" data-tabindex="-1"><svg class="iconic"><use xlink:href="#cog"></use></svg>${lychee.locale["SETTINGS"]}</a>`;
-	if (lychee.api_V2) {
-		html += lychee.html`
+	html += lychee.html`
 		<a class="linkMenu" id="button_users" data-tabindex="-1">${build.iconic("person")}${lychee.locale["USERS"]} </a>
 		<a class="linkMenu" id="button_u2f" data-tabindex="-1">${build.iconic("key")}${lychee.locale["U2F"]} </a>
 		<a class="linkMenu" id="button_sharing" data-tabindex="-1">${build.iconic("cloud")}${lychee.locale["SHARING"]}</a>`;
-	}
 	html += lychee.html`
 		<a class="linkMenu" id="button_logs" data-tabindex="-1">${build.iconic("align-left")}${lychee.locale["LOGS"]}</a>
 		<a class="linkMenu" id="button_diagnostics" data-tabindex="-1">${build.iconic("wrench")}${lychee.locale["DIAGNOSTICS"]}</a>
 		<a class="linkMenu" id="button_about" data-tabindex="-1">${build.iconic("info")}${lychee.locale["ABOUT_LYCHEE"]}</a>
 		<a class="linkMenu" id="button_signout" data-tabindex="21">${build.iconic("account-logout")}${lychee.locale["SIGN_OUT"]}</a>`;
-	if (lychee.api_V2 && lychee.update_available) {
+	if (lychee.update_available) {
 		html += lychee.html`
 		<a class="linkMenu" id="button_update"  data-tabindex="-1">${build.iconic("timer")}${lychee.locale["UPDATE_AVAILABLE"]}</a>
 		`;
@@ -80,31 +78,20 @@ leftMenu.bind = function () {
 	leftMenu.dom("#button_logs").on(eventName, leftMenu.Logs);
 	leftMenu.dom("#button_diagnostics").on(eventName, leftMenu.Diagnostics);
 	leftMenu.dom("#button_about").on(eventName, lychee.aboutDialog);
-
-	if (lychee.api_V2) {
-		leftMenu.dom("#button_users").on(eventName, leftMenu.Users);
-		leftMenu.dom("#button_u2f").on(eventName, leftMenu.u2f);
-		leftMenu.dom("#button_sharing").on(eventName, leftMenu.Sharing);
-		leftMenu.dom("#button_update").on(eventName, leftMenu.Update);
-	}
+	leftMenu.dom("#button_users").on(eventName, leftMenu.Users);
+	leftMenu.dom("#button_u2f").on(eventName, leftMenu.u2f);
+	leftMenu.dom("#button_sharing").on(eventName, leftMenu.Sharing);
+	leftMenu.dom("#button_update").on(eventName, leftMenu.Update);
 
 	return true;
 };
 
 leftMenu.Logs = function () {
-	if (lychee.api_V2) {
-		view.logs.init();
-	} else {
-		window.open(lychee.logs());
-	}
+	view.logs.init();
 };
 
 leftMenu.Diagnostics = function () {
-	if (lychee.api_V2) {
-		view.diagnostics.init();
-	} else {
-		window.open(lychee.diagnostics());
-	}
+	view.diagnostics.init();
 };
 
 leftMenu.Update = function () {

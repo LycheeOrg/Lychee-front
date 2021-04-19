@@ -79,107 +79,64 @@ albums.load = function () {
 };
 
 albums.parse = function (album) {
-	let i;
-	if (lychee.api_V2) {
-		if (!album.thumb) {
-			album.thumb = {};
-			album.thumb.id = "";
-			album.thumb.thumb = album.password === "1" ? "img/password.svg" : "img/no_images.svg";
-			album.thumb.type = "";
-			album.thumb.thumb2x = "";
-		}
-	} else {
-		for (i = 0; i < 3; i++) {
-			if (!album.thumbs[i]) {
-				album.thumbs[i] = album.password === "1" ? "img/password.svg" : "img/no_images.svg";
-			}
-		}
+	if (!album.thumb) {
+		album.thumb = {};
+		album.thumb.id = "";
+		album.thumb.thumb = album.password === "1" ? "img/password.svg" : "img/no_images.svg";
+		album.thumb.type = "";
+		album.thumb.thumb2x = "";
 	}
 };
 
 // TODO: REFACTOR THIS
 albums._createSmartAlbums = function (data) {
-	if (!lychee.api_V2) {
-		if (data.unsorted) {
-			data.unsorted = {
-				id: "unsorted",
-				title: lychee.locale["UNSORTED"],
-				sysdate: "",
-				unsorted: "1",
-				thumbs: data.unsorted.thumbs,
-				thumbs2x: data.unsorted.thumbs2x ? data.unsorted.thumbs2x : null,
-				types: data.unsorted.types,
-			};
-		}
+	if (data.unsorted) {
+		data.unsorted = {
+			id: "unsorted",
+			title: lychee.locale["UNSORTED"],
+			sysdate: "",
+			unsorted: "1",
+			thumbs: data.unsorted.thumbs,
+			thumbs2x: data.unsorted.thumbs2x ? data.unsorted.thumbs2x : null,
+			types: data.unsorted.types,
+		};
+	}
 
-		if (data.starred) {
-			data.starred = {
-				id: "starred",
-				title: lychee.locale["STARRED"],
-				sysdate: "",
-				star: "1",
-				thumbs: data.starred.thumbs,
-				thumbs2x: data.starred.thumbs2x ? data.starred.thumbs2x : null,
-				types: data.starred.types,
-			};
-		}
+	if (data.starred) {
+		data.starred = {
+			id: "starred",
+			title: lychee.locale["STARRED"],
+			sysdate: "",
+			star: "1",
+			thumbs: data.starred.thumbs,
+			thumbs2x: data.starred.thumbs2x ? data.starred.thumbs2x : null,
+			types: data.starred.types,
+		};
+	}
 
-		if (data.public) {
-			data.public = {
-				id: "public",
-				title: lychee.locale["PUBLIC"],
-				sysdate: "",
-				public: "1",
-				thumbs: data.public.thumbs,
-				thumbs2x: data.public.thumbs2x ? data.public.thumbs2x : null,
-				visible: "0",
-				types: data.public.types,
-			};
-		}
+	if (data.public) {
+		data.public = {
+			id: "public",
+			title: lychee.locale["PUBLIC"],
+			sysdate: "",
+			public: "1",
+			thumbs: data.public.thumbs,
+			thumbs2x: data.public.thumbs2x ? data.public.thumbs2x : null,
+			visible: "0",
+			types: data.public.types,
+		};
+	}
 
-		if (data.recent) {
-			data.recent = {
-				id: "recent",
-				title: lychee.locale["RECENT"],
-				sysdate: "",
-				recent: "1",
-				thumbs: data.recent.thumbs,
-				thumbs2x: data.recent.thumbs2x ? data.recent.thumbs2x : null,
-				types: data.recent.types,
-			};
-		}
-	} else {
-		if (data.unsorted) {
-			data.unsorted.title = lychee.locale["UNSORTED"];
-			data.unsorted.sysdate = "";
-			data.unsorted.unsorted = "1";
-		}
-
-		if (data.starred) {
-			data.starred.title = lychee.locale["STARRED"];
-			data.starred.sysdate = "";
-			data.starred.star = "1";
-		}
-
-		if (data.public) {
-			data.public.title = lychee.locale["PUBLIC"];
-			data.public.sysdate = "";
-			data.public.public = "1";
-			data.public.visible = "0";
-		}
-
-		if (data.recent) {
-			data.recent.title = lychee.locale["RECENT"];
-			data.recent.sysdate = "";
-			data.recent.recent = "1";
-		}
-
-		Object.entries(data).forEach(([albumName, albumData]) => {
-			if (albumData["tag_album"] === "1") {
-				data[albumName].sysdate = "";
-				data[albumName].tag_album = "1";
-			}
-		});
+	if (data.recent) {
+		data.recent = {
+			id: "recent",
+			title: lychee.locale["RECENT"],
+			sysdate: "",
+			recent: "1",
+			thumbs: data.recent.thumbs,
+			thumbs2x: data.recent.thumbs2x ? data.recent.thumbs2x : null,
+			types: data.recent.types,
+		};
 	}
 };
 
