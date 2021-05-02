@@ -159,9 +159,6 @@ lychee.init = function (exitview = true) {
 			lychee.locale[key] = data.locale[key];
 		}
 
-		// Apply translations to the header
-		header.applyTranslations();
-
 		const validatedSwipeToleranceX =
 			(data.config.swipe_tolerance_x && !isNaN(parseInt(data.config.swipe_tolerance_x)) && parseInt(data.config.swipe_tolerance_x)) || 150;
 		const validatedSwipeToleranceY =
