@@ -39,15 +39,9 @@ build.getAlbumThumb = function (data) {
 	let isRaw;
 	let thumb;
 
-	if (lychee.api_V2) {
-		isVideo = data.thumb.type && data.thumb.type.indexOf("video") > -1;
-		isRaw = data.thumb.type && data.thumb.type.indexOf("raw") > -1;
-		thumb = data.thumb.thumb;
-	} else {
-		isVideo = data.types[0] && data.type.indexOf("video") > -1;
-		isRaw = data.types[0] && data.types[0].indexOf("raw") > -1;
-		thumb = data.thumbs[0];
-	}
+	isVideo = data.thumb.type && data.thumb.type.indexOf("video") > -1;
+	isRaw = data.thumb.type && data.thumb.type.indexOf("raw") > -1;
+	thumb = data.thumb.thumb;
 	var thumb2x = "";
 
 	if (thumb === "uploads/thumb/" && isVideo) {
@@ -57,15 +51,7 @@ build.getAlbumThumb = function (data) {
 		return `<span class="thumbimg"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
 	}
 
-	if (lychee.api_V2) {
-		thumb2x = data.thumb.thumb2x;
-	} else {
-		// Fallback code for Lychee v3
-		var { path: thumb2x, isPhoto: isPhoto } = lychee.retinize(data.thumbs[0]);
-		if (!isPhoto) {
-			thumb2x = "";
-		}
-	}
+	thumb2x = data.thumb.thumb2x;
 
 	return `<span class="thumbimg${isVideo ? " video" : ""}"><img class='lazyload' src='img/placeholder.png' data-src='${thumb}' ${
 		thumb2x !== "" ? "data-srcset='" + thumb2x + " 2x'" : ""

@@ -75,21 +75,19 @@ view.albums = {
 				if (lychee.publicMode === false) albumsData = build.divider(lychee.locale["ALBUMS"]) + albumsData;
 			}
 
-			if (lychee.api_V2) {
-				let current_owner = "";
-				let i;
-				// Shared
-				if (albums.json.shared_albums && albums.json.shared_albums.length !== 0) {
-					for (i = 0; i < albums.json.shared_albums.length; ++i) {
-						let alb = albums.json.shared_albums[i];
-						if (!alb.parent_id || alb.parent_id === 0) {
-							albums.parse(alb);
-							if (current_owner !== alb.owner && lychee.publicMode === false) {
-								sharedData += build.divider(alb.owner);
-								current_owner = alb.owner;
-							}
-							sharedData += build.album(alb, !lychee.admin);
+			let current_owner = "";
+			let i;
+			// Shared
+			if (albums.json.shared_albums && albums.json.shared_albums.length !== 0) {
+				for (i = 0; i < albums.json.shared_albums.length; ++i) {
+					let alb = albums.json.shared_albums[i];
+					if (!alb.parent_id || alb.parent_id === 0) {
+						albums.parse(alb);
+						if (current_owner !== alb.owner && lychee.publicMode === false) {
+							sharedData += build.divider(alb.owner);
+							current_owner = alb.owner;
 						}
+						sharedData += build.album(alb, !lychee.admin);
 					}
 				}
 			}
@@ -1738,9 +1736,7 @@ view.logs = {
 
 	clearContent: function () {
 		let html = "";
-		if (lychee.api_V2) {
-			html += lychee.html`<div class="clear_logs_update"><a id="Clean_Noise" class="basicModal__button">${lychee.locale["CLEAN_LOGS"]}</a></div>`;
-		}
+		html += lychee.html`<div class="clear_logs_update"><a id="Clean_Noise" class="basicModal__button">${lychee.locale["CLEAN_LOGS"]}</a></div>`;
 		html += '<pre class="logs_diagnostics_view"></pre>';
 		lychee.content.html(html);
 
@@ -1808,17 +1804,7 @@ view.diagnostics = {
 		init: function () {
 			view.diagnostics.clearContent(false);
 
-			if (lychee.api_V2) {
-				view.diagnostics.content.v_2();
-			} else {
-				view.diagnostics.content.v_1();
-			}
-		},
-
-		v_1: function () {
-			api.post_raw("Diagnostics", {}, function (data) {
-				$(".logs_diagnostics_view").html(data);
-			});
+			view.diagnostics.content.v_2();
 		},
 
 		v_2: function () {

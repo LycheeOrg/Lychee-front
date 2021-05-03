@@ -1077,21 +1077,7 @@ album.share = function (service) {
 };
 
 album.getArchive = function (albumIDs) {
-	let link = "";
-
-	// double check with API_V2 this will not work...
-	if (lychee.api_V2) {
-		location.href = api.get_url("Album::getArchive") + lychee.html`?albumIDs=${albumIDs.join()}`;
-	} else {
-		let url = `${api.path}?function=Album::getArchive&albumID=${albumIDs[0]}`;
-
-		if (location.href.indexOf("index.html") > 0) link = location.href.replace(location.hash, "").replace("index.html", url);
-		else link = location.href.replace(location.hash, "") + url;
-
-		if (lychee.publicMode === true) link += `&password=${encodeURIComponent(password.value)}`;
-
-		location.href = link;
-	}
+	location.href = "api/Album::getArchive" + lychee.html`?albumIDs=${albumIDs.join()}`;
 };
 
 album.buildMessage = function (albumIDs, albumID, op1, op2, ops) {

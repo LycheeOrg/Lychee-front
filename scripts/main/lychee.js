@@ -95,19 +95,11 @@ let lychee = {
 };
 
 lychee.diagnostics = function () {
-	if (lychee.api_V2) {
-		return "/Diagnostics";
-	} else {
-		return "plugins/Diagnostics/";
-	}
+	return "/Diagnostics";
 };
 
 lychee.logs = function () {
-	if (lychee.api_V2) {
-		return "/Logs";
-	} else {
-		return "plugins/Log/";
-	}
+	return "/Logs";
 };
 
 lychee.aboutDialog = function () {
@@ -135,8 +127,6 @@ lychee.init = function (exitview = true) {
 	lychee.adjustContentHeight();
 
 	api.post("Session::init", {}, function (data) {
-		lychee.api_V2 = data.api_V2 || false;
-
 		if (data.status === 0) {
 			// No configuration
 
@@ -155,11 +145,7 @@ lychee.init = function (exitview = true) {
 		lychee.update_available = data.update_available;
 		lychee.landing_page_enable = (data.config.landing_page_enable && data.config.landing_page_enable === "1") || false;
 
-		if (lychee.api_V2) {
-			lychee.versionCode = data.config.version;
-		} else {
-			lychee.versionCode = data.config.version.slice(7, data.config.version.length);
-		}
+		lychee.versionCode = data.config.version;
 		if (lychee.versionCode !== "") {
 			let digits = lychee.versionCode.match(/.{1,2}/g);
 			lychee.version = parseInt(digits[0]).toString() + "." + parseInt(digits[1]).toString() + "." + parseInt(digits[2]).toString();
@@ -171,11 +157,6 @@ lychee.init = function (exitview = true) {
 		// or if we need to change some locale string
 		for (let key in data.locale) {
 			lychee.locale[key] = data.locale[key];
-		}
-
-		if (!lychee.api_V2) {
-			// Apply translations to the header
-			header.applyTranslations();
 		}
 
 		const validatedSwipeToleranceX =
@@ -249,8 +230,6 @@ lychee.init = function (exitview = true) {
 
 			lychee.editor_enabled = (data.config.editor_enabled && data.config.editor_enabled === "1") || false;
 
-			lychee.upload = !lychee.api_V2;
-			lychee.admin = !lychee.api_V2;
 			lychee.nsfw_visible_saved = lychee.nsfw_visible;
 
 			lychee.upload_processing_limit = parseInt(data.config.upload_processing_limit);
@@ -262,12 +241,10 @@ lychee.init = function (exitview = true) {
 			leftMenu.build();
 			leftMenu.bind();
 
-			if (lychee.api_V2) {
-				lychee.upload = data.admin || data.upload;
-				lychee.admin = data.admin;
-				lychee.lock = data.lock;
-				lychee.username = data.username;
-			}
+			lychee.upload = data.admin || data.upload;
+			lychee.admin = data.admin;
+			lychee.lock = data.lock;
+			lychee.username = data.username;
 			lychee.setMode("logged_in");
 
 			// Show dialog when there is no username and password

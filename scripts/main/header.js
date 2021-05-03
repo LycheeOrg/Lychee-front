@@ -553,28 +553,3 @@ header.setEditable = function (editable) {
 
 	return true;
 };
-
-header.applyTranslations = function () {
-	let selector_locale = {
-		"#button_signin": "SIGN_IN",
-		"#button_settings": "SETTINGS",
-		"#button_info_album": "ABOUT_ALBUM",
-		"#button_info": "ABOUT_PHOTO",
-		".button_add": "ADD",
-		"#button_move_album": "MOVE_ALBUM",
-		"#button_move": "MOVE",
-		"#button_trash_album": "DELETE_ALBUM",
-		"#button_trash": "DELETE",
-		"#button_archive": "DOWNLOAD_ALBUM",
-		"#button_star": "STAR_PHOTO",
-		"#button_back_home": "CLOSE_ALBUM",
-		"#button_fs_album_enter": "FULLSCREEN_ENTER",
-		"#button_fs_enter": "FULLSCREEN_ENTER",
-		"#button_share": "SHARE_PHOTO",
-		"#button_share_album": "SHARE_ALBUM",
-	};
-
-	for (let selector in selector_locale) {
-		header.dom(selector).prop("title", lychee.locale[selector_locale[selector]]);
-	}
-};

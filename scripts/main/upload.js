@@ -113,7 +113,7 @@ upload.start = {
 			formData.append("albumID", albumID);
 			formData.append(0, files[file_num]);
 
-			var api_url = api.get_url("Photo::add");
+			var api_url = "api/" + "Photo::add";
 
 			xhr.open("POST", api_url);
 
@@ -384,238 +384,188 @@ upload.start = {
 						resync_metadata: resync_metadata,
 					};
 
-					if (lychee.api_V2 === false) {
-						api.post("Import::server", params, function (_data) {
-							albums.refresh();
-							upload.notify(lychee.locale["UPLOAD_IMPORT_COMPLETE"]);
+					// Variables holding state across the invocations of
+					// processIncremental().
+					let lastReadIdx = 0;
+					let currentDir = data.path;
+					let encounteredProblems = false;
+					let topSkip = 0;
 
-							if (_data === "Notice: Import only contained albums!") {
-								// No error, but the folder only contained albums
-
-								// Go back to the album overview to show the imported albums
-								if (visible.albums()) lychee.load();
-								else album.reload();
-
-								basicModal.close();
-
-								return true;
-							} else if (_data === "Warning: Folder empty or no readable files to process!") {
-								// Error because the import could not start
-
-								$(".basicModal .rows .row p.notice").html(lychee.locale["UPLOAD_IMPORT_SERVER_FOLD"]).show();
-
-								$(".basicModal .rows .row .status").html(lychee.locale["UPLOAD_FAILED"]).addClass("error");
-
-								// Log error
-								lychee.error(lychee.locale["UPLOAD_IMPORT_SERVER_EMPT"], params, _data);
-							} else {
-								if (_data !== true) {
-									// Maybe an error, maybe just some skipped photos
-
-									$(".basicModal .rows .row p.notice").html(lychee.locale["UPLOAD_IMPORT_WARN_ERR"]).show();
-
-									$(".basicModal .rows .row .status").html(lychee.locale["UPLOAD_FINISHED"]).addClass("warning");
-
-									// Log error
-									lychee.error(null, params, _data);
-								} else {
-									// No error, everything worked fine
-
-									basicModal.close();
-								}
-
-								if (album.getID() === false) lychee.goto("0");
-								else album.load(albumID);
-							}
-
-							showCloseButton();
-
+					// Worker function invoked from both the response progress
+					// callback and the completion callback.
+					const processIncremental = function (jsonResponse) {
+						// Skip the part that we've already processed during
+						// the previous invocation(s).
+						let newResponse = jsonResponse.substring(lastReadIdx);
+						// Because of all the potential buffering along the way,
+						// we can't be sure if the last line is complete.  For
+						// that reason, our custom protocol terminates every
+						// line with the newline character, including the last
+						// line.
+						let lastNewline = newResponse.lastIndexOf("\n");
+						if (lastNewline === -1) {
+							// No valid input data to process.
 							return;
-						});
-					} else {
-						// Variables holding state across the invocations of
-						// processIncremental().
-						let lastReadIdx = 0;
-						let currentDir = data.path;
-						let encounteredProblems = false;
-						let topSkip = 0;
-
-						// Worker function invoked from both the response progress
-						// callback and the completion callback.
-						const processIncremental = function (jsonResponse) {
-							// Skip the part that we've already processed during
-							// the previous invocation(s).
-							let newResponse = jsonResponse.substring(lastReadIdx);
-							// Because of all the potential buffering along the way,
-							// we can't be sure if the last line is complete.  For
-							// that reason, our custom protocol terminates every
-							// line with the newline character, including the last
-							// line.
-							let lastNewline = newResponse.lastIndexOf("\n");
-							if (lastNewline === -1) {
-								// No valid input data to process.
-								return;
-							}
-							if (lastNewline !== newResponse.length - 1) {
-								// Last line is not newline-terminated, so it
-								// must be incomplete.  Strip it; it will be
-								// handled during the next invocation.
-								newResponse = newResponse.substring(0, lastNewline + 1);
-							}
-							// Advance the counter past the last valid character.
-							lastReadIdx += newResponse.length;
-							newResponse.split("\n").forEach(function (resp) {
-								let matches = resp.match(/^Status: (.*): (\d+)$/);
-								if (matches !== null) {
-									if (matches[2] !== "100") {
-										if (currentDir !== matches[1]) {
-											// New directory.  Add a new line to
-											// the dialog box.
-											currentDir = matches[1];
-											$(".basicModal .rows").append(build.uploadNewFile(currentDir));
-											topSkip += $(lastRowSelector).outerHeight();
-										}
-										$(lastRowSelector + " .status").html(matches[2] + "%");
-									} else {
-										// Final status report for this directory.
-										$(lastRowSelector + " .status")
-											.html(lychee.locale["UPLOAD_FINISHED"])
-											.addClass("success");
-									}
-								} else if ((matches = resp.match(/^Problem: (.*): ([^:]*)$/)) !== null) {
-									let rowSelector;
+						}
+						if (lastNewline !== newResponse.length - 1) {
+							// Last line is not newline-terminated, so it
+							// must be incomplete.  Strip it; it will be
+							// handled during the next invocation.
+							newResponse = newResponse.substring(0, lastNewline + 1);
+						}
+						// Advance the counter past the last valid character.
+						lastReadIdx += newResponse.length;
+						newResponse.split("\n").forEach(function (resp) {
+							let matches = resp.match(/^Status: (.*): (\d+)$/);
+							if (matches !== null) {
+								if (matches[2] !== "100") {
 									if (currentDir !== matches[1]) {
-										$(lastRowSelector).before(build.uploadNewFile(matches[1]));
-										rowSelector = prelastRowSelector;
-									} else {
-										// The problem is with the directory
-										// itself, so alter its existing line.
-										rowSelector = lastRowSelector;
-										topSkip -= $(rowSelector).outerHeight();
+										// New directory.  Add a new line to
+										// the dialog box.
+										currentDir = matches[1];
+										$(".basicModal .rows").append(build.uploadNewFile(currentDir));
+										topSkip += $(lastRowSelector).outerHeight();
 									}
-									if (matches[2] === "Given path is not a directory" || matches[2] === "Given path is reserved") {
-										$(rowSelector + " .status")
-											.html(lychee.locale["UPLOAD_FAILED"])
-											.addClass("error");
-									} else if (matches[2] === "Skipped duplicate (resynced metadata)") {
-										$(rowSelector + " .status")
-											.html(lychee.locale["UPLOAD_UPDATED"])
-											.addClass("warning");
-									} else if (matches[2] === "Import cancelled") {
-										$(rowSelector + " .status")
-											.html(lychee.locale["UPLOAD_CANCELLED"])
-											.addClass("error");
-									} else {
-										$(rowSelector + " .status")
-											.html(lychee.locale["UPLOAD_SKIPPED"])
-											.addClass("warning");
-									}
-									const translations = {
-										"Given path is not a directory": "UPLOAD_IMPORT_NOT_A_DIRECTORY",
-										"Given path is reserved": "UPLOAD_IMPORT_PATH_RESERVED",
-										"Could not read file": "UPLOAD_IMPORT_UNREADABLE",
-										"Could not import file": "UPLOAD_IMPORT_FAILED",
-										"Unsupported file type": "UPLOAD_IMPORT_UNSUPPORTED",
-										"Could not create album": "UPLOAD_IMPORT_ALBUM_FAILED",
-										"Skipped duplicate": "UPLOAD_IMPORT_SKIPPED_DUPLICATE",
-										"Skipped duplicate (resynced metadata)": "UPLOAD_IMPORT_RESYNCED_DUPLICATE",
-										"Import cancelled": "UPLOAD_IMPORT_CANCELLED",
-									};
-									$(rowSelector + " .notice")
-										.html(matches[2] in translations ? lychee.locale[translations[matches[2]]] : matches[2])
-										.show();
-									topSkip += $(rowSelector).outerHeight();
-									encounteredProblems = true;
-								} else if (resp === "Warning: Approaching memory limit") {
-									$(lastRowSelector).before(build.uploadNewFile(lychee.locale["UPLOAD_IMPORT_LOW_MEMORY"]));
-									topSkip += $(prelastRowSelector).outerHeight();
-									$(prelastRowSelector + " .status")
-										.html(lychee.locale["UPLOAD_WARNING"])
-										.addClass("warning");
-									$(prelastRowSelector + " .notice")
-										.html(lychee.locale["UPLOAD_IMPORT_LOW_MEMORY_EXPL"])
-										.show();
-								}
-								$(".basicModal .rows").scrollTop(topSkip);
-							}); // forEach (resp)
-						}; // processIncremental
-
-						api.post(
-							"Import::server",
-							params,
-							function (_data) {
-								// _data is already JSON-parsed.
-								processIncremental(_data);
-
-								albums.refresh();
-
-								upload.notify(
-									lychee.locale["UPLOAD_IMPORT_COMPLETE"],
-									encounteredProblems ? lychee.locale["UPLOAD_COMPLETE_FAILED"] : null
-								);
-
-								if (album.getID() === false) lychee.goto("0");
-								else album.load(albumID);
-
-								if (encounteredProblems) showCloseButton();
-								else basicModal.close();
-							},
-							function (event) {
-								// We received a possibly partial response.
-								// We need to begin by terminating the data with a
-								// '"' so that it can be JSON-parsed.
-								let response = this.response;
-								if (response.length > 0) {
-									if (response.substring(this.response.length - 1) === '"') {
-										// This might be either a terminating '"'
-										// or it may come from, say, a filename, in
-										// which case it would be escaped.
-										if (response.length > 1) {
-											if (response.substring(this.response.length - 2) === '"') {
-												response += '"';
-											}
-											// else it's a complete response,
-											// requiring no termination from us.
-										} else {
-											// The response is just '"'.
-											response += '"';
-										}
-									} else {
-										// This should be the most common case for
-										// partial responses.
-										response += '"';
-									}
-								}
-								// Parse the response as JSON.  This will remove
-								// the surrounding '"' characters, unescape any '"'
-								// from the middle, and translate '\n' sequences into
-								// newlines.
-								let jsonResponse;
-								try {
-									jsonResponse = JSON.parse(response);
-								} catch (e) {
-									// Most likely a SyntaxError due to something
-									// that went wrong on the server side.
+									$(lastRowSelector + " .status").html(matches[2] + "%");
+								} else {
+									// Final status report for this directory.
 									$(lastRowSelector + " .status")
+										.html(lychee.locale["UPLOAD_FINISHED"])
+										.addClass("success");
+								}
+							} else if ((matches = resp.match(/^Problem: (.*): ([^:]*)$/)) !== null) {
+								let rowSelector;
+								if (currentDir !== matches[1]) {
+									$(lastRowSelector).before(build.uploadNewFile(matches[1]));
+									rowSelector = prelastRowSelector;
+								} else {
+									// The problem is with the directory
+									// itself, so alter its existing line.
+									rowSelector = lastRowSelector;
+									topSkip -= $(rowSelector).outerHeight();
+								}
+								if (matches[2] === "Given path is not a directory" || matches[2] === "Given path is reserved") {
+									$(rowSelector + " .status")
 										.html(lychee.locale["UPLOAD_FAILED"])
 										.addClass("error");
-
-									albums.refresh();
-									upload.notify(lychee.locale["UPLOAD_COMPLETE"], lychee.locale["UPLOAD_COMPLETE_FAILED"]);
-
-									if (album.getID() === false) lychee.goto("0");
-									else album.load(albumID);
-
-									showCloseButton();
-
-									return;
+								} else if (matches[2] === "Skipped duplicate (resynced metadata)") {
+									$(rowSelector + " .status")
+										.html(lychee.locale["UPLOAD_UPDATED"])
+										.addClass("warning");
+								} else if (matches[2] === "Import cancelled") {
+									$(rowSelector + " .status")
+										.html(lychee.locale["UPLOAD_CANCELLED"])
+										.addClass("error");
+								} else {
+									$(rowSelector + " .status")
+										.html(lychee.locale["UPLOAD_SKIPPED"])
+										.addClass("warning");
 								}
-								// The rest of the work is the same as for the full
-								// response.
-								processIncremental(jsonResponse);
+								const translations = {
+									"Given path is not a directory": "UPLOAD_IMPORT_NOT_A_DIRECTORY",
+									"Given path is reserved": "UPLOAD_IMPORT_PATH_RESERVED",
+									"Could not read file": "UPLOAD_IMPORT_UNREADABLE",
+									"Could not import file": "UPLOAD_IMPORT_FAILED",
+									"Unsupported file type": "UPLOAD_IMPORT_UNSUPPORTED",
+									"Could not create album": "UPLOAD_IMPORT_ALBUM_FAILED",
+									"Skipped duplicate": "UPLOAD_IMPORT_SKIPPED_DUPLICATE",
+									"Skipped duplicate (resynced metadata)": "UPLOAD_IMPORT_RESYNCED_DUPLICATE",
+									"Import cancelled": "UPLOAD_IMPORT_CANCELLED",
+								};
+								$(rowSelector + " .notice")
+									.html(matches[2] in translations ? lychee.locale[translations[matches[2]]] : matches[2])
+									.show();
+								topSkip += $(rowSelector).outerHeight();
+								encounteredProblems = true;
+							} else if (resp === "Warning: Approaching memory limit") {
+								$(lastRowSelector).before(build.uploadNewFile(lychee.locale["UPLOAD_IMPORT_LOW_MEMORY"]));
+								topSkip += $(prelastRowSelector).outerHeight();
+								$(prelastRowSelector + " .status")
+									.html(lychee.locale["UPLOAD_WARNING"])
+									.addClass("warning");
+								$(prelastRowSelector + " .notice")
+									.html(lychee.locale["UPLOAD_IMPORT_LOW_MEMORY_EXPL"])
+									.show();
 							}
-						); // api.post
-					} // lychee.api_V2
+							$(".basicModal .rows").scrollTop(topSkip);
+						}); // forEach (resp)
+					}; // processIncremental
+
+					api.post(
+						"Import::server",
+						params,
+						function (_data) {
+							// _data is already JSON-parsed.
+							processIncremental(_data);
+
+							albums.refresh();
+
+							upload.notify(
+								lychee.locale["UPLOAD_IMPORT_COMPLETE"],
+								encounteredProblems ? lychee.locale["UPLOAD_COMPLETE_FAILED"] : null
+							);
+
+							if (album.getID() === false) lychee.goto("0");
+							else album.load(albumID);
+
+							if (encounteredProblems) showCloseButton();
+							else basicModal.close();
+						},
+						function (event) {
+							// We received a possibly partial response.
+							// We need to begin by terminating the data with a
+							// '"' so that it can be JSON-parsed.
+							let response = this.response;
+							if (response.length > 0) {
+								if (response.substring(this.response.length - 1) === '"') {
+									// This might be either a terminating '"'
+									// or it may come from, say, a filename, in
+									// which case it would be escaped.
+									if (response.length > 1) {
+										if (response.substring(this.response.length - 2) === '"') {
+											response += '"';
+										}
+										// else it's a complete response,
+										// requiring no termination from us.
+									} else {
+										// The response is just '"'.
+										response += '"';
+									}
+								} else {
+									// This should be the most common case for
+									// partial responses.
+									response += '"';
+								}
+							}
+							// Parse the response as JSON.  This will remove
+							// the surrounding '"' characters, unescape any '"'
+							// from the middle, and translate '\n' sequences into
+							// newlines.
+							let jsonResponse;
+							try {
+								jsonResponse = JSON.parse(response);
+							} catch (e) {
+								// Most likely a SyntaxError due to something
+								// that went wrong on the server side.
+								$(lastRowSelector + " .status")
+									.html(lychee.locale["UPLOAD_FAILED"])
+									.addClass("error");
+
+								albums.refresh();
+								upload.notify(lychee.locale["UPLOAD_COMPLETE"], lychee.locale["UPLOAD_COMPLETE_FAILED"]);
+
+								if (album.getID() === false) lychee.goto("0");
+								else album.load(albumID);
+
+								showCloseButton();
+
+								return;
+							}
+							// The rest of the work is the same as for the full
+							// response.
+							processIncremental(jsonResponse);
+						}
+					); // api.post
 				},
 				function () {
 					if (!cancelUpload) {
@@ -633,50 +583,48 @@ upload.start = {
 				<input class='text' name='path' type='text' placeholder='${lychee.locale["UPLOAD_ABSOLUTE_PATH"]}' value='${lychee.location}uploads/import/'>
 			</p>
 		`;
-		if (lychee.api_V2) {
-			msg += lychee.html`
-				<div class='choice'>
-					<label>
-						<input type='checkbox' name='delete' onchange='upload.check()'>
-						<span class='checkbox'>${build.iconic("check")}</span>
-						<span class='label'>${lychee.locale["UPLOAD_IMPORT_DELETE_ORIGINALS"]}</span>
-					</label>
-					<p>
-						${lychee.locale["UPLOAD_IMPORT_DELETE_ORIGINALS_EXPL"]}
-					</p>
-				</div>
-				<div class='choice'>
-					<label>
-						<input type='checkbox' name='symlinks' onchange='upload.check()'>
-						<span class='checkbox'>${build.iconic("check")}</span>
-						<span class='label'>${lychee.locale["UPLOAD_IMPORT_VIA_SYMLINK"]}</span>
-					</label>
-					<p>
-						${lychee.locale["UPLOAD_IMPORT_VIA_SYMLINK_EXPL"]}
-					</p>
-				</div>
-				<div class='choice'>
-					<label>
-						<input type='checkbox' name='skipduplicates' onchange='upload.check()'>
-						<span class='checkbox'>${build.iconic("check")}</span>
-						<span class='label'>${lychee.locale["UPLOAD_IMPORT_SKIP_DUPLICATES"]}</span>
-					</label>
-					<p>
-						${lychee.locale["UPLOAD_IMPORT_SKIP_DUPLICATES_EXPL"]}
-					</p>
-				</div>
-				<div class='choice'>
-					<label>
-						<input type='checkbox' name='resyncmetadata' onchange='upload.check()'>
-						<span class='checkbox'>${build.iconic("check")}</span>
-						<span class='label'>${lychee.locale["UPLOAD_IMPORT_RESYNC_METADATA"]}</span>
-					</label>
-					<p>
-						${lychee.locale["UPLOAD_IMPORT_RESYNC_METADATA_EXPL"]}
-					</p>
-				</div>
-			`;
-		}
+		msg += lychee.html`
+			<div class='choice'>
+				<label>
+					<input type='checkbox' name='delete' onchange='upload.check()'>
+					<span class='checkbox'>${build.iconic("check")}</span>
+					<span class='label'>${lychee.locale["UPLOAD_IMPORT_DELETE_ORIGINALS"]}</span>
+				</label>
+				<p>
+					${lychee.locale["UPLOAD_IMPORT_DELETE_ORIGINALS_EXPL"]}
+				</p>
+			</div>
+			<div class='choice'>
+				<label>
+					<input type='checkbox' name='symlinks' onchange='upload.check()'>
+					<span class='checkbox'>${build.iconic("check")}</span>
+					<span class='label'>${lychee.locale["UPLOAD_IMPORT_VIA_SYMLINK"]}</span>
+				</label>
+				<p>
+					${lychee.locale["UPLOAD_IMPORT_VIA_SYMLINK_EXPL"]}
+				</p>
+			</div>
+			<div class='choice'>
+				<label>
+					<input type='checkbox' name='skipduplicates' onchange='upload.check()'>
+					<span class='checkbox'>${build.iconic("check")}</span>
+					<span class='label'>${lychee.locale["UPLOAD_IMPORT_SKIP_DUPLICATES"]}</span>
+				</label>
+				<p>
+					${lychee.locale["UPLOAD_IMPORT_SKIP_DUPLICATES_EXPL"]}
+				</p>
+			</div>
+			<div class='choice'>
+				<label>
+					<input type='checkbox' name='resyncmetadata' onchange='upload.check()'>
+					<span class='checkbox'>${build.iconic("check")}</span>
+					<span class='label'>${lychee.locale["UPLOAD_IMPORT_RESYNC_METADATA"]}</span>
+				</label>
+				<p>
+					${lychee.locale["UPLOAD_IMPORT_RESYNC_METADATA_EXPL"]}
+				</p>
+			</div>
+		`;
 
 		basicModal.show({
 			body: msg,

@@ -3,21 +3,7 @@
  */
 
 let api = {
-	path: "php/index.php",
 	onError: null,
-};
-
-api.get_url = function (fn) {
-	let api_url = "";
-
-	if (lychee.api_V2) {
-		// because the api is defined directly by the function called in the route.php
-		api_url = "api/" + fn;
-	} else {
-		api_url = api.path;
-	}
-
-	return api_url;
 };
 
 api.isTimeout = function (errorThrown, jqXHR) {
@@ -47,7 +33,7 @@ api.post = function (fn, params, callback, responseProgressCB = null) {
 
 	params = $.extend({ function: fn }, params);
 
-	let api_url = api.get_url(fn);
+	let api_url = "api/" + fn;
 
 	const success = (data) => {
 		setTimeout(loadingBar.hide, 100);
@@ -117,7 +103,7 @@ api.post_raw = function (fn, params, callback) {
 
 	params = $.extend({ function: fn }, params);
 
-	let api_url = api.get_url(fn);
+	let api_url = "api/" + fn;
 
 	const success = (data) => {
 		setTimeout(loadingBar.hide, 100);
