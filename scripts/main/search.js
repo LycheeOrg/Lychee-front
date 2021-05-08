@@ -23,6 +23,9 @@ search.find = function (term) {
 					// Build albums
 					if (data && data.albums) {
 						albums.json = { albums: data.albums };
+						// Zap in case we are coming back from a search
+						// result album.
+						album.json = null;
 						$.each(albums.json.albums, function () {
 							albums.parse(this);
 							albumsData += build.album(this);
@@ -35,6 +38,7 @@ search.find = function (term) {
 						$.each(album.json.photos, function () {
 							photosData += build.photo(this);
 						});
+						album.json.id = "search=" + term;
 					}
 
 					let albums_divider = lychee.locale["ALBUMS"];

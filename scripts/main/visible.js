@@ -31,7 +31,7 @@ visible.config = function () {
 };
 
 visible.search = function () {
-	if (search.hash != null) return true;
+	if (visible.albums() && album.json && album.isSearchID(album.json.id)) return true;
 	return false;
 };
 

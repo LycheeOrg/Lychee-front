@@ -10,6 +10,10 @@ album.isSmartID = function (id) {
 	return id === "unsorted" || id === "starred" || id === "public" || id === "recent";
 };
 
+album.isSearchID = function (id) {
+	return id && id.startsWith("search");
+};
+
 album.getParent = function () {
 	if (album.json == null || album.isSmartID(album.json.id) === true || !album.json.parent_id || album.json.parent_id === 0) {
 		return "";
@@ -22,7 +26,7 @@ album.getID = function () {
 
 	// this is a Lambda
 	let isID = (_id) => {
-		if (album.isSmartID(_id)) {
+		if (album.isSmartID(_id) || album.isSearchID(_id)) {
 			return true;
 		}
 		return $.isNumeric(_id);
@@ -124,7 +128,7 @@ album.deleteSubByID = function (albumID) {
 	return deleted;
 };
 
-album.load = function (albumID, refresh = false) {
+album.load = function (albumID, refresh = false, parentID = null) {
 	let params = {
 		albumID,
 		password: "",
@@ -151,6 +155,10 @@ album.load = function (albumID, refresh = false) {
 		}
 
 		album.json = data;
+		if (parentID) {
+			album.json.original_parent_id = album.json.parent_id;
+			album.json.parent_id = parentID;
+		}
 
 		if (refresh === false) {
 			lychee.animate(".content", "contentZoomOut");
