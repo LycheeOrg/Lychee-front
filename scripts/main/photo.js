@@ -962,29 +962,35 @@ photo.getArchive = function (photoIDs, kind = null) {
 		if (myPhoto.livePhotoUrl !== null) {
 			msg += buildButton("LIVEPHOTOVIDEO", `${lychee.locale["PHOTO_LIVE_VIDEO"]}`);
 		}
-		if (myPhoto.hasOwnProperty("medium2x") && myPhoto.medium2x !== "") {
-			msg += buildButton("MEDIUM2X", `${lychee.locale["PHOTO_MEDIUM_HIDPI"]} (${myPhoto.medium2x_dim})`);
+		if (myPhoto.sizeVariants.medium2x !== null) {
+			msg += buildButton(
+				"MEDIUM2X",
+				`${lychee.locale["PHOTO_MEDIUM_HIDPI"]} (${myPhoto.sizeVariants.medium2x.width}x${myPhoto.sizeVariants.medium2x.height})`);
 		}
-		if (myPhoto.medium !== "") {
+		if (myPhoto.sizeVariants.medium !== null) {
 			msg += buildButton(
 				"MEDIUM",
-				`${lychee.locale["PHOTO_MEDIUM"]} ${myPhoto.hasOwnProperty("medium_dim") ? "(" + myPhoto.medium_dim + ")" : ""}`
-			);
+				`${lychee.locale["PHOTO_MEDIUM"]} (${myPhoto.sizeVariants.medium.width}x${myPhoto.sizeVariants.medium.height})`);
 		}
-		if (myPhoto.hasOwnProperty("small2x") && myPhoto.small2x !== "") {
-			msg += buildButton("SMALL2X", `${lychee.locale["PHOTO_SMALL_HIDPI"]} (${myPhoto.small2x_dim})`);
+		if (myPhoto.sizeVariants.small2x !== null) {
+			msg += buildButton(
+				"SMALL2X",
+				`${lychee.locale["PHOTO_SMALL_HIDPI"]} (${myPhoto.sizeVariants.small2x.width}x${myPhoto.sizeVariants.small2x.height})`);
 		}
-		if (myPhoto.small !== "") {
+		if (myPhoto.sizeVariants.small !== null) {
 			msg += buildButton(
 				"SMALL",
-				`${lychee.locale["PHOTO_SMALL"]} ${myPhoto.hasOwnProperty("small_dim") ? "(" + myPhoto.small_dim + ")" : ""}`
-			);
+				`${lychee.locale["PHOTO_SMALL"]} (${myPhoto.sizeVariants.small.width}x${myPhoto.sizeVariants.small.height})`);
 		}
-		if (myPhoto.hasOwnProperty("thumb2x") && myPhoto.thumb2x !== "") {
-			msg += buildButton("THUMB2X", `${lychee.locale["PHOTO_THUMB_HIDPI"]} (400x400)`);
+		if (myPhoto.sizeVariants.thumb2x !== null) {
+			msg += buildButton(
+				"THUMB2X",
+				`${lychee.locale["PHOTO_THUMB_HIDPI"]} (${myPhoto.sizeVariants.thumb2x.width}x${myPhoto.sizeVariants.thumb2x.height})`);
 		}
-		if (myPhoto.thumbUrl !== "") {
-			msg += buildButton("THUMB", `${lychee.locale["PHOTO_THUMB"]} (200x200)`);
+		if (myPhoto.sizeVariants.thumb !== null) {
+			msg += buildButton(
+				"THUMB",
+				`${lychee.locale["PHOTO_THUMB"]} (${myPhoto.sizeVariants.thumb.width}x${myPhoto.sizeVariants.thumb.height})`);
 		}
 
 		msg += lychee.html`
@@ -1055,31 +1061,39 @@ photo.showDirectLinks = function (photoID) {
 	`;
 
 	if (photo.json.url) {
-		msg += buildLine(`${lychee.locale["PHOTO_FULL"]} (${photo.json.width}x${photo.json.height})`, lychee.getBaseUrl() + photo.json.url);
-	}
-	if (photo.json.hasOwnProperty("medium2x") && photo.json.medium2x !== "") {
-		msg += buildLine(`${lychee.locale["PHOTO_MEDIUM_HIDPI"]} (${photo.json.medium2x_dim})`, lychee.getBaseUrl() + photo.json.medium2x);
-	}
-	if (photo.json.medium !== "") {
 		msg += buildLine(
-			`${lychee.locale["PHOTO_MEDIUM"]} ${photo.json.hasOwnProperty("medium_dim") ? "(" + photo.json.medium_dim + ")" : ""}`,
-			lychee.getBaseUrl() + photo.json.medium
-		);
+			`${lychee.locale["PHOTO_FULL"]} (${photo.json.width}x${photo.json.height})`,
+			lychee.getBaseUrl() + photo.json.url);
 	}
-	if (photo.json.hasOwnProperty("small2x") && photo.json.small2x !== "") {
-		msg += buildLine(`${lychee.locale["PHOTO_SMALL_HIDPI"]} (${photo.json.small2x_dim})`, lychee.getBaseUrl() + photo.json.small2x);
-	}
-	if (photo.json.small !== "") {
+	if (photo.json.sizeVariants.medium2x !== null) {
 		msg += buildLine(
-			`${lychee.locale["PHOTO_SMALL"]} ${photo.json.hasOwnProperty("small_dim") ? "(" + photo.json.small_dim + ")" : ""}`,
-			lychee.getBaseUrl() + photo.json.small
-		);
+			`${lychee.locale["PHOTO_MEDIUM_HIDPI"]} (${photo.json.sizeVariants.medium2x.width}x${photo.json.sizeVariants.medium2x.height})`,
+			lychee.getBaseUrl() + photo.json.sizeVariants.medium2x.url);
 	}
-	if (photo.json.hasOwnProperty("thumb2x") && photo.json.thumb2x !== "") {
-		msg += buildLine(`${lychee.locale["PHOTO_THUMB_HIDPI"]} (400x400)`, lychee.getBaseUrl() + photo.json.thumb2x);
+	if (photo.json.sizeVariants.medium !== null) {
+		msg += buildLine(
+			`${lychee.locale["PHOTO_MEDIUM"]} (${photo.json.sizeVariants.medium.width}x${photo.json.sizeVariants.medium.height})`,
+			lychee.getBaseUrl() + photo.json.sizeVariants.medium.url);
 	}
-	if (photo.json.thumbUrl !== "") {
-		msg += buildLine(` ${lychee.locale["PHOTO_THUMB"]} (200x200)`, lychee.getBaseUrl() + photo.json.thumbUrl);
+	if (photo.json.sizeVariants.small2x !== null) {
+		msg += buildLine(
+			`${lychee.locale["PHOTO_SMALL_HIDPI"]} (${photo.json.sizeVariants.small2x.width}x${photo.json.sizeVariants.small2x.height})`,
+			lychee.getBaseUrl() + photo.json.sizeVariants.small2x.url);
+	}
+	if (photo.json.sizeVariants.small !== null) {
+		msg += buildLine(
+			`${lychee.locale["PHOTO_SMALL"]} (${photo.json.sizeVariants.small.width}x${photo.json.sizeVariants.small.height})`,
+			lychee.getBaseUrl() + photo.json.sizeVariants.small.url);
+	}
+	if (photo.json.sizeVariants.thumb2x !== null) {
+		msg += buildLine(
+			`${lychee.locale["PHOTO_THUMB_HIDPI"]} (${photo.json.sizeVariants.thumb2x.width}x${photo.json.sizeVariants.thumb2x.height})`,
+			lychee.getBaseUrl() + photo.json.sizeVariants.thumb2x.url);
+	}
+	if (photo.json.sizeVariants.thumb !== null) {
+		msg += buildLine(
+			`${lychee.locale["PHOTO_THUMB"]} (${photo.json.sizeVariants.thumb.width}x${photo.json.sizeVariants.thumb.height})`,
+			lychee.getBaseUrl() + photo.json.sizeVariants.thumb.url);
 	}
 	if (photo.json.livePhotoUrl !== "") {
 		msg += buildLine(` ${lychee.locale["PHOTO_LIVE_VIDEO"]} `, lychee.getBaseUrl() + photo.json.livePhotoUrl);

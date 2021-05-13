@@ -1317,19 +1317,58 @@ album.updatePhoto = function (data) {
 			if (this.id === data.id) {
 				this.width = data.width;
 				this.height = data.height;
-				this.small = data.small;
-				this.small_dim = data.small_dim;
-				this.small2x = data.small2x;
-				this.small2x_dim = data.small2x_dim;
-				this.medium = data.medium;
-				this.medium_dim = data.medium_dim;
-				this.medium2x = data.medium2x;
-				this.medium2x_dim = data.medium2x_dim;
-				this.thumbUrl = data.thumbUrl;
-				this.thumb2x = data.thumb2x;
 				this.url = data.url;
 				this.size = data.size;
-
+				// Deep copy size variants
+				this.sizeVariants = {};
+				if(data.sizeVariants.thumb !== null) {
+					this.sizeVariants.thumb = {};
+					this.sizeVariants.thumb.url = data.sizeVariants.thumb.url;
+					this.sizeVariants.thumb.width = data.sizeVariants.thumb.width;
+					this.sizeVariants.thumb.height = data.sizeVariants.thumb.height;
+				} else {
+					this.sizeVariants.thumb = null;
+				}
+				if(data.sizeVariants.thumb2x !== null) {
+					this.sizeVariants.thumb2x = {};
+					this.sizeVariants.thumb2x.url = data.sizeVariants.thumb2x.url;
+					this.sizeVariants.thumb2x.width = data.sizeVariants.thumb2x.width;
+					this.sizeVariants.thumb2x.height = data.sizeVariants.thumb2x.height;
+				} else {
+					this.sizeVariants.thumb2x = null;
+				}
+				if(data.sizeVariants.small !== null) {
+					this.sizeVariants.small = {};
+					this.sizeVariants.small.url = data.sizeVariants.small.url;
+					this.sizeVariants.small.width = data.sizeVariants.small.width;
+					this.sizeVariants.small.height = data.sizeVariants.small.height;
+				} else {
+					this.sizeVariants.small = null;
+				}
+				if(data.sizeVariants.small2x !== null) {
+					this.sizeVariants.small2x = {};
+					this.sizeVariants.small2x.url = data.sizeVariants.small2x.url;
+					this.sizeVariants.small2x.width = data.sizeVariants.small2x.width;
+					this.sizeVariants.small2x.height = data.sizeVariants.small2x.height;
+				} else {
+					this.sizeVariants.small2x = null;
+				}
+				if(data.sizeVariants.medium !== null) {
+					this.sizeVariants.medium = {};
+					this.sizeVariants.medium.url = data.sizeVariants.medium.url;
+					this.sizeVariants.medium.width = data.sizeVariants.medium.width;
+					this.sizeVariants.medium.height = data.sizeVariants.medium.height;
+				} else {
+					this.sizeVariants.medium = null;
+				}
+				if(data.sizeVariants.medium2x !== null) {
+					this.sizeVariants.medium2x = {};
+					this.sizeVariants.medium2x.url = data.sizeVariants.medium2x.url;
+					this.sizeVariants.medium2x.width = data.sizeVariants.medium2x.width;
+					this.sizeVariants.medium2x.height = data.sizeVariants.medium2x.height;
+				} else {
+					this.sizeVariants.medium2x = null;
+				}
 				view.album.content.updatePhoto(this);
 				albums.refresh();
 

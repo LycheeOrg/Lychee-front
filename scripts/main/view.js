@@ -299,27 +299,27 @@ view.album = {
 
 			// This mimicks the structure of build.photo
 			if (lychee.layout === "0") {
-				src = data.thumbUrl;
-				if (data.hasOwnProperty("thumb2x") && data.thumb2x !== "") {
-					srcset = `${data.thumb2x} 2x`;
+				src = data.sizeVariants.thumb.url;
+				if (data.sizeVariants.thumb2x !== null) {
+					srcset = `${data.sizeVariants.thumb2x.url} 2x`;
 				}
 			} else {
-				if (data.small !== "") {
-					src = data.small;
-					if (data.hasOwnProperty("small2x") && data.small2x !== "") {
-						srcset = `${data.small} ${parseInt(data.small_dim, 10)}w, ${data.small2x} ${parseInt(data.small2x_dim, 10)}w`;
+				if (data.sizeVariants.small !== null) {
+					src = data.sizeVariants.small.url;
+					if (data.sizeVariants.small2x !== null) {
+						srcset = `${data.sizeVariants.small.url} ${data.sizeVariants.small.width}w, ${data.sizeVariants.small2x.url} ${data.sizeVariants.small2x.width}w`;
 					}
-				} else if (data.medium !== "") {
-					src = data.medium;
-					if (data.hasOwnProperty("medium2x") && data.medium2x !== "") {
-						srcset = `${data.medium} ${parseInt(data.medium_dim, 10)}w, ${data.medium2x} ${parseInt(data.medium2x_dim, 10)}w`;
+				} else if (data.sizeVariants.medium !== null) {
+					src = data.sizeVariants.medium.url;
+					if (data.sizeVariants.medium2x !== null) {
+						srcset = `${data.sizeVariants.medium.url} ${data.sizeVariants.medium.width}w, ${data.sizeVariants.medium2x.url} ${data.sizeVariants.medium2x.width}w`;
 					}
 				} else if (!data.type || data.type.indexOf("video") !== 0) {
 					src = data.url;
 				} else {
-					src = data.thumbUrl;
-					if (data.hasOwnProperty("thumb2x") && data.thumb2x !== "") {
-						srcset = `${data.thumbUrl} 200w, ${data.thumb2x} 400w`;
+					src = data.sizeVariants.thumb.url;
+					if (data.sizeVariants.thumb2x !== null) {
+						srcset = `${data.sizeVariants.thumb.url} ${data.sizeVariants.thumb.width}w, ${data.sizeVariants.thumb2x.url} ${data.sizeVariants.thumb2x.width}w`;
 					}
 				}
 			}
@@ -778,7 +778,7 @@ view.photo = {
 			let nextPhoto = album.getByID(nextPhotoID);
 
 			// Check if thumbUrl exists (for videos w/o ffmpeg, we add a play-icon)
-			let thumbUrl = nextPhoto.thumbUrl;
+			let thumbUrl = nextPhoto.sizeVariants.thumb.url;
 
 			if (thumbUrl === "uploads/thumb/" && nextPhoto.type.indexOf("video") > -1) {
 				thumbUrl = "img/play-icon.png";
@@ -793,7 +793,7 @@ view.photo = {
 			let previousPhoto = album.getByID(previousPhotoID);
 
 			// Check if thumbUrl exists (for videos w/o ffmpeg, we add a play-icon)
-			let thumbUrl = previousPhoto.thumbUrl;
+			let thumbUrl = previousPhoto.sizeVariants.thumb.url;
 
 			if (thumbUrl === "uploads/thumb/" && previousPhoto.type.indexOf("video") > -1) {
 				thumbUrl = "img/play-icon.png";
@@ -855,12 +855,12 @@ view.photo = {
 	},
 
 	onresize: function () {
-		if (!photo.json || photo.json.medium === "" || !photo.json.medium2x || photo.json.medium2x === "") return;
+		if (!photo.json || photo.json.sizeVariants.medium === null || photo.json.sizeVariants.medium2x === null) return;
 
 		// Calculate the width of the image in the current window without
 		// borders and set 'sizes' to it.
-		let imgWidth = parseInt(photo.json.medium_dim);
-		let imgHeight = photo.json.medium_dim.substr(photo.json.medium_dim.lastIndexOf("x") + 1);
+		let imgWidth = photo.json.sizeVariants.medium.width;
+		let imgHeight = photo.json.sizeVariants.medium.height;
 		let containerWidth = $(window).outerWidth();
 		let containerHeight = $(window).outerHeight();
 
