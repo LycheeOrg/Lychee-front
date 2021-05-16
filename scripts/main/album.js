@@ -1328,7 +1328,7 @@ album.updatePhoto = function (data) {
 				this.thumbUrl = data.thumbUrl;
 				this.thumb2x = data.thumb2x;
 				this.url = data.url;
-				this.size = data.size;
+				this.filesize = data.filesize;
 
 				view.album.content.updatePhoto(this);
 				albums.refresh();
