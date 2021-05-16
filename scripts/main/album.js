@@ -1312,27 +1312,41 @@ album.isUploadable = function () {
 };
 
 album.updatePhoto = function (data) {
+	let deepCopySizeVariant = function (src) {
+		if (src === undefined || src === null) return null;
+		let result = {};
+		result.url = src.url;
+		result.width = src.width;
+		result.height = src.height;
+		return result;
+	};
+
 	if (album.json) {
 		$.each(album.json.photos, function () {
 			if (this.id === data.id) {
 				this.width = data.width;
 				this.height = data.height;
-				this.small = data.small;
-				this.small_dim = data.small_dim;
-				this.small2x = data.small2x;
-				this.small2x_dim = data.small2x_dim;
-				this.medium = data.medium;
-				this.medium_dim = data.medium_dim;
-				this.medium2x = data.medium2x;
-				this.medium2x_dim = data.medium2x_dim;
-				this.thumbUrl = data.thumbUrl;
-				this.thumb2x = data.thumb2x;
 				this.url = data.url;
 				this.filesize = data.filesize;
-
+				// Deep copy size variants
+				this.sizeVariants = {
+					thumb: null,
+					thumb2x: null,
+					small: null,
+					small2x: null,
+					medium: null,
+					medium2x: null,
+				};
+				if (data.sizeVariants !== undefined && data.sizeVariants !== null) {
+					this.sizeVariants.thumb = deepCopySizeVariant(data.sizeVariants.thumb);
+					this.sizeVariants.thumb2x = deepCopySizeVariant(data.sizeVariants.thumb2x);
+					this.sizeVariants.small = deepCopySizeVariant(data.sizeVariants.small);
+					this.sizeVariants.small2x = deepCopySizeVariant(data.sizeVariants.small2x);
+					this.sizeVariants.medium = deepCopySizeVariant(data.sizeVariants.medium);
+					this.sizeVariants.medium2x = deepCopySizeVariant(data.sizeVariants.medium2x);
+				}
 				view.album.content.updatePhoto(this);
 				albums.refresh();
-
 				return false;
 			}
 			return true;

@@ -24,15 +24,15 @@ photoeditor.rotate = function (photoID, direction) {
 			}
 
 			let image = $("img#image");
-			if (photo.json.hasOwnProperty("medium2x") && photo.json.medium2x !== "") {
+			if (photo.json.sizeVariants.medium2x !== null) {
 				image.prop(
 					"srcset",
-					`${photo.json.medium} ${parseInt(photo.json.medium_dim, 10)}w, ${photo.json.medium2x} ${parseInt(photo.json.medium2x_dim, 10)}w`
+					`${photo.json.sizeVariants.medium.url} ${photo.json.sizeVariants.medium.width}w, ${photo.json.sizeVariants.medium2x.url} ${photo.json.sizeVariants.medium2x.width}w`
 				);
 			} else {
 				image.prop("srcset", "");
 			}
-			image.prop("src", photo.json.medium !== "" ? photo.json.medium : photo.json.url);
+			image.prop("src", photo.json.sizeVariants.medium !== null ? photo.json.sizeVariants.medium.url : photo.json.url);
 			view.photo.onresize();
 			view.photo.sidebar();
 

@@ -111,10 +111,10 @@ photo.hide = function () {
 
 photo.onresize = function () {
 	// Copy of view.photo.onresize
-	if (photo.json.medium === "" || !photo.json.medium2x || photo.json.medium2x === "") return;
+	if (photo.json.sizeVariants.medium === null || photo.json.sizeVariants.medium2x === null) return;
 
-	let imgWidth = parseInt(photo.json.medium_dim);
-	let imgHeight = photo.json.medium_dim.substr(photo.json.medium_dim.lastIndexOf("x") + 1);
+	let imgWidth = photo.json.sizeVariants.medium.width;
+	let imgHeight = photo.json.sizeVariants.medium.height;
 	let containerWidth = parseFloat($("#imageview").width(), 10);
 	let containerHeight = parseFloat($("#imageview").height(), 10);
 

@@ -150,17 +150,17 @@ build.photo = function (data, disabled = false) {
 	let isRaw = data.type && data.type.indexOf("raw") > -1;
 	let isLivePhoto = data.livePhotoUrl !== "" && data.livePhotoUrl !== null;
 
-	if (data.thumbUrl === "uploads/thumb/" && isLivePhoto) {
+	if (data.sizeVariants.thumb.url === "uploads/thumb/" && isLivePhoto) {
 		thumbnail = `<span class="thumbimg"><img src='img/live-photo-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false' data-tabindex='${tabindex.get_next_tab_index()}'></span>`;
 	}
-	if (data.thumbUrl === "uploads/thumb/" && isVideo) {
+	if (data.sizeVariants.thumb.url === "uploads/thumb/" && isVideo) {
 		thumbnail = `<span class="thumbimg"><img src='img/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false' data-tabindex='${tabindex.get_next_tab_index()}'></span>`;
-	} else if (data.thumbUrl === "uploads/thumb/" && isRaw) {
+	} else if (data.sizeVariants.thumb.url === "uploads/thumb/" && isRaw) {
 		thumbnail = `<span class="thumbimg"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false' data-tabindex='${tabindex.get_next_tab_index()}'></span>`;
 	} else if (lychee.layout === "0") {
-		if (data.hasOwnProperty("thumb2x")) {
+		if (data.sizeVariants.thumb2x !== null) {
 			// Lychee v4
-			thumb2x = data.thumb2x;
+			thumb2x = data.sizeVariants.thumb2x.url;
 		} else {
 			// Lychee v3
 			var { path: thumb2x } = lychee.retinize(data.thumbUrl);
@@ -172,30 +172,30 @@ build.photo = function (data, disabled = false) {
 
 		thumbnail = `<span class="thumbimg${isVideo ? " video" : ""}${isLivePhoto ? " livephoto" : ""}">`;
 		thumbnail +=
-			`<img class='lazyload' src='img/placeholder.png' data-src='${data.thumbUrl}' ` +
+			`<img class='lazyload' src='img/placeholder.png' data-src='${data.sizeVariants.thumb.url}' ` +
 			thumb2x +
 			` alt='Photo thumbnail' data-overlay='false' draggable='false' >`;
 		thumbnail += `</span>`;
 	} else {
-		if (data.small !== "") {
-			if (data.hasOwnProperty("small2x") && data.small2x !== "") {
-				thumb2x = `data-srcset='${data.small} ${parseInt(data.small_dim, 10)}w, ${data.small2x} ${parseInt(data.small2x_dim, 10)}w'`;
+		if (data.sizeVariants.small !== null) {
+			if (data.sizeVariants.small2x !== null) {
+				thumb2x = `data-srcset='${data.sizeVariants.small.url} ${data.sizeVariants.small.width}w, ${data.sizeVariants.small2x.url} ${data.sizeVariants.small2x.width}w'`;
 			}
 
 			thumbnail = `<span class="thumbimg${isVideo ? " video" : ""}${isLivePhoto ? " livephoto" : ""}">`;
 			thumbnail +=
-				`<img class='lazyload' src='img/placeholder.png' data-src='${data.small}' ` +
+				`<img class='lazyload' src='img/placeholder.png' data-src='${data.sizeVariants.small.url}' ` +
 				thumb2x +
 				` alt='Photo thumbnail' data-overlay='false' draggable='false' >`;
 			thumbnail += `</span>`;
-		} else if (data.medium !== "") {
-			if (data.hasOwnProperty("medium2x") && data.medium2x !== "") {
-				thumb2x = `data-srcset='${data.medium} ${parseInt(data.medium_dim, 10)}w, ${data.medium2x} ${parseInt(data.medium2x_dim, 10)}w'`;
+		} else if (data.sizeVariants.medium !== null) {
+			if (data.sizeVariants.medium2x !== null) {
+				thumb2x = `data-srcset='${data.sizeVariants.medium.url} ${data.sizeVariants.medium.width}w, ${data.sizeVariants.medium2x.url} ${data.sizeVariants.medium2x.width}w'`;
 			}
 
 			thumbnail = `<span class="thumbimg${isVideo ? " video" : ""}${isLivePhoto ? " livephoto" : ""}">`;
 			thumbnail +=
-				`<img class='lazyload' src='img/placeholder.png' data-src='${data.medium}' ` +
+				`<img class='lazyload' src='img/placeholder.png' data-src='${data.sizeVariants.medium.url}' ` +
 				thumb2x +
 				` alt='Photo thumbnail' data-overlay='false' draggable='false' >`;
 			thumbnail += `</span>`;
@@ -208,21 +208,21 @@ build.photo = function (data, disabled = false) {
 			// Fallback for videos with no small (the case of no thumb is
 			// handled at the top of this function).
 
-			if (data.hasOwnProperty("thumb2x")) {
+			if (data.sizeVariants.thumb2x !== null) {
 				// Lychee v4
-				thumb2x = data.thumb2x;
+				thumb2x = data.sizeVariants.thumb2x.url;
 			} else {
 				// Lychee v3
 				var { path: thumb2x } = lychee.retinize(data.thumbUrl);
 			}
 
 			if (thumb2x !== "") {
-				thumb2x = `data-srcset='${data.thumbUrl} 200w, ${thumb2x} 400w'`;
+				thumb2x = `data-srcset='${data.sizeVariants.thumb.url} ${data.sizeVariants.thumb.width}w, ${thumb2x} ${data.sizeVariants.thumb2x.width}w'`;
 			}
 
 			thumbnail = `<span class="thumbimg video">`;
 			thumbnail +=
-				`<img class='lazyload' src='img/placeholder.png' data-src='${data.thumbUrl}' ` +
+				`<img class='lazyload' src='img/placeholder.png' data-src='${data.sizeVariants.thumb.url}' ` +
 				thumb2x +
 				` alt='Photo thumbnail' data-overlay='false' draggable='false' >`;
 			thumbnail += `</span>`;
@@ -325,7 +325,7 @@ build.imageview = function (data, visibleControls, autoplay) {
 		html += lychee.html`<video width="auto" height="auto" id='image' controls class='${visibleControls === true ? "" : "full"}' autobuffer ${
 			autoplay ? "autoplay" : ""
 		} data-tabindex='${tabindex.get_next_tab_index()}'><source src='${data.url}'>Your browser does not support the video tag.</video>`;
-	} else if (data.type.indexOf("raw") > -1 && data.medium === "") {
+	} else if (data.type.indexOf("raw") > -1 && data.sizeVariants.medium === null) {
 		html += lychee.html`<img id='image' class='${
 			visibleControls === true ? "" : "full"
 		}' src='img/placeholder.png' draggable='false' alt='big' data-tabindex='${tabindex.get_next_tab_index()}'>`;
@@ -346,14 +346,14 @@ build.imageview = function (data, visibleControls, autoplay) {
 				}
 			});
 
-			if (data.medium !== "") {
+			if (data.sizeVariants.medium !== null) {
 				let medium = "";
 
-				if (data.hasOwnProperty("medium2x") && data.medium2x !== "") {
-					medium = `srcset='${data.medium} ${parseInt(data.medium_dim, 10)}w, ${data.medium2x} ${parseInt(data.medium2x_dim, 10)}w'`;
+				if (data.sizeVariants.medium2x !== null) {
+					medium = `srcset='${data.sizeVariants.medium.url} ${data.sizeVariants.medium.width}w, ${data.sizeVariants.medium2x.url} ${data.sizeVariants.medium2x.width}w'`;
 				}
 				img =
-					`<img id='image' class='${visibleControls === true ? "" : "full"}' src='${data.medium}' ` +
+					`<img id='image' class='${visibleControls === true ? "" : "full"}' src='${data.sizeVariants.medium.url}' ` +
 					medium +
 					`  draggable='false' alt='medium' data-tabindex='${tabindex.get_next_tab_index()}'>`;
 			} else {
@@ -362,12 +362,13 @@ build.imageview = function (data, visibleControls, autoplay) {
 				}' draggable='false' alt='big' data-tabindex='${tabindex.get_next_tab_index()}'>`;
 			}
 		} else {
-			if (data.medium !== "") {
-				let medium_dims = data.medium_dim.split("x");
-				let medium_width = medium_dims[0];
-				let medium_height = medium_dims[1];
+			if (data.sizeVariants.medium !== null) {
+				let medium_width = data.sizeVariants.medium.width;
+				let medium_height = data.sizeVariants.medium.height;
 				// It's a live photo
-				img = `<div id='livephoto' data-live-photo data-proactively-loads-video='true' data-photo-src='${data.medium}' data-video-src='${
+				img = `<div id='livephoto' data-live-photo data-proactively-loads-video='true' data-photo-src='${
+					data.sizeVariants.medium.url
+				}' data-video-src='${
 					data.livePhotoUrl
 				}'  style='width: ${medium_width}px; height: ${medium_height}px' data-tabindex='${tabindex.get_next_tab_index()}'></div>`;
 			} else {
