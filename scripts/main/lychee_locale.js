@@ -458,8 +458,8 @@ lychee.locale = {
 	 * @return {string} A formatted and localized string
 	 */
 	printFilesizeLocalized: function( filesize ) {
-		console.assert(Number.isInteger(filesize), "printFilesizeLocalized: expedted integer, got %s", typeof filesize);
-		const suffix = [ ' B', 'kB', 'MB', 'GB' ];
+		console.assert(Number.isInteger(filesize), "printFilesizeLocalized: expected integer, got %s", typeof filesize);
+		const suffix = [ ' B', ' kB', ' MB', ' GB' ];
 		let i = 0;
 		// Sic! We check if the number is larger than 1000 but divide by 1024 by intention
 		// We aim at a number which has at most 3 non-decimal digits, i.e. the result shall be in the interval
