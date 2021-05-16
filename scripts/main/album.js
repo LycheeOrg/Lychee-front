@@ -1321,7 +1321,7 @@ album.updatePhoto = function (data) {
 				this.size = data.size;
 				// Deep copy size variants
 				this.sizeVariants = {};
-				if(data.sizeVariants.thumb !== null) {
+				if (data.sizeVariants.thumb !== null) {
 					this.sizeVariants.thumb = {};
 					this.sizeVariants.thumb.url = data.sizeVariants.thumb.url;
 					this.sizeVariants.thumb.width = data.sizeVariants.thumb.width;
@@ -1329,7 +1329,7 @@ album.updatePhoto = function (data) {
 				} else {
 					this.sizeVariants.thumb = null;
 				}
-				if(data.sizeVariants.thumb2x !== null) {
+				if (data.sizeVariants.thumb2x !== null) {
 					this.sizeVariants.thumb2x = {};
 					this.sizeVariants.thumb2x.url = data.sizeVariants.thumb2x.url;
 					this.sizeVariants.thumb2x.width = data.sizeVariants.thumb2x.width;
@@ -1337,7 +1337,7 @@ album.updatePhoto = function (data) {
 				} else {
 					this.sizeVariants.thumb2x = null;
 				}
-				if(data.sizeVariants.small !== null) {
+				if (data.sizeVariants.small !== null) {
 					this.sizeVariants.small = {};
 					this.sizeVariants.small.url = data.sizeVariants.small.url;
 					this.sizeVariants.small.width = data.sizeVariants.small.width;
@@ -1345,7 +1345,7 @@ album.updatePhoto = function (data) {
 				} else {
 					this.sizeVariants.small = null;
 				}
-				if(data.sizeVariants.small2x !== null) {
+				if (data.sizeVariants.small2x !== null) {
 					this.sizeVariants.small2x = {};
 					this.sizeVariants.small2x.url = data.sizeVariants.small2x.url;
 					this.sizeVariants.small2x.width = data.sizeVariants.small2x.width;
@@ -1353,7 +1353,7 @@ album.updatePhoto = function (data) {
 				} else {
 					this.sizeVariants.small2x = null;
 				}
-				if(data.sizeVariants.medium !== null) {
+				if (data.sizeVariants.medium !== null) {
 					this.sizeVariants.medium = {};
 					this.sizeVariants.medium.url = data.sizeVariants.medium.url;
 					this.sizeVariants.medium.width = data.sizeVariants.medium.width;
@@ -1361,7 +1361,7 @@ album.updatePhoto = function (data) {
 				} else {
 					this.sizeVariants.medium = null;
 				}
-				if(data.sizeVariants.medium2x !== null) {
+				if (data.sizeVariants.medium2x !== null) {
 					this.sizeVariants.medium2x = {};
 					this.sizeVariants.medium2x.url = data.sizeVariants.medium2x.url;
 					this.sizeVariants.medium2x.width = data.sizeVariants.medium2x.width;

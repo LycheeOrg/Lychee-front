@@ -115,7 +115,7 @@ photo.preloadNextPrev = function (photoID) {
 		let previousPhotoID = album.getByID(photoID).previousPhoto;
 		let nextPhotoID = album.getByID(photoID).nextPhoto;
 		let imgs = $("img#image");
-		let isUsing2xCurrently = imgs.length > 0 && imgs[0].currentSrc !== null && imgs[0].currentSrc.includes("@2x.");;
+		let isUsing2xCurrently = imgs.length > 0 && imgs[0].currentSrc !== null && imgs[0].currentSrc.includes("@2x.");
 
 		$("head [data-prefetch]").remove();
 
@@ -959,32 +959,32 @@ photo.getArchive = function (photoIDs, kind = null) {
 		if (myPhoto.sizeVariants.medium2x !== null) {
 			msg += buildButton(
 				"MEDIUM2X",
-				`${lychee.locale["PHOTO_MEDIUM_HIDPI"]} (${myPhoto.sizeVariants.medium2x.width}x${myPhoto.sizeVariants.medium2x.height})`);
+				`${lychee.locale["PHOTO_MEDIUM_HIDPI"]} (${myPhoto.sizeVariants.medium2x.width}x${myPhoto.sizeVariants.medium2x.height})`
+			);
 		}
 		if (myPhoto.sizeVariants.medium !== null) {
 			msg += buildButton(
 				"MEDIUM",
-				`${lychee.locale["PHOTO_MEDIUM"]} (${myPhoto.sizeVariants.medium.width}x${myPhoto.sizeVariants.medium.height})`);
+				`${lychee.locale["PHOTO_MEDIUM"]} (${myPhoto.sizeVariants.medium.width}x${myPhoto.sizeVariants.medium.height})`
+			);
 		}
 		if (myPhoto.sizeVariants.small2x !== null) {
 			msg += buildButton(
 				"SMALL2X",
-				`${lychee.locale["PHOTO_SMALL_HIDPI"]} (${myPhoto.sizeVariants.small2x.width}x${myPhoto.sizeVariants.small2x.height})`);
+				`${lychee.locale["PHOTO_SMALL_HIDPI"]} (${myPhoto.sizeVariants.small2x.width}x${myPhoto.sizeVariants.small2x.height})`
+			);
 		}
 		if (myPhoto.sizeVariants.small !== null) {
-			msg += buildButton(
-				"SMALL",
-				`${lychee.locale["PHOTO_SMALL"]} (${myPhoto.sizeVariants.small.width}x${myPhoto.sizeVariants.small.height})`);
+			msg += buildButton("SMALL", `${lychee.locale["PHOTO_SMALL"]} (${myPhoto.sizeVariants.small.width}x${myPhoto.sizeVariants.small.height})`);
 		}
 		if (myPhoto.sizeVariants.thumb2x !== null) {
 			msg += buildButton(
 				"THUMB2X",
-				`${lychee.locale["PHOTO_THUMB_HIDPI"]} (${myPhoto.sizeVariants.thumb2x.width}x${myPhoto.sizeVariants.thumb2x.height})`);
+				`${lychee.locale["PHOTO_THUMB_HIDPI"]} (${myPhoto.sizeVariants.thumb2x.width}x${myPhoto.sizeVariants.thumb2x.height})`
+			);
 		}
 		if (myPhoto.sizeVariants.thumb !== null) {
-			msg += buildButton(
-				"THUMB",
-				`${lychee.locale["PHOTO_THUMB"]} (${myPhoto.sizeVariants.thumb.width}x${myPhoto.sizeVariants.thumb.height})`);
+			msg += buildButton("THUMB", `${lychee.locale["PHOTO_THUMB"]} (${myPhoto.sizeVariants.thumb.width}x${myPhoto.sizeVariants.thumb.height})`);
 		}
 
 		msg += lychee.html`
@@ -1055,39 +1055,43 @@ photo.showDirectLinks = function (photoID) {
 	`;
 
 	if (photo.json.url) {
-		msg += buildLine(
-			`${lychee.locale["PHOTO_FULL"]} (${photo.json.width}x${photo.json.height})`,
-			lychee.getBaseUrl() + photo.json.url);
+		msg += buildLine(`${lychee.locale["PHOTO_FULL"]} (${photo.json.width}x${photo.json.height})`, lychee.getBaseUrl() + photo.json.url);
 	}
 	if (photo.json.sizeVariants.medium2x !== null) {
 		msg += buildLine(
 			`${lychee.locale["PHOTO_MEDIUM_HIDPI"]} (${photo.json.sizeVariants.medium2x.width}x${photo.json.sizeVariants.medium2x.height})`,
-			lychee.getBaseUrl() + photo.json.sizeVariants.medium2x.url);
+			lychee.getBaseUrl() + photo.json.sizeVariants.medium2x.url
+		);
 	}
 	if (photo.json.sizeVariants.medium !== null) {
 		msg += buildLine(
 			`${lychee.locale["PHOTO_MEDIUM"]} (${photo.json.sizeVariants.medium.width}x${photo.json.sizeVariants.medium.height})`,
-			lychee.getBaseUrl() + photo.json.sizeVariants.medium.url);
+			lychee.getBaseUrl() + photo.json.sizeVariants.medium.url
+		);
 	}
 	if (photo.json.sizeVariants.small2x !== null) {
 		msg += buildLine(
 			`${lychee.locale["PHOTO_SMALL_HIDPI"]} (${photo.json.sizeVariants.small2x.width}x${photo.json.sizeVariants.small2x.height})`,
-			lychee.getBaseUrl() + photo.json.sizeVariants.small2x.url);
+			lychee.getBaseUrl() + photo.json.sizeVariants.small2x.url
+		);
 	}
 	if (photo.json.sizeVariants.small !== null) {
 		msg += buildLine(
 			`${lychee.locale["PHOTO_SMALL"]} (${photo.json.sizeVariants.small.width}x${photo.json.sizeVariants.small.height})`,
-			lychee.getBaseUrl() + photo.json.sizeVariants.small.url);
+			lychee.getBaseUrl() + photo.json.sizeVariants.small.url
+		);
 	}
 	if (photo.json.sizeVariants.thumb2x !== null) {
 		msg += buildLine(
 			`${lychee.locale["PHOTO_THUMB_HIDPI"]} (${photo.json.sizeVariants.thumb2x.width}x${photo.json.sizeVariants.thumb2x.height})`,
-			lychee.getBaseUrl() + photo.json.sizeVariants.thumb2x.url);
+			lychee.getBaseUrl() + photo.json.sizeVariants.thumb2x.url
+		);
 	}
 	if (photo.json.sizeVariants.thumb !== null) {
 		msg += buildLine(
 			`${lychee.locale["PHOTO_THUMB"]} (${photo.json.sizeVariants.thumb.width}x${photo.json.sizeVariants.thumb.height})`,
-			lychee.getBaseUrl() + photo.json.sizeVariants.thumb.url);
+			lychee.getBaseUrl() + photo.json.sizeVariants.thumb.url
+		);
 	}
 	if (photo.json.livePhotoUrl !== "") {
 		msg += buildLine(` ${lychee.locale["PHOTO_LIVE_VIDEO"]} `, lychee.getBaseUrl() + photo.json.livePhotoUrl);

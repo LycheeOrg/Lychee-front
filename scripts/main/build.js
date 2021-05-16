@@ -366,7 +366,9 @@ build.imageview = function (data, visibleControls, autoplay) {
 				let medium_width = data.sizeVariants.medium.width;
 				let medium_height = data.sizeVariants.medium.height;
 				// It's a live photo
-				img = `<div id='livephoto' data-live-photo data-proactively-loads-video='true' data-photo-src='${data.sizeVariants.medium.url}' data-video-src='${
+				img = `<div id='livephoto' data-live-photo data-proactively-loads-video='true' data-photo-src='${
+					data.sizeVariants.medium.url
+				}' data-video-src='${
 					data.livePhotoUrl
 				}'  style='width: ${medium_width}px; height: ${medium_height}px' data-tabindex='${tabindex.get_next_tab_index()}'></div>`;
 			} else {
