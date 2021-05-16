@@ -451,4 +451,34 @@ lychee.locale = {
 	PHOTO_THUMB_HIDPI: "Square thumb HiDPI",
 	PHOTO_LIVE_VIDEO: "Video part of live-photo",
 	PHOTO_VIEW: "Lychee Photo View:",
+
+	/**
+	 * Formats a number representing a filesize in bytes as a localized string
+	 * @param {!number} filesize
+	 * @return {string} A formatted and localized string
+	 */
+	printFilesizeLocalized: function (filesize) {
+		console.assert(Number.isInteger(filesize), "printFilesizeLocalized: expected integer, got %s", typeof filesize);
+		const suffix = [" B", " kB", " MB", " GB"];
+		let i = 0;
+		// Sic! We check if the number is larger than 1000 but divide by 1024 by intention
+		// We aim at a number which has at most 3 non-decimal digits, i.e. the result shall be in the interval
+		// [1000/1024, 1000) = [0.977, 1000)  (lower bound included, upper bound excluded)
+		while (filesize >= 1000.0 && i < suffix.length) {
+			filesize = filesize / 1024.0;
+			i++;
+		}
+
+		// The number of decimal digits is anti-proportional to the number of non-decimal digits
+		// In total, there shall always be three digits
+		if (filesize >= 100.0) {
+			filesize = Math.round(filesize);
+		} else if (filesize >= 10.0) {
+			filesize = Math.round(filesize * 10.0) / 10.0;
+		} else {
+			filesize = Math.round(filesize * 100.0) / 100.0;
+		}
+
+		return Number(filesize).toLocaleString() + suffix[i];
+	},
 };

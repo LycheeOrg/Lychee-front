@@ -1327,7 +1327,7 @@ album.updatePhoto = function (data) {
 				this.width = data.width;
 				this.height = data.height;
 				this.url = data.url;
-				this.size = data.size;
+				this.filesize = data.filesize;
 				// Deep copy size variants
 				this.sizeVariants = {
 					thumb: null,
