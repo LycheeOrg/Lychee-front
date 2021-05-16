@@ -957,7 +957,7 @@ photo.getArchive = function (photoIDs, kind = null) {
 		`;
 
 		if (myPhoto.url) {
-			msg += buildButton("FULL", `${lychee.locale["PHOTO_FULL"]} (${myPhoto.width}x${myPhoto.height}, ${myPhoto.size})`);
+			msg += buildButton("FULL", `${lychee.locale["PHOTO_FULL"]} (${myPhoto.width}x${myPhoto.height}, ${lychee.locale.printFilesizeLocalized(myPhoto.filesize)})`);
 		}
 		if (myPhoto.livePhotoUrl !== null) {
 			msg += buildButton("LIVEPHOTOVIDEO", `${lychee.locale["PHOTO_LIVE_VIDEO"]}`);
