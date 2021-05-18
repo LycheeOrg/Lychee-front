@@ -76,8 +76,8 @@ photo.hasExif = function () {
 	return exifHash !== "";
 };
 
-photo.hasTakedate = function () {
-	return photo.json.takedate && photo.json.takedate !== "";
+photo.hasTakestamp = function () {
+	return photo.json.takestamp !== null;
 };
 
 photo.hasDesc = function () {
