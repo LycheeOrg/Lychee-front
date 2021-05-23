@@ -131,7 +131,7 @@ mapview.open = function (albumID = null) {
 			name: e.layer.photo.name,
 			url: e.layer.photo.url,
 			url2x: e.layer.photo.url2x,
-			takestamp: lychee.locale.printDateTime(e.layer.photo.takestamp),
+			taken_at: lychee.locale.printDateTime(e.layer.photo.taken_at),
 		};
 		let template = "";
 
@@ -142,14 +142,14 @@ mapview.open = function (albumID = null) {
 				'srcset="{url} 1x, {url2x} 2x" ',
 				'data-album-id="{albumID}" data-id="{photoID}"/><div><h1>{name}</h1><span title="Camera Date">',
 				build.iconic("camera-slr"),
-				"</span><p>{takestamp}</p></div>"
+				"</span><p>{taken_at}</p></div>"
 			);
 		} else {
 			template = template.concat(
 				'<img class="image-leaflet-popup" src="{url}" ',
 				'data-album-id="{albumID}" data-id="{photoID}"/><div><h1>{name}</h1><span title="Camera Date">',
 				build.iconic("camera-slr"),
-				"</span><p>{takestamp}</p></div>"
+				"</span><p>{taken_at}</p></div>"
 			);
 		}
 
@@ -191,7 +191,7 @@ mapview.open = function (albumID = null) {
 					url: element.sizeVariants.small !== null ? element.sizeVariants.small.url : element.url,
 					url2x: element.sizeVariants.small2x !== null ? element.sizeVariants.small2x.url : null,
 					name: element.title,
-					takestamp: element.takestamp,
+					taken_at: element.taken_at,
 					albumID: element.album,
 					photoID: element.id,
 				});

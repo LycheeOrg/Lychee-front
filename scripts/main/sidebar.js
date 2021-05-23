@@ -166,7 +166,7 @@ sidebar.createStructure.photo = function (data) {
 	if (data == null || data === "") return false;
 
 	let editable = typeof album !== "undefined" ? album.isUploadable() : false;
-	let exifHash = data.takestamp + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
+	let exifHash = data.taken_at + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
 	let locationHash = data.longitude + data.latitude + data.altitude;
 	let structure = {};
 	let _public = "";
@@ -259,12 +259,12 @@ sidebar.createStructure.photo = function (data) {
 			type: sidebar.types.DEFAULT,
 			rows: isVideo
 				? [
-						{ title: lychee.locale["PHOTO_CAPTURED"], kind: "takedate", value: lychee.locale.printDateTime(data.takestamp) },
+						{ title: lychee.locale["PHOTO_CAPTURED"], kind: "takedate", value: lychee.locale.printDateTime(data.taken_at) },
 						{ title: lychee.locale["PHOTO_MAKE"], kind: "make", value: data.make },
 						{ title: lychee.locale["PHOTO_TYPE"], kind: "model", value: data.model },
 				  ]
 				: [
-						{ title: lychee.locale["PHOTO_CAPTURED"], kind: "takedate", value: lychee.locale.printDateTime(data.takestamp) },
+						{ title: lychee.locale["PHOTO_CAPTURED"], kind: "takedate", value: lychee.locale.printDateTime(data.taken_at) },
 						{ title: lychee.locale["PHOTO_MAKE"], kind: "make", value: data.make },
 						{ title: lychee.locale["PHOTO_TYPE"], kind: "model", value: data.model },
 						{ title: lychee.locale["PHOTO_LENS"], kind: "lens", value: data.lens },
