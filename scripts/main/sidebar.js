@@ -166,7 +166,7 @@ sidebar.createStructure.photo = function (data) {
 	if (data == null || data === "") return false;
 
 	let editable = typeof album !== "undefined" ? album.isUploadable() : false;
-	let exifHash = data.takedate + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
+	let exifHash = data.taken_at + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
 	let locationHash = data.longitude + data.latitude + data.altitude;
 	let structure = {};
 	let _public = "";
@@ -210,7 +210,7 @@ sidebar.createStructure.photo = function (data) {
 		type: sidebar.types.DEFAULT,
 		rows: [
 			{ title: lychee.locale["PHOTO_TITLE"], kind: "title", value: data.title, editable },
-			{ title: lychee.locale["PHOTO_UPLOADED"], kind: "uploaded", value: data.sysdate },
+			{ title: lychee.locale["PHOTO_UPLOADED"], kind: "uploaded", value: lychee.locale.printDateTime(data.created_at) },
 			{ title: lychee.locale["PHOTO_DESCRIPTION"], kind: "description", value: data.description, editable },
 		],
 	};
@@ -259,12 +259,12 @@ sidebar.createStructure.photo = function (data) {
 			type: sidebar.types.DEFAULT,
 			rows: isVideo
 				? [
-						{ title: lychee.locale["PHOTO_CAPTURED"], kind: "takedate", value: data.takedate },
+						{ title: lychee.locale["PHOTO_CAPTURED"], kind: "takedate", value: lychee.locale.printDateTime(data.taken_at) },
 						{ title: lychee.locale["PHOTO_MAKE"], kind: "make", value: data.make },
 						{ title: lychee.locale["PHOTO_TYPE"], kind: "model", value: data.model },
 				  ]
 				: [
-						{ title: lychee.locale["PHOTO_CAPTURED"], kind: "takedate", value: data.takedate },
+						{ title: lychee.locale["PHOTO_CAPTURED"], kind: "takedate", value: lychee.locale.printDateTime(data.taken_at) },
 						{ title: lychee.locale["PHOTO_MAKE"], kind: "make", value: data.make },
 						{ title: lychee.locale["PHOTO_TYPE"], kind: "model", value: data.model },
 						{ title: lychee.locale["PHOTO_LENS"], kind: "lens", value: data.lens },
@@ -457,7 +457,7 @@ sidebar.createStructure.album = function (album) {
 	structure.album = {
 		title: lychee.locale["ALBUM_ALBUM"],
 		type: sidebar.types.DEFAULT,
-		rows: [{ title: lychee.locale["ALBUM_CREATED"], kind: "created", value: data.sysdate }],
+		rows: [{ title: lychee.locale["ALBUM_CREATED"], kind: "created", value: lychee.locale.printDateTime(data.created_at) }],
 	};
 	if (data.albums && data.albums.length > 0) {
 		structure.album.rows.push({ title: lychee.locale["ALBUM_SUBALBUMS"], kind: "subalbums", value: data.albums.length });
