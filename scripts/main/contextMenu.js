@@ -179,17 +179,21 @@ contextMenu.buildList = function (lists, exclude, action, parent = 0, layer = 0)
 			let item = lists[i];
 
 			let thumb = "img/no_cover.svg";
-			if (item.thumbs && item.thumbs[0]) {
-				if (item.thumbs[0] === "uploads/thumb/" && item.types[0] && item.types[0].indexOf("video") > -1) {
-					thumb = "img/play-icon.png";
+			if (item.thumb && item.thumb.thumb) {
+				if (item.thumb.thumb === "uploads/thumb/") {
+					if (item.thumb.type && item.thumb.type.indexOf("video") > -1) {
+						thumb = "img/play-icon.png";
+					}
 				} else {
-					thumb = item.thumbs[0];
+					thumb = item.thumb.thumb;
 				}
-			} else if (item.thumbUrl) {
-				if (item.thumbUrl === "uploads/thumb/" && item.type.indexOf("video") > -1) {
-					thumb = "img/play-icon.png";
+			} else if (item.sizeVariants) {
+				if (item.sizeVariants.thumb === null) {
+					if (item.type && item.type.indexOf("video") > -1) {
+						thumb = "img/play-icon.png";
+					}
 				} else {
-					thumb = item.thumbUrl;
+					thumb = item.sizeVariants.thumb.url;
 				}
 			}
 
