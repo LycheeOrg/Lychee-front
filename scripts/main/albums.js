@@ -96,9 +96,7 @@ albums._createSmartAlbums = function (data) {
 			title: lychee.locale["UNSORTED"],
 			sysdate: "",
 			unsorted: "1",
-			thumbs: data.unsorted.thumbs,
-			thumbs2x: data.unsorted.thumbs2x ? data.unsorted.thumbs2x : null,
-			types: data.unsorted.types,
+			thumb: data.unsorted.thumb,
 		};
 	}
 
@@ -108,9 +106,7 @@ albums._createSmartAlbums = function (data) {
 			title: lychee.locale["STARRED"],
 			sysdate: "",
 			star: "1",
-			thumbs: data.starred.thumbs,
-			thumbs2x: data.starred.thumbs2x ? data.starred.thumbs2x : null,
-			types: data.starred.types,
+			thumb: data.starred.thumb,
 		};
 	}
 
@@ -120,10 +116,8 @@ albums._createSmartAlbums = function (data) {
 			title: lychee.locale["PUBLIC"],
 			sysdate: "",
 			public: "1",
-			thumbs: data.public.thumbs,
-			thumbs2x: data.public.thumbs2x ? data.public.thumbs2x : null,
 			visible: "0",
-			types: data.public.types,
+			thumb: data.public.thumb,
 		};
 	}
 
@@ -133,9 +127,7 @@ albums._createSmartAlbums = function (data) {
 			title: lychee.locale["RECENT"],
 			sysdate: "",
 			recent: "1",
-			thumbs: data.recent.thumbs,
-			thumbs2x: data.recent.thumbs2x ? data.recent.thumbs2x : null,
-			types: data.recent.types,
+			thumb: data.recent.thumb,
 		};
 	}
 };
