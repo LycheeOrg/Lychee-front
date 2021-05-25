@@ -153,20 +153,18 @@ build.photo = function (data, disabled = false) {
 	let isRaw = data.type && data.type.indexOf("raw") > -1;
 	let isLivePhoto = data.livePhotoUrl !== "" && data.livePhotoUrl !== null;
 
-	if (data.sizeVariants.thumb.url === "uploads/thumb/" && isLivePhoto) {
-		thumbnail = `<span class="thumbimg"><img src='img/live-photo-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false' data-tabindex='${tabindex.get_next_tab_index()}'></span>`;
-	}
-	if (data.sizeVariants.thumb.url === "uploads/thumb/" && isVideo) {
-		thumbnail = `<span class="thumbimg"><img src='img/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false' data-tabindex='${tabindex.get_next_tab_index()}'></span>`;
-	} else if (data.sizeVariants.thumb.url === "uploads/thumb/" && isRaw) {
-		thumbnail = `<span class="thumbimg"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false' data-tabindex='${tabindex.get_next_tab_index()}'></span>`;
+	if (data.sizeVariants.thumb === null) {
+		if (isLivePhoto) {
+			thumbnail = `<span class="thumbimg"><img src='img/live-photo-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false' data-tabindex='${tabindex.get_next_tab_index()}'></span>`;
+		}
+		if (isVideo) {
+			thumbnail = `<span class="thumbimg"><img src='img/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false' data-tabindex='${tabindex.get_next_tab_index()}'></span>`;
+		} else if (isRaw) {
+			thumbnail = `<span class="thumbimg"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false' data-tabindex='${tabindex.get_next_tab_index()}'></span>`;
+		}
 	} else if (lychee.layout === "0") {
 		if (data.sizeVariants.thumb2x !== null) {
-			// Lychee v4
 			thumb2x = data.sizeVariants.thumb2x.url;
-		} else {
-			// Lychee v3
-			var { path: thumb2x } = lychee.retinize(data.thumbUrl);
 		}
 
 		if (thumb2x !== "") {
@@ -212,11 +210,7 @@ build.photo = function (data, disabled = false) {
 			// handled at the top of this function).
 
 			if (data.sizeVariants.thumb2x !== null) {
-				// Lychee v4
 				thumb2x = data.sizeVariants.thumb2x.url;
-			} else {
-				// Lychee v3
-				var { path: thumb2x } = lychee.retinize(data.thumbUrl);
 			}
 
 			if (thumb2x !== "") {
