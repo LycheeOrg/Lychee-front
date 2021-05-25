@@ -778,9 +778,10 @@ view.photo = {
 			let nextPhoto = album.getByID(nextPhotoID);
 
 			// Check if thumbUrl exists (for videos w/o ffmpeg, we add a play-icon)
-			let thumbUrl = nextPhoto.sizeVariants.thumb.url;
-
-			if (thumbUrl === "uploads/thumb/" && nextPhoto.type.indexOf("video") > -1) {
+			let thumbUrl = "img/placeholder.png";
+			if (nextPhoto.sizeVariants.thumb !== null) {
+				thumbUrl = nextPhoto.sizeVariants.thumb.url;
+			} else if (nextPhoto.type.indexOf("video") > -1) {
 				thumbUrl = "img/play-icon.png";
 			}
 			$nextArrow.css("background-image", lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("${thumbUrl}")`);
@@ -793,9 +794,10 @@ view.photo = {
 			let previousPhoto = album.getByID(previousPhotoID);
 
 			// Check if thumbUrl exists (for videos w/o ffmpeg, we add a play-icon)
-			let thumbUrl = previousPhoto.sizeVariants.thumb.url;
-
-			if (thumbUrl === "uploads/thumb/" && previousPhoto.type.indexOf("video") > -1) {
+			let thumbUrl = "img/placeholder.png";
+			if (previousPhoto.sizeVariants.thumb !== null) {
+				thumbUrl = previousPhoto.sizeVariants.thumb.url;
+			} else if (previousPhoto.type.indexOf("video") > -1) {
 				thumbUrl = "img/play-icon.png";
 			}
 			$previousArrow.css("background-image", lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("${thumbUrl}")`);
