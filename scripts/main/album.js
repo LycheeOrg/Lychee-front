@@ -660,7 +660,7 @@ album.setSorting = function (albumID) {
 				<option value='id'>` +
 		lychee.locale["SORT_PHOTO_SELECT_1"] +
 		`</option>
-				<option value='taken_at'>` +
+				<option value='takestamp'>` +
 		lychee.locale["SORT_PHOTO_SELECT_2"] +
 		`</option>
 				<option value='title'>` +

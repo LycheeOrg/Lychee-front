@@ -125,15 +125,8 @@ mapview.open = function (albumID = null) {
 
 	// Define how the photos on the map should look like
 	mapview.photoLayer = L.photo.cluster().on("click", function (e) {
-		const photo = {
-			photoID: e.layer.photo.photoID,
-			albumID: e.layer.photo.albumID,
-			name: e.layer.photo.name,
-			url: e.layer.photo.url,
-			url2x: e.layer.photo.url2x,
-			taken_at: lychee.locale.printDateTime(e.layer.photo.taken_at),
-		};
-		let template = "";
+		var photo = e.layer.photo;
+		var template = "";
 
 		// Retina version if available
 		if (photo.url2x !== "") {
@@ -142,14 +135,14 @@ mapview.open = function (albumID = null) {
 				'srcset="{url} 1x, {url2x} 2x" ',
 				'data-album-id="{albumID}" data-id="{photoID}"/><div><h1>{name}</h1><span title="Camera Date">',
 				build.iconic("camera-slr"),
-				"</span><p>{taken_at}</p></div>"
+				"</span><p>{takedate}</p></div>"
 			);
 		} else {
 			template = template.concat(
 				'<img class="image-leaflet-popup" src="{url}" ',
 				'data-album-id="{albumID}" data-id="{photoID}"/><div><h1>{name}</h1><span title="Camera Date">',
 				build.iconic("camera-slr"),
-				"</span><p>{taken_at}</p></div>"
+				"</span><p>{takedate}</p></div>"
 			);
 		}
 
@@ -191,7 +184,7 @@ mapview.open = function (albumID = null) {
 					url: element.sizeVariants.small !== null ? element.sizeVariants.small.url : element.url,
 					url2x: element.sizeVariants.small2x !== null ? element.sizeVariants.small2x.url : null,
 					name: element.title,
-					taken_at: element.taken_at,
+					takedate: element.takedate,
 					albumID: element.album,
 					photoID: element.id,
 				});
