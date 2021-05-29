@@ -483,7 +483,8 @@ lychee.locale = {
 	},
 
 	/**
-	 * Converts a JSON encoded date/time into a localized string.
+	 * Converts a JSON encoded date/time into a localized string relative to
+	 * the original timezone
 	 *
 	 * The localized string uses the JS "medium" verbosity.
 	 * The precise definition of "medium verbosity" depends on the current locale, but for Western languages this
@@ -497,9 +498,37 @@ lychee.locale = {
 	 */
 	printDateTime: function (jsonDateTime) {
 		if (typeof jsonDateTime !== "string" || jsonDateTime === "") return "";
+
+		// Unfortunately, the built-in JS Date object is rather dumb.
+		// It is only required to support the timezone of the runtime
+		// environment and UTC.
+		// Moreover, the method `toLocalString` may or may not convert
+		// the represented time to the timezone of the runtime environment
+		// before formatting it as a string.
+		// However, we want to keep the printed time in the original timezone,
+		// because this facilitates human interaction with a photo.
+		// To this end we apply a "dirty" trick here.
+		// We first cut off any explicit timezone indication from the JSON
+		// string and only pass a date/time of the form `YYYYMMDDThhmmss` to
+		// `Date`.
+		// `Date` is required to interpret those time values according to the
+		// local timezone (see [MDN Web Docs - Date Time String Format](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse#date_time_string_format)).
+		// Most likely, the resulting `Date` object will represent the
+		// wrong instant in time (given in seconds since epoch), but we only
+		// want to call `toLocalString` which is fine and don't do any time
+		// arithmetics.
+		// Then we add the original timezone to the string manually.
+		const splitDateTime = jsonDateTime.split(/([-Z+])/);
+		console.assert(splitDateTime.length === 3, "'jsonDateTime' is not formatted acc. to ISO 8601; passed string was: " + jsonDateTime);
 		const locale = "default"; // use the user's browser settings
 		const format = { dateStyle: "medium", timeStyle: "medium" };
-		return new Date(jsonDateTime).toLocaleString(locale, format);
+		let result = new Date(splitDateTime[0]).toLocaleString(locale, format);
+		if (splitDateTime[1] === "Z" || splitDateTime[2] === "00:00") {
+			result += " UTC";
+		} else {
+			result += " UTC" + splitDateTime[1] + splitDateTime[2];
+		}
+		return result;
 	},
 
 	/**
