@@ -481,4 +481,40 @@ lychee.locale = {
 
 		return Number(filesize).toLocaleString() + suffix[i];
 	},
+
+	/**
+	 * Converts a JSON encoded date/time into a localized string.
+	 *
+	 * The localized string uses the JS "medium" verbosity.
+	 * The precise definition of "medium verbosity" depends on the current locale, but for Western languages this
+	 * means that the date portion is fully printed with digits (e.g. something like 03/30/2021 for English,
+	 * 30/03/2021 for French and 30.03.2021 for German), and that the time portion is printed with a resolution of
+	 * seconds with two digits for all parts either in 24h or 12h scheme (e.g. something like 02:24:13pm for English
+	 * and 14:24:13 for French/German).
+	 *
+	 * @param {?string} jsonDateTime
+	 * @return {string} A formatted and localized time
+	 */
+	printDateTime: function (jsonDateTime) {
+		if (typeof jsonDateTime !== "string" || jsonDateTime === "") return "";
+		const locale = "default"; // use the user's browser settings
+		const format = { dateStyle: "medium", timeStyle: "medium" };
+		return new Date(jsonDateTime).toLocaleString(locale, format);
+	},
+
+	/**
+	 * Converts a JSON encoded date/time into a localized string which only displays month and year.
+	 *
+	 * The month is printed as a shortened word with 3/4 letters, the year is printed with 4 digits (e.g. something like
+	 * "Aug 2020" in English or "Août 2020" in French).
+	 *
+	 * @param {?string} jsonDateTime
+	 * @return {string} A formatted and localized month and year
+	 */
+	printMonthYear: function (jsonDateTime) {
+		if (typeof jsonDateTime !== "string" || jsonDateTime === "") return "";
+		const locale = "default"; // use the user's browser settings
+		const format = { month: "short", year: "numeric" };
+		return new Date(jsonDateTime).toLocaleDateString(locale, format);
+	},
 };
