@@ -59,7 +59,10 @@ build.getAlbumThumb = function (data) {
 };
 
 build.album = function (data, disabled = false) {
-	let subtitle = data.sysdate;
+	const formattedCreationTs = lychee.locale.printMonthYear(data.created_at);
+	const formattedMinTs = lychee.locale.printMonthYear(data.min_taken_at);
+	const formattedMaxTs = lychee.locale.printMonthYear(data.max_taken_at);
+	let subtitle = formattedCreationTs;
 
 	// check setting album_subtitle_type:
 	// takedate: date range (min/max_takedate from EXIF; if missing defaults to creation)
@@ -71,9 +74,9 @@ build.album = function (data, disabled = false) {
 			subtitle = data.description ? data.description : "";
 			break;
 		case "takedate":
-			if ((data.min_takestamp && data.min_takestamp !== "") || (data.max_takestamp && data.max_takestamp !== "")) {
-				// either min_takestamp or max_takestamp set and not null
-				subtitle = data.min_takestamp === data.max_takestamp ? data.max_takestamp : data.min_takestamp + " - " + data.max_takestamp;
+			if (formattedMinTs !== "" || formattedMaxTs !== "") {
+				// either min_taken_at or max_taken_at is set
+				subtitle = formattedMinTs === formattedMaxTs ? formattedMaxTs : formattedMinTs + " - " + formattedMaxTs;
 				subtitle = `<span title='Camera Date'>${build.iconic("camera-slr")}</span>${subtitle}`;
 				break;
 			}
@@ -82,15 +85,15 @@ build.album = function (data, disabled = false) {
 			break;
 		case "oldstyle":
 		default:
-			if (lychee.sortingAlbums !== "" && data.min_takestamp && data.max_takestamp) {
+			if (lychee.sortingAlbums !== "" && data.min_taken_at && data.max_taken_at) {
 				let sortingAlbums = lychee.sortingAlbums.replace("ORDER BY ", "").split(" ");
-				if (sortingAlbums[0] === "max_takestamp" || sortingAlbums[0] === "min_takestamp") {
-					if (data.min_takestamp !== "" && data.max_takestamp !== "") {
-						subtitle = data.min_takestamp === data.max_takestamp ? data.max_takestamp : data.min_takestamp + " - " + data.max_takestamp;
-					} else if (data.min_takestamp !== "" && sortingAlbums[0] === "min_takestamp") {
-						subtitle = data.min_takestamp;
-					} else if (data.max_takestamp !== "" && sortingAlbums[0] === "max_takestamp") {
-						subtitle = data.max_takestamp;
+				if (sortingAlbums[0] === "max_taken_at" || sortingAlbums[0] === "min_taken_at") {
+					if (formattedMinTs !== "" && formattedMaxTs !== "") {
+						subtitle = formattedMinTs === formattedMaxTs ? formattedMaxTs : formattedMinTs + " - " + formattedMaxTs;
+					} else if (formattedMinTs !== "" && sortingAlbums[0] === "min_taken_at") {
+						subtitle = formattedMinTs;
+					} else if (formattedMaxTs !== "" && sortingAlbums[0] === "max_taken_at") {
+						subtitle = formattedMaxTs;
 					}
 				}
 			}
@@ -230,8 +233,9 @@ build.photo = function (data, disabled = false) {
 					<h1 title='$${data.title}'>$${data.title}</h1>
 			`;
 
-	if (data.takedate !== "") html += lychee.html`<a><span title='Camera Date'>${build.iconic("camera-slr")}</span>${data.takedate}</a>`;
-	else html += lychee.html`<a>${data.sysdate}</a>`;
+	if (data.taken_at !== null)
+		html += lychee.html`<a><span title='Camera Date'>${build.iconic("camera-slr")}</span>${lychee.locale.printDateTime(data.taken_at)}</a>`;
+	else html += lychee.html`<a>${lychee.locale.printDateTime(data.created_at)}</a>`;
 
 	html += `</div>`;
 
@@ -272,9 +276,9 @@ build.overlay_image = function (data) {
 			overlay = data.description;
 			break;
 		case "date":
-			if (data.takedate && data.takedate !== "")
-				overlay = `<a><span title='Camera Date'>${build.iconic("camera-slr")}</span>${data.takedate}</a>`;
-			else overlay = data.sysdate;
+			if (data.taken_at != null)
+				overlay = `<a><span title='Camera Date'>${build.iconic("camera-slr")}</span>${lychee.locale.printDateTime(data.taken_at)}</a>`;
+			else overlay = lychee.locale.printDateTime(data.created_at);
 			break;
 		case "exif":
 			let exifHash = data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;

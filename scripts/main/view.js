@@ -985,10 +985,10 @@ view.settings = {
 						  <option value='public'>` +
 				lychee.locale["SORT_ALBUM_SELECT_4"] +
 				`</option>
-						  <option value='max_takestamp'>` +
+						  <option value='max_taken_at'>` +
 				lychee.locale["SORT_ALBUM_SELECT_5"] +
 				`</option>
-						  <option value='min_takestamp'>` +
+						  <option value='min_taken_at'>` +
 				lychee.locale["SORT_ALBUM_SELECT_6"] +
 				`</option>
 					  </select>
@@ -1018,7 +1018,7 @@ view.settings = {
 						  <option value='id'>` +
 				lychee.locale["SORT_PHOTO_SELECT_1"] +
 				`</option>
-						  <option value='takestamp'>` +
+						  <option value='taken_at'>` +
 				lychee.locale["SORT_PHOTO_SELECT_2"] +
 				`</option>
 						  <option value='title'>` +

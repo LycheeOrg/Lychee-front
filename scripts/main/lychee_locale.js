@@ -481,4 +481,69 @@ lychee.locale = {
 
 		return Number(filesize).toLocaleString() + suffix[i];
 	},
+
+	/**
+	 * Converts a JSON encoded date/time into a localized string relative to
+	 * the original timezone
+	 *
+	 * The localized string uses the JS "medium" verbosity.
+	 * The precise definition of "medium verbosity" depends on the current locale, but for Western languages this
+	 * means that the date portion is fully printed with digits (e.g. something like 03/30/2021 for English,
+	 * 30/03/2021 for French and 30.03.2021 for German), and that the time portion is printed with a resolution of
+	 * seconds with two digits for all parts either in 24h or 12h scheme (e.g. something like 02:24:13pm for English
+	 * and 14:24:13 for French/German).
+	 *
+	 * @param {?string} jsonDateTime
+	 * @return {string} A formatted and localized time
+	 */
+	printDateTime: function (jsonDateTime) {
+		if (typeof jsonDateTime !== "string" || jsonDateTime === "") return "";
+
+		// Unfortunately, the built-in JS Date object is rather dumb.
+		// It is only required to support the timezone of the runtime
+		// environment and UTC.
+		// Moreover, the method `toLocalString` may or may not convert
+		// the represented time to the timezone of the runtime environment
+		// before formatting it as a string.
+		// However, we want to keep the printed time in the original timezone,
+		// because this facilitates human interaction with a photo.
+		// To this end we apply a "dirty" trick here.
+		// We first cut off any explicit timezone indication from the JSON
+		// string and only pass a date/time of the form `YYYYMMDDThhmmss` to
+		// `Date`.
+		// `Date` is required to interpret those time values according to the
+		// local timezone (see [MDN Web Docs - Date Time String Format](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse#date_time_string_format)).
+		// Most likely, the resulting `Date` object will represent the
+		// wrong instant in time (given in seconds since epoch), but we only
+		// want to call `toLocalString` which is fine and don't do any time
+		// arithmetics.
+		// Then we add the original timezone to the string manually.
+		const splitDateTime = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})([-Z+])(\d{2}:\d{2})?$/.exec(jsonDateTime);
+		console.assert(splitDateTime.length === 4, "'jsonDateTime' is not formatted acc. to ISO 8601; passed string was: " + jsonDateTime);
+		const locale = "default"; // use the user's browser settings
+		const format = { dateStyle: "medium", timeStyle: "medium" };
+		let result = new Date(splitDateTime[1]).toLocaleString(locale, format);
+		if (splitDateTime[2] === "Z" || splitDateTime[3] === "00:00") {
+			result += " UTC";
+		} else {
+			result += " UTC" + splitDateTime[2] + splitDateTime[3];
+		}
+		return result;
+	},
+
+	/**
+	 * Converts a JSON encoded date/time into a localized string which only displays month and year.
+	 *
+	 * The month is printed as a shortened word with 3/4 letters, the year is printed with 4 digits (e.g. something like
+	 * "Aug 2020" in English or "Août 2020" in French).
+	 *
+	 * @param {?string} jsonDateTime
+	 * @return {string} A formatted and localized month and year
+	 */
+	printMonthYear: function (jsonDateTime) {
+		if (typeof jsonDateTime !== "string" || jsonDateTime === "") return "";
+		const locale = "default"; // use the user's browser settings
+		const format = { month: "short", year: "numeric" };
+		return new Date(jsonDateTime).toLocaleDateString(locale, format);
+	},
 };
