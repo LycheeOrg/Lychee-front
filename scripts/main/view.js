@@ -102,7 +102,7 @@ view.albums = {
 			// Restore scroll position
 			let urls = JSON.parse(localStorage.getItem("scroll"));
 			let urlWindow = window.location.href;
-			$(window).scrollTop((urls != null && urls[urlWindow]) ? urls[urlWindow] : 0);
+			$(window).scrollTop(urls != null && urls[urlWindow] ? urls[urlWindow] : 0);
 		},
 
 		title: function (albumID) {
@@ -237,7 +237,7 @@ view.album = {
 			// Restore scroll position
 			let urls = JSON.parse(localStorage.getItem("scroll"));
 			let urlWindow = window.location.href;
-			$(window).scrollTop((urls != null && urls[urlWindow]) ? urls[urlWindow] : 0);
+			$(window).scrollTop(urls != null && urls[urlWindow] ? urls[urlWindow] : 0);
 		},
 
 		title: function (photoID) {
