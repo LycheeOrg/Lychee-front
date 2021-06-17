@@ -350,8 +350,7 @@ $(document).ready(function () {
 	$("#sensitive_warning").on("click", view.album.nsfw_warning.next);
 
 	const rememberScrollPage = function (scrollPos) {
-		// only for albums with subalbums
-		if (album && album.json && album.json.albums && album.json.albums.length > 0) {
+		if (visible.albums() || visible.album()) {
 			let urls = JSON.parse(localStorage.getItem("scroll"));
 			if (urls == null || urls.length < 1) {
 				urls = {};

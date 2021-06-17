@@ -25,8 +25,6 @@ view.albums = {
 	},
 
 	content: {
-		scrollPosition: 0,
-
 		init: function () {
 			let smartData = "";
 			let albumsData = "";
@@ -100,10 +98,11 @@ view.albums = {
 			}
 
 			album.apply_nsfw_filter();
+
 			// Restore scroll position
-			if (view.albums.content.scrollPosition != null && view.albums.content.scrollPosition !== 0) {
-				$(document).scrollTop(view.albums.content.scrollPosition);
-			}
+			let urls = JSON.parse(localStorage.getItem("scroll"));
+			let urlWindow = window.location.href;
+			$(window).scrollTop((urls != null && urls[urlWindow]) ? urls[urlWindow] : 0);
 		},
 
 		title: function (albumID) {
@@ -229,15 +228,16 @@ view.album = {
 			}
 			html += photosData;
 
-			// Save and reset scroll position
-			view.albums.content.scrollPosition = $(document).scrollTop();
-			requestAnimationFrame(() => $(document).scrollTop(0));
-
 			// Add photos to view
 			lychee.content.html(html);
 			album.apply_nsfw_filter();
 
 			view.album.content.justify();
+
+			// Restore scroll position
+			let urls = JSON.parse(localStorage.getItem("scroll"));
+			let urlWindow = window.location.href;
+			$(window).scrollTop((urls != null && urls[urlWindow]) ? urls[urlWindow] : 0);
 		},
 
 		title: function (photoID) {

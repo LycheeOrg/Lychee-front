@@ -198,17 +198,6 @@ album.load = function (albumID, refresh = false) {
 			});
 		} else {
 			processData(data);
-			// save scroll position for this URL
-			if (data && data.albums && data.albums.length > 0) {
-				setTimeout(function () {
-					let urls = JSON.parse(localStorage.getItem("scroll"));
-					let urlWindow = window.location.href;
-
-					if (urls != null && urls[urlWindow]) {
-						$(window).scrollTop(urls[urlWindow]);
-					}
-				}, 500);
-			}
 
 			tabindex.makeFocusable(lychee.content);
 
