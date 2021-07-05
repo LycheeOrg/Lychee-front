@@ -16,6 +16,11 @@ leftMenu.build = function () {
 		<a id="text_settings_close" class="closetxt" data-tabindex="-1">${lychee.locale["CLOSE"]}</a>
 		<a id="button_settings_close" class="closebtn" data-tabindex="20">&times;</a>
 		<a class="linkMenu" id="button_settings_open" data-tabindex="-1"><svg class="iconic"><use xlink:href="#cog"></use></svg>${lychee.locale["SETTINGS"]}</a>`;
+	if (lychee.new_photos_notification) {
+		html += lychee.html`
+		<a class="linkMenu" id="button_notifications" data-tabindex="-1">${build.iconic("bell")}${lychee.locale["NOTIFICATIONS"]} </a>
+		`;
+	}
 	html += lychee.html`
 		<a class="linkMenu" id="button_users" data-tabindex="-1">${build.iconic("person")}${lychee.locale["USERS"]} </a>
 		<a class="linkMenu" id="button_u2f" data-tabindex="-1">${build.iconic("key")}${lychee.locale["U2F"]} </a>
@@ -78,6 +83,7 @@ leftMenu.bind = function () {
 	leftMenu.dom("#button_logs").on(eventName, leftMenu.Logs);
 	leftMenu.dom("#button_diagnostics").on(eventName, leftMenu.Diagnostics);
 	leftMenu.dom("#button_about").on(eventName, lychee.aboutDialog);
+	leftMenu.dom("#button_notifications").on(eventName, leftMenu.Notifications);
 	leftMenu.dom("#button_users").on(eventName, leftMenu.Users);
 	leftMenu.dom("#button_u2f").on(eventName, leftMenu.u2f);
 	leftMenu.dom("#button_sharing").on(eventName, leftMenu.Sharing);
@@ -96,6 +102,10 @@ leftMenu.Diagnostics = function () {
 
 leftMenu.Update = function () {
 	view.update.init();
+};
+
+leftMenu.Notifications = function () {
+	notifications.load();
 };
 
 leftMenu.Users = function () {
