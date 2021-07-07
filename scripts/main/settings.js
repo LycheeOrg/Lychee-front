@@ -521,6 +521,23 @@ settings.changeLocationShowPublic = function () {
 	});
 };
 
+settings.changeNewPhotosNotification = function () {
+	var params = {};
+	if ($("#NewPhotosNotification:checked").length === 1) {
+		params.new_photos_notification = "1";
+	} else {
+		params.new_photos_notification = "0";
+	}
+	api.post("Settings::setNewPhotosNotification", params, function (data) {
+		if (data === true) {
+			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_NEW_PHOTOS_NOTIFICATION"]);
+			lychee.new_photos_notification = params.new_photos_notification === "1";
+		} else {
+			lychee.error(null, params, data);
+		}
+	});
+};
+
 settings.changeCSS = function () {
 	let params = {};
 	params.css = $("#css").val();

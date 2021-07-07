@@ -75,6 +75,7 @@ let lychee = {
 	checkForUpdates: "1",
 	update_json: 0,
 	update_available: false,
+	new_photos_notification: false,
 	sortingPhotos: "",
 	sortingAlbums: "",
 	location: "",
@@ -144,6 +145,7 @@ lychee.init = function (exitview = true) {
 		lychee.update_json = data.update_json;
 		lychee.update_available = data.update_available;
 		lychee.landing_page_enable = (data.config.landing_page_enable && data.config.landing_page_enable === "1") || false;
+		lychee.new_photos_notification = false;
 
 		lychee.versionCode = data.config.version;
 		if (lychee.versionCode !== "") {
@@ -231,6 +233,8 @@ lychee.init = function (exitview = true) {
 			lychee.editor_enabled = (data.config.editor_enabled && data.config.editor_enabled === "1") || false;
 
 			lychee.nsfw_visible_saved = lychee.nsfw_visible;
+
+			lychee.new_photos_notification = (data.config.new_photos_notification && data.config.new_photos_notification === "1") || false;
 
 			lychee.upload_processing_limit = parseInt(data.config.upload_processing_limit);
 			// when null or any non stringified numeric value is sent from the server we get NaN.
