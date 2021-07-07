@@ -1528,11 +1528,7 @@ view.notifications = {
 		init: function () {
 			view.notifications.clearContent();
 
-			$(".settings_view").append(
-				'<div class="setting_line"><p>' +
-					`${lychee.locale["USER_EMAIL_INSTRUCTION"]}` +
-					"</p></div>"
-			);
+			$(".settings_view").append('<div class="setting_line"><p>' + `${lychee.locale["USER_EMAIL_INSTRUCTION"]}` + "</p></div>");
 
 			let html = "";
 
