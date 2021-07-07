@@ -75,7 +75,7 @@ let lychee = {
 	checkForUpdates: "1",
 	update_json: 0,
 	update_available: false,
-	new_photos_notification: true,
+	new_photos_notification: false,
 	sortingPhotos: "",
 	sortingAlbums: "",
 	location: "",

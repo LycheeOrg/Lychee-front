@@ -532,7 +532,6 @@ settings.changeNewPhotosNotification = function () {
 		if (data === true) {
 			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_NEW_PHOTOS_NOTIFICATION"]);
 			lychee.new_photos_notification = params.new_photos_notification === "1";
-			lychee.new_photos_notification_saved = lychee.new_photos_notification;
 		} else {
 			lychee.error(null, params, data);
 		}

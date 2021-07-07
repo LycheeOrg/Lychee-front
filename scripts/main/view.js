@@ -1530,8 +1530,7 @@ view.notifications = {
 
 			$(".settings_view").append(
 				'<div class="setting_line"><p>' +
-					"Add your email below to enable receiving email notifications. " +
-					"<br />To stop receiving emails, simply remove your email below." +
+					`${lychee.locale["USER_EMAIL_INSTRUCTION"]}` +
 					"</p></div>"
 			);
 
