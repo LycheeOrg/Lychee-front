@@ -4,7 +4,7 @@
 	top: 0;
 	right: 0;
 	z-index: 98;
-	background: #f7f7f7;
+	background: color(h);
 }
 
 #logo {
@@ -12,7 +12,7 @@
 	padding: 15px;
 
 	h1 {
-		color: #000000;
+		color: color(b);
 		font-size: 1em;
 		text-transform: uppercase;
 		font-weight: 700;

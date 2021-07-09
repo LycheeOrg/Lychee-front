@@ -60,7 +60,7 @@
 	}
 
 	p {
-		color: #707070;
+		color: color(o);
 		margin-bottom: 1.5em;
 		line-height: 1.2em;
 		text-align: justify;
@@ -96,7 +96,7 @@
 		width: 80%;
 		margin-left: auto;
 		margin-right: auto;
-		border: 2px solid #707070;
+		border: 2px solid color(o);
 		box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		-webkit-box-sizing: border-box;

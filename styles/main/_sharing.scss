@@ -89,10 +89,10 @@
 		padding: 6px 12px;
 		font-size: 14px;
 		line-height: 1.42857143;
-		color: #555;
-		background-color: #fff;
+		color: color(r);
+		background-color: color(a);
 		background-image: none;
-		border: 1px solid #ccc;
+		border: 1px solid color(i);
 		border-radius: 4px;
 		-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
@@ -119,13 +119,13 @@
 	}
 
 	.grey .iconic {
-		fill: #b4b4b4;
+		fill: color(s);
 	}
 
 	p {
 		//margin: 0 0 5%;
 		width: 100%;
-		color: #ccc;
+		color: color(i);
 		text-align: center;
 		font-size: 14px;
 		display: block;
@@ -140,7 +140,7 @@
 		padding: 0 2px;
 		width: 40%;
 		background-color: transparent;
-		color: #fff;
+		color: color(a);
 		border: none;
 
 		&:last-of-type {
@@ -151,13 +151,13 @@
 			width: 15px;
 			height: 14px;
 			margin: 0 10px 0 1px;
-			fill: #ffffff;
+			fill: color(a);
 		}
 	}
 
 	.basicModal__button {
 		margin-top: 10px;
-		color: #2293ec;
+		color: color(c);
 		display: inline-block;
 		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02), inset 1px 0 0 rgba(0, 0, 0, 0.2);
 		border-radius: 5px;
@@ -174,7 +174,7 @@
 		//padding: 9px 2px;
 		width: 5%;
 		margin: 0 10px;
-		color: #fff;
+		color: color(a);
 
 		input {
 			position: absolute;
@@ -194,7 +194,7 @@
 
 			.iconic {
 				box-sizing: border-box;
-				fill: #2293ec;
+				fill: color(c);
 				padding: 2px;
 				opacity: 0;
 				-ms-transform: scale(0);
@@ -208,7 +208,7 @@
 		position: relative;
 		//margin: 1px 5px;
 		padding: 0;
-		color: #fff;
+		color: color(a);
 		border-radius: 3px;
 		border: 1px solid rgba(0, 0, 0, 0.2);
 		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
@@ -217,7 +217,7 @@
 		//overflow: hidden;
 		outline: 0;
 		vertical-align: middle;
-		background: rgba(0, 0, 0, 0.3);
+		background: color(e);
 		display: inline-block;
 	}
 
@@ -230,13 +230,13 @@
 @media (hover: hover) {
 	.sharing_view {
 		.basicModal__button:hover {
-			background: #2293ec;
-			color: #ffffff;
+			background: color(c);
+			color: color(a);
 			cursor: pointer;
 		}
 
 		input:hover {
-			border-bottom: #2293ec solid 1px;
+			border-bottom: color(c) solid 1px;
 		}
 	}
 }
@@ -245,12 +245,12 @@
 @media (hover: none) {
 	.sharing_view {
 		.basicModal__button {
-			background: #2293ec;
-			color: #ffffff;
+			background: color(c);
+			color: color(a);
 		}
 
 		input {
-			border-bottom: #2293ec solid 1px;
+			border-bottom: color(c) solid 1px;
 		}
 	}
 }

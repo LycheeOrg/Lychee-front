@@ -2,8 +2,8 @@
 	position: fixed;
 	height: 49px;
 	width: 100%;
-	background: linear-gradient(to bottom, #222222, #1a1a1a);
-	border-bottom: 1px solid #0f0f0f;
+	background: linear-gradient(to bottom, color(k),color(l));
+	border-bottom: 1px solid color(m);
 	z-index: 1;
 	transition: transform 0.3s ease-out;
 
@@ -24,7 +24,7 @@
 		border-bottom: none;
 
 		&.header--error {
-			background-color: rgba(10, 10, 10, 0.99);
+			background-color:color(n);
 		}
 	}
 
@@ -56,7 +56,7 @@
 	&__title {
 		width: 100%;
 		padding: 16px 0;
-		color: #fff;
+		color: color(a);
 		font-size: 16px;
 		font-weight: bold;
 		text-align: center;
@@ -104,7 +104,7 @@
 		}
 
 		&--star.active .iconic {
-			fill: #f0ef77;
+			fill: color(p);
 		}
 
 		&--eye.active .iconic {
@@ -161,8 +161,8 @@
 		width: 80px;
 		margin: 0;
 		padding: 5px 12px 6px 12px;
-		background-color: #1d1d1d;
-		color: #fff;
+		background-color: color(q);
+		color: color(a);
 		border: 1px solid black(0.9);
 		box-shadow: 0 1px 0 white(0.04);
 		outline: none;
@@ -215,7 +215,7 @@
 		flex-shrink: 0;
 		padding: 5px 10px;
 		margin: 11px 0;
-		color: #888;
+		color: color(t);
 		font-size: 13px;
 		border-radius: 100px;
 		cursor: default;

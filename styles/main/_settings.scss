@@ -8,24 +8,24 @@
 		padding: 9px 2px;
 		width: calc(50% - 4px);
 		background-color: transparent;
-		color: #fff;
+		color: color(a);
 		border: none;
-		border-bottom: 1px solid #222;
+		border-bottom: 1px solid color(k);
 		border-radius: 0;
 		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
 		outline: 0;
 
 		&:focus {
-			border-bottom-color: #2293ec;
+			border-bottom-color: color(c);
 		}
 
 		.error {
-			border-bottom-color: #d92c34;
+			border-bottom-color: color(w);
 		}
 	}
 
 	.basicModal__button {
-		color: #2293ec;
+		color: color(c);
 		display: inline-block;
 		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02), inset 1px 0 0 rgba(0, 0, 0, 0.2);
 		border-radius: 5px;
@@ -33,7 +33,7 @@
 
 	.basicModal__button_MORE,
 	.basicModal__button_SAVE {
-		color: #b22027;
+		color: color(z);
 		border-radius: 5px;
 	}
 
@@ -45,13 +45,13 @@
 		p {
 			margin: 0 0 5%;
 			width: 100%;
-			color: #ccc;
+			color: color(i);
 			line-height: 16px;
 
 			a {
 				color: rgba(255, 255, 255, 0.9);
 				text-decoration: none;
-				border-bottom: 1px dashed #888;
+				border-bottom: 1px dashed color(t);
 			}
 		}
 
@@ -68,22 +68,22 @@
 			width: calc(100% - 18px);
 			height: 100px;
 			background-color: transparent;
-			color: #fff;
-			border: 1px solid #666666;
+			color: color(a);
+			border: 1px solid color(aa);
 			border-radius: 0;
 			box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
 			outline: 0;
 			resize: vertical;
 
 			&:focus {
-				border-color: #2293ec;
+				border-color: color(c);
 			}
 		}
 
 		.choice {
 			padding: 0 30px 15px;
 			width: 100%;
-			color: #fff;
+			color: color(a);
 		}
 
 		.choice:last-child {
@@ -92,7 +92,7 @@
 
 		.choice label {
 			float: left;
-			color: #fff;
+			color: color(a);
 			font-size: 14px;
 			font-weight: 700;
 		}
@@ -115,7 +115,7 @@
 
 		.choice label .checkbox .iconic {
 			box-sizing: border-box;
-			fill: #2293ec;
+			fill: color(c);
 			padding: 2px;
 			opacity: 0;
 			-ms-transform: scale(0);
@@ -128,7 +128,7 @@
 			margin: 1px 5px;
 			padding: 0;
 			width: 110px;
-			color: #fff;
+			color: color(a);
 			border-radius: 3px;
 			border: 1px solid rgba(0, 0, 0, 0.2);
 			box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
@@ -137,14 +137,14 @@
 			overflow: hidden;
 			outline: 0;
 			vertical-align: middle;
-			background: rgba(0, 0, 0, 0.3);
+			background: color(e);
 			display: inline-block;
 
 			select {
 				margin: 0;
 				padding: 4px 8px;
 				width: 120%;
-				color: #fff;
+				color: color(a);
 				font-size: 11px;
 				line-height: 16px;
 				border: 0;
@@ -160,14 +160,14 @@
 				option {
 					margin: 0;
 					padding: 0;
-					background: #fff;
-					color: #333;
+					background: color(a);
+					color: color(g);
 					transition: none;
 				}
 			}
 
 			select:disabled {
-				color: #000;
+				color: color(b);
 				cursor: not-allowed;
 			}
 		}
@@ -177,7 +177,7 @@
 			content: "≡";
 			right: 8px;
 			top: 4px;
-			color: #2293ec;
+			color: color(c);
 			font-size: 16px;
 			line-height: 16px;
 			font-weight: 700;
@@ -211,7 +211,7 @@
 			bottom: 0;
 			border: 1px solid rgba(0, 0, 0, 0.2);
 			box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
-			background: rgba(0, 0, 0, 0.3);
+			background: color(e);
 			-webkit-transition: 0.4s;
 			transition: 0.4s;
 
@@ -233,7 +233,7 @@
 		input:checked + .slider:before {
 			-ms-transform: translateX(20px);
 			transform: translateX(20px);
-			background-color: #ffffff;
+			background-color: color(a);
 		}
 
 		/* Rounded sliders */
@@ -251,9 +251,9 @@
 		width: 100%;
 		padding-top: 10px;
 		padding-left: 4px;
-		border-bottom: dotted 1px #222222;
+		border-bottom: dotted 1px color(k);
 		margin-top: 20px;
-		color: #ffffff;
+		color: color(a);
 		font-weight: bold;
 		text-transform: capitalize;
 	}
@@ -270,7 +270,7 @@
 		p {
 			min-width: 550px;
 			margin: 0 0 0 0;
-			color: #ccc;
+			color: color(i);
 			display: inline-block;
 			width: 100%;
 			overflow-wrap: break-word;
@@ -278,7 +278,7 @@
 			a {
 				color: rgba(255, 255, 255, 0.9);
 				text-decoration: none;
-				border-bottom: 1px dashed #888;
+				border-bottom: 1px dashed color(t);
 			}
 
 			&:last-of-type {
@@ -300,7 +300,7 @@
 			padding: 9px 4px;
 			width: calc(50% - 12px);
 			background-color: transparent;
-			color: #fff;
+			color: color(a);
 			border: none;
 
 			&_icon {
@@ -310,7 +310,7 @@
 					width: 15px;
 					height: 14px;
 					margin: 0 10px 0 1px;
-					fill: #ffffff;
+					fill: color(a);
 				}
 			}
 		}
@@ -325,19 +325,19 @@
 @media (hover: hover) {
 	.settings_view {
 		.basicModal__button:hover {
-			background: #2293ec;
-			color: #ffffff;
+			background: color(c);
+			color: color(a);
 			cursor: pointer;
 		}
 
 		.basicModal__button_MORE:hover,
 		.basicModal__button_SAVE:hover {
-			background: #b22027;
-			color: #ffffff;
+			background: color(z);
+			color: color(a);
 		}
 
 		input:hover {
-			border-bottom: #2293ec solid 1px;
+			border-bottom: color(c) solid 1px;
 		}
 	}
 }
@@ -346,7 +346,7 @@
 @media (hover: none) {
 	.settings_view {
 		input.text {
-			border-bottom: #2293ec solid 1px;
+			border-bottom: color(c) solid 1px;
 			margin: 6px 0;
 		}
 
@@ -355,14 +355,14 @@
 		}
 
 		.basicModal__button {
-			background: #2293ec;
-			color: #ffffff;
+			background: color(c);
+			color: color(a);
 			max-width: 320px;
 			margin-top: 20px;
 
 			&_MORE,
 			&_SAVE {
-				background: #b22027;
+				background: color(z);
 			}
 		}
 	}

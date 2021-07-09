@@ -15,21 +15,21 @@
 	// Modes -------------------------------------------------------------- //
 	&.loading {
 		height: 3px;
-		background-image: linear-gradient(to right, #153674 0%, #153674 47%, #2651ae 53%, #2651ae 100%);
+		background-image: linear-gradient(to right, color(dd) 0%, color(dd) 47%, color(ee) 53%, color(ee) 100%);
 		z-index: 2;
 	}
 
 	&.error {
 		height: 40px;
-		background-color: #2f0d0e;
-		background-image: linear-gradient(to right, #451317 0%, #451317 47%, #aa3039 53%, #aa3039 100%);
+		background-color: color(gg);
+		background-image: linear-gradient(to right, color(ff) 0%, color(ff) 47%, color(ll) 53%, color(ll) 100%);
 		z-index: 1;
 	}
 
 	&.success {
 		height: 40px;
-		background-color: #007700;
-		background-image: linear-gradient(to right, #007700 0%, #009900 47%, #00aa00 53%, #00cc00 100%);
+		background-color: color(hh);
+		background-image: linear-gradient(to right, color(hh) 0%, color(x) 47%, color(ii) 53%, color(jj) 100%);
 		z-index: 1;
 	}
 
@@ -40,7 +40,7 @@
 	// Content -------------------------------------------------------------- //
 	h1 {
 		margin: 13px 13px 0 13px;
-		color: #ddd;
+		color: color(bb);
 		font-size: 14px;
 		font-weight: bold;
 		text-shadow: 0 1px 0 black(1);

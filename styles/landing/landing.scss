@@ -12,7 +12,7 @@
 html,
 body {
 	font-family: "Roboto", sans-serif;
-	background: #000000;
+	background: color(b);
 	overflow: hidden;
 }
 
@@ -36,9 +36,9 @@ a {
 
 #footer {
 	position: absolute;
-	background: #000000;
+	background: color(b);
 
 	p.home_copyright {
-		color: #ffffff;
+		color: color(a);
 	}
 }

@@ -7,7 +7,7 @@
 }
 
 .basicModal {
-	background: linear-gradient(to bottom, #444, #333);
+	background: linear-gradient(to bottom, color(v), color(g));
 	box-shadow: 0 1px 4px black(0.2), inset 0 1px 0 white(0.05);
 
 	&--error {
@@ -43,7 +43,7 @@
 		a {
 			color: white(0.9);
 			text-decoration: none;
-			border-bottom: 1px dashed #888;
+			border-bottom: 1px dashed color(t);
 		}
 
 		&:first-of-type {
@@ -115,11 +115,11 @@
 		padding: 9px 2px;
 		width: 100%;
 		background-color: transparent;
-		color: #fff;
+		color: color(a);
 		border: none;
 		// Do not use rgba() for border-bottom
 		// to avoid a blurry line in Safari on non-retina screens
-		border-bottom: 1px solid #222;
+		border-bottom: 1px solid color(k);
 		border-radius: 0;
 		box-shadow: 0 1px 0 white(0.05);
 		outline: none;
@@ -145,7 +145,7 @@
 	.choice {
 		padding: 0 30px 15px;
 		width: 100%;
-		color: #fff;
+		color: color(a);
 
 		&:first-child {
 			padding-top: 42px;
@@ -249,7 +249,7 @@
 		padding: 0;
 		width: 210px;
 		background: black(0.3);
-		color: #fff;
+		color: color(a);
 		border-radius: 3px;
 		border: 1px solid black(0.2);
 		box-shadow: 0 1px 0 white(0.02);
@@ -275,7 +275,7 @@
 			margin: 0;
 			padding: 4px 8px;
 			width: 120%;
-			color: #fff;
+			color: color(a);
 			font-size: 11px;
 			line-height: 16px;
 			border: 0;
@@ -296,8 +296,8 @@
 		select option {
 			margin: 0;
 			padding: 0;
-			background: #fff;
-			color: #333;
+			background: color(a);
+			color: color(g);
 			transition: none;
 		}
 	}
@@ -329,7 +329,7 @@
 		float: left;
 		width: 100%;
 		padding: 12px 0;
-		color: #fff;
+		color: color(a);
 		font-size: 16px;
 		font-weight: bold;
 		text-align: center;
@@ -362,7 +362,7 @@
 			float: left;
 			padding: 5px 10px;
 			width: 70%;
-			color: #fff;
+			color: color(a);
 			font-size: 14px;
 			white-space: nowrap;
 			overflow: hidden;
@@ -388,15 +388,15 @@
 			}
 
 			&.error {
-				color: rgb(233, 42, 0);
+				color: color(rr);
 			}
 
 			&.warning {
-				color: rgb(228, 233, 0);
+				color: color(qq);
 			}
 
 			&.success {
-				color: rgb(126, 233, 0);
+				color: color(pp);
 			}
 		}
 
@@ -417,7 +417,7 @@
 		padding: 0 30px;
 		margin-bottom: 15px;
 		width: 100%;
-		color: #fff;
+		color: color(a);
 
 		&:first-child {
 			padding-top: 42px;
@@ -447,7 +447,7 @@
 			cursor: pointer;
 			border: 1px solid rgba(0, 0, 0, 0.2);
 			box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
-			background: rgba(0, 0, 0, 0.3);
+			background: color(e);
 			-webkit-transition: 0.4s;
 			transition: 0.4s;
 		}
@@ -471,7 +471,7 @@
 		input:checked + .slider:before {
 			-ms-transform: translateX(20px);
 			transform: translateX(20px);
-			background-color: #ffffff;
+			background-color: color(a);
 		}
 
 		/* Rounded sliders */

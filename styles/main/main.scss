@@ -9,13 +9,70 @@
 
 // Properties -------------------------------------------------------------- //
 $shadow: 0 -1px 0 black(0.2);
+// Themes Colors ------------------------------------------------------------//
+$themecolors: (
+// Add all used color here to help rationize, create new theme ?
+  a: #ffffff,
+  b: #000000,
+  c: #2293ec,
+  d: #ececec,
+  e: rgba(0, 0, 0, 0.3),
+  f: #b5b5b5,
+  g: #333,
+  h: #f7f7f7,
+  i: #cccccc,
+  j: #252525,
+  k: #222222,
+  l: #1a1a1a,
+  m: #0f0f0f,
+  n: rgba(10, 10, 10, 0.99),
+  o: #707070,
+  p: #f0ef77,
+  q: #1d1d1d,
+  r: #555,
+  s: #b4b4b4,
+  t: #888,
+  u: #111,
+  v: #444,
+  w: #d92c34,
+  x: #009900,
+  y: #818181,
+  z: #b22027,
+  aa: #666666,
+  bb: #ddd,
+  cc: #f1f1f1,
+  dd: #153674,
+  ee: #2651ae,
+  ff: #451317,
+  gg: #2f0d0e,
+  hh: #007700,
+  ii: #00aa00,
+  jj: #00cc00,
+  kk: #aa3039,
+  ll: #aa3039,
+  mm: #ff82ee,
+  nn: #ffcc00,
+  oo: #ff9900,
+  pp: rgb(126, 233, 0),
+  qq: rgb(228, 233, 0),
+  rr: rgb(233, 42, 0),
+  // There some missing color with RGBA, named color like black and white
+);
+:root {
+  @each $name, $color in $themecolors {
+    --color-#{$name}: #{$color};
+  }
+}
+@function color($color-name) {
+  @return var(--color-#{$color-name});
+}
 // Colors ------------------------------------------------------------------ //
-$colorBlue: #2293ec;
-$colorRed: #d92c34;
-$colorPink: #ff82ee;
-$colorGreen: #00aa00;
-$colorYellow: #ffcc00;
-$colorOrange: #ff9900;
+$colorBlue: #2293ec; // color(c)
+$colorRed: #d92c34; // color(w);
+$colorPink: #ff82ee; //color(mm);
+$colorGreen: #00aa00; //color(ii);
+$colorYellow: #ffcc00; // color(nn);
+$colorOrange: #ff9900; // color(oo);
 // Animations -------------------------------------------------------------- //
 $timing: cubic-bezier(0.51, 0.92, 0.24, 1);
 $timingBounce: cubic-bezier(0.51, 0.92, 0.24, 1.15);
@@ -36,14 +93,14 @@ body {
 }
 
 body {
-	background-color: #1d1d1d;
+	background-color: color(q);
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 12px;
 	-webkit-font-smoothing: antialiased;
 	-moz-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	&.view {
-		background-color: #0f0f0f;
+		background-color: color(m);
 	}
 }
 

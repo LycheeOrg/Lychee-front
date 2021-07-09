@@ -31,7 +31,7 @@
 	font-variant: normal;
 	text-transform: none;
 	line-height: 1;
-	color: #ffffff;
+	color: color(a);
 	//font-size: 1.1em;
 	text-decoration: none;
 	margin: 15px;
@@ -64,7 +64,7 @@
 // restrict hover features to devices that support it
 @media (hover: hover) {
 	.socialicons:hover {
-		color: #b5b5b5;
+		color: color(f);
 		transform: scale(1.3);
 		-webkit-transform: scale(1.3);
 	}

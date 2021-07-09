@@ -5,12 +5,12 @@
 	bottom: 0;
 	right: 0;
 	z-index: 1000;
-	background: #000000;
+	background: color(b);
 
 	h1 {
 		text-align: center;
 		font-size: 1.5em;
-		color: #ffffff;
+		color: color(a);
 		text-transform: uppercase;
 		font-weight: 200;
 	}
@@ -18,7 +18,7 @@
 	h2 {
 		text-align: center;
 		font-size: 1em;
-		color: #ececec;
+		color: color(d);
 		text-transform: uppercase;
 		font-weight: 200;
 	}
