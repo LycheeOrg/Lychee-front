@@ -12,7 +12,7 @@
 html,
 body {
 	font-family: "Roboto", sans-serif;
-	background: color(a);
+	background: #ffffff;
 }
 
 ol,
@@ -34,12 +34,12 @@ a {
 
 #footer {
 	position: fixed;
-	background: color(a);
-	color: color(o);
+	background: #ffffff;
+	color: #707070;
 	padding: 20px 0 20px 0;
 
 	p {
-		color: color(o);
+		color: #707070;
 		font-size: 0.75em;
 	}
 }

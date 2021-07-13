@@ -1,17 +1,17 @@
 .basicModal__button:focus {
-	background: color(c);
-	color: color(a);
+	background: #2293ec;
+	color: #ffffff;
 	cursor: pointer;
 	outline-style: none;
 }
 
 .basicModal__button#basicModal__action:focus {
-	color: color(a);
+	color: #ffffff;
 }
 
 .content .photo:focus {
 	outline-style: solid;
-	outline-color: color(a);
+	outline-color: #ffffff;
 	outline-width: 10px;
 }
 
@@ -21,21 +21,21 @@
 
 .header .button:focus {
 	outline-width: 0;
-	background-color: color(a);
+	background-color: #ffffff;
 }
 
 .header__title:focus {
 	outline-width: 0;
-	background-color: color(a);
-	color: color(b);
+	background-color: #ffffff;
+	color: #000000;
 }
 
 .header .button:focus .iconic {
-	fill: color(b);
+	fill: #000000;
 }
 
 #imageview {
-	background-color: color(b);
+	background-color: #000000;
 }
 #imageview #image,
 #imageview #livephoto {

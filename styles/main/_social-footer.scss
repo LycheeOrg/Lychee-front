@@ -19,7 +19,7 @@
 	font-size: 18px;
 	font-family: "socials" !important;
 	speak: none;
-	color: color(i);
+	color: #cccccc;
 	text-decoration: none;
 	margin: 15px 15px 5px 15px;
 	transition: all 0.3s;
@@ -51,7 +51,7 @@
 // restrict hover features to devices that support it
 @media (hover: hover) {
 	.socialicons:hover {
-		color: color(f);
+		color: #b5b5b5;
 		-ms-transform: scale(1.3);
 		transform: scale(1.3);
 		-webkit-transform: scale(1.3);

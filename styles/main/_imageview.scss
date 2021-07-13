@@ -61,8 +61,8 @@
 		position: absolute;
 		bottom: 30px;
 		left: 30px;
-		color: color(a);
-		text-shadow: 1px 1px 2px color(b);
+		color: #ffffff;
+		text-shadow: 1px 1px 2px #000000;
 		z-index: 3;
 
 		h1 {
@@ -78,7 +78,7 @@
 		}
 
 		a .iconic {
-			fill: color(a);
+			fill: #fff;
 			margin: 0 5px 0 0;
 			width: 14px;
 			height: 14px;

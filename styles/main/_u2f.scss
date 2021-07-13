@@ -15,12 +15,12 @@
 	p {
 		width: 550px;
 		margin: 0 0 5%;
-		color: color(i);
+		color: #ccc;
 		display: inline-block;
 		a {
 			color: rgba(255, 255, 255, 0.9);
 			text-decoration: none;
-			border-bottom: 1px dashed color(t);
+			border-bottom: 1px dashed #888;
 		}
 		&:last-of-type {
 			margin: 0;
@@ -38,7 +38,7 @@
 		width: 80%;
 		//margin: 0 2%;
 		background-color: transparent;
-		color: color(a);
+		color: #fff;
 		border: none;
 		&_icon {
 			width: 5%;
@@ -46,7 +46,7 @@
 				width: 15px;
 				height: 14px;
 				margin: 0 15px 0 1px;
-				fill: color(a);
+				fill: #ffffff;
 			}
 		}
 	}
@@ -58,7 +58,7 @@
 	.choice {
 		display: inline-block;
 		width: 5%;
-		color: color(a);
+		color: #fff;
 		input {
 			position: absolute;
 			margin: 0;
@@ -75,7 +75,7 @@
 			box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.7);
 			.iconic {
 				box-sizing: border-box;
-				fill: color(c);
+				fill: #2293ec;
 				padding: 2px;
 				opacity: 0;
 				-ms-transform: scale(0);
@@ -92,16 +92,16 @@
 		border-radius: 0 0 0 0;
 	}
 	.basicModal__button_OK {
-		color: color(c);
+		color: #2293ec;
 		border-radius: 5px 0 0 5px;
 	}
 	.basicModal__button_DEL {
-		color: color(z);
+		color: #b22027;
 		border-radius: 0 5px 5px 0;
 	}
 	.basicModal__button_CREATE {
 		width: 100%;
-		color: color(x);
+		color: #009900;
 		border-radius: 5px;
 	}
 	.select {
@@ -109,7 +109,7 @@
 		margin: 1px 5px;
 		padding: 0;
 		width: 110px;
-		color: color(a);
+		color: #fff;
 		border-radius: 3px;
 		border: 1px solid rgba(0, 0, 0, 0.2);
 		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
@@ -118,13 +118,13 @@
 		overflow: hidden;
 		outline: 0;
 		vertical-align: middle;
-		background: color(e);
+		background: rgba(0, 0, 0, 0.3);
 		display: inline-block;
 		select {
 			margin: 0;
 			padding: 4px 8px;
 			width: 120%;
-			color: color(a);
+			color: #fff;
 			font-size: 11px;
 			line-height: 16px;
 			border: 0;
@@ -138,8 +138,8 @@
 			option {
 				margin: 0;
 				padding: 0;
-				background: color(a);
-				color: color(g);
+				background: #fff;
+				color: #333;
 				transition: none;
 			}
 		}
@@ -148,7 +148,7 @@
 			content: "≡";
 			right: 8px;
 			top: 4px;
-			color: color(c);
+			color: #2293ec;
 			font-size: 16px;
 			line-height: 16px;
 			font-weight: 700;
@@ -169,7 +169,7 @@
 		margin: 0 0px 0 0px;
 		width: 20px;
 		height: 20px;
-		fill: color(y);
+		fill: #818181;
 	}
 	.iconic.ionicons {
 		margin: 0 8px -2px 0;
@@ -186,27 +186,27 @@
 		}
 
 		.basicModal__button_OK:hover {
-			background: color(c);
-			color: color(a);
+			background: #2293ec;
+			color: #ffffff;
 		}
 
 		.basicModal__button_DEL:hover {
-			background: color(z);
-			color: color(a);
+			background: #b22027;
+			color: #ffffff;
 		}
 
 		.basicModal__button_CREATE:hover {
-			background: color(x);
-			color: color(a);
+			background: #009900;
+			color: #ffffff;
 		}
 
 		input:hover {
-			border-bottom: color(c) solid 1px;
+			border-bottom: #2293ec solid 1px;
 		}
 	}
 
 	.signInKeyLess:hover .iconic {
-		fill: color(a);
+		fill: #ffffff;
 	}
 }
 
@@ -214,23 +214,23 @@
 @media (hover: none) {
 	.u2f_view_line {
 		.basicModal__button {
-			color: color(a);
+			color: #ffffff;
 
 			&_OK {
-				background: color(c);
+				background: #2293ec;
 			}
 
 			&_DEL {
-				background: color(z);
+				background: #b22027;
 			}
 
 			&_CREATE {
-				background: color(x);
+				background: #009900;
 			}
 		}
 
 		input {
-			border-bottom: color(c) solid 1px;
+			border-bottom: #2293ec solid 1px;
 		}
 	}
 }

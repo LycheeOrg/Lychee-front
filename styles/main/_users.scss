@@ -17,13 +17,13 @@
 	p {
 		width: 550px;
 		margin: 0 0 5%;
-		color: color(i);
+		color: #ccc;
 		display: inline-block;
 
 		a {
 			color: rgba(255, 255, 255, 0.9);
 			text-decoration: none;
-			border-bottom: 1px dashed color(t);
+			border-bottom: 1px dashed #888;
 		}
 
 		&:last-of-type {
@@ -41,7 +41,7 @@
 		width: 40%;
 		//margin: 0 2%;
 		background-color: transparent;
-		color: color(a);
+		color: #fff;
 		border: none;
 
 		&_icon {
@@ -52,7 +52,7 @@
 				width: 15px;
 				height: 14px;
 				margin: 0 8px;
-				fill: color(a);
+				fill: #ffffff;
 			}
 		}
 	}
@@ -62,21 +62,21 @@
 		width: 40%;
 		//margin: 0 2%;
 		background-color: transparent;
-		color: color(a);
+		color: #fff;
 		border: none;
-		border-bottom: 1px solid color(k);
+		border-bottom: 1px solid #222;
 		border-radius: 0;
 		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
 		outline: 0;
 		margin: 0 0 10px;
 
 		&:focus {
-			border-bottom-color: color(c);
+			border-bottom-color: #2293ec;
 		}
 	}
 
 	input.text.error {
-		border-bottom-color: color(w);
+		border-bottom-color: #d92c34;
 	}
 
 	.choice label input:checked ~ .checkbox .iconic {
@@ -89,7 +89,7 @@
 		display: inline-block;
 		width: 5%;
 		min-width: 32px;
-		color: color(a);
+		color: #fff;
 
 		input {
 			position: absolute;
@@ -108,7 +108,7 @@
 
 			.iconic {
 				box-sizing: border-box;
-				fill: color(c);
+				fill: #2293ec;
 				padding: 2px;
 				opacity: 0;
 				-ms-transform: scale(0);
@@ -127,19 +127,19 @@
 	}
 
 	.basicModal__button_OK {
-		color: color(c);
+		color: #2293ec;
 		border-radius: 5px 0 0 5px;
 		margin-right: -4px;
 	}
 
 	.basicModal__button_DEL {
-		color: color(z);
+		color: #b22027;
 		border-radius: 0 5px 5px 0;
 	}
 
 	.basicModal__button_CREATE {
 		width: 20%;
-		color: color(x);
+		color: #009900;
 		border-radius: 5px;
 		min-width: 144px;
 	}
@@ -149,7 +149,7 @@
 		margin: 1px 5px;
 		padding: 0;
 		width: 110px;
-		color: color(a);
+		color: #fff;
 		border-radius: 3px;
 		border: 1px solid rgba(0, 0, 0, 0.2);
 		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
@@ -158,14 +158,14 @@
 		overflow: hidden;
 		outline: 0;
 		vertical-align: middle;
-		background: color(e);
+		background: rgba(0, 0, 0, 0.3);
 		display: inline-block;
 
 		select {
 			margin: 0;
 			padding: 4px 8px;
 			width: 120%;
-			color: color(a);
+			color: #fff;
 			font-size: 11px;
 			line-height: 16px;
 			border: 0;
@@ -180,8 +180,8 @@
 			option {
 				margin: 0;
 				padding: 0;
-				background: color(a);
-				color: color(g);
+				background: #fff;
+				color: #333;
 				transition: none;
 			}
 		}
@@ -191,7 +191,7 @@
 			content: "≡";
 			right: 8px;
 			top: 4px;
-			color: color(c);
+			color: #2293ec;
 			font-size: 16px;
 			line-height: 16px;
 			font-weight: 700;
@@ -206,24 +206,24 @@
 		.basicModal__button {
 			&:hover {
 				cursor: pointer;
-				color: color(a);
+				color: #ffffff;
 			}
 
 			&_OK:hover {
-				background: color(c);
+				background: #2293ec;
 			}
 
 			&_DEL:hover {
-				background: color(z);
+				background: #b22027;
 			}
 
 			&_CREATE:hover {
-				background: color(x);
+				background: #009900;
 			}
 		}
 
 		input:hover {
-			border-bottom: color(c) solid 1px;
+			border-bottom: #2293ec solid 1px;
 		}
 	}
 }
@@ -232,23 +232,23 @@
 @media (hover: none) {
 	.users_view_line {
 		.basicModal__button {
-			color: color(a);
+			color: #ffffff;
 
 			&_OK {
-				background: color(c);
+				background: #2293ec;
 			}
 
 			&_DEL {
-				background: color(z);
+				background: #b22027;
 			}
 
 			&_CREATE {
-				background: color(x);
+				background: #009900;
 			}
 		}
 
 		input {
-			border-bottom: color(c) solid 1px;
+			border-bottom: #2293ec solid 1px;
 		}
 	}
 }
