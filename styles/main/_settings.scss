@@ -8,19 +8,19 @@
 		padding: 9px 2px;
 		width: calc(50% - 4px);
 		background-color: transparent;
-		color: #fff;
+		color: color(setting-input-text-text);
 		border: none;
-		border-bottom: 1px solid #222;
+		border-bottom: 1px solid color(setting-input-text-border-bottom);
 		border-radius: 0;
 		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
 		outline: 0;
 
 		&:focus {
-			border-bottom-color: #2293ec;
+			border-bottom-color: color(focus-setting-input-text-border-bottom);
 		}
 
 		.error {
-			border-bottom-color: #d92c34;
+			border-bottom-color: color(error-setting-input-text-border-bottom);
 		}
 	}
 

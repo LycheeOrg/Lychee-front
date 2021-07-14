@@ -20,14 +20,19 @@ $colors: (
 	darken5-picton-blue2: darken(#4393e6, 5%),
 	darken10-picton-blue2: darken(#4393e6, 10%),
 	darken15-picton-blue2: darken(#4393e6, 15%),
+	chathams-blue: #153674,
+	cerulean-blue: #2651ae,
 	// Red
 	reed-roof-terracota: #b22027,
+	well-read: #aa3039,
 	punch: #d92c34,
 	darken10_punch: darken(#d92c34, 10%),
 	lighten10_punch: lighten(#d92c34, 10%),
 	blush-pink: #ff82ee,
 	coffee-bean: #2f0d0e,
+	cedar: #451317,
 	// Green
+	light-green: #00cc00,
 	japanese-laurel: #00aa00,
 	japanese-laurel2: #009900,
 	japanese-laurel3: #007700,
@@ -125,12 +130,34 @@ $color-place: (
 	setting-slider-background: color_value(black),
 	checked-setting-slider-background: color_value(white),
 	before-setting-slider-background: color_value(picton-blue),
+	setting-input-text-text: color_value(white),
+	setting-input-text-border-bottom: color_value(dark-mine-shaft),
+	focus-setting-input-text-border-bottom: color_value(picton-blue),
+	error-setting-input-text-border-bottom: color_value(punch),
 	// Sidebar
 	sidebar-tags-icon-fill: color_value(punch),
 	active-sidebar-tags-icon-fill: color_value(darken10-punch),
 	sidebar-header-border-top: color_value(picton-blue),
 	hover-sidebar-tag-span-fill: color_value(lighten10_punch),
-	//
+	// User
+	user-viewline-input-text-error-border-bottom: color_value(punch),
+	user-input-text-text: color_value(white),
+	user-input-text-border-bottom: color_value(dark-mine-shaft),
+	focus-user-input-text-border-bottom: color_value(picton-blue),
+	//loading
+	loading-border-bottom: color(black),
+	loading-h1-text: color(light-silver),
+	loading-h1-text-shadow: color(black),
+	loading-background-first-gradiant: color_value(chathams-blue),
+	loading-background-2nd-gradiant: color_value(cerulean-blue),
+	error-loading-background: color_value(coffee-bean),
+	error-loading-background-first-gradiant: color_value(cedar),
+	error-loading-background-2nd-gradiant: color_value(well-read),
+	sucess-loading-background: color_value(japanese-laurel3),
+	sucess-loading-background-first-gradiant: color_value(japanese-laurel3),
+	sucess-loading-background-2nd-gradiant: color_value(japanese-laurel2),
+	sucess-loading-background-third-gradiant: color_value(japanese-laurel),
+	sucess-loading-background-4th-gradiant: color_value(light-green)
 );
 :root {
 	@each $name, $color in $color-place {
