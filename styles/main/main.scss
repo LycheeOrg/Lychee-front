@@ -63,6 +63,7 @@ $shadow: 0 -1px 0 black(0.2);
 // Color-Place ------------------------------------
 $color-place: (
 	// Buttons
+	default-button-fill: color_value(white),
 	nsfw-button-fill: color_value(blush-pink),
     star-button-fill: color_value(manz),
 	eye-active-button-fill: color_value(punch),
@@ -78,8 +79,58 @@ $color-place: (
 	cover-badge-background: color_value(orange-peel),
 	hidden-badge-background: color_value(orange-peel),
 	not-hidden-badge-background: color_value(japanese-laurel),
+	// thumbimg
+	default-thumbimg-border: color_value(white),
+	focus-thumbimg-border: color_value(picton-blue),
+	active-thumbimg-border: color_value(darken15-pictor-blue),
+	hover-thumbimg-border: color_value(picton-blue),
+    selected-thumbimg-outline: color_value(picton-blue),
+    // Header-search
+    header-search-background: color_value(cod-gray2),
+	header-search-text: color_value(white),
+	default-header-search-border: color_value(black),
+	focus-header-search-border: color_value(picton-blue),
+	// Header title
+	header-title-text: color_value(white),
+	// sharing view
+	default-sharingview-button-color: color_value(picton-blue),
+    default-sharingview-button-background: color_value(black),
+    default-sharingview-button-border: color_value(picton-blue),
+	sharingview-blue-iconic-fill: color_value(picton-blue),
+	sharingview-grey-iconic-fill: color_value(gray-nobel2),
+	sharingview-borderblue-border: color_value(picton-blue),
+	// basicContext
+	active-basicContext-data-iconic-fill: color_value(orange-peel),
+    basicContext-data-iconic-fill: color_value(white),
+	hover-basicContext-enabled-data-first-gradiant-color: color_value(picton-blue),
+	hover-basicContext-enabled-data-2nd-gradiant-color: color_value(darken5-picton-blue),
+	active-basicContext-enabled-data-first-gradiant-color: color_value(darken10-picton-blue),
+	active-basicContext-enabled-data-2nd-gradiant-color: color_value(darken15-picton-blue),
+	// basicmodal
+	basicmodal-action-text: color_value(white),
+    basicmodal-cancel-text: color_value(punch),
+	basicmodal-input-text: color_value(white),
+	basicmodal-input-bottom-border: color_value(dark-mine-shaft),
+    focus-basicmodal-input-bottom-border: color_value(picton-blue),
+	error-basicmodal-input-bottom-border: color_value(punch),
+    basicmodal-radio-text: color_value(white),
+    basicmodal-radio-checkbox-fill: color_value(picton-blue),
+    basicmodal-select-text: color_value(white),
+    after-basicmodal-select-text: color_value(picton-blue),
+	basicmodal-slider-background: color_value(white),
+	before-basicmodal-slider-background: color_value(picton-blue),
+	// Settings
+	setting-line-warning-text: color_value(punch),
+	setting-slider-background: color_value(black),
+	checked-setting-slider-background: color_value(white),
+	before-setting-slider-background: color_value(picton-blue),
+	// Sidebar
+	sidebar-tags-icon-fill: color_value(punch),
+	active-sidebar-tags-icon-fill: color_value(darken10-punch),
+	sidebar-header-border-top: color_value(picton-blue),
+	hover-sidebar-tag-span-fill: color_value(lighten10_punch),
+	//
 );
-
 :root {
   @each $name, $color in $color-place {
     --color-#{$name}: #{$color};

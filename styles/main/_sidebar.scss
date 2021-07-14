@@ -28,7 +28,7 @@
 		height: 49px;
 		width: 100%;
 		background: linear-gradient(to bottom, white(0.02), black(0));
-		border-top: 1px solid color(picton-blue);
+		border-top: 1px solid color(sidebar-header-border-top);
 	}
 
 	&__header h1 {
@@ -185,14 +185,14 @@
 		transition: width 0.2s, margin 0.2s, transform 0.2s, fill 0.2s ease-out;
 
 		.iconic {
-			fill: color(punch);
+			fill: color(sidebar-tags-icon-fill);
 			width: 8px;
 			height: 8px;
 		}
 
 		&:active .iconic {
 			transition: none;
-			fill: color(darken10-punch);
+			fill: color(active-sidebar-tags-icon-fill);
 		}
 	}
 
@@ -233,7 +233,7 @@
 			}
 
 			span:hover .iconic {
-				fill: color(lighten10-punch);
+				fill: color(hover-sidebar-tag-span-fill);
 			}
 		}
 	}

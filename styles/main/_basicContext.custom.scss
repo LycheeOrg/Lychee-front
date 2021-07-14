@@ -43,7 +43,10 @@
 	}
 
 	&__item:not(.basicContext__item--disabled):active &__data {
-		background: linear-gradient(to bottom, color(darken10-picton-blue), color(darken15-picton-blue));
+		background: linear-gradient(to bottom,
+			color(active-basicContext-enabled-data-first-gradiant-color),
+			color(active-basicContext-enabled-data-2nd-gradiant-color)
+		);
 	}
 
 	&__icon {
@@ -56,7 +59,10 @@
 // restrict hover features to devices that support it
 @media (hover: hover) {
 	.basicContext__item:not(.basicContext__item--disabled):hover &__data {
-		background: linear-gradient(to bottom, color(picton-blue), color(darken5-picton-blue));
+		background: linear-gradient(to bottom,
+			color(hover-basicContext-enabled-data-first-gradiant-color),
+			color(hover-basicContext-enabled-data-2nd-gradiant-color)
+		);
 	}
 
 	.basicContext {

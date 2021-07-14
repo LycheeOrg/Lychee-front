@@ -17,11 +17,11 @@
 		margin: 0 10px 0 1px;
 		width: 11px;
 		height: 10px;
-		fill: white(1);
+		fill: rgba(color(basicContext-data-iconic-fill),1);
 	}
 
 	&__data .iconic.active {
-		fill: color(orange-peel);
+		fill: color(active-basicContext-data-iconic-fill);
 	}
 
 	&__data .iconic.ionicons {

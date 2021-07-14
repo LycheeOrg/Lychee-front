@@ -92,13 +92,13 @@
 		}
 
 		&#basicModal__action {
-			color: color(picton-blue);
+			color: color(basicmodal-action-text);
 			box-shadow: inset 0 1px 0 white(0.02), inset 1px 0 0 black(0.2);
 		}
 
 		&#basicModal__action.red,
 		&#basicModal__cancel.red {
-			color: color(punch);
+			color: color(basicmodal-cancel-text);
 		}
 
 		&.hidden {
@@ -115,21 +115,21 @@
 		padding: 9px 2px;
 		width: 100%;
 		background-color: transparent;
-		color: #fff;
+		color: color(basicmodal-input-text);
 		border: none;
 		// Do not use rgba() for border-bottom
 		// to avoid a blurry line in Safari on non-retina screens
-		border-bottom: 1px solid #222;
+		border-bottom: 1px solid color(basicmodal-input-bottom-border);
 		border-radius: 0;
 		box-shadow: 0 1px 0 white(0.05);
 		outline: none;
 
 		&:focus {
-			border-bottom-color: color(picton-blue);
+			border-bottom-color: color(focus-basicmodal-input-bottom-border);
 		}
 
 		&.error {
-			border-bottom-color: color(punch);
+			border-bottom-color: color(error-basicmodal-input-bottom-border);
 		}
 
 		&:first-child {
@@ -145,7 +145,7 @@
 	.choice {
 		padding: 0 30px 15px;
 		width: 100%;
-		color: #fff;
+		color: color(basicmodal-radio-text);
 
 		&:first-child {
 			padding-top: 42px;
@@ -179,7 +179,7 @@
 
 			.iconic {
 				box-sizing: border-box;
-				fill: color(picton-blue);
+				fill: color(basicmodal-radio-checkbox-fill);
 				padding: 2px;
 				opacity: 0;
 				transform: scale(0);
@@ -249,7 +249,7 @@
 		padding: 0;
 		width: 210px;
 		background: black(0.3);
-		color: #fff;
+		color: color(basicmodal-select-text);
 		border-radius: 3px;
 		border: 1px solid black(0.2);
 		box-shadow: 0 1px 0 white(0.02);
@@ -264,7 +264,7 @@
 			content: "≡";
 			right: 8px;
 			top: 4px;
-			color: color(picton-blue);
+			color: color(after-basicmodal-select-text);
 			font-size: 16px;
 			line-height: 16px;
 			font-weight: bold;
@@ -447,7 +447,7 @@
 			cursor: pointer;
 			border: 1px solid rgba(0, 0, 0, 0.2);
 			box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
-			background: rgba(0, 0, 0, 0.3);
+			background: rgba(color(basicmodal-slider-background), 0.3);
 			-webkit-transition: 0.4s;
 			transition: 0.4s;
 		}
@@ -459,19 +459,19 @@
 			width: 14px;
 			left: 3px;
 			bottom: 3px;
-			background-color: color(picton-blue);
+			background-color: color(before-basicmodal-slider-background);
 			-webkit-transition: 0.4s;
 			transition: 0.4s;
 		}
 
 		input:checked + .slider {
-			background-color: color(picton-blue);
+			background-color: color(before-basicmodal-slider-background);
 		}
 
 		input:checked + .slider:before {
 			-ms-transform: translateX(20px);
 			transform: translateX(20px);
-			background-color: #ffffff;
+			background-color: color(basicmodal-slider-background);
 		}
 
 		/* Rounded sliders */

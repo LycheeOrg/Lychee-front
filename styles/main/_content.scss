@@ -55,7 +55,9 @@
 			background: #222;
 			color: #222;
 			box-shadow: 0 2px 5px black(0.5);
-			border: 1px solid white(0.5);
+			border-color: rgba(color(default-thumbing-border),0.5);
+			border-style: solid;
+			border-width: 1px;
 			transition: opacity 0.3s ease-out, transform 0.3s ease-out, border-color 0.3s ease-out;
 		}
 		.thumbimg > img {
@@ -64,14 +66,14 @@
 		}
 		&:focus .thumbimg,
 		&.active .thumbimg {
-			border-color: color(picton-blue);
+			border-color: color(focus-thumbimg-border);
 		}
 		&:active .thumbimg {
 			transition: none;
-			border-color: color(darken15-pictor-blue);
+			border-color: color(active-thumbimg-border);
 		}
 		&.selected img {
-			outline: 1px solid color(picton-blue);
+			outline: 1px solid color(selected-thumbimg-outline);
 		}
 		.video {
 			&::before {
@@ -493,7 +495,7 @@
 		.album,
 		.photo {
 			&:hover .thumbimg {
-				border-color: color(picton-blue);
+				border-color: color(hover-thumbimg-border);
 			}
 
 			.video,

@@ -48,9 +48,9 @@
 	}
 
 	.btn-default {
-		color: color(picton-blue);
-		border-color: color(picton-blue);
-		background: rgba(0, 0, 0, 0.5);
+		color: color(default-sharingview-button-text);
+		border-color: color(default-sharingview-button-border);
+		background: rgba(color(default-sharingview-button-background), 0.5);
 		border-radius: 3px;
 		box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.7);
 	}
@@ -105,7 +105,7 @@
 		display: inline-block;
 		width: 15px;
 		height: 14px;
-		fill: color(picton-blue);
+		fill: color(sharingview-blue-iconic-fill);
 
 		.iconic.ionicons {
 			margin: 0 8px -2px 0;
@@ -115,11 +115,11 @@
 	}
 
 	.blue .iconic {
-		fill: color(picton-blue);
+		fill: color(sharingview-blue-iconic-fill);
 	}
 
 	.grey .iconic {
-		fill: #b4b4b4;
+		fill: color(sharingview-grey-iconic-fill);
 	}
 
 	p {
@@ -222,7 +222,7 @@
 	}
 
 	.borderBlue {
-		border: 1px solid color(picton-blue);
+		border: 1px solid color(sharingview-borderblue-border);
 	}
 }
 
