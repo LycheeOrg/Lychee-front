@@ -9,13 +9,85 @@
 
 // Properties -------------------------------------------------------------- //
 $shadow: 0 -1px 0 black(0.2);
-// Colors ------------------------------------------------------------------ //
-$colorBlue: #2293ec;
-$colorRed: #d92c34;
-$colorPink: #ff82ee;
-$colorGreen: #00aa00;
-$colorYellow: #ffcc00;
-$colorOrange: #ff9900;
+// Colors ----------------------------------------------------------- //
+ $colors: (
+// Blues
+	 picton-blue: #2293ec,
+	 darken5-picton-blue: darken(#2293ec, 5%),
+	 darken10-picton-blue: darken(#2293ec, 10%),
+	 darken15-picton-blue: darken(#2293ec, 15%),
+	 picton-blue2: #4393e6,
+	 darken5-picton-blue2: darken(#4393e6, 5%),
+	 darken10-picton-blue2: darken(#4393e6, 10%),
+	 darken15-picton-blue2: darken(#4393e6, 15%),
+// Red
+	 reed-roof-terracota: #b22027,
+     punch: #d92c34,
+	 darken10_punch: darken(#d92c34, 10%),
+	 lighten10_punch: lighten(#d92c34, 10%),
+	 blush-pink: #ff82ee,
+     coffee-bean: #2f0d0e,
+// Green
+	 japanese-laurel: #00aa00,
+     japanese-laurel2: #009900,
+     japanese-laurel3: #007700,
+// Orange/Yellow
+     manz: #f0ef77,
+     supernova: #ffcc00,
+     orange-peel: #ff9900,
+// Grey
+     white: white,
+	 lighten20-white: lighten(white, 20%), // lighten white doesnt make much sense.
+	 alabaster: #f7f7f7,
+     seashell: #f1f1f1,
+     gallery: #ececec,
+     alto: #dddddd,
+     light-silver: #cccccc,
+     gray-nobel: #b5b5b5,
+     gray-nobel2: #b4b4b4,
+     gray: #818181,
+     gray2: #888888,
+     dove-gray: #707070,
+     dove-gray2: #666666,
+     gray-emperor: #555555,
+     mine-shaft: #333333,
+     dark-mine-shaft: #222222,
+     cod-gray2: #1d1d1d,
+     cod-gray: #111111,
+     cod-gray3: #0f0f0f,
+     black: black
+ );
+@function color_value($color-value){
+	 @return map-get($colors, $color-value)
+}
+// Color-Place ------------------------------------
+$color-place: (
+	// Buttons
+	nsfw-button-fill: color_value(blush-pink),
+    star-button-fill: color_value(manz),
+	eye-active-button-fill: color_value(punch),
+	eye-active-hidden-button-fill: color_value(orange-peel),
+	eye-active-not-hidden-button-fill: color_value(japanese-laurel),
+	info-active-button-fill: color_value(picton-blue),
+	// Badge
+	default-badge-background: color_value(punch),
+	nsfw-badge-background: color_value(blush-pink),
+	star-badge-background: color_value(supernova),
+	list-badge-background: color_value(picton-blue),
+	tag-badge-background: color_value(japanese-laurel),
+	cover-badge-background: color_value(orange-peel),
+	hidden-badge-background: color_value(orange-peel),
+	not-hidden-badge-background: color_value(japanese-laurel),
+);
+
+:root {
+  @each $name, $color in $color-place {
+    --color-#{$name}: #{$color};
+  }
+}
+@function color($color-name) {
+  @return var(--color-#{$color-name});
+}
 // Animations -------------------------------------------------------------- //
 $timing: cubic-bezier(0.51, 0.92, 0.24, 1);
 $timingBounce: cubic-bezier(0.51, 0.92, 0.24, 1.15);

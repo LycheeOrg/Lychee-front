@@ -64,14 +64,14 @@
 		}
 		&:focus .thumbimg,
 		&.active .thumbimg {
-			border-color: $colorBlue;
+			border-color: color(picton-blue);
 		}
 		&:active .thumbimg {
 			transition: none;
-			border-color: darken($colorBlue, 15%);
+			border-color: color(darken15-pictor-blue);
 		}
 		&.selected img {
-			outline: 1px solid $colorBlue;
+			outline: 1px solid color(picton-blue);
 		}
 		.video {
 			&::before {
@@ -208,7 +208,7 @@
 		margin: 0 0 0 6px;
 		padding: 12px 8px 6px;
 		width: 18px;
-		background: $colorRed;
+		background: color(default-badge-background);
 		box-shadow: 0 0 2px black(0.6);
 		border-radius: 0 0 5px 5px;
 		border: 1px solid #fff;
@@ -222,29 +222,29 @@
 			display: inline-block;
 		}
 		&--not--hidden {
-			background: $colorGreen;
+			background: color(not-hidden-badge-background);
 		}
 		&--hidden {
-			background: $colorOrange;
+			background: color(hidden-badge-background);
 		}
 		&--cover {
-			display: "inline-block";
-			background: $colorOrange;
+			display: inline-block;
+			background: color(cover-badge-background);
 		}
 		&--star {
 			display: inline-block;
-			background: $colorYellow;
+			background: color(star-badge-background);
 		}
 		&--nsfw {
 			display: inline-block;
-			background: $colorPink;
+			background: color(nsfw-badge-background);
 		}
 		&--list {
-			background: $colorBlue;
+			background: color(list-badge-background);
 		}
 		&--tag {
 			display: inline-block;
-			background: $colorGreen;
+			background: color(tag-badge-background);
 		}
 		.iconic {
 			fill: #fff;
@@ -493,7 +493,7 @@
 		.album,
 		.photo {
 			&:hover .thumbimg {
-				border-color: $colorBlue;
+				border-color: color(picton-blue);
 			}
 
 			.video,

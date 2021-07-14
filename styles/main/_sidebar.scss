@@ -28,7 +28,7 @@
 		height: 49px;
 		width: 100%;
 		background: linear-gradient(to bottom, white(0.02), black(0));
-		border-top: 1px solid $colorBlue;
+		border-top: 1px solid color(picton-blue);
 	}
 
 	&__header h1 {
@@ -185,14 +185,14 @@
 		transition: width 0.2s, margin 0.2s, transform 0.2s, fill 0.2s ease-out;
 
 		.iconic {
-			fill: $colorRed;
+			fill: color(punch);
 			width: 8px;
 			height: 8px;
 		}
 
 		&:active .iconic {
 			transition: none;
-			fill: darken($colorRed, 10%);
+			fill: color(darken10-punch);
 		}
 	}
 
@@ -233,7 +233,7 @@
 			}
 
 			span:hover .iconic {
-				fill: lighten($colorRed, 10%);
+				fill: color(lighten10-punch);
 			}
 		}
 	}

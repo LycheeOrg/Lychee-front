@@ -104,19 +104,19 @@
 		}
 
 		&--star.active .iconic {
-			fill: #f0ef77;
+			fill: color(star-button-fill);
 		}
 
 		&--eye.active .iconic {
-			fill: $colorRed;
+			fill: color(eye-active-button-fill);
 		}
 
 		&--eye.active--not-hidden .iconic {
-			fill: $colorGreen;
+			fill: color(eye-active-not-hidden-button-fill);
 		}
 
 		&--eye.active--hidden .iconic {
-			fill: $colorOrange;
+			fill: color(eye-active-hidden-button-fill);
 		}
 
 		&--share .iconic.ionicons {
@@ -126,11 +126,11 @@
 		}
 
 		&--nsfw.active .iconic {
-			fill: $colorPink;
+			fill: color(nsfw-button-fill);
 		}
 
 		&--info.active .iconic {
-			fill: $colorBlue;
+			fill: color(info-active-button-fill);
 		}
 	}
 
@@ -172,7 +172,7 @@
 
 		&:focus {
 			width: 140px;
-			border-color: $colorBlue;
+			border-color: color(picton-blue);
 			box-shadow: 0 1px 0 white(0);
 			opacity: 1;
 		}

@@ -48,8 +48,8 @@
 	}
 
 	.btn-default {
-		color: $colorBlue;
-		border-color: $colorBlue;
+		color: color(picton-blue);
+		border-color: color(picton-blue);
 		background: rgba(0, 0, 0, 0.5);
 		border-radius: 3px;
 		box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.7);
@@ -105,7 +105,7 @@
 		display: inline-block;
 		width: 15px;
 		height: 14px;
-		fill: $colorBlue;
+		fill: color(picton-blue);
 
 		.iconic.ionicons {
 			margin: 0 8px -2px 0;
@@ -115,7 +115,7 @@
 	}
 
 	.blue .iconic {
-		fill: $colorBlue;
+		fill: color(picton-blue);
 	}
 
 	.grey .iconic {
@@ -222,7 +222,7 @@
 	}
 
 	.borderBlue {
-		border: 1px solid $colorBlue;
+		border: 1px solid color(picton-blue);
 	}
 }
 
