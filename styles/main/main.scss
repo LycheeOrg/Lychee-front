@@ -10,62 +10,63 @@
 // Properties -------------------------------------------------------------- //
 $shadow: 0 -1px 0 black(0.2);
 // Colors ----------------------------------------------------------- //
- $colors: (
-// Blues
-	 picton-blue: #2293ec,
-	 darken5-picton-blue: darken(#2293ec, 5%),
-	 darken10-picton-blue: darken(#2293ec, 10%),
-	 darken15-picton-blue: darken(#2293ec, 15%),
-	 picton-blue2: #4393e6,
-	 darken5-picton-blue2: darken(#4393e6, 5%),
-	 darken10-picton-blue2: darken(#4393e6, 10%),
-	 darken15-picton-blue2: darken(#4393e6, 15%),
-// Red
-	 reed-roof-terracota: #b22027,
-     punch: #d92c34,
-	 darken10_punch: darken(#d92c34, 10%),
-	 lighten10_punch: lighten(#d92c34, 10%),
-	 blush-pink: #ff82ee,
-     coffee-bean: #2f0d0e,
-// Green
-	 japanese-laurel: #00aa00,
-     japanese-laurel2: #009900,
-     japanese-laurel3: #007700,
-// Orange/Yellow
-     manz: #f0ef77,
-     supernova: #ffcc00,
-     orange-peel: #ff9900,
-// Grey
-     white: white,
-	 lighten20-white: lighten(white, 20%), // lighten white doesnt make much sense.
-	 alabaster: #f7f7f7,
-     seashell: #f1f1f1,
-     gallery: #ececec,
-     alto: #dddddd,
-     light-silver: #cccccc,
-     gray-nobel: #b5b5b5,
-     gray-nobel2: #b4b4b4,
-     gray: #818181,
-     gray2: #888888,
-     dove-gray: #707070,
-     dove-gray2: #666666,
-     gray-emperor: #555555,
-     mine-shaft: #333333,
-     dark-mine-shaft: #222222,
-     cod-gray2: #1d1d1d,
-     cod-gray: #111111,
-     cod-gray3: #0f0f0f,
-     black: black
- );
-@function color_value($color-value){
-	 @return map-get($colors, $color-value)
+$colors: (
+	// Blues
+	picton-blue: #2293ec,
+	darken5-picton-blue: darken(#2293ec, 5%),
+	darken10-picton-blue: darken(#2293ec, 10%),
+	darken15-picton-blue: darken(#2293ec, 15%),
+	picton-blue2: #4393e6,
+	darken5-picton-blue2: darken(#4393e6, 5%),
+	darken10-picton-blue2: darken(#4393e6, 10%),
+	darken15-picton-blue2: darken(#4393e6, 15%),
+	// Red
+	reed-roof-terracota: #b22027,
+	punch: #d92c34,
+	darken10_punch: darken(#d92c34, 10%),
+	lighten10_punch: lighten(#d92c34, 10%),
+	blush-pink: #ff82ee,
+	coffee-bean: #2f0d0e,
+	// Green
+	japanese-laurel: #00aa00,
+	japanese-laurel2: #009900,
+	japanese-laurel3: #007700,
+	// Orange/Yellow
+	manz: #f0ef77,
+	supernova: #ffcc00,
+	orange-peel: #ff9900,
+	// Grey
+	white: white,
+	lighten20-white: lighten(white, 20%),
+	// lighten white doesnt make much sense.
+	alabaster: #f7f7f7,
+	seashell: #f1f1f1,
+	gallery: #ececec,
+	alto: #dddddd,
+	light-silver: #cccccc,
+	gray-nobel: #b5b5b5,
+	gray-nobel2: #b4b4b4,
+	gray: #818181,
+	gray2: #888888,
+	dove-gray: #707070,
+	dove-gray2: #666666,
+	gray-emperor: #555555,
+	mine-shaft: #333333,
+	dark-mine-shaft: #222222,
+	cod-gray2: #1d1d1d,
+	cod-gray: #111111,
+	cod-gray3: #0f0f0f,
+	black: black
+);
+@function color_value($color-value) {
+	@return map-get($colors, $color-value);
 }
 // Color-Place ------------------------------------
 $color-place: (
 	// Buttons
 	default-button-fill: color_value(white),
 	nsfw-button-fill: color_value(blush-pink),
-    star-button-fill: color_value(manz),
+	star-button-fill: color_value(manz),
 	eye-active-button-fill: color_value(punch),
 	eye-active-hidden-button-fill: color_value(orange-peel),
 	eye-active-not-hidden-button-fill: color_value(japanese-laurel),
@@ -84,9 +85,9 @@ $color-place: (
 	focus-thumbimg-border: color_value(picton-blue),
 	active-thumbimg-border: color_value(darken15-pictor-blue),
 	hover-thumbimg-border: color_value(picton-blue),
-    selected-thumbimg-outline: color_value(picton-blue),
-    // Header-search
-    header-search-background: color_value(cod-gray2),
+	selected-thumbimg-outline: color_value(picton-blue),
+	// Header-search
+	header-search-background: color_value(cod-gray2),
 	header-search-text: color_value(white),
 	default-header-search-border: color_value(black),
 	focus-header-search-border: color_value(picton-blue),
@@ -94,29 +95,29 @@ $color-place: (
 	header-title-text: color_value(white),
 	// sharing view
 	default-sharingview-button-color: color_value(picton-blue),
-    default-sharingview-button-background: color_value(black),
-    default-sharingview-button-border: color_value(picton-blue),
+	default-sharingview-button-background: color_value(black),
+	default-sharingview-button-border: color_value(picton-blue),
 	sharingview-blue-iconic-fill: color_value(picton-blue),
 	sharingview-grey-iconic-fill: color_value(gray-nobel2),
 	sharingview-borderblue-border: color_value(picton-blue),
 	// basicContext
 	active-basicContext-data-iconic-fill: color_value(orange-peel),
-    basicContext-data-iconic-fill: color_value(white),
+	basicContext-data-iconic-fill: color_value(white),
 	hover-basicContext-enabled-data-first-gradiant-color: color_value(picton-blue),
 	hover-basicContext-enabled-data-2nd-gradiant-color: color_value(darken5-picton-blue),
 	active-basicContext-enabled-data-first-gradiant-color: color_value(darken10-picton-blue),
 	active-basicContext-enabled-data-2nd-gradiant-color: color_value(darken15-picton-blue),
 	// basicmodal
 	basicmodal-action-text: color_value(white),
-    basicmodal-cancel-text: color_value(punch),
+	basicmodal-cancel-text: color_value(punch),
 	basicmodal-input-text: color_value(white),
 	basicmodal-input-bottom-border: color_value(dark-mine-shaft),
-    focus-basicmodal-input-bottom-border: color_value(picton-blue),
+	focus-basicmodal-input-bottom-border: color_value(picton-blue),
 	error-basicmodal-input-bottom-border: color_value(punch),
-    basicmodal-radio-text: color_value(white),
-    basicmodal-radio-checkbox-fill: color_value(picton-blue),
-    basicmodal-select-text: color_value(white),
-    after-basicmodal-select-text: color_value(picton-blue),
+	basicmodal-radio-text: color_value(white),
+	basicmodal-radio-checkbox-fill: color_value(picton-blue),
+	basicmodal-select-text: color_value(white),
+	after-basicmodal-select-text: color_value(picton-blue),
 	basicmodal-slider-background: color_value(white),
 	before-basicmodal-slider-background: color_value(picton-blue),
 	// Settings
@@ -132,12 +133,12 @@ $color-place: (
 	//
 );
 :root {
-  @each $name, $color in $color-place {
-    --color-#{$name}: #{$color};
-  }
+	@each $name, $color in $color-place {
+		--color-#{$name}: #{$color};
+	}
 }
 @function color($color-name) {
-  @return var(--color-#{$color-name});
+	@return var(--color-#{$color-name});
 }
 // Animations -------------------------------------------------------------- //
 $timing: cubic-bezier(0.51, 0.92, 0.24, 1);
