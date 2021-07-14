@@ -31,6 +31,7 @@ $colors: (
 	blush-pink: #ff82ee,
 	coffee-bean: #2f0d0e,
 	cedar: #451317,
+	rosewood: #640000,
 	// Green
 	light-green: #00cc00,
 	japanese-laurel: #00aa00,
@@ -61,6 +62,7 @@ $colors: (
 	cod-gray2: #1d1d1d,
 	cod-gray: #111111,
 	cod-gray3: #0f0f0f,
+	cod-gray4: #0a0a0a,
 	black: black
 );
 @function color_value($color-value) {
@@ -157,7 +159,25 @@ $color-place: (
 	sucess-loading-background-first-gradiant: color_value(japanese-laurel3),
 	sucess-loading-background-2nd-gradiant: color_value(japanese-laurel2),
 	sucess-loading-background-third-gradiant: color_value(japanese-laurel),
-	sucess-loading-background-4th-gradiant: color_value(light-green)
+	sucess-loading-background-4th-gradiant: color_value(light-green),
+	// Sensitive warning
+	warning-background: color_value(rosewood),
+	warning-text: color_value(white),
+	warning-h1-border-bottom: color_value(white),
+	// Social-footer
+	social-footer-icons-text: color_value(light-silver),
+	hover-social-footer-icons-text: color_value(gray-nobel),
+	// imageviews
+	imageviews-background: color_value(cod-gray4),
+	imageviews-full-background: color_value(black),
+	imageviews-image-overlay-text: color_value(white),
+	imageviews-image-overlay-a-iconic-fill: color_value(white),
+	imageviews-image-overlay-text-shadow: color_value(black),
+	imageviews-arrows-a-border: color_value(white),
+	imageviews-arrows-iconic-fill: color_value(white),
+	// footer
+	footer-background: color_value(cod-gray2),
+	footer-p-a-text: color_value(light-silver)
 );
 :root {
 	@each $name, $color in $color-place {
