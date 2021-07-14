@@ -5,12 +5,12 @@
 	bottom: 0;
 	right: 0;
 	z-index: 1000;
-	background: #000000;
+	background: color(landing-intro-background);
 
 	h1 {
 		text-align: center;
 		font-size: 1.5em;
-		color: #ffffff;
+		color: color(landing-intro-h1-text);
 		text-transform: uppercase;
 		font-weight: 200;
 	}
@@ -18,7 +18,7 @@
 	h2 {
 		text-align: center;
 		font-size: 1em;
-		color: #ececec;
+		color: color(landing-intro-h2-text);
 		text-transform: uppercase;
 		font-weight: 200;
 	}

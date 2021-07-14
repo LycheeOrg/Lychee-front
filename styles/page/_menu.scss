@@ -11,7 +11,7 @@
 	a {
 		display: block;
 		font-size: 0.8em;
-		color: #666666;
+		color: color(page-menu-a-text);
 		text-transform: uppercase;
 		font-weight: 400;
 		transition: all 0.3s;
@@ -21,7 +21,7 @@
 	}
 
 	.current-menu-item a {
-		color: #b5b5b5 !important;
+		color: color(current-menu-item-page-menu-a-text) !important;
 	}
 }
 
@@ -36,6 +36,6 @@
 // restrict hover features to devices that support it
 @media (hover: hover) {
 	#menu a:hover {
-		color: #b5b5b5 !important;
+		color: color(hover-page-menu-a-text) !important;
 	}
 }

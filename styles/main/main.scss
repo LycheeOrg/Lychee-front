@@ -190,7 +190,36 @@ $color-place: (
 	focus-tv-header-button-title-background: color_value(white),
 	focus-tv-header-button-title-text: color_value(black),
 	focus-tv-header-button-iconic-fill: color_value(black),
-	tv-imageviews-background: color_value(black)
+	tv-imageviews-background: color_value(black),
+	// Landing
+	landing-intro-background: color_value(black),
+	landing-intro-h1-text: color_value(white),
+	landing-intro-h2-text: color_value(gallery),
+	landing-logo-h1-text: color_value(white),
+	landing-menu-a-text: color_value(white),
+	hover-landing-menu-a-text: color_value(gray-nobel),
+	current-menu-item-landing-menu-a-text: color_value(gray-nobel),
+	landing-footer-background: color_value(black),
+	landing-footer-home-copyright-text: color_value(white),
+	landing-body-background: color_value(black),
+	// page
+	page-body-background: color_value(white),
+	page-footer-background: color_value(white),
+	page-footer-text: color_value(dove-gray),
+	page-footer-p-text: color_value(dove-gray),
+	page-social-socialicons-text: color-value(white),
+	hover-page-social-socialicons-text: color_value(gray-nobel),
+	page-social-socials-background: color_value(black),
+	page-menu-a-text: color_value(dove-gray2),
+    current-menu-item-page-menu-a-text: color_value(gray-nobel),
+	hover-page-menu-a-text: color_value(gray-nobel),
+	page-header-background: color_value(alabaster),
+	page-logo-h1-text: color_value(black),
+	page-footer-p-text: color_value(light-silver),
+	page-footer-p-a-text: color_value(light-silver),
+	visited-page-footer-p-a-text: color_value(light-silver),
+	page-content-p-text: color_value(dove-gray),
+    page-content-left_50_img-border: color_value(dove-gray),
 );
 :root {
 	@each $name, $color in $color-place {
