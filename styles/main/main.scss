@@ -177,7 +177,20 @@ $color-place: (
 	imageviews-arrows-iconic-fill: color_value(white),
 	// footer
 	footer-background: color_value(cod-gray2),
-	footer-p-a-text: color_value(light-silver)
+	footer-p-a-text: color_value(light-silver),
+	// frame
+	frame-body-background: color_value(black),
+	frame-img-drop-shadow: color_value(black),
+	// TV
+	focus-tv-basicmodal-button-background: color_value(picton-blue),
+	focus-tv-basicmodal-button-text: color_value(white),
+	focus-tv-basicmodal-button-action-text: color_value(white),
+	focus-tv-content-outline: color_value(white),
+	focus-tv-header-button-background: color_value(white),
+	focus-tv-header-button-title-background: color_value(white),
+	focus-tv-header-button-title-text: color_value(black),
+	focus-tv-header-button-iconic-fill: color_value(black),
+	tv-imageviews-background: color_value(black)
 );
 :root {
 	@each $name, $color in $color-place {

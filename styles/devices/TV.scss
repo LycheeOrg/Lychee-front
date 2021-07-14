@@ -1,17 +1,17 @@
 .basicModal__button:focus {
-	background: #2293ec;
-	color: #ffffff;
+	background: color(focus-tv-basicmodal-button-background);
+	color: color(focus-tv-basicmodal-button-text);
 	cursor: pointer;
 	outline-style: none;
 }
 
 .basicModal__button#basicModal__action:focus {
-	color: #ffffff;
+	color: color(focus-tv-basicmodal-button-action-text);
 }
 
 .content .photo:focus {
 	outline-style: solid;
-	outline-color: #ffffff;
+	outline-color: color(focus-tv-content-outline);
 	outline-width: 10px;
 }
 
@@ -21,21 +21,21 @@
 
 .header .button:focus {
 	outline-width: 0;
-	background-color: #ffffff;
+	background-color: color(focus-tv-header-button-background);
 }
 
 .header__title:focus {
 	outline-width: 0;
-	background-color: #ffffff;
-	color: #000000;
+	background-color: color(focus-tv-header-button-title-background);
+	color: color(focus-tv-header-button-title-text);
 }
 
 .header .button:focus .iconic {
-	fill: #000000;
+	fill: color(focus-tv-header-button-iconic-fill);
 }
 
 #imageview {
-	background-color: #000000;
+	background-color: color(tv-imageviews-background);
 }
 #imageview #image,
 #imageview #livephoto {
