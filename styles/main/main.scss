@@ -32,6 +32,7 @@ $colors: (
 	coffee-bean: #2f0d0e,
 	cedar: #451317,
 	rosewood: #640000,
+	mahogany: #640a0a,
 	// Green
 	light-green: #00cc00,
 	japanese-laurel: #00aa00,
@@ -246,6 +247,18 @@ $color-place: (
 	hover-log-diagnostic-basicmodal-button-background: color_value(picton-blue),
 	hover-log-diagnostic-basicmodal-button-text: color_value(white),
 	hover-log-diagnostic-iconic-fill: color_value(white),
+	// mapview
+	mapview-background: color_value(mahogany),
+	mapview-full-background: color_value(black),
+	leaflet-popup-content-wrapper-background: color_value(black),
+	leaflet-popup-content-div-background: color_value(black),
+	leaflet-popup-content-h1-text: color_value(white),
+	leaflet-popup-content-h1-text-shadow: color_value(white),
+	leaflet-popup-content-svg-fill: color_value(white),
+	leaflet-popup-content-p-text: color_value(white),
+	// message
+	// multiselect
+	// photos-links
 	// footer
 	footer-background: color_value(cod-gray2),
 	footer-p-a-text: color_value(light-silver),
