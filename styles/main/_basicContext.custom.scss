@@ -1,23 +1,23 @@
 // Default Theme ----------------------------------------------------- //
 .basicContext {
 	padding: 5px 0 6px;
-	background: linear-gradient(to bottom, #333, #252525);
-	box-shadow: 0 1px 4px black(0.2), inset 0 1px 0 white(0.05);
+	background: linear-gradient(to bottom, color(basicontext-background-first-gradiant), color(basicontext-background-2nd-gradiant));
+	box-shadow: 0 1px 4px rgba(color(basicontext-box-shadow-1), 0.2), inset 0 1px 0 rgba(color(basicontext-box-shadow-2), 0.05);
 	border-radius: 5px;
-	border: 1px solid black(0.7);
-	border-bottom: 1px solid black(0.8);
+	border: 1px solid rgba(color(basicontext-border), 0.7);
+	border-bottom: 1px solid rgba(color(basicontext-border), 0.8);
 	transition: none;
 
 	&__item {
 		margin-bottom: 2px;
 		font-size: 14px;
-		color: #ccc;
+		color: color(basicontext-item-text);
 
 		&--separator {
 			margin: 4px 0;
 			height: 2px;
-			background: black(0.2);
-			border-bottom: 1px solid white(0.06);
+			background: rgba(color(basicontext-item-separator-background), 0.2);
+			border-bottom: 1px solid color(basicontext-item-separator-border-bottom, 0.06);
 		}
 
 		&--disabled {
@@ -70,12 +70,12 @@
 	.basicContext {
 		/* When you mouse over the navigation links, change their color (use same color for close and menu entries) */
 		&__item:hover {
-			color: lighten(white, 20%);
+			color: color(hover-basicontext-item-text);
 			transition: 0.3s;
 			transform: scale(1.05);
 
 			.iconic {
-				fill: lighten(white, 20%);
+				fill: color(hover-basicontext-item-iconic-fill);
 			}
 		}
 	}

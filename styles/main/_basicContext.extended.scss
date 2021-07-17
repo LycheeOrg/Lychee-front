@@ -2,9 +2,9 @@
 .basicContext {
 	&__data .cover {
 		position: absolute;
-		background-color: #222;
+		background-color: color(basicContext-data-cover-background);
 		border-radius: 2px;
-		box-shadow: 0 0 0 1px black(0.5);
+		box-shadow: 0 0 0 1px rgba(color(basicContext-data-cover-box-shadow), 0.5);
 	}
 
 	&__data .title {
@@ -35,10 +35,10 @@
 		margin: -2px 0;
 		padding: 5px 7px 6px;
 		width: 100%;
-		background: #333;
-		color: #fff;
-		box-shadow: 0px 1px 0px white(0.05);
-		border: 1px solid black(0.4);
+		background: color(basicontext-data-input-link-background);
+		color: color(basicontext-data-input-link-text);
+		box-shadow: 0px 1px 0px color(basicontext-data-input-link-box-shadow, 0.05);
+		border: 1px solid color(basicontext-data-input-link-border, 0.4);
 		border-radius: 3px;
 		outline: none;
 	}
