@@ -2,7 +2,7 @@
 	width: 90%;
 	margin-left: auto;
 	margin-right: auto;
-	color: #ccc;
+	color: color(log-diagnostic-text);
 	font-size: 12px;
 	line-height: 14px;
 
@@ -29,10 +29,10 @@
 .logs_diagnostics_view {
 	.basicModal__button {
 		//margin-top: 10px;
-		color: #2293ec;
+		color: color(log-diagnostic-basicmodal-button-text);
 		display: inline-block;
-		-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02), inset 1px 0 0 rgba(0, 0, 0, 0.2);
-		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02), inset 1px 0 0 rgba(0, 0, 0, 0.2);
+		-webkit-box-shadow: inset 0 1px 0 rgba(color(log-diagnostic-basicmodal-button-box-shadow-1), 0.02), inset 1px 0 0 rgba(color_value(log-diagnostic-basicmodal-button-box-shadow-2), 0.2);
+		box-shadow: inset 0 1px 0 rgba(color(log-diagnostic-basicmodal-button-box-shadow-1), 0.02), inset 1px 0 0 rgba(color_value(log-diagnostic-basicmodal-button-box-shadow-2), 0.2);
 		border-radius: 5px;
 	}
 
@@ -41,7 +41,7 @@
 		margin: 0 10px 0 1px;
 		width: 13px;
 		height: 12px;
-		fill: #2293ec;
+		fill: color(log-diagnostic-iconic-fill);
 	}
 
 	.button_left {
@@ -55,14 +55,14 @@
 	.clear_logs_update,
 	.logs_diagnostics_view {
 		.basicModal__button {
-			background: #2293ec;
-			color: #fff;
+			background: color(hover-log-diagnostic-basicmodal-button-background);
+			color: color(hover-log-diagnostic-basicmodal-button-text);
 			max-width: 320px;
 			margin-top: 20px;
 		}
 
 		.iconic {
-			fill: #fff;
+			fill: color(hover-log-diagnostic-iconic-fill);
 		}
 	}
 }

@@ -64,6 +64,7 @@ $colors: (
 	cod-gray: #111111,
 	cod-gray3: #0f0f0f,
 	cod-gray4: #0a0a0a,
+	cod-gray5: #1a1a1a,
 	black: black
 );
 @function color_value($color-value) {
@@ -215,6 +216,36 @@ $color-place: (
 	imageviews-image-overlay-text-shadow: color_value(black),
 	imageviews-arrows-a-border: color_value(white),
 	imageviews-arrows-iconic-fill: color_value(white),
+	// header
+	header-background-first-gradiant: color_value(dark-mine-shaft),
+	header-background-2nd-gradiant: color_value(cod-gray5),
+	header-border-bottom: color_value(cod-gray3),
+	header-view-error-background: color_value(cod-gray5),
+	active-header-title-iconic-fill: color_value(white),
+	header-button-iconic-fill: color_value(white),
+	header-search-box-shadow: color_value(white),
+	focus-header-search-box-shadow: color_value(white),
+	header-clear-text: color_value(white),
+	header-hostedwith-text: color_value(gray2),
+	hover-header-button-iconic-fill: color_value(white),
+	hover-header-clear-text: color_value(white),
+	hover-header-hostedwith-background: color_value(black),
+	// leftmenu
+	leftmenu-background: color_value(cod-gray),
+	leftmenu-a-text: color_value(gray),
+	leftmenu-closetxt-text: color_value(cod-gray),
+	leftmenu-iconic-fill: color_value(gray),
+	hover-leftmenu-closetxt-text: color_value(gray),
+	hover-leftmenu-a-text: color_value(seashell),
+	// log-diagnostic
+	log-diagnostic-text: color_value(light-silver),
+	log-diagnostic-basicmodal-button-text: color_value(picton-blue),
+	log-diagnostic-basicmodal-button-box-shadow-1: color_value(black),
+	log-diagnostic-basicmodal-button-box-shadow-2: color_value(white),
+	log-diagnostic-iconic-fill: color_value(picton-blue),
+	hover-log-diagnostic-basicmodal-button-background: color_value(picton-blue),
+	hover-log-diagnostic-basicmodal-button-text: color_value(white),
+	hover-log-diagnostic-iconic-fill: color_value(white),
 	// footer
 	footer-background: color_value(cod-gray2),
 	footer-p-a-text: color_value(light-silver),

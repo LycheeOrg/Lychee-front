@@ -2,8 +2,8 @@
 	position: fixed;
 	height: 49px;
 	width: 100%;
-	background: linear-gradient(to bottom, #222222, #1a1a1a);
-	border-bottom: 1px solid #0f0f0f;
+	background: linear-gradient(to bottom, color(header-background-first-gradiant), color(header-background-2nd-gradiant));
+	border-bottom: 1px solid color(header-border-bottom);
 	z-index: 1;
 	transition: transform 0.3s ease-out;
 
@@ -24,7 +24,7 @@
 		border-bottom: none;
 
 		&.header--error {
-			background-color: rgba(10, 10, 10, 0.99);
+			background-color: rgba(color(header-view-error-background), 0.99);
 		}
 	}
 
@@ -77,7 +77,7 @@
 
 		&:active .iconic {
 			transition: none;
-			fill: white(0.8);
+			fill: rgba(color(active-header-title-iconic-fill),0.8);
 		}
 
 		&--editable .iconic {
@@ -94,7 +94,7 @@
 		.iconic {
 			width: 15px;
 			height: 15px;
-			fill: white(0.5);
+			fill: rgba(color(header-button-iconic-fill),0.5);
 			transition: fill 0.2s ease-out;
 		}
 
@@ -166,7 +166,7 @@
 		border-style: solid;
 		border-width: 1px;
 		border-color: rgba(color(default-header-search-border), 0.9);
-		box-shadow: 0 1px 0 white(0.04);
+		box-shadow: 0 1px 0 rgba(color(header-search-box-shadow),0.04);
 		outline: none;
 		border-radius: 50px;
 		opacity: 0.6;
@@ -175,7 +175,7 @@
 		&:focus {
 			width: 140px;
 			border-color: color(focus-header-search-border);
-			box-shadow: 0 1px 0 white(0);
+			box-shadow: 0 1px 0 rgba(color(focus-header-search-box-shadow),0);
 			opacity: 1;
 		}
 
@@ -197,7 +197,7 @@
 		top: -2px;
 		right: 8px;
 		padding: 0;
-		color: white(0.5);
+		color: rgba(color(header-clear-text),0.5);
 		font-size: 24px;
 		opacity: 0;
 		transition: color 0.2s ease-out;
@@ -217,7 +217,7 @@
 		flex-shrink: 0;
 		padding: 5px 10px;
 		margin: 11px 0;
-		color: #888;
+		color: color(header-hostedwith-text);
 		font-size: 13px;
 		border-radius: 100px;
 		cursor: default;
@@ -234,16 +234,16 @@
 		&__title,
 		.button {
 			&:hover .iconic {
-				fill: white(1);
+				fill: rgba(color(hover-header-button-iconic-fill),1);
 			}
 		}
 
 		&__clear:hover {
-			color: white(1);
+			color: rgba(color(hover-header-clear-text),1);
 		}
 
 		&__hostedwith:hover {
-			background-color: black(0.3);
+			background-color: rgba(color(hover-header-hostedwith-background),0.3);
 		}
 	}
 }
