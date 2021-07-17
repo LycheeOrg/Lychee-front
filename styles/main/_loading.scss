@@ -5,7 +5,7 @@
 	height: 3px;
 	background-size: 100px 3px;
 	background-repeat: repeat-x;
-	border-bottom: 1px solid black(0.3);
+	border-bottom: 1px solid rgba(color(loading-border-bottom), 0.3);
 
 	animation-name: moveBackground;
 	animation-duration: 0.3s;
@@ -15,21 +15,39 @@
 	// Modes -------------------------------------------------------------- //
 	&.loading {
 		height: 3px;
-		background-image: linear-gradient(to right, #153674 0%, #153674 47%, #2651ae 53%, #2651ae 100%);
+		background-image: linear-gradient(
+			to right,
+			color(loading-background-first-gradiant) 0%,
+			color(loading-background-first-gradiant) 47%,
+			color(loading-background-2nd-gradiant) 53%,
+			color(loading-background-2nd-gradiant) 100%
+		);
 		z-index: 2;
 	}
 
 	&.error {
 		height: 40px;
-		background-color: #2f0d0e;
-		background-image: linear-gradient(to right, #451317 0%, #451317 47%, #aa3039 53%, #aa3039 100%);
+		background-color: color(error-loading-background);
+		background-image: linear-gradient(
+			to right,
+			color(error-loading-background-first-gradiant) 0%,
+			color(error-loading-background-first-gradiant) 47%,
+			color(error-loading-background-2nd-gradiant) 53%,
+			color(error-loading-background-2nd-gradiant) 100%
+		);
 		z-index: 1;
 	}
 
 	&.success {
 		height: 40px;
-		background-color: #007700;
-		background-image: linear-gradient(to right, #007700 0%, #009900 47%, #00aa00 53%, #00cc00 100%);
+		background-color: color(sucess-loading-background);
+		background-image: linear-gradient(
+			to right,
+			color(sucess-loading-background-first-gradiant) 0%,
+			color(sucess-loading-background-2nd-gradiant) 47%,
+			color(sucess-loading-background-third-gradiant) 53%,
+			color(sucess-loading-background-4th-gradiant) 100%
+		);
 		z-index: 1;
 	}
 
@@ -40,10 +58,10 @@
 	// Content -------------------------------------------------------------- //
 	h1 {
 		margin: 13px 13px 0 13px;
-		color: #ddd;
+		color: color(loading-h1-text);
 		font-size: 14px;
 		font-weight: bold;
-		text-shadow: 0 1px 0 black(1);
+		text-shadow: 0 1px 0 rgba(color(loading-h1-text-shadow), 1);
 		text-transform: capitalize;
 
 		span {

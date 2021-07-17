@@ -8,19 +8,19 @@
 		padding: 9px 2px;
 		width: calc(50% - 4px);
 		background-color: transparent;
-		color: #fff;
+		color: color(setting-input-text-text);
 		border: none;
-		border-bottom: 1px solid #222;
+		border-bottom: 1px solid color(setting-input-text-border-bottom);
 		border-radius: 0;
 		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
 		outline: 0;
 
 		&:focus {
-			border-bottom-color: #2293ec;
+			border-bottom-color: color(focus-setting-input-text-border-bottom);
 		}
 
 		.error {
-			border-bottom-color: #d92c34;
+			border-bottom-color: color(error-setting-input-text-border-bottom);
 		}
 	}
 
@@ -211,7 +211,7 @@
 			bottom: 0;
 			border: 1px solid rgba(0, 0, 0, 0.2);
 			box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
-			background: rgba(0, 0, 0, 0.3);
+			background: rgba(color(setting-slider-background), 0.3);
 			-webkit-transition: 0.4s;
 			transition: 0.4s;
 
@@ -222,18 +222,18 @@
 				width: 14px;
 				left: 3px;
 				bottom: 3px;
-				background-color: $colorBlue;
+				background-color: color(before-setting-slider-background);
 			}
 		}
 
 		input:checked + .slider {
-			background-color: $colorBlue;
+			background-color: color(before-setting-slider-background);
 		}
 
 		input:checked + .slider:before {
 			-ms-transform: translateX(20px);
 			transform: translateX(20px);
-			background-color: #ffffff;
+			background-color: color(checked-setting-slider-background);
 		}
 
 		/* Rounded sliders */
@@ -287,7 +287,7 @@
 
 			.warning {
 				margin-bottom: 30px;
-				color: $colorRed;
+				color: color(setting-line-warning-text);
 				font-weight: bold;
 				font-size: 18px;
 				text-align: justify;

@@ -17,7 +17,7 @@
 	position: fixed;
 	left: 0;
 	top: 37%;
-	background: rgba(0, 0, 0, 0.8);
+	background: rgba(color(page-social-socials-background), 0.8);
 	z-index: 2;
 }
 
@@ -31,7 +31,7 @@
 	font-variant: normal;
 	text-transform: none;
 	line-height: 1;
-	color: #ffffff;
+	color: color(page-social-socialicons-text);
 	//font-size: 1.1em;
 	text-decoration: none;
 	margin: 15px;
@@ -64,7 +64,7 @@
 // restrict hover features to devices that support it
 @media (hover: hover) {
 	.socialicons:hover {
-		color: #b5b5b5;
+		color: color(hover-page-social-socialicons-text);
 		transform: scale(1.3);
 		-webkit-transform: scale(1.3);
 	}

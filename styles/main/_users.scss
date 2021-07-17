@@ -62,21 +62,21 @@
 		width: 40%;
 		//margin: 0 2%;
 		background-color: transparent;
-		color: #fff;
+		color: color(user-input-text-text);
 		border: none;
-		border-bottom: 1px solid #222;
+		border-bottom: 1px solid color(user-input-text-border-bottom);
 		border-radius: 0;
 		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
 		outline: 0;
 		margin: 0 0 10px;
 
 		&:focus {
-			border-bottom-color: #2293ec;
+			border-bottom-color: color(focus-user-input-text-border-bottom);
 		}
 	}
 
 	input.text.error {
-		border-bottom-color: #d92c34;
+		border-bottom-color: color(user-viewline-input-text-error-border-bottom);
 	}
 
 	.choice label input:checked ~ .checkbox .iconic {

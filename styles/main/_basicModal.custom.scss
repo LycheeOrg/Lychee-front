@@ -1,6 +1,6 @@
 .basicModal .select select option {
-	background: #333333 !important;
-	color: #ffffff !important;
+	background: color(basicmodal-select-option-background) !important;
+	color: color(basicmodal-select-option-text) !important;
 }
 
 .basicModal .switch:last-child {
@@ -13,7 +13,7 @@
 
 	hr {
 		border: none;
-		border-top: 1px solid rgba(0, 0, 0, 0.2);
+		border-top: 1px solid rgba(color(basicmodal-hr-border-top), 0.2);
 	}
 }
 

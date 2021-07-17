@@ -1,5 +1,5 @@
 #sensitive_warning {
-	background: rgba(100, 0, 0, 0.95);
+	background: rgba(color(warning-background), 0.95);
 	width: 100vw;
 	height: 100vh;
 	position: fixed;
@@ -9,11 +9,11 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	color: white;
+	color: color(warning-text);
 	h1 {
 		font-size: 36px;
 		font-weight: bold;
-		border-bottom: 2px solid white;
+		border-bottom: 2px solid color(warning-h1-border-bottom);
 		margin-bottom: 15px;
 	}
 	p {

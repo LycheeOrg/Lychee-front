@@ -6,7 +6,7 @@
 	z-index: 4; /* Stay on top */
 	top: 0; /* Stay at the top */
 	left: 0;
-	background-color: #111; /* Black*/
+	background-color: color(leftmenu-background);
 	overflow-x: hidden; /* Disable horizontal scroll */
 	padding-top: 49px; /* Place content 49px from the top (same as menu bar height) */
 	transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
@@ -17,7 +17,7 @@
 	padding: 8px 8px 8px 32px;
 	text-decoration: none;
 	font-size: 18px;
-	color: #818181;
+	color: color(leftmenu-a-text);
 	display: block;
 	transition: 0.3s;
 
@@ -42,7 +42,7 @@
 	font-size: 24px;
 	height: 28px;
 	padding-top: 16px;
-	color: #111;
+	color: color(leftmenu-closetxt-text);
 	display: inline-block;
 	width: 210px;
 }
@@ -52,7 +52,7 @@
 	margin: 0 10px 0 1px;
 	width: 15px;
 	height: 14px;
-	fill: #818181;
+	fill: color(leftmenu-iconic-fill);
 }
 
 .leftMenu .iconic.ionicons {
@@ -77,12 +77,12 @@
 @media (hover: hover) {
 	.leftMenu {
 		.closetxt:hover {
-			color: #818181;
+			color: color(hover-leftmenu-closetxt-text);
 		}
 
 		/* When you mouse over the navigation links, change their color */
 		a:hover {
-			color: #f1f1f1;
+			color: color(hover-leftmenu-a-text);
 		}
 	}
 }
