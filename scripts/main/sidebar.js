@@ -221,12 +221,16 @@ sidebar.createStructure.photo = function (data) {
 		rows: [
 			{ title: lychee.locale["PHOTO_SIZE"], kind: "size", value: lychee.locale.printFilesizeLocalized(data.filesize) },
 			{ title: lychee.locale["PHOTO_FORMAT"], kind: "type", value: data.type },
-			{ title: lychee.locale["PHOTO_RESOLUTION"], kind: "resolution", value: data.width + " x " + data.height },
+			{
+				title: lychee.locale["PHOTO_RESOLUTION"],
+				kind: "resolution",
+				value: data.size_variants.original.width + " x " + data.size_variants.original.height,
+			},
 		],
 	};
 
 	if (isVideo) {
-		if (data.width === 0 || data.height === 0) {
+		if (data.size_variants.original.width === 0 || data.size_variants.original.height === 0) {
 			// Remove the "Resolution" line if we don't have the data.
 			structure.image.rows.splice(-1, 1);
 		}

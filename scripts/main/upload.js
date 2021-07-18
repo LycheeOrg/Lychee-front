@@ -140,7 +140,7 @@ upload.start = {
 				}
 
 				// Set status
-				if (xhr.status === 200 && isNumber(data)) {
+				if ((xhr.status === 200 || xhr.status === 201) && isNumber(data.id)) {
 					// Success
 					$(nRowStatusSelector(file_num + 1))
 						.html(lychee.locale["UPLOAD_FINISHED"])

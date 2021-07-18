@@ -187,13 +187,13 @@ contextMenu.buildList = function (lists, exclude, action, parent = 0, layer = 0)
 				} else {
 					thumb = item.thumb.thumb;
 				}
-			} else if (item.sizeVariants) {
-				if (item.sizeVariants.thumb === null) {
+			} else if (item.size_variants) {
+				if (item.size_variants.thumb === null) {
 					if (item.type && item.type.indexOf("video") > -1) {
 						thumb = "img/play-icon.png";
 					}
 				} else {
-					thumb = item.sizeVariants.thumb.url;
+					thumb = item.size_variants.thumb.url;
 				}
 			}
 
@@ -391,7 +391,7 @@ contextMenu.photoMore = function (photoID, e) {
 		(photo.json.hasOwnProperty("downloadable")
 			? photo.json.downloadable === "1"
 			: album.json && album.json.downloadable && album.json.downloadable === "1");
-	let showFull = photo.json.url && photo.json.url !== "";
+	let showFull = photo.json.size_variants.original.url && photo.json.size_variants.original.url !== "";
 
 	let items = [
 		{ title: build.iconic("fullscreen-enter") + lychee.locale["FULL_PHOTO"], visible: !!showFull, fn: () => window.open(photo.getDirectLink()) },

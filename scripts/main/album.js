@@ -1324,26 +1324,25 @@ album.updatePhoto = function (data) {
 	if (album.json) {
 		$.each(album.json.photos, function () {
 			if (this.id === data.id) {
-				this.width = data.width;
-				this.height = data.height;
-				this.url = data.url;
 				this.filesize = data.filesize;
 				// Deep copy size variants
-				this.sizeVariants = {
+				this.size_variants = {
 					thumb: null,
 					thumb2x: null,
 					small: null,
 					small2x: null,
 					medium: null,
 					medium2x: null,
+					original: null,
 				};
-				if (data.sizeVariants !== undefined && data.sizeVariants !== null) {
-					this.sizeVariants.thumb = deepCopySizeVariant(data.sizeVariants.thumb);
-					this.sizeVariants.thumb2x = deepCopySizeVariant(data.sizeVariants.thumb2x);
-					this.sizeVariants.small = deepCopySizeVariant(data.sizeVariants.small);
-					this.sizeVariants.small2x = deepCopySizeVariant(data.sizeVariants.small2x);
-					this.sizeVariants.medium = deepCopySizeVariant(data.sizeVariants.medium);
-					this.sizeVariants.medium2x = deepCopySizeVariant(data.sizeVariants.medium2x);
+				if (data.size_variants !== undefined && data.size_variants !== null) {
+					this.size_variants.thumb = deepCopySizeVariant(data.size_variants.thumb);
+					this.size_variants.thumb2x = deepCopySizeVariant(data.size_variants.thumb2x);
+					this.size_variants.small = deepCopySizeVariant(data.size_variants.small);
+					this.size_variants.small2x = deepCopySizeVariant(data.size_variants.small2x);
+					this.size_variants.medium = deepCopySizeVariant(data.size_variants.medium);
+					this.size_variants.medium2x = deepCopySizeVariant(data.size_variants.medium2x);
+					this.size_variants.original = deepCopySizeVariant(data.size_variants.original);
 				}
 				view.album.content.updatePhoto(this);
 				albums.refresh();

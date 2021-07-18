@@ -476,7 +476,7 @@ header.setMode = function (mode) {
 						? photo.json.downloadable === "1"
 						: album.json && album.json.downloadable && album.json.downloadable === "1")
 				) &&
-				!(photo.json.url && photo.json.url !== "")
+				!(photo.json.size_variants.original.url && photo.json.size_variants.original.url !== "")
 			) {
 				let e = $("#button_more");
 				e.hide();

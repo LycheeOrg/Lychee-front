@@ -299,27 +299,27 @@ view.album = {
 
 			// This mimicks the structure of build.photo
 			if (lychee.layout === "0") {
-				src = data.sizeVariants.thumb.url;
-				if (data.sizeVariants.thumb2x !== null) {
-					srcset = `${data.sizeVariants.thumb2x.url} 2x`;
+				src = data.size_variants.thumb.url;
+				if (data.size_variants.thumb2x !== null) {
+					srcset = `${data.size_variants.thumb2x.url} 2x`;
 				}
 			} else {
-				if (data.sizeVariants.small !== null) {
-					src = data.sizeVariants.small.url;
-					if (data.sizeVariants.small2x !== null) {
-						srcset = `${data.sizeVariants.small.url} ${data.sizeVariants.small.width}w, ${data.sizeVariants.small2x.url} ${data.sizeVariants.small2x.width}w`;
+				if (data.size_variants.small !== null) {
+					src = data.size_variants.small.url;
+					if (data.size_variants.small2x !== null) {
+						srcset = `${data.size_variants.small.url} ${data.size_variants.small.width}w, ${data.size_variants.small2x.url} ${data.size_variants.small2x.width}w`;
 					}
-				} else if (data.sizeVariants.medium !== null) {
-					src = data.sizeVariants.medium.url;
-					if (data.sizeVariants.medium2x !== null) {
-						srcset = `${data.sizeVariants.medium.url} ${data.sizeVariants.medium.width}w, ${data.sizeVariants.medium2x.url} ${data.sizeVariants.medium2x.width}w`;
+				} else if (data.size_variants.medium !== null) {
+					src = data.size_variants.medium.url;
+					if (data.size_variants.medium2x !== null) {
+						srcset = `${data.size_variants.medium.url} ${data.size_variants.medium.width}w, ${data.size_variants.medium2x.url} ${data.size_variants.medium2x.width}w`;
 					}
 				} else if (!data.type || data.type.indexOf("video") !== 0) {
-					src = data.url;
+					src = data.size_variants.original.url;
 				} else {
-					src = data.sizeVariants.thumb.url;
-					if (data.sizeVariants.thumb2x !== null) {
-						srcset = `${data.sizeVariants.thumb.url} ${data.sizeVariants.thumb.width}w, ${data.sizeVariants.thumb2x.url} ${data.sizeVariants.thumb2x.width}w`;
+					src = data.size_variants.thumb.url;
+					if (data.size_variants.thumb2x !== null) {
+						srcset = `${data.size_variants.thumb.url} ${data.size_variants.thumb.width}w, ${data.size_variants.thumb2x.url} ${data.size_variants.thumb2x.width}w`;
 					}
 				}
 			}
@@ -504,7 +504,7 @@ view.album = {
 	},
 
 	description: function () {
-		sidebar.changeAttr("description", album.json.description);
+		sidebar.changeAttr("description", album.json.description ? album.json.description : '');
 	},
 
 	show_tags: function () {
@@ -665,7 +665,7 @@ view.photo = {
 	},
 
 	description: function () {
-		if (photo.json.init) sidebar.changeAttr("description", photo.json.description);
+		if (photo.json.init) sidebar.changeAttr("description", photo.json.description ? photo.json.description : '');
 	},
 
 	license: function () {
@@ -779,8 +779,8 @@ view.photo = {
 
 			// Check if thumbUrl exists (for videos w/o ffmpeg, we add a play-icon)
 			let thumbUrl = "img/placeholder.png";
-			if (nextPhoto.sizeVariants.thumb !== null) {
-				thumbUrl = nextPhoto.sizeVariants.thumb.url;
+			if (nextPhoto.size_variants.thumb !== null) {
+				thumbUrl = nextPhoto.size_variants.thumb.url;
 			} else if (nextPhoto.type.indexOf("video") > -1) {
 				thumbUrl = "img/play-icon.png";
 			}
@@ -795,8 +795,8 @@ view.photo = {
 
 			// Check if thumbUrl exists (for videos w/o ffmpeg, we add a play-icon)
 			let thumbUrl = "img/placeholder.png";
-			if (previousPhoto.sizeVariants.thumb !== null) {
-				thumbUrl = previousPhoto.sizeVariants.thumb.url;
+			if (previousPhoto.size_variants.thumb !== null) {
+				thumbUrl = previousPhoto.size_variants.thumb.url;
 			} else if (previousPhoto.type.indexOf("video") > -1) {
 				thumbUrl = "img/play-icon.png";
 			}
@@ -848,7 +848,7 @@ view.photo = {
 	header: function () {
 		if (
 			(photo.json.type && (photo.json.type.indexOf("video") === 0 || photo.json.type === "raw")) ||
-			(photo.json.livePhotoUrl !== "" && photo.json.livePhotoUrl !== null)
+			(photo.json.live_photo_url !== "" && photo.json.live_photo_url !== null)
 		) {
 			$("#button_rotate_cwise, #button_rotate_ccwise").hide();
 		} else {
@@ -857,12 +857,12 @@ view.photo = {
 	},
 
 	onresize: function () {
-		if (!photo.json || photo.json.sizeVariants.medium === null || photo.json.sizeVariants.medium2x === null) return;
+		if (!photo.json || photo.json.size_variants.medium === null || photo.json.size_variants.medium2x === null) return;
 
 		// Calculate the width of the image in the current window without
 		// borders and set 'sizes' to it.
-		let imgWidth = photo.json.sizeVariants.medium.width;
-		let imgHeight = photo.json.sizeVariants.medium.height;
+		let imgWidth = photo.json.size_variants.medium.width;
+		let imgHeight = photo.json.size_variants.medium.height;
 		let containerWidth = $(window).outerWidth();
 		let containerHeight = $(window).outerHeight();
 

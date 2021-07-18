@@ -81,26 +81,26 @@ frame.next = function () {
 
 frame.refreshPicture = function () {
 	api.post("Photo::getRandom", {}, function (data) {
-		if (!data.url && (data.sizeVariants === null || data.sizeVariants.medium === null)) {
+		if (data.size_variants === null || (data.size_variants.original === null && data.size_variants.medium === null)) {
 			console.log("URL not found");
 		}
-		if (data.sizeVariants.thumb === null) console.log("Thumb not found");
+		if (data.size_variants.thumb === null) console.log("Thumb not found");
 
-		$("#background").attr("src", data.sizeVariants.thumb.url);
+		$("#background").attr("src", data.size_variants.thumb.url);
 
 		let srcset = "";
 		let src = "";
 		this.frame.photo = null;
-		if (data.sizeVariants.medium !== null) {
-			src = data.sizeVariants.medium.url;
+		if (data.size_variants.medium !== null) {
+			src = data.size_variants.medium.url;
 
-			if (data.sizeVariants.medium2x !== null) {
-				srcset = `${data.sizeVariants.medium.url} ${data.sizeVariants.medium.width}w, ${data.sizeVariants.medium2x.url} ${data.sizeVariants.medium2x.width}w`;
+			if (data.size_variants.medium2x !== null) {
+				srcset = `${data.size_variants.medium.url} ${data.size_variants.medium.width}w, ${data.size_variants.medium2x.url} ${data.size_variants.medium2x.width}w`;
 				// We use it in the resize callback.
 				this.frame.photo = data;
 			}
 		} else {
-			src = data.url;
+			src = data.size_variants.original.url;
 		}
 
 		$("#picture").attr("srcset", srcset);
@@ -122,7 +122,7 @@ frame.set = function (data) {
 
 frame.resize = function () {
 	if (this.photo) {
-		let ratio = this.photo.height > 0 ? this.photo.width / this.photo.height : 1;
+		let ratio = this.photo.size_variants.height > 0 ? this.photo.size_variants.width / this.photo.size_variants.height : 1;
 		let winWidth = $(window).width();
 		let winHeight = $(window).height();
 
