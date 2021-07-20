@@ -504,7 +504,7 @@ view.album = {
 	},
 
 	description: function () {
-		sidebar.changeAttr("description", album.json.description ? album.json.description : '');
+		sidebar.changeAttr("description", album.json.description ? album.json.description : "");
 	},
 
 	show_tags: function () {
@@ -665,7 +665,7 @@ view.photo = {
 	},
 
 	description: function () {
-		if (photo.json.init) sidebar.changeAttr("description", photo.json.description ? photo.json.description : '');
+		if (photo.json.init) sidebar.changeAttr("description", photo.json.description ? photo.json.description : "");
 	},
 
 	license: function () {

@@ -676,7 +676,7 @@ photo.setDescription = function (photoID) {
 	const action = function (data) {
 		basicModal.close();
 
-		let description = data.description === '' ? null : data.description;
+		let description = data.description === "" ? null : data.description;
 
 		if (visible.photo()) {
 			photo.json.description = description;
