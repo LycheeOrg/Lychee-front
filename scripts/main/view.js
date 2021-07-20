@@ -25,8 +25,6 @@ view.albums = {
 	},
 
 	content: {
-		scrollPosition: 0,
-
 		init: function () {
 			let smartData = "";
 			let albumsData = "";
@@ -100,10 +98,11 @@ view.albums = {
 			}
 
 			album.apply_nsfw_filter();
+
 			// Restore scroll position
-			if (view.albums.content.scrollPosition != null && view.albums.content.scrollPosition !== 0) {
-				$(document).scrollTop(view.albums.content.scrollPosition);
-			}
+			let urls = JSON.parse(localStorage.getItem("scroll"));
+			let urlWindow = window.location.href;
+			$(window).scrollTop(urls != null && urls[urlWindow] ? urls[urlWindow] : 0);
 		},
 
 		title: function (albumID) {
@@ -229,15 +228,16 @@ view.album = {
 			}
 			html += photosData;
 
-			// Save and reset scroll position
-			view.albums.content.scrollPosition = $(document).scrollTop();
-			requestAnimationFrame(() => $(document).scrollTop(0));
-
 			// Add photos to view
 			lychee.content.html(html);
 			album.apply_nsfw_filter();
 
 			view.album.content.justify();
+
+			// Restore scroll position
+			let urls = JSON.parse(localStorage.getItem("scroll"));
+			let urlWindow = window.location.href;
+			$(window).scrollTop(urls != null && urls[urlWindow] ? urls[urlWindow] : 0);
 		},
 
 		title: function (photoID) {
@@ -910,6 +910,7 @@ view.settings = {
 				view.settings.content.setOverlayType();
 				view.settings.content.setMapDisplay();
 				view.settings.content.setNSFWVisible();
+				view.settings.content.setNotification();
 				view.settings.content.setCSS();
 				view.settings.content.moreButton();
 			}
@@ -1385,6 +1386,24 @@ view.settings = {
 			settings.bind("#LocationShowPublic", ".setLocationShowPublic", settings.changeLocationShowPublic);
 		},
 
+		setNotification: function () {
+			msg = `
+			<div class="setNewPhotosNotification">
+			<p>${lychee.locale["NEW_PHOTOS_NOTIFICATION"]}
+			<label class="switch">
+				<input id="NewPhotosNotification" type="checkbox">
+				<span class="slider round"></span>
+			</label>
+			</p>
+			</div>
+			`;
+
+			$(".settings_view").append(msg);
+			if (lychee.new_photos_notification) $("#NewPhotosNotification").click();
+
+			settings.bind("#NewPhotosNotification", ".setNewPhotosNotification", settings.changeNewPhotosNotification);
+		},
+
 		setCSS: function () {
 			let msg = `
 			<div class="setCSS">
@@ -1485,6 +1504,46 @@ view.full_settings = {
 					settings.save_enter(e);
 				});
 			});
+		},
+	},
+};
+
+view.notifications = {
+	init: function () {
+		multiselect.clearSelection();
+
+		view.notifications.title();
+		view.notifications.content.init();
+	},
+
+	title: function () {
+		lychee.setTitle("Notifications", false);
+	},
+
+	clearContent: function () {
+		lychee.content.html('<div class="settings_view"></div>');
+	},
+
+	content: {
+		init: function () {
+			view.notifications.clearContent();
+
+			$(".settings_view").append('<div class="setting_line"><p>' + `${lychee.locale["USER_EMAIL_INSTRUCTION"]}` + "</p></div>");
+
+			let html = "";
+
+			html +=
+				'<div class="setLogin"><p id="UserUpdate">' +
+				"Enter your email address:" +
+				'<input name="email" class="text" type="text" placeholder="email@example.com" value="' +
+				notifications.json +
+				'">' +
+				'</p><div class="basicModal__buttons">' +
+				'<a id="UserUpdate_button" class="basicModal__button">Save</a>' +
+				"</div></div>";
+
+			$(".settings_view").append(html);
+			settings.bind("#UserUpdate_button", "#UserUpdate", notifications.update);
 		},
 	},
 };
