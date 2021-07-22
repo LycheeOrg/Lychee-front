@@ -208,6 +208,18 @@
 			cursor: pointer;
 		}
 	}
+
+	// palette -------------------------------------------------------------- //
+	.palette{
+		margin: 2px 0 2px 20px;
+		.color{
+			margin: 2px;
+			display: inline-block;
+			height: 25px;
+			width: 25px;
+			cursor: pointer;
+		}
+	}
 }
 
 // restrict hover features to devices that support it

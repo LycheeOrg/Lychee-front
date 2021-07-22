@@ -7,6 +7,7 @@ let sidebar = {
 	types: {
 		DEFAULT: 0,
 		TAGS: 1,
+		PALETTE: 2,
 	},
 	createStructure: {},
 };
@@ -90,6 +91,13 @@ sidebar.bind = function () {
 		.off(eventName)
 		.on(eventName, function () {
 			sidebar.triggerSearch($(this).text());
+		});
+
+	sidebar
+		.dom(".color")
+		.off(eventName)
+		.on(eventName, function () {
+			sidebar.triggerSearch($(this).data('color'));
 		});
 
 	return true;
@@ -252,6 +260,12 @@ sidebar.createStructure.photo = function (data) {
 		editable,
 	};
 
+	structure.palette = {
+		title: lychee.locale["PHOTO_PALETTE"],
+		type: sidebar.types.PALETTE,
+		value: data.colors.length > 0 ? build.colors(data.colors) : '',
+	}
+
 	// Only create EXIF section when EXIF data available
 	if (exifHash !== "") {
 		structure.exif = {
@@ -327,7 +341,7 @@ sidebar.createStructure.photo = function (data) {
 	}
 
 	// Construct all parts of the structure
-	let structure_ret = [structure.basics, structure.image, structure.tags, structure.exif, structure.location, structure.license];
+	let structure_ret = [structure.basics, structure.image, structure.tags, structure.exif, structure.location, structure.license, structure.palette];
 
 	if (!lychee.publicMode) {
 		structure_ret.push(structure.sharing);
@@ -629,9 +643,23 @@ sidebar.render = function (structure) {
 		return _html;
 	};
 
+	let renderPalette = function (section) {
+		let _html = "";
+		_html += lychee.html`
+				<div class='sidebar__divider'>
+					 <h1>${section.title}</h1>
+				</div>
+				<div class='palette'>
+				 	${section.value}
+				</div>
+		`;
+		return _html;
+	}
+
 	structure.forEach(function (section) {
 		if (section.type === sidebar.types.DEFAULT) html += renderDefault(section);
 		else if (section.type === sidebar.types.TAGS) html += renderTags(section);
+		else if (section.type === sidebar.types.PALETTE && section.value !== '') html += renderPalette(section);
 	});
 
 	return html;
