@@ -410,10 +410,10 @@ photo.copyTo = function (photoIDs, albumID) {
 	};
 
 	api.post("Photo::duplicate", params, function (data) {
-		if (data !== true) {
-			lychee.error(null, params, data);
-		} else {
+		if (data instanceof Array) {
 			album.reload();
+		} else {
+			lychee.error(null, params, data);
 		}
 	});
 };
