@@ -1,14 +1,5 @@
-// Functions --------------------------------------------------------------- //
-@function black($opacity) {
-	@return rgba(0, 0, 0, $opacity);
-}
-
-@function white($opacity) {
-	@return rgba(255, 255, 255, $opacity);
-}
-
 // Properties -------------------------------------------------------------- //
-$shadow: 0 -1px 0 black(0.2);
+$shadow: 0 -1px 0 rgba(color("BLACK"),0.2);
 // Colors ----------------------------------------------------------- //
 $colors: (
 	// Blues
@@ -28,12 +19,14 @@ $colors: (
 	punch: #d92c34,
 	darken10_punch: darken(#d92c34, 10%),
 	lighten10_punch: lighten(#d92c34, 10%),
+	scarlet: #e92a00,
 	blush-pink: #ff82ee,
 	coffee-bean: #2f0d0e,
 	cedar: #451317,
 	rosewood: #640000,
 	mahogany: #640a0a,
 	// Green
+	chartreuse: #84e900,
 	light-green: #00cc00,
 	japanese-laurel: #00aa00,
 	japanese-laurel2: #009900,
@@ -41,6 +34,7 @@ $colors: (
 	// Orange/Yellow
 	manz: #f0ef77,
 	supernova: #ffcc00,
+	turbo: #e4e900,
 	orange-peel: #ff9900,
 	// Grey
 	white: white,
@@ -58,6 +52,7 @@ $colors: (
 	dove-gray: #707070,
 	dove-gray2: #666666,
 	gray-emperor: #555555,
+	tundora: #444444,
 	mine-shaft: #333333,
 	dark-mine-shaft: #222222,
 	mine-shaft2: #252525,
@@ -257,6 +252,52 @@ $color-place: (
 	leaflet-popup-content-svg-fill: color_value(white),
 	leaflet-popup-content-p-text: color_value(white),
 	// message
+	message-basicmodal-container-background: color_value((black),
+	message-basicmodal-background-gradiant-1: color_value(tundora),
+	message-basicmodal-background-gradiant-2: color_value(mine-shaft),
+	message-basicmodal-p-text: color_value(white),
+	message-basicmodal-p-b-text: color_value(white),
+	message-basicmodal-p-a-text: color_value(white),
+	message-basicmodal-p-a-border-bottom: color_value(gray2),
+	message-button-background: color_value(black),
+	message-button-color: color_value(white),
+	message-button-box-shadow: color_value(white),
+	active-message-button-background: color_value((black),
+	message-basicmodal-action-box-shadow-1: color_value(white),
+	message-basicmodal-action-box-shadow-2: color_value(black),
+	message-input-text-box-shadow: color_value(white),
+	message-choice-label-text: color_value(white),
+	message-choice-label-checkbox-background: color_value(black),
+	message-choice-label-checkbox-box-shadow: color_value(black),
+	checked-message-label-input-checkbox-background: color_value(black),
+	active-message-label-input-checkbox-background: color_value(black),
+	disabled-message-label-input-checkbox-background: color_value(black),
+	disabled-message-label-input-label-text: color_value(black),
+	message-choice-p-text: color_value(black),
+	message-select-text: color_value(black),
+	message-select-border: color_value(black),
+	message-select-box-shadow: color_value(black),
+	message-select-option-background: color_value(white),
+	message-select-option-text: color_value(mine-shaft),
+	message-version-text: color_value(black),
+	message-version-span-a-text: color_value(black),
+	message-version-rows-background: color_value(black),
+	message-version-rows-box-shadow: color_value(black),
+	message-version-row-background: color_value(black),
+	message-version-row-a-name-text: color_value(white),
+	message-version-row-a-status-text: color_value(black),
+	error-message-version-row-text: color_value(scarlet),
+	warning-message-version-row-text: color_value(turbo),
+	success-message-version-row-text: color_value(chartreuse),
+	message-row-p-notice-text: color_value(black),
+	message-switch-text: color_value(white),
+	message-switch-label-text: color_value(black),
+	message-switch-label-slider-border: color_value(black),
+	message-switch-label-slider-box-shadow: color_value(white),
+	disabled-message-switch-label-input-slider-background: color_value(black),
+	disabled-message-switch-label-text: color_value(black),
+	message-switch-p-text: color_value(black),
+	hover-message-basicmodal-button-background: color_value(black),
 	// multiselect
 	// photos-links
 	// footer
