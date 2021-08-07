@@ -415,8 +415,8 @@ view.album = {
 				}
 				let ratio = [];
 				$.each(album.json.photos, function (i) {
-					let height = this.size_variants.original.height
-					let width = this.size_variants.original.width
+					let height = this.size_variants.original.height;
+					let width = this.size_variants.original.width;
 					ratio[i] = height > 0 ? width / height : 1;
 
 					if (this.type && this.type.indexOf("video") > -1) {
