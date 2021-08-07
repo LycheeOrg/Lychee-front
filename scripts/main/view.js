@@ -415,11 +415,14 @@ view.album = {
 				}
 				let ratio = [];
 				$.each(album.json.photos, function (i) {
-					ratio[i] = this.height > 0 ? this.width / this.height : 1;
+					let height = this.size_variants.original.height
+					let width = this.size_variants.original.width
+					ratio[i] = height > 0 ? width / height : 1;
+
 					if (this.type && this.type.indexOf("video") > -1) {
 						// Video.  If there's no small and medium, we have
 						// to fall back to the square thumb.
-						if (this.small === "" && this.medium === "") {
+						if (this.size_variants.small === null && this.size_variants.medium === null) {
 							ratio[i] = 1;
 						}
 					}
