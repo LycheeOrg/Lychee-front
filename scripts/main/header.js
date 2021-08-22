@@ -293,7 +293,7 @@ header.setMode = function (mode) {
 			if (
 				!album.json ||
 				(album.json.photos === false && album.json.albums && album.json.albums.length === 0) ||
-				(!album.isUploadable() && album.json.downloadable === "0")
+				(!album.isUploadable() && !album.json.downloadable)
 			) {
 				let e = $("#button_archive");
 				e.hide();
@@ -304,7 +304,7 @@ header.setMode = function (mode) {
 				tabindex.makeFocusable(e);
 			}
 
-			if (album.json && album.json.hasOwnProperty("share_button_visible") && album.json.share_button_visible !== "1") {
+			if (album.json && album.json.hasOwnProperty("share_button_visible") && !album.json.share_button_visible) {
 				let e = $("#button_share_album");
 				e.hide();
 				tabindex.makeUnfocusable(e);
@@ -472,9 +472,7 @@ header.setMode = function (mode) {
 			if (
 				!(
 					album.isUploadable() ||
-					(photo.json.hasOwnProperty("downloadable")
-						? photo.json.downloadable === "1"
-						: album.json && album.json.downloadable && album.json.downloadable === "1")
+					(photo.json.hasOwnProperty("downloadable") ? photo.json.downloadable === "1" : album.json && album.json.downloadable)
 				) &&
 				!(photo.json.size_variants.original.url && photo.json.size_variants.original.url !== "")
 			) {

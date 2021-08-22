@@ -579,16 +579,16 @@ photo.setPublic = function (photoID, e) {
 
 		$('.basicModal .switch input[name="public"]').prop("checked", true);
 		if (album.json) {
-			if (album.json.full_photo !== null && album.json.full_photo === "1") {
+			if (album.json.full_photo) {
 				$('.basicModal .choice input[name="full_photo"]').prop("checked", true);
 			}
 			// Photos in public albums are never hidden as such.  It's the
 			// album that's hidden.  Or is that distinction irrelevant to end
 			// users?
-			if (album.json.downloadable === "1") {
+			if (album.json.downloadable) {
 				$('.basicModal .choice input[name="downloadable"]').prop("checked", true);
 			}
-			if (album.json.password === "1") {
+			if (album.json.has_password) {
 				$('.basicModal .choice input[name="password"]').prop("checked", true);
 			}
 		}

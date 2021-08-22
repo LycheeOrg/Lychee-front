@@ -179,7 +179,7 @@ view.album = {
 				return;
 			}
 
-			if (album.json.nsfw && album.json.nsfw === "1" && !lychee.nsfw_unlocked_albums.includes(album.json.id)) {
+			if (album.json.nsfw && !lychee.nsfw_unlocked_albums.includes(album.json.id)) {
 				$("#sensitive_warning").show();
 			} else {
 				$("#sensitive_warning").hide();
@@ -535,8 +535,8 @@ view.album = {
 	public: function () {
 		$("#button_visibility_album, #button_sharing_album_users").removeClass("active--not-hidden active--hidden");
 
-		if (album.json.public === "1") {
-			if (album.json.visible === "0") {
+		if (album.json.public) {
+			if (album.json.requires_link) {
 				$("#button_visibility_album, #button_sharing_album_users").addClass("active--hidden");
 			} else {
 				$("#button_visibility_album, #button_sharing_album_users").addClass("active--not-hidden");
@@ -551,12 +551,12 @@ view.album = {
 	},
 
 	hidden: function () {
-		if (album.json.visible === "1") sidebar.changeAttr("hidden", lychee.locale["ALBUM_SHR_NO"]);
-		else sidebar.changeAttr("hidden", lychee.locale["ALBUM_SHR_YES"]);
+		if (album.json.requires_link) sidebar.changeAttr("hidden", lychee.locale["ALBUM_SHR_YES"]);
+		else sidebar.changeAttr("hidden", lychee.locale["ALBUM_SHR_NO"]);
 	},
 
 	nsfw: function () {
-		if (album.json.nsfw === "1") {
+		if (album.json.nsfw) {
 			// Sensitive
 			$("#button_nsfw_album").addClass("active").attr("title", lychee.locale["ALBUM_UNMARK_NSFW"]);
 		} else {
@@ -566,17 +566,17 @@ view.album = {
 	},
 
 	downloadable: function () {
-		if (album.json.downloadable === "1") sidebar.changeAttr("downloadable", lychee.locale["ALBUM_SHR_YES"]);
+		if (album.json.downloadable) sidebar.changeAttr("downloadable", lychee.locale["ALBUM_SHR_YES"]);
 		else sidebar.changeAttr("downloadable", lychee.locale["ALBUM_SHR_NO"]);
 	},
 
 	shareButtonVisible: () => {
-		if (album.json.share_button_visible === "1") sidebar.changeAttr("share_button_visible", lychee.locale["ALBUM_SHR_YES"]);
+		if (album.json.share_button_visible) sidebar.changeAttr("share_button_visible", lychee.locale["ALBUM_SHR_YES"]);
 		else sidebar.changeAttr("share_button_visible", lychee.locale["ALBUM_SHR_NO"]);
 	},
 
 	password: function () {
-		if (album.json.password === "1") sidebar.changeAttr("password", lychee.locale["ALBUM_SHR_YES"]);
+		if (album.json.has_password) sidebar.changeAttr("password", lychee.locale["ALBUM_SHR_YES"]);
 		else sidebar.changeAttr("password", lychee.locale["ALBUM_SHR_NO"]);
 	},
 

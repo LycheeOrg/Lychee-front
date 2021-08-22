@@ -790,14 +790,13 @@ album.setPublic = function (albumID, e) {
 			if ($(this).prop("checked") === true) {
 				$(".basicModal .choice input").attr("disabled", false);
 
-				if (album.json.public === "1") {
+				if (album.json.public) {
 					// Initialize options based on album settings.
-					if (album.json.full_photo !== null && album.json.full_photo === "1")
-						$('.basicModal .choice input[name="full_photo"]').prop("checked", true);
-					if (album.json.visible === "0") $('.basicModal .choice input[name="hidden"]').prop("checked", true);
-					if (album.json.downloadable === "1") $('.basicModal .choice input[name="downloadable"]').prop("checked", true);
-					if (album.json.share_button_visible === "1") $('.basicModal .choice input[name="share_button_visible"]').prop("checked", true);
-					if (album.json.password === "1") {
+					if (album.json.full_photo) $('.basicModal .choice input[name="full_photo"]').prop("checked", true);
+					if (album.json.requires_link) $('.basicModal .choice input[name="hidden"]').prop("checked", true);
+					if (album.json.downloadable) $('.basicModal .choice input[name="downloadable"]').prop("checked", true);
+					if (album.json.share_button_visible) $('.basicModal .choice input[name="share_button_visible"]').prop("checked", true);
+					if (album.json.has_password) {
 						$('.basicModal .choice input[name="password"]').prop("checked", true);
 						$('.basicModal .choice input[name="passwordtext"]').show();
 					}
@@ -819,13 +818,13 @@ album.setPublic = function (albumID, e) {
 			}
 		});
 
-		if (album.json.nsfw === "1") {
+		if (album.json.nsfw) {
 			$('.basicModal .switch input[name="nsfw"]').prop("checked", true);
 		} else {
 			$('.basicModal .switch input[name="nsfw"]').prop("checked", false);
 		}
 
-		if (album.json.public === "1") {
+		if (album.json.public) {
 			$('.basicModal .switch input[name="public"]').click();
 		} else {
 			$(".basicModal .choice input").attr("disabled", true);
@@ -842,55 +841,31 @@ album.setPublic = function (albumID, e) {
 	albums.refresh();
 
 	// Set public
-	if ($('.basicModal .switch input[name="nsfw"]:checked').length === 1) {
-		album.json.nsfw = "1";
-	} else {
-		album.json.nsfw = "0";
-	}
+	album.json.nsfw = $('.basicModal .switch input[name="nsfw"]:checked').length === 1;
 
 	// Set public
-	if ($('.basicModal .switch input[name="public"]:checked').length === 1) {
-		album.json.public = "1";
-	} else {
-		album.json.public = "0";
-	}
+	album.json.public = $('.basicModal .switch input[name="public"]:checked').length === 1;
 
 	// Set full photo
-	if ($('.basicModal .choice input[name="full_photo"]:checked').length === 1) {
-		album.json.full_photo = "1";
-	} else {
-		album.json.full_photo = "0";
-	}
+	album.json.full_photo = $('.basicModal .choice input[name="full_photo"]:checked').length === 1;
 
 	// Set visible
-	if ($('.basicModal .choice input[name="hidden"]:checked').length === 1) {
-		album.json.visible = "0";
-	} else {
-		album.json.visible = "1";
-	}
+	album.json.requires_link = $('.basicModal .choice input[name="hidden"]:checked').length === 1;
 
 	// Set downloadable
-	if ($('.basicModal .choice input[name="downloadable"]:checked').length === 1) {
-		album.json.downloadable = "1";
-	} else {
-		album.json.downloadable = "0";
-	}
+	album.json.downloadable = $('.basicModal .choice input[name="downloadable"]:checked').length === 1;
 
 	// Set share_button_visible
-	if ($('.basicModal .choice input[name="share_button_visible"]:checked').length === 1) {
-		album.json.share_button_visible = "1";
-	} else {
-		album.json.share_button_visible = "0";
-	}
+	album.json.share_button_visible = $('.basicModal .choice input[name="share_button_visible"]:checked').length === 1;
 
 	// Set password
 	let oldPassword = album.json.password;
 	if ($('.basicModal .choice input[name="password"]:checked').length === 1) {
 		password = $('.basicModal .choice input[name="passwordtext"]').val();
-		album.json.password = "1";
+		album.json.has_password = true;
 	} else {
 		password = "";
-		album.json.password = "0";
+		album.json.has_password = false;
 	}
 
 	// Modal input has been processed, now it can be closed
@@ -911,7 +886,7 @@ album.setPublic = function (albumID, e) {
 		full_photo: album.json.full_photo,
 		public: album.json.public,
 		nsfw: album.json.nsfw,
-		visible: album.json.visible,
+		requires_link: album.json.requires_link,
 		downloadable: album.json.downloadable,
 		share_button_visible: album.json.share_button_visible,
 	};
@@ -1028,7 +1003,7 @@ album.shareUsers = function (albumID, e) {
 };
 
 album.setNSFW = function (albumID, e) {
-	album.json.nsfw = album.json.nsfw === "0" ? "1" : "0";
+	album.json.nsfw = !album.json.nsfw;
 
 	view.album.nsfw();
 
@@ -1046,7 +1021,7 @@ album.setNSFW = function (albumID, e) {
 };
 
 album.share = function (service) {
-	if (album.json.hasOwnProperty("share_button_visible") && album.json.share_button_visible !== "1") {
+	if (album.json.hasOwnProperty("share_button_visible") && !album.json.share_button_visible) {
 		return;
 	}
 

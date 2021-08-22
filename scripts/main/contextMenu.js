@@ -390,7 +390,7 @@ contextMenu.photoMore = function (photoID, e) {
 		album.isUploadable() ||
 		(photo.json.hasOwnProperty("downloadable")
 			? photo.json.downloadable === "1"
-			: album.json && album.json.downloadable && album.json.downloadable === "1");
+			: album.json && album.json.downloadable && album.json.downloadable);
 	let showFull = photo.json.size_variants.original.url && photo.json.size_variants.original.url !== "";
 
 	let items = [
@@ -551,7 +551,7 @@ contextMenu.shareAlbum = function (albumID, e) {
 			title: build.iconic("link-intact") + lychee.locale["DIRECT_LINK"],
 			fn: () => {
 				let url = lychee.getBaseUrl() + "r/" + albumID;
-				if (album.json.password === "1") {
+				if (album.json.has_password) {
 					// Copy the url with prefilled password param
 					url += "?password=";
 				}
