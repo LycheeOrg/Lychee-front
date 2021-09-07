@@ -51,26 +51,16 @@ users.create = function (params) {
 		params.lock = "0";
 	}
 
-	api.post("User::Create", params, function (data) {
-		if (data !== true) {
-			loadingBar.show("error", data.description);
-			lychee.error(null, params, data);
-		} else {
-			loadingBar.show("success", "User created!");
-			users.list(); // reload user list
-		}
+	api.post("User::Create", params, function () {
+		loadingBar.show("success", "User created!");
+		users.list(); // reload user list
 	});
 };
 
 users.delete = function (params) {
-	api.post("User::Delete", params, function (data) {
-		if (data !== true) {
-			loadingBar.show("error", data.description);
-			lychee.error(null, params, data);
-		} else {
-			loadingBar.show("success", "User deleted!");
-			users.list(); // reload user list
-		}
+	api.post("User::Delete", params, function () {
+		loadingBar.show("success", "User deleted!");
+		users.list(); // reload user list
 	});
 };
 
