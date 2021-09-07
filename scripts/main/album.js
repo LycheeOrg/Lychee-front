@@ -248,12 +248,12 @@ album.add = function (IDs = null, callback = null) {
 		}
 
 		api.post("Album::add", params, function (_data) {
-			if (_data !== false && isNumber(_data)) {
+			if (_data && isNumber(_data.id)) {
 				if (IDs != null && callback != null) {
 					callback(IDs, _data, false); // we do not confirm
 				} else {
 					albums.refresh();
-					lychee.goto(_data);
+					lychee.goto(_data.id);
 				}
 			} else {
 				lychee.error(null, params, _data);
@@ -296,9 +296,9 @@ album.addByTags = function () {
 
 		api.post("Album::addByTags", params, function (_data) {
 			const isNumber = (n) => !isNaN(parseInt(n, 10)) && isFinite(n);
-			if (_data !== false && isNumber(_data)) {
+			if (_data && isNumber(_data.id)) {
 				albums.refresh();
-				lychee.goto(_data);
+				lychee.goto(_data.id);
 			} else {
 				lychee.error(null, params, _data);
 			}
