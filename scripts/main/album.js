@@ -49,7 +49,7 @@ album.getByID = function (photoID) {
 
 	if (photoID == null || !album.json || !album.json.photos) {
 		lychee.error("Error: Album json not found !");
-		return undefined;
+		return null;
 	}
 
 	let i = 0;
@@ -61,7 +61,7 @@ album.getByID = function (photoID) {
 	}
 
 	lychee.error("Error: photo " + photoID + " not found !");
-	return undefined;
+	return null;
 };
 
 album.getSubByID = function (albumID) {
@@ -1091,7 +1091,7 @@ album.delete = function (albumIDs) {
 	let msg = "";
 
 	if (!albumIDs) return false;
-	if (albumIDs instanceof Array === false) albumIDs = [albumIDs];
+	if (!(albumIDs instanceof Array)) albumIDs = [albumIDs];
 
 	action.fn = function () {
 		basicModal.close();
@@ -1118,7 +1118,7 @@ album.delete = function (albumIDs) {
 				}
 			}
 
-			if (data !== true) lychee.error(null, params, data);
+			if (typeof data !== "undefined") lychee.error(null, params, data);
 		});
 	};
 

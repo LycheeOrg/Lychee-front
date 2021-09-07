@@ -742,18 +742,8 @@ view.photo = {
 		let $nextArrow = lychee.imageview.find("a#next");
 		let $previousArrow = lychee.imageview.find("a#previous");
 		let photoID = photo.getID();
-		let hasNext =
-			album.json &&
-			album.json.photos &&
-			album.getByID(photoID) &&
-			album.getByID(photoID).nextPhoto != null &&
-			album.getByID(photoID).nextPhoto !== "";
-		let hasPrevious =
-			album.json &&
-			album.json.photos &&
-			album.getByID(photoID) &&
-			album.getByID(photoID).previousPhoto != null &&
-			album.getByID(photoID).previousPhoto !== "";
+		let hasNext = album.json && album.json.photos && album.getByID(photoID) && album.getByID(photoID).next_photo_id !== null;
+		let hasPrevious = album.json && album.json.photos && album.getByID(photoID) && album.getByID(photoID).previous_photo_id !== null;
 
 		let img = $("img#image");
 		if (img.length > 0) {
@@ -777,7 +767,7 @@ view.photo = {
 		if (hasNext === false || lychee.viewMode === true) {
 			$nextArrow.hide();
 		} else {
-			let nextPhotoID = album.getByID(photoID).nextPhoto;
+			let nextPhotoID = album.getByID(photoID).next_photo_id;
 			let nextPhoto = album.getByID(nextPhotoID);
 
 			// Check if thumbUrl exists (for videos w/o ffmpeg, we add a play-icon)
@@ -793,7 +783,7 @@ view.photo = {
 		if (hasPrevious === false || lychee.viewMode === true) {
 			$previousArrow.hide();
 		} else {
-			let previousPhotoID = album.getByID(photoID).previousPhoto;
+			let previousPhotoID = album.getByID(photoID).previous_photo_id;
 			let previousPhoto = album.getByID(previousPhotoID);
 
 			// Check if thumbUrl exists (for videos w/o ffmpeg, we add a play-icon)

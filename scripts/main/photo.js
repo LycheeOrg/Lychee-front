@@ -112,8 +112,8 @@ photo.cycle_display_overlay = function () {
 // Preload the next and previous photos for better response time
 photo.preloadNextPrev = function (photoID) {
 	if (album.json && album.json.photos && album.getByID(photoID)) {
-		let previousPhotoID = album.getByID(photoID).previousPhoto;
-		let nextPhotoID = album.getByID(photoID).nextPhoto;
+		let previousPhotoID = album.getByID(photoID).previous_photo_id;
+		let nextPhotoID = album.getByID(photoID).next_photo_id;
 		let imgs = $("img#image");
 		let isUsing2xCurrently = imgs.length > 0 && imgs[0].currentSrc !== null && imgs[0].currentSrc.includes("@2x.");
 
@@ -165,10 +165,10 @@ photo.preloadNextPrev = function (photoID) {
 			}
 		};
 
-		if (nextPhotoID && nextPhotoID !== "") {
+		if (nextPhotoID) {
 			preload(nextPhotoID);
 		}
-		if (previousPhotoID && previousPhotoID !== "") {
+		if (previousPhotoID) {
 			preload(previousPhotoID);
 		}
 	}
@@ -194,7 +194,7 @@ photo.updateSizeLivePhotoDuringAnimation = function (animationDuraction = 300, p
 };
 
 photo.previous = function (animate) {
-	if (photo.getID() !== false && album.json && album.getByID(photo.getID()) && album.getByID(photo.getID()).previousPhoto !== "") {
+	if (photo.getID() !== false && album.json && album.getByID(photo.getID()) && album.getByID(photo.getID()).previous_photo_id !== null) {
 		let delay = 0;
 
 		if (animate === true) {
@@ -211,13 +211,13 @@ photo.previous = function (animate) {
 		setTimeout(() => {
 			if (photo.getID() === false) return false;
 			photo.LivePhotosObject = null;
-			lychee.goto(album.getID() + "/" + album.getByID(photo.getID()).previousPhoto, false);
+			lychee.goto(album.getID() + "/" + album.getByID(photo.getID()).previous_photo_id, false);
 		}, delay);
 	}
 };
 
 photo.next = function (animate) {
-	if (photo.getID() !== false && album.json && album.getByID(photo.getID()) && album.getByID(photo.getID()).nextPhoto !== "") {
+	if (photo.getID() !== false && album.json && album.getByID(photo.getID()) && album.getByID(photo.getID()).next_photo_id !== null) {
 		let delay = 0;
 
 		if (animate === true) {
@@ -234,7 +234,7 @@ photo.next = function (animate) {
 		setTimeout(() => {
 			if (photo.getID() === false) return false;
 			photo.LivePhotosObject = null;
-			lychee.goto(album.getID() + "/" + album.getByID(photo.getID()).nextPhoto, false);
+			lychee.goto(album.getID() + "/" + album.getByID(photo.getID()).next_photo_id, false);
 		}, delay);
 	}
 };
@@ -246,34 +246,35 @@ photo.delete = function (photoIDs) {
 	let photoTitle = "";
 
 	if (!photoIDs) return false;
-	if (photoIDs instanceof Array === false) photoIDs = [photoIDs];
+	if (!(photoIDs instanceof Array)) photoIDs = [photoIDs];
 
 	if (photoIDs.length === 1) {
 		// Get title if only one photo is selected
 		if (visible.photo()) photoTitle = photo.json.title;
-		else photoTitle = album.getByID(photoIDs).title;
+		else photoTitle = album.getByID(photoIDs[0]).title;
 
 		// Fallback for photos without a title
 		if (photoTitle === "") photoTitle = lychee.locale["UNTITLED"];
 	}
 
 	action.fn = function () {
-		let nextPhoto = "";
-		let previousPhoto = "";
+		let nextPhotoID = null;
+		let previousPhotoID = null;
 
 		basicModal.close();
 
 		photoIDs.forEach(function (id, index) {
 			// Change reference for the next and previous photo
-			if (album.getByID(id).nextPhoto !== "" || album.getByID(id).previousPhoto !== "") {
-				nextPhoto = album.getByID(id).nextPhoto;
-				previousPhoto = album.getByID(id).previousPhoto;
+			let curPhoto = album.getByID(id);
+			if (curPhoto.next_photo_id !== null || curPhoto.previous_photo_id !== null) {
+				nextPhotoID = curPhoto.next_photo_id;
+				previousPhotoID = curPhoto.previous_photo_id;
 
-				if (previousPhoto !== "") {
-					album.getByID(previousPhoto).nextPhoto = nextPhoto;
+				if (previousPhotoID !== null) {
+					album.getByID(previousPhotoID).next_photo_id = nextPhotoID;
 				}
-				if (nextPhoto !== "") {
-					album.getByID(nextPhoto).previousPhoto = previousPhoto;
+				if (nextPhotoID !== null) {
+					album.getByID(nextPhotoID).previous_photo_id = previousPhotoID;
 				}
 			}
 
@@ -287,10 +288,10 @@ photo.delete = function (photoIDs) {
 		// next photo is not the current one. Also try the previous one.
 		// Show album otherwise.
 		if (visible.photo()) {
-			if (nextPhoto !== "" && nextPhoto !== photo.getID()) {
-				lychee.goto(album.getID() + "/" + nextPhoto);
-			} else if (previousPhoto !== "" && previousPhoto !== photo.getID()) {
-				lychee.goto(album.getID() + "/" + previousPhoto);
+			if (nextPhotoID !== null && nextPhotoID !== photo.getID()) {
+				lychee.goto(album.getID() + "/" + nextPhotoID);
+			} else if (previousPhotoID !== null && previousPhotoID !== photo.getID()) {
+				lychee.goto(album.getID() + "/" + previousPhotoID);
 			} else {
 				lychee.goto(album.getID());
 			}
@@ -419,23 +420,24 @@ photo.copyTo = function (photoIDs, albumID) {
 };
 
 photo.setAlbum = function (photoIDs, albumID) {
-	let nextPhoto = "";
-	let previousPhoto = "";
+	let nextPhotoID = null;
+	let previousPhotoID = null;
 
 	if (!photoIDs) return false;
-	if (photoIDs instanceof Array === false) photoIDs = [photoIDs];
+	if (!(photoIDs instanceof Array)) photoIDs = [photoIDs];
 
 	photoIDs.forEach(function (id, index) {
 		// Change reference for the next and previous photo
-		if (album.getByID(id).nextPhoto !== "" || album.getByID(id).previousPhoto !== "") {
-			nextPhoto = album.getByID(id).nextPhoto;
-			previousPhoto = album.getByID(id).previousPhoto;
+		let curPhoto = album.getByID(id);
+		if (curPhoto.next_photo_id !== null || curPhoto.previous_photo_id !== null) {
+			nextPhotoID = curPhoto.next_photo_id;
+			previousPhotoID = curPhoto.previous_photo_id;
 
-			if (previousPhoto !== "") {
-				album.getByID(previousPhoto).nextPhoto = nextPhoto;
+			if (previousPhotoID !== null) {
+				album.getByID(previousPhotoID).next_photo_id = nextPhotoID;
 			}
-			if (nextPhoto !== "") {
-				album.getByID(nextPhoto).previousPhoto = previousPhoto;
+			if (nextPhotoID !== null) {
+				album.getByID(nextPhotoID).previous_photo_id = previousPhotoID;
 			}
 		}
 
@@ -449,10 +451,10 @@ photo.setAlbum = function (photoIDs, albumID) {
 	// next photo is not the current one. Also try the previous one.
 	// Show album otherwise.
 	if (visible.photo()) {
-		if (nextPhoto !== "" && nextPhoto !== photo.getID()) {
-			lychee.goto(album.getID() + "/" + nextPhoto);
-		} else if (previousPhoto !== "" && previousPhoto !== photo.getID()) {
-			lychee.goto(album.getID() + "/" + previousPhoto);
+		if (nextPhotoID !== null && nextPhotoID !== photo.getID()) {
+			lychee.goto(album.getID() + "/" + nextPhotoID);
+		} else if (previousPhotoID !== null && previousPhotoID !== photo.getID()) {
+			lychee.goto(album.getID() + "/" + previousPhotoID);
 		} else {
 			lychee.goto(album.getID());
 		}
