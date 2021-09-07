@@ -49,7 +49,7 @@ contextMenu.add = function (e) {
 		items.unshift({
 			title: build.iconic("folder") + lychee.locale["MOVE_ALBUM"],
 			visible: lychee.enable_button_move,
-			fn: (event) => contextMenu.move([album.getID()], event, album.setAlbum, "ROOT", album.getParent() !== ""),
+			fn: (event) => contextMenu.move([album.getID()], event, album.setAlbum, "ROOT", album.getParentID() !== null),
 		});
 	}
 	let button_nsfw_album = $("#button_nsfw_album");
@@ -478,9 +478,9 @@ contextMenu.move = function (IDs, e, callback, kind = "UNSORTED", display_root =
 				if (callback !== album.merge && callback !== photo.copyTo) {
 					exclude.push(album.getID().toString());
 				}
-				if (IDs.length === 1 && IDs[0] === album.getID() && album.getParent() && callback === album.setAlbum) {
+				if (IDs.length === 1 && IDs[0] === album.getID() && album.getParentID() && callback === album.setAlbum) {
 					// If moving the current album, exclude its parent.
-					exclude.push(album.getParent().toString());
+					exclude.push(album.getParentID().toString());
 				}
 			} else if (visible.photo()) {
 				exclude.push(photo.json.album.toString());

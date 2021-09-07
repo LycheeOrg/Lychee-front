@@ -10,9 +10,9 @@ album.isSmartID = function (id) {
 	return id === "unsorted" || id === "starred" || id === "public" || id === "recent";
 };
 
-album.getParent = function () {
+album.getParentID = function () {
 	if (album.json == null || album.isSmartID(album.json.id) === true || !album.json.parent_id || album.json.parent_id === 0) {
-		return "";
+		return null;
 	}
 	return album.json.parent_id;
 };
@@ -41,7 +41,7 @@ album.getID = function () {
 };
 
 album.isTagAlbum = function () {
-	return album.json && album.json.tag_album && album.json.tag_album === "1";
+	return album.json && album.json.tag_album && album.json.tag_album === true;
 };
 
 album.getByID = function (photoID) {
@@ -511,7 +511,7 @@ album.toggleCover = function (photoID) {
 			lychee.error(null, params, data);
 		} else {
 			view.album.content.cover(photoID);
-			if (!album.getParent()) {
+			if (!album.getParentID()) {
 				albums.refresh();
 			}
 		}
@@ -875,7 +875,7 @@ album.setPublic = function (albumID, e) {
 	if (visible.album()) {
 		view.album.nsfw();
 		view.album.public();
-		view.album.hidden();
+		view.album.requiresLink();
 		view.album.downloadable();
 		view.album.shareButtonVisible();
 		view.album.password();
@@ -1109,7 +1109,7 @@ album.delete = function (albumIDs) {
 			} else if (visible.album()) {
 				albums.refresh();
 				if (albumIDs.length === 1 && album.getID() == albumIDs[0]) {
-					lychee.goto(album.getParent());
+					lychee.goto(album.getParentID());
 				} else {
 					albumIDs.forEach(function (id) {
 						album.deleteSubByID(id);
@@ -1268,11 +1268,11 @@ album.isUploadable = function () {
 
 	// For special cases of no album / smart album / etc. we return true.
 	// It's only for regular non-matching albums that we return false.
-	if (album.json === null || !album.json.owner) {
+	if (album.json === null || !album.json.owner_name) {
 		return true;
 	}
 
-	return album.json.owner === lychee.username;
+	return album.json.owner_name === lychee.username;
 };
 
 album.updatePhoto = function (data) {

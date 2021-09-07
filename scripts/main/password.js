@@ -15,15 +15,23 @@ password.getDialog = function (albumID, callback) {
 			password: passwd,
 		};
 
-		api.post("Album::getPublic", params, function (_data) {
-			if (_data === true) {
+		api.post(
+			"Album::unlock",
+			params,
+			function (_data) {
 				basicModal.close();
 				password.value = passwd;
 				callback();
-			} else {
-				basicModal.error("password");
+			},
+			null,
+			function (jqXHR) {
+				if (jqXHR.status === 403) {
+					basicModal.error("password");
+					return true;
+				}
+				return false;
 			}
-		});
+		);
 	};
 
 	const cancel = () => {

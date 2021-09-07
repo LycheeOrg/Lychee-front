@@ -81,9 +81,9 @@ view.albums = {
 					let alb = albums.json.shared_albums[i];
 					if (!alb.parent_id || alb.parent_id === 0) {
 						albums.parse(alb);
-						if (current_owner !== alb.owner && lychee.publicMode === false) {
-							sharedData += build.divider(alb.owner);
-							current_owner = alb.owner;
+						if (current_owner !== alb.owner_name && lychee.publicMode === false) {
+							sharedData += build.divider(alb.owner_name);
+							current_owner = alb.owner_name;
 						}
 						sharedData += build.album(alb, !lychee.admin);
 					}
@@ -550,7 +550,7 @@ view.album = {
 		}
 	},
 
-	hidden: function () {
+	requiresLink: function () {
 		if (album.json.requires_link) sidebar.changeAttr("hidden", lychee.locale["ALBUM_SHR_YES"]);
 		else sidebar.changeAttr("hidden", lychee.locale["ALBUM_SHR_NO"]);
 	},

@@ -82,7 +82,7 @@ albums.parse = function (album) {
 	if (!album.thumb) {
 		album.thumb = {};
 		album.thumb.id = "";
-		album.thumb.thumb = album.password === "1" ? "img/password.svg" : "img/no_images.svg";
+		album.thumb.thumb = album.has_password ? "img/password.svg" : "img/no_images.svg";
 		album.thumb.type = "";
 		album.thumb.thumb2x = "";
 	}
