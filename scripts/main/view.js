@@ -31,29 +31,29 @@ view.albums = {
 			let sharedData = "";
 
 			// Smart Albums
-			if (albums.json.smartalbums != null) {
+			if (albums.json.smart_albums != null) {
 				if (lychee.publicMode === false) {
 					smartData = build.divider(lychee.locale["SMART_ALBUMS"]);
 				}
-				if (albums.json.smartalbums.unsorted) {
-					albums.parse(albums.json.smartalbums.unsorted);
-					smartData += build.album(albums.json.smartalbums.unsorted);
+				if (albums.json.smart_albums.unsorted) {
+					albums.parse(albums.json.smart_albums.unsorted);
+					smartData += build.album(albums.json.smart_albums.unsorted);
 				}
-				if (albums.json.smartalbums.public) {
-					albums.parse(albums.json.smartalbums.public);
-					smartData += build.album(albums.json.smartalbums.public);
+				if (albums.json.smart_albums.public) {
+					albums.parse(albums.json.smart_albums.public);
+					smartData += build.album(albums.json.smart_albums.public);
 				}
-				if (albums.json.smartalbums.starred) {
-					albums.parse(albums.json.smartalbums.starred);
-					smartData += build.album(albums.json.smartalbums.starred);
+				if (albums.json.smart_albums.starred) {
+					albums.parse(albums.json.smart_albums.starred);
+					smartData += build.album(albums.json.smart_albums.starred);
 				}
-				if (albums.json.smartalbums.recent) {
-					albums.parse(albums.json.smartalbums.recent);
-					smartData += build.album(albums.json.smartalbums.recent);
+				if (albums.json.smart_albums.recent) {
+					albums.parse(albums.json.smart_albums.recent);
+					smartData += build.album(albums.json.smart_albums.recent);
 				}
 
-				Object.entries(albums.json.smartalbums).forEach(([albumName, albumData]) => {
-					if (albumData["tag_album"] === "1") {
+				Object.entries(albums.json.smart_albums).forEach(([, albumData]) => {
+					if (albumData["tag_album"] === true) {
 						albums.parse(albumData);
 						smartData += build.album(albumData);
 					}

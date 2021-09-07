@@ -16,7 +16,7 @@ albums.load = function () {
 			let waitTime;
 
 			// Smart Albums
-			if (data.smartalbums != null) albums._createSmartAlbums(data.smartalbums);
+			if (data.smart_albums != null) albums._createSmartAlbums(data.smart_albums);
 
 			albums.json = data;
 
@@ -177,7 +177,7 @@ albums.getByID = function (albumID) {
 
 	if (json === undefined && albums.json.shared_albums !== null) $.each(albums.json.shared_albums, func);
 
-	if (json === undefined && albums.json.smartalbums !== null) $.each(albums.json.smartalbums, func);
+	if (json === undefined && albums.json.smart_albums !== null) $.each(albums.json.smart_albums, func);
 
 	return json;
 };
@@ -213,10 +213,10 @@ albums.deleteByID = function (albumID) {
 	}
 
 	if (deleted === false) {
-		if (!albums.json.smartalbums) return undefined;
-		$.each(albums.json.smartalbums, function (i) {
-			if (parseInt(albums.json.smartalbums[i].id) === parseInt(albumID)) {
-				delete albums.json.smartalbums[i];
+		if (!albums.json.smart_albums) return undefined;
+		$.each(albums.json.smart_albums, function (i) {
+			if (parseInt(albums.json.smart_albums[i].id) === parseInt(albumID)) {
+				delete albums.json.smart_albums[i];
 				deleted = true;
 				return false; // stop the loop
 			}

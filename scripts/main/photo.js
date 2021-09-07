@@ -759,11 +759,11 @@ photo.editTags = function (photoIDs) {
 
 photo.setTags = function (photoIDs, tags) {
 	if (!photoIDs) return false;
-	if (photoIDs instanceof Array === false) photoIDs = [photoIDs];
+	if (!(photoIDs instanceof Array)) photoIDs = [photoIDs];
 
 	// Parse tags
-	tags = tags.replace(/(\ ,\ )|(\ ,)|(,\ )|(,{1,}\ {0,})|(,$|^,)/g, ",");
-	tags = tags.replace(/,$|^,|(\ ){0,}$/g, "");
+	tags = tags.replace(/( , )|( ,)|(, )|(,+ *)|(,$|^,)/g, ",");
+	tags = tags.replace(/,$|^,|( )*$/g, "");
 
 	if (visible.photo()) {
 		photo.json.tags = tags;
@@ -782,9 +782,9 @@ photo.setTags = function (photoIDs, tags) {
 	api.post("Photo::setTags", params, function (data) {
 		if (data !== true) {
 			lychee.error(null, params, data);
-		} else if (albums.json && albums.json.smartalbums) {
-			$.each(Object.entries(albums.json.smartalbums), function () {
-				if (this.length == 2 && this[1]["tag_album"] === "1") {
+		} else if (albums.json && albums.json.smart_albums) {
+			$.each(Object.entries(albums.json.smart_albums), function () {
+				if (this.length === 2 && this[1]["tag_album"] === true) {
 					// If we have any tag albums, force a refresh.
 					albums.refresh();
 					return false;
