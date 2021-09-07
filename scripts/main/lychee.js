@@ -330,7 +330,7 @@ lychee.login = function (data) {
 	};
 
 	api.post("Session::login", params, function (_data) {
-		if (_data === true) {
+		if (typeof _data === "undefined") {
 			window.location.reload();
 		} else {
 			// Show error and reactive button
