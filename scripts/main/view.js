@@ -263,7 +263,7 @@ view.album = {
 		star: function (photoID) {
 			let $badge = $('.photo[data-id="' + photoID + '"] .icn-star');
 
-			if (album.getByID(photoID).star === "1") $badge.addClass("badge--star");
+			if (album.getByID(photoID).star) $badge.addClass("badge--star");
 			else $badge.removeClass("badge--star");
 		},
 
@@ -692,7 +692,7 @@ view.photo = {
 	},
 
 	star: function () {
-		if (photo.json.star === "1") {
+		if (photo.json.star) {
 			// Starred
 			$("#button_star").addClass("active").attr("title", lychee.locale["UNSTAR_PHOTO"]);
 		} else {

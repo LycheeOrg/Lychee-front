@@ -484,12 +484,12 @@ photo.setStar = function (photoIDs) {
 	if (!photoIDs) return false;
 
 	if (visible.photo()) {
-		photo.json.star = photo.json.star === "0" ? "1" : "0";
+		photo.json.star = !photo.json.star;
 		view.photo.star();
 	}
 
 	photoIDs.forEach(function (id) {
-		album.getByID(id).star = album.getByID(id).star === "0" ? "1" : "0";
+		album.getByID(id).star = !album.getByID(id).star;
 		view.album.content.star(id);
 	});
 
