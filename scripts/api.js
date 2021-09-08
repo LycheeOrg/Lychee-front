@@ -59,7 +59,8 @@ api.post = function (fn, params, successCallback, responseProgressCB = null, err
 	let ajaxParams = {
 		type: "POST",
 		url: api_url,
-		data: params,
+		contentType: "application/json",
+		data: JSON.stringify(params),
 		dataType: "json",
 		success,
 		error,
