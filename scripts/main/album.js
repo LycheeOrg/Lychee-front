@@ -615,24 +615,20 @@ album.setSorting = function (albumID) {
 	};
 
 	const action = function (data) {
-		let typePhotos = data.sortingCol;
-		let orderPhotos = data.sortingOrder;
+		let sortingCol = data.sortingCol;
+		let sortingOrder = data.sortingOrder;
 
 		basicModal.close();
 
 		let params = {
 			albumID,
-			typePhotos,
-			orderPhotos,
+			sortingCol,
+			sortingOrder,
 		};
 
 		api.post("Album::setSorting", params, function (_data) {
-			if (_data !== true) {
-				lychee.error(null, params, _data);
-			} else {
-				if (visible.album()) {
-					album.reload();
-				}
+			if (visible.album()) {
+				album.reload();
 			}
 		});
 	};
