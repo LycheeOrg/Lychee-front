@@ -100,9 +100,9 @@ build.album = function (data, disabled = false) {
 	}
 
 	let html = lychee.html`
-			<div class='album ${disabled ? `disabled` : ``} ${data.nsfw && data.nsfw === "1" && lychee.nsfw_blur ? `blurred` : ``}'
+			<div class='album ${disabled ? `disabled` : ``} ${data.is_nsfw && lychee.nsfw_blur ? `blurred` : ``}'
 				data-id='${data.id}'
-				data-nsfw='${data.nsfw && data.nsfw === "1" ? `1` : `0`}'
+				data-nsfw='${data.is_nsfw ? `1` : `0`}'
 				data-tabindex='${tabindex.get_next_tab_index()}'>
 				  ${build.getAlbumThumb(data)}
 				  ${build.getAlbumThumb(data)}
@@ -117,15 +117,15 @@ build.album = function (data, disabled = false) {
 		let isCover = album.json && album.json.cover_id && data.thumb.id === album.json.cover_id;
 		html += lychee.html`
 				<div class='badges'>
-					<a class='badge ${data.nsfw === "1" ? "badge--nsfw" : ""} icn-warning'>${build.iconic("warning")}</a>
-					<a class='badge ${data.star === "1" ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
-					<a class='badge ${data.recent === "1" ? "badge--visible badge--list" : ""}'>${build.iconic("clock")}</a>
-					<a class='badge ${data.public === "1" ? "badge--visible" : ""} ${
-			data.visible === "1" ? "badge--not--hidden" : "badge--hidden"
-		} icn-share'>${build.iconic("eye")}</a>
-					<a class='badge ${data.unsorted === "1" ? "badge--visible" : ""}'>${build.iconic("list")}</a>
+					<a class='badge ${data.is_nsfw ? "badge--nsfw" : ""} icn-warning'>${build.iconic("warning")}</a>
+					<a class='badge ${data.is_starred ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
+					<a class='badge ${data.is_recent ? "badge--visible badge--list" : ""}'>${build.iconic("clock")}</a>
+					<a class='badge ${data.is_public ? "badge--visible" : ""} ${data.visible === "1" ? "badge--not--hidden" : "badge--hidden"} icn-share'>${build.iconic(
+			"eye"
+		)}</a>
+					<a class='badge ${data.is_unsorted ? "badge--visible" : ""}'>${build.iconic("list")}</a>
 					<a class='badge ${data.has_password ? "badge--visible" : ""}'>${build.iconic("lock-locked")}</a>
-					<a class='badge ${data.tag_album ? "badge--tag" : ""}'>${build.iconic("tag")}</a>
+					<a class='badge ${data.is_tag_album ? "badge--tag" : ""}'>${build.iconic("tag")}</a>
 					<a class='badge ${isCover ? "badge--cover" : ""} icn-cover'>${build.iconic("folder-cover")}</a>
 				</div>
 				`;
@@ -242,8 +242,8 @@ build.photo = function (data, disabled = false) {
 	if (album.isUploadable()) {
 		html += lychee.html`
 				<div class='badges'>
-				<a class='badge ${data.star === "1" ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
-				<a class='badge ${data.public === "1" && album.json.public !== "1" ? "badge--visible badge--hidden" : ""} icn-share'>${build.iconic("eye")}</a>
+				<a class='badge ${data.is_starred ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
+				<a class='badge ${data.is_public ? "badge--visible badge--hidden" : ""} icn-share'>${build.iconic("eye")}</a>
 				<a class='badge ${isCover ? "badge--cover" : ""} icn-cover'>${build.iconic("folder-cover")}</a>
 				</div>
 				`;

@@ -484,12 +484,12 @@ photo.setStar = function (photoIDs) {
 	if (!photoIDs) return false;
 
 	if (visible.photo()) {
-		photo.json.star = !photo.json.star;
+		photo.json.is_starred = !photo.json.is_starred;
 		view.photo.star();
 	}
 
 	photoIDs.forEach(function (id) {
-		album.getByID(id).star = !album.getByID(id).star;
+		album.getByID(id).is_starred = !album.getByID(id).is_starred;
 		view.album.content.star(id);
 	});
 
@@ -509,7 +509,7 @@ photo.setPublic = function (photoID, e) {
 		<div class='switch'>
 			<label>
 				<span class='label'>${lychee.locale["PHOTO_PUBLIC"]}:</span>
-				<input type='checkbox' name='public'>
+				<input type='checkbox' name='is_public'>
 				<span class='slider round'></span>
 			</label>
 			<p>${lychee.locale["PHOTO_PUBLIC_EXPL"]}</p>
@@ -519,7 +519,7 @@ photo.setPublic = function (photoID, e) {
 	let msg_choices = lychee.html`
 		<div class='choice'>
 			<label>
-				<input type='checkbox' name='full_photo' disabled>
+				<input type='checkbox' name='grants_full_photo' disabled>
 				<span class='checkbox'>${build.iconic("check")}</span>
 				<span class='label'>${lychee.locale["PHOTO_FULL"]}</span>
 			</label>
@@ -527,7 +527,7 @@ photo.setPublic = function (photoID, e) {
 		</div>
 		<div class='choice'>
 			<label>
-				<input type='checkbox' name='hidden' disabled>
+				<input type='checkbox' name='requires_link' disabled>
 				<span class='checkbox'>${build.iconic("check")}</span>
 				<span class='label'>${lychee.locale["PHOTO_HIDDEN"]}</span>
 			</label>
@@ -535,7 +535,7 @@ photo.setPublic = function (photoID, e) {
 		</div>
 		<div class='choice'>
 			<label>
-				<input type='checkbox' name='downloadable' disabled>
+				<input type='checkbox' name='is_downloadable' disabled>
 				<span class='checkbox'>${build.iconic("check")}</span>
 				<span class='label'>${lychee.locale["PHOTO_DOWNLOADABLE"]}</span>
 			</label>
@@ -543,7 +543,7 @@ photo.setPublic = function (photoID, e) {
 		</div>
 		<div class='choice'>
 			<label>
-				<input type='checkbox' name='share_button_visible' disabled>
+				<input type='checkbox' name='is_share_button_visible' disabled>
 				<span class='checkbox'>${build.iconic("check")}</span>
 				<span class='label'>${lychee.locale["PHOTO_SHARE_BUTTON_VISIBLE"]}</span>
 			</label>
@@ -551,7 +551,7 @@ photo.setPublic = function (photoID, e) {
 		</div>
 		<div class='choice'>
 			<label>
-				<input type='checkbox' name='password' disabled>
+				<input type='checkbox' name='has_password' disabled>
 				<span class='checkbox'>${build.iconic("check")}</span>
 				<span class='label'>${lychee.locale["PHOTO_PASSWORD_PROT"]}</span>
 			</label>
@@ -559,7 +559,7 @@ photo.setPublic = function (photoID, e) {
 		</div>
 	`;
 
-	if (photo.json.public === "2") {
+	if (photo.json.is_public == 2) {
 		// Public album. We can't actually change anything but we will
 		// display the current settings.
 
@@ -579,19 +579,19 @@ photo.setPublic = function (photoID, e) {
 			},
 		});
 
-		$('.basicModal .switch input[name="public"]').prop("checked", true);
+		$('.basicModal .switch input[name="is_public"]').prop("checked", true);
 		if (album.json) {
-			if (album.json.full_photo) {
-				$('.basicModal .choice input[name="full_photo"]').prop("checked", true);
+			if (album.json.grants_full_photo) {
+				$('.basicModal .choice input[name="grants_full_photo"]').prop("checked", true);
 			}
 			// Photos in public albums are never hidden as such.  It's the
 			// album that's hidden.  Or is that distinction irrelevant to end
 			// users?
-			if (album.json.downloadable) {
-				$('.basicModal .choice input[name="downloadable"]').prop("checked", true);
+			if (album.json.is_downloadable) {
+				$('.basicModal .choice input[name="is_downloadable"]').prop("checked", true);
 			}
 			if (album.json.has_password) {
-				$('.basicModal .choice input[name="password"]').prop("checked", true);
+				$('.basicModal .choice input[name="has_password"]').prop("checked", true);
 			}
 		}
 
@@ -607,15 +607,15 @@ photo.setPublic = function (photoID, e) {
 		`;
 
 		const action = function () {
-			let newPublic = $('.basicModal .switch input[name="public"]:checked').length === 1 ? "1" : "0";
+			let newIsPublic = $('.basicModal .switch input[name="is_public"]:checked').length === 1;
 
-			if (newPublic !== photo.json.public) {
+			if (newIsPublic !== photo.json.is_public) {
 				if (visible.photo()) {
-					photo.json.public = newPublic;
+					photo.json.is_public = newIsPublic;
 					view.photo.public();
 				}
 
-				album.getByID(photoID).public = newPublic;
+				album.getByID(photoID).is_public = newIsPublic;
 				view.album.content.public(photoID);
 
 				albums.refresh();
@@ -644,19 +644,19 @@ photo.setPublic = function (photoID, e) {
 			},
 		});
 
-		$('.basicModal .switch input[name="public"]').on("click", function () {
+		$('.basicModal .switch input[name="is_public"]').on("click", function () {
 			if ($(this).prop("checked") === true) {
 				if (lychee.full_photo) {
-					$('.basicModal .choice input[name="full_photo"]').prop("checked", true);
+					$('.basicModal .choice input[name="grants_full_photo"]').prop("checked", true);
 				}
 				if (lychee.public_photos_hidden) {
-					$('.basicModal .choice input[name="hidden"]').prop("checked", true);
+					$('.basicModal .choice input[name="requires_link"]').prop("checked", true);
 				}
 				if (lychee.downloadable) {
-					$('.basicModal .choice input[name="downloadable"]').prop("checked", true);
+					$('.basicModal .choice input[name="is_downloadable"]').prop("checked", true);
 				}
 				if (lychee.share_button_visible) {
-					$('.basicModal .choice input[name="share_button_visible"]').prop("checked", true);
+					$('.basicModal .choice input[name="is_share_button_visible"]').prop("checked", true);
 				}
 				// Photos shared individually can't be password-protected.
 			} else {
@@ -664,8 +664,8 @@ photo.setPublic = function (photoID, e) {
 			}
 		});
 
-		if (photo.json.public === "1") {
-			$('.basicModal .switch input[name="public"]').click();
+		if (photo.json.is_public == 1) {
+			$('.basicModal .switch input[name="is_public"]').click();
 		}
 	}
 
@@ -786,7 +786,7 @@ photo.setTags = function (photoIDs, tags) {
 			lychee.error(null, params, data);
 		} else if (albums.json && albums.json.smart_albums) {
 			$.each(Object.entries(albums.json.smart_albums), function () {
-				if (this.length === 2 && this[1]["tag_album"] === true) {
+				if (this.length === 2 && this[1]["is_tag_album"] === true) {
 					// If we have any tag albums, force a refresh.
 					albums.refresh();
 					return false;
@@ -809,7 +809,7 @@ photo.deleteTag = function (photoID, index) {
 };
 
 photo.share = function (photoID, service) {
-	if (photo.json.hasOwnProperty("share_button_visible") && photo.json.share_button_visible !== "1") {
+	if (photo.json.hasOwnProperty("is_share_button_visible") && !photo.json.is_share_button_visible) {
 		return;
 	}
 

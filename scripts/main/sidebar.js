@@ -169,7 +169,7 @@ sidebar.createStructure.photo = function (data) {
 	let exifHash = data.taken_at + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
 	let locationHash = data.longitude + data.latitude + data.altitude;
 	let structure = {};
-	let _public = "";
+	let isPublic = "";
 	let isVideo = data.type && data.type.indexOf("video") > -1;
 	let license;
 
@@ -190,18 +190,18 @@ sidebar.createStructure.photo = function (data) {
 	}
 
 	// Set value for public
-	switch (data.public) {
-		case "0":
-			_public = lychee.locale["PHOTO_SHR_NO"];
+	switch (data.is_public) {
+		case 0:
+			isPublic = lychee.locale["PHOTO_SHR_NO"];
 			break;
-		case "1":
-			_public = lychee.locale["PHOTO_SHR_PHT"];
+		case 1:
+			isPublic = lychee.locale["PHOTO_SHR_PHT"];
 			break;
-		case "2":
-			_public = lychee.locale["PHOTO_SHR_ALB"];
+		case 2:
+			isPublic = lychee.locale["PHOTO_SHR_ALB"];
 			break;
 		default:
-			_public = "-";
+			isPublic = "-";
 			break;
 	}
 
@@ -285,7 +285,7 @@ sidebar.createStructure.photo = function (data) {
 	structure.sharing = {
 		title: lychee.locale["PHOTO_SHARING"],
 		type: sidebar.types.DEFAULT,
-		rows: [{ title: lychee.locale["PHOTO_SHR_PLUBLIC"], kind: "public", value: _public }],
+		rows: [{ title: lychee.locale["PHOTO_SHR_PLUBLIC"], kind: "public", value: isPublic }],
 	};
 
 	structure.license = {
@@ -347,10 +347,10 @@ sidebar.createStructure.album = function (album) {
 
 	let editable = album.isUploadable();
 	let structure = {};
-	let _public = data.public ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
+	let isPublic = data.is_public ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
 	let requiresLink = data.requires_link ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
-	let downloadable = data.downloadable ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
-	let shareButtonVisible = data.share_button_visible ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
+	let isDownloadable = data.is_downloadable ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
+	let isShareButtonVisible = data.is_share_button_visible ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
 	let hasPassword = data.has_password ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
 	let license = "";
 	let sorting = "";
@@ -418,10 +418,10 @@ sidebar.createStructure.album = function (album) {
 		title: lychee.locale["ALBUM_SHARING"],
 		type: sidebar.types.DEFAULT,
 		rows: [
-			{ title: lychee.locale["ALBUM_PUBLIC"], kind: "public", value: _public },
+			{ title: lychee.locale["ALBUM_PUBLIC"], kind: "public", value: isPublic },
 			{ title: lychee.locale["ALBUM_HIDDEN"], kind: "hidden", value: requiresLink },
-			{ title: lychee.locale["ALBUM_DOWNLOADABLE"], kind: "downloadable", value: downloadable },
-			{ title: lychee.locale["ALBUM_SHARE_BUTTON_VISIBLE"], kind: "share_button_visible", value: shareButtonVisible },
+			{ title: lychee.locale["ALBUM_DOWNLOADABLE"], kind: "downloadable", value: isDownloadable },
+			{ title: lychee.locale["ALBUM_SHARE_BUTTON_VISIBLE"], kind: "share_button_visible", value: isShareButtonVisible },
 			{ title: lychee.locale["ALBUM_PASSWORD"], kind: "password", value: hasPassword },
 		],
 	};

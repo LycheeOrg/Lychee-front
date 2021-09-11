@@ -95,7 +95,7 @@ albums._createSmartAlbums = function (data) {
 			id: "unsorted",
 			title: lychee.locale["UNSORTED"],
 			created_at: null,
-			unsorted: "1",
+			is_unsorted: true,
 			thumb: data.unsorted.thumb,
 		};
 	}
@@ -105,7 +105,7 @@ albums._createSmartAlbums = function (data) {
 			id: "starred",
 			title: lychee.locale["STARRED"],
 			created_at: null,
-			star: "1",
+			is_starred: true,
 			thumb: data.starred.thumb,
 		};
 	}
@@ -115,8 +115,8 @@ albums._createSmartAlbums = function (data) {
 			id: "public",
 			title: lychee.locale["PUBLIC"],
 			created_at: null,
-			public: "1",
-			visible: "0",
+			is_public: true,
+			is_visible: false,
 			thumb: data.public.thumb,
 		};
 	}
@@ -126,7 +126,7 @@ albums._createSmartAlbums = function (data) {
 			id: "recent",
 			title: lychee.locale["RECENT"],
 			created_at: null,
-			recent: "1",
+			is_recent: true,
 			thumb: data.recent.thumb,
 		};
 	}

@@ -53,7 +53,7 @@ view.albums = {
 				}
 
 				Object.entries(albums.json.smart_albums).forEach(([, albumData]) => {
-					if (albumData["tag_album"] === true) {
+					if (albumData["is_tag_album"]) {
 						albums.parse(albumData);
 						smartData += build.album(albumData);
 					}
@@ -179,7 +179,7 @@ view.album = {
 				return;
 			}
 
-			if (album.json.nsfw && !lychee.nsfw_unlocked_albums.includes(album.json.id)) {
+			if (album.json.is_nsfw && !lychee.nsfw_unlocked_albums.includes(album.json.id)) {
 				$("#sensitive_warning").show();
 			} else {
 				$("#sensitive_warning").hide();
@@ -263,14 +263,14 @@ view.album = {
 		star: function (photoID) {
 			let $badge = $('.photo[data-id="' + photoID + '"] .icn-star');
 
-			if (album.getByID(photoID).star) $badge.addClass("badge--star");
+			if (album.getByID(photoID).is_starred) $badge.addClass("badge--star");
 			else $badge.removeClass("badge--star");
 		},
 
 		public: function (photoID) {
 			let $badge = $('.photo[data-id="' + photoID + '"] .icn-share');
 
-			if (album.getByID(photoID).public === "1") $badge.addClass("badge--visible badge--hidden");
+			if (album.getByID(photoID).is_public == 1) $badge.addClass("badge--visible badge--hidden");
 			else $badge.removeClass("badge--visible badge--hidden");
 		},
 
@@ -535,7 +535,7 @@ view.album = {
 	public: function () {
 		$("#button_visibility_album, #button_sharing_album_users").removeClass("active--not-hidden active--hidden");
 
-		if (album.json.public) {
+		if (album.json.is_public) {
 			if (album.json.requires_link) {
 				$("#button_visibility_album, #button_sharing_album_users").addClass("active--hidden");
 			} else {
@@ -556,7 +556,7 @@ view.album = {
 	},
 
 	nsfw: function () {
-		if (album.json.nsfw) {
+		if (album.json.is_nsfw) {
 			// Sensitive
 			$("#button_nsfw_album").addClass("active").attr("title", lychee.locale["ALBUM_UNMARK_NSFW"]);
 		} else {
@@ -566,12 +566,12 @@ view.album = {
 	},
 
 	downloadable: function () {
-		if (album.json.downloadable) sidebar.changeAttr("downloadable", lychee.locale["ALBUM_SHR_YES"]);
+		if (album.json.is_downloadable) sidebar.changeAttr("downloadable", lychee.locale["ALBUM_SHR_YES"]);
 		else sidebar.changeAttr("downloadable", lychee.locale["ALBUM_SHR_NO"]);
 	},
 
 	shareButtonVisible: () => {
-		if (album.json.share_button_visible) sidebar.changeAttr("share_button_visible", lychee.locale["ALBUM_SHR_YES"]);
+		if (album.json.is_share_button_visible) sidebar.changeAttr("share_button_visible", lychee.locale["ALBUM_SHR_YES"]);
 		else sidebar.changeAttr("share_button_visible", lychee.locale["ALBUM_SHR_NO"]);
 	},
 
@@ -692,7 +692,7 @@ view.photo = {
 	},
 
 	star: function () {
-		if (photo.json.star) {
+		if (photo.json.is_starred) {
 			// Starred
 			$("#button_star").addClass("active").attr("title", lychee.locale["UNSTAR_PHOTO"]);
 		} else {
@@ -704,9 +704,9 @@ view.photo = {
 	public: function () {
 		$("#button_visibility").removeClass("active--hidden active--not-hidden");
 
-		if (photo.json.public === "1" || photo.json.public === "2") {
+		if (photo.json.is_public == 1 || photo.json.is_public == 2) {
 			// Photo public
-			if (photo.json.public === "1") {
+			if (photo.json.is_public == 1) {
 				$("#button_visibility").addClass("active--hidden");
 			} else {
 				$("#button_visibility").addClass("active--not-hidden");
@@ -976,7 +976,7 @@ view.settings = {
 						  <option value='description'>` +
 				lychee.locale["SORT_ALBUM_SELECT_3"] +
 				`</option>
-						  <option value='public'>` +
+						  <option value='is_public'>` +
 				lychee.locale["SORT_ALBUM_SELECT_4"] +
 				`</option>
 						  <option value='max_taken_at'>` +
@@ -1021,10 +1021,10 @@ view.settings = {
 						  <option value='description'>` +
 				lychee.locale["SORT_PHOTO_SELECT_4"] +
 				`</option>
-						  <option value='public'>` +
+						  <option value='is_public'>` +
 				lychee.locale["SORT_PHOTO_SELECT_5"] +
 				`</option>
-						  <option value='star'>` +
+						  <option value='is_starred'>` +
 				lychee.locale["SORT_PHOTO_SELECT_6"] +
 				`</option>
 						  <option value='type'>` +

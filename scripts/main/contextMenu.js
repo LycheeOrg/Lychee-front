@@ -388,9 +388,9 @@ contextMenu.photoMore = function (photoID, e) {
 	// c) or, the album is explicitly marked as downloadable
 	let showDownload =
 		album.isUploadable() ||
-		(photo.json.hasOwnProperty("downloadable")
-			? photo.json.downloadable === "1"
-			: album.json && album.json.downloadable && album.json.downloadable);
+		(photo.json.hasOwnProperty("is_downloadable")
+			? photo.json.is_downloadable
+			: album.json && album.json.is_downloadable && album.json.is_downloadable);
 	let showFull = photo.json.size_variants.original.url && photo.json.size_variants.original.url !== "";
 
 	let items = [
@@ -518,7 +518,7 @@ contextMenu.move = function (IDs, e, callback, kind = "UNSORTED", display_root =
 
 contextMenu.sharePhoto = function (photoID, e) {
 	// v4+ only
-	if (photo.json.hasOwnProperty("share_button_visible") && photo.json.share_button_visible !== "1") {
+	if (photo.json.hasOwnProperty("is_share_button_visible") && !photo.json.is_share_button_visible) {
 		return;
 	}
 
@@ -537,7 +537,7 @@ contextMenu.sharePhoto = function (photoID, e) {
 
 contextMenu.shareAlbum = function (albumID, e) {
 	// v4+ only
-	if (album.json.hasOwnProperty("share_button_visible") && album.json.share_button_visible !== "1") {
+	if (album.json.hasOwnProperty("is_share_button_visible") && !album.json.is_share_button_visible) {
 		return;
 	}
 
