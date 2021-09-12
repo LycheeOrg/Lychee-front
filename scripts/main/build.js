@@ -120,7 +120,7 @@ build.album = function (data, disabled = false) {
 					<a class='badge ${data.is_nsfw ? "badge--nsfw" : ""} icn-warning'>${build.iconic("warning")}</a>
 					<a class='badge ${data.is_starred ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
 					<a class='badge ${data.is_recent ? "badge--visible badge--list" : ""}'>${build.iconic("clock")}</a>
-					<a class='badge ${data.is_public ? "badge--visible" : ""} ${data.visible === "1" ? "badge--not--hidden" : "badge--hidden"} icn-share'>${build.iconic(
+					<a class='badge ${data.is_public ? "badge--visible" : ""} ${data.requires_link ? "badge--hidden" : "badge--not--hidden"} icn-share'>${build.iconic(
 			"eye"
 		)}</a>
 					<a class='badge ${data.is_unsorted ? "badge--visible" : ""}'>${build.iconic("list")}</a>
@@ -131,7 +131,7 @@ build.album = function (data, disabled = false) {
 				`;
 	}
 
-	if ((data.albums && data.albums.length > 0) || (data.hasOwnProperty("has_albums") && data.has_albums === "1")) {
+	if ((data.albums && data.albums.length > 0) || (data.hasOwnProperty("has_albums") && data.has_albums === true)) {
 		html += lychee.html`
 				<div class='subalbum_badge'>
 					<a class='badge badge--folder'>${build.iconic("layers")}</a>
@@ -243,7 +243,7 @@ build.photo = function (data, disabled = false) {
 		html += lychee.html`
 				<div class='badges'>
 				<a class='badge ${data.is_starred ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
-				<a class='badge ${data.is_public ? "badge--visible badge--hidden" : ""} icn-share'>${build.iconic("eye")}</a>
+				<a class='badge ${data.is_public && !album.json.is_public ? "badge--visible badge--hidden" : ""} icn-share'>${build.iconic("eye")}</a>
 				<a class='badge ${isCover ? "badge--cover" : ""} icn-cover'>${build.iconic("folder-cover")}</a>
 				</div>
 				`;

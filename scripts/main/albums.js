@@ -116,7 +116,7 @@ albums._createSmartAlbums = function (data) {
 			title: lychee.locale["PUBLIC"],
 			created_at: null,
 			is_public: true,
-			is_visible: false,
+			requires_link: true,
 			thumb: data.public.thumb,
 		};
 	}
