@@ -318,12 +318,12 @@ sidebar.createStructure.photo = function (data) {
 				{ title: lychee.locale["PHOTO_LOCATION"], kind: "location", value: data.location ? data.location : "" },
 			],
 		};
-		if (data.imgDirection) {
+		if (data.img_direction) {
 			// No point in display sub-degree precision.
 			structure.location.rows.push({
 				title: lychee.locale["PHOTO_IMGDIRECTION"],
 				kind: "imgDirection",
-				value: Math.round(data.imgDirection).toString() + "°",
+				value: Math.round(data.img_direction).toString() + "°",
 			});
 		}
 	} else {

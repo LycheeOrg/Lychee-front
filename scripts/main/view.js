@@ -821,7 +821,7 @@ view.photo = {
 				attribution: map_provider_layer_attribution[lychee.map_provider].attribution,
 			}).addTo(mymap);
 
-			if (!lychee.map_display_direction || !photo.json.imgDirection || photo.json.imgDirection === "") {
+			if (!lychee.map_display_direction || !photo.json.img_direction) {
 				// Add Marker to map, direction is not set
 				L.marker([photo.json.latitude, photo.json.longitude]).addTo(mymap);
 			} else {
@@ -833,7 +833,7 @@ view.photo = {
 					iconAnchor: [50, 49], // point of the icon which will correspond to marker's location
 				});
 				let marker = L.marker([photo.json.latitude, photo.json.longitude], { icon: viewDirectionIcon }).addTo(mymap);
-				marker.setRotationAngle(photo.json.imgDirection);
+				marker.setRotationAngle(photo.json.img_direction);
 			}
 		}
 	},
