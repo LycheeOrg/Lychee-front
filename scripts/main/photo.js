@@ -292,9 +292,7 @@ photo.delete = function (photoIDs) {
 			photoIDs: photoIDs.join(),
 		};
 
-		api.post("Photo::delete", params, function (data) {
-			if (data) lychee.error(null, params, data);
-		});
+		api.post("Photo::delete", params, null);
 	};
 
 	if (photoIDs.length === 1) {
