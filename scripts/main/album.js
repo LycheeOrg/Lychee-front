@@ -892,9 +892,7 @@ album.setPublic = function (albumID, e) {
 		params.password = password;
 	}
 
-	api.post("Album::setPublic", params, function (data) {
-		if (data !== true) lychee.error(null, params, data);
-	});
+	api.post("Album::setPublic", params, null);
 };
 
 album.shareUsers = function (albumID, e) {

@@ -28,7 +28,7 @@ api.isTimeout = function (errorThrown, jqXHR) {
 	return false;
 };
 
-api.post = function (fn, params, successCallback, responseProgressCB = null, errorCallback) {
+api.post = function (fn, params, successCallback, responseProgressCB = null, errorCallback = null) {
 	loadingBar.show();
 
 	params = $.extend({ function: fn }, params);
@@ -44,7 +44,7 @@ api.post = function (fn, params, successCallback, responseProgressCB = null, err
 			return false;
 		}
 
-		successCallback(data);
+		if (successCallback) successCallback(data);
 	};
 
 	const error = (jqXHR, textStatus, errorThrown) => {
