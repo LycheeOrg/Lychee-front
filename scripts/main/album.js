@@ -131,25 +131,6 @@ album.load = function (albumID, refresh = false) {
 	};
 
 	const processData = function (data) {
-		if (data === "Warning: Wrong password!") {
-			// User hit Cancel at the password prompt
-			return false;
-		}
-
-		if (data === "Warning: Album private!") {
-			if (document.location.hash.replace("#", "").split("/")[1] !== undefined) {
-				// Display photo only
-				lychee.setMode("view");
-				lychee.footer_hide();
-			} else {
-				// Album not public
-				lychee.content.show();
-				lychee.footer_show();
-				if (!visible.albums() && !visible.album()) lychee.goto();
-			}
-			return false;
-		}
-
 		album.json = data;
 
 		if (refresh === false) {
@@ -186,17 +167,10 @@ album.load = function (albumID, refresh = false) {
 		}, waitTime);
 	};
 
-	api.post("Album::get", params, function (data) {
-		if (data === "Warning: Wrong password!") {
-			password.getDialog(albumID, function () {
-				params.password = password.value;
-
-				api.post("Album::get", params, function (_data) {
-					albums.refresh();
-					processData(_data);
-				});
-			});
-		} else {
+	api.post(
+		"Album::get",
+		params,
+		function (data) {
 			processData(data);
 
 			tabindex.makeFocusable(lychee.content);
@@ -213,8 +187,23 @@ album.load = function (albumID, refresh = false) {
 					}
 				}
 			}
+		},
+		null,
+		function (jqXHR) {
+			if (jqXHR.status === 403) {
+				password.getDialog(albumID, function () {
+					params.password = password.value;
+
+					api.post("Album::get", params, function (_data) {
+						albums.refresh();
+						processData(_data);
+					});
+				});
+				return true;
+			}
+			return false;
 		}
-	});
+	);
 };
 
 album.parse = function () {

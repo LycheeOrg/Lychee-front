@@ -42,17 +42,6 @@ photo.load = function (photoID, albumID, autoplay) {
 	};
 
 	api.post("Photo::get", params, function (data) {
-		if (data === "Warning: Photo private!") {
-			lychee.content.show();
-			lychee.goto();
-			return false;
-		}
-
-		if (data === "Warning: Wrong password!") {
-			checkPasswd();
-			return false;
-		}
-
 		photo.json = data;
 		photo.json.original_album = photo.json.album;
 		photo.json.album = albumID;
