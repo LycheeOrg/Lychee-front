@@ -719,7 +719,11 @@ photo.editTags = function (photoIDs) {
 	}
 
 	// Improve tags
-	oldTags = oldTags.replace(/,/g, ", ");
+	if (typeof oldTags === "string" && oldTags !== "") {
+		oldTags = oldTags.replace(/,/g, ", ");
+	} else {
+		oldTags = "";
+	}
 
 	const action = function (data) {
 		basicModal.close();
