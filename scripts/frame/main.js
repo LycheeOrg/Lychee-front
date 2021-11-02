@@ -122,7 +122,8 @@ frame.set = function (data) {
 
 frame.resize = function () {
 	if (this.photo) {
-		let ratio = this.photo.size_variants.height > 0 ? this.photo.size_variants.width / this.photo.size_variants.height : 1;
+		let ratio =
+			this.photo.size_variants.original.height > 0 ? this.photo.size_variants.original.width / this.photo.size_variants.original.height : 1;
 		let winWidth = $(window).width();
 		let winHeight = $(window).height();
 
