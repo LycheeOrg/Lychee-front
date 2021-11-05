@@ -108,8 +108,8 @@ sidebar.triggerSearch = function (search_string) {
 };
 
 sidebar.userPreferenceVisibility = function() {
-        let v = sessionStorage.getItem("sidebarUserToggled");
-        return v != null ? v : false;
+        let v = sessionStorage.getItem("sidebarUserPreferenceVisible");
+        return v !== null ? v === "true" : false;
 }
 
 sidebar.toggle = function (is_user_initiated) {
@@ -122,7 +122,7 @@ sidebar.toggle = function (is_user_initiated) {
 		photo.updateSizeLivePhotoDuringAnimation();
 
                 if (is_user_initiated)  
-                    sessionStorage.setItem("sidebarUserToggled", visible.sidebar());
+                    sessionStorage.setItem("sidebarUserPreferenceVisible", visible.sidebar());
 
 		return true;
 	}
