@@ -60,8 +60,12 @@ header.bind = function () {
 		multiselect.bind();
 		lychee.load();
 	});
-	header.dom("#button_info_album").on(eventName, sidebar.toggle);
-	header.dom("#button_info").on(eventName, sidebar.toggle);
+	header.dom("#button_info_album").on(eventName, function () { 
+            sidebar.toggle(true)
+        });
+	header.dom("#button_info").on(eventName, function () {
+            sidebar.toggle(true)
+        });
 	header.dom(".button--map-albums").on(eventName, function () {
 		lychee.gotoMap();
 	});
