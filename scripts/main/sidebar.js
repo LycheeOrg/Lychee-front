@@ -121,7 +121,7 @@ sidebar.toggle = function (is_user_initiated) {
 		sidebar.dom().toggleClass("active");
 		photo.updateSizeLivePhotoDuringAnimation();
 
-                if (is_user_initiated)  
+                if (is_user_initiated)
                     sessionStorage.setItem("sidebarUserPreferenceVisible", visible.sidebar());
 
 		return true;

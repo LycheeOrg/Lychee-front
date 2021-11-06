@@ -60,7 +60,7 @@ header.bind = function () {
 		multiselect.bind();
 		lychee.load();
 	});
-	header.dom("#button_info_album").on(eventName, function () { 
+	header.dom("#button_info_album").on(eventName, function () {
             sidebar.toggle(true)
         });
 	header.dom("#button_info").on(eventName, function () {
