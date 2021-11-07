@@ -61,11 +61,11 @@ header.bind = function () {
 		lychee.load();
 	});
 	header.dom("#button_info_album").on(eventName, function () {
-            sidebar.toggle(true)
-        });
+		sidebar.toggle(true);
+	});
 	header.dom("#button_info").on(eventName, function () {
-            sidebar.toggle(true)
-        });
+		sidebar.toggle(true);
+	});
 	header.dom(".button--map-albums").on(eventName, function () {
 		lychee.gotoMap();
 	});
@@ -354,8 +354,7 @@ header.setMode = function (mode) {
 				);
 			} else if (album.isTagAlbum()) {
 				$("#button_info_album").show();
-                                if (sidebar.userPreferenceVisibility() && !visible.sidebar())
-                                    sidebar.toggle(false);
+				if (sidebar.userPreferenceVisibility() && !visible.sidebar()) sidebar.toggle(false);
 				$("#button_move_album").hide();
 				$(".button_add, .header__divider", ".header__toolbar--album").hide();
 				tabindex.makeFocusable($("#button_info_album"));
@@ -377,8 +376,7 @@ header.setMode = function (mode) {
 				}
 			} else {
 				$("#button_info_album").show();
-                                if (sidebar.userPreferenceVisibility() && !visible.sidebar())
-                                    sidebar.toggle(false);
+				if (sidebar.userPreferenceVisibility() && !visible.sidebar()) sidebar.toggle(false);
 				tabindex.makeFocusable($("#button_info_album"));
 				if (album.isUploadable()) {
 					$(

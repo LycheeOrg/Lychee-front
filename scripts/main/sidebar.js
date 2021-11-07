@@ -107,10 +107,10 @@ sidebar.triggerSearch = function (search_string) {
 	lychee.goto("search/" + encodeURIComponent(search_string));
 };
 
-sidebar.userPreferenceVisibility = function() {
-        let v = sessionStorage.getItem("sidebarUserPreferenceVisible");
-        return v !== null ? v === "true" : false;
-}
+sidebar.userPreferenceVisibility = function () {
+	let v = sessionStorage.getItem("sidebarUserPreferenceVisible");
+	return v !== null ? v === "true" : false;
+};
 
 sidebar.toggle = function (is_user_initiated) {
 	if (visible.sidebar() || visible.sidebarbutton()) {
@@ -121,8 +121,7 @@ sidebar.toggle = function (is_user_initiated) {
 		sidebar.dom().toggleClass("active");
 		photo.updateSizeLivePhotoDuringAnimation();
 
-                if (is_user_initiated)
-                    sessionStorage.setItem("sidebarUserPreferenceVisible", visible.sidebar());
+		if (is_user_initiated) sessionStorage.setItem("sidebarUserPreferenceVisible", visible.sidebar());
 
 		return true;
 	}
