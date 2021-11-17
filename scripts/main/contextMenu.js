@@ -446,10 +446,12 @@ contextMenu.photoMore = function (photoID, e) {
 			});
 		}
 		/* The condition below is copied from view.photo.header() */
-		if (!(
-			(photo.json.type && (photo.json.type.indexOf("video") === 0 || photo.json.type === "raw")) ||
-			(photo.json.livePhotoUrl !== "" && photo.json.livePhotoUrl !== null)
-		)) {
+		if (
+			!(
+				(photo.json.type && (photo.json.type.indexOf("video") === 0 || photo.json.type === "raw")) ||
+				(photo.json.livePhotoUrl !== "" && photo.json.livePhotoUrl !== null)
+			)
+		) {
 			let button_rotate_cwise = $("#button_rotate_cwise");
 			if (button_rotate_cwise && button_rotate_cwise.css("display") === "none") {
 				items.unshift({
