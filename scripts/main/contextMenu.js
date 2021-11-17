@@ -17,6 +17,9 @@ contextMenu.add = function (e) {
 
 	if (visible.albums()) {
 		items.push({ title: build.iconic("tags") + lychee.locale["NEW_TAG_ALBUM"], fn: album.addByTags });
+	} else if (album.isSmartID(album.getID())) {
+		// remove Import and New album if smart album
+		items.splice(1);
 	}
 
 	if (!lychee.admin) {
@@ -27,38 +30,53 @@ contextMenu.add = function (e) {
 		items.splice(3, 1);
 	}
 
-	// prepend further buttons if menu bar is reduced on small screens
-	let button_visibility_album = $("#button_visibility_album");
-	if (button_visibility_album && button_visibility_album.css("display") === "none") {
-		items.unshift({
-			title: build.iconic("eye") + lychee.locale["VISIBILITY_ALBUM"],
-			visible: lychee.enable_button_visibility,
-			fn: (event) => album.setPublic(album.getID(), event),
-		});
-	}
-	let button_trash_album = $("#button_trash_album");
-	if (button_trash_album && button_trash_album.css("display") === "none") {
-		items.unshift({
-			title: build.iconic("trash") + lychee.locale["DELETE_ALBUM"],
-			visible: lychee.enable_button_trash,
-			fn: () => album.delete([album.getID()]),
-		});
-	}
-	let button_move_album = $("#button_move_album");
-	if (button_move_album && button_move_album.css("display") === "none") {
-		items.unshift({
-			title: build.iconic("folder") + lychee.locale["MOVE_ALBUM"],
-			visible: lychee.enable_button_move,
-			fn: (event) => contextMenu.move([album.getID()], event, album.setAlbum, "ROOT", album.getParent() !== ""),
-		});
-	}
-	let button_nsfw_album = $("#button_nsfw_album");
-	if (button_nsfw_album && button_nsfw_album.css("display") === "none") {
-		items.unshift({
-			title: build.iconic("warning") + lychee.locale["ALBUM_MARK_NSFW"],
-			visible: true,
-			fn: () => album.setNSFW(album.getID()),
-		});
+	if (visible.album() && album.isUploadable()) {
+		// prepend further buttons if menu bar is reduced on small screens
+		let albumID = album.getID();
+		if (album.isTagAlbum()) {
+			// For tag albums the context menu is normally not used.
+			items = [];
+		}
+		if (albumID !== "starred" && albumID !== "public" && albumID !== "recent") {
+			if (albumID !== "unsorted") {
+				let button_visibility_album = $("#button_visibility_album");
+				if (button_visibility_album && button_visibility_album.css("display") === "none") {
+					items.unshift({
+						title: build.iconic("eye") + lychee.locale["VISIBILITY_ALBUM"],
+						visible: lychee.enable_button_visibility,
+						fn: (event) => album.setPublic(albumID, event),
+					});
+				}
+			}
+			let button_trash_album = $("#button_trash_album");
+			if (button_trash_album && button_trash_album.css("display") === "none") {
+				items.unshift({
+					title: build.iconic("trash") + lychee.locale["DELETE_ALBUM"],
+					visible: lychee.enable_button_trash,
+					fn: () => album.delete([albumID]),
+				});
+			}
+			if (albumID !== "unsorted") {
+				if (!album.isTagAlbum()) {
+					let button_move_album = $("#button_move_album");
+					if (button_move_album && button_move_album.css("display") === "none") {
+						items.unshift({
+							title: build.iconic("folder") + lychee.locale["MOVE_ALBUM"],
+							visible: lychee.enable_button_move,
+							fn: (event) => contextMenu.move([albumID], event, album.setAlbum, "ROOT", album.getParent() !== ""),
+						});
+					}
+				}
+				let button_nsfw_album = $("#button_nsfw_album");
+				if (button_nsfw_album && button_nsfw_album.css("display") === "none") {
+					items.unshift({
+						title: build.iconic("warning") + lychee.locale["ALBUM_MARK_NSFW"],
+						visible: true,
+						fn: () => album.setNSFW(albumID),
+					});
+				}
+			}
+		}
 	}
 
 	basicContext.show(items, e.originalEvent);
@@ -291,6 +309,10 @@ contextMenu.photo = function (photoID, e) {
 		{ title: build.iconic("trash") + lychee.locale["DELETE"], fn: () => photo.delete([photoID]) },
 		{ title: build.iconic("cloud-download") + lychee.locale["DOWNLOAD"], fn: () => photo.getArchive([photoID]) },
 	];
+	if (album.isSmartID(album.getID()) || album.isTagAlbum()) {
+		// Cover setting not supported for smart or tag albums.
+		items.splice(2, 1);
+	}
 
 	$('.photo[data-id="' + photoID + '"]').addClass("active");
 
@@ -397,46 +419,54 @@ contextMenu.photoMore = function (photoID, e) {
 		{ title: build.iconic("fullscreen-enter") + lychee.locale["FULL_PHOTO"], visible: !!showFull, fn: () => window.open(photo.getDirectLink()) },
 		{ title: build.iconic("cloud-download") + lychee.locale["DOWNLOAD"], visible: !!showDownload, fn: () => photo.getArchive([photoID]) },
 	];
-	// prepend further buttons if menu bar is reduced on small screens
-	let button_visibility = $("#button_visibility");
-	if (button_visibility && button_visibility.css("display") === "none") {
-		items.unshift({
-			title: build.iconic("eye") + lychee.locale["VISIBILITY_PHOTO"],
-			visible: lychee.enable_button_visibility,
-			fn: (event) => photo.setPublic(photo.getID(), event),
-		});
-	}
-	let button_trash = $("#button_trash");
-	if (button_trash && button_trash.css("display") === "none") {
-		items.unshift({
-			title: build.iconic("trash") + lychee.locale["DELETE"],
-			visible: lychee.enable_button_trash,
-			fn: () => photo.delete([photo.getID()]),
-		});
-	}
-	let button_move = $("#button_move");
-	if (button_move && button_move.css("display") === "none") {
-		items.unshift({
-			title: build.iconic("folder") + lychee.locale["MOVE"],
-			visible: lychee.enable_button_move,
-			fn: (event) => contextMenu.move([photo.getID()], event, photo.setAlbum),
-		});
-	}
-	let button_rotate_cwise = $("#button_rotate_cwise");
-	if (button_rotate_cwise && button_rotate_cwise.css("display") === "none") {
-		items.unshift({
-			title: build.iconic("clockwise") + lychee.locale["PHOTO_EDIT_ROTATECWISE"],
-			visible: lychee.enable_button_move,
-			fn: () => photoeditor.rotate(photo.getID(), 1),
-		});
-	}
-	let button_rotate_ccwise = $("#button_rotate_ccwise");
-	if (button_rotate_ccwise && button_rotate_ccwise.css("display") === "none") {
-		items.unshift({
-			title: build.iconic("counterclockwise") + lychee.locale["PHOTO_EDIT_ROTATECCWISE"],
-			visible: lychee.enable_button_move,
-			fn: () => photoeditor.rotate(photo.getID(), -1),
-		});
+	if (album.isUploadable()) {
+		// prepend further buttons if menu bar is reduced on small screens
+		let button_visibility = $("#button_visibility");
+		if (button_visibility && button_visibility.css("display") === "none") {
+			items.unshift({
+				title: build.iconic("eye") + lychee.locale["VISIBILITY_PHOTO"],
+				visible: lychee.enable_button_visibility,
+				fn: (event) => photo.setPublic(photo.getID(), event),
+			});
+		}
+		let button_trash = $("#button_trash");
+		if (button_trash && button_trash.css("display") === "none") {
+			items.unshift({
+				title: build.iconic("trash") + lychee.locale["DELETE"],
+				visible: lychee.enable_button_trash,
+				fn: () => photo.delete([photo.getID()]),
+			});
+		}
+		let button_move = $("#button_move");
+		if (button_move && button_move.css("display") === "none") {
+			items.unshift({
+				title: build.iconic("folder") + lychee.locale["MOVE"],
+				visible: lychee.enable_button_move,
+				fn: (event) => contextMenu.move([photo.getID()], event, photo.setAlbum),
+			});
+		}
+		/* The condition below is copied from view.photo.header() */
+		if (!(
+			(photo.json.type && (photo.json.type.indexOf("video") === 0 || photo.json.type === "raw")) ||
+			(photo.json.livePhotoUrl !== "" && photo.json.livePhotoUrl !== null)
+		)) {
+			let button_rotate_cwise = $("#button_rotate_cwise");
+			if (button_rotate_cwise && button_rotate_cwise.css("display") === "none") {
+				items.unshift({
+					title: build.iconic("clockwise") + lychee.locale["PHOTO_EDIT_ROTATECWISE"],
+					visible: lychee.enable_button_move,
+					fn: () => photoeditor.rotate(photo.getID(), 1),
+				});
+			}
+			let button_rotate_ccwise = $("#button_rotate_ccwise");
+			if (button_rotate_ccwise && button_rotate_ccwise.css("display") === "none") {
+				items.unshift({
+					title: build.iconic("counterclockwise") + lychee.locale["PHOTO_EDIT_ROTATECCWISE"],
+					visible: lychee.enable_button_move,
+					fn: () => photoeditor.rotate(photo.getID(), -1),
+				});
+			}
+		}
 	}
 
 	basicContext.show(items, e.originalEvent);
