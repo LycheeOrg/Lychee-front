@@ -578,7 +578,7 @@ view.album = {
 	},
 
 	sidebar: function () {
-		if ((visible.album() || (album.json && album.json.init)) && !visible.photo()) {
+		if ((visible.album() || (album.json && !album.json.init)) && !visible.photo()) {
 			let structure = sidebar.createStructure.album(album);
 			let html = sidebar.render(structure);
 
@@ -846,6 +846,7 @@ view.photo = {
 	},
 
 	header: function () {
+		/* Note: the condition below is duplicated in contextMenu.photoMore() */
 		if (
 			(photo.json.type && (photo.json.type.indexOf("video") === 0 || photo.json.type === "raw")) ||
 			(photo.json.livePhotoUrl !== "" && photo.json.livePhotoUrl !== null)
