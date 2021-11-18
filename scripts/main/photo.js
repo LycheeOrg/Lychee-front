@@ -413,14 +413,7 @@ photo.copyTo = function (photoIDs, albumID) {
 		if (data !== true) {
 			lychee.error(null, params, data);
 		} else {
-			if (albumID === album.getID()) {
-				album.reload();
-			} else {
-				// Lychee v3 does not support the albumID argument to
-				// Photo::duplicate so we need to do it manually, which is
-				// imperfect, as it moves the source photos, not the duplicates.
-				photo.setAlbum(photoIDs, albumID);
-			}
+			album.reload();
 		}
 	});
 };

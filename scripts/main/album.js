@@ -198,17 +198,6 @@ album.load = function (albumID, refresh = false) {
 			});
 		} else {
 			processData(data);
-			// save scroll position for this URL
-			if (data && data.albums && data.albums.length > 0) {
-				setTimeout(function () {
-					let urls = JSON.parse(localStorage.getItem("scroll"));
-					let urlWindow = window.location.href;
-
-					if (urls != null && urls[urlWindow]) {
-						$(window).scrollTop(urls[urlWindow]);
-					}
-				}, 500);
-			}
 
 			tabindex.makeFocusable(lychee.content);
 
@@ -397,7 +386,10 @@ album.setTitle = function (albumIDs) {
 				oldTitle = album.json.title;
 			} else oldTitle = album.getSubByID(albumIDs[0]).title;
 		}
-		if (!oldTitle && albums.json) oldTitle = albums.getByID(albumIDs[0]).title;
+		if (!oldTitle) {
+			let a = albums.getByID(albumIDs[0]);
+			if (a) oldTitle = a.title;
+		}
 	}
 
 	const action = function (data) {
@@ -417,20 +409,23 @@ album.setTitle = function (albumIDs) {
 				album.json.title = newTitle;
 				view.album.title();
 
-				if (albums.json) albums.getByID(albumIDs[0]).title = newTitle;
+				let a = albums.getByID(albumIDs[0]);
+				if (a) a.title = newTitle;
 			} else {
 				albumIDs.forEach(function (id) {
 					album.getSubByID(id).title = newTitle;
 					view.album.content.titleSub(id);
 
-					if (albums.json) albums.getByID(id).title = newTitle;
+					let a = albums.getByID(id);
+					if (a) a.title = newTitle;
 				});
 			}
 		} else if (visible.albums()) {
 			// Rename all albums
 
 			albumIDs.forEach(function (id) {
-				albums.getByID(id).title = newTitle;
+				let a = albums.getByID(id);
+				if (a) a.title = newTitle;
 				view.albums.content.title(id);
 			});
 		}
@@ -1091,7 +1086,7 @@ album.buildMessage = function (albumIDs, albumID, op1, op2, ops) {
 	// Get title of first album
 	if (parseInt(albumID, 10) === 0) {
 		title = lychee.locale["ROOT"];
-	} else if (albums.json) {
+	} else {
 		album1 = albums.getByID(albumID);
 		if (album1) {
 			title = album1.title;
@@ -1103,11 +1098,9 @@ album.buildMessage = function (albumIDs, albumID, op1, op2, ops) {
 
 	if (albumIDs.length === 1) {
 		// Get title of second album
-		if (albums.json) {
-			album2 = albums.getByID(albumIDs[0]);
-			if (album2) {
-				sTitle = album2.title;
-			}
+		album2 = albums.getByID(albumIDs[0]);
+		if (album2) {
+			sTitle = album2.title;
 		}
 
 		// Fallback for second album without a title
@@ -1175,7 +1168,10 @@ album.delete = function (albumIDs) {
 				albumTitle = album.json.title;
 			} else albumTitle = album.getSubByID(albumIDs[0]).title;
 		}
-		if (!albumTitle && albums.json) albumTitle = albums.getByID(albumIDs).title;
+		if (!albumTitle) {
+			let a = albums.getByID(albumIDs);
+			if (a) albumTitle = a.title;
+		}
 
 		// Fallback for album without a title
 		if (albumTitle === "") albumTitle = lychee.locale["UNTITLED"];

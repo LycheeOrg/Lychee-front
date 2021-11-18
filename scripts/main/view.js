@@ -25,8 +25,6 @@ view.albums = {
 	},
 
 	content: {
-		scrollPosition: 0,
-
 		init: function () {
 			let smartData = "";
 			let albumsData = "";
@@ -100,10 +98,11 @@ view.albums = {
 			}
 
 			album.apply_nsfw_filter();
+
 			// Restore scroll position
-			if (view.albums.content.scrollPosition != null && view.albums.content.scrollPosition !== 0) {
-				$(document).scrollTop(view.albums.content.scrollPosition);
-			}
+			let urls = JSON.parse(localStorage.getItem("scroll"));
+			let urlWindow = window.location.href;
+			$(window).scrollTop(urls != null && urls[urlWindow] ? urls[urlWindow] : 0);
 		},
 
 		title: function (albumID) {
@@ -229,15 +228,16 @@ view.album = {
 			}
 			html += photosData;
 
-			// Save and reset scroll position
-			view.albums.content.scrollPosition = $(document).scrollTop();
-			requestAnimationFrame(() => $(document).scrollTop(0));
-
 			// Add photos to view
 			lychee.content.html(html);
 			album.apply_nsfw_filter();
 
 			view.album.content.justify();
+
+			// Restore scroll position
+			let urls = JSON.parse(localStorage.getItem("scroll"));
+			let urlWindow = window.location.href;
+			$(window).scrollTop(urls != null && urls[urlWindow] ? urls[urlWindow] : 0);
 		},
 
 		title: function (photoID) {
@@ -910,45 +910,27 @@ view.settings = {
 				view.settings.content.setOverlayType();
 				view.settings.content.setMapDisplay();
 				view.settings.content.setNSFWVisible();
+				view.settings.content.setNotification();
 				view.settings.content.setCSS();
 				view.settings.content.moreButton();
 			}
 		},
 
 		setLogin: function () {
-			let msg =
-				`
+			let msg = lychee.html`
 			<div class="setLogin">
-			  <p>
-				  ` +
-				lychee.locale["PASSWORD_TITLE"] +
-				`
-				  <input name='oldUsername' class='text' type='text' placeholder='` +
-				lychee.locale["USERNAME_CURRENT"] +
-				`' value=''>
-				  <input name='oldPassword' class='text' type='password' placeholder='` +
-				lychee.locale["PASSWORD_CURRENT"] +
-				`' value=''>
+			  <p>$${lychee.locale["PASSWORD_TITLE"]}
+				  <input name='oldUsername' class='text' type='text' placeholder='$${lychee.locale["USERNAME_CURRENT"]}' value=''>
+				  <input name='oldPassword' class='text' type='password' placeholder='$${lychee.locale["PASSWORD_CURRENT"]}' value=''>
 			  </p>
-			  <p>
-				  ` +
-				lychee.locale["PASSWORD_TEXT"] +
-				`
-				  <input name='username' class='text' type='text' placeholder='` +
-				lychee.locale["LOGIN_USERNAME"] +
-				`' value=''>
-				  <input name='password' class='text' type='password' placeholder='` +
-				lychee.locale["LOGIN_PASSWORD"] +
-				`' value=''>
-				  <input name='confirm' class='text' type='password' placeholder='` +
-				lychee.locale["LOGIN_PASSWORD_CONFIRM"] +
-				`' value=''>
+			  <p>$${lychee.locale["PASSWORD_TEXT"]}
+				  <input name='username' class='text' type='text' placeholder='$${lychee.locale["LOGIN_USERNAME"]}' value=''>
+				  <input name='password' class='text' type='password' placeholder='$${lychee.locale["LOGIN_PASSWORD"]}' value=''>
+				  <input name='confirm' class='text' type='password' placeholder='$${lychee.locale["LOGIN_PASSWORD_CONFIRM"]}' value=''>
 			  </p>
 			<div class="basicModal__buttons">
 				<!--<a id="basicModal__cancel" class="basicModal__button ">Cancel</a>-->
-				<a id="basicModal__action_password_change" class="basicModal__button ">` +
-				lychee.locale["PASSWORD_CHANGE"] +
-				`</a>
+				<a id="basicModal__action_password_change" class="basicModal__button ">$${lychee.locale["PASSWORD_CHANGE"]}</a>
 			</div>
 			</div>`;
 
@@ -965,104 +947,57 @@ view.settings = {
 			let sortingPhotos = [];
 			let sortingAlbums = [];
 
-			let msg =
-				`
-			<div class="setSorting">
-			  <p>` +
-				lychee.locale["SORT_ALBUM_BY_1"] +
-				`
-				  <span class="select">
-					  <select id="settings_albums_type" name="typeAlbums">
-						  <option value='id'>` +
-				lychee.locale["SORT_ALBUM_SELECT_1"] +
-				`</option>
-						  <option value='title'>` +
-				lychee.locale["SORT_ALBUM_SELECT_2"] +
-				`</option>
-						  <option value='description'>` +
-				lychee.locale["SORT_ALBUM_SELECT_3"] +
-				`</option>
-						  <option value='public'>` +
-				lychee.locale["SORT_ALBUM_SELECT_4"] +
-				`</option>
-						  <option value='max_taken_at'>` +
-				lychee.locale["SORT_ALBUM_SELECT_5"] +
-				`</option>
-						  <option value='min_taken_at'>` +
-				lychee.locale["SORT_ALBUM_SELECT_6"] +
-				`</option>
-					  </select>
-				  </span>
-				  ` +
-				lychee.locale["SORT_ALBUM_BY_2"] +
-				`
-				  <span class="select">
-					  <select id="settings_albums_order" name="orderAlbums">
-						  <option value='ASC'>` +
-				lychee.locale["SORT_ASCENDING"] +
-				`</option>
-						  <option value='DESC'>` +
-				lychee.locale["SORT_DESCENDING"] +
-				`</option>
-					  </select>
-				  </span>
-				  ` +
-				lychee.locale["SORT_ALBUM_BY_3"] +
-				`
-			  </p>
-			  <p>` +
-				lychee.locale["SORT_PHOTO_BY_1"] +
-				`
-				  <span class="select">
-					  <select id="settings_photos_type" name="typePhotos">
-						  <option value='id'>` +
-				lychee.locale["SORT_PHOTO_SELECT_1"] +
-				`</option>
-						  <option value='taken_at'>` +
-				lychee.locale["SORT_PHOTO_SELECT_2"] +
-				`</option>
-						  <option value='title'>` +
-				lychee.locale["SORT_PHOTO_SELECT_3"] +
-				`</option>
-						  <option value='description'>` +
-				lychee.locale["SORT_PHOTO_SELECT_4"] +
-				`</option>
-						  <option value='public'>` +
-				lychee.locale["SORT_PHOTO_SELECT_5"] +
-				`</option>
-						  <option value='star'>` +
-				lychee.locale["SORT_PHOTO_SELECT_6"] +
-				`</option>
-						  <option value='type'>` +
-				lychee.locale["SORT_PHOTO_SELECT_7"] +
-				`</option>
-					  </select>
-				  </span>
-				  ` +
-				lychee.locale["SORT_PHOTO_BY_2"] +
-				`
-				  <span class="select">
-					  <select id="settings_photos_order" name="orderPhotos">
-						  <option value='ASC'>` +
-				lychee.locale["SORT_ASCENDING"] +
-				`</option>
-						  <option value='DESC'>` +
-				lychee.locale["SORT_DESCENDING"] +
-				`</option>
-					  </select>
-				  </span>
-				  ` +
-				lychee.locale["SORT_PHOTO_BY_3"] +
-				`
-			  </p>
-				<div class="basicModal__buttons">
-					<!--<a id="basicModal__cancel" class="basicModal__button ">Cancel</a>-->
-					<a id="basicModal__action_sorting_change" class="basicModal__button ">` +
-				lychee.locale["SORT_CHANGE"] +
-				`</a>
+			let msg = lychee.html`
+				<div class="setSorting">
+					<p>
+						$${lychee.locale["SORT_ALBUM_BY_1"]}
+						<span class="select">
+							<select id="settings_albums_type" name="typeAlbums">
+								<option value='id'>$${lychee.locale["SORT_ALBUM_SELECT_1"]}</option>
+								<option value='title'>$${lychee.locale["SORT_ALBUM_SELECT_2"]}</option>
+								<option value='description'>$${lychee.locale["SORT_ALBUM_SELECT_3"]}</option>
+								<option value='public'>$${lychee.locale["SORT_ALBUM_SELECT_4"]}</option>
+								<option value='max_taken_at'>$${lychee.locale["SORT_ALBUM_SELECT_5"]}</option>
+								<option value='min_taken_at'>$${lychee.locale["SORT_ALBUM_SELECT_6"]}</option>
+							</select>
+						</span>
+						$${lychee.locale["SORT_ALBUM_BY_2"]}
+						<span class="select">
+							<select id="settings_albums_order" name="orderAlbums">
+								<option value='ASC'>$${lychee.locale["SORT_ASCENDING"]}</option>
+								<option value='DESC'>$${lychee.locale["SORT_DESCENDING"]}</option>
+							</select>
+						</span>
+						$${lychee.locale["SORT_ALBUM_BY_3"]}
+					</p>
+					<p>
+						$${lychee.locale["SORT_PHOTO_BY_1"]}
+						<span class="select">
+							<select id="settings_photos_type" name="typePhotos">
+								<option value='id'>$${lychee.locale["SORT_PHOTO_SELECT_1"]}</option>
+								<option value='taken_at'>$${lychee.locale["SORT_PHOTO_SELECT_2"]}</option>
+								<option value='title'>$${lychee.locale["SORT_PHOTO_SELECT_3"]}</option>
+								<option value='description'>$${lychee.locale["SORT_PHOTO_SELECT_4"]}</option>
+								<option value='public'>$${lychee.locale["SORT_PHOTO_SELECT_5"]}</option>
+								<option value='star'>$${lychee.locale["SORT_PHOTO_SELECT_6"]}</option>
+								<option value='type'>$${lychee.locale["SORT_PHOTO_SELECT_7"]}</option>
+							</select>
+				  		</span>
+						$${lychee.locale["SORT_PHOTO_BY_2"]}
+				  		<span class="select">
+							<select id="settings_photos_order" name="orderPhotos">
+								<option value='ASC'>$${lychee.locale["SORT_ASCENDING"]}</option>
+								<option value='DESC'>$${lychee.locale["SORT_DESCENDING"]}</option>
+							</select>
+						</span>
+						$${lychee.locale["SORT_PHOTO_BY_3"]}
+					</p>
+					<div class="basicModal__buttons">
+						<!--<a id="basicModal__cancel" class="basicModal__button ">Cancel</a>-->
+						<a id="basicModal__action_sorting_change" class="basicModal__button ">$${lychee.locale["SORT_CHANGE"]}</a>
+					</div>
 				</div>
-			  </div>
-			  `;
+			`;
 
 			$(".settings_view").append(msg);
 
@@ -1385,6 +1320,24 @@ view.settings = {
 			settings.bind("#LocationShowPublic", ".setLocationShowPublic", settings.changeLocationShowPublic);
 		},
 
+		setNotification: function () {
+			msg = `
+			<div class="setNewPhotosNotification">
+			<p>${lychee.locale["NEW_PHOTOS_NOTIFICATION"]}
+			<label class="switch">
+				<input id="NewPhotosNotification" type="checkbox">
+				<span class="slider round"></span>
+			</label>
+			</p>
+			</div>
+			`;
+
+			$(".settings_view").append(msg);
+			if (lychee.new_photos_notification) $("#NewPhotosNotification").click();
+
+			settings.bind("#NewPhotosNotification", ".setNewPhotosNotification", settings.changeNewPhotosNotification);
+		},
+
 		setCSS: function () {
 			let msg = `
 			<div class="setCSS">
@@ -1485,6 +1438,46 @@ view.full_settings = {
 					settings.save_enter(e);
 				});
 			});
+		},
+	},
+};
+
+view.notifications = {
+	init: function () {
+		multiselect.clearSelection();
+
+		view.notifications.title();
+		view.notifications.content.init();
+	},
+
+	title: function () {
+		lychee.setTitle("Notifications", false);
+	},
+
+	clearContent: function () {
+		lychee.content.html('<div class="settings_view"></div>');
+	},
+
+	content: {
+		init: function () {
+			view.notifications.clearContent();
+
+			$(".settings_view").append('<div class="setting_line"><p>' + `${lychee.locale["USER_EMAIL_INSTRUCTION"]}` + "</p></div>");
+
+			let html = "";
+
+			html +=
+				'<div class="setLogin"><p id="UserUpdate">' +
+				"Enter your email address:" +
+				'<input name="email" class="text" type="text" placeholder="email@example.com" value="' +
+				notifications.json +
+				'">' +
+				'</p><div class="basicModal__buttons">' +
+				'<a id="UserUpdate_button" class="basicModal__button">Save</a>' +
+				"</div></div>";
+
+			$(".settings_view").append(html);
+			settings.bind("#UserUpdate_button", "#UserUpdate", notifications.update);
 		},
 	},
 };
