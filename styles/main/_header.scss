@@ -71,13 +71,13 @@
 			margin: 0 0 0 5px;
 			width: 10px;
 			height: 10px;
-			fill: rgba(color("BLACK"),0.5);
+			fill: rgba(color("BLACK"), 0.5);
 			transition: fill 0.2s ease-out;
 		}
 
 		&:active .iconic {
 			transition: none;
-			fill: rgba(color(active-header-title-iconic-fill),0.8);
+			fill: rgba(color(active-header-title-iconic-fill), 0.8);
 		}
 
 		&--editable .iconic {
@@ -94,7 +94,7 @@
 		.iconic {
 			width: 15px;
 			height: 15px;
-			fill: rgba(color(header-button-iconic-fill),0.5);
+			fill: rgba(color(header-button-iconic-fill), 0.5);
 			transition: fill 0.2s ease-out;
 		}
 
@@ -166,7 +166,7 @@
 		border-style: solid;
 		border-width: 1px;
 		border-color: rgba(color(default-header-search-border), 0.9);
-		box-shadow: 0 1px 0 rgba(color(header-search-box-shadow),0.04);
+		box-shadow: 0 1px 0 rgba(color(header-search-box-shadow), 0.04);
 		outline: none;
 		border-radius: 50px;
 		opacity: 0.6;
@@ -175,7 +175,7 @@
 		&:focus {
 			width: 140px;
 			border-color: color(focus-header-search-border);
-			box-shadow: 0 1px 0 rgba(color(focus-header-search-box-shadow),0);
+			box-shadow: 0 1px 0 rgba(color(focus-header-search-box-shadow), 0);
 			opacity: 1;
 		}
 
@@ -197,7 +197,7 @@
 		top: -2px;
 		right: 8px;
 		padding: 0;
-		color: rgba(color(header-clear-text),0.5);
+		color: rgba(color(header-clear-text), 0.5);
 		font-size: 24px;
 		opacity: 0;
 		transition: color 0.2s ease-out;
@@ -234,16 +234,16 @@
 		&__title,
 		.button {
 			&:hover .iconic {
-				fill: rgba(color(hover-header-button-iconic-fill),1);
+				fill: rgba(color(hover-header-button-iconic-fill), 1);
 			}
 		}
 
 		&__clear:hover {
-			color: rgba(color(hover-header-clear-text),1);
+			color: rgba(color(hover-header-clear-text), 1);
 		}
 
 		&__hostedwith:hover {
-			background-color: rgba(color(hover-header-hostedwith-background),0.3);
+			background-color: rgba(color(hover-header-hostedwith-background), 0.3);
 		}
 	}
 }

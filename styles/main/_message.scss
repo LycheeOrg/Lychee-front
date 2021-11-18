@@ -1,5 +1,5 @@
 .basicModalContainer {
-	background-color: rgba(color(message-basicmodal-container-background),0.85);
+	background-color: rgba(color(message-basicmodal-container-background), 0.85);
 
 	&--error {
 		transform: translateY(40px);
@@ -8,7 +8,7 @@
 
 .basicModal {
 	background: linear-gradient(to bottom, color(message-basicmodal-background-gradiant-1), color(message-basicmodal-background-gradiant-2));
-	box-shadow: 0 1px 4px rgba(color("BLACK"),0.2), inset 0 1px 0 rgba(color("BLACK"),0.05);
+	box-shadow: 0 1px 4px rgba(color("BLACK"), 0.2), inset 0 1px 0 rgba(color("BLACK"), 0.05);
 
 	&--error {
 		transform: translateY(-40px);
@@ -30,7 +30,7 @@
 	// Text -------------------------------------------------------------- //
 	p {
 		padding: 10px 30px;
-		color: rgba(color(message-basicmodal-p-text),0.9);
+		color: rgba(color(message-basicmodal-p-text), 0.9);
 		font-size: 14px;
 		text-align: left;
 		line-height: 20px;
@@ -41,7 +41,7 @@
 		}
 
 		a {
-			color: rgba(color(message-basicmodal-p-a-text),0.9);
+			color: rgba(color(message-basicmodal-p-a-text), 0.9);
 			text-decoration: none;
 			border-bottom: 1px dashed color(message-basicmodal-p-a-border-bottom);
 		}
@@ -79,21 +79,22 @@
 	// Buttons -------------------------------------------------------------- //
 	&__button {
 		padding: 13px 0 15px;
-		background: rgba(color(message-button-background),0.02);
-		color: rgba(color("BLACK"),0.5);
-		border-top: 1px solid rgba(color(message-button-color,0.2);
-		box-shadow: inset 0 1px 0 rgba(color(message-button-box-shadow),0.02);
+		background: rgba(color(message-button-background), 0.02);
+		color: rgba(color("BLACK"), 0.5);
+		border-top: 1px solid rgba(color(message-button-color), 0.2);
+		box-shadow: inset 0 1px 0 rgba(color(message-button-box-shadow), 0.02);
 		cursor: default;
 
 		&:active,
 		&--active {
 			transition: none;
-			background: rgba(color(active-message-button-background),0.1);
+			background: rgba(color(active-message-button-background), 0.1);
 		}
 
 		&#basicModal__action {
 			color: color(basicmodal-action-text);
-			box-shadow: inset 0 1px 0 color(message-basicmodal-action-box-shadow-1.02), inset 1px 0 0 color(message-basicmodal-action-box-shadow-2,0.2);
+			box-shadow: inset 0 1px 0 color(message-basicmodal-action-box-shadow-1.02),
+				inset 1px 0 0 color(message-basicmodal-action-box-shadow-2, 0.2);
 		}
 
 		&#basicModal__action.red,
@@ -121,7 +122,7 @@
 		// to avoid a blurry line in Safari on non-retina screens
 		border-bottom: 1px solid color(basicmodal-input-bottom-border);
 		border-radius: 0;
-		box-shadow: 0 1px 0 rgba(message-input-text-box-shadow,0.05);
+		box-shadow: 0 1px 0 rgba(message-input-text-box-shadow, 0.05);
 		outline: none;
 
 		&:focus {
@@ -157,7 +158,7 @@
 
 		label {
 			float: left;
-			color: rgba(color(message-choice-label-text),1);
+			color: rgba(color(message-choice-label-text), 1);
 			font-size: 14px;
 			font-weight: 700;
 		}
@@ -173,9 +174,9 @@
 			display: block;
 			width: 16px;
 			height: 16px;
-			background: rgba(color(message-choice-label-checkbox-background),0.5);
+			background: rgba(color(message-choice-label-checkbox-background), 0.5);
 			border-radius: 3px;
-			box-shadow: 0 0 0 1px rgba(color(message-choice-label-checkbox-box-shadow),0.7);
+			box-shadow: 0 0 0 1px rgba(color(message-choice-label-checkbox-box-shadow), 0.7);
 
 			.iconic {
 				box-sizing: border-box;
@@ -189,7 +190,7 @@
 
 		// Checked
 		label input:checked ~ .checkbox {
-			background: rgba(color(checked-message-label-input-checkbox-background),0.5);
+			background: rgba(color(checked-message-label-input-checkbox-background), 0.5);
 			.iconic {
 				opacity: 1;
 				transform: scale(1);
@@ -198,14 +199,14 @@
 
 		// Active
 		label input:active ~ .checkbox {
-			background: rgba(color(active-message-label-input-checkbox-background),0.3);
+			background: rgba(color(active-message-label-input-checkbox-background), 0.3);
 			.iconic {
 				opacity: 0.8;
 			}
 		}
 
 		label input:disabled ~ .checkbox {
-			background: rgba(color(disabled-message-label-input-checkbox-background),0.2);
+			background: rgba(color(disabled-message-label-input-checkbox-background), 0.2);
 			.iconic {
 				opacity: 0.3;
 			}
@@ -213,7 +214,7 @@
 		}
 
 		label input:disabled ~ .label {
-			color: rgba(color(disabled-message-label-input-label-text),0.3);
+			color: rgba(color(disabled-message-label-input-label-text), 0.3);
 		}
 
 		label .label {
@@ -225,7 +226,7 @@
 			padding: 2px 0 0 35px;
 			margin: 0;
 			width: 100%;
-			color: rgba(color(message-choice-p-text),0.6);
+			color: rgba(color(message-choice-p-text), 0.6);
 			font-size: 13px;
 		}
 
@@ -248,11 +249,11 @@
 		margin: 5px 7px;
 		padding: 0;
 		width: 210px;
-		background: rgba(color(message-select-text),0.3);
+		background: rgba(color(message-select-text), 0.3);
 		color: color(basicmodal-select-text);
 		border-radius: 3px;
-		border: 1px solid rgba(color(message-select-border),0.2);
-		box-shadow: 0 1px 0 rgba(color(message-select-box-shadow),0.02);
+		border: 1px solid rgba(color(message-select-border), 0.2);
+		box-shadow: 0 1px 0 rgba(color(message-select-box-shadow), 0.02);
 		font-size: 11px;
 		line-height: 16px;
 		overflow: hidden;
@@ -306,7 +307,7 @@
 	.version {
 		margin: -5px 0 0;
 		padding: 0 30px 30px !important;
-		color: rgba(color(message-version-text),0.3);
+		color: rgba(color(message-version-text), 0.3);
 		font-size: 12px;
 		text-align: right;
 
@@ -315,7 +316,7 @@
 		}
 
 		span a {
-			color: rgba(color(message-version-span-a-text),0.3);
+			color: rgba(color(message-version-span-a-text), 0.3);
 		}
 	}
 	div.version {
@@ -340,11 +341,11 @@
 		margin: 0 8px 8px;
 		width: calc(100% - 16px);
 		height: 300px;
-		background-color: rgba(color(message-version-rows-background),0.4);
+		background-color: rgba(color(message-version-rows-background), 0.4);
 		overflow: hidden;
 		overflow-y: auto;
 		border-radius: 3px;
-		box-shadow: inset 0 0 3px rgba(color(message-version-rows-box-shadow),0.4);
+		box-shadow: inset 0 0 3px rgba(color(message-version-rows-box-shadow), 0.4);
 	}
 
 	// Row -------------------------------------------------------------- //
@@ -352,10 +353,10 @@
 		float: left;
 		padding: 8px 0;
 		width: 100%;
-		background-color: rgba(color(message-version-row-background),0.02);
+		background-color: rgba(color(message-version-row-background), 0.02);
 
 		&:nth-child(2n) {
-			background-color: rgba(color(message-version-row-background),0);
+			background-color: rgba(color(message-version-row-background), 0);
 		}
 
 		a.name {
@@ -372,7 +373,7 @@
 			float: left;
 			padding: 5px 10px;
 			width: 30%;
-			color: rgba(color(message-version-row-a-status-text),0.5);
+			color: rgba(color(message-version-row-a-status-text), 0.5);
 			font-size: 14px;
 			text-align: right;
 
@@ -405,7 +406,7 @@
 			float: left;
 			padding: 2px 10px 5px;
 			width: 100%;
-			color: rgba(color(message-row-p-notice-text),0.5);
+			color: rgba(color(message-row-p-notice-text), 0.5);
 			font-size: 12px;
 			overflow: hidden;
 			line-height: 16px;
@@ -432,7 +433,7 @@
 
 		label {
 			float: left;
-			color: rgba(color(message-switch-label-text),1);
+			color: rgba(color(message-switch-label-text), 1);
 			font-size: 14px;
 			font-weight: 700;
 		}
@@ -484,7 +485,7 @@
 		}
 
 		label input:disabled ~ .slider {
-			background: rgba(color(disabled-message-switch-label-input-slider-background),0.2);
+			background: rgba(color(disabled-message-switch-label-input-slider-background), 0.2);
 			.iconic {
 				opacity: 0.3;
 			}
@@ -492,7 +493,7 @@
 		}
 
 		.label--disabled {
-			color: rgba(color(disabled-message-switch-label-text),0.6);
+			color: rgba(color(disabled-message-switch-label-text), 0.6);
 		}
 
 		p {
@@ -500,7 +501,7 @@
 			padding: 2px 0 0;
 			margin: 0;
 			width: 100%;
-			color: rgba(color(message-switch-p-text),0.6);
+			color: rgba(color(message-switch-p-text), 0.6);
 			font-size: 13px;
 		}
 	}
@@ -509,6 +510,6 @@
 // restrict hover features to devices that support it
 @media (hover: hover) {
 	.basicModal__button:hover {
-		background: rgba(color(hover-message-basicmodal-button-background),0.02);
+		background: rgba(color(hover-message-basicmodal-button-background), 0.02);
 	}
 }

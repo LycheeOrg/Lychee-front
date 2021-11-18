@@ -1,5 +1,5 @@
 // Properties -------------------------------------------------------------- //
-$shadow: 0 -1px 0 rgba(color("BLACK"),0.2);
+$shadow: 0 -1px 0 rgba(color("BLACK"), 0.2);
 // Colors ----------------------------------------------------------- //
 $colors: (
 	// Blues
@@ -252,7 +252,7 @@ $color-place: (
 	leaflet-popup-content-svg-fill: color_value(white),
 	leaflet-popup-content-p-text: color_value(white),
 	// message
-	message-basicmodal-container-background: color_value((black),
+	message-basicmodal-container-background: color_value(black),
 	message-basicmodal-background-gradiant-1: color_value(tundora),
 	message-basicmodal-background-gradiant-2: color_value(mine-shaft),
 	message-basicmodal-p-text: color_value(white),
@@ -262,7 +262,7 @@ $color-place: (
 	message-button-background: color_value(black),
 	message-button-color: color_value(white),
 	message-button-box-shadow: color_value(white),
-	active-message-button-background: color_value((black),
+	active-message-button-background: color_value(black),
 	message-basicmodal-action-box-shadow-1: color_value(white),
 	message-basicmodal-action-box-shadow-2: color_value(black),
 	message-input-text-box-shadow: color_value(white),
@@ -346,6 +346,7 @@ $color-place: (
 	page-content-p-text: color_value(dove-gray),
 	page-content-left_50_img-border: color_value(dove-gray)
 );
+
 :root {
 	@each $name, $color in $color-place {
 		--color-#{$name}: #{$color};

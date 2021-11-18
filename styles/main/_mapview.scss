@@ -14,7 +14,7 @@
 	}
 
 	&.full {
-		background-color: rgba(color(mapview-full-background),1);
+		background-color: rgba(color(mapview-full-background), 1);
 		cursor: none;
 	}
 	#leaflet_map_full {
@@ -46,7 +46,11 @@
 	left: 22px;
 	right: 22px;
 	padding-bottom: 10px;
-	background: linear-gradient(to bottom, rgba(color(leaflet-popup-content-div-background), 0), rgba(color(leaflet-popup-content-div-background), 0.6));
+	background: linear-gradient(
+		to bottom,
+		rgba(color(leaflet-popup-content-div-background), 0),
+		rgba(color(leaflet-popup-content-div-background), 0.6)
+	);
 }
 
 .leaflet-popup-content h1 {
