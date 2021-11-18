@@ -169,7 +169,7 @@
 		width: 180px;
 		margin: 12px 0 5px 15px;
 		color: color(content-photo-overlay-h1-text);
-		text-shadow: 0 1px 3px color(content-photo-overlay-h1-text-shadow, 0.4);
+		text-shadow: 0 1px 3px rgba(color(content-photo-overlay-h1-text-shadow), 0.4);
 		font-size: 16px;
 		font-weight: bold;
 		overflow: hidden;
@@ -274,7 +274,7 @@
 		padding: 10px 0 0;
 		width: 100%;
 		opacity: 0;
-		border-top: 1px solid color(color(content-divider-border-top), 0.02);
+		border-top: 1px solid rgba(color(content-divider-border-top), 0.02);
 		box-shadow: $shadow;
 
 		animation-duration: 0.2s;

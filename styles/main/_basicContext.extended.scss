@@ -37,8 +37,8 @@
 		width: 100%;
 		background: color(basicontext-data-input-link-background);
 		color: color(basicontext-data-input-link-text);
-		box-shadow: 0px 1px 0px color(basicontext-data-input-link-box-shadow, 0.05);
-		border: 1px solid color(basicontext-data-input-link-border, 0.4);
+		box-shadow: 0px 1px 0px rgba(color(basicontext-data-input-link-box-shadow), 0.05);
+		border: 1px solid rgba(color(basicontext-data-input-link-border), 0.4);
 		border-radius: 3px;
 		outline: none;
 	}
