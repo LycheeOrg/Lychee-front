@@ -105,7 +105,7 @@ upload.start = {
 
 				albums.refresh();
 
-				if (album.getID() === false) lychee.goto("unsorted");
+				if (album.getID() === false) lychee.goto();
 				else album.load(albumID);
 			};
 
@@ -321,7 +321,7 @@ upload.start = {
 
 						albums.refresh();
 
-						if (album.getID() === false) lychee.goto("0");
+						if (album.getID() === false) lychee.goto();
 						else album.load(albumID);
 					});
 				});
@@ -505,7 +505,7 @@ upload.start = {
 								encounteredProblems ? lychee.locale["UPLOAD_COMPLETE_FAILED"] : null
 							);
 
-							if (album.getID() === false) lychee.goto("0");
+							if (album.getID() === false) lychee.goto();
 							else album.load(albumID);
 
 							if (encounteredProblems) showCloseButton();
@@ -554,7 +554,7 @@ upload.start = {
 								albums.refresh();
 								upload.notify(lychee.locale["UPLOAD_COMPLETE"], lychee.locale["UPLOAD_COMPLETE_FAILED"]);
 
-								if (album.getID() === false) lychee.goto("0");
+								if (album.getID() === false) lychee.goto();
 								else album.load(albumID);
 
 								showCloseButton();
@@ -709,7 +709,7 @@ upload.start = {
 
 					albums.refresh();
 
-					if (album.getID() === false) lychee.goto("0");
+					if (album.getID() === false) lychee.goto();
 					else album.load(albumID);
 				});
 			});
