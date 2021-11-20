@@ -37,7 +37,7 @@ contextMenu.add = function (e) {
 			// For tag albums the context menu is normally not used.
 			items = [];
 		}
-		if (albumID !== "starred" && albumID !== "public" && albumID !== "recent") {
+		if (Number.isInteger(parseInt(albumID)) || albumID === "unsorted") {
 			if (albumID !== "unsorted") {
 				let button_visibility_album = $("#button_visibility_album");
 				if (button_visibility_album && button_visibility_album.css("display") === "none") {
