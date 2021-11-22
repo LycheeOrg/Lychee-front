@@ -107,7 +107,12 @@ sidebar.triggerSearch = function (search_string) {
 	lychee.goto("search/" + encodeURIComponent(search_string));
 };
 
-sidebar.toggle = function () {
+sidebar.keepSidebarVisible = function () {
+	let v = sessionStorage.getItem("keepSidebarVisible");
+	return v !== null ? v === "true" : false;
+};
+
+sidebar.toggle = function (is_user_initiated) {
 	if (visible.sidebar() || visible.sidebarbutton()) {
 		header.dom(".button--info").toggleClass("active");
 		lychee.content.toggleClass("content--sidebar");
@@ -115,6 +120,8 @@ sidebar.toggle = function () {
 		if (typeof view !== "undefined") view.album.content.justify();
 		sidebar.dom().toggleClass("active");
 		photo.updateSizeLivePhotoDuringAnimation();
+
+		if (is_user_initiated) sessionStorage.setItem("keepSidebarVisible", visible.sidebar());
 
 		return true;
 	}

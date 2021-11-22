@@ -172,7 +172,9 @@ $(document).ready(function () {
 	});
 
 	// Infobox
-	header.dom("#button_info").on("click", sidebar.toggle);
+	header.dom("#button_info").on("click", function () {
+		sidebar.toggle(true);
+	});
 
 	// Load photo
 	loadPhotoInfo(photoID);

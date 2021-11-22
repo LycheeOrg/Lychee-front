@@ -116,7 +116,7 @@ $(document).ready(function () {
 		})
 		.bind(["i", "ContextMenu"], function () {
 			if (!visible.multiselect()) {
-				sidebar.toggle();
+				sidebar.toggle(true);
 				return false;
 			}
 		})

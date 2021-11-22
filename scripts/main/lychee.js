@@ -435,7 +435,7 @@ lychee.load = function (autoplay = true) {
 
 			// Show Album -> it's below the map
 			if (visible.photo()) view.photo.hide();
-			if (visible.sidebar()) sidebar.toggle();
+			if (visible.sidebar()) sidebar.toggle(false);
 			if (album.json && albumID === album.json.id) {
 				view.album.title();
 			}
@@ -503,7 +503,7 @@ lychee.load = function (autoplay = true) {
 
 			// Show Album -> it's below the map
 			if (visible.photo()) view.photo.hide();
-			if (visible.sidebar()) sidebar.toggle();
+			if (visible.sidebar()) sidebar.toggle(false);
 			mapview.open();
 			lychee.footer_hide();
 		} else if (albumID == "search") {
@@ -519,7 +519,7 @@ lychee.load = function (autoplay = true) {
 				tabindex.makeUnfocusable(lychee.imageview);
 			}
 			if (visible.mapview()) mapview.close();
-			if (visible.sidebar() && album.isSmartID(albumID)) sidebar.toggle();
+			if (visible.sidebar() && album.isSmartID(albumID)) sidebar.toggle(false);
 			$("#sensitive_warning").hide();
 			if (album.json && albumID === album.json.id) {
 				view.album.title();
@@ -543,7 +543,7 @@ lychee.load = function (autoplay = true) {
 		photo.json = null;
 
 		// Hide sidebar
-		if (visible.sidebar()) sidebar.toggle();
+		if (visible.sidebar()) sidebar.toggle(false);
 
 		// Show Albums
 		if (visible.photo()) {
