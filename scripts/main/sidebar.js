@@ -108,7 +108,7 @@ sidebar.triggerSearch = function (search_string) {
 };
 
 sidebar.userPreferenceVisibility = function () {
-	let v = sessionStorage.getItem("sidebarUserPreferenceVisible");
+	let v = sessionStorage.getItem("keepSidebarVisible");
 	return v !== null ? v === "true" : false;
 };
 
@@ -121,7 +121,7 @@ sidebar.toggle = function (is_user_initiated) {
 		sidebar.dom().toggleClass("active");
 		photo.updateSizeLivePhotoDuringAnimation();
 
-		if (is_user_initiated) sessionStorage.setItem("sidebarUserPreferenceVisible", visible.sidebar());
+		if (is_user_initiated) sessionStorage.setItem("keepSidebarVisible", visible.sidebar());
 
 		return true;
 	}
