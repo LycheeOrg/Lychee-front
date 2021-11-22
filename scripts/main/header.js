@@ -354,7 +354,7 @@ header.setMode = function (mode) {
 				);
 			} else if (album.isTagAlbum()) {
 				$("#button_info_album").show();
-				if (sidebar.userPreferenceVisibility() && !visible.sidebar()) sidebar.toggle(false);
+				if (sidebar.keepSidebarVisible() && !visible.sidebar()) sidebar.toggle(false);
 				$("#button_move_album").hide();
 				$(".button_add, .header__divider", ".header__toolbar--album").hide();
 				tabindex.makeFocusable($("#button_info_album"));
@@ -376,7 +376,7 @@ header.setMode = function (mode) {
 				}
 			} else {
 				$("#button_info_album").show();
-				if (sidebar.userPreferenceVisibility() && !visible.sidebar()) sidebar.toggle(false);
+				if (sidebar.keepSidebarVisible() && !visible.sidebar()) sidebar.toggle(false);
 				tabindex.makeFocusable($("#button_info_album"));
 				if (album.isUploadable()) {
 					$(

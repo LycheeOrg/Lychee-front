@@ -107,7 +107,7 @@ sidebar.triggerSearch = function (search_string) {
 	lychee.goto("search/" + encodeURIComponent(search_string));
 };
 
-sidebar.userPreferenceVisibility = function () {
+sidebar.keepSidebarVisible() = function () {
 	let v = sessionStorage.getItem("keepSidebarVisible");
 	return v !== null ? v === "true" : false;
 };
