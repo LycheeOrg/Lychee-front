@@ -60,8 +60,12 @@ header.bind = function () {
 		multiselect.bind();
 		lychee.load();
 	});
-	header.dom("#button_info_album").on(eventName, sidebar.toggle);
-	header.dom("#button_info").on(eventName, sidebar.toggle);
+	header.dom("#button_info_album").on(eventName, function () {
+		sidebar.toggle(true);
+	});
+	header.dom("#button_info").on(eventName, function () {
+		sidebar.toggle(true);
+	});
 	header.dom(".button--map-albums").on(eventName, function () {
 		lychee.gotoMap();
 	});
@@ -350,20 +354,29 @@ header.setMode = function (mode) {
 				);
 			} else if (album.isTagAlbum()) {
 				$("#button_info_album").show();
-				$("#button_nsfw_album, #button_move_album").hide();
+				if (sidebar.keepSidebarVisible() && !visible.sidebar()) sidebar.toggle(false);
+				$("#button_move_album").hide();
 				$(".button_add, .header__divider", ".header__toolbar--album").hide();
 				tabindex.makeFocusable($("#button_info_album"));
-				tabindex.makeUnfocusable($("#button_nsfw_album, #button_move_album"));
+				tabindex.makeUnfocusable($("#button_move_album"));
 				tabindex.makeUnfocusable($(".button_add, .header__divider", ".header__toolbar--album"));
 				if (album.isUploadable()) {
-					$("#button_visibility_album, #button_sharing_album_users, #button_trash_album").show();
-					tabindex.makeFocusable($("#button_visibility_album, #button_sharing_album_users, #button_trash_album"));
+					$("#button_nsfw_album, #button_visibility_album, #button_sharing_album_users, #button_trash_album").show();
+					tabindex.makeFocusable($("#button_nsfw_album, #button_visibility_album, #button_sharing_album_users, #button_trash_album"));
+					if ($("#button_visibility_album").is(":hidden")) {
+						// This can happen with narrow screens.  In that
+						// case we re-enable the add button which will
+						// contain the overflow items.
+						$(".button_add, .header__divider", ".header__toolbar--album").show();
+						tabindex.makeFocusable($(".button_add, .header__divider", ".header__toolbar--album"));
+					}
 				} else {
-					$("#button_visibility_album, #button_sharing_album_users, #button_trash_album").hide();
-					tabindex.makeUnfocusable($("#button_visibility_album, #button_sharing_album_users, #button_trash_album"));
+					$("#button_nsfw_album, #button_visibility_album, #button_sharing_album_users, #button_trash_album").hide();
+					tabindex.makeUnfocusable($("#button_nsfw_album, #button_visibility_album, #button_sharing_album_users, #button_trash_album"));
 				}
 			} else {
 				$("#button_info_album").show();
+				if (sidebar.keepSidebarVisible() && !visible.sidebar()) sidebar.toggle(false);
 				tabindex.makeFocusable($("#button_info_album"));
 				if (album.isUploadable()) {
 					$(
