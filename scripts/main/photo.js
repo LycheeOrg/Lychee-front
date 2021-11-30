@@ -841,7 +841,7 @@ photo.setLicense = function (photoID) {
 		};
 
 		api.post("Photo::setLicense", params, function (_data) {
-			if (_data !== true) {
+			if (_data) {
 				lychee.error(null, params, _data);
 			} else {
 				// update the photo JSON and reload the license in the sidebar

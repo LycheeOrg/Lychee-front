@@ -20,7 +20,7 @@ users.update = function (params) {
 	}
 
 	api.post("User::Save", params, function (data) {
-		if (data !== true) {
+		if (data) {
 			loadingBar.show("error", data.description);
 			lychee.error(null, params, data);
 		} else {
