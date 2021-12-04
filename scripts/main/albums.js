@@ -140,7 +140,7 @@ albums.isShared = function (albumID) {
 	let found = false;
 
 	let func = function () {
-		if (parseInt(this.id, 10) === parseInt(albumID, 10)) {
+		if (this.id === albumID) {
 			found = true;
 			return false; // stop the loop
 		}
@@ -164,7 +164,7 @@ albums.getByID = function (albumID) {
 	let json = undefined;
 
 	let func = function () {
-		if (parseInt(this.id, 10) === parseInt(albumID, 10)) {
+		if (this.id === albumID) {
 			json = this;
 			return false; // stop the loop
 		}
@@ -194,7 +194,7 @@ albums.deleteByID = function (albumID) {
 	let deleted = false;
 
 	$.each(albums.json.albums, function (i) {
-		if (parseInt(albums.json.albums[i].id) === parseInt(albumID)) {
+		if (albums.json.albums[i].id === albumID) {
 			albums.json.albums.splice(i, 1);
 			deleted = true;
 			return false; // stop the loop
@@ -204,7 +204,7 @@ albums.deleteByID = function (albumID) {
 	if (deleted === false) {
 		if (!albums.json.shared_albums) return undefined;
 		$.each(albums.json.shared_albums, function (i) {
-			if (parseInt(albums.json.shared_albums[i].id) === parseInt(albumID)) {
+			if (albums.json.shared_albums[i].id === albumID) {
 				albums.json.shared_albums.splice(i, 1);
 				deleted = true;
 				return false; // stop the loop
@@ -215,7 +215,7 @@ albums.deleteByID = function (albumID) {
 	if (deleted === false) {
 		if (!albums.json.smart_albums) return undefined;
 		$.each(albums.json.smart_albums, function (i) {
-			if (parseInt(albums.json.smart_albums[i].id) === parseInt(albumID)) {
+			if (albums.json.smart_albums[i].id === albumID) {
 				delete albums.json.smart_albums[i];
 				deleted = true;
 				return false; // stop the loop

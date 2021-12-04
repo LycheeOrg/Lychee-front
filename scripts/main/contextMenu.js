@@ -37,7 +37,7 @@ contextMenu.add = function (e) {
 			// For tag albums the context menu is normally not used.
 			items = [];
 		}
-		if (Number.isInteger(parseInt(albumID)) || albumID === "unsorted") {
+		if (albumID.length === 24 || albumID === "unsorted") {
 			if (albumID !== "unsorted") {
 				let button_visibility_album = $("#button_visibility_album");
 				if (button_visibility_album && button_visibility_album.css("display") === "none") {
@@ -184,7 +184,7 @@ contextMenu.albumMulti = function (albumIDs, e) {
 contextMenu.buildList = function (lists, exclude, action, parent = 0, layer = 0) {
 	const find = function (excl, id) {
 		for (let i = 0; i < excl.length; i++) {
-			if (parseInt(excl[i], 10) === parseInt(id, 10)) return true;
+			if (excl[i] === id) return true;
 		}
 		return false;
 	};
@@ -259,9 +259,7 @@ contextMenu.albumTitle = function (albumID, e) {
 
 		if (data.shared_albums && data.shared_albums.length > 0) {
 			items = items.concat({});
-			items = items.concat(
-				contextMenu.buildList(data.shared_albums, albumID !== false ? [parseInt(albumID, 10)] : [], (a) => lychee.goto(a.id))
-			);
+			items = items.concat(contextMenu.buildList(data.shared_albums, albumID !== false ? [albumID] : [], (a) => lychee.goto(a.id)));
 		}
 
 		if (albumID !== false && !album.isSmartID(albumID) && album.isUploadable()) {
@@ -475,11 +473,11 @@ contextMenu.photoMore = function (photoID, e) {
 };
 
 contextMenu.getSubIDs = function (albums, albumID) {
-	let ids = [parseInt(albumID, 10)];
+	let ids = [albumID];
 	let a;
 
 	for (a = 0; a < albums.length; a++) {
-		if (parseInt(albums[a].parent_id, 10) === parseInt(albumID, 10)) {
+		if (albums[a].parent_id === albumID) {
 			ids = ids.concat(contextMenu.getSubIDs(albums, albums[a].id));
 		}
 
@@ -532,7 +530,7 @@ contextMenu.move = function (IDs, e, callback, kind = "UNSORTED", display_root =
 		}
 
 		// Show Unsorted when unsorted is not the current album
-		if (display_root && album.getID() !== "0" && !visible.albums()) {
+		if (display_root && album.getID() !== null && !visible.albums()) {
 			items.unshift({});
 			items.unshift({ title: lychee.locale[kind], fn: () => callback(IDs, 0) });
 		}

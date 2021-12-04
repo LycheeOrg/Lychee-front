@@ -63,7 +63,7 @@ view.albums = {
 			// Albums
 			if (albums.json.albums && albums.json.albums.length !== 0) {
 				$.each(albums.json.albums, function () {
-					if (!this.parent_id || this.parent_id === 0) {
+					if (!this.parent_id) {
 						albums.parse(this);
 						albumsData += build.album(this);
 					}
@@ -79,7 +79,7 @@ view.albums = {
 			if (albums.json.shared_albums && albums.json.shared_albums.length !== 0) {
 				for (i = 0; i < albums.json.shared_albums.length; ++i) {
 					let alb = albums.json.shared_albums[i];
-					if (!alb.parent_id || alb.parent_id === 0) {
+					if (!alb.parent_id) {
 						albums.parse(alb);
 						if (current_owner !== alb.owner_name && lychee.publicMode === false) {
 							sharedData += build.divider(alb.owner_name);

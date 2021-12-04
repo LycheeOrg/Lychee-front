@@ -407,19 +407,16 @@ lychee.gotoMap = function (albumID = "", autoplay = true) {
 };
 
 lychee.load = function (autoplay = true) {
-	let albumID = "";
-	let photoID = "";
 	let hash = document.location.hash.replace("#", "").split("/");
+	let albumID = hash[0];
+	let photoID = hash[1];
 
 	contextMenu.close();
 	multiselect.close();
 	tabindex.reset();
 
-	if (hash[0] != null) albumID = hash[0];
-	if (hash[1] != null) photoID = hash[1];
-
 	if (albumID && photoID) {
-		if (albumID == "map") {
+		if (albumID === "map") {
 			// If map functionality is disabled -> do nothing
 			if (!lychee.map_display) {
 				loadingBar.show("error", lychee.locale["ERROR_MAP_DEACTIVATED"]);
@@ -441,7 +438,7 @@ lychee.load = function (autoplay = true) {
 			}
 			mapview.open(albumID);
 			lychee.footer_hide();
-		} else if (albumID == "search") {
+		} else if (albumID === "search") {
 			// Search has been triggered
 			const search_string = decodeURIComponent(photoID);
 
@@ -489,7 +486,7 @@ lychee.load = function (autoplay = true) {
 			lychee.footer_hide();
 		}
 	} else if (albumID) {
-		if (albumID == "map") {
+		if (albumID === "map") {
 			$(".no_content").remove();
 			// Show map of all albums
 			// If map functionality is disabled -> do nothing
@@ -506,7 +503,7 @@ lychee.load = function (autoplay = true) {
 			if (visible.sidebar()) sidebar.toggle(false);
 			mapview.open();
 			lychee.footer_hide();
-		} else if (albumID == "search") {
+		} else if (albumID === "search") {
 			// search string is empty -> do nothing
 		} else {
 			$(".no_content").remove();

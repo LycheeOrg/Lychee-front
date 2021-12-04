@@ -10,8 +10,12 @@ album.isSmartID = function (id) {
 	return id === "unsorted" || id === "starred" || id === "public" || id === "recent";
 };
 
+album.isModelID = function (id) {
+	return typeof id === "string" && id.length === 24;
+};
+
 album.getParentID = function () {
-	if (album.json == null || album.isSmartID(album.json.id) === true || !album.json.parent_id || album.json.parent_id === 0) {
+	if (album.json == null || album.isSmartID(album.json.id) === true || !album.json.parent_id) {
 		return null;
 	}
 	return album.json.parent_id;
@@ -22,10 +26,7 @@ album.getID = function () {
 
 	// this is a Lambda
 	let isID = (_id) => {
-		if (album.isSmartID(_id)) {
-			return true;
-		}
-		return $.isNumeric(_id);
+		return album.isSmartID(_id) || album.isModelID(_id);
 	};
 
 	if (photo.json) id = photo.json.album;
@@ -37,7 +38,7 @@ album.getID = function () {
 	if (isID(id) === false) id = $(".photo:hover, .photo.active").attr("data-album-id");
 
 	if (isID(id) === true) return id;
-	else return false;
+	else return null;
 };
 
 album.isTagAlbum = function () {
@@ -54,7 +55,7 @@ album.getByID = function (photoID) {
 
 	let i = 0;
 	while (i < album.json.photos.length) {
-		if (parseInt(album.json.photos[i].id) === parseInt(photoID)) {
+		if (album.json.photos[i].id === photoID) {
 			return album.json.photos[i];
 		}
 		i++;
@@ -74,7 +75,7 @@ album.getSubByID = function (albumID) {
 
 	let i = 0;
 	while (i < album.json.albums.length) {
-		if (parseInt(album.json.albums[i].id) === parseInt(albumID)) {
+		if (album.json.albums[i].id === albumID) {
 			return album.json.albums[i];
 		}
 		i++;
@@ -94,7 +95,7 @@ album.deleteByID = function (photoID) {
 	let deleted = false;
 
 	$.each(album.json.photos, function (i) {
-		if (parseInt(album.json.photos[i].id) === parseInt(photoID)) {
+		if (album.json.photos[i].id === photoID) {
 			album.json.photos.splice(i, 1);
 			deleted = true;
 			return false;
@@ -114,7 +115,7 @@ album.deleteSubByID = function (albumID) {
 	let deleted = false;
 
 	$.each(album.json.albums, function (i) {
-		if (parseInt(album.json.albums[i].id) === parseInt(albumID)) {
+		if (album.json.albums[i].id === albumID) {
 			album.json.albums.splice(i, 1);
 			deleted = true;
 			return false;
@@ -214,7 +215,7 @@ album.add = function (IDs = null, callback = null) {
 	const action = function (data) {
 		// let title = data.title;
 
-		const isNumber = (n) => !isNaN(parseInt(n, 10)) && isFinite(n);
+		const isModelID = (albumID) => typeof albumID === "string" && albumID.length === 24;
 
 		if (!data.title.trim()) {
 			basicModal.error("title");
@@ -225,11 +226,11 @@ album.add = function (IDs = null, callback = null) {
 
 		let params = {
 			title: data.title,
-			parent_id: 0,
+			parent_id: null,
 		};
 
 		if (visible.albums() || album.isSmartID(album.json.id)) {
-			params.parent_id = 0;
+			params.parent_id = null;
 		} else if (visible.album()) {
 			params.parent_id = album.json.id;
 		} else if (visible.photo()) {
@@ -237,7 +238,7 @@ album.add = function (IDs = null, callback = null) {
 		}
 
 		api.post("Album::add", params, function (_data) {
-			if (_data && isNumber(_data.id)) {
+			if (_data && isModelID(_data.id)) {
 				if (IDs != null && callback != null) {
 					callback(IDs, _data, false); // we do not confirm
 				} else {
@@ -284,8 +285,8 @@ album.addByTags = function () {
 		};
 
 		api.post("Album::addByTags", params, function (_data) {
-			const isNumber = (n) => !isNaN(parseInt(n, 10)) && isFinite(n);
-			if (_data && isNumber(_data.id)) {
+			const isModelID = (albumID) => typeof albumID === "string" && albumID.length === 24;
+			if (_data && isModelID(_data.id)) {
 				albums.refresh();
 				lychee.goto(_data.id);
 			} else {
@@ -371,7 +372,7 @@ album.setTitle = function (albumIDs) {
 	if (albumIDs.length === 1) {
 		// Get old title if only one album is selected
 		if (album.json) {
-			if (parseInt(album.getID()) === parseInt(albumIDs[0])) {
+			if (album.getID() === albumIDs[0]) {
 				oldTitle = album.json.title;
 			} else oldTitle = album.getSubByID(albumIDs[0]).title;
 		}
@@ -392,7 +393,7 @@ album.setTitle = function (albumIDs) {
 		let newTitle = data.title;
 
 		if (visible.album()) {
-			if (albumIDs.length === 1 && parseInt(album.getID()) === parseInt(albumIDs[0])) {
+			if (albumIDs.length === 1 && album.getID() === albumIDs[0]) {
 				// Rename only one album
 
 				album.json.title = newTitle;
@@ -494,7 +495,7 @@ album.setDescription = function (albumID) {
 album.toggleCover = function (photoID) {
 	if (!photoID) return false;
 
-	album.json.cover_id = album.json.cover_id === photoID ? "" : photoID;
+	album.json.cover_id = album.json.cover_id === photoID ? null : photoID;
 
 	let params = {
 		albumID: album.json.id,
@@ -1039,10 +1040,10 @@ album.buildMessage = function (albumIDs, albumID, op1, op2, ops) {
 	let msg = "";
 
 	if (!albumIDs) return false;
-	if (albumIDs instanceof Array === false) albumIDs = [albumIDs];
+	if (!(albumIDs instanceof Array)) albumIDs = [albumIDs];
 
 	// Get title of first album
-	if (parseInt(albumID, 10) === 0) {
+	if (albumID === null) {
 		title = lychee.locale["ROOT"];
 	} else {
 		album1 = albums.getByID(albumID);
@@ -1122,7 +1123,7 @@ album.delete = function (albumIDs) {
 
 		// Get title
 		if (album.json) {
-			if (parseInt(album.getID()) === parseInt(albumIDs[0])) {
+			if (album.getID() === albumIDs[0]) {
 				albumTitle = album.json.title;
 			} else albumTitle = album.getSubByID(albumIDs[0]).title;
 		}
@@ -1161,9 +1162,9 @@ album.delete = function (albumIDs) {
 album.merge = function (albumIDs, albumID, confirm = true) {
 	const action = function () {
 		basicModal.close();
-		albumIDs.unshift(albumID);
 
 		let params = {
+			albumID: albumID,
 			albumIDs: albumIDs.join(),
 		};
 
@@ -1199,9 +1200,9 @@ album.merge = function (albumIDs, albumID, confirm = true) {
 album.setAlbum = function (albumIDs, albumID, confirm = true) {
 	const action = function () {
 		basicModal.close();
-		albumIDs.unshift(albumID);
 
 		let params = {
+			albumID: albumID,
 			albumIDs: albumIDs.join(),
 		};
 

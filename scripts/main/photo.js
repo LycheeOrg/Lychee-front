@@ -15,8 +15,8 @@ photo.getID = function () {
 	if (photo.json) id = photo.json.id;
 	else id = $(".photo:hover, .photo.active").attr("data-id");
 
-	if ($.isNumeric(id) === true) return id;
-	else return false;
+	if (typeof id === "string" && id.length === 24) return id;
+	else return null;
 };
 
 photo.load = function (photoID, albumID, autoplay) {
@@ -183,7 +183,7 @@ photo.updateSizeLivePhotoDuringAnimation = function (animationDuraction = 300, p
 };
 
 photo.previous = function (animate) {
-	if (photo.getID() !== false && album.json && album.getByID(photo.getID()) && album.getByID(photo.getID()).previous_photo_id !== null) {
+	if (photo.getID() !== null && album.json && album.getByID(photo.getID()) && album.getByID(photo.getID()).previous_photo_id !== null) {
 		let delay = 0;
 
 		if (animate === true) {
@@ -198,7 +198,7 @@ photo.previous = function (animate) {
 		}
 
 		setTimeout(() => {
-			if (photo.getID() === false) return false;
+			if (photo.getID() === null) return false;
 			photo.LivePhotosObject = null;
 			lychee.goto(album.getID() + "/" + album.getByID(photo.getID()).previous_photo_id, false);
 		}, delay);
@@ -206,7 +206,7 @@ photo.previous = function (animate) {
 };
 
 photo.next = function (animate) {
-	if (photo.getID() !== false && album.json && album.getByID(photo.getID()) && album.getByID(photo.getID()).next_photo_id !== null) {
+	if (photo.getID() !== null && album.json && album.getByID(photo.getID()) && album.getByID(photo.getID()).next_photo_id !== null) {
 		let delay = 0;
 
 		if (animate === true) {
@@ -221,7 +221,7 @@ photo.next = function (animate) {
 		}
 
 		setTimeout(() => {
-			if (photo.getID() === false) return false;
+			if (photo.getID() === null) return false;
 			photo.LivePhotosObject = null;
 			lychee.goto(album.getID() + "/" + album.getByID(photo.getID()).next_photo_id, false);
 		}, delay);

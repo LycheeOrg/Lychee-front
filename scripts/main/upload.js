@@ -105,7 +105,7 @@ upload.start = {
 
 				albums.refresh();
 
-				if (album.getID() === false) lychee.goto();
+				if (album.getID() === null) lychee.goto();
 				else album.load(albumID);
 			};
 
@@ -121,7 +121,7 @@ upload.start = {
 				let data = null;
 				let errorText = "";
 
-				const isNumber = (n) => !isNaN(parseFloat(n)) && isFinite(n);
+				const isModelID = (albumID) => typeof albumID === "string" && albumID.length === 24;
 
 				data = xhr.responseText;
 
@@ -140,7 +140,7 @@ upload.start = {
 				}
 
 				// Set status
-				if ((xhr.status === 200 || xhr.status === 201) && isNumber(data.id)) {
+				if ((xhr.status === 200 || xhr.status === 201) && isModelID(data.id)) {
 					// Success
 					$(nRowStatusSelector(file_num + 1))
 						.html(lychee.locale["UPLOAD_FINISHED"])
@@ -255,7 +255,7 @@ upload.start = {
 		};
 
 		if (files.length <= 0) return false;
-		if (albumID === false || visible.albums() === true) albumID = 0;
+		if (albumID === false || visible.albums() === true) albumID = null;
 
 		window.onbeforeunload = function () {
 			return lychee.locale["UPLOAD_IN_PROGRESS"];
@@ -280,7 +280,7 @@ upload.start = {
 
 		url = typeof url === "string" ? url : "";
 
-		if (albumID === false) albumID = 0;
+		if (albumID === false) albumID = null;
 
 		const action = function (data) {
 			let files = [];
@@ -321,7 +321,7 @@ upload.start = {
 
 						albums.refresh();
 
-						if (album.getID() === false) lychee.goto();
+						if (album.getID() === null) lychee.goto();
 						else album.load(albumID);
 					});
 				});
@@ -348,7 +348,7 @@ upload.start = {
 
 	server: function () {
 		let albumID = album.getID();
-		if (albumID === false) albumID = 0;
+		if (albumID === false) albumID = null;
 
 		const action = function (data) {
 			if (!data.path.trim()) {
@@ -505,7 +505,7 @@ upload.start = {
 								encounteredProblems ? lychee.locale["UPLOAD_COMPLETE_FAILED"] : null
 							);
 
-							if (album.getID() === false) lychee.goto();
+							if (album.getID() === null) lychee.goto();
 							else album.load(albumID);
 
 							if (encounteredProblems) showCloseButton();
@@ -554,7 +554,7 @@ upload.start = {
 								albums.refresh();
 								upload.notify(lychee.locale["UPLOAD_COMPLETE"], lychee.locale["UPLOAD_COMPLETE_FAILED"]);
 
-								if (album.getID() === false) lychee.goto();
+								if (album.getID() === null) lychee.goto();
 								else album.load(albumID);
 
 								showCloseButton();
@@ -709,7 +709,7 @@ upload.start = {
 
 					albums.refresh();
 
-					if (album.getID() === false) lychee.goto();
+					if (album.getID() === null) lychee.goto();
 					else album.load(albumID);
 				});
 			});
