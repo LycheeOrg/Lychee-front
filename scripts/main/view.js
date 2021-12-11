@@ -947,7 +947,7 @@ view.settings = {
 						$${lychee.locale["SORT_ALBUM_BY_1"]}
 						<span class="select">
 							<select id="settings_albums_type" name="typeAlbums">
-								<option value='id'>$${lychee.locale["SORT_ALBUM_SELECT_1"]}</option>
+								<option value='created_at'>$${lychee.locale["SORT_ALBUM_SELECT_1"]}</option>
 								<option value='title'>$${lychee.locale["SORT_ALBUM_SELECT_2"]}</option>
 								<option value='description'>$${lychee.locale["SORT_ALBUM_SELECT_3"]}</option>
 								<option value='is_public'>$${lychee.locale["SORT_ALBUM_SELECT_4"]}</option>
@@ -968,7 +968,7 @@ view.settings = {
 						$${lychee.locale["SORT_PHOTO_BY_1"]}
 						<span class="select">
 							<select id="settings_photos_type" name="typePhotos">
-								<option value='id'>$${lychee.locale["SORT_PHOTO_SELECT_1"]}</option>
+								<option value='created_at'>$${lychee.locale["SORT_PHOTO_SELECT_1"]}</option>
 								<option value='taken_at'>$${lychee.locale["SORT_PHOTO_SELECT_2"]}</option>
 								<option value='title'>$${lychee.locale["SORT_PHOTO_SELECT_3"]}</option>
 								<option value='description'>$${lychee.locale["SORT_PHOTO_SELECT_4"]}</option>
