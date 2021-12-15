@@ -1253,7 +1253,7 @@ album.isUploadable = function () {
 	if (lychee.admin) {
 		return true;
 	}
-	if (lychee.publicMode || !lychee.upload) {
+	if (lychee.publicMode || !lychee.may_upload) {
 		return false;
 	}
 

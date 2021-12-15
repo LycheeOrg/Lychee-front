@@ -9,14 +9,14 @@ users.update = function (params) {
 	}
 
 	if ($("#UserData" + params.id + ' .choice input[name="upload"]:checked').length === 1) {
-		params.upload = "1";
+		params.may_upload = true;
 	} else {
-		params.upload = "0";
+		params.may_upload = false;
 	}
 	if ($("#UserData" + params.id + ' .choice input[name="lock"]:checked').length === 1) {
-		params.lock = "1";
+		params.is_locked = true;
 	} else {
-		params.lock = "0";
+		params.is_locked = false;
 	}
 
 	api.post("User::Save", params, function (data) {
@@ -41,14 +41,14 @@ users.create = function (params) {
 	}
 
 	if ($('#UserCreate .choice input[name="upload"]:checked').length === 1) {
-		params.upload = "1";
+		params.may_upload = true;
 	} else {
-		params.upload = "0";
+		params.may_upload = false;
 	}
 	if ($('#UserCreate .choice input[name="lock"]:checked').length === 1) {
-		params.lock = "1";
+		params.is_locked = true;
 	} else {
-		params.lock = "0";
+		params.is_locked = false;
 	}
 
 	api.post("User::Create", params, function () {

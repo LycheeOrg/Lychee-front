@@ -20,8 +20,8 @@ let lychee = {
 	api_V2: false, // enable api_V2
 	sub_albums: false, // enable sub_albums features
 	admin: false, // enable admin mode (multi-user)
-	upload: false, // enable possibility to upload (multi-user)
-	lock: false, // locked user (multi-user)
+	may_upload: false, // enable possibility to upload (multi-user)
+	is_locked: false, // locked user (multi-user)
 	username: null,
 	layout: "1", // 0: Use default, "square" layout. 1: Use Flickr-like "justified" layout. 2: Use Google-like "unjustified" layout
 	public_search: false, // display Search in publicMode
@@ -245,9 +245,9 @@ lychee.init = function (exitview = true) {
 			leftMenu.build();
 			leftMenu.bind();
 
-			lychee.upload = data.admin || data.upload;
+			lychee.may_upload = data.admin || data.may_upload;
 			lychee.admin = data.admin;
-			lychee.lock = data.lock;
+			lychee.is_locked = data.is_locked;
 			lychee.username = data.username;
 			lychee.setMode("logged_in");
 
@@ -587,10 +587,10 @@ lychee.setTitle = function (title, editable) {
 };
 
 lychee.setMode = function (mode) {
-	if (lychee.lock) {
+	if (lychee.is_locked) {
 		$("#button_settings_open").remove();
 	}
-	if (!lychee.upload) {
+	if (!lychee.may_upload) {
 		$("#button_sharing").remove();
 
 		$(document)

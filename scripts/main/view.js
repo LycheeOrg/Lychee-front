@@ -1526,10 +1526,10 @@ view.users = {
 				$(".users_view").append(build.user(this));
 				settings.bind("#UserUpdate" + this.id, "#UserData" + this.id, users.update);
 				settings.bind("#UserDelete" + this.id, "#UserData" + this.id, users.delete);
-				if (this.upload === 1) {
+				if (this.may_upload) {
 					$("#UserData" + this.id + ' .choice input[name="upload"]').click();
 				}
-				if (this.lock === 1) {
+				if (this.is_locked) {
 					$("#UserData" + this.id + ' .choice input[name="lock"]').click();
 				}
 			});
@@ -1952,10 +1952,10 @@ view.u2f = {
 				$.each(u2f.json, function () {
 					$(".u2f_view").append(build.u2f(this));
 					settings.bind("#CredentialDelete" + this.id, "#CredentialData" + this.id, u2f.delete);
-					// if (this.upload === 1) {
+					// if (this.may_upload) {
 					//     $('#UserData' + this.id + ' .choice input[name="upload"]').click();
 					// }
-					// if (this.lock === 1) {
+					// if (this.is_locked) {
 					//     $('#UserData' + this.id + ' .choice input[name="lock"]').click();
 					// }
 				});
