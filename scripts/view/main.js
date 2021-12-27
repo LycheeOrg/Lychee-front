@@ -231,7 +231,7 @@ const error = function (jqXHR, params) {
 	 */
 	let responseObj = null;
 
-	switch(jqXHR.responseType) {
+	switch (jqXHR.responseType) {
 		case "text":
 			msg += jqXHR.responseText;
 			break;

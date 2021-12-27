@@ -149,7 +149,7 @@ frame.error = function (jqXHR, params) {
 	 */
 	let responseObj = null;
 
-	switch(jqXHR.responseType) {
+	switch (jqXHR.responseType) {
 		case "text":
 			msg += jqXHR.responseText;
 			break;
@@ -182,7 +182,9 @@ let loadingBar = {
 	 * @param {?string} errorText the error text to show
 	 * @return {boolean}
 	 */
-	show(status, errorText) { return false; },
+	show(status, errorText) {
+		return false;
+	},
 
 	/**
 	 * @param {?boolean} force

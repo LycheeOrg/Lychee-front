@@ -118,7 +118,7 @@ api.get = function (url, callback) {
 	 * @param {XMLHttpRequest} jqXHR the jQuery XMLHttpRequest object, see {@link https://api.jquery.com/jQuery.ajax/#jqXHR}.
 	 */
 	const errorHandler = (jqXHR) => {
-		api.onError(jqXHR,{});
+		api.onError(jqXHR, {});
 	};
 
 	$.ajax({
