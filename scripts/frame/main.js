@@ -136,22 +136,58 @@ frame.resize = function () {
 	}
 };
 
-frame.error = function (errorThrown, params = "", data = "") {
-	loadingBar.show("error", errorThrown);
+/**
+ *
+ * @param {XMLHttpRequest} jqXHR
+ * @param {Object} params the original JSON parameters of the request
+ * @return {boolean}
+ */
+frame.error = function (jqXHR, params) {
+	let msg = jqXHR.statusText + " - ";
+	/**
+	 * @type {?LycheeException}
+	 */
+	let responseObj = null;
+
+	switch(jqXHR.responseType) {
+		case "text":
+			msg += jqXHR.responseText;
+			break;
+		case "json":
+			responseObj = JSON.parse(jqXHR.responseText);
+			msg += responseObj.message;
+			break;
+		default:
+			msg += "Unknown error";
+			break;
+	}
+
+	loadingBar.show("error", msg);
 
 	console.error({
-		description: errorThrown,
+		description: msg,
 		params: params,
-		response: data,
+		response: responseObj ? responseObj : jqXHR.responseText,
 	});
-	alert(errorThrown);
+	alert(msg);
+	return true;
 };
 
 // Main -------------------------------------------------------------- //
 
 let loadingBar = {
-	show() {},
-	hide() {},
+	/**
+	 *
+	 * @param {?string} status the status, either `null`, `"error"` or `"success"`
+	 * @param {?string} errorText the error text to show
+	 * @return {boolean}
+	 */
+	show(status, errorText) { return false; },
+
+	/**
+	 * @param {?boolean} force
+	 */
+	hide(force) {},
 };
 
 let imageview = $("#imageview");

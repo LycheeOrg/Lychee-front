@@ -764,21 +764,39 @@ lychee.html = function (literalSections, ...substs) {
 	return result;
 };
 
-lychee.error = function (errorThrown, params = "", data = "") {
-	loadingBar.show("error", errorThrown);
+/**
+ * @param {XMLHttpRequest} jqXHR
+ * @param {Object} params the original JSON parameters of the request
+ * @return {boolean}
+ */
+lychee.error = function (jqXHR, params) {
+	let msg = jqXHR.statusText + " - ";
+	/**
+	 * @type {?LycheeException}
+	 */
+	let responseObj = null;
 
-	if (errorThrown === "Session timed out.") {
-		setTimeout(() => {
-			lychee.goto();
-			window.location.reload();
-		}, 3000);
-	} else {
-		console.error({
-			description: errorThrown,
-			params: params,
-			response: data,
-		});
+	switch(jqXHR.responseType) {
+		case "text":
+			msg += jqXHR.responseText;
+			break;
+		case "json":
+			responseObj = JSON.parse(jqXHR.responseText);
+			msg += responseObj.message;
+			break;
+		default:
+			msg += "Unknown error";
+			break;
 	}
+
+	loadingBar.show("error", msg);
+
+	console.error({
+		description: msg,
+		params: params,
+		response: responseObj ? responseObj : jqXHR.responseText,
+	});
+	return true;
 };
 
 lychee.fullscreenEnter = function () {

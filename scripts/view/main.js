@@ -219,12 +219,37 @@ const loadPhotoInfo = function (photoID) {
 	});
 };
 
-const error = function (errorThrown, params, data) {
-	console.error({
-		description: errorThrown,
-		params: params,
-		response: data,
-	});
+/**
+ * @param {XMLHttpRequest} jqXHR
+ * @param {Object} params the original JSON parameters of the request
+ * @return {boolean}
+ */
+const error = function (jqXHR, params) {
+	let msg = jqXHR.statusText + " - ";
+	/**
+	 * @type {?LycheeException}
+	 */
+	let responseObj = null;
 
-	loadingBar.show("error", errorThrown);
+	switch(jqXHR.responseType) {
+		case "text":
+			msg += jqXHR.responseText;
+			break;
+		case "json":
+			responseObj = JSON.parse(jqXHR.responseText);
+			msg += responseObj.message;
+			break;
+		default:
+			msg += "Unknown error";
+			break;
+	}
+
+	loadingBar.show("error", msg);
+
+	console.error({
+		description: msg,
+		params: params,
+		response: responseObj ? responseObj : jqXHR.responseText,
+	});
+	return true;
 };

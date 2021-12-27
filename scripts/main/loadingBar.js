@@ -12,6 +12,11 @@ loadingBar.dom = function (selector) {
 	return loadingBar._dom.find(selector);
 };
 
+/**
+ * @param {?string} status the status, either `null`, `"error"` or `"success"`
+ * @param {?string} errorText the error text to show
+ * @return {boolean}
+ */
 loadingBar.show = function (status, errorText) {
 	if (status === "error") {
 		// Set status
@@ -95,6 +100,9 @@ loadingBar.show = function (status, errorText) {
 	}
 };
 
+/**
+ * @param {boolean} force
+ */
 loadingBar.hide = function (force) {
 	if ((loadingBar.status !== "error" && loadingBar.status !== "success" && loadingBar.status != null) || force) {
 		// Remove status
