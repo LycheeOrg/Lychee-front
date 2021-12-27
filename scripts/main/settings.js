@@ -168,22 +168,17 @@ settings.createLogin = function () {
 			password,
 		};
 
-		api.post("Settings::setLogin", params, function (_data) {
-			if (_data !== true) {
-				basicModal.show({
-					body: "<p>" + lychee.locale["ERROR_LOGIN"] + "</p>",
-					buttons: {
-						action: {
-							title: lychee.locale["RETRY"],
-							fn: settings.createLogin,
-						},
+		api.post("Settings::setLogin", params, null, null, function (jqXHR) {
+			basicModal.show({
+				body: "<p>" + lychee.locale["ERROR_LOGIN"] + "</p>",
+				buttons: {
+					action: {
+						title: lychee.locale["RETRY"],
+						fn: settings.createLogin,
 					},
-				});
-			}
-			// else
-			// {
-			// 	window.location.reload()
-			// }
+				},
+			});
+			return true;
 		});
 	};
 
@@ -271,15 +266,10 @@ settings.changeLogin = function (params) {
 		$("input[name=confirm]").removeClass("error");
 	}
 
-	api.post("Settings::setLogin", params, function (data) {
-		if (data !== true) {
-			loadingBar.show("error", data.description);
-			lychee.error(null, datas, data);
-		} else {
-			$("input[name]").removeClass("error");
-			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_LOGIN"]);
-			view.settings.content.clearLogin();
-		}
+	api.post("Settings::setLogin", params, function () {
+		$("input[name]").removeClass("error");
+		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_LOGIN"]);
+		view.settings.content.clearLogin();
 	});
 };
 

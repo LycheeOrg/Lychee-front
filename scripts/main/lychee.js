@@ -329,14 +329,22 @@ lychee.login = function (data) {
 		password,
 	};
 
-	api.post("Session::login", params, function (_data) {
-		if (typeof _data === "undefined") {
+	api.post(
+		"Session::login",
+		params,
+		function () {
 			window.location.reload();
-		} else {
-			// Show error and reactive button
-			basicModal.error("password");
+		},
+		null,
+		function (jqXHR) {
+			if (jqXHR.status === 401) {
+				basicModal.error("password");
+				return true;
+			} else {
+				return false;
+			}
 		}
-	});
+	);
 };
 
 lychee.loginDialog = function () {
