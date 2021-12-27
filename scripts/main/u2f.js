@@ -27,8 +27,8 @@ u2f.login = function () {
 	}
 
 	new Larapass({
-		login: "/api/webauthn::login",
-		loginOptions: "/api/webauthn::login/gen",
+		login: "/api/WebAuthn::login",
+		loginOptions: "/api/WebAuthn::login/gen",
 	})
 		.login({
 			user_id: 0, // for now it is only available to Admin user via a secret key shortcut.
@@ -46,8 +46,8 @@ u2f.register = function () {
 	}
 
 	let larapass = new Larapass({
-		register: "/api/webauthn::register",
-		registerOptions: "/api/webauthn::register/gen",
+		register: "/api/WebAuthn::register",
+		registerOptions: "/api/WebAuthn::register/gen",
 	});
 	if (Larapass.supportsWebAuthn()) {
 		larapass
@@ -63,7 +63,7 @@ u2f.register = function () {
 };
 
 u2f.delete = function (params) {
-	api.post("webauthn::delete", params, function (data) {
+	api.post("WebAuthn::delete", params, function (data) {
 		console.log(data);
 		if (!data) {
 			loadingBar.show("error", data.description);
@@ -76,7 +76,7 @@ u2f.delete = function (params) {
 };
 
 u2f.list = function () {
-	api.post("webauthn::list", {}, function (data) {
+	api.post("WebAuthn::list", {}, function (data) {
 		u2f.json = data;
 		view.u2f.init();
 	});

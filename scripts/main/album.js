@@ -897,7 +897,7 @@ album.shareUsers = function (albumID, e) {
 			<p>${lychee.locale["WAIT_FETCH_DATA"]}</p>
 		</form>`;
 
-		api.post("Sharing::List", {}, (data) => {
+		api.post("Sharing::list", {}, (data) => {
 			const sharingForm = $("#sharing_people_form");
 			sharingForm.empty();
 			if (data !== undefined) {
@@ -967,7 +967,7 @@ album.shareUsers = function (albumID, e) {
 
 	if (sharingToDelete.length > 0) {
 		var params = { ShareIDs: sharingToDelete.join(",") };
-		api.post("Sharing::Delete", params, function (data) {
+		api.post("Sharing::delete", params, function (data) {
 			if (data !== true) {
 				loadingBar.show("error", data.description);
 				lychee.error(null, params, data);
@@ -979,7 +979,7 @@ album.shareUsers = function (albumID, e) {
 			albumIDs: albumID,
 			UserIDs: sharingToAdd.join(","),
 		};
-		api.post("Sharing::Add", params, (data) => {
+		api.post("Sharing::add", params, (data) => {
 			if (data !== true) {
 				loadingBar.show("error", data.description);
 				lychee.error(null, params, data);

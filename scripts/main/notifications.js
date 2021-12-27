@@ -12,7 +12,7 @@ notifications.update = function (params) {
 		}
 	}
 
-	api.post("User::UpdateEmail", params, function (data) {
+	api.post("User::setEmail", params, function (data) {
 		if (data) {
 			loadingBar.show("error", data.description);
 			lychee.error(null, params, data);
@@ -23,7 +23,7 @@ notifications.update = function (params) {
 };
 
 notifications.load = function () {
-	api.post("User::GetEmail", {}, function (data) {
+	api.post("User::getEmail", {}, function (data) {
 		notifications.json = data;
 		view.notifications.init();
 	});

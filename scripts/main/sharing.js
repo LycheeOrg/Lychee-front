@@ -27,7 +27,7 @@ sharing.add = function () {
 		return false;
 	}
 
-	api.post("Sharing::Add", params, function (data) {
+	api.post("Sharing::add", params, function (data) {
 		if (data !== true) {
 			loadingBar.show("error", data.description);
 			lychee.error(null, params, data);
@@ -52,7 +52,7 @@ sharing.delete = function () {
 		loadingBar.show("error", "Select a sharing to remove!");
 		return false;
 	}
-	api.post("Sharing::Delete", params, function (data) {
+	api.post("Sharing::delete", params, function (data) {
 		if (data !== true) {
 			loadingBar.show("error", data.description);
 			lychee.error(null, params, data);
@@ -64,7 +64,7 @@ sharing.delete = function () {
 };
 
 sharing.list = function () {
-	api.post("Sharing::List", {}, function (data) {
+	api.post("Sharing::list", {}, function (data) {
 		sharing.json = data;
 		view.sharing.init();
 	});

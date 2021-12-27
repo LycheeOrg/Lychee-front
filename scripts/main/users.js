@@ -19,7 +19,7 @@ users.update = function (params) {
 		params.is_locked = false;
 	}
 
-	api.post("User::Save", params, function (data) {
+	api.post("User::save", params, function (data) {
 		if (data) {
 			loadingBar.show("error", data.description);
 			lychee.error(null, params, data);
@@ -51,21 +51,21 @@ users.create = function (params) {
 		params.is_locked = false;
 	}
 
-	api.post("User::Create", params, function () {
+	api.post("User::create", params, function () {
 		loadingBar.show("success", "User created!");
 		users.list(); // reload user list
 	});
 };
 
 users.delete = function (params) {
-	api.post("User::Delete", params, function () {
+	api.post("User::delete", params, function () {
 		loadingBar.show("success", "User deleted!");
 		users.list(); // reload user list
 	});
 };
 
 users.list = function () {
-	api.post("User::List", {}, function (data) {
+	api.post("User::list", {}, function (data) {
 		users.json = data;
 		view.users.init();
 	});

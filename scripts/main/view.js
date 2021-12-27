@@ -1839,14 +1839,14 @@ view.diagnostics = {
 	},
 
 	call_check_update: function () {
-		api.post("Update::Check", [], function (data) {
+		api.post("Update::check", [], function (data) {
 			loadingBar.show("success", data);
 			$("#Check_Update_Lychee").remove();
 		});
 	},
 
 	call_apply_update: function () {
-		api.post("Update::Apply", [], function (data) {
+		api.post("Update::apply", [], function (data) {
 			let html = view.preify(data, "");
 			$("#Update_Lychee").remove();
 			$(html).prependTo(".logs_diagnostics_view");
@@ -1887,7 +1887,7 @@ view.update = {
 			view.update.clearContent();
 
 			// code duplicate
-			api.post("Update::Apply", [], function (data) {
+			api.post("Update::apply", [], function (data) {
 				let html = view.preify(data, "logs_diagnostics_view");
 				lychee.content.html(html);
 			});
