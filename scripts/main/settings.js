@@ -32,10 +32,27 @@ settings.createConfig = function () {
 			dbTablePrefix,
 		};
 
-		api.post("Config::create", params, function (_data) {
-			if (_data !== true) {
-				// Connection failed
+		api.post(
+			"Config::create",
+			params,
+			() => window.location.reload(),
+			null,
+			function (jqXHR, params) {
+				let _data = lychee.locale["ERROR_UNKNOWN"];
+				if (jqXHR.responseType === "json") {
+					/**
+					 * @type {LycheeException}
+					 */
+					let lycheeException = JSON.parse(jqXHR.responseText);
+					_data = lycheeException.message;
+				}
+
+				// TODO: Where, when and how does the server throw these error messages?
+				// Have these error message ever been used? The backend doesn't
+				// define these message and had not even done so before the re-factoring.
+				// Are these conditions legacy and probably never taken?
 				if (_data === "Warning: Connection failed!") {
+					// Connection failed
 					basicModal.show({
 						body: "<p>" + lychee.locale["ERROR_DB_1"] + "</p>",
 						buttons: {
@@ -45,12 +62,8 @@ settings.createConfig = function () {
 							},
 						},
 					});
-
-					return false;
-				}
-
-				// Creation failed
-				if (_data === "Warning: Creation failed!") {
+				} else if (_data === "Warning: Creation failed!") {
+					// Creation failed
 					basicModal.show({
 						body: "<p>" + lychee.locale["ERROR_DB_2"] + "</p>",
 						buttons: {
@@ -60,12 +73,8 @@ settings.createConfig = function () {
 							},
 						},
 					});
-
-					return false;
-				}
-
-				// Could not create file
-				if (_data === "Warning: Could not create file!") {
+				} else if (_data === "Warning: Could not create file!") {
+					// Could not create file
 					basicModal.show({
 						body: "<p>" + lychee.locale["ERROR_CONFIG_FILE"] + "</p>",
 						buttons: {
@@ -75,29 +84,22 @@ settings.createConfig = function () {
 							},
 						},
 					});
-
-					return false;
+				} else {
+					// Something else went wrong
+					basicModal.show({
+						body: "<p>" + _data + "</p>",
+						buttons: {
+							action: {
+								title: lychee.locale["RETRY"],
+								fn: settings.createConfig,
+							},
+						},
+					});
 				}
 
-				// Something went wrong
-				basicModal.show({
-					body: "<p>" + lychee.locale["ERROR_UNKNOWN"] + "</p>",
-					buttons: {
-						action: {
-							title: lychee.locale["RETRY"],
-							fn: settings.createConfig,
-						},
-					},
-				});
-
-				return false;
-			} else {
-				// Configuration successful
-				window.location.reload();
-
-				return false;
+				return true;
 			}
-		});
+		);
 	};
 
 	let msg =
@@ -274,51 +276,41 @@ settings.changeLogin = function (params) {
 };
 
 settings.changeSorting = function (params) {
-	api.post("Settings::setSorting", params, function (data) {
-		if (data === true) {
-			lychee.sortingAlbums = "ORDER BY " + params["typeAlbums"] + " " + params["orderAlbums"];
-			lychee.sortingPhotos = "ORDER BY " + params["typePhotos"] + " " + params["orderPhotos"];
-			albums.refresh();
-			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_SORT"]);
-		} else lychee.error(null, params, data);
+	api.post("Settings::setSorting", params, function () {
+		lychee.sortingAlbums = "ORDER BY " + params["typeAlbums"] + " " + params["orderAlbums"];
+		lychee.sortingPhotos = "ORDER BY " + params["typePhotos"] + " " + params["orderPhotos"];
+		albums.refresh();
+		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_SORT"]);
 	});
 };
 
 settings.changeDropboxKey = function (params) {
 	// if params.key == "" key is cleared
-	api.post("Settings::setDropboxKey", params, function (data) {
-		if (data === true) {
-			lychee.dropboxKey = params.key;
-			// if (callback) lychee.loadDropbox(callback)
-			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_DROPBOX"]);
-		} else lychee.error(null, params, data);
+	api.post("Settings::setDropboxKey", params, function () {
+		lychee.dropboxKey = params.key;
+		// if (callback) lychee.loadDropbox(callback)
+		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_DROPBOX"]);
 	});
 };
 
 settings.changeLang = function (params) {
-	api.post("Settings::setLang", params, function (data) {
-		if (data === true) {
-			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_LANG"]);
-			lychee.init();
-		} else lychee.error(null, params, data);
+	api.post("Settings::setLang", params, function () {
+		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_LANG"]);
+		lychee.init();
 	});
 };
 
 settings.setDefaultLicense = function (params) {
-	api.post("Settings::setDefaultLicense", params, function (data) {
-		if (data === true) {
-			lychee.default_license = params.license;
-			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_LICENSE"]);
-		} else lychee.error(null, params, data);
+	api.post("Settings::setDefaultLicense", params, function () {
+		lychee.default_license = params.license;
+		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_LICENSE"]);
 	});
 };
 
 settings.setLayout = function (params) {
-	api.post("Settings::setLayout", params, function (data) {
-		if (data === true) {
-			lychee.layout = params.layout;
-			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_LAYOUT"]);
-		} else lychee.error(null, params, data);
+	api.post("Settings::setLayout", params, function () {
+		lychee.layout = params.layout;
+		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_LAYOUT"]);
 	});
 };
 
@@ -329,11 +321,9 @@ settings.changePublicSearch = function () {
 	} else {
 		params.public_search = "0";
 	}
-	api.post("Settings::setPublicSearch", params, function (data) {
-		if (data === true) {
-			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_PUBLIC_SEARCH"]);
-			lychee.public_search = params.public_search === "1";
-		} else lychee.error(null, params, data);
+	api.post("Settings::setPublicSearch", params, function () {
+		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_PUBLIC_SEARCH"]);
+		lychee.public_search = params.public_search === "1";
 	});
 };
 
@@ -355,12 +345,10 @@ settings.setOverlayType = function () {
 		console.log("Error - default used");
 	}
 
-	api.post("Settings::setOverlayType", params, function (data) {
-		if (data === true) {
-			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_IMAGE_OVERLAY"]);
-			lychee.image_overlay_type = params.image_overlay_type;
-			lychee.image_overlay_type_default = params.image_overlay_type;
-		} else lychee.error(null, params, data);
+	api.post("Settings::setOverlayType", params, function () {
+		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_IMAGE_OVERLAY"]);
+		lychee.image_overlay_type = params.image_overlay_type;
+		lychee.image_overlay_type_default = params.image_overlay_type;
 	});
 };
 
@@ -371,11 +359,9 @@ settings.changeMapDisplay = function () {
 	} else {
 		params.map_display = "0";
 	}
-	api.post("Settings::setMapDisplay", params, function (data) {
-		if (data === true) {
-			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
-			lychee.map_display = params.map_display === "1";
-		} else lychee.error(null, params, data);
+	api.post("Settings::setMapDisplay", params, function () {
+		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
+		lychee.map_display = params.map_display === "1";
 	});
 	// Map functionality is disabled
 	// -> map for public albums also needs to be disabled
@@ -397,11 +383,9 @@ settings.changeMapDisplayPublic = function () {
 	} else {
 		params.map_display_public = "0";
 	}
-	api.post("Settings::setMapDisplayPublic", params, function (data) {
-		if (data === true) {
-			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY_PUBLIC"]);
-			lychee.map_display_public = params.map_display_public === "1";
-		} else lychee.error(null, params, data);
+	api.post("Settings::setMapDisplayPublic", params, function () {
+		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY_PUBLIC"]);
+		lychee.map_display_public = params.map_display_public === "1";
 	});
 };
 
@@ -410,11 +394,9 @@ settings.setMapProvider = function () {
 	let params = {};
 	params.map_provider = $("#MapProvider").val();
 
-	api.post("Settings::setMapProvider", params, function (data) {
-		if (data === true) {
-			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_PROVIDER"]);
-			lychee.map_provider = params.map_provider;
-		} else lychee.error(null, params, data);
+	api.post("Settings::setMapProvider", params, function () {
+		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_PROVIDER"]);
+		lychee.map_provider = params.map_provider;
 	});
 };
 
@@ -425,11 +407,9 @@ settings.changeMapIncludeSubalbums = function () {
 	} else {
 		params.map_include_subalbums = "0";
 	}
-	api.post("Settings::setMapIncludeSubalbums", params, function (data) {
-		if (data === true) {
-			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
-			lychee.map_include_subalbums = params.map_include_subalbums === "1";
-		} else lychee.error(null, params, data);
+	api.post("Settings::setMapIncludeSubalbums", params, function () {
+		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
+		lychee.map_include_subalbums = params.map_include_subalbums === "1";
 	});
 };
 
@@ -440,11 +420,9 @@ settings.changeLocationDecoding = function () {
 	} else {
 		params.location_decoding = "0";
 	}
-	api.post("Settings::setLocationDecoding", params, function (data) {
-		if (data === true) {
-			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
-			lychee.location_decoding = params.location_decoding === "1";
-		} else lychee.error(null, params, data);
+	api.post("Settings::setLocationDecoding", params, function () {
+		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
+		lychee.location_decoding = params.location_decoding === "1";
 	});
 };
 
@@ -455,14 +433,10 @@ settings.changeNSFWVisible = function () {
 	} else {
 		params.nsfw_visible = "0";
 	}
-	api.post("Settings::setNSFWVisible", params, function (data) {
-		if (data === true) {
-			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_NSFW_VISIBLE"]);
-			lychee.nsfw_visible = params.nsfw_visible === "1";
-			lychee.nsfw_visible_saved = lychee.nsfw_visible;
-		} else {
-			lychee.error(null, params, data);
-		}
+	api.post("Settings::setNSFWVisible", params, function () {
+		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_NSFW_VISIBLE"]);
+		lychee.nsfw_visible = params.nsfw_visible === "1";
+		lychee.nsfw_visible_saved = lychee.nsfw_visible;
 	});
 };
 
@@ -483,11 +457,9 @@ settings.changeLocationShow = function () {
 			$("#LocationShowPublic").click();
 		}
 	}
-	api.post("Settings::setLocationShow", params, function (data) {
-		if (data === true) {
-			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
-			lychee.location_show = params.location_show === "1";
-		} else lychee.error(null, params, data);
+	api.post("Settings::setLocationShow", params, function () {
+		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
+		lychee.location_show = params.location_show === "1";
 	});
 };
 
@@ -503,11 +475,9 @@ settings.changeLocationShowPublic = function () {
 	} else {
 		params.location_show_public = "0";
 	}
-	api.post("Settings::setLocationShowPublic", params, function (data) {
-		if (data === true) {
-			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
-			lychee.location_show_public = params.location_show_public === "1";
-		} else lychee.error(null, params, data);
+	api.post("Settings::setLocationShowPublic", params, function () {
+		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
+		lychee.location_show_public = params.location_show_public === "1";
 	});
 };
 
@@ -518,13 +488,9 @@ settings.changeNewPhotosNotification = function () {
 	} else {
 		params.new_photos_notification = "0";
 	}
-	api.post("Settings::setNewPhotosNotification", params, function (data) {
-		if (data === true) {
-			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_NEW_PHOTOS_NOTIFICATION"]);
-			lychee.new_photos_notification = params.new_photos_notification === "1";
-		} else {
-			lychee.error(null, params, data);
-		}
+	api.post("Settings::setNewPhotosNotification", params, function () {
+		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_NEW_PHOTOS_NOTIFICATION"]);
+		lychee.new_photos_notification = params.new_photos_notification === "1";
 	});
 };
 
@@ -532,22 +498,18 @@ settings.changeCSS = function () {
 	let params = {};
 	params.css = $("#css").val();
 
-	api.post("Settings::setCSS", params, function (data) {
-		if (data === true) {
-			lychee.css = params.css;
-			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_CSS"]);
-		} else lychee.error(null, params, data);
+	api.post("Settings::setCSS", params, function () {
+		lychee.css = params.css;
+		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_CSS"]);
 	});
 };
 
 settings.save = function (params, exitview = true) {
-	api.post("Settings::saveAll", params, function (data) {
-		if (data === true) {
-			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_UPDATE"]);
-			view.full_settings.init();
-			// re-read settings
-			lychee.init(exitview);
-		} else lychee.error("Check the Logs", params, data);
+	api.post("Settings::saveAll", params, function () {
+		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_UPDATE"]);
+		view.full_settings.init();
+		// re-read settings
+		lychee.init(exitview);
 	});
 };
 

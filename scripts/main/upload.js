@@ -121,7 +121,7 @@ upload.start = {
 				let data = null;
 				let errorText = "";
 
-				const isModelID = (albumID) => typeof albumID === "string" && albumID.length === 24;
+				const isModelID = (albumID) => typeof albumID === "string" && /^[-_0-9a-zA-Z]{24}$/.test(albumID);
 
 				data = xhr.responseText;
 
@@ -300,30 +300,31 @@ upload.start = {
 						albumID,
 					};
 
-					api.post("Import::url", params, function (_data) {
-						// Same code as in import.dropbox()
-
-						if (_data !== true) {
+					api.post(
+						"Import::url",
+						params,
+						function () {
+							// Same code as in import.dropbox()
+							basicModal.close();
+							upload.notify(lychee.locale["UPLOAD_IMPORT_COMPLETE"]);
+							albums.refresh();
+							if (album.getID() === null) lychee.goto();
+							else album.load(albumID);
+						},
+						null,
+						function () {
+							// Same code as in import.dropbox()
 							$(".basicModal .rows .row p.notice").html(lychee.locale["UPLOAD_IMPORT_WARN_ERR"]).show();
-
 							$(".basicModal .rows .row .status").html(lychee.locale["UPLOAD_FINISHED"]).addClass("warning");
-
 							// Show close button
 							$(".basicModal #basicModal__action.hidden").show();
-
-							// Log error
-							lychee.error(null, params, _data);
-						} else {
-							basicModal.close();
+							upload.notify(lychee.locale["UPLOAD_IMPORT_COMPLETE"]);
+							albums.refresh();
+							if (album.getID() === null) lychee.goto();
+							else album.load(albumID);
+							return false;
 						}
-
-						upload.notify(lychee.locale["UPLOAD_IMPORT_COMPLETE"]);
-
-						albums.refresh();
-
-						if (album.getID() === null) lychee.goto();
-						else album.load(albumID);
-					});
+					);
 				});
 			} else basicModal.error("link");
 		};
@@ -569,8 +570,8 @@ upload.start = {
 				},
 				function () {
 					if (!cancelUpload) {
-						api.post("Import::serverCancel", {}, function (resp) {
-							if (resp === "true") cancelUpload = true;
+						api.post("Import::serverCancel", {}, function () {
+							cancelUpload = true;
 						});
 					}
 				}
@@ -688,30 +689,31 @@ upload.start = {
 					albumID,
 				};
 
-				api.post("Import::url", params, function (data) {
-					// Same code as in import.url()
-
-					if (data !== true) {
+				api.post(
+					"Import::url",
+					params,
+					function () {
+						// Same code as in import.url()
+						basicModal.close();
+						upload.notify(lychee.locale["UPLOAD_IMPORT_COMPLETE"]);
+						albums.refresh();
+						if (album.getID() === null) lychee.goto();
+						else album.load(albumID);
+					},
+					null,
+					function () {
+						// Same code as in import.url()
 						$(".basicModal .rows .row p.notice").html(lychee.locale["UPLOAD_IMPORT_WARN_ERR"]).show();
-
 						$(".basicModal .rows .row .status").html(lychee.locale["UPLOAD_FINISHED"]).addClass("warning");
-
 						// Show close button
 						$(".basicModal #basicModal__action.hidden").show();
-
-						// Log error
-						lychee.error(null, params, data);
-					} else {
-						basicModal.close();
+						upload.notify(lychee.locale["UPLOAD_IMPORT_COMPLETE"]);
+						albums.refresh();
+						if (album.getID() === null) lychee.goto();
+						else album.load(albumID);
+						return false;
 					}
-
-					upload.notify(lychee.locale["UPLOAD_IMPORT_COMPLETE"]);
-
-					albums.refresh();
-
-					if (album.getID() === null) lychee.goto();
-					else album.load(albumID);
-				});
+				);
 			});
 		};
 

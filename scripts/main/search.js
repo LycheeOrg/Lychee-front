@@ -15,7 +15,7 @@ search.find = function (term) {
 		"timeout",
 		setTimeout(function () {
 			if (header.dom(".header__search").val().length !== 0) {
-				api.post("search", { term }, function (data) {
+				api.post("Search::run", { term }, function (data) {
 					let html = "";
 					let albumsData = "";
 					let photosData = "";

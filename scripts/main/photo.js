@@ -292,7 +292,7 @@ photo.delete = function (photoIDs) {
 			photoIDs: photoIDs.join(),
 		};
 
-		api.post("Photo::delete", params, null);
+		api.post("Photo::delete", params);
 	};
 
 	if (photoIDs.length === 1) {
@@ -361,11 +361,7 @@ photo.setTitle = function (photoIDs) {
 			title: newTitle,
 		};
 
-		api.post("Photo::setTitle", params, function (_data) {
-			if (_data !== true) {
-				lychee.error(null, params, _data);
-			}
-		});
+		api.post("Photo::setTitle", params);
 	};
 
 	let input = lychee.html`<input class='text' name='title' type='text' maxlength='100' placeholder='Title' value='$${oldTitle}'>`;
@@ -397,13 +393,7 @@ photo.copyTo = function (photoIDs, albumID) {
 		albumID,
 	};
 
-	api.post("Photo::duplicate", params, function (data) {
-		if (data instanceof Object) {
-			album.reload();
-		} else {
-			lychee.error(null, params, data);
-		}
-	});
+	api.post("Photo::duplicate", params, () => album.reload());
 };
 
 photo.setAlbum = function (photoIDs, albumID) {
@@ -452,17 +442,13 @@ photo.setAlbum = function (photoIDs, albumID) {
 		albumID,
 	};
 
-	api.post("Photo::setAlbum", params, function (data) {
-		if (data !== true) {
-			lychee.error(null, params, data);
-		} else {
-			// We only really need to do anything here if the destination
-			// is a (possibly nested) subalbum of the current album; but
-			// since we have no way of figuring it out (albums.json is
-			// null), we need to reload.
-			if (visible.album()) {
-				album.reload();
-			}
+	api.post("Photo::setAlbum", params, function () {
+		// We only really need to do anything here if the destination
+		// is a (possibly nested) subalbum of the current album; but
+		// since we have no way of figuring it out (albums.json is
+		// null), we need to reload.
+		if (visible.album()) {
+			album.reload();
 		}
 	});
 };
@@ -486,9 +472,7 @@ photo.setStar = function (photoIDs) {
 		photoIDs: photoIDs.join(),
 	};
 
-	api.post("Photo::setStar", params, function (data) {
-		if (data !== true) lychee.error(null, params, data);
-	});
+	api.post("Photo::setStar", params);
 };
 
 photo.setPublic = function (photoID, e) {
@@ -609,9 +593,7 @@ photo.setPublic = function (photoID, e) {
 
 				// Photo::setPublic simply flips the current state.
 				// Ugly API but effective...
-				api.post("Photo::setPublic", { photoID }, function (data) {
-					if (data !== true) lychee.error(null, params, data);
-				});
+				api.post("Photo::setPublic", { photoID });
 			}
 
 			basicModal.close();
@@ -677,11 +659,7 @@ photo.setDescription = function (photoID) {
 			description,
 		};
 
-		api.post("Photo::setDescription", params, function (_data) {
-			if (_data !== true) {
-				lychee.error(null, params, _data);
-			}
-		});
+		api.post("Photo::setDescription", params);
 	};
 
 	basicModal.show({
@@ -772,15 +750,12 @@ photo.setTags = function (photoIDs, tags) {
 		tags,
 	};
 
-	api.post("Photo::setTags", params, function (data) {
-		if (data !== true) {
-			lychee.error(null, params, data);
-		} else if (albums.json && albums.json.smart_albums) {
+	api.post("Photo::setTags", params, function () {
+		if (albums.json && albums.json.smart_albums) {
 			$.each(Object.entries(albums.json.smart_albums), function () {
 				if (this.length === 2 && this[1]["is_tag_album"] === true) {
 					// If we have any tag albums, force a refresh.
 					albums.refresh();
-					return false;
 				}
 			});
 		}
@@ -840,14 +815,10 @@ photo.setLicense = function (photoID) {
 			license,
 		};
 
-		api.post("Photo::setLicense", params, function (_data) {
-			if (_data) {
-				lychee.error(null, params, _data);
-			} else {
-				// update the photo JSON and reload the license in the sidebar
-				photo.json.license = params.license;
-				view.photo.license();
-			}
+		api.post("Photo::setLicense", params, function () {
+			// update the photo JSON and reload the license in the sidebar
+			photo.json.license = params.license;
+			view.photo.license();
 		});
 	};
 

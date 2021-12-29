@@ -332,9 +332,7 @@ lychee.login = function (data) {
 	api.post(
 		"Session::login",
 		params,
-		function () {
-			window.location.reload();
-		},
+		() => window.location.reload(),
 		null,
 		function (jqXHR) {
 			if (jqXHR.status === 401) {
@@ -393,9 +391,7 @@ lychee.loginDialog = function () {
 };
 
 lychee.logout = function () {
-	api.post("Session::logout", {}, function () {
-		window.location.reload();
-	});
+	api.post("Session::logout", {}, () => window.location.reload());
 };
 
 lychee.goto = function (url = "", autoplay = true) {

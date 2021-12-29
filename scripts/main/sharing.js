@@ -27,14 +27,9 @@ sharing.add = function () {
 		return false;
 	}
 
-	api.post("Sharing::add", params, function (data) {
-		if (data !== true) {
-			loadingBar.show("error", data.description);
-			lychee.error(null, params, data);
-		} else {
-			loadingBar.show("success", "Sharing updated!");
-			sharing.list(); // reload user list
-		}
+	api.post("Sharing::add", params, function () {
+		loadingBar.show("success", "Sharing updated!");
+		sharing.list(); // reload user list
 	});
 };
 
@@ -52,14 +47,9 @@ sharing.delete = function () {
 		loadingBar.show("error", "Select a sharing to remove!");
 		return false;
 	}
-	api.post("Sharing::delete", params, function (data) {
-		if (data !== true) {
-			loadingBar.show("error", data.description);
-			lychee.error(null, params, data);
-		} else {
-			loadingBar.show("success", "Sharing removed!");
-			sharing.list(); // reload user list
-		}
+	api.post("Sharing::delete", params, function () {
+		loadingBar.show("success", "Sharing removed!");
+		sharing.list(); // reload user list
 	});
 };
 

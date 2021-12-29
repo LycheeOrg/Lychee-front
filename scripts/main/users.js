@@ -19,14 +19,9 @@ users.update = function (params) {
 		params.is_locked = false;
 	}
 
-	api.post("User::save", params, function (data) {
-		if (data) {
-			loadingBar.show("error", data.description);
-			lychee.error(null, params, data);
-		} else {
-			loadingBar.show("success", "User updated!");
-			users.list(); // reload user list
-		}
+	api.post("User::save", params, function () {
+		loadingBar.show("success", "User updated!");
+		users.list(); // reload user list
 	});
 };
 

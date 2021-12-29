@@ -14,29 +14,24 @@ photoeditor.rotate = function (photoID, direction) {
 	};
 
 	api.post("PhotoEditor::rotate", params, function (data) {
-		if (data === false) {
-			lychee.error(null, params, data);
-		} else {
-			photo.json = data;
-			photo.json.original_album = photo.json.album;
-			if (album.json) {
-				photo.json.album = album.json.id;
-			}
-
-			let image = $("img#image");
-			if (photo.json.size_variants.medium2x !== null) {
-				image.prop(
-					"srcset",
-					`${photo.json.size_variants.medium.url} ${photo.json.size_variants.medium.width}w, ${photo.json.size_variants.medium2x.url} ${photo.json.size_variants.medium2x.width}w`
-				);
-			} else {
-				image.prop("srcset", "");
-			}
-			image.prop("src", photo.json.size_variants.medium !== null ? photo.json.size_variants.medium.url : photo.json.size_variants.original.url);
-			view.photo.onresize();
-			view.photo.sidebar();
-
-			album.updatePhoto(data);
+		photo.json = data;
+		photo.json.original_album = photo.json.album;
+		if (album.json) {
+			photo.json.album = album.json.id;
 		}
+
+		let image = $("img#image");
+		if (photo.json.size_variants.medium2x !== null) {
+			image.prop(
+				"srcset",
+				`${photo.json.size_variants.medium.url} ${photo.json.size_variants.medium.width}w, ${photo.json.size_variants.medium2x.url} ${photo.json.size_variants.medium2x.width}w`
+			);
+		} else {
+			image.prop("srcset", "");
+		}
+		image.prop("src", photo.json.size_variants.medium !== null ? photo.json.size_variants.medium.url : photo.json.size_variants.original.url);
+		view.photo.onresize();
+		view.photo.sidebar();
+		album.updatePhoto(data);
 	});
 };

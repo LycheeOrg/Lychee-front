@@ -51,7 +51,7 @@ let api = {
  * @param {?ProgressCallback} responseProgressCB
  * @param {?ErrorCallback} errorCallback
  */
-api.post = function (fn, params, successCallback, responseProgressCB = null, errorCallback = null) {
+api.post = function (fn, params, successCallback = null, responseProgressCB = null, errorCallback = null) {
 	loadingBar.show();
 
 	/**

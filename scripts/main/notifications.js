@@ -12,13 +12,8 @@ notifications.update = function (params) {
 		}
 	}
 
-	api.post("User::setEmail", params, function (data) {
-		if (data) {
-			loadingBar.show("error", data.description);
-			lychee.error(null, params, data);
-		} else {
-			loadingBar.show("success", "Email updated!");
-		}
+	api.post("User::setEmail", params, function () {
+		loadingBar.show("success", "Email updated!");
 	});
 };
 

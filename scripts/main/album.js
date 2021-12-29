@@ -11,7 +11,7 @@ album.isSmartID = function (id) {
 };
 
 album.isModelID = function (id) {
-	return typeof id === "string" && id.length === 24;
+	return typeof id === "string" && /^[-_0-9a-zA-Z]{24}$/.test(id);
 };
 
 album.getParentID = function () {
@@ -215,7 +215,7 @@ album.add = function (IDs = null, callback = null) {
 	const action = function (data) {
 		// let title = data.title;
 
-		const isModelID = (albumID) => typeof albumID === "string" && albumID.length === 24;
+		const isModelID = (albumID) => typeof albumID === "string" && /^[-_0-9a-zA-Z]{24}$/.test(albumID);
 
 		if (!data.title.trim()) {
 			basicModal.error("title");
@@ -238,15 +238,13 @@ album.add = function (IDs = null, callback = null) {
 		}
 
 		api.post("Album::add", params, function (_data) {
-			if (_data && isModelID(_data.id)) {
+			if (isModelID(_data.id)) {
 				if (IDs != null && callback != null) {
 					callback(IDs, _data, false); // we do not confirm
 				} else {
 					albums.refresh();
 					lychee.goto(_data.id);
 				}
-			} else {
-				lychee.error(null, params, _data);
 			}
 		});
 	};
@@ -285,12 +283,10 @@ album.addByTags = function () {
 		};
 
 		api.post("Album::addByTags", params, function (_data) {
-			const isModelID = (albumID) => typeof albumID === "string" && albumID.length === 24;
-			if (_data && isModelID(_data.id)) {
+			const isModelID = (albumID) => typeof albumID === "string" && /^[-_0-9a-zA-Z]{24}$/.test(albumID);
+			if (isModelID(_data.id)) {
 				albums.refresh();
 				lychee.goto(_data.id);
-			} else {
-				lychee.error(null, params, _data);
 			}
 		});
 	};
@@ -334,13 +330,7 @@ album.setShowTags = function (albumID) {
 			show_tags: show_tags,
 		};
 
-		api.post("Album::setShowTags", params, function (_data) {
-			if (_data) {
-				lychee.error(null, params, _data);
-			} else {
-				album.reload();
-			}
-		});
+		api.post("Album::setShowTags", params, () => album.reload());
 	};
 
 	basicModal.show({
@@ -425,11 +415,7 @@ album.setTitle = function (albumIDs) {
 			title: newTitle,
 		};
 
-		api.post("Album::setTitle", params, function (_data) {
-			if (_data) {
-				lychee.error(null, params, _data);
-			}
-		});
+		api.post("Album::setTitle", params);
 	};
 
 	let input = lychee.html`<input class='text' name='title' type='text' maxlength='100' placeholder='$${lychee.locale["ALBUM_TITLE"]}' value='$${oldTitle}'>`;
@@ -470,11 +456,7 @@ album.setDescription = function (albumID) {
 			description,
 		};
 
-		api.post("Album::setDescription", params, function (_data) {
-			if (_data) {
-				lychee.error(null, params, _data);
-			}
-		});
+		api.post("Album::setDescription", params);
 	};
 
 	basicModal.show({
@@ -502,14 +484,10 @@ album.toggleCover = function (photoID) {
 		photoID: album.json.cover_id,
 	};
 
-	api.post("Album::setCover", params, function (data) {
-		if (data) {
-			lychee.error(null, params, data);
-		} else {
-			view.album.content.cover(photoID);
-			if (!album.getParentID()) {
-				albums.refresh();
-			}
+	api.post("Album::setCover", params, function () {
+		view.album.content.cover(photoID);
+		if (!album.getParentID()) {
+			albums.refresh();
 		}
 	});
 };
@@ -530,14 +508,10 @@ album.setLicense = function (albumID) {
 			license,
 		};
 
-		api.post("Album::setLicense", params, function (_data) {
-			if (_data) {
-				lychee.error(null, params, _data);
-			} else {
-				if (visible.album()) {
-					album.json.license = params.license;
-					view.album.license();
-				}
+		api.post("Album::setLicense", params, function () {
+			if (visible.album()) {
+				album.json.license = params.license;
+				view.album.license();
 			}
 		});
 	};
@@ -622,7 +596,7 @@ album.setSorting = function (albumID) {
 			sortingOrder,
 		};
 
-		api.post("Album::setSorting", params, function (_data) {
+		api.post("Album::setSorting", params, function () {
 			if (visible.album()) {
 				album.reload();
 			}
@@ -888,7 +862,7 @@ album.setPublic = function (albumID, e) {
 		params.password = password;
 	}
 
-	api.post("Album::setPublic", params, null);
+	api.post("Album::setPublic", params);
 };
 
 album.shareUsers = function (albumID, e) {
@@ -900,30 +874,28 @@ album.shareUsers = function (albumID, e) {
 		api.post("Sharing::list", {}, (data) => {
 			const sharingForm = $("#sharing_people_form");
 			sharingForm.empty();
-			if (data !== undefined) {
-				if (data.users !== undefined) {
-					sharingForm.append(`<p>${lychee.locale["SHARING_ALBUM_USERS_LONG_MESSAGE"]}</p>`);
-					// Fill with the list of users
-					data.users.forEach((user) => {
-						sharingForm.append(lychee.html`<div class='choice'>
-							<label>
-								<input type='checkbox' name='${user.id}'>
-								<span class='checkbox'>${build.iconic("check")}</span>
-								<span class='label'>${user.username}</span>
-							</label>
-							<p></p>
-						</div>`);
-					});
-					var sharingOfAlbum = data.shared !== undefined ? data.shared.filter((val) => val.album_id === albumID) : [];
-					sharingOfAlbum.forEach((sharing) => {
-						// Check all the shares who already exists, and store their sharing id on the element
-						var elem = $(`.basicModal .choice input[name="${sharing.user_id}"]`);
-						elem.prop("checked", true);
-						elem.data("sharingId", sharing.id);
-					});
-				} else {
-					sharingForm.append(`<p>${lychee.locale["SHARING_ALBUM_USERS_NO_USERS"]}</p>`);
-				}
+			if (data.users !== undefined) {
+				sharingForm.append(`<p>${lychee.locale["SHARING_ALBUM_USERS_LONG_MESSAGE"]}</p>`);
+				// Fill with the list of users
+				data.users.forEach((user) => {
+					sharingForm.append(lychee.html`<div class='choice'>
+						<label>
+							<input type='checkbox' name='${user.id}'>
+							<span class='checkbox'>${build.iconic("check")}</span>
+							<span class='label'>${user.username}</span>
+						</label>
+						<p></p>
+					</div>`);
+				});
+				var sharingOfAlbum = data.shared !== undefined ? data.shared.filter((val) => val.album_id === albumID) : [];
+				sharingOfAlbum.forEach((sharing) => {
+					// Check all the shares who already exists, and store their sharing id on the element
+					var elem = $(`.basicModal .choice input[name="${sharing.user_id}"]`);
+					elem.prop("checked", true);
+					elem.data("sharingId", sharing.id);
+				});
+			} else {
+				sharingForm.append(`<p>${lychee.locale["SHARING_ALBUM_USERS_NO_USERS"]}</p>`);
 			}
 		});
 
@@ -967,25 +939,15 @@ album.shareUsers = function (albumID, e) {
 
 	if (sharingToDelete.length > 0) {
 		var params = { ShareIDs: sharingToDelete.join(",") };
-		api.post("Sharing::delete", params, function (data) {
-			if (data !== true) {
-				loadingBar.show("error", data.description);
-				lychee.error(null, params, data);
-			}
-		});
+		api.post("Sharing::delete", params);
 	}
 	if (sharingToAdd.length > 0) {
 		var params = {
 			albumIDs: albumID,
 			UserIDs: sharingToAdd.join(","),
 		};
-		api.post("Sharing::add", params, (data) => {
-			if (data !== true) {
-				loadingBar.show("error", data.description);
-				lychee.error(null, params, data);
-			} else {
-				loadingBar.show("success", "Sharing updated!");
-			}
+		api.post("Sharing::add", params, function () {
+			loadingBar.show("success", "Sharing updated!");
 		});
 	}
 
@@ -1001,13 +963,7 @@ album.setNSFW = function (albumID, e) {
 		albumID: albumID,
 	};
 
-	api.post("Album::setNSFW", params, function (data) {
-		if (data) {
-			lychee.error(null, params, data);
-		} else {
-			albums.refresh();
-		}
-	});
+	api.post("Album::setNSFW", params, () => albums.refresh());
 };
 
 album.share = function (service) {
@@ -1096,7 +1052,7 @@ album.delete = function (albumIDs) {
 				});
 			} else if (visible.album()) {
 				albums.refresh();
-				if (albumIDs.length === 1 && album.getID() == albumIDs[0]) {
+				if (albumIDs.length === 1 && album.getID() === albumIDs[0]) {
 					lychee.goto(album.getParentID());
 				} else {
 					albumIDs.forEach(function (id) {
@@ -1105,8 +1061,6 @@ album.delete = function (albumIDs) {
 					});
 				}
 			}
-
-			if (typeof data !== "undefined") lychee.error(null, params, data);
 		});
 	};
 
@@ -1168,13 +1122,7 @@ album.merge = function (albumIDs, albumID, confirm = true) {
 			albumIDs: albumIDs.join(),
 		};
 
-		api.post("Album::merge", params, function (data) {
-			if (data) {
-				lychee.error(null, params, data);
-			} else {
-				album.reload();
-			}
-		});
+		api.post("Album::merge", params, () => album.reload());
 	};
 
 	if (confirm) {
@@ -1206,13 +1154,7 @@ album.setAlbum = function (albumIDs, albumID, confirm = true) {
 			albumIDs: albumIDs.join(),
 		};
 
-		api.post("Album::move", params, function (data) {
-			if (data) {
-				lychee.error(null, params, data);
-			} else {
-				album.reload();
-			}
-		});
+		api.post("Album::move", params, () => album.reload());
 	};
 
 	if (confirm) {

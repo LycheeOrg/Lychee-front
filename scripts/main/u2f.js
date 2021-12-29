@@ -63,15 +63,9 @@ u2f.register = function () {
 };
 
 u2f.delete = function (params) {
-	api.post("WebAuthn::delete", params, function (data) {
-		console.log(data);
-		if (!data) {
-			loadingBar.show("error", data.description);
-			lychee.error(null, params, data);
-		} else {
-			loadingBar.show("success", lychee.locale["U2F_CREDENTIALS_DELETED"]);
-			u2f.list(); // reload credential list
-		}
+	api.post("WebAuthn::delete", params, function () {
+		loadingBar.show("success", lychee.locale["U2F_CREDENTIALS_DELETED"]);
+		u2f.list(); // reload credential list
 	});
 };
 
