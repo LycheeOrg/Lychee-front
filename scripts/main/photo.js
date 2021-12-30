@@ -43,8 +43,8 @@ photo.load = function (photoID, albumID, autoplay) {
 
 	api.post("Photo::get", params, function (data) {
 		photo.json = data;
-		photo.json.original_album = photo.json.album;
-		photo.json.album = albumID;
+		photo.json.original_album_id = photo.json.album_id;
+		photo.json.album_id = albumID;
 
 		if (!visible.photo()) view.photo.show();
 		view.photo.init(autoplay);

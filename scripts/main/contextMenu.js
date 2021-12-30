@@ -513,7 +513,7 @@ contextMenu.move = function (IDs, e, callback, kind = "UNSORTED", display_root =
 					exclude.push(album.getParentID().toString());
 				}
 			} else if (visible.photo()) {
-				exclude.push(photo.json.album.toString());
+				exclude.push(photo.json.album_id);
 			}
 			items = items.concat(contextMenu.buildList(albums, exclude.concat(IDs), (a) => callback(IDs, a.id)));
 		};

@@ -15,9 +15,9 @@ photoeditor.rotate = function (photoID, direction) {
 
 	api.post("PhotoEditor::rotate", params, function (data) {
 		photo.json = data;
-		photo.json.original_album = photo.json.album;
+		photo.json.original_album_id = photo.json.album_id;
 		if (album.json) {
-			photo.json.album = album.json.id;
+			photo.json.album_id = album.json.id;
 		}
 
 		let image = $("img#image");

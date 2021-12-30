@@ -21,7 +21,11 @@ album.getParentID = function () {
 	return album.json.parent_id;
 };
 
+/**
+ * @return {?string} the album ID
+ */
 album.getID = function () {
+	/** @type {?string} */
 	let id = null;
 
 	// this is a Lambda
@@ -29,7 +33,7 @@ album.getID = function () {
 		return album.isSmartID(_id) || album.isModelID(_id);
 	};
 
-	if (photo.json) id = photo.json.album;
+	if (photo.json) id = photo.json.album_id;
 	else if (album.json) id = album.json.id;
 	else if (mapview.albumID) id = mapview.albumID;
 
@@ -234,7 +238,7 @@ album.add = function (IDs = null, callback = null) {
 		} else if (visible.album()) {
 			params.parent_id = album.json.id;
 		} else if (visible.photo()) {
-			params.parent_id = photo.json.album;
+			params.parent_id = photo.json.album_id;
 		}
 
 		api.post("Album::add", params, function (_data) {
