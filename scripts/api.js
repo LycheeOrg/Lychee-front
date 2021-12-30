@@ -11,6 +11,7 @@
  * @callback ErrorCallback
  * @param {XMLHttpRequest} jqXHR the jQuery XMLHttpRequest object, see {@link https://api.jquery.com/jQuery.ajax/#jqXHR}.
  * @param {Object} params the original JSON parameters of the request
+ * @param {?LycheeException} lycheeException the Lychee exception
  * @return {boolean}
  */
 
@@ -68,12 +69,17 @@ api.post = function (fn, params, successCallback = null, responseProgressCB = nu
 	 * @param {XMLHttpRequest} jqXHR the jQuery XMLHttpRequest object, see {@link https://api.jquery.com/jQuery.ajax/#jqXHR}.
 	 */
 	const errorHandler = (jqXHR) => {
+		/**
+		 * @type {?LycheeException}
+		 */
+		const lycheeException = jqXHR.responseJSON;
+
 		if (errorCallback) {
-			let isHandled = errorCallback(jqXHR, params);
+			let isHandled = errorCallback(jqXHR, params, lycheeException);
 			if (isHandled) return;
 		}
 		// Call global error handler for unhandled errors
-		api.onError(jqXHR, params);
+		api.onError(jqXHR, params, lycheeException);
 	};
 
 	let ajaxParams = {

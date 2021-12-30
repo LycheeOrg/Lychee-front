@@ -140,34 +140,16 @@ frame.resize = function () {
  *
  * @param {XMLHttpRequest} jqXHR
  * @param {Object} params the original JSON parameters of the request
+ * @param {?LycheeException} lycheeException the Lychee Exception
  * @return {boolean}
  */
-frame.error = function (jqXHR, params) {
-	let msg = jqXHR.statusText + " - ";
-	/**
-	 * @type {?LycheeException}
-	 */
-	let responseObj = null;
-
-	switch (jqXHR.responseType) {
-		case "text":
-			msg += jqXHR.responseText;
-			break;
-		case "json":
-			responseObj = JSON.parse(jqXHR.responseText);
-			msg += responseObj.message;
-			break;
-		default:
-			msg += "Unknown error";
-			break;
-	}
-
+frame.error = function (jqXHR, params, lycheeException) {
+	const msg = jqXHR.statusText + (lycheeException ? " - " + lycheeException.message : "");
 	loadingBar.show("error", msg);
-
-	console.error({
+	console.error("The server returned an error response", {
 		description: msg,
 		params: params,
-		response: responseObj ? responseObj : jqXHR.responseText,
+		response: lycheeException,
 	});
 	alert(msg);
 	return true;
