@@ -478,11 +478,14 @@ view.album = {
 						// query is being modified.
 						return false;
 					}
-					let ratio = album.json.photos[i].height > 0 ? album.json.photos[i].width / album.json.photos[i].height : 1;
+					let ratio =
+						album.json.photos[i].size_variants.original.height > 0
+							? album.json.photos[i].size_variants.original.width / album.json.photos[i].size_variants.original.height
+							: 1;
 					if (album.json.photos[i].type && album.json.photos[i].type.indexOf("video") > -1) {
 						// Video.  If there's no small and medium, we have
 						// to fall back to the square thumb.
-						if (album.json.photos[i].small === "" && album.json.photos[i].medium === "") {
+						if (album.json.photos[i].size_variants.small === null && album.json.photos[i].size_variants.medium === null) {
 							ratio = 1;
 						}
 					}
