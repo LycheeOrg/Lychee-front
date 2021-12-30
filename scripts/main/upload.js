@@ -65,197 +65,247 @@ upload.notify = function (title, text) {
 };
 
 upload.start = {
+	/**
+	 * @param {FileList} files
+	 */
 	local: function (files) {
-		let albumID = album.getID();
-		let error = false;
-		let warning = false;
-		let processing_count = 0;
-		let next_upload = 0;
-		let currently_uploading = false;
-		let cancelUpload = false;
+		if (files.length <= 0) return;
 
-		const process = function (file_num) {
-			let formData = new FormData();
-			let xhr = new XMLHttpRequest();
-			let pre_progress = 0;
-			let progress = 0;
+		const albumID = visible.albums() ? null : album.getID();
+		let hasErrorOccurred = false;
+		let hasWarningOccurred = false;
+		/**
+		 * The number of requests which are "on the fly", i.e. for which a
+		 * response has not yet completely been received.
+		 *
+		 * Note, that Lychee supports a restricted kind of "parallelism"
+		 * which is limited by the configuration option
+		 * `lychee.upload_processing_limit`:
+		 * While always only a single file is uploaded at once, upload of the
+		 * next file already starts after transmission of the previous file
+		 * has been finished, the response to the previous file might still be
+		 * outstanding as the uploaded file is processed at the server-side.
+		 *
+		 * @type {number}
+		 */
+		let outstandingResponsesCount = 0;
+		/**
+		 * The latest (aka highest) index of a file which is being or has
+		 * been uploaded to the server.
+		 *
+		 * @type {number}
+		 */
+		let latestFileIdx = 0;
+		/**
+		 * Indicator of a file is currently being uploaded.
+		 *
+		 * This is used as a semaphore to serialize the upload transmissions
+		 * between several instances of the method {@link process}.
+		 *
+		 * @type {boolean}
+		 */
+		let isUploadRunning = false;
+		let shallCancelUpload = false;
 
-			if (file_num === 0) {
-				$(cancelSelector).show();
+		/**
+		 * This callback is invoked when the last file has been processed.
+		 *
+		 * It closes the modal dialog or shows the close button and
+		 * reloads the album.
+		 */
+		const finish = function () {
+			window.onbeforeunload = null;
+
+			$("#upload_files").val("");
+
+			if (!hasErrorOccurred && !hasWarningOccurred) {
+				// Success
+				basicModal.close();
+				upload.notify(lychee.locale["UPLOAD_COMPLETE"]);
+			} else if (!hasErrorOccurred && hasWarningOccurred) {
+				// Warning
+				showCloseButton();
+				upload.notify(lychee.locale["UPLOAD_COMPLETE"]);
+			} else {
+				// Error
+				showCloseButton();
+				upload.notify(lychee.locale["UPLOAD_COMPLETE"], lychee.locale["UPLOAD_COMPLETE_FAILED"]);
 			}
 
-			const finish = function () {
-				window.onbeforeunload = null;
+			albums.refresh();
 
-				$("#upload_files").val("");
+			if (albumID === null) lychee.goto();
+			else album.load(albumID);
+		};
 
-				if (error === false && warning === false) {
-					// Success
-					basicModal.close();
-					upload.notify(lychee.locale["UPLOAD_COMPLETE"]);
-				} else if (error === false && warning === true) {
-					// Warning
-					showCloseButton();
-					upload.notify(lychee.locale["UPLOAD_COMPLETE"]);
-				} else {
-					// Error
-					showCloseButton();
-					upload.notify(lychee.locale["UPLOAD_COMPLETE"], lychee.locale["UPLOAD_COMPLETE_FAILED"]);
+		/**
+		 * Processes the upload and response for a single file.
+		 *
+		 * Note that up to `lychee.upload_processing_limit` "instances" of
+		 * this method can be "alive" simultaneously.
+		 * The parameter `fileIdx` is constrained to the range between
+		 * `latestFileIdx - lychee.upload_processing_limit` and `latestFileIdx`.
+		 *
+		 * @param {number} fileIdx the index of the file being processed
+		 */
+		const process = function (fileIdx) {
+			/**
+			 * The upload progress of the file with index `fileIdx` so far.
+			 *
+			 * @type {number}
+			 */
+			let uploadProgress = 0;
+
+			/**
+			 * A function to be called when the upload has transmitted more data.
+			 *
+			 * This method updates the upload percentage counter in the dialog.
+			 *
+			 * @param {ProgressEvent} e
+			 * @this XMLHttpRequest
+			 */
+			const onUploadProgress = function (e) {
+				if (e.lengthComputable !== true) return;
+
+				// Calculate progress
+				const progress = ((e.loaded / e.total) * 100) | 0;
+
+				// Set progress when progress has changed
+				if (progress > uploadProgress) {
+					uploadProgress = progress;
+					$(nRowStatusSelector(fileIdx + 1)).html(uploadProgress + "%");
 				}
-
-				albums.refresh();
-
-				if (album.getID() === null) lychee.goto();
-				else album.load(albumID);
 			};
 
-			formData.append("function", "Photo::add");
-			formData.append("albumID", albumID);
-			formData.append(0, files[file_num]);
+			/**
+			 * A function to be called when the upload has completed.
+			 *
+			 * This method
+			 *
+			 *  - unsets the indicator for a running upload,
+			 *  - scrolls the dialog such that the file with index `fileIdx`
+			 *    becomes visible, and
+			 *  - changes the status text to "Upload processing".
+			 *
+			 * @this XMLHttpRequest
+			 */
+			const onUploadComplete = function () {
+				$(nRowStatusSelector(fileIdx + 1)).html(lychee.locale["UPLOAD_PROCESSING"]);
+				isUploadRunning = false;
+				let scrollPos = 0;
+				if (fileIdx + 1 > 4) scrollPos = (fileIdx + 1 - 4) * 40;
+				$(".basicModal .rows").scrollTop(scrollPos);
+			};
 
-			var api_url = "api/" + "Photo::add";
+			/**
+			 * A function to be called when a response has been received.
+			 *
+			 * This method updates the status of the affected file.
+			 *
+			 * @this XMLHttpRequest
+			 */
+			const onLoaded = function () {
+				/** @type {?LycheeException} */
+				const lycheeException = this.status >= 400 ? this.response : null;
+				let errorText;
+				let statusText;
+				let statusClass;
 
-			xhr.open("POST", api_url);
-
-			xhr.onload = function () {
-				let data = null;
-				let errorText = "";
-
-				const isModelID = (albumID) => typeof albumID === "string" && /^[-_0-9a-zA-Z]{24}$/.test(albumID);
-
-				data = xhr.responseText;
-
-				if (typeof data === "string" && data.search("phpdebugbar") !== -1) {
-					// get rid of phpdebugbar thingy
-					var debug_bar_n = data.search("<link rel='stylesheet' type='text/css'");
-					if (debug_bar_n > 0) {
-						data = data.slice(0, debug_bar_n);
-					}
+				switch (this.status) {
+					case 200:
+					case 201:
+					case 204:
+						statusText = lychee.locale["UPLOAD_FINISHED"];
+						statusClass = "success";
+						break;
+					case 409:
+						statusText = lychee.locale["UPLOAD_SKIPPED"];
+						errorText = lycheeException ? lycheeException.message : lychee.locale["UPLOAD_ERROR_UNKNOWN"];
+						hasWarningOccurred = true;
+						statusClass = "warning";
+						break;
+					case 413:
+						statusText = lychee.locale["UPLOAD_FAILED"];
+						errorText = lychee.locale["UPLOAD_ERROR_POSTSIZE"];
+						hasErrorOccurred = true;
+						statusClass = "error";
+						break;
+					default:
+						statusText = lychee.locale["UPLOAD_FAILED"];
+						errorText = lycheeException ? lycheeException.message : lychee.locale["UPLOAD_ERROR_UNKNOWN"];
+						hasErrorOccurred = true;
+						statusClass = "error";
+						break;
 				}
 
-				try {
-					data = JSON.parse(data);
-				} catch (e) {
-					data = "";
+				$(nRowStatusSelector(fileIdx + 1))
+					.html(statusText)
+					.addClass(statusClass);
+
+				if (statusClass === "error") {
+					api.onError(this, { albumID: albumID }, lycheeException);
 				}
 
-				// Set status
-				if ((xhr.status === 200 || xhr.status === 201) && isModelID(data.id)) {
-					// Success
-					$(nRowStatusSelector(file_num + 1))
-						.html(lychee.locale["UPLOAD_FINISHED"])
-						.addClass("success");
-				} else {
-					if (xhr.status === 413 || data.substr(0, 6) === "Error:") {
-						if (xhr.status === 413) {
-							errorText = lychee.locale["UPLOAD_ERROR_POSTSIZE"];
-						} else {
-							errorText = data.substr(6);
-							if (errorText === " validation failed") {
-								errorText = lychee.locale["UPLOAD_ERROR_FILESIZE"];
-							} else {
-								errorText += " " + lychee.locale["UPLOAD_ERROR_CONSOLE"];
-							}
-						}
-						error = true;
+				$(".basicModal .rows .row:nth-child(" + (fileIdx + 1) + ") p.notice")
+					.html(errorText)
+					.show();
+			};
 
-						// Error Status
-						$(nRowStatusSelector(file_num + 1))
-							.html(lychee.locale["UPLOAD_FAILED"])
-							.addClass("error");
-
-						// Throw error
-						lychee.error(lychee.locale["UPLOAD_FAILED_ERROR"], xhr, data);
-					} else if (data.substr(0, 8) === "Warning:") {
-						errorText = data.substr(8);
-						warning = true;
-
-						// Warning Status
-						$(nRowStatusSelector(file_num + 1))
-							.html(lychee.locale["UPLOAD_SKIPPED"])
-							.addClass("warning");
-
-						// Throw error
-						lychee.error(lychee.locale["UPLOAD_FAILED_WARNING"], xhr, data);
-					} else {
-						errorText = lychee.locale["UPLOAD_UNKNOWN"];
-						error = true;
-
-						// Error Status
-						$(nRowStatusSelector(file_num + 1))
-							.html(lychee.locale["UPLOAD_FAILED"])
-							.addClass("error");
-
-						// Throw error
-						lychee.error(lychee.locale["UPLOAD_ERROR_UNKNOWN"], xhr, data);
-					}
-
-					$(".basicModal .rows .row:nth-child(" + (file_num + 1) + ") p.notice")
-						.html(errorText)
-						.show();
-				}
-
-				processing_count--;
-
-				// Upload next file
+			/**
+			 * A function to be called when any response has been received
+			 * (after specific success and error callbacks have been executed)
+			 *
+			 * This method starts a new upload, if
+			 *
+			 *  - there are more files to be uploaded,
+			 *  - no other upload is currently running, and
+			 *  - the number of outstanding responses does not exceed the
+			 *    processing limit of Lychee.
+			 *
+			 * This method calls {@link finish}, if
+			 *
+			 *  - the process shall be cancelled or no more files are left for processing,
+			 *  - no upload is running anymore, and
+			 *  - no response is outstanding
+			 *
+			 * @this XMLHttpRequest
+			 */
+			const onComplete = function () {
+				latestFileIdx++;
+				outstandingResponsesCount--;
 				if (
-					!currently_uploading &&
-					!cancelUpload &&
-					(processing_count < lychee.upload_processing_limit || lychee.upload_processing_limit === 0) &&
-					next_upload < files.length
+					!isUploadRunning &&
+					!shallCancelUpload &&
+					(outstandingResponsesCount < lychee.upload_processing_limit || lychee.upload_processing_limit === 0) &&
+					latestFileIdx < files.length
 				) {
-					process(next_upload);
+					process(latestFileIdx);
 				}
 
-				// Finish upload when all files are finished
-				if (!currently_uploading && processing_count === 0) {
+				if ((shallCancelUpload || latestFileIdx >= files.length) && !isUploadRunning && outstandingResponsesCount === 0) {
 					finish();
 				}
 			};
 
-			xhr.upload.onprogress = function (e) {
-				if (e.lengthComputable !== true) return false;
+			const formData = new FormData();
+			const xhr = new XMLHttpRequest();
 
-				// Calculate progress
-				progress = ((e.loaded / e.total) * 100) | 0;
+			formData.append("albumID", albumID);
+			formData.append("file", files[fileIdx]);
 
-				// Set progress when progress has changed
-				if (progress > pre_progress) {
-					$(nRowStatusSelector(file_num + 1)).html(progress + "%");
-					pre_progress = progress;
-				}
-
-				if (progress >= 100) {
-					// Scroll to the uploading file
-					let scrollPos = 0;
-					if (file_num + 1 > 4) scrollPos = (file_num + 1 - 4) * 40;
-					$(".basicModal .rows").scrollTop(scrollPos);
-
-					// Set status to processing
-					$(nRowStatusSelector(file_num + 1)).html(lychee.locale["UPLOAD_PROCESSING"]);
-					processing_count++;
-					currently_uploading = false;
-
-					// Upload next file
-					if (
-						!cancelUpload &&
-						(processing_count < lychee.upload_processing_limit || lychee.upload_processing_limit === 0) &&
-						next_upload < files.length
-					) {
-						process(next_upload);
-					}
-				}
-			};
-
-			currently_uploading = true;
-			next_upload++;
-
+			xhr.upload.onprogress = onUploadProgress;
+			xhr.upload.onload = onUploadComplete;
+			xhr.onload = onLoaded;
+			xhr.onloadend = onComplete;
+			xhr.responseType = "json";
+			xhr.open("POST", "api/Photo::add");
 			xhr.setRequestHeader("X-XSRF-TOKEN", csrf.getCookie("XSRF-TOKEN"));
+			xhr.setRequestHeader("Accept", "application/json");
+
+			outstandingResponsesCount++;
+			isUploadRunning = true;
 			xhr.send(formData);
 		};
-
-		if (files.length <= 0) return false;
-		if (albumID === false || visible.albums() === true) albumID = null;
 
 		window.onbeforeunload = function () {
 			return lychee.locale["UPLOAD_IN_PROGRESS"];
@@ -266,11 +316,12 @@ upload.start = {
 			files,
 			function () {
 				// Upload first file
-				process(next_upload);
+				$(cancelSelector).show();
+				process(0);
 			},
 			function () {
-				cancelUpload = true;
-				error = true;
+				shallCancelUpload = true;
+				hasErrorOccurred = true;
 			}
 		);
 	},
