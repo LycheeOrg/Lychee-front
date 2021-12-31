@@ -192,7 +192,7 @@ mapview.open = function (albumID = null) {
 					url2x: element.size_variants.small2x !== null ? element.size_variants.small2x.url : null,
 					name: element.title,
 					taken_at: element.taken_at,
-					albumID: element.album,
+					albumID: element.album_id,
 					photoID: element.id,
 				});
 

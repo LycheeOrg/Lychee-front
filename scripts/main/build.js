@@ -227,7 +227,9 @@ build.photo = function (data, disabled = false) {
 	}
 
 	html += lychee.html`
-			<div class='photo ${disabled ? `disabled` : ``}' data-album-id='${data.album}' data-id='${data.id}' data-tabindex='${tabindex.get_next_tab_index()}'>
+			<div class='photo ${disabled ? `disabled` : ``}' data-album-id='${data.album_id}' data-id='${
+		data.id
+	}' data-tabindex='${tabindex.get_next_tab_index()}'>
 				${thumbnail}
 				<div class='overlay'>
 					<h1 title='$${data.title}'>$${data.title}</h1>
