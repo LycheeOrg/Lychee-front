@@ -54,7 +54,7 @@ build.getAlbumThumb = function (data) {
 	thumb2x = data.thumb.thumb2x;
 
 	return `<span class="thumbimg${isVideo ? " video" : ""}"><img class='lazyload' src='img/placeholder.png' data-src='${thumb}' ${
-		thumb2x !== "" ? "data-srcset='" + thumb2x + " 2x'" : ""
+		thumb2x !== null ? "data-srcset='" + thumb2x + " 2x'" : ""
 	} alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
 };
 
