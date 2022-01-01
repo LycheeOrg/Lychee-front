@@ -406,10 +406,92 @@ lychee.gotoMap = function (albumID = "", autoplay = true) {
 	lychee.goto("map/" + albumID, autoplay);
 };
 
+/**
+ * Triggers a reload, if the given IDs are in legacy format.
+ *
+ * If any of the IDs is in legacy format, the method first translates the IDs
+ * into the modern format via an AJAX call to the backend and then triggers
+ * an asynchronous reloading of the page with the resolved, modern IDs.
+ * The function returns `true` in this case.
+ *
+ * If the IDs are already in modern format (and thus neither a translation
+ * nor a reloading is required), the function returns `false`.
+ * In this case this function is basically a no-op.
+ *
+ * @param {?string} albumID  the album ID
+ * @param {?string} photoID  the photo ID
+ * @param {boolean} autoplay indicates whether playback should start
+ *                           automatically, if the indicated photo is a video
+ *
+ * @return {boolean} `true`, if any of the IDs has been in legacy format
+ *                   and an asynchronous reloading has been scheduled
+ */
+lychee.reloadIfLegacyIDs = function (albumID, photoID, autoplay) {
+	/** @param {?string} id the inspected ID */
+	const isLegacyID = function (id) {
+		// The legacy IDs were pure numeric values. We exclude values which
+		// have 24 digits, because these could also be modern IDs.
+		// A modern IDs is a 24 character long, base64 encoded value and thus
+		// could also match 24 digits by accident.
+		return id && id.length !== 24 && parseInt(id).toString() === id;
+	};
+
+	if (!isLegacyID(albumID) && !isLegacyID(photoID)) {
+		// this function is a no-op if neither ID is in legacy format
+		return false;
+	}
+
+	/**
+	 * Callback to be called asynchronously which executes the actual reloading.
+	 *
+	 * @param {?string} newAlbumID
+	 * @param {?string} newPhotoID
+	 *
+	 * @return void
+	 */
+	const reloadWithNewIDs = function (newAlbumID, newPhotoID) {
+		let newUrl = "";
+		if (newAlbumID) {
+			newUrl += newAlbumID;
+			newUrl += newPhotoID ? "/" + newPhotoID : "";
+		}
+		lychee.goto(newUrl, autoplay);
+	};
+
+	// We have to deal with three cases:
+	//  1. only the album ID needs to be translated
+	//  2. the album and photo ID need to be translated (this requires two cascaded AJAX calls)
+	//  3. only the photo ID needs to be translated
+	if (isLegacyID(albumID)) {
+		api.post("Legacy::translateLegacyAlbumID", { albumID: albumID }, function (data1) {
+			const newAlbumID = data1.albumID;
+			if (isLegacyID(photoID)) {
+				api.post("Legacy::translateLegacyPhotoID", { photoID: photoID }, function (data2) {
+					const newPhotoID = data2.photoID;
+					reloadWithNewIDs(newAlbumID, newPhotoID);
+				});
+			} else {
+				reloadWithNewIDs(newAlbumID, photoID);
+			}
+		});
+	} else {
+		api.post("Legacy::translateLegacyPhotoID", { photoID: photoID }, function (data3) {
+			const newPhotoID = data3.photoID;
+			reloadWithNewIDs(albumID, newPhotoID);
+		});
+	}
+
+	return true;
+};
+
 lychee.load = function (autoplay = true) {
 	let hash = document.location.hash.replace("#", "").split("/");
 	let albumID = hash[0];
 	let photoID = hash[1];
+
+	if (lychee.reloadIfLegacyIDs(albumID, photoID, autoplay)) {
+		return;
+	}
 
 	contextMenu.close();
 	multiselect.close();
