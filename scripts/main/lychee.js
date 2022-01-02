@@ -489,10 +489,6 @@ lychee.load = function (autoplay = true) {
 	let albumID = hash[0];
 	let photoID = hash[1];
 
-	if (lychee.reloadIfLegacyIDs(albumID, photoID, autoplay)) {
-		return;
-	}
-
 	contextMenu.close();
 	multiselect.close();
 	tabindex.reset();
@@ -539,6 +535,10 @@ lychee.load = function (autoplay = true) {
 
 			lychee.footer_show();
 		} else {
+			if (lychee.reloadIfLegacyIDs(albumID, photoID, autoplay)) {
+				return;
+			}
+
 			$(".no_content").remove();
 			// Show photo
 
@@ -588,6 +588,10 @@ lychee.load = function (autoplay = true) {
 		} else if (albumID === "search") {
 			// search string is empty -> do nothing
 		} else {
+			if (lychee.reloadIfLegacyIDs(albumID, photoID, autoplay)) {
+				return;
+			}
+
 			$(".no_content").remove();
 			// Trash data
 			photo.json = null;
