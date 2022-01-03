@@ -388,9 +388,15 @@ photo.setTitle = function (photoIDs) {
 	});
 };
 
+/**
+ *
+ * @param {string[]} photoIDs IDs of photos to be copied
+ * @param {?string} albumID ID of destination album; `null` means root album
+ * @return {void}
+ */
 photo.copyTo = function (photoIDs, albumID) {
-	if (!photoIDs) return false;
-	if (photoIDs instanceof Array === false) photoIDs = [photoIDs];
+	if (!photoIDs) return;
+	if (!(photoIDs instanceof Array)) photoIDs = [photoIDs];
 
 	let params = {
 		photoIDs: photoIDs.join(),

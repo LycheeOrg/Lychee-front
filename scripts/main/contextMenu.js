@@ -532,7 +532,7 @@ contextMenu.move = function (IDs, e, callback, kind = "UNSORTED", display_root =
 		// Show Unsorted when unsorted is not the current album
 		if (display_root && album.getID() !== "unsorted" && !visible.albums()) {
 			items.unshift({});
-			items.unshift({ title: lychee.locale[kind], fn: () => callback(IDs, (kind === "UNSORTED" ? null : 0)) });
+			items.unshift({ title: lychee.locale[kind], fn: () => callback(IDs, null) });
 		}
 
 		// Don't allow to move the current album to a newly created subalbum
