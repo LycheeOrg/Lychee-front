@@ -390,8 +390,8 @@ lychee.logout = function () {
 	});
 };
 
-lychee.goto = function (url = "", autoplay = true) {
-	url = "#" + url;
+lychee.goto = function (url = null, autoplay = true) {
+	url = "#" + (url !== null ? url : "");
 
 	history.pushState(null, null, url);
 	lychee.load(autoplay);
