@@ -110,7 +110,10 @@ upload.start = {
 			};
 
 			formData.append("function", "Photo::add");
-			formData.append("albumID", albumID === "unsorted" ? null : albumID);
+			// For form data, a `null` value is indicated by the empty
+			// string `""`. Form data falsely converts the value `null` to the
+			// literal string `"null"`.
+			formData.append("albumID", albumID ? albumID : "");
 			formData.append(0, files[file_num]);
 
 			var api_url = "api/" + "Photo::add";
@@ -294,7 +297,7 @@ upload.start = {
 
 					let params = {
 						url: data.link,
-						albumID: albumID === "unsorted" ? null : albumID,
+						albumID: albumID,
 					};
 
 					api.post("Import::url", params, function (_data) {
@@ -372,7 +375,7 @@ upload.start = {
 					$(".basicModal .rows .row .status").html(lychee.locale["UPLOAD_IMPORTING"]);
 
 					let params = {
-						albumID: albumID === "unsorted" ? null : albumID,
+						albumID: albumID,
 						path: data.path,
 						delete_imported: delete_imported,
 						import_via_symlink: import_via_symlink,
@@ -680,7 +683,7 @@ upload.start = {
 
 				let params = {
 					url: links,
-					albumID: albumID === "unsorted" ? null : albumID,
+					albumID: albumID,
 				};
 
 				api.post("Import::url", params, function (data) {

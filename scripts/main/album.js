@@ -21,6 +21,9 @@ album.getParentID = function () {
 	return album.json.parent_id;
 };
 
+/**
+ * @return {?string}
+ */
 album.getID = function () {
 	let id = null;
 
