@@ -124,7 +124,13 @@ lychee.aboutDialog = function () {
 	if (lychee.checkForUpdates === "1") lychee.getUpdate();
 };
 
-lychee.init = function (exitview = true) {
+/**
+ * @param {boolean} isFirstInitialization must be set to `false` if called
+ *                                        for re-initialization to prevent
+ *                                        multiple registrations of global
+ *                                        event handlers
+ */
+lychee.init = function (isFirstInitialization = true) {
 	lychee.adjustContentHeight();
 
 	api.post("Session::init", {}, function (data) {
@@ -304,8 +310,11 @@ lychee.init = function (exitview = true) {
 			// should not happen.
 		}
 
-		if (exitview) {
-			$(window).bind("popstate", lychee.load);
+		if (isFirstInitialization) {
+			$(window).on("popstate", function () {
+				const autoplay = history.state && history.state.hasOwnProperty("autoplay") ? history.state.autoplay : true;
+				lychee.load(autoplay);
+			});
 			lychee.load();
 		}
 	});
@@ -392,8 +401,7 @@ lychee.logout = function () {
 
 lychee.goto = function (url = null, autoplay = true) {
 	url = "#" + (url !== null ? url : "");
-
-	history.pushState(null, null, url);
+	history.pushState({ autoplay: autoplay }, null, url);
 	lychee.load(autoplay);
 };
 
