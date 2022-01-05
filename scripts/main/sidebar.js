@@ -375,10 +375,12 @@ sidebar.createStructure.album = function (album) {
 			break;
 	}
 
-	if (data.sorting_col === "") {
-		sorting = lychee.locale["DEFAULT"];
-	} else {
-		sorting = data.sorting_col + " " + data.sorting_order;
+	if (!lychee.publicMode) {
+		if (data.sorting_col === "") {
+			sorting = lychee.locale["DEFAULT"];
+		} else {
+			sorting = data.sorting_col + " " + data.sorting_order;
+		}
 	}
 
 	structure.basics = {
@@ -417,7 +419,7 @@ sidebar.createStructure.album = function (album) {
 		structure.album.rows.push({ title: lychee.locale["ALBUM_VIDEOS"], kind: "videos", value: videoCount });
 	}
 
-	if (data.photos) {
+	if (data.photos && sorting !== "") {
 		structure.album.rows.push({ title: lychee.locale["ALBUM_ORDERING"], kind: "sorting", value: sorting, editable: editable });
 	}
 

@@ -609,7 +609,7 @@ album.setLicense = function (albumID) {
 album.setSorting = function (albumID) {
 	const callback = function () {
 		$("select#sortingCol").val(album.json.sorting_col);
-		$("select#sortingOrder").val(album.json.sorting_order);
+		$("select#sortingOrder").val(album.json.sorting_order === "" ? "ASC" : album.json.sorting_order);
 		return false;
 	};
 
