@@ -333,7 +333,7 @@ photo.setTitle = function (photoIDs) {
 	if (photoIDs.length === 1) {
 		// Get old title if only one photo is selected
 		if (photo.json) oldTitle = photo.json.title;
-		else if (album.json) oldTitle = album.getByID(photoIDs).title;
+		else if (album.json) oldTitle = album.getByID(photoIDs[0]).title;
 	}
 
 	const action = function (data) {
@@ -714,8 +714,8 @@ photo.editTags = function (photoIDs) {
 
 	// Get tags
 	if (visible.photo()) oldTags = photo.json.tags;
-	else if (visible.album() && photoIDs.length === 1) oldTags = album.getByID(photoIDs).tags;
-	else if (visible.search() && photoIDs.length === 1) oldTags = album.getByID(photoIDs).tags;
+	else if (visible.album() && photoIDs.length === 1) oldTags = album.getByID(photoIDs[0]).tags;
+	else if (visible.search() && photoIDs.length === 1) oldTags = album.getByID(photoIDs[0]).tags;
 	else if (visible.album() && photoIDs.length > 1) {
 		let same = true;
 		photoIDs.forEach(function (id) {

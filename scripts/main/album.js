@@ -1131,7 +1131,7 @@ album.delete = function (albumIDs) {
 			} else albumTitle = album.getSubByID(albumIDs[0]).title;
 		}
 		if (!albumTitle) {
-			let a = albums.getByID(albumIDs);
+			let a = albums.getByID(albumIDs[0]);
 			if (a) albumTitle = a.title;
 		}
 
