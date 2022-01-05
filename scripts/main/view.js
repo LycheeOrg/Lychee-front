@@ -1444,7 +1444,9 @@ view.notifications = {
 	init: function () {
 		multiselect.clearSelection();
 
+		view.photo.hide();
 		view.notifications.title();
+		header.setMode("config");
 		view.notifications.content.init();
 	},
 

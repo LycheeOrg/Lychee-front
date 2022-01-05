@@ -608,6 +608,9 @@ contextMenu.close = function () {
 
 contextMenu.config = function (e) {
 	let items = [{ title: build.iconic("cog") + lychee.locale["SETTINGS"], fn: settings.open }];
+	if (lychee.new_photos_notification) {
+		items.push({ title: build.iconic("bell") + lychee.locale["NOTIFICATIONS"], fn: notifications.load });
+	}
 	if (lychee.admin) {
 		items.push({ title: build.iconic("person") + lychee.locale["USERS"], fn: users.list });
 	}

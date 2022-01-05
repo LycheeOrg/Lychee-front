@@ -11,6 +11,8 @@ leftMenu.dom = function (selector) {
 	return leftMenu._dom.find(selector);
 };
 
+// Note: on mobile we use a context menu instead; please make sure that
+// contextMenu.config is kept in sync with any changes here!
 leftMenu.build = function () {
 	let html = lychee.html`
 		<a id="text_settings_close" class="closetxt" data-tabindex="-1">${lychee.locale["CLOSE"]}</a>
