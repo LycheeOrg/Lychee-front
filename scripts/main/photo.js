@@ -666,12 +666,12 @@ photo.setPublic = function (photoID, e) {
 };
 
 photo.setDescription = function (photoID) {
-	let oldDescription = photo.json.description;
+	let oldDescription = photo.json.description ? photo.json.description : "";
 
 	const action = function (data) {
 		basicModal.close();
 
-		let description = data.description === "" ? null : data.description;
+		let description = data.description ? data.description : null;
 
 		if (visible.photo()) {
 			photo.json.description = description;
