@@ -291,7 +291,7 @@ contextMenu.photo = function (photoID, e) {
 			title: build.iconic("layers") + lychee.locale["COPY_TO"],
 			fn: () => {
 				basicContext.close();
-				contextMenu.move([photoID], e, photo.copyTo, "UNSORTED");
+				contextMenu.move([photoID], e, photo.copyTo);
 			},
 		},
 		// Notice for 'Move':
@@ -301,7 +301,7 @@ contextMenu.photo = function (photoID, e) {
 			title: build.iconic("folder") + lychee.locale["MOVE"],
 			fn: () => {
 				basicContext.close();
-				contextMenu.move([photoID], e, photo.setAlbum, "UNSORTED");
+				contextMenu.move([photoID], e, photo.setAlbum);
 			},
 		},
 		{ title: build.iconic("trash") + lychee.locale["DELETE"], fn: () => photo.delete([photoID]) },
@@ -365,14 +365,14 @@ contextMenu.photoMulti = function (photoIDs, e) {
 			title: build.iconic("layers") + lychee.locale["COPY_ALL_TO"],
 			fn: () => {
 				basicContext.close();
-				contextMenu.move(photoIDs, e, photo.copyTo, "UNSORTED");
+				contextMenu.move(photoIDs, e, photo.copyTo);
 			},
 		},
 		{
 			title: build.iconic("folder") + lychee.locale["MOVE_ALL"],
 			fn: () => {
 				basicContext.close();
-				contextMenu.move(photoIDs, e, photo.setAlbum, "UNSORTED");
+				contextMenu.move(photoIDs, e, photo.setAlbum);
 			},
 		},
 		{ title: build.iconic("trash") + lychee.locale["DELETE_ALL"], fn: () => photo.delete(photoIDs) },
@@ -530,9 +530,9 @@ contextMenu.move = function (IDs, e, callback, kind = "UNSORTED", display_root =
 		}
 
 		// Show Unsorted when unsorted is not the current album
-		if (display_root && album.getID() !== null && !visible.albums()) {
+		if (display_root && album.getID() !== "unsorted" && !visible.albums()) {
 			items.unshift({});
-			items.unshift({ title: lychee.locale[kind], fn: () => callback(IDs, 0) });
+			items.unshift({ title: lychee.locale[kind], fn: () => callback(IDs, null) });
 		}
 
 		// Don't allow to move the current album to a newly created subalbum
@@ -608,6 +608,9 @@ contextMenu.close = function () {
 
 contextMenu.config = function (e) {
 	let items = [{ title: build.iconic("cog") + lychee.locale["SETTINGS"], fn: settings.open }];
+	if (lychee.new_photos_notification) {
+		items.push({ title: build.iconic("bell") + lychee.locale["NOTIFICATIONS"], fn: notifications.load });
+	}
 	if (lychee.admin) {
 		items.push({ title: build.iconic("person") + lychee.locale["USERS"], fn: users.list });
 	}

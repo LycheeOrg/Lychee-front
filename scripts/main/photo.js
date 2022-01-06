@@ -333,7 +333,7 @@ photo.setTitle = function (photoIDs) {
 	if (photoIDs.length === 1) {
 		// Get old title if only one photo is selected
 		if (photo.json) oldTitle = photo.json.title;
-		else if (album.json) oldTitle = album.getByID(photoIDs).title;
+		else if (album.json) oldTitle = album.getByID(photoIDs[0]).title;
 	}
 
 	const action = function (data) {
@@ -384,9 +384,15 @@ photo.setTitle = function (photoIDs) {
 	});
 };
 
+/**
+ *
+ * @param {string[]} photoIDs IDs of photos to be copied
+ * @param {?string} albumID ID of destination album; `null` means root album
+ * @return {void}
+ */
 photo.copyTo = function (photoIDs, albumID) {
-	if (!photoIDs) return false;
-	if (photoIDs instanceof Array === false) photoIDs = [photoIDs];
+	if (!photoIDs) return;
+	if (!(photoIDs instanceof Array)) photoIDs = [photoIDs];
 
 	let params = {
 		photoIDs: photoIDs.join(),
@@ -642,12 +648,12 @@ photo.setPublic = function (photoID, e) {
 };
 
 photo.setDescription = function (photoID) {
-	let oldDescription = photo.json.description;
+	let oldDescription = photo.json.description ? photo.json.description : "";
 
 	const action = function (data) {
 		basicModal.close();
 
-		let description = data.description === "" ? null : data.description;
+		let description = data.description ? data.description : null;
 
 		if (visible.photo()) {
 			photo.json.description = description;
@@ -686,8 +692,8 @@ photo.editTags = function (photoIDs) {
 
 	// Get tags
 	if (visible.photo()) oldTags = photo.json.tags;
-	else if (visible.album() && photoIDs.length === 1) oldTags = album.getByID(photoIDs).tags;
-	else if (visible.search() && photoIDs.length === 1) oldTags = album.getByID(photoIDs).tags;
+	else if (visible.album() && photoIDs.length === 1) oldTags = album.getByID(photoIDs[0]).tags;
+	else if (visible.search() && photoIDs.length === 1) oldTags = album.getByID(photoIDs[0]).tags;
 	else if (visible.album() && photoIDs.length > 1) {
 		let same = true;
 		photoIDs.forEach(function (id) {

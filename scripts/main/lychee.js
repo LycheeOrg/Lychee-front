@@ -124,7 +124,13 @@ lychee.aboutDialog = function () {
 	if (lychee.checkForUpdates === "1") lychee.getUpdate();
 };
 
-lychee.init = function (exitview = true) {
+/**
+ * @param {boolean} isFirstInitialization must be set to `false` if called
+ *                                        for re-initialization to prevent
+ *                                        multiple registrations of global
+ *                                        event handlers
+ */
+lychee.init = function (isFirstInitialization = true) {
 	lychee.adjustContentHeight();
 
 	api.post("Session::init", {}, function (data) {
@@ -304,8 +310,11 @@ lychee.init = function (exitview = true) {
 			// should not happen.
 		}
 
-		if (exitview) {
-			$(window).bind("popstate", lychee.load);
+		if (isFirstInitialization) {
+			$(window).on("popstate", function () {
+				const autoplay = history.state && history.state.hasOwnProperty("autoplay") ? history.state.autoplay : true;
+				lychee.load(autoplay);
+			});
 			lychee.load();
 		}
 	});
@@ -394,10 +403,9 @@ lychee.logout = function () {
 	api.post("Session::logout", {}, () => window.location.reload());
 };
 
-lychee.goto = function (url = "", autoplay = true) {
-	url = "#" + url;
-
-	history.pushState(null, null, url);
+lychee.goto = function (url = null, autoplay = true) {
+	url = "#" + (url !== null ? url : "");
+	history.pushState({ autoplay: autoplay }, null, url);
 	lychee.load(autoplay);
 };
 
@@ -463,27 +471,15 @@ lychee.reloadIfLegacyIDs = function (albumID, photoID, autoplay) {
 	};
 
 	// We have to deal with three cases:
-	//  1. only the album ID needs to be translated
-	//  2. the album and photo ID need to be translated (this requires two cascaded AJAX calls)
+	//  1. the album and photo ID need to be translated
+	//  2. only the album ID needs to be translated
 	//  3. only the photo ID needs to be translated
-	if (isLegacyID(albumID)) {
-		api.post("Legacy::translateLegacyAlbumID", { albumID: albumID }, function (data1) {
-			const newAlbumID = data1.albumID;
-			if (isLegacyID(photoID)) {
-				api.post("Legacy::translateLegacyPhotoID", { photoID: photoID }, function (data2) {
-					const newPhotoID = data2.photoID;
-					reloadWithNewIDs(newAlbumID, newPhotoID);
-				});
-			} else {
-				reloadWithNewIDs(newAlbumID, photoID);
-			}
-		});
-	} else {
-		api.post("Legacy::translateLegacyPhotoID", { photoID: photoID }, function (data3) {
-			const newPhotoID = data3.photoID;
-			reloadWithNewIDs(albumID, newPhotoID);
-		});
-	}
+	let params = {};
+	if (isLegacyID(albumID)) params.albumID = albumID;
+	if (isLegacyID(photoID)) params.photoID = photoID;
+	api.post("Legacy::translateLegacyModelIDs", params, function (data) {
+		reloadWithNewIDs(data.hasOwnProperty("albumID") ? data.albumID : albumID, data.hasOwnProperty("photoID") ? data.photoID : photoID);
+	});
 
 	return true;
 };
@@ -492,10 +488,6 @@ lychee.load = function (autoplay = true) {
 	let hash = document.location.hash.replace("#", "").split("/");
 	let albumID = hash[0];
 	let photoID = hash[1];
-
-	if (lychee.reloadIfLegacyIDs(albumID, photoID, autoplay)) {
-		return;
-	}
 
 	contextMenu.close();
 	multiselect.close();
@@ -543,6 +535,10 @@ lychee.load = function (autoplay = true) {
 
 			lychee.footer_show();
 		} else {
+			if (lychee.reloadIfLegacyIDs(albumID, photoID, autoplay)) {
+				return;
+			}
+
 			$(".no_content").remove();
 			// Show photo
 
@@ -592,6 +588,10 @@ lychee.load = function (autoplay = true) {
 		} else if (albumID === "search") {
 			// search string is empty -> do nothing
 		} else {
+			if (lychee.reloadIfLegacyIDs(albumID, photoID, autoplay)) {
+				return;
+			}
+
 			$(".no_content").remove();
 			// Trash data
 			photo.json = null;

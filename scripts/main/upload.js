@@ -337,8 +337,6 @@ upload.start = {
 
 		url = typeof url === "string" ? url : "";
 
-		if (albumID === false) albumID = null;
-
 		const action = function (data) {
 			let files = [];
 
@@ -354,7 +352,7 @@ upload.start = {
 
 					let params = {
 						url: data.link,
-						albumID,
+						albumID: albumID,
 					};
 
 					api.post(
@@ -377,7 +375,7 @@ upload.start = {
 							$(".basicModal #basicModal__action.hidden").show();
 							upload.notify(lychee.locale["UPLOAD_IMPORT_COMPLETE"]);
 							albums.refresh();
-							if (album.getID() === null) lychee.goto();
+							if (albumID === null) lychee.goto();
 							else album.load(albumID);
 							return false;
 						}
@@ -555,7 +553,7 @@ upload.start = {
 								encounteredProblems ? lychee.locale["UPLOAD_COMPLETE_FAILED"] : null
 							);
 
-							if (album.getID() === null) lychee.goto();
+							if (albumID === null) lychee.goto();
 							else album.load(albumID);
 
 							if (encounteredProblems) showCloseButton();
@@ -597,7 +595,7 @@ upload.start = {
 										albums.refresh();
 										upload.notify(lychee.locale["UPLOAD_COMPLETE"], lychee.locale["UPLOAD_COMPLETE_FAILED"]);
 
-										if (album.getID() === null) lychee.goto();
+										if (albumID === null) lychee.goto();
 										else album.load(albumID);
 
 										showCloseButton();
@@ -709,7 +707,6 @@ upload.start = {
 
 	dropbox: function () {
 		let albumID = album.getID();
-		if (albumID === false) albumID = 0;
 
 		const success = function (files) {
 			let links = "";
@@ -730,7 +727,7 @@ upload.start = {
 
 				let params = {
 					url: links,
-					albumID,
+					albumID: albumID,
 				};
 
 				api.post(
@@ -753,7 +750,7 @@ upload.start = {
 						$(".basicModal #basicModal__action.hidden").show();
 						upload.notify(lychee.locale["UPLOAD_IMPORT_COMPLETE"]);
 						albums.refresh();
-						if (album.getID() === null) lychee.goto();
+						if (albumID === null) lychee.goto();
 						else album.load(albumID);
 						return false;
 					}

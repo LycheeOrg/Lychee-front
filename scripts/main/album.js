@@ -443,10 +443,10 @@ album.setTitle = function (albumIDs) {
 };
 
 album.setDescription = function (albumID) {
-	let oldDescription = album.json.description;
+	let oldDescription = album.json.description ? album.json.description : "";
 
 	const action = function (data) {
-		let description = data.description;
+		let description = data.description ? data.description : null;
 
 		basicModal.close();
 
@@ -584,7 +584,7 @@ album.setLicense = function (albumID) {
 album.setSorting = function (albumID) {
 	const callback = function () {
 		$("select#sortingCol").val(album.json.sorting_col);
-		$("select#sortingOrder").val(album.json.sorting_order);
+		$("select#sortingOrder").val(album.json.sorting_order === null ? "ASC" : album.json.sorting_order);
 		return false;
 	};
 
@@ -1086,7 +1086,7 @@ album.delete = function (albumIDs) {
 			} else albumTitle = album.getSubByID(albumIDs[0]).title;
 		}
 		if (!albumTitle) {
-			let a = albums.getByID(albumIDs);
+			let a = albums.getByID(albumIDs[0]);
 			if (a) albumTitle = a.title;
 		}
 

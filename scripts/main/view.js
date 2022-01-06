@@ -746,8 +746,8 @@ view.photo = {
 		let $previousArrow = lychee.imageview.find("a#previous");
 		let photoID = photo.getID();
 		let photoInAlbum = album.json && album.json.photos ? album.getByID(photoID) : null;
-		let hasNext = photoInAlbum.hasOwnProperty("next_photo_id") && photoInAlbum.next_photo_id !== null;
-		let hasPrevious = photoInAlbum.hasOwnProperty("previous_photo_id") && photoInAlbum.previous_photo_id !== null;
+		let hasNext = photoInAlbum !== null && photoInAlbum.hasOwnProperty("next_photo_id") && photoInAlbum.next_photo_id !== null;
+		let hasPrevious = photoInAlbum !== null && photoInAlbum.hasOwnProperty("previous_photo_id") && photoInAlbum.previous_photo_id !== null;
 
 		let img = $("img#image");
 		if (img.length > 0) {
@@ -1444,7 +1444,9 @@ view.notifications = {
 	init: function () {
 		multiselect.clearSelection();
 
+		view.photo.hide();
 		view.notifications.title();
+		header.setMode("config");
 		view.notifications.content.init();
 	},
 
