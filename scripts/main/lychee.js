@@ -770,6 +770,14 @@ lychee.retinize = function (path = "") {
 	};
 };
 
+/**
+ * @callback DropboxCallback
+ * @return void
+ */
+
+/**
+ * @param {DropboxCallback} callback
+ */
 lychee.loadDropbox = function (callback) {
 	if (lychee.dropbox === false && lychee.dropboxKey != null && lychee.dropboxKey !== "") {
 		loadingBar.show();
@@ -793,7 +801,7 @@ lychee.loadDropbox = function (callback) {
 	} else if (lychee.dropbox === true && lychee.dropboxKey != null && lychee.dropboxKey !== "") {
 		callback();
 	} else {
-		settings.setDropboxKey(callback);
+		settings.setDropboxKey();
 	}
 };
 
