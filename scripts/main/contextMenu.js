@@ -8,15 +8,15 @@ contextMenu.add = function (e) {
 	let items = [
 		{ title: build.iconic("image") + lychee.locale["UPLOAD_PHOTO"], fn: () => $("#upload_files").click() },
 		{},
-		{ title: build.iconic("link-intact") + lychee.locale["IMPORT_LINK"], fn: upload.start.url },
-		{ title: build.iconic("dropbox", "ionicons") + lychee.locale["IMPORT_DROPBOX"], fn: upload.start.dropbox },
-		{ title: build.iconic("terminal") + lychee.locale["IMPORT_SERVER"], fn: upload.start.server },
+		{ title: build.iconic("link-intact") + lychee.locale["IMPORT_LINK"], fn: () => upload.start.url() },
+		{ title: build.iconic("dropbox", "ionicons") + lychee.locale["IMPORT_DROPBOX"], fn: () => upload.start.dropbox() },
+		{ title: build.iconic("terminal") + lychee.locale["IMPORT_SERVER"], fn: () => upload.start.server() },
 		{},
-		{ title: build.iconic("folder") + lychee.locale["NEW_ALBUM"], fn: album.add },
+		{ title: build.iconic("folder") + lychee.locale["NEW_ALBUM"], fn: () => album.add() },
 	];
 
 	if (visible.albums()) {
-		items.push({ title: build.iconic("tags") + lychee.locale["NEW_TAG_ALBUM"], fn: album.addByTags });
+		items.push({ title: build.iconic("tags") + lychee.locale["NEW_TAG_ALBUM"], fn: () => album.addByTags() });
 	} else if (album.isSmartID(album.getID())) {
 		// remove Import and New album if smart album
 		items.splice(1);
