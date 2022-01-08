@@ -1350,7 +1350,7 @@ view.settings = {
 
 			let css_addr = $($("link")[1]).attr("href");
 
-			api.get(css_addr, function (data) {
+			api.getCSS(css_addr, function (data) {
 				$("#css").html(data);
 			});
 
