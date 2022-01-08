@@ -3,12 +3,12 @@
  */
 
 /**
- * @callback SuccessCallback
+ * @callback APISuccessCB
  * @param {Object} data the decoded JSON response
  */
 
 /**
- * @callback ErrorCallback
+ * @callback APIErrorCB
  * @param {XMLHttpRequest} jqXHR the jQuery XMLHttpRequest object, see {@link https://api.jquery.com/jQuery.ajax/#jqXHR}.
  * @param {Object} params the original JSON parameters of the request
  * @param {?LycheeException} lycheeException the Lychee exception
@@ -16,10 +16,8 @@
  */
 
 /**
- * @callback ProgressCallback
- * @param {Object} event         the progress event
- * @param {number} event.loaded  the amount of loaded data so far
- * @param {number} event.total   the total amount of data to be loaded
+ * @callback APIProgressCB
+ * @param {ProgressEvent} event the progress event
  */
 
 /**
@@ -39,7 +37,7 @@ let api = {
 	/**
 	 * Global, default error handler
 	 *
-	 * @type {?ErrorCallback}
+	 * @type {?APIErrorCB}
 	 */
 	onError: null,
 };
@@ -48,9 +46,9 @@ let api = {
  *
  * @param {string} fn
  * @param {Object} params
- * @param {?SuccessCallback} successCallback
- * @param {?ProgressCallback} responseProgressCB
- * @param {?ErrorCallback} errorCallback
+ * @param {?APISuccessCB} successCallback
+ * @param {?APIProgressCB} responseProgressCB
+ * @param {?APIErrorCB} errorCallback
  */
 api.post = function (fn, params, successCallback = null, responseProgressCB = null, errorCallback = null) {
 	loadingBar.show();
@@ -104,7 +102,7 @@ api.post = function (fn, params, successCallback = null, responseProgressCB = nu
 /**
  *
  * @param {string} url
- * @param {SuccessCallback} callback
+ * @param {APISuccessCB} callback
  */
 api.get = function (url, callback) {
 	loadingBar.show();
@@ -141,7 +139,7 @@ api.get = function (url, callback) {
  *
  * @param {string} fn
  * @param {Object} params
- * @param {SuccessCallback} callback
+ * @param {APISuccessCB} callback
  */
 api.post_raw = function (fn, params, callback) {
 	loadingBar.show();
