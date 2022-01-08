@@ -422,14 +422,9 @@ build.no_content = function (typ) {
 };
 
 /**
- * @typedef FileEntry
- * @property {string} name
- */
-
-/**
- * @param {string} title the title of the dialog
- * @param {FileEntry[]} files a list of file entries to be shown in the dialog
- * @return {string} the HTML fragment for the dialog
+ * @param {string}                                           title the title of the dialog
+ * @param {(FileList|File[]|DropboxFile[]|{name: string}[])} files a list of file entries to be shown in the dialog
+ * @return {string}                                                the HTML fragment for the dialog
  */
 build.uploadModal = function (title, files) {
 	let html = "";

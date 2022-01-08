@@ -771,12 +771,17 @@ lychee.retinize = function (path = "") {
 };
 
 /**
- * @callback DropboxCallback
+ * @callback DropboxLoadedCB
  * @return void
  */
 
 /**
- * @param {DropboxCallback} callback
+ * Ensures that the Dropbox Chooser JS component is loaded and calls the
+ * provided callback after loading.
+ *
+ * See {@link Dropbox}
+ *
+ * @param {DropboxLoadedCB} callback
  */
 lychee.loadDropbox = function (callback) {
 	if (lychee.dropbox === false && lychee.dropboxKey != null && lychee.dropboxKey !== "") {
@@ -801,6 +806,10 @@ lychee.loadDropbox = function (callback) {
 	} else if (lychee.dropbox === true && lychee.dropboxKey != null && lychee.dropboxKey !== "") {
 		callback();
 	} else {
+		// TODO: Is this branch ever called?
+		// In particular, this branch behaves differently from the other two
+		// in the sense that it neither loads the Dropbox component nor
+		// calls the callback.
 		settings.setDropboxKey();
 	}
 };

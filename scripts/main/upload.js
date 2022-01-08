@@ -25,9 +25,9 @@ let showCloseButton = function () {
 
 /**
  * @param {string} title
- * @param {FileEntry[]} files
- * @param run_callback
- * @param cancel_callback
+ * @param {(FileList|File[]|DropboxFile[]|{name: string}[])} files
+ * @param {ModalDialogReadyCB} run_callback
+ * @param {?ModalDialogButtonCB} cancel_callback
  */
 upload.show = function (title, files, run_callback, cancel_callback = null) {
 	basicModal.show({
@@ -72,7 +72,7 @@ upload.notify = function (title, text) {
 
 upload.start = {
 	/**
-	 * @param {FileList} files
+	 * @param {(FileList|File[])} files
 	 */
 	local: function (files) {
 		if (files.length <= 0) return;
@@ -388,7 +388,7 @@ upload.start = {
 			body:
 				lychee.html`<p>` +
 				lychee.locale["UPLOAD_IMPORT_INSTR"] +
-				` <input class='text' name='link' type='text' placeholder='http://' value='${preselectedUrl}'></p>`,
+				` <input class='text' name='link' type='text' placeholder='https://' value='${preselectedUrl}'></p>`,
 			buttons: {
 				action: {
 					title: lychee.locale["UPLOAD_IMPORT"],
@@ -727,7 +727,7 @@ upload.start = {
 		const albumID = album.getID();
 
 		/**
-		 * @param {Array} files
+		 * @param {DropboxFile[]} files
 		 */
 		const action = function (files) {
 			const runImport = function () {
