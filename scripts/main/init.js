@@ -88,7 +88,7 @@ $(document).ready(function () {
 		.bind(["r"], function () {
 			if (album.isUploadable()) {
 				if (visible.album()) {
-					album.setTitle(album.getID());
+					album.setTitle([album.getID()]);
 					return false;
 				} else if (visible.photo()) {
 					photo.setTitle([photo.getID()]);

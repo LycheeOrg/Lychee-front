@@ -9,6 +9,9 @@ let photo = {
 	LivePhotosObject: null,
 };
 
+/**
+ * @returns {?string}
+ */
 photo.getID = function () {
 	let id = null;
 
@@ -228,14 +231,15 @@ photo.next = function (animate) {
 	}
 };
 
+/**
+ * @param {string[]} photoIDs
+ * @returns {boolean}
+ */
 photo.delete = function (photoIDs) {
 	let action = {};
 	let cancel = {};
 	let msg = "";
 	let photoTitle = "";
-
-	if (!photoIDs) return false;
-	if (!(photoIDs instanceof Array)) photoIDs = [photoIDs];
 
 	if (photoIDs.length === 1) {
 		// Get title if only one photo is selected
@@ -288,11 +292,7 @@ photo.delete = function (photoIDs) {
 			lychee.goto(album.getID());
 		}
 
-		let params = {
-			photoIDs: photoIDs.join(),
-		};
-
-		api.post("Photo::delete", params);
+		api.post("Photo::delete", { photoIDs: photoIDs });
 	};
 
 	if (photoIDs.length === 1) {
@@ -323,12 +323,14 @@ photo.delete = function (photoIDs) {
 	});
 };
 
+/**
+ *
+ * @param {string[]} photoIDs
+ * @returns {void}
+ */
 photo.setTitle = function (photoIDs) {
 	let oldTitle = "";
 	let msg = "";
-
-	if (!photoIDs) return false;
-	if (photoIDs instanceof Array === false) photoIDs = [photoIDs];
 
 	if (photoIDs.length === 1) {
 		// Get old title if only one photo is selected
@@ -356,12 +358,10 @@ photo.setTitle = function (photoIDs) {
 			view.album.content.title(id);
 		});
 
-		let params = {
-			photoIDs: photoIDs.join(),
+		api.post("Photo::setTitle", {
+			photoIDs: photoIDs,
 			title: newTitle,
-		};
-
-		api.post("Photo::setTitle", params);
+		});
 	};
 
 	let input = lychee.html`<input class='text' name='title' type='text' maxlength='100' placeholder='Title' value='$${oldTitle}'>`;
@@ -391,23 +391,23 @@ photo.setTitle = function (photoIDs) {
  * @return {void}
  */
 photo.copyTo = function (photoIDs, albumID) {
-	if (!photoIDs) return;
-	if (!(photoIDs instanceof Array)) photoIDs = [photoIDs];
-
-	let params = {
-		photoIDs: photoIDs.join(),
-		albumID,
-	};
-
-	api.post("Photo::duplicate", params, () => album.reload());
+	api.post(
+		"Photo::duplicate",
+		{
+			photoIDs: photoIDs,
+			albumID: albumID,
+		},
+		() => album.reload()
+	);
 };
 
+/**
+ * @param {string[]} photoIDs
+ * @param {string} albumID
+ */
 photo.setAlbum = function (photoIDs, albumID) {
 	let nextPhotoID = null;
 	let previousPhotoID = null;
-
-	if (!photoIDs) return false;
-	if (!(photoIDs instanceof Array)) photoIDs = [photoIDs];
 
 	photoIDs.forEach(function (id, index) {
 		// Change reference for the next and previous photo
@@ -443,25 +443,29 @@ photo.setAlbum = function (photoIDs, albumID) {
 		}
 	}
 
-	let params = {
-		photoIDs: photoIDs.join(),
-		albumID,
-	};
-
-	api.post("Photo::setAlbum", params, function () {
-		// We only really need to do anything here if the destination
-		// is a (possibly nested) subalbum of the current album; but
-		// since we have no way of figuring it out (albums.json is
-		// null), we need to reload.
-		if (visible.album()) {
-			album.reload();
+	api.post(
+		"Photo::setAlbum",
+		{
+			photoIDs: photoIDs,
+			albumID: albumID,
+		},
+		function () {
+			// We only really need to do anything here if the destination
+			// is a (possibly nested) subalbum of the current album; but
+			// since we have no way of figuring it out (albums.json is
+			// null), we need to reload.
+			if (visible.album()) {
+				album.reload();
+			}
 		}
-	});
+	);
 };
 
+/**
+ * @param {string[]} photoIDs
+ * @returns {void}
+ */
 photo.setStar = function (photoIDs) {
-	if (!photoIDs) return false;
-
 	if (visible.photo()) {
 		photo.json.is_starred = !photo.json.is_starred;
 		view.photo.star();
@@ -474,11 +478,7 @@ photo.setStar = function (photoIDs) {
 
 	albums.refresh();
 
-	let params = {
-		photoIDs: photoIDs.join(),
-	};
-
-	api.post("Photo::setStar", params);
+	api.post("Photo::setStar", { photoIDs: photoIDs });
 };
 
 photo.setPublic = function (photoID, e) {
@@ -734,10 +734,12 @@ photo.editTags = function (photoIDs) {
 	});
 };
 
+/**
+ * @param {string[]} photoIDs
+ * @param {string} tags
+ * @returns {boolean}
+ */
 photo.setTags = function (photoIDs, tags) {
-	if (!photoIDs) return false;
-	if (!(photoIDs instanceof Array)) photoIDs = [photoIDs];
-
 	// Parse tags
 	tags = tags.replace(/( , )|( ,)|(, )|(,+ *)|(,$|^,)/g, ",");
 	tags = tags.replace(/,$|^,|( )*$/g, "");
@@ -747,25 +749,27 @@ photo.setTags = function (photoIDs, tags) {
 		view.photo.tags();
 	}
 
-	photoIDs.forEach(function (id, index, array) {
+	photoIDs.forEach(function (id) {
 		album.getByID(id).tags = tags;
 	});
 
-	let params = {
-		photoIDs: photoIDs.join(),
-		tags,
-	};
-
-	api.post("Photo::setTags", params, function () {
-		if (albums.json && albums.json.smart_albums) {
-			$.each(Object.entries(albums.json.smart_albums), function () {
-				if (this.length === 2 && this[1]["is_tag_album"] === true) {
-					// If we have any tag albums, force a refresh.
-					albums.refresh();
-				}
-			});
+	api.post(
+		"Photo::setTags",
+		{
+			photoIDs: photoIDs,
+			tags: tags,
+		},
+		function () {
+			if (albums.json && albums.json.smart_albums) {
+				$.each(Object.entries(albums.json.smart_albums), function () {
+					if (this.length === 2 && this[1]["is_tag_album"] === true) {
+						// If we have any tag albums, force a refresh.
+						albums.refresh();
+					}
+				});
+			}
 		}
-	});
+	);
 };
 
 photo.deleteTag = function (photoID, index) {

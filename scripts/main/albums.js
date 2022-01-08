@@ -154,14 +154,18 @@ albums.isShared = function (albumID) {
 	return found;
 };
 
+/**
+ * @param {?string} albumID
+ * @returns {?Object}
+ */
 albums.getByID = function (albumID) {
 	// Function returns the JSON of an album
 
-	if (albumID == null) return undefined;
-	if (!albums.json) return undefined;
-	if (!albums.json.albums) return undefined;
+	if (albumID == null) return null;
+	if (!albums.json) return null;
+	if (!albums.json.albums) return null;
 
-	let json = undefined;
+	let json = null;
 
 	let func = function () {
 		if (this.id === albumID) {
@@ -175,9 +179,9 @@ albums.getByID = function (albumID) {
 
 	$.each(albums.json.albums, func);
 
-	if (json === undefined && albums.json.shared_albums !== null) $.each(albums.json.shared_albums, func);
+	if (json === null && albums.json.shared_albums !== null) $.each(albums.json.shared_albums, func);
 
-	if (json === undefined && albums.json.smart_albums !== null) $.each(albums.json.smart_albums, func);
+	if (json === null && albums.json.smart_albums !== null) $.each(albums.json.smart_albums, func);
 
 	return json;
 };

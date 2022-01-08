@@ -755,17 +755,16 @@ upload.start = {
 
 				$(".basicModal .rows .row .status").html(lychee.locale["UPLOAD_IMPORTING"]);
 
-				let links = "";
-				files.forEach((file) => (links += file.link + ","));
-				// Remove last comma
-				links = links.substr(0, links.length - 1);
-
-				const params = {
-					url: links,
-					albumID: albumID,
-				};
-
-				api.post("Import::url", params, successHandler, null, errorHandler);
+				api.post(
+					"Import::url",
+					{
+						url: files.map((file) => file.link),
+						albumID: albumID,
+					},
+					successHandler,
+					null,
+					errorHandler
+				);
 			};
 
 			files.forEach((file) => (file.name = file.link));
