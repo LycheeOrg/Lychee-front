@@ -134,39 +134,3 @@ api.get = function (url, callback) {
 		error: errorHandler,
 	});
 };
-
-/**
- *
- * @param {string} fn
- * @param {Object} params
- * @param {APISuccessCB} callback
- */
-api.post_raw = function (fn, params, callback) {
-	loadingBar.show();
-
-	/**
-	 * The success handler
-	 * @param {Object} data the decoded JSON object of the response
-	 */
-	const successHandler = (data) => {
-		setTimeout(loadingBar.hide, 100);
-		callback(data);
-	};
-
-	/**
-	 * The error handler
-	 * @param {XMLHttpRequest} jqXHR the jQuery XMLHttpRequest object, see {@link https://api.jquery.com/jQuery.ajax/#jqXHR}.
-	 */
-	const errorHandler = (jqXHR) => {
-		api.onError(jqXHR, params);
-	};
-
-	$.ajax({
-		type: "POST",
-		url: "api/" + fn,
-		data: params,
-		dataType: "text",
-		success: successHandler,
-		error: errorHandler,
-	});
-};

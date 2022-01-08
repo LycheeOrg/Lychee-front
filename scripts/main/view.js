@@ -1736,7 +1736,7 @@ view.logs = {
 		lychee.content.html(html);
 
 		$("#Clean_Noise").on("click", function () {
-			api.post_raw("Logs::clearNoise", {}, function () {
+			api.post("Logs::clearNoise", {}, function () {
 				view.logs.init();
 			});
 		});
@@ -1745,9 +1745,41 @@ view.logs = {
 	content: {
 		init: function () {
 			view.logs.clearContent();
-			api.post_raw("Logs", {}, function (data) {
-				$(".logs_diagnostics_view").html(data);
-			});
+			api.post(
+				"Logs::list",
+				{},
+				/** @param {{id: number, created_at: string, updated_at: string, type: string, function: string, line: number, text: string}[]} logEntries */
+				function (logEntries) {
+					let html = "<pre>";
+					/** @param {Date} datetime */
+					const formatDateTime = function (datetime) {
+						return (
+							"" +
+							datetime.getUTCFullYear() +
+							"-" +
+							String(datetime.getUTCMonth()).padStart(2, "0") +
+							"-" +
+							String(datetime.getUTCDay()).padStart(2, "0") +
+							" " +
+							String(datetime.getUTCHours()).padStart(2, "0") +
+							":" +
+							String(datetime.getUTCMinutes()).padStart(2, "0") +
+							":" +
+							String(datetime.getUTCSeconds()).padStart(2, "0") +
+							" UTC"
+						);
+					};
+					logEntries.forEach(function (logEntry) {
+						html += formatDateTime(new Date(logEntry.created_at)) + " -- ";
+						html += logEntry.type.padEnd(7) + " -- ";
+						html += logEntry.function + " -- ";
+						html += logEntry.line + " -- ";
+						html += logEntry.text + "\n";
+					});
+					html += "</pre>";
+					$(".logs_diagnostics_view").html(html);
+				}
+			);
 		},
 	},
 };
@@ -1803,7 +1835,7 @@ view.diagnostics = {
 		},
 
 		v_2: function () {
-			api.post("Diagnostics", {}, function (data) {
+			api.post("Diagnostics::get", {}, function (data) {
 				view.diagnostics.clearContent(data.update);
 				let html = "";
 
