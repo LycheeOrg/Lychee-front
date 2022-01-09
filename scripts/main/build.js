@@ -58,6 +58,12 @@ build.getAlbumThumb = function (data) {
 	} alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
 };
 
+/**
+ * @param {(Album|TagAlbum)} data
+ * @param {boolean}          disabled
+ *
+ * @returns {string} HTML for the album
+ */
 build.album = function (data, disabled = false) {
 	const formattedCreationTs = lychee.locale.printMonthYear(data.created_at);
 	const formattedMinTs = lychee.locale.printMonthYear(data.min_taken_at);
@@ -143,10 +149,16 @@ build.album = function (data, disabled = false) {
 	return html;
 };
 
+/**
+ * @param {Photo}   data
+ * @param {boolean} disabled
+ *
+ * @returns {string} HTML for the photo
+ */
 build.photo = function (data, disabled = false) {
 	let html = "";
 	let thumbnail = "";
-	var thumb2x = "";
+	let thumb2x = "";
 	let isCover = data.id === album.json.cover_id;
 
 	let isVideo = data.type && data.type.indexOf("video") > -1;

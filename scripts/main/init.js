@@ -12,7 +12,7 @@ $(document).ready(function () {
 	csrf.bind();
 
 	// Set API error handler
-	api.onError = lychee.error;
+	api.onError = lychee.handleAPIError;
 
 	$("html").css("visibility", "visible");
 
@@ -96,7 +96,11 @@ $(document).ready(function () {
 				}
 			}
 		})
-		.bind(["h"], album.toggle_nsfw_filter)
+		.bind(["h"], function () {
+			lychee.nsfw_visible = !lychee.nsfw_visible;
+			album.apply_nsfw_filter();
+			return false;
+		})
 		.bind(["d"], function () {
 			if (album.isUploadable()) {
 				if (visible.photo()) {

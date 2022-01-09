@@ -21,16 +21,6 @@
  */
 
 /**
- * @typedef {Object} LycheeException
- * @property {string} message     the message of the exception
- * @property {string} [exception] the name of the exception class; only in developer mode
- * @property {string} [file]      the file name where the exception has been thrown; only in developer mode
- * @property {number} [line]      the line number where the exception has been thrown; only in developer mode
- * @property {Array} [trace]      the backtrace; only in developer mode
- * @property {?LycheeException} [previous_exception] the previous exception, if any; only in developer mode
- */
-
-/**
  * The main API object
  */
 let api = {

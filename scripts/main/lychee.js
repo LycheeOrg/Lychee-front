@@ -837,6 +837,11 @@ lychee.escapeHTML = function (html = "") {
 	return html;
 };
 
+/**
+ * @param literalSections
+ * @param substs
+ * @returns {string}
+ */
 lychee.html = function (literalSections, ...substs) {
 	// Use raw literal sections: we don’t want
 	// backslashes (\n etc.) to be interpreted
@@ -873,7 +878,7 @@ lychee.html = function (literalSections, ...substs) {
  * @param {?LycheeException} lycheeException the Lychee Exception
  * @return {boolean}
  */
-lychee.error = function (jqXHR, params, lycheeException) {
+lychee.handleAPIError = function (jqXHR, params, lycheeException) {
 	const msg = jqXHR.statusText + (lycheeException ? " - " + lycheeException.message : "");
 	loadingBar.show("error", msg);
 	console.error("The server returned an error response", {

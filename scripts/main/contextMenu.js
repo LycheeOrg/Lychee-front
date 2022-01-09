@@ -44,7 +44,7 @@ contextMenu.add = function (e) {
 					items.unshift({
 						title: build.iconic("eye") + lychee.locale["VISIBILITY_ALBUM"],
 						visible: lychee.enable_button_visibility,
-						fn: (event) => album.setPublic(albumID, event),
+						fn: () => album.setPublic(albumID),
 					});
 				}
 			}
@@ -346,7 +346,7 @@ contextMenu.photoMulti = function (photoIDs, e) {
 	if (subcount && photocount) {
 		multiselect.deselect(".photo.active, .album.active");
 		multiselect.close();
-		lychee.error("Please select either albums or photos!");
+		loadingBar.show("error", "Please select either albums or photos!");
 		return;
 	}
 	if (subcount) {
@@ -489,6 +489,52 @@ contextMenu.getSubIDs = function (albums, albumID) {
 	return ids;
 };
 
+/**
+ * @callback TargetAlbumSelectedCB
+ *
+ * Called by {@link contextMenu.move} after the user has selected a target ID.
+ * In most cases, {@link album.setAlbum} or {@link photo.setAlbum} are
+ * directly used as the callback.
+ * This design decision is the only reason, why this callback gets more
+ * parameters than the selected target ID.
+ * The parameter signature of this callback matches {@link album.setAlbum}.
+ *
+ * However, the callback should actually enclose all other parameters it
+ * needs and only receive the target ID.
+ *
+ * TODO: Re-factor callbacks.
+ *
+ * @param {string[]} IDs      the source IDs
+ * @param {?string} targetID  the ID of the target album
+ * @param {boolean} [confirm] indicates whether the callback shall show a
+ *                            confirmation dialog to the user for whatever to
+ *                            callback is going to do
+ * @returns void
+ */
+
+/**
+ * Shows the context menu with the album tree and allows the user to select a target album.
+ *
+ * **ATTENTION:** The name `move` of this method is very badly chosen.
+ * The method does not move anything, but only shows the menu and reports
+ * the selected album.
+ * In particular, the method is used by any operation which needs an target
+ * album (i.e. merge, copy-to, etc.)
+ *
+ * TODO: Find a better name for this function.
+ *
+ * The method calls the provided callback after the user has selected a
+ * target album and passes the ID of the target album together with the
+ * source `IDs` and the event `e` to the callback.
+ *
+ * TODO: Actually the callbacks should enclose all additional parameters (`IDs`, `e`) they need. Refactor the callbacks.
+ *
+ * @param {string[]} IDs - IDs of source objects (either album or photo IDs)
+ * @param {Event} e - Some (?) event
+ * @param {TargetAlbumSelectedCB} callback - to be called after the user has selected a target ID
+ * @param {string} [kind=UNSORTED] - Name of root album; either "UNSORTED" or "ROOT"; TODO: Why do we need two different names for the same thing?
+ * @param {boolean} [display_root=true] - Whether the root (aka unsorted) album shall be shown
+ */
 contextMenu.move = function (IDs, e, callback, kind = "UNSORTED", display_root = true) {
 	let items = [];
 

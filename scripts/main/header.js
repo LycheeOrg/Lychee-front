@@ -31,12 +31,12 @@ header.bind = function () {
 		contextMenu.sharePhoto(photo.getID(), e);
 	});
 
-	header.dom("#button_visibility_album").on(eventName, function (e) {
-		album.setPublic(album.getID(), e);
+	header.dom("#button_visibility_album").on(eventName, function () {
+		album.setPublic(album.getID());
 	});
 
-	header.dom("#button_sharing_album_users").on(eventName, function (e) {
-		album.shareUsers(album.getID(), e);
+	header.dom("#button_sharing_album_users").on(eventName, function () {
+		album.shareUsers(album.getID());
 	});
 
 	header.dom("#button_share_album").on(eventName, function (e) {

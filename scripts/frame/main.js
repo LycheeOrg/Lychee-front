@@ -143,7 +143,7 @@ frame.resize = function () {
  * @param {?LycheeException} lycheeException the Lychee Exception
  * @return {boolean}
  */
-frame.error = function (jqXHR, params, lycheeException) {
+frame.handleAPIError = function (jqXHR, params, lycheeException) {
 	const msg = jqXHR.statusText + (lycheeException ? " - " + lycheeException.message : "");
 	loadingBar.show("error", msg);
 	console.error("The server returned an error response", {
@@ -181,7 +181,7 @@ $(function () {
 	csrf.bind();
 
 	// Set API error handler
-	api.onError = frame.error;
+	api.onError = frame.handleAPIError;
 
 	$(window).on("resize", function () {
 		frame.resize();

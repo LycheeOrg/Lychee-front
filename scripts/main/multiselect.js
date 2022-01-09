@@ -58,7 +58,7 @@ multiselect.addItem = function (object, id) {
 	let isAlbum = object.hasClass("album");
 
 	if ((isAlbum && multiselect.photosSelected > 0) || (!isAlbum && multiselect.albumsSelected > 0)) {
-		lychee.error("Please select either albums or photos!");
+		loadingBar.show("error", "Please select either albums or photos!");
 		return;
 	}
 
@@ -182,7 +182,7 @@ multiselect.photoContextMenu = function (e, photoObj) {
 		// should not happen... but you never know...
 		contextMenu.photo(photo.getID(), e);
 	} else {
-		lychee.error("Could not find what you want.");
+		loadingBar.show("error", "Could not find what you want.");
 	}
 };
 

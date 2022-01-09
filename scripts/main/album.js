@@ -3,17 +3,29 @@
  */
 
 let album = {
+	/** @type {?(Album|TagAlbum)} */
 	json: null,
 };
 
+/**
+ * @param {?string} id
+ * @returns {boolean}
+ */
 album.isSmartID = function (id) {
 	return id === "unsorted" || id === "starred" || id === "public" || id === "recent";
 };
 
+/**
+ * @param {?string} id
+ * @returns {boolean}
+ */
 album.isModelID = function (id) {
 	return typeof id === "string" && /^[-_0-9a-zA-Z]{24}$/.test(id);
 };
 
+/**
+ * @returns {?string}
+ */
 album.getParentID = function () {
 	if (album.json == null || album.isSmartID(album.json.id) === true || !album.json.parent_id) {
 		return null;
@@ -45,17 +57,20 @@ album.getID = function () {
 	else return null;
 };
 
+/**
+ * @returns {boolean}
+ */
 album.isTagAlbum = function () {
 	return album.json && album.json.is_tag_album && album.json.is_tag_album === true;
 };
 
 /**
  * @param {?string} photoID
- * @returns {?Object} the photo model
+ * @returns {?Photo} the photo model
  */
 album.getByID = function (photoID) {
 	if (photoID == null || !album.json || !album.json.photos) {
-		lychee.error("Error: Album json not found !");
+		loadingBar.show("error", "Error: Album json not found !");
 		return null;
 	}
 
@@ -67,13 +82,13 @@ album.getByID = function (photoID) {
 		i++;
 	}
 
-	lychee.error("Error: photo " + photoID + " not found !");
+	loadingBar.show("error", "Error: photo " + photoID + " not found !");
 	return null;
 };
 
 /**
  * @param {?string} albumID
- * @returns {?Object} the album model
+ * @returns {?Album} the album model
  */
 album.getSubByID = function (albumID) {
 	if (albumID == null || !album.json || !album.json.albums) {
@@ -89,14 +104,17 @@ album.getSubByID = function (albumID) {
 		i++;
 	}
 
-	lychee.error("Error: album " + albumID + " not found!");
+	loadingBar.show("error", "Error: album " + albumID + " not found!");
 	return null;
 };
 
-// noinspection DuplicatedCode
+/**
+ * @param {string} photoID
+ * @returns {boolean}
+ */
 album.deleteByID = function (photoID) {
 	if (photoID == null || !album.json || !album.json.photos) {
-		lychee.error("Error: Album json not found !");
+		loadingBar.show("error", "Error: Album json not found !");
 		return false;
 	}
 
@@ -113,10 +131,13 @@ album.deleteByID = function (photoID) {
 	return deleted;
 };
 
-// noinspection DuplicatedCode
+/**
+ * @param {string} albumID
+ * @returns {boolean}
+ */
 album.deleteSubByID = function (albumID) {
 	if (albumID == null || !album.json || !album.json.albums) {
-		lychee.error("Error: Album json not found !");
+		loadingBar.show("error", "Error: Album json not found !");
 		return false;
 	}
 
@@ -133,13 +154,22 @@ album.deleteSubByID = function (albumID) {
 	return deleted;
 };
 
+/**
+ * @param {string} albumID
+ * @param {boolean} refresh
+ *
+ * @returns void
+ */
 album.load = function (albumID, refresh = false) {
-	let params = {
-		albumID,
+	const params = {
+		albumID: albumID,
 		password: "",
 	};
 
-	const processData = function (data) {
+	/**
+	 * @param {Album} data
+	 */
+	const processAlbum = function (data) {
 		album.json = data;
 
 		if (refresh === false) {
@@ -167,7 +197,7 @@ album.load = function (albumID, refresh = false) {
 				if (first_album.length !== 0) {
 					first_album.focus();
 				} else {
-					first_photo = $(".photo:first");
+					const first_photo = $(".photo:first");
 					if (first_photo.length !== 0) {
 						first_photo.focus();
 					}
@@ -176,54 +206,86 @@ album.load = function (albumID, refresh = false) {
 		}, waitTime);
 	};
 
-	api.post(
-		"Album::get",
-		params,
-		function (data) {
-			processData(data);
+	/**
+	 * @param {Album} data
+	 */
+	const successHandler = function (data) {
+		processAlbum(data);
 
-			tabindex.makeFocusable(lychee.content);
+		tabindex.makeFocusable(lychee.content);
 
-			if (lychee.active_focus_on_page_load) {
-				// Put focus on first element - either album or photo
-				first_album = $(".album:first");
-				if (first_album.length !== 0) {
-					first_album.focus();
-				} else {
-					first_photo = $(".photo:first");
-					if (first_photo.length !== 0) {
-						first_photo.focus();
-					}
+		if (lychee.active_focus_on_page_load) {
+			// Put focus on first element - either album or photo
+			const first_album = $(".album:first");
+			if (first_album.length !== 0) {
+				first_album.focus();
+			} else {
+				const first_photo = $(".photo:first");
+				if (first_photo.length !== 0) {
+					first_photo.focus();
 				}
 			}
-		},
-		null,
-		function (jqXHR) {
-			if (jqXHR.status === 403) {
-				password.getDialog(albumID, function () {
-					params.password = password.value;
-
-					api.post("Album::get", params, function (_data) {
-						albums.refresh();
-						processData(_data);
-					});
-				});
-				return true;
-			}
-			return false;
 		}
-	);
+	};
+
+	/**
+	 * @param {XMLHttpRequest} jqXHR
+	 * @returns {boolean}
+	 */
+	const errorHandler = function (jqXHR) {
+		if (jqXHR.status === 403) {
+			password.getDialog(albumID, function () {
+				params.password = password.value;
+
+				api.post(
+					"Album::get",
+					params,
+					/** @param {Album} _data */
+					function (_data) {
+						albums.refresh();
+						processAlbum(_data);
+					}
+				);
+			});
+			return true;
+		}
+		return false;
+	};
+
+	api.post("Album::get", params, successHandler, null, errorHandler);
 };
 
+/**
+ * @returns void
+ */
 album.parse = function () {
 	if (!album.json.title) album.json.title = lychee.locale["UNTITLED"];
 };
 
+/**
+ * Creates a new album.
+ *
+ * The method optionally calls the provided callback after the new albums
+ * has been created and passes the ID of the newly created album plus the
+ * provided `IDs`.
+ *
+ * Actually, the callback should enclose all additional parameter it needs.
+ * The parameter `IDs` is not needed by this method itself.
+ * TODO: Refactor callbacks.
+ * Also see comments for {@link TargetAlbumSelectedCB} and
+ * {@link contextMenu.move}.
+ *
+ * @param {string[]}              [IDs=null]      some IDs which are passed on to the callback
+ * @param {TargetAlbumSelectedCB} [callback=null] called upon successful creation of the album
+ *
+ * @returns void
+ */
 album.add = function (IDs = null, callback = null) {
+	/**
+	 * @param {{title: string}} data
+	 */
 	const action = function (data) {
 		// let title = data.title;
-
-		const isModelID = (albumID) => typeof albumID === "string" && /^[-_0-9a-zA-Z]{24}$/.test(albumID);
 
 		if (!data.title.trim()) {
 			basicModal.error("title");
@@ -232,7 +294,7 @@ album.add = function (IDs = null, callback = null) {
 
 		basicModal.close();
 
-		let params = {
+		const params = {
 			title: data.title,
 			parent_id: null,
 		};
@@ -245,16 +307,19 @@ album.add = function (IDs = null, callback = null) {
 			params.parent_id = photo.json.album_id;
 		}
 
-		api.post("Album::add", params, function (_data) {
-			if (isModelID(_data.id)) {
+		api.post(
+			"Album::add",
+			params,
+			/** @param {Album} _data */
+			function (_data) {
 				if (IDs != null && callback != null) {
-					callback(IDs, _data, false); // we do not confirm
+					callback(IDs, _data.id, false); // we do not confirm
 				} else {
 					albums.refresh();
 					lychee.goto(_data.id);
 				}
 			}
-		});
+		);
 	};
 
 	basicModal.show({
@@ -272,7 +337,11 @@ album.add = function (IDs = null, callback = null) {
 	});
 };
 
+/**
+ * @returns void
+ */
 album.addByTags = function () {
+	/** @param {{title: string, tags: string}} data */
 	const action = function (data) {
 		if (!data.title.trim()) {
 			basicModal.error("title");
@@ -285,18 +354,18 @@ album.addByTags = function () {
 
 		basicModal.close();
 
-		let params = {
-			title: data.title,
-			tags: data.tags,
-		};
-
-		api.post("Album::addByTags", params, function (_data) {
-			const isModelID = (albumID) => typeof albumID === "string" && /^[-_0-9a-zA-Z]{24}$/.test(albumID);
-			if (isModelID(_data.id)) {
+		api.post(
+			"Album::addByTags",
+			{
+				title: data.title,
+				tags: data.tags,
+			},
+			/** @param {TagAlbum} _data */
+			function (_data) {
 				albums.refresh();
 				lychee.goto(_data.id);
 			}
-		});
+		);
 	};
 
 	basicModal.show({
@@ -317,28 +386,35 @@ album.addByTags = function () {
 	});
 };
 
+/**
+ * @param {string} albumID
+ * @returns {void}
+ */
 album.setShowTags = function (albumID) {
-	let oldShowTags = album.json.show_tags;
+	const oldShowTags = album.json.show_tags;
 
+	/** @param {{show_tags: string}} data */
 	const action = function (data) {
 		if (!data.show_tags.trim()) {
 			basicModal.error("show_tags");
 			return;
 		}
 
-		let show_tags = data.show_tags;
 		basicModal.close();
 
 		if (visible.album()) {
-			album.json.show_tags = show_tags;
+			album.json.show_tags = data.show_tags;
 			view.album.show_tags();
 		}
-		let params = {
-			albumID: albumID,
-			show_tags: show_tags,
-		};
 
-		api.post("Album::setShowTags", params, () => album.reload());
+		api.post(
+			"Album::setShowTags",
+			{
+				albumID: albumID,
+				show_tags: data.show_tags,
+			},
+			() => album.reload()
+		);
 	};
 
 	basicModal.show({
@@ -365,7 +441,6 @@ album.setShowTags = function (albumID) {
  */
 album.setTitle = function (albumIDs) {
 	let oldTitle = "";
-	let msg = "";
 
 	if (albumIDs.length === 1) {
 		// Get old title if only one album is selected
@@ -380,6 +455,7 @@ album.setTitle = function (albumIDs) {
 		}
 	}
 
+	/** @param {{title: string}} data */
 	const action = function (data) {
 		if (!data.title.trim()) {
 			basicModal.error("title");
@@ -424,13 +500,15 @@ album.setTitle = function (albumIDs) {
 		});
 	};
 
-	let input = lychee.html`<input class='text' name='title' type='text' maxlength='100' placeholder='$${lychee.locale["ALBUM_TITLE"]}' value='$${oldTitle}'>`;
+	const inputHTML = lychee.html`<input class='text' name='title' type='text' maxlength='100' placeholder='$${lychee.locale["ALBUM_TITLE"]}' value='$${oldTitle}'>`;
 
-	if (albumIDs.length === 1) msg = lychee.html`<p>${lychee.locale["ALBUM_NEW_TITLE"]} ${input}</p>`;
-	else msg = lychee.html`<p>${lychee.locale["ALBUMS_NEW_TITLE_1"]} $${albumIDs.length} ${lychee.locale["ALBUMS_NEW_TITLE_2"]} ${input}</p>`;
+	const dialogHTML =
+		albumIDs.length === 1
+			? lychee.html`<p>${lychee.locale["ALBUM_NEW_TITLE"]} ${inputHTML}</p>`
+			: lychee.html`<p>${lychee.locale["ALBUMS_NEW_TITLE_1"]} $${albumIDs.length} ${lychee.locale["ALBUMS_NEW_TITLE_2"]} ${inputHTML}</p>`;
 
 	basicModal.show({
-		body: msg,
+		body: dialogHTML,
 		buttons: {
 			action: {
 				title: lychee.locale["ALBUM_SET_TITLE"],
@@ -444,11 +522,16 @@ album.setTitle = function (albumIDs) {
 	});
 };
 
+/**
+ * @param {string} albumID
+ * @returns void
+ */
 album.setDescription = function (albumID) {
-	let oldDescription = album.json.description ? album.json.description : "";
+	const oldDescription = album.json.description ? album.json.description : "";
 
+	/** @param {{description: string}} data */
 	const action = function (data) {
-		let description = data.description ? data.description : null;
+		const description = data.description ? data.description : null;
 
 		basicModal.close();
 
@@ -457,12 +540,10 @@ album.setDescription = function (albumID) {
 			view.album.description();
 		}
 
-		let params = {
-			albumID,
-			description,
-		};
-
-		api.post("Album::setDescription", params);
+		api.post("Album::setDescription", {
+			albumID: albumID,
+			description: description,
+		});
 	};
 
 	basicModal.show({
@@ -480,12 +561,14 @@ album.setDescription = function (albumID) {
 	});
 };
 
+/**
+ * @param {string} photoID
+ * @returns {void}
+ */
 album.toggleCover = function (photoID) {
-	if (!photoID) return false;
-
 	album.json.cover_id = album.json.cover_id === photoID ? null : photoID;
 
-	let params = {
+	const params = {
 		albumID: album.json.id,
 		photoID: album.json.cover_id,
 	};
@@ -498,28 +581,32 @@ album.toggleCover = function (photoID) {
 	});
 };
 
+/**
+ * @param {string} albumID
+ * @returns void
+ */
 album.setLicense = function (albumID) {
 	const callback = function () {
 		$("select#license").val(album.json.license === "" ? "none" : album.json.license);
-		return false;
 	};
 
+	/** @param {{license: string}} data */
 	const action = function (data) {
-		let license = data.license;
-
 		basicModal.close();
 
-		let params = {
-			albumID,
-			license,
-		};
-
-		api.post("Album::setLicense", params, function () {
-			if (visible.album()) {
-				album.json.license = params.license;
-				view.album.license();
+		api.post(
+			"Album::setLicense",
+			{
+				albumID: albumID,
+				license: data.license,
+			},
+			function () {
+				if (visible.album()) {
+					album.json.license = data.license;
+					view.album.license();
+				}
 			}
-		});
+		);
 	};
 
 	let msg = lychee.html`
@@ -583,6 +670,10 @@ album.setLicense = function (albumID) {
 	});
 };
 
+/**
+ * @param {string} albumID
+ * @returns void
+ */
 album.setSorting = function (albumID) {
 	const callback = function () {
 		$("select#sortingCol").val(album.json.sorting_col);
@@ -590,23 +681,23 @@ album.setSorting = function (albumID) {
 		return false;
 	};
 
+	/** @param {{sortingCol: string, sortingOrder: string}} data */
 	const action = function (data) {
-		let sortingCol = data.sortingCol;
-		let sortingOrder = data.sortingOrder;
-
 		basicModal.close();
 
-		let params = {
-			albumID,
-			sortingCol,
-			sortingOrder,
-		};
-
-		api.post("Album::setSorting", params, function () {
-			if (visible.album()) {
-				album.reload();
+		api.post(
+			"Album::setSorting",
+			{
+				albumID: albumID,
+				sortingCol: data.sortingCol,
+				sortingOrder: data.sortingOrder,
+			},
+			function () {
+				if (visible.album()) {
+					album.reload();
+				}
 			}
-		});
+		);
 	};
 
 	let msg =
@@ -676,11 +767,30 @@ album.setSorting = function (albumID) {
 	});
 };
 
-album.setPublic = function (albumID, e) {
-	let password = "";
-
+/**
+ * Sets the accessibility attributes of an album.
+ *
+ * **ATTENTION**: Despite its name this method does not only set the
+ * `is_public` attribute of the album, but configures most of the attributes
+ * which contribute to the accessibility of an album.
+ *
+ * TODO: Find a better name for the method.
+ *
+ * **ATTENTION**: This method is structurally very different from the other
+ * methods in this file which use a modal dialog.
+ * In particular, this methods does not use callbacks to handle the result
+ * of the dialog after the dialog has been closed, but calls itself
+ * recursively to open, to close and to handle the results. Why?
+ *
+ * TODO: Consider re-writing this method to match the structure of the other
+ * methods.
+ *
+ * @param {string} albumID
+ * @returns {void}
+ */
+album.setPublic = function (albumID) {
 	if (!basicModal.visible()) {
-		let msg = lychee.html`
+		const msg = lychee.html`
 			<form>
 				<div class='switch'>
 					<label>
@@ -749,7 +859,7 @@ album.setPublic = function (albumID, e) {
 				action: {
 					title: lychee.locale["ALBUM_SHARING_CONFIRM"],
 					// Call setPublic function without showing the modal
-					fn: () => album.setPublic(albumID, e),
+					fn: () => album.setPublic(albumID),
 				},
 				cancel: {
 					title: lychee.locale["CANCEL"],
@@ -806,8 +916,6 @@ album.setPublic = function (albumID, e) {
 			if ($(this).prop("checked") === true) $('.basicModal .choice input[name="passwordtext"]').show().focus();
 			else $('.basicModal .choice input[name="passwordtext"]').hide();
 		});
-
-		return true;
 	}
 
 	albums.refresh();
@@ -831,14 +939,10 @@ album.setPublic = function (albumID, e) {
 	album.json.is_share_button_visible = $('.basicModal .choice input[name="is_share_button_visible"]:checked').length === 1;
 
 	// Set password
-	let oldPassword = album.json.password;
-	if ($('.basicModal .choice input[name="has_password"]:checked').length === 1) {
-		password = $('.basicModal .choice input[name="passwordtext"]').val();
-		album.json.has_password = true;
-	} else {
-		password = "";
-		album.json.has_password = false;
-	}
+	// TODO: IMHO the following line does not make much sense. The JSON has no attribute `password`, because the server does not send it. Thus `oldPassword` is always undefined.
+	const oldPassword = album.json.password;
+	album.json.has_password = $('.basicModal .choice input[name="has_password"]:checked').length === 1;
+	const newPassword = album.json.has_password ? $('.basicModal .choice input[name="passwordtext"]').val() : "";
 
 	// Modal input has been processed, now it can be closed
 	basicModal.close();
@@ -853,8 +957,8 @@ album.setPublic = function (albumID, e) {
 		view.album.password();
 	}
 
-	let params = {
-		albumID,
+	const params = {
+		albumID: albumID,
 		grants_full_photo: album.json.grants_full_photo,
 		is_public: album.json.is_public,
 		is_nsfw: album.json.is_nsfw,
@@ -862,27 +966,37 @@ album.setPublic = function (albumID, e) {
 		is_downloadable: album.json.is_downloadable,
 		is_share_button_visible: album.json.is_share_button_visible,
 	};
-	if (oldPassword !== album.json.password || password.length > 0) {
+	if (oldPassword !== newPassword || newPassword.length > 0) {
 		// We send the password only if there's been a change; that way the
 		// server will keep the current password if it wasn't changed.
-		params.password = password;
+		params.password = newPassword;
 	}
 
 	api.post("Album::setPublic", params);
 };
 
 /**
+ * Lets a user update the sharing settings of an album.
+ *
+ * ATTENTION**: This method is structurally very different from the other
+ * methods in this file which use a modal dialog.
+ * In particular, this methods does not use callbacks to handle the result
+ * of the dialog after the dialog has been closed, but calls itself
+ * recursively to open, to close and to handle the results. Why?
+ *
+ * TODO: Consider re-writing this method to match the structure of the other methods.
+ *
  * @param {string} albumID
- * @param e
- * @returns {boolean}
+ * @returns {void}
  */
-album.shareUsers = function (albumID, e) {
+album.shareUsers = function (albumID) {
 	if (!basicModal.visible()) {
 		let msg = `<form id="sharing_people_form">
 			<p>${lychee.locale["WAIT_FETCH_DATA"]}</p>
 		</form>`;
 
-		api.post("Sharing::list", {}, (data) => {
+		/** @param {SharingInfo} data */
+		const successCallback = function (data) {
 			const sharingForm = $("#sharing_people_form");
 			sharingForm.empty();
 			if (data.users !== undefined) {
@@ -898,17 +1012,19 @@ album.shareUsers = function (albumID, e) {
 						<p></p>
 					</div>`);
 				});
-				var sharingOfAlbum = data.shared !== undefined ? data.shared.filter((val) => val.album_id === albumID) : [];
+				const sharingOfAlbum = data.shared !== undefined ? data.shared.filter((val) => val.album_id === albumID) : [];
 				sharingOfAlbum.forEach((sharing) => {
 					// Check all the shares who already exists, and store their sharing id on the element
-					var elem = $(`.basicModal .choice input[name="${sharing.user_id}"]`);
+					const elem = $(`.basicModal .choice input[name="${sharing.user_id}"]`);
 					elem.prop("checked", true);
 					elem.data("sharingId", sharing.id);
 				});
 			} else {
 				sharingForm.append(`<p>${lychee.locale["SHARING_ALBUM_USERS_NO_USERS"]}</p>`);
 			}
-		});
+		};
+
+		api.post("Sharing::list", {}, successCallback);
 
 		basicModal.show({
 			body: msg,
@@ -916,7 +1032,7 @@ album.shareUsers = function (albumID, e) {
 				action: {
 					title: lychee.locale["ALBUM_SHARING_CONFIRM"],
 					fn: () => {
-						album.shareUsers(albumID, e);
+						album.shareUsers(albumID);
 					},
 				},
 				cancel: {
@@ -925,7 +1041,6 @@ album.shareUsers = function (albumID, e) {
 				},
 			},
 		});
-		return true;
 	}
 
 	basicModal.close();
@@ -950,6 +1065,8 @@ album.shareUsers = function (albumID, e) {
 		}
 	});
 
+	// TODO: The success handler below are asymmetric, in particular the user only sees a success message for added shares
+
 	if (sharingToDelete.length > 0) {
 		api.post("Sharing::delete", {
 			shareIDs: sharingToDelete,
@@ -967,28 +1084,36 @@ album.shareUsers = function (albumID, e) {
 			}
 		);
 	}
-
-	return true;
 };
 
-album.setNSFW = function (albumID, e) {
+/**
+ * @param {string} albumID
+ * @returns void
+ */
+album.setNSFW = function (albumID) {
 	album.json.is_nsfw = !album.json.is_nsfw;
 
 	view.album.nsfw();
 
-	let params = {
-		albumID: albumID,
-	};
-
-	api.post("Album::setNSFW", params, () => albums.refresh());
+	api.post(
+		"Album::setNSFW",
+		{
+			albumID: albumID,
+		},
+		() => albums.refresh()
+	);
 };
 
+/**
+ * @param {string} service - either `"twitter"`, `"facebook"` or `"mail"`
+ * @returns void
+ */
 album.share = function (service) {
 	if (album.json.hasOwnProperty("is_share_button_visible") && !album.json.is_share_button_visible) {
 		return;
 	}
 
-	let url = location.href;
+	const url = location.href;
 
 	switch (service) {
 		case "twitter":
@@ -1003,8 +1128,12 @@ album.share = function (service) {
 	}
 };
 
+/**
+ * @param {string[]} albumIDs
+ * @returns void
+ */
 album.getArchive = function (albumIDs) {
-	location.href = "api/Album::getArchive" + lychee.html`?albumIDs=${albumIDs.join()}`;
+	location.href = "api/Album::getArchive?" + $.param({ albumIDs: albumIDs });
 };
 
 /**
@@ -1068,7 +1197,7 @@ album.delete = function (albumIDs) {
 			{
 				albumIDs: albumIDs,
 			},
-			function (data) {
+			function () {
 				if (visible.albums()) {
 					albumIDs.forEach(function (id) {
 						view.albums.content.delete(id);
@@ -1178,9 +1307,9 @@ album.merge = function (albumIDs, albumID, confirm = true) {
 };
 
 /**
- * @param {string[]} albumIDs
- * @param {string} albumID
- * @param {boolean} confirm
+ * @param {string[]} albumIDs source IDs
+ * @param {string}   albumID  target ID
+ * @param {boolean}  confirm  show confirmation dialog?
  */
 album.setAlbum = function (albumIDs, albumID, confirm = true) {
 	const action = function () {
@@ -1216,6 +1345,9 @@ album.setAlbum = function (albumIDs, albumID, confirm = true) {
 	}
 };
 
+/**
+ * @returns void
+ */
 album.apply_nsfw_filter = function () {
 	if (lychee.nsfw_visible) {
 		$('.album[data-nsfw="1"]').show();
@@ -1224,12 +1356,14 @@ album.apply_nsfw_filter = function () {
 	}
 };
 
-album.toggle_nsfw_filter = function () {
-	lychee.nsfw_visible = !lychee.nsfw_visible;
-	album.apply_nsfw_filter();
-	return false;
-};
-
+/**
+ * Determines whether the user can upload to the currently active album.
+ *
+ * For special cases of no album / smart album / etc. we return true.
+ * It's only for regular, non-matching albums that we return false.
+ *
+ * @returns {boolean}
+ */
 album.isUploadable = function () {
 	if (lychee.admin) {
 		return true;
@@ -1238,59 +1372,56 @@ album.isUploadable = function () {
 		return false;
 	}
 
-	// For special cases of no album / smart album / etc. we return true.
-	// It's only for regular non-matching albums that we return false.
 	if (album.json === null || !album.json.owner_name) {
 		return true;
 	}
 
+	// TODO: Comparison of numeric user IDs (instead of names) should be more robust
 	return album.json.owner_name === lychee.username;
 };
 
+/**
+ * @param {Photo} data
+ */
 album.updatePhoto = function (data) {
+	/**
+	 * @param {?SizeVariant} src
+	 * @returns {?SizeVariant}
+	 */
 	let deepCopySizeVariant = function (src) {
 		if (src === undefined || src === null) return null;
-		let result = {};
-		result.url = src.url;
-		result.width = src.width;
-		result.height = src.height;
-		return result;
+		return {
+			type: src.type,
+			url: src.url,
+			width: src.width,
+			height: src.height,
+		};
 	};
 
-	if (album.json) {
-		$.each(album.json.photos, function () {
-			if (this.id === data.id) {
-				this.filesize = data.filesize;
-				// Deep copy size variants
-				this.size_variants = {
-					thumb: null,
-					thumb2x: null,
-					small: null,
-					small2x: null,
-					medium: null,
-					medium2x: null,
-					original: null,
-				};
-				if (data.size_variants !== undefined && data.size_variants !== null) {
-					this.size_variants.thumb = deepCopySizeVariant(data.size_variants.thumb);
-					this.size_variants.thumb2x = deepCopySizeVariant(data.size_variants.thumb2x);
-					this.size_variants.small = deepCopySizeVariant(data.size_variants.small);
-					this.size_variants.small2x = deepCopySizeVariant(data.size_variants.small2x);
-					this.size_variants.medium = deepCopySizeVariant(data.size_variants.medium);
-					this.size_variants.medium2x = deepCopySizeVariant(data.size_variants.medium2x);
-					this.size_variants.original = deepCopySizeVariant(data.size_variants.original);
-				}
-				view.album.content.updatePhoto(this);
-				albums.refresh();
-				return false;
-			}
-			return true;
-		});
+	if (album.json && album.json.photos) {
+		const photo = album.json.photos.find((p) => p.id === data.id);
+
+		photo.filesize = data.filesize;
+		// Deep copy size variants
+		photo.size_variants = {
+			thumb: deepCopySizeVariant(data.size_variants.thumb),
+			thumb2x: deepCopySizeVariant(data.size_variants.thumb2x),
+			small: deepCopySizeVariant(data.size_variants.small),
+			small2x: deepCopySizeVariant(data.size_variants.small2x),
+			medium: deepCopySizeVariant(data.size_variants.medium),
+			medium2x: deepCopySizeVariant(data.size_variants.medium2x),
+			original: deepCopySizeVariant(data.size_variants.original),
+		};
+		view.album.content.updatePhoto(photo);
+		albums.refresh();
 	}
 };
 
+/**
+ * @returns void
+ */
 album.reload = function () {
-	let albumID = album.getID();
+	const albumID = album.getID();
 
 	album.refresh();
 	albums.refresh();
@@ -1299,6 +1430,9 @@ album.reload = function () {
 	else lychee.goto();
 };
 
+/**
+ * @returns void
+ */
 album.refresh = function () {
 	album.json = null;
 };

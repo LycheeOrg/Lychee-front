@@ -164,7 +164,7 @@ $(document).ready(function () {
 	let photoID = gup("p");
 
 	// Set API error handler
-	api.onError = error;
+	api.onError = handleAPIError;
 
 	// Share
 	header.dom("#button_share").on("click", function (e) {
@@ -225,7 +225,7 @@ const loadPhotoInfo = function (photoID) {
  * @param {?LycheeException} lycheeException the Lychee Exception
  * @return {boolean}
  */
-const error = function (jqXHR, params, lycheeException) {
+const handleAPIError = function (jqXHR, params, lycheeException) {
 	const msg = jqXHR.statusText + (lycheeException ? " - " + lycheeException.message : "");
 	loadingBar.show("error", msg);
 	console.error("The server returned an error response", {
