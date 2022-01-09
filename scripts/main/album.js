@@ -1098,14 +1098,18 @@ album.delete = function (albumIDs) {
 					albums.deleteByID(id);
 				});
 			} else if (visible.album()) {
-				albums.refresh();
-				if (albumIDs.length === 1 && album.getID() == albumIDs[0]) {
-					lychee.goto(album.getParentID());
+				if (albumIDs.toString() === "unsorted") {
+					album.reload();
 				} else {
-					albumIDs.forEach(function (id) {
-						album.deleteSubByID(id);
-						view.album.content.deleteSub(id);
-					});
+					albums.refresh();
+					if (albumIDs.length === 1 && album.getID() == albumIDs[0]) {
+						lychee.goto(album.getParentID());
+					} else {
+						albumIDs.forEach(function (id) {
+							album.deleteSubByID(id);
+							view.album.content.deleteSub(id);
+						});
+					}
 				}
 			}
 
