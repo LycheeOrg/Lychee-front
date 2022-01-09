@@ -1,4 +1,5 @@
 let u2f = {
+	/** @type {?WebAuthnCredential[]} * */
 	json: null,
 };
 

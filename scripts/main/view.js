@@ -270,7 +270,7 @@ view.album = {
 		public: function (photoID) {
 			let $badge = $('.photo[data-id="' + photoID + '"] .icn-share');
 
-			if (album.getByID(photoID).is_public == 1) $badge.addClass("badge--visible badge--hidden");
+			if (album.getByID(photoID).is_public === 1) $badge.addClass("badge--visible badge--hidden");
 			else $badge.removeClass("badge--visible badge--hidden");
 		},
 
@@ -405,7 +405,7 @@ view.album = {
 			if (!album.json || !album.json.photos || album.json.photos === false) return;
 			if (lychee.layout === "1") {
 				let containerWidth = parseFloat($(".justified-layout").width(), 10);
-				if (containerWidth == 0) {
+				if (containerWidth === 0) {
 					// Triggered on Reload in photo view.
 					containerWidth =
 						$(window).width() -
@@ -457,7 +457,7 @@ view.album = {
 				});
 			} else if (lychee.layout === "2") {
 				let containerWidth = parseFloat($(".unjustified-layout").width(), 10);
-				if (containerWidth == 0) {
+				if (containerWidth === 0) {
 					// Triggered on Reload in photo view.
 					containerWidth =
 						$(window).width() -
@@ -707,9 +707,9 @@ view.photo = {
 	public: function () {
 		$("#button_visibility").removeClass("active--hidden active--not-hidden");
 
-		if (photo.json.is_public == 1 || photo.json.is_public == 2) {
+		if (photo.json.is_public === 1 || photo.json.is_public === 2) {
 			// Photo public
-			if (photo.json.is_public == 1) {
+			if (photo.json.is_public === 1) {
 				$("#button_visibility").addClass("active--hidden");
 			} else {
 				$("#button_visibility").addClass("active--not-hidden");
@@ -804,7 +804,7 @@ view.photo = {
 	sidebar: function () {
 		let structure = sidebar.createStructure.photo(photo.json);
 		let html = sidebar.render(structure);
-		let has_location = photo.json.latitude && photo.json.longitude ? true : false;
+		let has_location = !!(photo.json.latitude && photo.json.longitude);
 
 		sidebar.dom(".sidebar__wrapper").html(html);
 		sidebar.bind();

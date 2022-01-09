@@ -1,48 +1,58 @@
+//noinspection HtmlUnknownTarget
+
 /**
  * @description This module is used to generate HTML-Code.
  */
 
 let build = {};
 
+/**
+ * @param {string} icon
+ * @param {string} [classes=""]
+ *
+ * @returns {string}
+ */
 build.iconic = function (icon, classes = "") {
-	let html = "";
-
-	html += lychee.html`<svg class='iconic ${classes}'><use xlink:href='#${icon}' /></svg>`;
-
-	return html;
+	return lychee.html`<svg class='iconic ${classes}'><use xlink:href='#${icon}' /></svg>`;
 };
 
+/**
+ * @param {string} title
+ * @returns {string}
+ */
 build.divider = function (title) {
-	let html = "";
-
-	html += lychee.html`<div class='divider'><h1>${title}</h1></div>`;
-
-	return html;
+	return lychee.html`<div class='divider'><h1>${title}</h1></div>`;
 };
 
+/**
+ * @param {string} id
+ * @returns {string}
+ */
 build.editIcon = function (id) {
-	let html = "";
-
-	html += lychee.html`<div id='${id}' class='edit'>${build.iconic("pencil")}</div>`;
-
-	return html;
+	return lychee.html`<div id='${id}' class='edit'>${build.iconic("pencil")}</div>`;
 };
 
+/**
+ * @param {number} top
+ * @param {number} left
+ * @returns {string}
+ */
 build.multiselect = function (top, left) {
 	return lychee.html`<div id='multiselect' style='top: ${top}px; left: ${left}px;'></div>`;
 };
 
-// two additional images that are barely visible seems a bit overkill - use same image 3 times
-// if this simplification comes to pass data.types, data.thumbs and data.thumbs2x no longer need to be arrays
+/**
+ * Returns HTML for the thumb of an album.
+ *
+ * @param {(Album|TagAlbum)} data
+ *
+ * @returns {string}
+ */
 build.getAlbumThumb = function (data) {
-	let isVideo;
-	let isRaw;
-	let thumb;
-
-	isVideo = data.thumb.type && data.thumb.type.indexOf("video") > -1;
-	isRaw = data.thumb.type && data.thumb.type.indexOf("raw") > -1;
-	thumb = data.thumb.thumb;
-	var thumb2x = "";
+	const isVideo = data.thumb.type && data.thumb.type.indexOf("video") > -1;
+	const isRaw = data.thumb.type && data.thumb.type.indexOf("raw") > -1;
+	const thumb = data.thumb.thumb;
+	const thumb2x = data.thumb.thumb2x;
 
 	if (thumb === "uploads/thumb/" && isVideo) {
 		return `<span class="thumbimg"><img src='img/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
@@ -51,16 +61,14 @@ build.getAlbumThumb = function (data) {
 		return `<span class="thumbimg"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
 	}
 
-	thumb2x = data.thumb.thumb2x;
-
 	return `<span class="thumbimg${isVideo ? " video" : ""}"><img class='lazyload' src='img/placeholder.png' data-src='${thumb}' ${
 		thumb2x !== null ? "data-srcset='" + thumb2x + " 2x'" : ""
 	} alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
 };
 
 /**
- * @param {(Album|TagAlbum)} data
- * @param {boolean}          disabled
+ * @param {(Album|TagAlbum|SmartAlbum)} data
+ * @param {boolean}                     disabled
  *
  * @returns {string} HTML for the album
  */
@@ -124,12 +132,12 @@ build.album = function (data, disabled = false) {
 		html += lychee.html`
 				<div class='badges'>
 					<a class='badge ${data.is_nsfw ? "badge--nsfw" : ""} icn-warning'>${build.iconic("warning")}</a>
-					<a class='badge ${data.is_starred ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
-					<a class='badge ${data.is_recent ? "badge--visible badge--list" : ""}'>${build.iconic("clock")}</a>
+					<a class='badge ${data.id === SmartAlbumID.STARRED ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
+					<a class='badge ${data.id === SmartAlbumID.RECENT ? "badge--visible badge--list" : ""}'>${build.iconic("clock")}</a>
 					<a class='badge ${data.is_public ? "badge--visible" : ""} ${data.requires_link ? "badge--hidden" : "badge--not--hidden"} icn-share'>${build.iconic(
 			"eye"
 		)}</a>
-					<a class='badge ${data.is_unsorted ? "badge--visible" : ""}'>${build.iconic("list")}</a>
+					<a class='badge ${data.id === SmartAlbumID.RECENT ? "badge--visible" : ""}'>${build.iconic("list")}</a>
 					<a class='badge ${data.has_password ? "badge--visible" : ""}'>${build.iconic("lock-locked")}</a>
 					<a class='badge ${data.is_tag_album ? "badge--tag" : ""}'>${build.iconic("tag")}</a>
 					<a class='badge ${isCover ? "badge--cover" : ""} icn-cover'>${build.iconic("folder-cover")}</a>
@@ -137,7 +145,7 @@ build.album = function (data, disabled = false) {
 				`;
 	}
 
-	if ((data.albums && data.albums.length > 0) || (data.hasOwnProperty("has_albums") && data.has_albums === true)) {
+	if ((data.albums && data.albums.length > 0) || data.has_albums) {
 		html += lychee.html`
 				<div class='subalbum_badge'>
 					<a class='badge badge--folder'>${build.iconic("layers")}</a>
@@ -159,12 +167,16 @@ build.photo = function (data, disabled = false) {
 	let html = "";
 	let thumbnail = "";
 	let thumb2x = "";
-	let isCover = data.id === album.json.cover_id;
+	const isCover = data.id === album.json.cover_id;
 
-	let isVideo = data.type && data.type.indexOf("video") > -1;
-	let isRaw = data.type && data.type.indexOf("raw") > -1;
-	let isLivePhoto = data.live_photo_url !== "" && data.live_photo_url !== null;
+	const isVideo = data.type && data.type.indexOf("video") > -1;
+	const isRaw = data.type && data.type.indexOf("raw") > -1;
+	const isLivePhoto = data.live_photo_url !== "" && data.live_photo_url !== null;
 
+	// My IDE complains that `thumb` is always non-null and therefore the
+	// first branch of the condition is never taken.
+	// I am willing to agree.
+	// TODO: Revise this code, whether the first branch is really needed.
 	if (data.size_variants.thumb === null) {
 		if (isLivePhoto) {
 			thumbnail = `<span class="thumbimg"><img src='img/live-photo-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false' data-tabindex='${tabindex.get_next_tab_index()}'></span>`;
@@ -268,6 +280,13 @@ build.photo = function (data, disabled = false) {
 	return html;
 };
 
+/**
+ * @param {Photo} data
+ * @param {string} overlay_type
+ * @param {boolean} [next=false]
+ *
+ * @returns {string}
+ */
 build.check_overlay_type = function (data, overlay_type, next = false) {
 	let types = ["desc", "date", "exif", "none"];
 	let idx = types.indexOf(overlay_type);
@@ -283,6 +302,10 @@ build.check_overlay_type = function (data, overlay_type, next = false) {
 	}
 };
 
+/**
+ * @param {Photo} data
+ * @returns {string}
+ */
 build.overlay_image = function (data) {
 	let overlay = "";
 	switch (build.check_overlay_type(data, lychee.image_overlay_type)) {
@@ -329,19 +352,25 @@ build.overlay_image = function (data) {
 	);
 };
 
-build.imageview = function (data, visibleControls, autoplay) {
+/**
+ * @param {Photo} data
+ * @param {boolean} areControlsVisible
+ * @param {boolean} autoplay
+ * @returns {{thumb: string, html: string}}
+ */
+build.imageview = function (data, areControlsVisible, autoplay) {
 	let html = "";
 	let thumb = "";
 
 	if (data.type.indexOf("video") > -1) {
-		html += lychee.html`<video width="auto" height="auto" id='image' controls class='${visibleControls === true ? "" : "full"}' autobuffer ${
+		html += lychee.html`<video width="auto" height="auto" id='image' controls class='${areControlsVisible ? "" : "full"}' autobuffer ${
 			autoplay ? "autoplay" : ""
 		} data-tabindex='${tabindex.get_next_tab_index()}'><source src='${
 			data.size_variants.original.url
 		}'>Your browser does not support the video tag.</video>`;
 	} else if (data.type.indexOf("raw") > -1 && data.size_variants.medium === null) {
 		html += lychee.html`<img id='image' class='${
-			visibleControls === true ? "" : "full"
+			areControlsVisible ? "" : "full"
 		}' src='img/placeholder.png' draggable='false' alt='big' data-tabindex='${tabindex.get_next_tab_index()}'>`;
 	} else {
 		let img = "";
@@ -351,7 +380,7 @@ build.imageview = function (data, visibleControls, autoplay) {
 
 			// See if we have the thumbnail loaded...
 			$(".photo").each(function () {
-				if ($(this).attr("data-id") && $(this).attr("data-id") == data.id) {
+				if ($(this).attr("data-id") && $(this).attr("data-id") === data.id) {
 					let thumbimg = $(this).find("img");
 					if (thumbimg.length > 0) {
 						thumb = thumbimg[0].currentSrc ? thumbimg[0].currentSrc : thumbimg[0].src;
@@ -367,11 +396,11 @@ build.imageview = function (data, visibleControls, autoplay) {
 					medium = `srcset='${data.size_variants.medium.url} ${data.size_variants.medium.width}w, ${data.size_variants.medium2x.url} ${data.size_variants.medium2x.width}w'`;
 				}
 				img =
-					`<img id='image' class='${visibleControls === true ? "" : "full"}' src='${data.size_variants.medium.url}' ` +
+					`<img id='image' class='${areControlsVisible ? "" : "full"}' src='${data.size_variants.medium.url}' ` +
 					medium +
 					`  draggable='false' alt='medium' data-tabindex='${tabindex.get_next_tab_index()}'>`;
 			} else {
-				img = `<img id='image' class='${visibleControls === true ? "" : "full"}' src='${
+				img = `<img id='image' class='${areControlsVisible ? "" : "full"}' src='${
 					data.size_variants.original.url
 				}' draggable='false' alt='big' data-tabindex='${tabindex.get_next_tab_index()}'>`;
 			}
@@ -408,12 +437,16 @@ build.imageview = function (data, visibleControls, autoplay) {
 	return { html, thumb };
 };
 
-build.no_content = function (typ) {
+/**
+ * @param {string} type - either `"magnifying-glass"`, `"eye"`, `"cog"` or `"question-marks"`
+ * @returns {string}
+ */
+build.no_content = function (type) {
 	let html = "";
 
-	html += lychee.html`<div class='no_content fadeIn'>${build.iconic(typ)}`;
+	html += lychee.html`<div class='no_content fadeIn'>${build.iconic(type)}`;
 
-	switch (typ) {
+	switch (type) {
 		case "magnifying-glass":
 			html += lychee.html`<p>${lychee.locale["VIEW_NO_RESULT"]}</p>`;
 			break;
@@ -469,6 +502,12 @@ build.uploadModal = function (title, files) {
 	return html;
 };
 
+/**
+ * Builds the HTML snippet for a row in the upload dialog.
+ *
+ * @param {string} name
+ * @returns {string}
+ */
 build.uploadNewFile = function (name) {
 	if (name.length > 40) {
 		name = name.substr(0, 17) + "..." + name.substr(name.length - 20, 20);
@@ -483,23 +522,22 @@ build.uploadNewFile = function (name) {
 		`;
 };
 
+/**
+ * @param {?string} tags
+ * @returns {string}
+ */
 build.tags = function (tags) {
 	let html = "";
-	let editable = typeof album !== "undefined" ? album.isUploadable() : false;
+	const editable = album.isUploadable();
 
-	// Search is enabled if logged in (not publicMode) or public seach is enabled
-	let searchable = lychee.publicMode === false || lychee.public_search === true;
+	// Search is enabled if logged in (not publicMode) or public search is enabled
+	const searchable = !lychee.publicMode || lychee.public_search;
 
 	// build class_string for tag
-	let a_class = "tag";
-	if (searchable) {
-		a_class = a_class + " search";
-	}
+	const a_class = searchable ? "tag search" : "tag";
 
-	if (typeof tags === "string" && tags !== "") {
-		tags = tags.split(",");
-
-		tags.forEach(function (tag, index) {
+	if (tags !== null && tags !== "") {
+		tags.split(",").forEach(function (tag, index) {
 			if (editable) {
 				html += lychee.html`<a class='${a_class}'>$${tag}<span data-index='${index}'>${build.iconic("x")}</span></a>`;
 			} else {
@@ -513,8 +551,12 @@ build.tags = function (tags) {
 	return html;
 };
 
+/**
+ * @param {User} user
+ * @returns {string}
+ */
 build.user = function (user) {
-	let html = lychee.html`<div class="users_view_line">
+	return lychee.html`<div class="users_view_line">
 			<p id="UserData${user.id}">
 			<input name="id" type="hidden" value="${user.id}" />
 			<input class="text" name="username" type="text" value="$${user.username}" placeholder="username" />
@@ -536,10 +578,12 @@ build.user = function (user) {
 			<a id="UserDelete${user.id}"  class="basicModal__button basicModal__button_DEL">Delete</a>
 		</div>
 		`;
-
-	return html;
 };
 
+/**
+ * @param {WebAuthnCredential} credential
+ * @returns {string}
+ */
 build.u2f = function (credential) {
 	return lychee.html`<div class="u2f_view_line">
 			<p id="CredentialData${credential.id}">

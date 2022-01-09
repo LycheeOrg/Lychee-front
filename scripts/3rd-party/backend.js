@@ -14,7 +14,7 @@
  * @property {string}       id
  * @property {string}       title
  * @property {?string}      description
- * @property {string}       tags
+ * @property {?string}      tags
  * @property {number}       is_public
  * @property {?string}      type
  * @property {number}       filesize
@@ -179,4 +179,32 @@
  * @property {SmartAlbum} starred
  * @property {SmartAlbum} public
  * @property {SmartAlbum} recent
+ */
+
+/**
+ * The IDs of the built-in, smart albums.
+ *
+ * @type {Readonly<{RECENT: string, STARRED: string, PUBLIC: string, UNSORTED: string}>}
+ */
+const SmartAlbumID = Object.freeze({
+	UNSORTED: 'unsorted',
+	STARRED: 'starred',
+	PUBLIC: 'public',
+	RECENT: 'recent'
+});
+
+/**
+ * @typedef User
+ *
+ * @property {number}  id
+ * @property {string}  username
+ * @property {?string} email
+ * @property {boolean} may_upload
+ * @property {boolean} is_locked
+ */
+
+/**
+ * @typedef WebAuthnCredential
+ *
+ * @property {string} id
  */

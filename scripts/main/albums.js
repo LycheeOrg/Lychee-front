@@ -109,27 +109,20 @@ albums.parse = function (album) {
 albums._createSmartAlbums = function (data) {
 	if (data.unsorted) {
 		data.unsorted.title = lychee.locale["UNSORTED"];
-		data.unsorted.created_at = null;
-		data.unsorted.is_unsorted = true;
 	}
 
 	if (data.starred) {
 		data.starred.title = lychee.locale["STARRED"];
-		data.starred.created_at = null;
-		data.starred.is_starred = true;
 	}
 
 	if (data.public) {
 		data.public.title = lychee.locale["PUBLIC"];
-		data.public.created_at = null;
 		data.public.is_public = true;
 		data.public.requires_link = true;
 	}
 
 	if (data.recent) {
 		data.recent.title = lychee.locale["RECENT"];
-		data.recent.created_at = null;
-		data.recent.is_recent = true;
 	}
 };
 

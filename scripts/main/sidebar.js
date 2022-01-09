@@ -166,9 +166,13 @@ sidebar.secondsToHMS = function (d) {
 	var m = Math.floor((d % 3600) / 60);
 	var s = Math.floor(d % 60);
 
-	return (h > 0 ? h.toString() + "h" : "") + (m > 0 ? m.toString() + "m" : "") + (s > 0 || (h == 0 && m == 0) ? s.toString() + "s" : "");
+	return (h > 0 ? h.toString() + "h" : "") + (m > 0 ? m.toString() + "m" : "") + (s > 0 || (h === 0 && m === 0) ? s.toString() + "s" : "");
 };
 
+/**
+ * @param {Photo} data
+ * @returns void
+ */
 sidebar.createStructure.photo = function (data) {
 	if (data == null || data === "") return false;
 
@@ -245,10 +249,10 @@ sidebar.createStructure.photo = function (data) {
 		// We overload the database, storing duration (in full seconds) in
 		// "aperture" and frame rate (floating point with three digits after
 		// the decimal point) in "focal".
-		if (data.aperture != "") {
+		if (data.aperture) {
 			structure.image.rows.push({ title: lychee.locale["PHOTO_DURATION"], kind: "duration", value: sidebar.secondsToHMS(data.aperture) });
 		}
-		if (data.focal != "") {
+		if (data.focal) {
 			structure.image.rows.push({ title: lychee.locale["PHOTO_FPS"], kind: "fps", value: data.focal + " fps" });
 		}
 	}
@@ -460,7 +464,7 @@ sidebar.has_location = function (structure) {
 	let _has_location = false;
 
 	structure.forEach(function (section) {
-		if (section.title == lychee.locale["PHOTO_LOCATION"]) {
+		if (section.title === lychee.locale["PHOTO_LOCATION"]) {
 			_has_location = true;
 		}
 	});
@@ -483,21 +487,21 @@ sidebar.render = function (structure) {
 				 <table>
 				 `;
 
-		if (section.title == lychee.locale["PHOTO_LOCATION"]) {
+		if (section.title === lychee.locale["PHOTO_LOCATION"]) {
 			let _has_latitude = false;
 			let _has_longitude = false;
 
 			section.rows.forEach(function (row, index, object) {
-				if (row.kind == "latitude" && row.value !== "") {
+				if (row.kind === "latitude" && row.value !== "") {
 					_has_latitude = true;
 				}
 
-				if (row.kind == "longitude" && row.value !== "") {
+				if (row.kind === "longitude" && row.value !== "") {
 					_has_longitude = true;
 				}
 
 				// Do not show location is not enabled
-				if (row.kind == "location" && ((lychee.publicMode === true && !lychee.location_show_public) || !lychee.location_show)) {
+				if (row.kind === "location" && ((lychee.publicMode === true && !lychee.location_show_public) || !lychee.location_show)) {
 					object.splice(index, 1);
 				} else {
 					// Explode location string into an array to keep street, city etc separate

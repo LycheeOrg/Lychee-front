@@ -1,4 +1,5 @@
 let users = {
+	/** @type {?User[]} */
 	json: null,
 };
 
@@ -8,16 +9,8 @@ users.update = function (params) {
 		return false;
 	}
 
-	if ($("#UserData" + params.id + ' .choice input[name="upload"]:checked').length === 1) {
-		params.may_upload = true;
-	} else {
-		params.may_upload = false;
-	}
-	if ($("#UserData" + params.id + ' .choice input[name="lock"]:checked').length === 1) {
-		params.is_locked = true;
-	} else {
-		params.is_locked = false;
-	}
+	params.may_upload = $("#UserData" + params.id + ' .choice input[name="upload"]:checked').length === 1;
+	params.is_locked = $("#UserData" + params.id + ' .choice input[name="lock"]:checked').length === 1;
 
 	api.post("User::save", params, function () {
 		loadingBar.show("success", "User updated!");
@@ -35,16 +28,8 @@ users.create = function (params) {
 		return false;
 	}
 
-	if ($('#UserCreate .choice input[name="upload"]:checked').length === 1) {
-		params.may_upload = true;
-	} else {
-		params.may_upload = false;
-	}
-	if ($('#UserCreate .choice input[name="lock"]:checked').length === 1) {
-		params.is_locked = true;
-	} else {
-		params.is_locked = false;
-	}
+	params.may_upload = $('#UserCreate .choice input[name="upload"]:checked').length === 1;
+	params.is_locked = $('#UserCreate .choice input[name="lock"]:checked').length === 1;
 
 	api.post("User::create", params, function () {
 		loadingBar.show("success", "User created!");
@@ -60,8 +45,13 @@ users.delete = function (params) {
 };
 
 users.list = function () {
-	api.post("User::list", {}, function (data) {
-		users.json = data;
-		view.users.init();
-	});
+	api.post(
+		"User::list",
+		{},
+		/** @param {User[]} data */
+		function (data) {
+			users.json = data;
+			view.users.init();
+		}
+	);
 };
