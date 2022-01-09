@@ -3,57 +3,62 @@
  */
 
 let albums = {
+	/** @type {?Albums} */
 	json: null,
 };
 
+/**
+ * @returns void
+ */
 albums.load = function () {
 	let startTime = new Date().getTime();
 
 	lychee.animate(".content", "contentZoomOut");
 
-	if (albums.json === null) {
-		api.post("Albums::get", {}, function (data) {
-			let waitTime;
+	/**
+	 * @param {Albums} data
+	 */
+	const successCallback = function (data) {
+		// Smart Albums
+		if (data.smart_albums.length > 0) albums._createSmartAlbums(data.smart_albums);
 
-			// Smart Albums
-			if (data.smart_albums != null) albums._createSmartAlbums(data.smart_albums);
+		albums.json = data;
 
-			albums.json = data;
+		// Skip delay when opening a blank Lychee
+		const skipDelay = (!visible.albums() && !visible.photo() && !visible.album()) ||
+			(visible.album() && lychee.content.html() === "");
+		// Calculate delay
+		const durationTime = new Date().getTime() - startTime;
+		const waitTime = (durationTime > 300 || skipDelay) ? 0 : 300 - durationTime;
 
-			// Calculate delay
-			let durationTime = new Date().getTime() - startTime;
-			if (durationTime > 300) waitTime = 0;
-			else waitTime = 300 - durationTime;
+		setTimeout(() => {
+			header.setMode("albums");
+			view.albums.init();
+			lychee.animate(lychee.content, "contentZoomIn");
 
-			// Skip delay when opening a blank Lychee
-			if (!visible.albums() && !visible.photo() && !visible.album()) waitTime = 0;
-			if (visible.album() && lychee.content.html() === "") waitTime = 0;
+			tabindex.makeFocusable(lychee.content);
 
-			setTimeout(() => {
-				header.setMode("albums");
-				view.albums.init();
-				lychee.animate(lychee.content, "contentZoomIn");
-
-				tabindex.makeFocusable(lychee.content);
-
-				if (lychee.active_focus_on_page_load) {
-					// Put focus on first element - either album or photo
-					let first_album = $(".album:first");
-					if (first_album.length !== 0) {
-						first_album.focus();
-					} else {
-						let first_photo = $(".photo:first");
-						if (first_photo.length !== 0) {
-							first_photo.focus();
-						}
+			if (lychee.active_focus_on_page_load) {
+				// Put focus on first element - either album or photo
+				let first_album = $(".album:first");
+				if (first_album.length !== 0) {
+					first_album.focus();
+				} else {
+					let first_photo = $(".photo:first");
+					if (first_photo.length !== 0) {
+						first_photo.focus();
 					}
 				}
+			}
 
-				setTimeout(() => {
-					lychee.footer_show();
-				}, 300);
-			}, waitTime);
-		});
+			setTimeout(() => {
+				lychee.footer_show();
+			}, 300);
+		}, waitTime);
+	};
+
+	if (albums.json === null) {
+		api.post("Albums::get", {}, successCallback);
 	} else {
 		setTimeout(() => {
 			header.setMode("albums");
@@ -64,11 +69,11 @@ albums.load = function () {
 
 			if (lychee.active_focus_on_page_load) {
 				// Put focus on first element - either album or photo
-				first_album = $(".album:first");
+				const first_album = $(".album:first");
 				if (first_album.length !== 0) {
 					first_album.focus();
 				} else {
-					first_photo = $(".photo:first");
+					const first_photo = $(".photo:first");
 					if (first_photo.length !== 0) {
 						first_photo.focus();
 					}
@@ -78,60 +83,60 @@ albums.load = function () {
 	}
 };
 
+/**
+ * @param {Album} album
+ * @returns void
+ */
 albums.parse = function (album) {
 	if (!album.thumb) {
-		album.thumb = {};
-		album.thumb.id = "";
-		album.thumb.thumb = album.has_password ? "img/password.svg" : "img/no_images.svg";
-		album.thumb.type = "";
-		album.thumb.thumb2x = null;
+		album.thumb = {
+			id: "",
+			thumb: album.has_password ? "img/password.svg" : "img/no_images.svg",
+			type: "image/svg+xml",
+			thumb2x: null
+		};
 	}
 };
 
-// TODO: REFACTOR THIS
+/**
+ * Normalizes the built-in smart albums.
+ *
+ * TODO: REFACTOR THIS
+ *
+ * @param {SmartAlbums} data
+ * @returns void
+ */
 albums._createSmartAlbums = function (data) {
 	if (data.unsorted) {
-		data.unsorted = {
-			id: "unsorted",
-			title: lychee.locale["UNSORTED"],
-			created_at: null,
-			is_unsorted: true,
-			thumb: data.unsorted.thumb,
-		};
+		data.unsorted.title = lychee.locale["UNSORTED"];
+		data.unsorted.created_at = null;
+		data.unsorted.is_unsorted = true;
 	}
 
 	if (data.starred) {
-		data.starred = {
-			id: "starred",
-			title: lychee.locale["STARRED"],
-			created_at: null,
-			is_starred: true,
-			thumb: data.starred.thumb,
-		};
+		data.starred.title = lychee.locale["STARRED"];
+		data.starred.created_at = null;
+		data.starred.is_starred = true;
 	}
 
 	if (data.public) {
-		data.public = {
-			id: "public",
-			title: lychee.locale["PUBLIC"],
-			created_at: null,
-			is_public: true,
-			requires_link: true,
-			thumb: data.public.thumb,
-		};
+		data.public.title = lychee.locale["PUBLIC"];
+		data.public.created_at = null;
+		data.public.is_public = true;
+		data.public.requires_link = true;
 	}
 
 	if (data.recent) {
-		data.recent = {
-			id: "recent",
-			title: lychee.locale["RECENT"],
-			created_at: null,
-			is_recent: true,
-			thumb: data.recent.thumb,
-		};
+		data.recent.title = lychee.locale["RECENT"];
+		data.recent.created_at = null;
+		data.recent.is_recent = true;
 	}
 };
 
+/**
+ * @param {?string} albumID
+ * @returns {boolean}
+ */
 albums.isShared = function (albumID) {
 	if (albumID == null) return false;
 	if (!albums.json) return false;
@@ -139,7 +144,11 @@ albums.isShared = function (albumID) {
 
 	let found = false;
 
-	let func = function () {
+	/**
+	 * @this {Album}
+	 * @returns {boolean}
+	 */
+	const func = function () {
 		if (this.id === albumID) {
 			found = true;
 			return false; // stop the loop
@@ -156,18 +165,20 @@ albums.isShared = function (albumID) {
 
 /**
  * @param {?string} albumID
- * @returns {?Object}
+ * @returns {?(Album|TagAlbum|SmartAlbum)}
  */
 albums.getByID = function (albumID) {
-	// Function returns the JSON of an album
-
 	if (albumID == null) return null;
 	if (!albums.json) return null;
 	if (!albums.json.albums) return null;
 
 	let json = null;
 
-	let func = function () {
+	/**
+	 * @this {(Album|TagAlbum|SmartAlbum)}
+	 * @returns {boolean}
+	 */
+	const func = function () {
 		if (this.id === albumID) {
 			json = this;
 			return false; // stop the loop
@@ -179,57 +190,49 @@ albums.getByID = function (albumID) {
 
 	$.each(albums.json.albums, func);
 
-	if (json === null && albums.json.shared_albums !== null) $.each(albums.json.shared_albums, func);
+	if (json === null) $.each(albums.json.shared_albums, func);
 
-	if (json === null && albums.json.smart_albums !== null) $.each(albums.json.smart_albums, func);
+	if (json === null) $.each(albums.json.smart_albums, func);
 
 	return json;
 };
 
+/**
+ * Deletes an album by ID.
+ *
+ * This function is only ever invoked for top-level albums, so it doesn't
+ * need to walk the albums tree.
+ *
+ * TODO: Check above statement.
+ *
+ * The method is called by {@link album.delete} after the album has
+ * successfully been deleted at the server-side.
+ * How does this match the statement above?
+ *
+ * @param {?string} albumID
+ * @returns {void}
+ */
 albums.deleteByID = function (albumID) {
-	// Function returns the JSON of an album
-	// This function is only ever invoked for top-level albums so it
-	// doesn't need to descend down the albums tree.
+	if (albumID == null) return;
+	if (!albums.json) return;
+	if (!albums.json.albums) return;
 
-	if (albumID == null) return false;
-	if (!albums.json) return false;
-	if (!albums.json.albums) return false;
+	let idx = albums.json.albums.findIndex((a) => a.id === albumID);
+	albums.json.albums.splice(idx, 1);
 
-	let deleted = false;
+	if (idx !== -1) return;
 
-	$.each(albums.json.albums, function (i) {
-		if (albums.json.albums[i].id === albumID) {
-			albums.json.albums.splice(i, 1);
-			deleted = true;
-			return false; // stop the loop
-		}
-	});
+	idx = albums.json.shared_albums.findIndex((a) => a.id === albumID);
+	albums.json.albums.splice(idx, 1);
 
-	if (deleted === false) {
-		if (!albums.json.shared_albums) return undefined;
-		$.each(albums.json.shared_albums, function (i) {
-			if (albums.json.shared_albums[i].id === albumID) {
-				albums.json.shared_albums.splice(i, 1);
-				deleted = true;
-				return false; // stop the loop
-			}
-		});
-	}
+	if (idx !== -1) return;
 
-	if (deleted === false) {
-		if (!albums.json.smart_albums) return undefined;
-		$.each(albums.json.smart_albums, function (i) {
-			if (albums.json.smart_albums[i].id === albumID) {
-				delete albums.json.smart_albums[i];
-				deleted = true;
-				return false; // stop the loop
-			}
-		});
-	}
-
-	return deleted;
+	delete albums.json.smart_albums[albumID];
 };
 
+/**
+ * @returns void
+ */
 albums.refresh = function () {
 	albums.json = null;
 };

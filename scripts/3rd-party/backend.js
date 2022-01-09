@@ -161,3 +161,22 @@
  * @property {(Album|TagAlbum)[]} albums
  * @property {Photo[]}            photos
  */
+
+/**
+ * @typedef Albums
+ *
+ * @property {SmartAlbums} smart_albums - despite the name also includes tag albums
+ * @property {Album[]}     albums
+ * @property {Album[]}     shared_albums
+ */
+
+/**
+ * @typedef SmartAlbums
+ *
+ * @type {Object.<string, TagAlbum>}
+ *
+ * @property {SmartAlbum} unsorted
+ * @property {SmartAlbum} starred
+ * @property {SmartAlbum} public
+ * @property {SmartAlbum} recent
+ */
