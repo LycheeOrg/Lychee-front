@@ -286,6 +286,17 @@
 			font-weight: bold;
 		}
 	}
+	// Description ---------------------------------------------------------- //
+	.album_description {
+		width: 100%;
+		p {
+			margin: 10px 0 -20px 30px;
+			color: white;
+			font-size: 14px;
+			line-height: 19px;
+			white-space: pre-wrap;
+		}
+	}
 }
 
 // responsive web design for smaller screens
@@ -342,6 +353,11 @@
 			h1 {
 				margin: 0 0 6px 8px;
 				font-size: 12px;
+			}
+		}
+		.album_description {
+			p {
+				margin: 10px 0 -10px;
 			}
 		}
 	}
@@ -401,6 +417,11 @@
 				margin: 0 0 6px 10px;
 			}
 		}
+		.album_description {
+			p {
+				margin: 10px 0 -14px;
+			}
+		}
 	}
 }
 
@@ -456,6 +477,11 @@
 			}
 			h1 {
 				margin: 0 0 6px 10px;
+			}
+		}
+		.album_description {
+			p {
+				margin: 10px 0 -18px;
 			}
 		}
 	}
