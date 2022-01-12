@@ -87,14 +87,18 @@ photo.isLivePhotoPlaying = function () {
 	return photo.LivePhotosObject.isPlaying;
 };
 
+photo.update_display_overlay = function () {
+	$("#image_overlay").remove();
+	let newoverlay = build.overlay_image(photo.json);
+	if (newoverlay !== "") lychee.imageview.append(newoverlay);
+};
+
 photo.cycle_display_overlay = function () {
 	let oldtype = build.check_overlay_type(photo.json, lychee.image_overlay_type);
 	let newtype = build.check_overlay_type(photo.json, oldtype, true);
 	if (oldtype !== newtype) {
 		lychee.image_overlay_type = newtype;
-		$("#image_overlay").remove();
-		let newoverlay = build.overlay_image(photo.json);
-		if (newoverlay !== "") lychee.imageview.append(newoverlay);
+		photo.update_display_overlay();
 	}
 };
 
@@ -349,6 +353,7 @@ photo.setTitle = function (photoIDs) {
 		if (visible.photo()) {
 			photo.json.title = newTitle === "" ? "Untitled" : newTitle;
 			view.photo.title();
+			photo.update_display_overlay();
 		}
 
 		photoIDs.forEach(function (id) {
@@ -668,14 +673,16 @@ photo.setPublic = function (photoID, e) {
 photo.setDescription = function (photoID) {
 	let oldDescription = photo.json.description ? photo.json.description : "";
 
-	const action = function (data) {
-		basicModal.close();
+	const action = function () {
+		let description = $("#photo_desc").val();
+		if (description === "") description = null;
 
-		let description = data.description ? data.description : null;
+		basicModal.close();
 
 		if (visible.photo()) {
 			photo.json.description = description;
 			view.photo.description();
+			photo.update_display_overlay();
 		}
 
 		let params = {
@@ -691,7 +698,7 @@ photo.setDescription = function (photoID) {
 	};
 
 	basicModal.show({
-		body: lychee.html`<p>${lychee.locale["PHOTO_NEW_DESCRIPTION"]} <input class='text' name='description' type='text' maxlength='800' placeholder='${lychee.locale["PHOTO_DESCRIPTION"]}' value='$${oldDescription}'></p>`,
+		body: lychee.html`<p>${lychee.locale["PHOTO_NEW_DESCRIPTION"]} <textarea id='photo_desc' placeholder='${lychee.locale["PHOTO_DESCRIPTION"]}'}'></textarea></p>`,
 		buttons: {
 			action: {
 				title: lychee.locale["PHOTO_SET_DESCRIPTION"],
@@ -703,6 +710,7 @@ photo.setDescription = function (photoID) {
 			},
 		},
 	});
+	$("#photo_desc").html(oldDescription).select();
 };
 
 photo.editTags = function (photoIDs) {

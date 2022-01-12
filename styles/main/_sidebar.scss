@@ -208,6 +208,10 @@
 			cursor: pointer;
 		}
 	}
+
+	.attr_description {
+		white-space: pre-wrap;
+	}
 }
 
 // restrict hover features to devices that support it

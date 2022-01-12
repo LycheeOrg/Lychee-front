@@ -458,8 +458,9 @@ album.setTitle = function (albumIDs) {
 album.setDescription = function (albumID) {
 	let oldDescription = album.json.description ? album.json.description : "";
 
-	const action = function (data) {
-		let description = data.description ? data.description : null;
+	const action = function () {
+		let description = $("#album_desc").val();
+		if (description === "") description = null;
 
 		basicModal.close();
 
@@ -481,7 +482,7 @@ album.setDescription = function (albumID) {
 	};
 
 	basicModal.show({
-		body: lychee.html`<p>${lychee.locale["ALBUM_NEW_DESCRIPTION"]}<input class='text' name='description' type='text' maxlength='800' placeholder='$${lychee.locale["ALBUM_DESCRIPTION"]}' value='$${oldDescription}'></p>`,
+		body: lychee.html`<p>${lychee.locale["ALBUM_NEW_DESCRIPTION"]}<textarea id='album_desc' placeholder='$${lychee.locale["ALBUM_DESCRIPTION"]}'></textarea></p>`,
 		buttons: {
 			action: {
 				title: lychee.locale["ALBUM_SET_DESCRIPTION"],
@@ -493,6 +494,7 @@ album.setDescription = function (albumID) {
 			},
 		},
 	});
+	$("#album_desc").html(oldDescription).select();
 };
 
 album.toggleCover = function (photoID) {
