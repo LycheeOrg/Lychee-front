@@ -188,7 +188,7 @@ $(document).ready(function () {
 		}
 		let clicked = false;
 		$(":focus").each(function () {
-			if (!$(this).is("input")) {
+			if (!$(this).is("input") && !$(this).is("textarea")) {
 				$(this).click();
 				clicked = true;
 			}
