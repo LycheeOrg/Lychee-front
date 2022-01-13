@@ -814,6 +814,9 @@ lychee.loadDropbox = function (callback) {
 	}
 };
 
+/**
+ * @returns {string}
+ */
 lychee.getEventName = function () {
 	if (lychee.device_type === "mobile") {
 		return "touchend";

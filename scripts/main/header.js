@@ -2,15 +2,26 @@
  * @description This module takes care of the header.
  */
 
-let header = {
+/**
+ * @namespace
+ * @property {jQuery} _dom
+ */
+const header = {
 	_dom: $(".header"),
 };
 
+/**
+ * @param {?string} [selector=null]
+ * @returns {jQuery}
+ */
 header.dom = function (selector) {
 	if (selector == null || selector === "") return header._dom;
 	return header._dom.find(selector);
 };
 
+/**
+ * @returns {void}
+ */
 header.bind = function () {
 	// Event Name
 	let eventName = lychee.getEventName();
@@ -137,13 +148,14 @@ header.bind = function () {
 	});
 
 	header.bind_back();
-
-	return true;
 };
 
+/**
+ * @return {void}
+ */
 header.bind_back = function () {
 	// Event Name
-	let eventName = lychee.getEventName();
+	const eventName = lychee.getEventName();
 
 	header.dom(".header__title").on(eventName, function () {
 		if (lychee.landing_page_enable && visible.albums()) {
@@ -154,6 +166,9 @@ header.bind_back = function () {
 	});
 };
 
+/**
+ * @returns {void}
+ */
 header.show = function () {
 	lychee.imageview.removeClass("full");
 	header.dom().removeClass("header--hidden");
@@ -161,16 +176,19 @@ header.show = function () {
 	tabindex.restoreSettings(header.dom());
 
 	photo.updateSizeLivePhotoDuringAnimation();
-
-	return true;
 };
 
+/**
+ * @returns {void}
+ */
 header.hideIfLivePhotoNotPlaying = function () {
 	// Hides the header, if current live photo is not playing
-	if (photo.isLivePhotoPlaying()) return false;
-	return header.hide();
+	if (!photo.isLivePhotoPlaying()) header.hide();
 };
 
+/**
+ * @returns {void}
+ */
 header.hide = function () {
 	if (visible.photo() && !visible.sidebar() && !visible.contextMenu() && basicModal.visible() === false) {
 		tabindex.saveSettings(header.dom());
@@ -180,22 +198,26 @@ header.hide = function () {
 		header.dom().addClass("header--hidden");
 
 		photo.updateSizeLivePhotoDuringAnimation();
-
-		return true;
 	}
-
-	return false;
 };
 
+/**
+ * @param {string} [title="Untitled"]
+ * @returns {void}
+ */
 header.setTitle = function (title = "Untitled") {
 	let $title = header.dom(".header__title");
 	let html = lychee.html`$${title}${build.iconic("caret-bottom")}`;
 
 	$title.html(html);
-
-	return true;
 };
 
+/**
+ *
+ * @param {string} mode either one out of `"public"`, `"albums"`, `"album"`,
+ *                      `"photo"`, `"map"` or `"config"`
+ * @returns {void}
+ */
 header.setMode = function (mode) {
 	if (mode === "albums" && lychee.publicMode === true) mode = "public";
 
@@ -214,22 +236,22 @@ header.setMode = function (mode) {
 			);
 
 			if (lychee.public_search) {
-				let e = $(".header__search, .header__clear", ".header__toolbar--public");
+				const e = $(".header__search, .header__clear", ".header__toolbar--public");
 				e.show();
 				tabindex.makeFocusable(e);
 			} else {
-				let e = $(".header__search, .header__clear", ".header__toolbar--public");
+				const e = $(".header__search, .header__clear", ".header__toolbar--public");
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 
 			// Set icon in Public mode
 			if (lychee.map_display_public) {
-				let e = $(".button--map-albums", ".header__toolbar--public");
+				const e = $(".button--map-albums", ".header__toolbar--public");
 				e.show();
 				tabindex.makeFocusable(e);
 			} else {
-				let e = $(".button--map-albums", ".header__toolbar--public");
+				const e = $(".button--map-albums", ".header__toolbar--public");
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
@@ -238,7 +260,7 @@ header.setMode = function (mode) {
 			if (lychee.active_focus_on_page_load) {
 				$("#button_signin").focus();
 			}
-			return true;
+			return;
 
 		case "albums":
 			header.dom().removeClass("header--view");
@@ -256,28 +278,28 @@ header.setMode = function (mode) {
 
 			// If map is disabled, we should hide the icon
 			if (lychee.map_display) {
-				let e = $(".button--map-albums", ".header__toolbar--albums");
+				const e = $(".button--map-albums", ".header__toolbar--albums");
 				e.show();
 				tabindex.makeFocusable(e);
 			} else {
-				let e = $(".button--map-albums", ".header__toolbar--albums");
+				const e = $(".button--map-albums", ".header__toolbar--albums");
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 
 			if (lychee.enable_button_add) {
-				let e = $(".button_add", ".header__toolbar--albums");
+				const e = $(".button_add", ".header__toolbar--albums");
 				e.show();
 				tabindex.makeFocusable(e);
 			} else {
-				let e = $(".button_add", ".header__toolbar--albums");
+				const e = $(".button_add", ".header__toolbar--albums");
 				e.remove();
 			}
 
-			return true;
+			return;
 
 		case "album":
-			let albumID = album.getID();
+			const albumID = album.getID();
 
 			header.dom().removeClass("header--view");
 			header
@@ -299,37 +321,37 @@ header.setMode = function (mode) {
 				(album.json.photos.length === 0 && album.json.albums && album.json.albums.length === 0) ||
 				(!album.isUploadable() && !album.json.is_downloadable)
 			) {
-				let e = $("#button_archive");
+				const e = $("#button_archive");
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			} else {
-				let e = $("#button_archive");
+				const e = $("#button_archive");
 				e.show();
 				tabindex.makeFocusable(e);
 			}
 
 			if (album.json && album.json.hasOwnProperty("is_share_button_visible") && !album.json.is_share_button_visible) {
-				let e = $("#button_share_album");
+				const e = $("#button_share_album");
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			} else {
-				let e = $("#button_share_album");
+				const e = $("#button_share_album");
 				e.show();
 				tabindex.makeFocusable(e);
 			}
 
 			// If map is disabled, we should hide the icon
 			if (lychee.publicMode === true ? lychee.map_display_public : lychee.map_display) {
-				let e = $("#button_map_album");
+				const e = $("#button_map_album");
 				e.show();
 				tabindex.makeFocusable(e);
 			} else {
-				let e = $("#button_map_album");
+				const e = $("#button_map_album");
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 
-			if (albumID === "starred" || albumID === "public" || albumID === "recent") {
+			if (albumID === SmartAlbumID.STARRED || albumID === SmartAlbumID.PUBLIC || albumID === SmartAlbumID.RECENT) {
 				$(
 					"#button_nsfw_album, #button_info_album, #button_trash_album, #button_visibility_album, #button_sharing_album_users, #button_move_album"
 				).hide();
@@ -345,7 +367,7 @@ header.setMode = function (mode) {
 						"#button_nsfw_album, #button_info_album, #button_trash_album, #button_visibility_album, #button_sharing_album_users, #button_move_album"
 					)
 				);
-			} else if (albumID === "unsorted") {
+			} else if (albumID === SmartAlbumID.UNSORTED) {
 				$("#button_nsfw_album, #button_info_album, #button_visibility_album, #button_sharing_album_users, #button_move_album").hide();
 				$("#button_trash_album, .button_add, .header__divider", ".header__toolbar--album").show();
 				tabindex.makeFocusable($("#button_trash_album, .button_add, .header__divider", ".header__toolbar--album"));
@@ -405,35 +427,35 @@ header.setMode = function (mode) {
 
 			// Remove buttons if needed
 			if (!lychee.enable_button_visibility) {
-				let e = $("#button_visibility_album", "#button_sharing_album_users", ".header__toolbar--album");
+				const e = $("#button_visibility_album", "#button_sharing_album_users", ".header__toolbar--album");
 				e.remove();
 			}
 			if (!lychee.enable_button_share) {
-				let e = $("#button_share_album", ".header__toolbar--album");
+				const e = $("#button_share_album", ".header__toolbar--album");
 				e.remove();
 			}
 			if (!lychee.enable_button_archive) {
-				let e = $("#button_archive", ".header__toolbar--album");
+				const e = $("#button_archive", ".header__toolbar--album");
 				e.remove();
 			}
 			if (!lychee.enable_button_move) {
-				let e = $("#button_move_album", ".header__toolbar--album");
+				const e = $("#button_move_album", ".header__toolbar--album");
 				e.remove();
 			}
 			if (!lychee.enable_button_trash) {
-				let e = $("#button_trash_album", ".header__toolbar--album");
+				const e = $("#button_trash_album", ".header__toolbar--album");
 				e.remove();
 			}
 			if (!lychee.enable_button_fullscreen || !lychee.fullscreenAvailable()) {
-				let e = $("#button_fs_album_enter", ".header__toolbar--album");
+				const e = $("#button_fs_album_enter", ".header__toolbar--album");
 				e.remove();
 			}
 			if (!lychee.enable_button_add) {
-				let e = $(".button_add", ".header__toolbar--album");
+				const e = $(".button_add", ".header__toolbar--album");
 				e.remove();
 			}
 
-			return true;
+			return;
 
 		case "photo":
 			header.dom().addClass("header--view");
@@ -450,31 +472,31 @@ header.setMode = function (mode) {
 			);
 			// If map is disabled, we should hide the icon
 			if (lychee.publicMode === true ? lychee.map_display_public : lychee.map_display) {
-				let e = $("#button_map");
+				const e = $("#button_map");
 				e.show();
 				tabindex.makeFocusable(e);
 			} else {
-				let e = $("#button_map");
+				const e = $("#button_map");
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 
 			if (album.isUploadable()) {
-				let e = $("#button_trash, #button_move, #button_visibility, #button_star");
+				const e = $("#button_trash, #button_move, #button_visibility, #button_star");
 				e.show();
 				tabindex.makeFocusable(e);
 			} else {
-				let e = $("#button_trash, #button_move, #button_visibility, #button_star");
+				const e = $("#button_trash, #button_move, #button_visibility, #button_star");
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 
 			if (photo.json && photo.json.hasOwnProperty("is_share_button_visible") && !photo.json.is_share_button_visible) {
-				let e = $("#button_share");
+				const e = $("#button_share");
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			} else {
-				let e = $("#button_share");
+				const e = $("#button_share");
 				e.show();
 				tabindex.makeFocusable(e);
 			}
@@ -489,34 +511,34 @@ header.setMode = function (mode) {
 				) &&
 				!(photo.json.size_variants.original.url && photo.json.size_variants.original.url !== "")
 			) {
-				let e = $("#button_more");
+				const e = $("#button_more");
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 
 			// Remove buttons if needed
 			if (!lychee.enable_button_visibility) {
-				let e = $("#button_visibility", ".header__toolbar--photo");
+				const e = $("#button_visibility", ".header__toolbar--photo");
 				e.remove();
 			}
 			if (!lychee.enable_button_share) {
-				let e = $("#button_share", ".header__toolbar--photo");
+				const e = $("#button_share", ".header__toolbar--photo");
 				e.remove();
 			}
 			if (!lychee.enable_button_move) {
-				let e = $("#button_move", ".header__toolbar--photo");
+				const e = $("#button_move", ".header__toolbar--photo");
 				e.remove();
 			}
 			if (!lychee.enable_button_trash) {
-				let e = $("#button_trash", ".header__toolbar--photo");
+				const e = $("#button_trash", ".header__toolbar--photo");
 				e.remove();
 			}
 			if (!lychee.enable_button_fullscreen || !lychee.fullscreenAvailable()) {
-				let e = $("#button_fs_enter", ".header__toolbar--photo");
+				const e = $("#button_fs_enter", ".header__toolbar--photo");
 				e.remove();
 			}
 			if (!lychee.enable_button_more) {
-				let e = $("#button_more", ".header__toolbar--photo");
+				const e = $("#button_more", ".header__toolbar--photo");
 				e.remove();
 			}
 			if (!lychee.enable_button_rotate) {
@@ -526,7 +548,7 @@ header.setMode = function (mode) {
 				e = $("#button_rotate_ccwise", ".header__toolbar--photo");
 				e.remove();
 			}
-			return true;
+			return;
 		case "map":
 			header.dom().removeClass("header--view");
 			header
@@ -540,27 +562,28 @@ header.setMode = function (mode) {
 					".header__toolbar--public, .header__toolbar--album, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--config"
 				)
 			);
-			return true;
+			return;
 		case "config":
 			header.dom().addClass("header--view");
 			header
 				.dom(".header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map")
 				.removeClass("header__toolbar--visible");
 			header.dom(".header__toolbar--config").addClass("header__toolbar--visible");
-			return true;
+			return;
 	}
-
-	return false;
 };
 
-// Note that the pull-down menu is now enabled not only for editable
-// items but for all of public/albums/album/photo views, so 'editable' is a
-// bit of a misnomer at this point...
+/**
+ * Note that the pull-down menu is now enabled not only for editable
+ * items but for all of public/albums/album/photo views, so 'editable' is a
+ * bit of a misnomer at this point...
+ *
+ * @param {boolean} editable
+ * @returns {void}
+ */
 header.setEditable = function (editable) {
-	let $title = header.dom(".header__title");
+	const $title = header.dom(".header__title");
 
 	if (editable) $title.addClass("header__title--editable");
 	else $title.removeClass("header__title--editable");
-
-	return true;
 };

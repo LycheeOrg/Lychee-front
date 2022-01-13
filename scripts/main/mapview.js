@@ -264,22 +264,27 @@ mapview.close = function () {
 	$("#mapview").hide();
 	header.setMode("album");
 
-	// Make album focussable
+	// Make album focusable
 	tabindex.makeFocusable(lychee.content);
 };
 
+/**
+ * @param {jQuery} elem
+ * @returns {void}
+ */
 mapview.goto = function (elem) {
 	// If map functionality is disabled -> do nothing
 	if (!lychee.map_display) return;
 
-	var photoID = elem.attr("data-id");
-	var albumID = elem.attr("data-album-id");
+	const photoID = elem.attr("data-id");
+	let albumID = elem.attr("data-album-id");
 
-	if (albumID == "null") albumID = 0;
+	if (albumID === "null") albumID = null;
 
 	if (album.json == null || albumID !== album.json.id) {
 		album.refresh();
 	}
 
+	// TODO: This line looks suspicious, if `albumID === null` this doesn't make much sense
 	lychee.goto(albumID + "/" + photoID);
 };

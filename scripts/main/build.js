@@ -4,7 +4,7 @@
  * @description This module is used to generate HTML-Code.
  */
 
-let build = {};
+const build = {};
 
 /**
  * @param {string} icon

@@ -2,7 +2,7 @@
  * @description This module is used for the context menu.
  */
 
-let contextMenu = {};
+const contextMenu = {};
 
 /**
  * @param {jQuery.Event} e

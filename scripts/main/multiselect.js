@@ -93,6 +93,12 @@ multiselect.removeItem = function (object, id) {
 	multiselect.lastClicked = object;
 };
 
+/**
+ * @param {jQuery.Event} e
+ * @param {jQuery} albumObj
+ *
+ * @returns {void}
+ */
 multiselect.albumClick = function (e, albumObj) {
 	let id = albumObj.attr("data-id");
 
@@ -124,6 +130,12 @@ multiselect.albumClick = function (e, albumObj) {
 	}
 };
 
+/**
+ * @param {jQuery.Event} e
+ * @param {jQuery} photoObj
+ *
+ * @returns {void}
+ */
 multiselect.photoClick = function (e, photoObj) {
 	let id = photoObj.attr("data-id");
 
@@ -155,6 +167,12 @@ multiselect.photoClick = function (e, photoObj) {
 	}
 };
 
+/**
+ * @param {jQuery.Event} e
+ * @param {jQuery} albumObj
+ *
+ * @returns {void}
+ */
 multiselect.albumContextMenu = function (e, albumObj) {
 	let id = albumObj.attr("data-id");
 	let selected = multiselect.isSelected(id).selected;
@@ -168,6 +186,12 @@ multiselect.albumContextMenu = function (e, albumObj) {
 	}
 };
 
+/**
+ * @param {jQuery.Event} e
+ * @param {jQuery} photoObj
+ *
+ * @returns {void}
+ */
 multiselect.photoContextMenu = function (e, photoObj) {
 	let id = photoObj.attr("data-id");
 	let selected = multiselect.isSelected(id).selected;

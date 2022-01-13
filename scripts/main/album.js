@@ -2,7 +2,7 @@
  * @description Takes care of every action an album can handle and execute.
  */
 
-let album = {
+const album = {
 	/** @type {?(Album|TagAlbum)} */
 	json: null,
 };

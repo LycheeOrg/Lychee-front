@@ -6,7 +6,7 @@ $(document).ready(function () {
 	$("#sensitive_warning").hide();
 
 	// Event Name
-	let eventName = lychee.getEventName();
+	const eventName = lychee.getEventName();
 
 	// set CSRF protection (Laravel)
 	csrf.bind();
@@ -24,9 +24,9 @@ $(document).ready(function () {
 
 	// Image View
 	lychee.imageview
-		.on(eventName, ".arrow_wrapper--previous", photo.previous)
-		.on(eventName, ".arrow_wrapper--next", photo.next)
-		.on(eventName, "img, #livephoto", photo.cycle_display_overlay);
+		.on(eventName, ".arrow_wrapper--previous", () => photo.previous(false))
+		.on(eventName, ".arrow_wrapper--next", () => photo.next(false))
+		.on(eventName, "img, #livephoto", () => photo.cycle_display_overlay());
 
 	// Keyboard
 	Mousetrap.addKeycodes({
@@ -229,7 +229,7 @@ $(document).ready(function () {
 
 	$(document)
 		// Fullscreen on mobile
-		.on("touchend", "#imageview #image", function (e) {
+		.on("touchend", "#imageview #image", function () {
 			// prevent triggering event 'mousemove'
 			// why? this also prevents 'click' from firing which results in unexpected behaviour
 			// unable to reproduce problems arising from 'mousemove' on iOS devices
@@ -240,7 +240,7 @@ $(document).ready(function () {
 				// In this case, swipe.preventNextHeaderToggle is set to true
 				if (typeof swipe.preventNextHeaderToggle === "undefined" || !swipe.preventNextHeaderToggle) {
 					if (visible.header()) {
-						header.hide(e);
+						header.hide();
 					} else {
 						header.show();
 					}
@@ -257,28 +257,28 @@ $(document).ready(function () {
 			if (visible.photo()) swipe.start($("#imageview #image, #imageview #livephoto"));
 		})
 		.swipe()
-		.on("swipeMove", function (e) {
+		.on("swipeMove", /** @param {jQuery.Event} e */ function (e) {
 			if (visible.photo()) swipe.move(e.swipe);
 		})
 		.swipe()
-		.on("swipeEnd", function (e) {
+		.on("swipeEnd", /** @param {jQuery.Event} e */ function (e) {
 			if (visible.photo()) swipe.stop(e.swipe, photo.previous, photo.next);
 		});
 
 	// Document
 	$(document)
 		// Navigation
-		.on("click", ".album", function (e) {
+		.on("click", ".album", /** @param {jQuery.Event} e */ function (e) {
 			multiselect.albumClick(e, $(this));
 		})
-		.on("click", ".photo", function (e) {
+		.on("click", ".photo", /** @param {jQuery.Event} e */ function (e) {
 			multiselect.photoClick(e, $(this));
 		})
 		// Context Menu
-		.on("contextmenu", ".photo", function (e) {
+		.on("contextmenu", ".photo", /** @param {jQuery.Event} e */ function (e) {
 			multiselect.photoContextMenu(e, $(this));
 		})
-		.on("contextmenu", ".album", function (e) {
+		.on("contextmenu", ".album", /** @param {jQuery.Event} e */ function (e) {
 			multiselect.albumContextMenu(e, $(this));
 		})
 		// Upload
@@ -294,7 +294,7 @@ $(document).ready(function () {
 			},
 			false
 		)
-		.on("drop", function (e) {
+		.on("drop", /** @param {jQuery.Event} e */ function (e) {
 			if (
 				!album.isUploadable() ||
 				visible.contextMenu() ||
@@ -313,11 +313,11 @@ $(document).ready(function () {
 			return false;
 		})
 		// click on thumbnail on map
-		.on("click", ".image-leaflet-popup", function (e) {
+		.on("click", ".image-leaflet-popup", function () {
 			mapview.goto($(this));
 		})
 		// Paste upload
-		.on("paste", function (e) {
+		.on("paste", /** @param {jQuery.Event} e */ function (e) {
 			if (e.originalEvent.clipboardData.items) {
 				const items = e.originalEvent.clipboardData.items;
 				let filesToUpload = [];
@@ -353,6 +353,10 @@ $(document).ready(function () {
 
 	$("#sensitive_warning").on("click", view.album.nsfw_warning.next);
 
+	/**
+	 * @param {number} scrollPos
+	 * @returns {void}
+	 */
 	const rememberScrollPage = function (scrollPos) {
 		if ((visible.albums() && !visible.search()) || visible.album()) {
 			let urls = JSON.parse(localStorage.getItem("scroll"));
