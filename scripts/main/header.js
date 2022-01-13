@@ -82,7 +82,7 @@ header.bind = function () {
 	header.dom("#button_move_album").on(eventName, function (e) {
 		contextMenu.move([album.getID()], e, album.setAlbum, "ROOT", album.getParentID() != null);
 	});
-	header.dom("#button_nsfw_album").on(eventName, function (e) {
+	header.dom("#button_nsfw_album").on(eventName, function () {
 		album.setNSFW(album.getID());
 	});
 	header.dom("#button_move").on(eventName, function (e) {
@@ -167,7 +167,7 @@ header.show = function () {
 
 header.hideIfLivePhotoNotPlaying = function () {
 	// Hides the header, if current live photo is not playing
-	if (photo.isLivePhotoPlaying() == true) return false;
+	if (photo.isLivePhotoPlaying()) return false;
 	return header.hide();
 };
 
