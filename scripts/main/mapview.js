@@ -186,13 +186,13 @@ mapview.open = function (albumID = null) {
 				photos.push({
 					lat: parseFloat(element.latitude),
 					lng: parseFloat(element.longitude),
-					thumbnail: element.sizeVariants.thumb !== null ? element.sizeVariants.thumb.url : "img/placeholder.png",
-					thumbnail2x: element.sizeVariants.thumb2x !== null ? element.sizeVariants.thumb2x.url : null,
-					url: element.sizeVariants.small !== null ? element.sizeVariants.small.url : element.url,
-					url2x: element.sizeVariants.small2x !== null ? element.sizeVariants.small2x.url : null,
+					thumbnail: element.size_variants.thumb !== null ? element.size_variants.thumb.url : "img/placeholder.png",
+					thumbnail2x: element.size_variants.thumb2x !== null ? element.size_variants.thumb2x.url : null,
+					url: element.size_variants.small !== null ? element.size_variants.small.url : element.url,
+					url2x: element.size_variants.small2x !== null ? element.size_variants.small2x.url : null,
 					name: element.title,
 					taken_at: element.taken_at,
-					albumID: element.album,
+					albumID: element.album_id,
 					photoID: element.id,
 				});
 
@@ -224,56 +224,27 @@ mapview.open = function (albumID = null) {
 	// Possible enhancement could be to only have a single ajax call
 	const getAlbumData = function (_albumID, _includeSubAlbums = true) {
 		if (_albumID !== "" && _albumID !== null) {
-			// _ablumID has been to a specific album
+			// _albumID has been specified
 			let params = {
 				albumID: _albumID,
 				includeSubAlbums: _includeSubAlbums,
-				password: "",
 			};
 
 			api.post("Album::getPositionData", params, function (data) {
-				if (data === "Warning: Wrong password!") {
-					password.getDialog(_albumID, function () {
-						params.password = password.value;
-
-						api.post("Album::getPositionData", params, function (_data) {
-							addPhotosToMap(_data);
-							mapview.title(_albumID, _data.title);
-						});
-					});
-				} else {
-					addPhotosToMap(data);
-					mapview.title(_albumID, data.title);
-				}
+				addPhotosToMap(data);
+				mapview.title(_albumID, data.title);
 			});
 		} else {
 			// AlbumID is empty -> fetch all photos of all albums
-			// _ablumID has been to a specific album
-			let params = {
-				includeSubAlbums: _includeSubAlbums,
-				password: "",
-			};
-
-			api.post("Albums::getPositionData", params, function (data) {
-				if (data === "Warning: Wrong password!") {
-					password.getDialog(_albumID, function () {
-						params.password = password.value;
-
-						api.post("Albums::getPositionData", params, function (_data) {
-							addPhotosToMap(_data);
-							mapview.title(_albumID, _data.title);
-						});
-					});
-				} else {
-					addPhotosToMap(data);
-					mapview.title(_albumID, data.title);
-				}
+			api.post("Albums::getPositionData", {}, function (data) {
+				addPhotosToMap(data);
+				mapview.title(_albumID, data.title);
 			});
 		}
 	};
 
-	// If subalbums not being included and album.json already has all data
-	// -> we can reuse it
+	// If sub-albums are not requested and album.json already has all data,
+	// we reuse it
 	if (lychee.map_include_subalbums === false && album.json !== null && album.json.photos !== null) {
 		addPhotosToMap(album.json);
 	} else {

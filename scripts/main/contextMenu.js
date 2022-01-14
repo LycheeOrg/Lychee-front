@@ -37,7 +37,7 @@ contextMenu.add = function (e) {
 			// For tag albums the context menu is normally not used.
 			items = [];
 		}
-		if (Number.isInteger(parseInt(albumID)) || albumID === "unsorted") {
+		if (albumID.length === 24 || albumID === "unsorted") {
 			if (albumID !== "unsorted") {
 				let button_visibility_album = $("#button_visibility_album");
 				if (button_visibility_album && button_visibility_album.css("display") === "none") {
@@ -63,7 +63,7 @@ contextMenu.add = function (e) {
 						items.unshift({
 							title: build.iconic("folder") + lychee.locale["MOVE_ALBUM"],
 							visible: lychee.enable_button_move,
-							fn: (event) => contextMenu.move([albumID], event, album.setAlbum, "ROOT", album.getParent() !== ""),
+							fn: (event) => contextMenu.move([albumID], event, album.setAlbum, "ROOT", album.getParentID() !== null),
 						});
 					}
 				}
@@ -184,7 +184,7 @@ contextMenu.albumMulti = function (albumIDs, e) {
 contextMenu.buildList = function (lists, exclude, action, parent = 0, layer = 0) {
 	const find = function (excl, id) {
 		for (let i = 0; i < excl.length; i++) {
-			if (parseInt(excl[i], 10) === parseInt(id, 10)) return true;
+			if (excl[i] === id) return true;
 		}
 		return false;
 	};
@@ -205,13 +205,13 @@ contextMenu.buildList = function (lists, exclude, action, parent = 0, layer = 0)
 				} else {
 					thumb = item.thumb.thumb;
 				}
-			} else if (item.sizeVariants) {
-				if (item.sizeVariants.thumb === null) {
+			} else if (item.size_variants) {
+				if (item.size_variants.thumb === null) {
 					if (item.type && item.type.indexOf("video") > -1) {
 						thumb = "img/play-icon.png";
 					}
 				} else {
-					thumb = item.sizeVariants.thumb.url;
+					thumb = item.size_variants.thumb.url;
 				}
 			}
 
@@ -259,9 +259,7 @@ contextMenu.albumTitle = function (albumID, e) {
 
 		if (data.shared_albums && data.shared_albums.length > 0) {
 			items = items.concat({});
-			items = items.concat(
-				contextMenu.buildList(data.shared_albums, albumID !== false ? [parseInt(albumID, 10)] : [], (a) => lychee.goto(a.id))
-			);
+			items = items.concat(contextMenu.buildList(data.shared_albums, albumID !== false ? [albumID] : [], (a) => lychee.goto(a.id)));
 		}
 
 		if (albumID !== false && !album.isSmartID(albumID) && album.isUploadable()) {
@@ -293,7 +291,7 @@ contextMenu.photo = function (photoID, e) {
 			title: build.iconic("layers") + lychee.locale["COPY_TO"],
 			fn: () => {
 				basicContext.close();
-				contextMenu.move([photoID], e, photo.copyTo, "UNSORTED");
+				contextMenu.move([photoID], e, photo.copyTo);
 			},
 		},
 		// Notice for 'Move':
@@ -303,7 +301,7 @@ contextMenu.photo = function (photoID, e) {
 			title: build.iconic("folder") + lychee.locale["MOVE"],
 			fn: () => {
 				basicContext.close();
-				contextMenu.move([photoID], e, photo.setAlbum, "UNSORTED");
+				contextMenu.move([photoID], e, photo.setAlbum);
 			},
 		},
 		{ title: build.iconic("trash") + lychee.locale["DELETE"], fn: () => photo.delete([photoID]) },
@@ -367,14 +365,14 @@ contextMenu.photoMulti = function (photoIDs, e) {
 			title: build.iconic("layers") + lychee.locale["COPY_ALL_TO"],
 			fn: () => {
 				basicContext.close();
-				contextMenu.move(photoIDs, e, photo.copyTo, "UNSORTED");
+				contextMenu.move(photoIDs, e, photo.copyTo);
 			},
 		},
 		{
 			title: build.iconic("folder") + lychee.locale["MOVE_ALL"],
 			fn: () => {
 				basicContext.close();
-				contextMenu.move(photoIDs, e, photo.setAlbum, "UNSORTED");
+				contextMenu.move(photoIDs, e, photo.setAlbum);
 			},
 		},
 		{ title: build.iconic("trash") + lychee.locale["DELETE_ALL"], fn: () => photo.delete(photoIDs) },
@@ -410,10 +408,10 @@ contextMenu.photoMore = function (photoID, e) {
 	// c) or, the album is explicitly marked as downloadable
 	let showDownload =
 		album.isUploadable() ||
-		(photo.json.hasOwnProperty("downloadable")
-			? photo.json.downloadable === "1"
-			: album.json && album.json.downloadable && album.json.downloadable === "1");
-	let showFull = photo.json.url && photo.json.url !== "";
+		(photo.json.hasOwnProperty("is_downloadable")
+			? photo.json.is_downloadable
+			: album.json && album.json.is_downloadable && album.json.is_downloadable);
+	let showFull = photo.json.size_variants.original.url && photo.json.size_variants.original.url !== "";
 
 	let items = [
 		{ title: build.iconic("fullscreen-enter") + lychee.locale["FULL_PHOTO"], visible: !!showFull, fn: () => window.open(photo.getDirectLink()) },
@@ -449,7 +447,7 @@ contextMenu.photoMore = function (photoID, e) {
 		if (
 			!(
 				(photo.json.type && (photo.json.type.indexOf("video") === 0 || photo.json.type === "raw")) ||
-				(photo.json.livePhotoUrl !== "" && photo.json.livePhotoUrl !== null)
+				(photo.json.live_photo_url !== "" && photo.json.live_photo_url !== null)
 			)
 		) {
 			let button_rotate_cwise = $("#button_rotate_cwise");
@@ -475,11 +473,11 @@ contextMenu.photoMore = function (photoID, e) {
 };
 
 contextMenu.getSubIDs = function (albums, albumID) {
-	let ids = [parseInt(albumID, 10)];
+	let ids = [albumID];
 	let a;
 
 	for (a = 0; a < albums.length; a++) {
-		if (parseInt(albums[a].parent_id, 10) === parseInt(albumID, 10)) {
+		if (albums[a].parent_id === albumID) {
 			ids = ids.concat(contextMenu.getSubIDs(albums, albums[a].id));
 		}
 
@@ -510,9 +508,9 @@ contextMenu.move = function (IDs, e, callback, kind = "UNSORTED", display_root =
 				if (callback !== album.merge && callback !== photo.copyTo) {
 					exclude.push(album.getID().toString());
 				}
-				if (IDs.length === 1 && IDs[0] === album.getID() && album.getParent() && callback === album.setAlbum) {
+				if (IDs.length === 1 && IDs[0] === album.getID() && album.getParentID() && callback === album.setAlbum) {
 					// If moving the current album, exclude its parent.
-					exclude.push(album.getParent().toString());
+					exclude.push(album.getParentID().toString());
 				}
 			} else if (visible.photo()) {
 				exclude.push(photo.json.album.toString());
@@ -532,9 +530,9 @@ contextMenu.move = function (IDs, e, callback, kind = "UNSORTED", display_root =
 		}
 
 		// Show Unsorted when unsorted is not the current album
-		if (display_root && album.getID() !== "0" && !visible.albums()) {
+		if (display_root && album.getID() !== "unsorted" && !visible.albums()) {
 			items.unshift({});
-			items.unshift({ title: lychee.locale[kind], fn: () => callback(IDs, 0) });
+			items.unshift({ title: lychee.locale[kind], fn: () => callback(IDs, null) });
 		}
 
 		// Don't allow to move the current album to a newly created subalbum
@@ -550,7 +548,7 @@ contextMenu.move = function (IDs, e, callback, kind = "UNSORTED", display_root =
 
 contextMenu.sharePhoto = function (photoID, e) {
 	// v4+ only
-	if (photo.json.hasOwnProperty("share_button_visible") && photo.json.share_button_visible !== "1") {
+	if (photo.json.hasOwnProperty("is_share_button_visible") && !photo.json.is_share_button_visible) {
 		return;
 	}
 
@@ -569,7 +567,7 @@ contextMenu.sharePhoto = function (photoID, e) {
 
 contextMenu.shareAlbum = function (albumID, e) {
 	// v4+ only
-	if (album.json.hasOwnProperty("share_button_visible") && album.json.share_button_visible !== "1") {
+	if (album.json.hasOwnProperty("is_share_button_visible") && !album.json.is_share_button_visible) {
 		return;
 	}
 
@@ -583,7 +581,7 @@ contextMenu.shareAlbum = function (albumID, e) {
 			title: build.iconic("link-intact") + lychee.locale["DIRECT_LINK"],
 			fn: () => {
 				let url = lychee.getBaseUrl() + "r/" + albumID;
-				if (album.json.password === "1") {
+				if (album.json.has_password) {
 					// Copy the url with prefilled password param
 					url += "?password=";
 				}
@@ -610,6 +608,9 @@ contextMenu.close = function () {
 
 contextMenu.config = function (e) {
 	let items = [{ title: build.iconic("cog") + lychee.locale["SETTINGS"], fn: settings.open }];
+	if (lychee.new_photos_notification) {
+		items.push({ title: build.iconic("bell") + lychee.locale["NOTIFICATIONS"], fn: notifications.load });
+	}
 	if (lychee.admin) {
 		items.push({ title: build.iconic("person") + lychee.locale["USERS"], fn: users.list });
 	}

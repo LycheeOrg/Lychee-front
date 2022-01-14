@@ -20,8 +20,8 @@ let lychee = {
 	api_V2: false, // enable api_V2
 	sub_albums: false, // enable sub_albums features
 	admin: false, // enable admin mode (multi-user)
-	upload: false, // enable possibility to upload (multi-user)
-	lock: false, // locked user (multi-user)
+	may_upload: false, // enable possibility to upload (multi-user)
+	is_locked: false, // locked user (multi-user)
 	username: null,
 	layout: "1", // 0: Use default, "square" layout. 1: Use Flickr-like "justified" layout. 2: Use Google-like "unjustified" layout
 	public_search: false, // display Search in publicMode
@@ -124,7 +124,13 @@ lychee.aboutDialog = function () {
 	if (lychee.checkForUpdates === "1") lychee.getUpdate();
 };
 
-lychee.init = function (exitview = true) {
+/**
+ * @param {boolean} isFirstInitialization must be set to `false` if called
+ *                                        for re-initialization to prevent
+ *                                        multiple registrations of global
+ *                                        event handlers
+ */
+lychee.init = function (isFirstInitialization = true) {
 	lychee.adjustContentHeight();
 
 	api.post("Session::init", {}, function (data) {
@@ -245,9 +251,9 @@ lychee.init = function (exitview = true) {
 			leftMenu.build();
 			leftMenu.bind();
 
-			lychee.upload = data.admin || data.upload;
+			lychee.may_upload = data.admin || data.may_upload;
 			lychee.admin = data.admin;
-			lychee.lock = data.lock;
+			lychee.is_locked = data.is_locked;
 			lychee.username = data.username;
 			lychee.setMode("logged_in");
 
@@ -304,8 +310,11 @@ lychee.init = function (exitview = true) {
 			// should not happen.
 		}
 
-		if (exitview) {
-			$(window).bind("popstate", lychee.load);
+		if (isFirstInitialization) {
+			$(window).on("popstate", function () {
+				const autoplay = history.state && history.state.hasOwnProperty("autoplay") ? history.state.autoplay : true;
+				lychee.load(autoplay);
+			});
 			lychee.load();
 		}
 	});
@@ -330,7 +339,7 @@ lychee.login = function (data) {
 	};
 
 	api.post("Session::login", params, function (_data) {
-		if (_data === true) {
+		if (typeof _data === "undefined") {
 			window.location.reload();
 		} else {
 			// Show error and reactive button
@@ -390,10 +399,9 @@ lychee.logout = function () {
 	});
 };
 
-lychee.goto = function (url = "", autoplay = true) {
-	url = "#" + url;
-
-	history.pushState(null, null, url);
+lychee.goto = function (url = null, autoplay = true) {
+	url = "#" + (url !== null ? url : "");
+	history.pushState({ autoplay: autoplay }, null, url);
 	lychee.load(autoplay);
 };
 
@@ -406,20 +414,83 @@ lychee.gotoMap = function (albumID = "", autoplay = true) {
 	lychee.goto("map/" + albumID, autoplay);
 };
 
+/**
+ * Triggers a reload, if the given IDs are in legacy format.
+ *
+ * If any of the IDs is in legacy format, the method first translates the IDs
+ * into the modern format via an AJAX call to the backend and then triggers
+ * an asynchronous reloading of the page with the resolved, modern IDs.
+ * The function returns `true` in this case.
+ *
+ * If the IDs are already in modern format (and thus neither a translation
+ * nor a reloading is required), the function returns `false`.
+ * In this case this function is basically a no-op.
+ *
+ * @param {?string} albumID  the album ID
+ * @param {?string} photoID  the photo ID
+ * @param {boolean} autoplay indicates whether playback should start
+ *                           automatically, if the indicated photo is a video
+ *
+ * @return {boolean} `true`, if any of the IDs has been in legacy format
+ *                   and an asynchronous reloading has been scheduled
+ */
+lychee.reloadIfLegacyIDs = function (albumID, photoID, autoplay) {
+	/** @param {?string} id the inspected ID */
+	const isLegacyID = function (id) {
+		// The legacy IDs were pure numeric values. We exclude values which
+		// have 24 digits, because these could also be modern IDs.
+		// A modern IDs is a 24 character long, base64 encoded value and thus
+		// could also match 24 digits by accident.
+		return id && id.length !== 24 && parseInt(id).toString() === id;
+	};
+
+	if (!isLegacyID(albumID) && !isLegacyID(photoID)) {
+		// this function is a no-op if neither ID is in legacy format
+		return false;
+	}
+
+	/**
+	 * Callback to be called asynchronously which executes the actual reloading.
+	 *
+	 * @param {?string} newAlbumID
+	 * @param {?string} newPhotoID
+	 *
+	 * @return void
+	 */
+	const reloadWithNewIDs = function (newAlbumID, newPhotoID) {
+		let newUrl = "";
+		if (newAlbumID) {
+			newUrl += newAlbumID;
+			newUrl += newPhotoID ? "/" + newPhotoID : "";
+		}
+		lychee.goto(newUrl, autoplay);
+	};
+
+	// We have to deal with three cases:
+	//  1. the album and photo ID need to be translated
+	//  2. only the album ID needs to be translated
+	//  3. only the photo ID needs to be translated
+	let params = {};
+	if (isLegacyID(albumID)) params.albumID = albumID;
+	if (isLegacyID(photoID)) params.photoID = photoID;
+	api.post("Legacy::translateLegacyModelIDs", params, function (data) {
+		reloadWithNewIDs(data.hasOwnProperty("albumID") ? data.albumID : albumID, data.hasOwnProperty("photoID") ? data.photoID : photoID);
+	});
+
+	return true;
+};
+
 lychee.load = function (autoplay = true) {
-	let albumID = "";
-	let photoID = "";
 	let hash = document.location.hash.replace("#", "").split("/");
+	let albumID = hash[0];
+	let photoID = hash[1];
 
 	contextMenu.close();
 	multiselect.close();
 	tabindex.reset();
 
-	if (hash[0] != null) albumID = hash[0];
-	if (hash[1] != null) photoID = hash[1];
-
 	if (albumID && photoID) {
-		if (albumID == "map") {
+		if (albumID === "map") {
 			// If map functionality is disabled -> do nothing
 			if (!lychee.map_display) {
 				loadingBar.show("error", lychee.locale["ERROR_MAP_DEACTIVATED"]);
@@ -441,7 +512,7 @@ lychee.load = function (autoplay = true) {
 			}
 			mapview.open(albumID);
 			lychee.footer_hide();
-		} else if (albumID == "search") {
+		} else if (albumID === "search") {
 			// Search has been triggered
 			const search_string = decodeURIComponent(photoID);
 
@@ -460,6 +531,10 @@ lychee.load = function (autoplay = true) {
 
 			lychee.footer_show();
 		} else {
+			if (lychee.reloadIfLegacyIDs(albumID, photoID, autoplay)) {
+				return;
+			}
+
 			$(".no_content").remove();
 			// Show photo
 
@@ -489,7 +564,7 @@ lychee.load = function (autoplay = true) {
 			lychee.footer_hide();
 		}
 	} else if (albumID) {
-		if (albumID == "map") {
+		if (albumID === "map") {
 			$(".no_content").remove();
 			// Show map of all albums
 			// If map functionality is disabled -> do nothing
@@ -506,9 +581,13 @@ lychee.load = function (autoplay = true) {
 			if (visible.sidebar()) sidebar.toggle(false);
 			mapview.open();
 			lychee.footer_hide();
-		} else if (albumID == "search") {
+		} else if (albumID === "search") {
 			// search string is empty -> do nothing
 		} else {
+			if (lychee.reloadIfLegacyIDs(albumID, photoID, autoplay)) {
+				return;
+			}
+
 			$(".no_content").remove();
 			// Trash data
 			photo.json = null;
@@ -590,10 +669,10 @@ lychee.setTitle = function (title, editable) {
 };
 
 lychee.setMode = function (mode) {
-	if (lychee.lock) {
+	if (lychee.is_locked) {
 		$("#button_settings_open").remove();
 	}
-	if (!lychee.upload) {
+	if (!lychee.may_upload) {
 		$("#button_sharing").remove();
 
 		$(document)

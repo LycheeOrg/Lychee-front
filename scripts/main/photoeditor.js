@@ -18,21 +18,21 @@ photoeditor.rotate = function (photoID, direction) {
 			lychee.error(null, params, data);
 		} else {
 			photo.json = data;
-			photo.json.original_album = photo.json.album;
+			photo.json.original_album_id = photo.json.album_id;
 			if (album.json) {
-				photo.json.album = album.json.id;
+				photo.json.album_id = album.json.id;
 			}
 
 			let image = $("img#image");
-			if (photo.json.sizeVariants.medium2x !== null) {
+			if (photo.json.size_variants.medium2x !== null) {
 				image.prop(
 					"srcset",
-					`${photo.json.sizeVariants.medium.url} ${photo.json.sizeVariants.medium.width}w, ${photo.json.sizeVariants.medium2x.url} ${photo.json.sizeVariants.medium2x.width}w`
+					`${photo.json.size_variants.medium.url} ${photo.json.size_variants.medium.width}w, ${photo.json.size_variants.medium2x.url} ${photo.json.size_variants.medium2x.width}w`
 				);
 			} else {
 				image.prop("srcset", "");
 			}
-			image.prop("src", photo.json.sizeVariants.medium !== null ? photo.json.sizeVariants.medium.url : photo.json.url);
+			image.prop("src", photo.json.size_variants.medium !== null ? photo.json.size_variants.medium.url : photo.json.size_variants.original.url);
 			view.photo.onresize();
 			view.photo.sidebar();
 

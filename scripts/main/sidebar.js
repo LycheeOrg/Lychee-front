@@ -138,11 +138,11 @@ sidebar.setSelectable = function (selectable = true) {
 	else sidebar.dom().addClass("notSelectable");
 };
 
-sidebar.changeAttr = function (attr, value = "-", dangerouslySetInnerHTML = false) {
+sidebar.changeAttr = function (attr, value = "", dangerouslySetInnerHTML = false) {
 	if (attr == null || attr === "") return false;
 
 	// Set a default for the value
-	if (value == null || value === "") value = "-";
+	if (value === null) value = "";
 
 	// Escape value
 	if (dangerouslySetInnerHTML === false) value = lychee.escapeHTML(value);
@@ -176,7 +176,7 @@ sidebar.createStructure.photo = function (data) {
 	let exifHash = data.taken_at + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
 	let locationHash = data.longitude + data.latitude + data.altitude;
 	let structure = {};
-	let _public = "";
+	let isPublic = "";
 	let isVideo = data.type && data.type.indexOf("video") > -1;
 	let license;
 
@@ -197,18 +197,18 @@ sidebar.createStructure.photo = function (data) {
 	}
 
 	// Set value for public
-	switch (data.public) {
-		case "0":
-			_public = lychee.locale["PHOTO_SHR_NO"];
+	switch (data.is_public) {
+		case 0:
+			isPublic = lychee.locale["PHOTO_SHR_NO"];
 			break;
-		case "1":
-			_public = lychee.locale["PHOTO_SHR_PHT"];
+		case 1:
+			isPublic = lychee.locale["PHOTO_SHR_PHT"];
 			break;
-		case "2":
-			_public = lychee.locale["PHOTO_SHR_ALB"];
+		case 2:
+			isPublic = lychee.locale["PHOTO_SHR_ALB"];
 			break;
 		default:
-			_public = "-";
+			isPublic = "-";
 			break;
 	}
 
@@ -218,7 +218,7 @@ sidebar.createStructure.photo = function (data) {
 		rows: [
 			{ title: lychee.locale["PHOTO_TITLE"], kind: "title", value: data.title, editable },
 			{ title: lychee.locale["PHOTO_UPLOADED"], kind: "uploaded", value: lychee.locale.printDateTime(data.created_at) },
-			{ title: lychee.locale["PHOTO_DESCRIPTION"], kind: "description", value: data.description, editable },
+			{ title: lychee.locale["PHOTO_DESCRIPTION"], kind: "description", value: data.description ? data.description : "", editable },
 		],
 	};
 
@@ -228,12 +228,16 @@ sidebar.createStructure.photo = function (data) {
 		rows: [
 			{ title: lychee.locale["PHOTO_SIZE"], kind: "size", value: lychee.locale.printFilesizeLocalized(data.filesize) },
 			{ title: lychee.locale["PHOTO_FORMAT"], kind: "type", value: data.type },
-			{ title: lychee.locale["PHOTO_RESOLUTION"], kind: "resolution", value: data.width + " x " + data.height },
+			{
+				title: lychee.locale["PHOTO_RESOLUTION"],
+				kind: "resolution",
+				value: data.size_variants.original.width + " x " + data.size_variants.original.height,
+			},
 		],
 	};
 
 	if (isVideo) {
-		if (data.width === 0 || data.height === 0) {
+		if (data.size_variants.original.width === 0 || data.size_variants.original.height === 0) {
 			// Remove the "Resolution" line if we don't have the data.
 			structure.image.rows.splice(-1, 1);
 		}
@@ -288,7 +292,7 @@ sidebar.createStructure.photo = function (data) {
 	structure.sharing = {
 		title: lychee.locale["PHOTO_SHARING"],
 		type: sidebar.types.DEFAULT,
-		rows: [{ title: lychee.locale["PHOTO_SHR_PLUBLIC"], kind: "public", value: _public }],
+		rows: [{ title: lychee.locale["PHOTO_SHR_PLUBLIC"], kind: "public", value: isPublic }],
 	};
 
 	structure.license = {
@@ -321,12 +325,12 @@ sidebar.createStructure.photo = function (data) {
 				{ title: lychee.locale["PHOTO_LOCATION"], kind: "location", value: data.location ? data.location : "" },
 			],
 		};
-		if (data.imgDirection) {
+		if (data.img_direction) {
 			// No point in display sub-degree precision.
 			structure.location.rows.push({
 				title: lychee.locale["PHOTO_IMGDIRECTION"],
 				kind: "imgDirection",
-				value: Math.round(data.imgDirection).toString() + "°",
+				value: Math.round(data.img_direction).toString() + "°",
 			});
 		}
 	} else {
@@ -350,78 +354,13 @@ sidebar.createStructure.album = function (album) {
 
 	let editable = album.isUploadable();
 	let structure = {};
-	let _public = "";
-	let hidden = "";
-	let downloadable = "";
-	let share_button_visible = "";
-	let password = "";
+	let isPublic = data.is_public ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
+	let requiresLink = data.requires_link ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
+	let isDownloadable = data.is_downloadable ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
+	let isShareButtonVisible = data.is_share_button_visible ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
+	let hasPassword = data.has_password ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
 	let license = "";
 	let sorting = "";
-
-	// Set value for public
-	switch (data.public) {
-		case "0":
-			_public = lychee.locale["ALBUM_SHR_NO"];
-			break;
-		case "1":
-			_public = lychee.locale["ALBUM_SHR_YES"];
-			break;
-		default:
-			_public = "-";
-			break;
-	}
-
-	// Set value for hidden
-	switch (data.visible) {
-		case "0":
-			hidden = lychee.locale["ALBUM_SHR_YES"];
-			break;
-		case "1":
-			hidden = lychee.locale["ALBUM_SHR_NO"];
-			break;
-		default:
-			hidden = "-";
-			break;
-	}
-
-	// Set value for downloadable
-	switch (data.downloadable) {
-		case "0":
-			downloadable = lychee.locale["ALBUM_SHR_NO"];
-			break;
-		case "1":
-			downloadable = lychee.locale["ALBUM_SHR_YES"];
-			break;
-		default:
-			downloadable = "-";
-			break;
-	}
-
-	// Set value for share_button_visible
-	switch (data.share_button_visible) {
-		case "0":
-			share_button_visible = lychee.locale["ALBUM_SHR_NO"];
-			break;
-		case "1":
-			share_button_visible = lychee.locale["ALBUM_SHR_YES"];
-			break;
-		default:
-			share_button_visible = "-";
-			break;
-	}
-
-	// Set value for password
-	switch (data.password) {
-		case "0":
-			password = lychee.locale["ALBUM_SHR_NO"];
-			break;
-		case "1":
-			password = lychee.locale["ALBUM_SHR_YES"];
-			break;
-		default:
-			password = "-";
-			break;
-	}
 
 	// Set license string
 	switch (data.license) {
@@ -436,10 +375,12 @@ sidebar.createStructure.album = function (album) {
 			break;
 	}
 
-	if (data.sorting_col === "") {
-		sorting = lychee.locale["DEFAULT"];
-	} else {
-		sorting = data.sorting_col + " " + data.sorting_order;
+	if (!lychee.publicMode) {
+		if (data.sorting_col === null) {
+			sorting = lychee.locale["DEFAULT"];
+		} else {
+			sorting = data.sorting_col + " " + data.sorting_order;
+		}
 	}
 
 	structure.basics = {
@@ -447,7 +388,7 @@ sidebar.createStructure.album = function (album) {
 		type: sidebar.types.DEFAULT,
 		rows: [
 			{ title: lychee.locale["ALBUM_TITLE"], kind: "title", value: data.title, editable },
-			{ title: lychee.locale["ALBUM_DESCRIPTION"], kind: "description", value: data.description, editable },
+			{ title: lychee.locale["ALBUM_DESCRIPTION"], kind: "description", value: data.description ? data.description : "", editable },
 		],
 	};
 
@@ -478,7 +419,7 @@ sidebar.createStructure.album = function (album) {
 		structure.album.rows.push({ title: lychee.locale["ALBUM_VIDEOS"], kind: "videos", value: videoCount });
 	}
 
-	if (data.photos) {
+	if (data.photos && sorting !== "") {
 		structure.album.rows.push({ title: lychee.locale["ALBUM_ORDERING"], kind: "sorting", value: sorting, editable: editable });
 	}
 
@@ -486,16 +427,16 @@ sidebar.createStructure.album = function (album) {
 		title: lychee.locale["ALBUM_SHARING"],
 		type: sidebar.types.DEFAULT,
 		rows: [
-			{ title: lychee.locale["ALBUM_PUBLIC"], kind: "public", value: _public },
-			{ title: lychee.locale["ALBUM_HIDDEN"], kind: "hidden", value: hidden },
-			{ title: lychee.locale["ALBUM_DOWNLOADABLE"], kind: "downloadable", value: downloadable },
-			{ title: lychee.locale["ALBUM_SHARE_BUTTON_VISIBLE"], kind: "share_button_visible", value: share_button_visible },
-			{ title: lychee.locale["ALBUM_PASSWORD"], kind: "password", value: password },
+			{ title: lychee.locale["ALBUM_PUBLIC"], kind: "public", value: isPublic },
+			{ title: lychee.locale["ALBUM_HIDDEN"], kind: "hidden", value: requiresLink },
+			{ title: lychee.locale["ALBUM_DOWNLOADABLE"], kind: "downloadable", value: isDownloadable },
+			{ title: lychee.locale["ALBUM_SHARE_BUTTON_VISIBLE"], kind: "share_button_visible", value: isShareButtonVisible },
+			{ title: lychee.locale["ALBUM_PASSWORD"], kind: "password", value: hasPassword },
 		],
 	};
 
-	if (data.owner != null) {
-		structure.share.rows.push({ title: lychee.locale["ALBUM_OWNER"], kind: "owner", value: data.owner });
+	if (data.owner_name != null) {
+		structure.share.rows.push({ title: lychee.locale["ALBUM_OWNER"], kind: "owner", value: data.owner_name });
 	}
 
 	structure.license = {

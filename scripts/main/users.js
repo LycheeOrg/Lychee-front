@@ -9,18 +9,18 @@ users.update = function (params) {
 	}
 
 	if ($("#UserData" + params.id + ' .choice input[name="upload"]:checked').length === 1) {
-		params.upload = "1";
+		params.may_upload = true;
 	} else {
-		params.upload = "0";
+		params.may_upload = false;
 	}
 	if ($("#UserData" + params.id + ' .choice input[name="lock"]:checked').length === 1) {
-		params.lock = "1";
+		params.is_locked = true;
 	} else {
-		params.lock = "0";
+		params.is_locked = false;
 	}
 
 	api.post("User::Save", params, function (data) {
-		if (data !== true) {
+		if (data) {
 			loadingBar.show("error", data.description);
 			lychee.error(null, params, data);
 		} else {
@@ -41,36 +41,26 @@ users.create = function (params) {
 	}
 
 	if ($('#UserCreate .choice input[name="upload"]:checked').length === 1) {
-		params.upload = "1";
+		params.may_upload = true;
 	} else {
-		params.upload = "0";
+		params.may_upload = false;
 	}
 	if ($('#UserCreate .choice input[name="lock"]:checked').length === 1) {
-		params.lock = "1";
+		params.is_locked = true;
 	} else {
-		params.lock = "0";
+		params.is_locked = false;
 	}
 
-	api.post("User::Create", params, function (data) {
-		if (data !== true) {
-			loadingBar.show("error", data.description);
-			lychee.error(null, params, data);
-		} else {
-			loadingBar.show("success", "User created!");
-			users.list(); // reload user list
-		}
+	api.post("User::Create", params, function () {
+		loadingBar.show("success", "User created!");
+		users.list(); // reload user list
 	});
 };
 
 users.delete = function (params) {
-	api.post("User::Delete", params, function (data) {
-		if (data !== true) {
-			loadingBar.show("error", data.description);
-			lychee.error(null, params, data);
-		} else {
-			loadingBar.show("success", "User deleted!");
-			users.list(); // reload user list
-		}
+	api.post("User::Delete", params, function () {
+		loadingBar.show("success", "User deleted!");
+		users.list(); // reload user list
 	});
 };
 

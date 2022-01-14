@@ -111,10 +111,10 @@ photo.hide = function () {
 
 photo.onresize = function () {
 	// Copy of view.photo.onresize
-	if (photo.json.sizeVariants.medium === null || photo.json.sizeVariants.medium2x === null) return;
+	if (photo.json.size_variants.medium === null || photo.json.size_variants.medium2x === null) return;
 
-	let imgWidth = photo.json.sizeVariants.medium.width;
-	let imgHeight = photo.json.sizeVariants.medium.height;
+	let imgWidth = photo.json.size_variants.medium.width;
+	let imgHeight = photo.json.size_variants.medium.height;
 	let containerWidth = parseFloat($("#imageview").width(), 10);
 	let containerHeight = parseFloat($("#imageview").height(), 10);
 
@@ -187,12 +187,6 @@ const loadPhotoInfo = function (photoID) {
 	};
 
 	api.post("Photo::get", params, function (data) {
-		if (data === "Warning: Photo private!" || data === "Warning: Wrong password!") {
-			$("body").append(build.no_content("question-mark")).removeClass("view");
-			header.dom().remove();
-			return false;
-		}
-
 		photo.json = data;
 
 		// Set title

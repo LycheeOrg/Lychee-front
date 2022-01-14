@@ -28,7 +28,7 @@ api.isTimeout = function (errorThrown, jqXHR) {
 	return false;
 };
 
-api.post = function (fn, params, callback, responseProgressCB = null) {
+api.post = function (fn, params, successCallback, responseProgressCB = null, errorCallback = null) {
 	loadingBar.show();
 
 	params = $.extend({ function: fn }, params);
@@ -44,17 +44,23 @@ api.post = function (fn, params, callback, responseProgressCB = null) {
 			return false;
 		}
 
-		callback(data);
+		if (successCallback) successCallback(data);
 	};
 
 	const error = (jqXHR, textStatus, errorThrown) => {
+		if (errorCallback) {
+			let isHandled = errorCallback(jqXHR);
+			if (isHandled) return;
+		}
+		// Call global error handler for unhandled errors
 		api.onError(api.isTimeout(errorThrown, jqXHR) ? "Session timed out." : "Server error or API not found.", params, errorThrown);
 	};
 
 	let ajaxParams = {
 		type: "POST",
 		url: api_url,
-		data: params,
+		contentType: "application/json",
+		data: JSON.stringify(params),
 		dataType: "json",
 		success,
 		error,

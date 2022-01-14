@@ -10,25 +10,29 @@ album.isSmartID = function (id) {
 	return id === "unsorted" || id === "starred" || id === "public" || id === "recent";
 };
 
-album.getParent = function () {
-	if (album.json == null || album.isSmartID(album.json.id) === true || !album.json.parent_id || album.json.parent_id === 0) {
-		return "";
+album.isModelID = function (id) {
+	return typeof id === "string" && id.length === 24;
+};
+
+album.getParentID = function () {
+	if (album.json == null || album.isSmartID(album.json.id) === true || !album.json.parent_id) {
+		return null;
 	}
 	return album.json.parent_id;
 };
 
+/**
+ * @return {?string}
+ */
 album.getID = function () {
 	let id = null;
 
 	// this is a Lambda
 	let isID = (_id) => {
-		if (album.isSmartID(_id)) {
-			return true;
-		}
-		return $.isNumeric(_id);
+		return album.isSmartID(_id) || album.isModelID(_id);
 	};
 
-	if (photo.json) id = photo.json.album;
+	if (photo.json) id = photo.json.album_id;
 	else if (album.json) id = album.json.id;
 	else if (mapview.albumID) id = mapview.albumID;
 
@@ -37,11 +41,11 @@ album.getID = function () {
 	if (isID(id) === false) id = $(".photo:hover, .photo.active").attr("data-album-id");
 
 	if (isID(id) === true) return id;
-	else return false;
+	else return null;
 };
 
 album.isTagAlbum = function () {
-	return album.json && album.json.tag_album && album.json.tag_album === "1";
+	return album.json && album.json.is_tag_album && album.json.is_tag_album === true;
 };
 
 album.getByID = function (photoID) {
@@ -49,19 +53,19 @@ album.getByID = function (photoID) {
 
 	if (photoID == null || !album.json || !album.json.photos) {
 		lychee.error("Error: Album json not found !");
-		return undefined;
+		return null;
 	}
 
 	let i = 0;
 	while (i < album.json.photos.length) {
-		if (parseInt(album.json.photos[i].id) === parseInt(photoID)) {
+		if (album.json.photos[i].id === photoID) {
 			return album.json.photos[i];
 		}
 		i++;
 	}
 
 	lychee.error("Error: photo " + photoID + " not found !");
-	return undefined;
+	return null;
 };
 
 album.getSubByID = function (albumID) {
@@ -74,7 +78,7 @@ album.getSubByID = function (albumID) {
 
 	let i = 0;
 	while (i < album.json.albums.length) {
-		if (parseInt(album.json.albums[i].id) === parseInt(albumID)) {
+		if (album.json.albums[i].id === albumID) {
 			return album.json.albums[i];
 		}
 		i++;
@@ -94,7 +98,7 @@ album.deleteByID = function (photoID) {
 	let deleted = false;
 
 	$.each(album.json.photos, function (i) {
-		if (parseInt(album.json.photos[i].id) === parseInt(photoID)) {
+		if (album.json.photos[i].id === photoID) {
 			album.json.photos.splice(i, 1);
 			deleted = true;
 			return false;
@@ -114,7 +118,7 @@ album.deleteSubByID = function (albumID) {
 	let deleted = false;
 
 	$.each(album.json.albums, function (i) {
-		if (parseInt(album.json.albums[i].id) === parseInt(albumID)) {
+		if (album.json.albums[i].id === albumID) {
 			album.json.albums.splice(i, 1);
 			deleted = true;
 			return false;
@@ -131,25 +135,6 @@ album.load = function (albumID, refresh = false) {
 	};
 
 	const processData = function (data) {
-		if (data === "Warning: Wrong password!") {
-			// User hit Cancel at the password prompt
-			return false;
-		}
-
-		if (data === "Warning: Album private!") {
-			if (document.location.hash.replace("#", "").split("/")[1] !== undefined) {
-				// Display photo only
-				lychee.setMode("view");
-				lychee.footer_hide();
-			} else {
-				// Album not public
-				lychee.content.show();
-				lychee.footer_show();
-				if (!visible.albums() && !visible.album()) lychee.goto();
-			}
-			return false;
-		}
-
 		album.json = data;
 
 		if (refresh === false) {
@@ -186,17 +171,10 @@ album.load = function (albumID, refresh = false) {
 		}, waitTime);
 	};
 
-	api.post("Album::get", params, function (data) {
-		if (data === "Warning: Wrong password!") {
-			password.getDialog(albumID, function () {
-				params.password = password.value;
-
-				api.post("Album::get", params, function (_data) {
-					albums.refresh();
-					processData(_data);
-				});
-			});
-		} else {
+	api.post(
+		"Album::get",
+		params,
+		function (data) {
 			processData(data);
 
 			tabindex.makeFocusable(lychee.content);
@@ -213,8 +191,23 @@ album.load = function (albumID, refresh = false) {
 					}
 				}
 			}
+		},
+		null,
+		function (jqXHR) {
+			if (jqXHR.status === 403) {
+				password.getDialog(albumID, function () {
+					params.password = password.value;
+
+					api.post("Album::get", params, function (_data) {
+						albums.refresh();
+						processData(_data);
+					});
+				});
+				return true;
+			}
+			return false;
 		}
-	});
+	);
 };
 
 album.parse = function () {
@@ -225,7 +218,7 @@ album.add = function (IDs = null, callback = null) {
 	const action = function (data) {
 		// let title = data.title;
 
-		const isNumber = (n) => !isNaN(parseInt(n, 10)) && isFinite(n);
+		const isModelID = (albumID) => typeof albumID === "string" && albumID.length === 24;
 
 		if (!data.title.trim()) {
 			basicModal.error("title");
@@ -236,24 +229,24 @@ album.add = function (IDs = null, callback = null) {
 
 		let params = {
 			title: data.title,
-			parent_id: 0,
+			parent_id: null,
 		};
 
 		if (visible.albums() || album.isSmartID(album.json.id)) {
-			params.parent_id = 0;
+			params.parent_id = null;
 		} else if (visible.album()) {
 			params.parent_id = album.json.id;
 		} else if (visible.photo()) {
-			params.parent_id = photo.json.album;
+			params.parent_id = photo.json.album_id;
 		}
 
 		api.post("Album::add", params, function (_data) {
-			if (_data !== false && isNumber(_data)) {
+			if (_data && isModelID(_data.id)) {
 				if (IDs != null && callback != null) {
 					callback(IDs, _data, false); // we do not confirm
 				} else {
 					albums.refresh();
-					lychee.goto(_data);
+					lychee.goto(_data.id);
 				}
 			} else {
 				lychee.error(null, params, _data);
@@ -295,10 +288,10 @@ album.addByTags = function () {
 		};
 
 		api.post("Album::addByTags", params, function (_data) {
-			const isNumber = (n) => !isNaN(parseInt(n, 10)) && isFinite(n);
-			if (_data !== false && isNumber(_data)) {
+			const isModelID = (albumID) => typeof albumID === "string" && albumID.length === 24;
+			if (_data && isModelID(_data.id)) {
 				albums.refresh();
-				lychee.goto(_data);
+				lychee.goto(_data.id);
 			} else {
 				lychee.error(null, params, _data);
 			}
@@ -345,7 +338,7 @@ album.setShowTags = function (albumID) {
 		};
 
 		api.post("Album::setShowTags", params, function (_data) {
-			if (_data !== true) {
+			if (_data) {
 				lychee.error(null, params, _data);
 			} else {
 				album.reload();
@@ -382,7 +375,7 @@ album.setTitle = function (albumIDs) {
 	if (albumIDs.length === 1) {
 		// Get old title if only one album is selected
 		if (album.json) {
-			if (parseInt(album.getID()) === parseInt(albumIDs[0])) {
+			if (album.getID() === albumIDs[0]) {
 				oldTitle = album.json.title;
 			} else oldTitle = album.getSubByID(albumIDs[0]).title;
 		}
@@ -403,7 +396,7 @@ album.setTitle = function (albumIDs) {
 		let newTitle = data.title;
 
 		if (visible.album()) {
-			if (albumIDs.length === 1 && parseInt(album.getID()) === parseInt(albumIDs[0])) {
+			if (albumIDs.length === 1 && album.getID() === albumIDs[0]) {
 				// Rename only one album
 
 				album.json.title = newTitle;
@@ -436,7 +429,7 @@ album.setTitle = function (albumIDs) {
 		};
 
 		api.post("Album::setTitle", params, function (_data) {
-			if (_data !== true) {
+			if (_data) {
 				lychee.error(null, params, _data);
 			}
 		});
@@ -463,10 +456,10 @@ album.setTitle = function (albumIDs) {
 };
 
 album.setDescription = function (albumID) {
-	let oldDescription = album.json.description;
+	let oldDescription = album.json.description ? album.json.description : "";
 
 	const action = function (data) {
-		let description = data.description;
+		let description = data.description ? data.description : null;
 
 		basicModal.close();
 
@@ -481,7 +474,7 @@ album.setDescription = function (albumID) {
 		};
 
 		api.post("Album::setDescription", params, function (_data) {
-			if (_data !== true) {
+			if (_data) {
 				lychee.error(null, params, _data);
 			}
 		});
@@ -505,7 +498,7 @@ album.setDescription = function (albumID) {
 album.toggleCover = function (photoID) {
 	if (!photoID) return false;
 
-	album.json.cover_id = album.json.cover_id === photoID ? "" : photoID;
+	album.json.cover_id = album.json.cover_id === photoID ? null : photoID;
 
 	let params = {
 		albumID: album.json.id,
@@ -513,11 +506,11 @@ album.toggleCover = function (photoID) {
 	};
 
 	api.post("Album::setCover", params, function (data) {
-		if (data !== true) {
+		if (data) {
 			lychee.error(null, params, data);
 		} else {
 			view.album.content.cover(photoID);
-			if (!album.getParent()) {
+			if (!album.getParentID()) {
 				albums.refresh();
 			}
 		}
@@ -541,7 +534,7 @@ album.setLicense = function (albumID) {
 		};
 
 		api.post("Album::setLicense", params, function (_data) {
-			if (_data !== true) {
+			if (_data) {
 				lychee.error(null, params, _data);
 			} else {
 				if (visible.album()) {
@@ -616,29 +609,25 @@ album.setLicense = function (albumID) {
 album.setSorting = function (albumID) {
 	const callback = function () {
 		$("select#sortingCol").val(album.json.sorting_col);
-		$("select#sortingOrder").val(album.json.sorting_order);
+		$("select#sortingOrder").val(album.json.sorting_order === null ? "ASC" : album.json.sorting_order);
 		return false;
 	};
 
 	const action = function (data) {
-		let typePhotos = data.sortingCol;
-		let orderPhotos = data.sortingOrder;
+		let sortingCol = data.sortingCol;
+		let sortingOrder = data.sortingOrder;
 
 		basicModal.close();
 
 		let params = {
 			albumID,
-			typePhotos,
-			orderPhotos,
+			sortingCol,
+			sortingOrder,
 		};
 
 		api.post("Album::setSorting", params, function (_data) {
-			if (_data !== true) {
-				lychee.error(null, params, _data);
-			} else {
-				if (visible.album()) {
-					album.reload();
-				}
+			if (visible.album()) {
+				album.reload();
 			}
 		});
 	};
@@ -652,7 +641,7 @@ album.setSorting = function (albumID) {
 		<span class="select">
 			<select id="sortingCol" name="sortingCol">
 				<option value=''>-</option>
-				<option value='id'>` +
+				<option value='created_at'>` +
 		lychee.locale["SORT_PHOTO_SELECT_1"] +
 		`</option>
 				<option value='taken_at'>` +
@@ -664,10 +653,10 @@ album.setSorting = function (albumID) {
 				<option value='description'>` +
 		lychee.locale["SORT_PHOTO_SELECT_4"] +
 		`</option>
-				<option value='public'>` +
+				<option value='is_public'>` +
 		lychee.locale["SORT_PHOTO_SELECT_5"] +
 		`</option>
-				<option value='star'>` +
+				<option value='is_starred'>` +
 		lychee.locale["SORT_PHOTO_SELECT_6"] +
 		`</option>
 				<option value='type'>` +
@@ -719,14 +708,14 @@ album.setPublic = function (albumID, e) {
 				<div class='switch'>
 					<label>
 						${lychee.locale["ALBUM_PUBLIC"]}:&nbsp;
-						<input type='checkbox' name='public'>
+						<input type='checkbox' name='is_public'>
 						<span class='slider round'></span>
 					</label>
 					<p>${lychee.locale["ALBUM_PUBLIC_EXPL"]}</p>
 				</div>
 				<div class='choice'>
 					<label>
-						<input type='checkbox' name='full_photo'>
+						<input type='checkbox' name='grants_full_photo'>
 						<span class='checkbox'>${build.iconic("check")}</span>
 						<span class='label'>${lychee.locale["ALBUM_FULL"]}</span>
 					</label>
@@ -734,7 +723,7 @@ album.setPublic = function (albumID, e) {
 				</div>
 				<div class='choice'>
 					<label>
-						<input type='checkbox' name='hidden'>
+						<input type='checkbox' name='requires_link'>
 						<span class='checkbox'>${build.iconic("check")}</span>
 						<span class='label'>${lychee.locale["ALBUM_HIDDEN"]}</span>
 					</label>
@@ -742,7 +731,7 @@ album.setPublic = function (albumID, e) {
 				</div>
 				<div class='choice'>
 					<label>
-						<input type='checkbox' name='downloadable'>
+						<input type='checkbox' name='is_downloadable'>
 						<span class='checkbox'>${build.iconic("check")}</span>
 						<span class='label'>${lychee.locale["ALBUM_DOWNLOADABLE"]}</span>
 					</label>
@@ -750,7 +739,7 @@ album.setPublic = function (albumID, e) {
 				</div>
 				<div class='choice'>
 					<label>
-						<input type='checkbox' name='share_button_visible'>
+						<input type='checkbox' name='is_share_button_visible'>
 						<span class='checkbox'>${build.iconic("check")}</span>
 						<span class='label'>${lychee.locale["ALBUM_SHARE_BUTTON_VISIBLE"]}</span>
 					</label>
@@ -758,7 +747,7 @@ album.setPublic = function (albumID, e) {
 				</div>
 				<div class='choice'>
 					<label>
-						<input type='checkbox' name='password'>
+						<input type='checkbox' name='has_password'>
 						<span class='checkbox'>${build.iconic("check")}</span>
 						<span class='label'>${lychee.locale["ALBUM_PASSWORD_PROT"]}</span>
 					</label>
@@ -769,7 +758,7 @@ album.setPublic = function (albumID, e) {
 				<div class='switch'>
 					<label>
 						${lychee.locale["ALBUM_NSFW"]}:&nbsp;
-						<input type='checkbox' name='nsfw'>
+						<input type='checkbox' name='is_nsfw'>
 						<span class='slider round'></span>
 					</label>
 					<p>${lychee.locale["ALBUM_NSFW_EXPL"]}</p>
@@ -792,31 +781,30 @@ album.setPublic = function (albumID, e) {
 			},
 		});
 
-		$('.basicModal .switch input[name="public"]').on("click", function () {
+		$('.basicModal .switch input[name="is_public"]').on("click", function () {
 			if ($(this).prop("checked") === true) {
 				$(".basicModal .choice input").attr("disabled", false);
 
-				if (album.json.public === "1") {
+				if (album.json.is_public) {
 					// Initialize options based on album settings.
-					if (album.json.full_photo !== null && album.json.full_photo === "1")
-						$('.basicModal .choice input[name="full_photo"]').prop("checked", true);
-					if (album.json.visible === "0") $('.basicModal .choice input[name="hidden"]').prop("checked", true);
-					if (album.json.downloadable === "1") $('.basicModal .choice input[name="downloadable"]').prop("checked", true);
-					if (album.json.share_button_visible === "1") $('.basicModal .choice input[name="share_button_visible"]').prop("checked", true);
-					if (album.json.password === "1") {
-						$('.basicModal .choice input[name="password"]').prop("checked", true);
+					if (album.json.grants_full_photo) $('.basicModal .choice input[name="grants_full_photo"]').prop("checked", true);
+					if (album.json.requires_link) $('.basicModal .choice input[name="requires_link"]').prop("checked", true);
+					if (album.json.is_downloadable) $('.basicModal .choice input[name="is_downloadable"]').prop("checked", true);
+					if (album.json.is_share_button_visible) $('.basicModal .choice input[name="is_share_button_visible"]').prop("checked", true);
+					if (album.json.has_password) {
+						$('.basicModal .choice input[name="has_password"]').prop("checked", true);
 						$('.basicModal .choice input[name="passwordtext"]').show();
 					}
 				} else {
 					// Initialize options based on global settings.
-					if (lychee.full_photo) {
-						$('.basicModal .choice input[name="full_photo"]').prop("checked", true);
+					if (lychee.grants_full_photo) {
+						$('.basicModal .choice input[name="grants_full_photo"]').prop("checked", true);
 					}
-					if (lychee.downloadable) {
-						$('.basicModal .choice input[name="downloadable"]').prop("checked", true);
+					if (lychee.is_downloadable) {
+						$('.basicModal .choice input[name="is_downloadable"]').prop("checked", true);
 					}
-					if (lychee.share_button_visible) {
-						$('.basicModal .choice input[name="share_button_visible"]').prop("checked", true);
+					if (lychee.is_share_button_visible) {
+						$('.basicModal .choice input[name="is_share_button_visible"]').prop("checked", true);
 					}
 				}
 			} else {
@@ -825,19 +813,19 @@ album.setPublic = function (albumID, e) {
 			}
 		});
 
-		if (album.json.nsfw === "1") {
-			$('.basicModal .switch input[name="nsfw"]').prop("checked", true);
+		if (album.json.is_nsfw) {
+			$('.basicModal .switch input[name="is_nsfw"]').prop("checked", true);
 		} else {
-			$('.basicModal .switch input[name="nsfw"]').prop("checked", false);
+			$('.basicModal .switch input[name="is_nsfw"]').prop("checked", false);
 		}
 
-		if (album.json.public === "1") {
-			$('.basicModal .switch input[name="public"]').click();
+		if (album.json.is_public) {
+			$('.basicModal .switch input[name="is_public"]').click();
 		} else {
 			$(".basicModal .choice input").attr("disabled", true);
 		}
 
-		$('.basicModal .choice input[name="password"]').on("change", function () {
+		$('.basicModal .choice input[name="has_password"]').on("change", function () {
 			if ($(this).prop("checked") === true) $('.basicModal .choice input[name="passwordtext"]').show().focus();
 			else $('.basicModal .choice input[name="passwordtext"]').hide();
 		});
@@ -848,55 +836,31 @@ album.setPublic = function (albumID, e) {
 	albums.refresh();
 
 	// Set public
-	if ($('.basicModal .switch input[name="nsfw"]:checked').length === 1) {
-		album.json.nsfw = "1";
-	} else {
-		album.json.nsfw = "0";
-	}
+	album.json.is_nsfw = $('.basicModal .switch input[name="is_nsfw"]:checked').length === 1;
 
 	// Set public
-	if ($('.basicModal .switch input[name="public"]:checked').length === 1) {
-		album.json.public = "1";
-	} else {
-		album.json.public = "0";
-	}
+	album.json.is_public = $('.basicModal .switch input[name="is_public"]:checked').length === 1;
 
 	// Set full photo
-	if ($('.basicModal .choice input[name="full_photo"]:checked').length === 1) {
-		album.json.full_photo = "1";
-	} else {
-		album.json.full_photo = "0";
-	}
+	album.json.grants_full_photo = $('.basicModal .choice input[name="grants_full_photo"]:checked').length === 1;
 
 	// Set visible
-	if ($('.basicModal .choice input[name="hidden"]:checked').length === 1) {
-		album.json.visible = "0";
-	} else {
-		album.json.visible = "1";
-	}
+	album.json.requires_link = $('.basicModal .choice input[name="requires_link"]:checked').length === 1;
 
 	// Set downloadable
-	if ($('.basicModal .choice input[name="downloadable"]:checked').length === 1) {
-		album.json.downloadable = "1";
-	} else {
-		album.json.downloadable = "0";
-	}
+	album.json.is_downloadable = $('.basicModal .choice input[name="is_downloadable"]:checked').length === 1;
 
 	// Set share_button_visible
-	if ($('.basicModal .choice input[name="share_button_visible"]:checked').length === 1) {
-		album.json.share_button_visible = "1";
-	} else {
-		album.json.share_button_visible = "0";
-	}
+	album.json.is_share_button_visible = $('.basicModal .choice input[name="is_share_button_visible"]:checked').length === 1;
 
 	// Set password
 	let oldPassword = album.json.password;
-	if ($('.basicModal .choice input[name="password"]:checked').length === 1) {
+	if ($('.basicModal .choice input[name="has_password"]:checked').length === 1) {
 		password = $('.basicModal .choice input[name="passwordtext"]').val();
-		album.json.password = "1";
+		album.json.has_password = true;
 	} else {
 		password = "";
-		album.json.password = "0";
+		album.json.has_password = false;
 	}
 
 	// Modal input has been processed, now it can be closed
@@ -906,7 +870,7 @@ album.setPublic = function (albumID, e) {
 	if (visible.album()) {
 		view.album.nsfw();
 		view.album.public();
-		view.album.hidden();
+		view.album.requiresLink();
 		view.album.downloadable();
 		view.album.shareButtonVisible();
 		view.album.password();
@@ -914,12 +878,12 @@ album.setPublic = function (albumID, e) {
 
 	let params = {
 		albumID,
-		full_photo: album.json.full_photo,
-		public: album.json.public,
-		nsfw: album.json.nsfw,
-		visible: album.json.visible,
-		downloadable: album.json.downloadable,
-		share_button_visible: album.json.share_button_visible,
+		grants_full_photo: album.json.grants_full_photo,
+		is_public: album.json.is_public,
+		is_nsfw: album.json.is_nsfw,
+		requires_link: album.json.requires_link,
+		is_downloadable: album.json.is_downloadable,
+		is_share_button_visible: album.json.is_share_button_visible,
 	};
 	if (oldPassword !== album.json.password || password.length > 0) {
 		// We send the password only if there's been a change; that way the
@@ -927,9 +891,7 @@ album.setPublic = function (albumID, e) {
 		params.password = password;
 	}
 
-	api.post("Album::setPublic", params, function (data) {
-		if (data !== true) lychee.error(null, params, data);
-	});
+	api.post("Album::setPublic", params, null);
 };
 
 album.shareUsers = function (albumID, e) {
@@ -1034,7 +996,7 @@ album.shareUsers = function (albumID, e) {
 };
 
 album.setNSFW = function (albumID, e) {
-	album.json.nsfw = album.json.nsfw === "0" ? "1" : "0";
+	album.json.is_nsfw = !album.json.is_nsfw;
 
 	view.album.nsfw();
 
@@ -1043,7 +1005,7 @@ album.setNSFW = function (albumID, e) {
 	};
 
 	api.post("Album::setNSFW", params, function (data) {
-		if (data !== true) {
+		if (data) {
 			lychee.error(null, params, data);
 		} else {
 			albums.refresh();
@@ -1052,7 +1014,7 @@ album.setNSFW = function (albumID, e) {
 };
 
 album.share = function (service) {
-	if (album.json.hasOwnProperty("share_button_visible") && album.json.share_button_visible !== "1") {
+	if (album.json.hasOwnProperty("is_share_button_visible") && !album.json.is_share_button_visible) {
 		return;
 	}
 
@@ -1081,10 +1043,10 @@ album.buildMessage = function (albumIDs, albumID, op1, op2, ops) {
 	let msg = "";
 
 	if (!albumIDs) return false;
-	if (albumIDs instanceof Array === false) albumIDs = [albumIDs];
+	if (!(albumIDs instanceof Array)) albumIDs = [albumIDs];
 
 	// Get title of first album
-	if (parseInt(albumID, 10) === 0) {
+	if (albumID === null) {
 		title = lychee.locale["ROOT"];
 	} else {
 		album1 = albums.getByID(albumID);
@@ -1120,7 +1082,7 @@ album.delete = function (albumIDs) {
 	let msg = "";
 
 	if (!albumIDs) return false;
-	if (albumIDs instanceof Array === false) albumIDs = [albumIDs];
+	if (!(albumIDs instanceof Array)) albumIDs = [albumIDs];
 
 	action.fn = function () {
 		basicModal.close();
@@ -1136,18 +1098,22 @@ album.delete = function (albumIDs) {
 					albums.deleteByID(id);
 				});
 			} else if (visible.album()) {
-				albums.refresh();
-				if (albumIDs.length === 1 && album.getID() == albumIDs[0]) {
-					lychee.goto(album.getParent());
+				if (albumIDs.toString() === "unsorted") {
+					album.reload();
 				} else {
-					albumIDs.forEach(function (id) {
-						album.deleteSubByID(id);
-						view.album.content.deleteSub(id);
-					});
+					albums.refresh();
+					if (albumIDs.length === 1 && album.getID() == albumIDs[0]) {
+						lychee.goto(album.getParentID());
+					} else {
+						albumIDs.forEach(function (id) {
+							album.deleteSubByID(id);
+							view.album.content.deleteSub(id);
+						});
+					}
 				}
 			}
 
-			if (data !== true) lychee.error(null, params, data);
+			if (typeof data !== "undefined") lychee.error(null, params, data);
 		});
 	};
 
@@ -1164,12 +1130,12 @@ album.delete = function (albumIDs) {
 
 		// Get title
 		if (album.json) {
-			if (parseInt(album.getID()) === parseInt(albumIDs[0])) {
+			if (album.getID() === albumIDs[0]) {
 				albumTitle = album.json.title;
 			} else albumTitle = album.getSubByID(albumIDs[0]).title;
 		}
 		if (!albumTitle) {
-			let a = albums.getByID(albumIDs);
+			let a = albums.getByID(albumIDs[0]);
 			if (a) albumTitle = a.title;
 		}
 
@@ -1203,14 +1169,14 @@ album.delete = function (albumIDs) {
 album.merge = function (albumIDs, albumID, confirm = true) {
 	const action = function () {
 		basicModal.close();
-		albumIDs.unshift(albumID);
 
 		let params = {
+			albumID: albumID,
 			albumIDs: albumIDs.join(),
 		};
 
 		api.post("Album::merge", params, function (data) {
-			if (data !== true) {
+			if (data) {
 				lychee.error(null, params, data);
 			} else {
 				album.reload();
@@ -1241,14 +1207,14 @@ album.merge = function (albumIDs, albumID, confirm = true) {
 album.setAlbum = function (albumIDs, albumID, confirm = true) {
 	const action = function () {
 		basicModal.close();
-		albumIDs.unshift(albumID);
 
 		let params = {
+			albumID: albumID,
 			albumIDs: albumIDs.join(),
 		};
 
 		api.post("Album::move", params, function (data) {
-			if (data !== true) {
+			if (data) {
 				lychee.error(null, params, data);
 			} else {
 				album.reload();
@@ -1294,17 +1260,17 @@ album.isUploadable = function () {
 	if (lychee.admin) {
 		return true;
 	}
-	if (lychee.publicMode || !lychee.upload) {
+	if (lychee.publicMode || !lychee.may_upload) {
 		return false;
 	}
 
 	// For special cases of no album / smart album / etc. we return true.
 	// It's only for regular non-matching albums that we return false.
-	if (album.json === null || !album.json.owner) {
+	if (album.json === null || !album.json.owner_name) {
 		return true;
 	}
 
-	return album.json.owner === lychee.username;
+	return album.json.owner_name === lychee.username;
 };
 
 album.updatePhoto = function (data) {
@@ -1320,26 +1286,25 @@ album.updatePhoto = function (data) {
 	if (album.json) {
 		$.each(album.json.photos, function () {
 			if (this.id === data.id) {
-				this.width = data.width;
-				this.height = data.height;
-				this.url = data.url;
 				this.filesize = data.filesize;
 				// Deep copy size variants
-				this.sizeVariants = {
+				this.size_variants = {
 					thumb: null,
 					thumb2x: null,
 					small: null,
 					small2x: null,
 					medium: null,
 					medium2x: null,
+					original: null,
 				};
-				if (data.sizeVariants !== undefined && data.sizeVariants !== null) {
-					this.sizeVariants.thumb = deepCopySizeVariant(data.sizeVariants.thumb);
-					this.sizeVariants.thumb2x = deepCopySizeVariant(data.sizeVariants.thumb2x);
-					this.sizeVariants.small = deepCopySizeVariant(data.sizeVariants.small);
-					this.sizeVariants.small2x = deepCopySizeVariant(data.sizeVariants.small2x);
-					this.sizeVariants.medium = deepCopySizeVariant(data.sizeVariants.medium);
-					this.sizeVariants.medium2x = deepCopySizeVariant(data.sizeVariants.medium2x);
+				if (data.size_variants !== undefined && data.size_variants !== null) {
+					this.size_variants.thumb = deepCopySizeVariant(data.size_variants.thumb);
+					this.size_variants.thumb2x = deepCopySizeVariant(data.size_variants.thumb2x);
+					this.size_variants.small = deepCopySizeVariant(data.size_variants.small);
+					this.size_variants.small2x = deepCopySizeVariant(data.size_variants.small2x);
+					this.size_variants.medium = deepCopySizeVariant(data.size_variants.medium);
+					this.size_variants.medium2x = deepCopySizeVariant(data.size_variants.medium2x);
+					this.size_variants.original = deepCopySizeVariant(data.size_variants.original);
 				}
 				view.album.content.updatePhoto(this);
 				albums.refresh();

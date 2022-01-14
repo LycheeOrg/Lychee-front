@@ -16,7 +16,7 @@ albums.load = function () {
 			let waitTime;
 
 			// Smart Albums
-			if (data.smartalbums != null) albums._createSmartAlbums(data.smartalbums);
+			if (data.smart_albums != null) albums._createSmartAlbums(data.smart_albums);
 
 			albums.json = data;
 
@@ -82,9 +82,9 @@ albums.parse = function (album) {
 	if (!album.thumb) {
 		album.thumb = {};
 		album.thumb.id = "";
-		album.thumb.thumb = album.password === "1" ? "img/password.svg" : "img/no_images.svg";
+		album.thumb.thumb = album.has_password ? "img/password.svg" : "img/no_images.svg";
 		album.thumb.type = "";
-		album.thumb.thumb2x = "";
+		album.thumb.thumb2x = null;
 	}
 };
 
@@ -95,7 +95,7 @@ albums._createSmartAlbums = function (data) {
 			id: "unsorted",
 			title: lychee.locale["UNSORTED"],
 			created_at: null,
-			unsorted: "1",
+			is_unsorted: true,
 			thumb: data.unsorted.thumb,
 		};
 	}
@@ -105,7 +105,7 @@ albums._createSmartAlbums = function (data) {
 			id: "starred",
 			title: lychee.locale["STARRED"],
 			created_at: null,
-			star: "1",
+			is_starred: true,
 			thumb: data.starred.thumb,
 		};
 	}
@@ -115,8 +115,8 @@ albums._createSmartAlbums = function (data) {
 			id: "public",
 			title: lychee.locale["PUBLIC"],
 			created_at: null,
-			public: "1",
-			visible: "0",
+			is_public: true,
+			requires_link: true,
 			thumb: data.public.thumb,
 		};
 	}
@@ -126,7 +126,7 @@ albums._createSmartAlbums = function (data) {
 			id: "recent",
 			title: lychee.locale["RECENT"],
 			created_at: null,
-			recent: "1",
+			is_recent: true,
 			thumb: data.recent.thumb,
 		};
 	}
@@ -140,7 +140,7 @@ albums.isShared = function (albumID) {
 	let found = false;
 
 	let func = function () {
-		if (parseInt(this.id, 10) === parseInt(albumID, 10)) {
+		if (this.id === albumID) {
 			found = true;
 			return false; // stop the loop
 		}
@@ -164,7 +164,7 @@ albums.getByID = function (albumID) {
 	let json = undefined;
 
 	let func = function () {
-		if (parseInt(this.id, 10) === parseInt(albumID, 10)) {
+		if (this.id === albumID) {
 			json = this;
 			return false; // stop the loop
 		}
@@ -177,7 +177,7 @@ albums.getByID = function (albumID) {
 
 	if (json === undefined && albums.json.shared_albums !== null) $.each(albums.json.shared_albums, func);
 
-	if (json === undefined && albums.json.smartalbums !== null) $.each(albums.json.smartalbums, func);
+	if (json === undefined && albums.json.smart_albums !== null) $.each(albums.json.smart_albums, func);
 
 	return json;
 };
@@ -194,7 +194,7 @@ albums.deleteByID = function (albumID) {
 	let deleted = false;
 
 	$.each(albums.json.albums, function (i) {
-		if (parseInt(albums.json.albums[i].id) === parseInt(albumID)) {
+		if (albums.json.albums[i].id === albumID) {
 			albums.json.albums.splice(i, 1);
 			deleted = true;
 			return false; // stop the loop
@@ -204,7 +204,7 @@ albums.deleteByID = function (albumID) {
 	if (deleted === false) {
 		if (!albums.json.shared_albums) return undefined;
 		$.each(albums.json.shared_albums, function (i) {
-			if (parseInt(albums.json.shared_albums[i].id) === parseInt(albumID)) {
+			if (albums.json.shared_albums[i].id === albumID) {
 				albums.json.shared_albums.splice(i, 1);
 				deleted = true;
 				return false; // stop the loop
@@ -213,10 +213,10 @@ albums.deleteByID = function (albumID) {
 	}
 
 	if (deleted === false) {
-		if (!albums.json.smartalbums) return undefined;
-		$.each(albums.json.smartalbums, function (i) {
-			if (parseInt(albums.json.smartalbums[i].id) === parseInt(albumID)) {
-				delete albums.json.smartalbums[i];
+		if (!albums.json.smart_albums) return undefined;
+		$.each(albums.json.smart_albums, function (i) {
+			if (albums.json.smart_albums[i].id === albumID) {
+				delete albums.json.smart_albums[i];
 				deleted = true;
 				return false; // stop the loop
 			}

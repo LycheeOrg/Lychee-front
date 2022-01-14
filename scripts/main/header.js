@@ -80,7 +80,7 @@ header.bind = function () {
 		contextMenu.photoMore(photo.getID(), e);
 	});
 	header.dom("#button_move_album").on(eventName, function (e) {
-		contextMenu.move([album.getID()], e, album.setAlbum, "ROOT", album.getParent() != "");
+		contextMenu.move([album.getID()], e, album.setAlbum, "ROOT", album.getParentID() != null);
 	});
 	header.dom("#button_nsfw_album").on(eventName, function (e) {
 		album.setNSFW(album.getID());
@@ -113,14 +113,14 @@ header.bind = function () {
 		if (!album.json.parent_id) {
 			lychee.goto();
 		} else {
-			lychee.goto(album.getParent());
+			lychee.goto(album.getParentID());
 		}
 	});
 	header.dom("#button_back").on(eventName, function () {
 		lychee.goto(album.getID());
 	});
 	header.dom("#button_back_map").on(eventName, function () {
-		lychee.goto(album.getID() || "");
+		lychee.goto(album.getID());
 	});
 	header.dom("#button_fs_album_enter,#button_fs_enter").on(eventName, lychee.fullscreenEnter);
 	header.dom("#button_fs_album_exit,#button_fs_exit").on(eventName, lychee.fullscreenExit).hide();
@@ -296,8 +296,8 @@ header.setMode = function (mode) {
 			// upload to it and it's not explicitly marked as downloadable.
 			if (
 				!album.json ||
-				(album.json.photos === false && album.json.albums && album.json.albums.length === 0) ||
-				(!album.isUploadable() && album.json.downloadable === "0")
+				(album.json.photos.length === 0 && album.json.albums && album.json.albums.length === 0) ||
+				(!album.isUploadable() && !album.json.is_downloadable)
 			) {
 				let e = $("#button_archive");
 				e.hide();
@@ -308,7 +308,7 @@ header.setMode = function (mode) {
 				tabindex.makeFocusable(e);
 			}
 
-			if (album.json && album.json.hasOwnProperty("share_button_visible") && album.json.share_button_visible !== "1") {
+			if (album.json && album.json.hasOwnProperty("is_share_button_visible") && !album.json.is_share_button_visible) {
 				let e = $("#button_share_album");
 				e.hide();
 				tabindex.makeUnfocusable(e);
@@ -469,7 +469,7 @@ header.setMode = function (mode) {
 				tabindex.makeUnfocusable(e);
 			}
 
-			if (photo.json && photo.json.hasOwnProperty("share_button_visible") && photo.json.share_button_visible !== "1") {
+			if (photo.json && photo.json.hasOwnProperty("is_share_button_visible") && !photo.json.is_share_button_visible) {
 				let e = $("#button_share");
 				e.hide();
 				tabindex.makeUnfocusable(e);
@@ -485,11 +485,9 @@ header.setMode = function (mode) {
 			if (
 				!(
 					album.isUploadable() ||
-					(photo.json.hasOwnProperty("downloadable")
-						? photo.json.downloadable === "1"
-						: album.json && album.json.downloadable && album.json.downloadable === "1")
+					(photo.json.hasOwnProperty("is_downloadable") ? photo.json.is_downloadable : album.json && album.json.is_downloadable)
 				) &&
-				!(photo.json.url && photo.json.url !== "")
+				!(photo.json.size_variants.original.url && photo.json.size_variants.original.url !== "")
 			) {
 				let e = $("#button_more");
 				e.hide();

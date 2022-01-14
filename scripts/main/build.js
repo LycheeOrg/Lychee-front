@@ -54,7 +54,7 @@ build.getAlbumThumb = function (data) {
 	thumb2x = data.thumb.thumb2x;
 
 	return `<span class="thumbimg${isVideo ? " video" : ""}"><img class='lazyload' src='img/placeholder.png' data-src='${thumb}' ${
-		thumb2x !== "" ? "data-srcset='" + thumb2x + " 2x'" : ""
+		thumb2x !== null ? "data-srcset='" + thumb2x + " 2x'" : ""
 	} alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
 };
 
@@ -100,9 +100,9 @@ build.album = function (data, disabled = false) {
 	}
 
 	let html = lychee.html`
-			<div class='album ${disabled ? `disabled` : ``} ${data.nsfw && data.nsfw === "1" && lychee.nsfw_blur ? `blurred` : ``}'
+			<div class='album ${disabled ? `disabled` : ``} ${data.is_nsfw && lychee.nsfw_blur ? `blurred` : ``}'
 				data-id='${data.id}'
-				data-nsfw='${data.nsfw && data.nsfw === "1" ? `1` : `0`}'
+				data-nsfw='${data.is_nsfw ? `1` : `0`}'
 				data-tabindex='${tabindex.get_next_tab_index()}'>
 				  ${build.getAlbumThumb(data)}
 				  ${build.getAlbumThumb(data)}
@@ -117,21 +117,21 @@ build.album = function (data, disabled = false) {
 		let isCover = album.json && album.json.cover_id && data.thumb.id === album.json.cover_id;
 		html += lychee.html`
 				<div class='badges'>
-					<a class='badge ${data.nsfw === "1" ? "badge--nsfw" : ""} icn-warning'>${build.iconic("warning")}</a>
-					<a class='badge ${data.star === "1" ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
-					<a class='badge ${data.recent === "1" ? "badge--visible badge--list" : ""}'>${build.iconic("clock")}</a>
-					<a class='badge ${data.public === "1" ? "badge--visible" : ""} ${
-			data.visible === "1" ? "badge--not--hidden" : "badge--hidden"
-		} icn-share'>${build.iconic("eye")}</a>
-					<a class='badge ${data.unsorted === "1" ? "badge--visible" : ""}'>${build.iconic("list")}</a>
-					<a class='badge ${data.password === "1" ? "badge--visible" : ""}'>${build.iconic("lock-locked")}</a>
-					<a class='badge ${data.tag_album === "1" ? "badge--tag" : ""}'>${build.iconic("tag")}</a>
+					<a class='badge ${data.is_nsfw ? "badge--nsfw" : ""} icn-warning'>${build.iconic("warning")}</a>
+					<a class='badge ${data.is_starred ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
+					<a class='badge ${data.is_recent ? "badge--visible badge--list" : ""}'>${build.iconic("clock")}</a>
+					<a class='badge ${data.is_public ? "badge--visible" : ""} ${data.requires_link ? "badge--hidden" : "badge--not--hidden"} icn-share'>${build.iconic(
+			"eye"
+		)}</a>
+					<a class='badge ${data.is_unsorted ? "badge--visible" : ""}'>${build.iconic("list")}</a>
+					<a class='badge ${data.has_password ? "badge--visible" : ""}'>${build.iconic("lock-locked")}</a>
+					<a class='badge ${data.is_tag_album ? "badge--tag" : ""}'>${build.iconic("tag")}</a>
 					<a class='badge ${isCover ? "badge--cover" : ""} icn-cover'>${build.iconic("folder-cover")}</a>
 				</div>
 				`;
 	}
 
-	if ((data.albums && data.albums.length > 0) || (data.hasOwnProperty("has_albums") && data.has_albums === "1")) {
+	if ((data.albums && data.albums.length > 0) || (data.hasOwnProperty("has_albums") && data.has_albums === true)) {
 		html += lychee.html`
 				<div class='subalbum_badge'>
 					<a class='badge badge--folder'>${build.iconic("layers")}</a>
@@ -151,9 +151,9 @@ build.photo = function (data, disabled = false) {
 
 	let isVideo = data.type && data.type.indexOf("video") > -1;
 	let isRaw = data.type && data.type.indexOf("raw") > -1;
-	let isLivePhoto = data.livePhotoUrl !== "" && data.livePhotoUrl !== null;
+	let isLivePhoto = data.live_photo_url !== "" && data.live_photo_url !== null;
 
-	if (data.sizeVariants.thumb === null) {
+	if (data.size_variants.thumb === null) {
 		if (isLivePhoto) {
 			thumbnail = `<span class="thumbimg"><img src='img/live-photo-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false' data-tabindex='${tabindex.get_next_tab_index()}'></span>`;
 		}
@@ -163,8 +163,8 @@ build.photo = function (data, disabled = false) {
 			thumbnail = `<span class="thumbimg"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false' data-tabindex='${tabindex.get_next_tab_index()}'></span>`;
 		}
 	} else if (lychee.layout === "0") {
-		if (data.sizeVariants.thumb2x !== null) {
-			thumb2x = data.sizeVariants.thumb2x.url;
+		if (data.size_variants.thumb2x !== null) {
+			thumb2x = data.size_variants.thumb2x.url;
 		}
 
 		if (thumb2x !== "") {
@@ -173,53 +173,53 @@ build.photo = function (data, disabled = false) {
 
 		thumbnail = `<span class="thumbimg${isVideo ? " video" : ""}${isLivePhoto ? " livephoto" : ""}">`;
 		thumbnail +=
-			`<img class='lazyload' src='img/placeholder.png' data-src='${data.sizeVariants.thumb.url}' ` +
+			`<img class='lazyload' src='img/placeholder.png' data-src='${data.size_variants.thumb.url}' ` +
 			thumb2x +
 			` alt='Photo thumbnail' data-overlay='false' draggable='false' >`;
 		thumbnail += `</span>`;
 	} else {
-		if (data.sizeVariants.small !== null) {
-			if (data.sizeVariants.small2x !== null) {
-				thumb2x = `data-srcset='${data.sizeVariants.small.url} ${data.sizeVariants.small.width}w, ${data.sizeVariants.small2x.url} ${data.sizeVariants.small2x.width}w'`;
+		if (data.size_variants.small !== null) {
+			if (data.size_variants.small2x !== null) {
+				thumb2x = `data-srcset='${data.size_variants.small.url} ${data.size_variants.small.width}w, ${data.size_variants.small2x.url} ${data.size_variants.small2x.width}w'`;
 			}
 
 			thumbnail = `<span class="thumbimg${isVideo ? " video" : ""}${isLivePhoto ? " livephoto" : ""}">`;
 			thumbnail +=
-				`<img class='lazyload' src='img/placeholder.png' data-src='${data.sizeVariants.small.url}' ` +
+				`<img class='lazyload' src='img/placeholder.png' data-src='${data.size_variants.small.url}' ` +
 				thumb2x +
 				` alt='Photo thumbnail' data-overlay='false' draggable='false' >`;
 			thumbnail += `</span>`;
-		} else if (data.sizeVariants.medium !== null) {
-			if (data.sizeVariants.medium2x !== null) {
-				thumb2x = `data-srcset='${data.sizeVariants.medium.url} ${data.sizeVariants.medium.width}w, ${data.sizeVariants.medium2x.url} ${data.sizeVariants.medium2x.width}w'`;
+		} else if (data.size_variants.medium !== null) {
+			if (data.size_variants.medium2x !== null) {
+				thumb2x = `data-srcset='${data.size_variants.medium.url} ${data.size_variants.medium.width}w, ${data.size_variants.medium2x.url} ${data.size_variants.medium2x.width}w'`;
 			}
 
 			thumbnail = `<span class="thumbimg${isVideo ? " video" : ""}${isLivePhoto ? " livephoto" : ""}">`;
 			thumbnail +=
-				`<img class='lazyload' src='img/placeholder.png' data-src='${data.sizeVariants.medium.url}' ` +
+				`<img class='lazyload' src='img/placeholder.png' data-src='${data.size_variants.medium.url}' ` +
 				thumb2x +
 				` alt='Photo thumbnail' data-overlay='false' draggable='false' >`;
 			thumbnail += `</span>`;
 		} else if (!isVideo) {
 			// Fallback for images with no small or medium.
 			thumbnail = `<span class="thumbimg${isLivePhoto ? " livephoto" : ""}">`;
-			thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.url}' alt='Photo thumbnail' data-overlay='false' draggable='false' >`;
+			thumbnail += `<img class='lazyload' src='img/placeholder.png' data-src='${data.size_variants.original.url}' alt='Photo thumbnail' data-overlay='false' draggable='false' >`;
 			thumbnail += `</span>`;
 		} else {
 			// Fallback for videos with no small (the case of no thumb is
 			// handled at the top of this function).
 
-			if (data.sizeVariants.thumb2x !== null) {
-				thumb2x = data.sizeVariants.thumb2x.url;
+			if (data.size_variants.thumb2x !== null) {
+				thumb2x = data.size_variants.thumb2x.url;
 			}
 
 			if (thumb2x !== "") {
-				thumb2x = `data-srcset='${data.sizeVariants.thumb.url} ${data.sizeVariants.thumb.width}w, ${thumb2x} ${data.sizeVariants.thumb2x.width}w'`;
+				thumb2x = `data-srcset='${data.size_variants.thumb.url} ${data.size_variants.thumb.width}w, ${thumb2x} ${data.size_variants.thumb2x.width}w'`;
 			}
 
 			thumbnail = `<span class="thumbimg video">`;
 			thumbnail +=
-				`<img class='lazyload' src='img/placeholder.png' data-src='${data.sizeVariants.thumb.url}' ` +
+				`<img class='lazyload' src='img/placeholder.png' data-src='${data.size_variants.thumb.url}' ` +
 				thumb2x +
 				` alt='Photo thumbnail' data-overlay='false' draggable='false' >`;
 			thumbnail += `</span>`;
@@ -227,7 +227,9 @@ build.photo = function (data, disabled = false) {
 	}
 
 	html += lychee.html`
-			<div class='photo ${disabled ? `disabled` : ``}' data-album-id='${data.album}' data-id='${data.id}' data-tabindex='${tabindex.get_next_tab_index()}'>
+			<div class='photo ${disabled ? `disabled` : ``}' data-album-id='${data.album_id}' data-id='${
+		data.id
+	}' data-tabindex='${tabindex.get_next_tab_index()}'>
 				${thumbnail}
 				<div class='overlay'>
 					<h1 title='$${data.title}'>$${data.title}</h1>
@@ -242,8 +244,8 @@ build.photo = function (data, disabled = false) {
 	if (album.isUploadable()) {
 		html += lychee.html`
 				<div class='badges'>
-				<a class='badge ${data.star === "1" ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
-				<a class='badge ${data.public === "1" && album.json.public !== "1" ? "badge--visible badge--hidden" : ""} icn-share'>${build.iconic("eye")}</a>
+				<a class='badge ${data.is_starred ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
+				<a class='badge ${data.is_public && !album.json.is_public ? "badge--visible badge--hidden" : ""} icn-share'>${build.iconic("eye")}</a>
 				<a class='badge ${isCover ? "badge--cover" : ""} icn-cover'>${build.iconic("folder-cover")}</a>
 				</div>
 				`;
@@ -322,15 +324,17 @@ build.imageview = function (data, visibleControls, autoplay) {
 	if (data.type.indexOf("video") > -1) {
 		html += lychee.html`<video width="auto" height="auto" id='image' controls class='${visibleControls === true ? "" : "full"}' autobuffer ${
 			autoplay ? "autoplay" : ""
-		} data-tabindex='${tabindex.get_next_tab_index()}'><source src='${data.url}'>Your browser does not support the video tag.</video>`;
-	} else if (data.type.indexOf("raw") > -1 && data.sizeVariants.medium === null) {
+		} data-tabindex='${tabindex.get_next_tab_index()}'><source src='${
+			data.size_variants.original.url
+		}'>Your browser does not support the video tag.</video>`;
+	} else if (data.type.indexOf("raw") > -1 && data.size_variants.medium === null) {
 		html += lychee.html`<img id='image' class='${
 			visibleControls === true ? "" : "full"
 		}' src='img/placeholder.png' draggable='false' alt='big' data-tabindex='${tabindex.get_next_tab_index()}'>`;
 	} else {
 		let img = "";
 
-		if (data.livePhotoUrl === "" || data.livePhotoUrl === null) {
+		if (data.live_photo_url === "" || data.live_photo_url === null) {
 			// It's normal photo
 
 			// See if we have the thumbnail loaded...
@@ -344,36 +348,38 @@ build.imageview = function (data, visibleControls, autoplay) {
 				}
 			});
 
-			if (data.sizeVariants.medium !== null) {
+			if (data.size_variants.medium !== null) {
 				let medium = "";
 
-				if (data.sizeVariants.medium2x !== null) {
-					medium = `srcset='${data.sizeVariants.medium.url} ${data.sizeVariants.medium.width}w, ${data.sizeVariants.medium2x.url} ${data.sizeVariants.medium2x.width}w'`;
+				if (data.size_variants.medium2x !== null) {
+					medium = `srcset='${data.size_variants.medium.url} ${data.size_variants.medium.width}w, ${data.size_variants.medium2x.url} ${data.size_variants.medium2x.width}w'`;
 				}
 				img =
-					`<img id='image' class='${visibleControls === true ? "" : "full"}' src='${data.sizeVariants.medium.url}' ` +
+					`<img id='image' class='${visibleControls === true ? "" : "full"}' src='${data.size_variants.medium.url}' ` +
 					medium +
 					`  draggable='false' alt='medium' data-tabindex='${tabindex.get_next_tab_index()}'>`;
 			} else {
 				img = `<img id='image' class='${visibleControls === true ? "" : "full"}' src='${
-					data.url
+					data.size_variants.original.url
 				}' draggable='false' alt='big' data-tabindex='${tabindex.get_next_tab_index()}'>`;
 			}
 		} else {
-			if (data.sizeVariants.medium !== null) {
-				let medium_width = data.sizeVariants.medium.width;
-				let medium_height = data.sizeVariants.medium.height;
+			if (data.size_variants.medium !== null) {
+				let medium_width = data.size_variants.medium.width;
+				let medium_height = data.size_variants.medium.height;
 				// It's a live photo
 				img = `<div id='livephoto' data-live-photo data-proactively-loads-video='true' data-photo-src='${
-					data.sizeVariants.medium.url
+					data.size_variants.medium.url
 				}' data-video-src='${
-					data.livePhotoUrl
+					data.live_photo_url
 				}'  style='width: ${medium_width}px; height: ${medium_height}px' data-tabindex='${tabindex.get_next_tab_index()}'></div>`;
 			} else {
 				// It's a live photo
-				img = `<div id='livephoto' data-live-photo data-proactively-loads-video='true' data-photo-src='${data.url}' data-video-src='${
-					data.livePhotoUrl
-				}'  style='width: ${data.width}px; height: ${data.height}px' data-tabindex='${tabindex.get_next_tab_index()}'></div>`;
+				img = `<div id='livephoto' data-live-photo data-proactively-loads-video='true' data-photo-src='${
+					data.size_variants.original.url
+				}' data-video-src='${data.live_photo_url}'  style='width: ${data.size_variants.original.width}px; height: ${
+					data.size_variants.original.height
+				}px' data-tabindex='${tabindex.get_next_tab_index()}'></div>`;
 			}
 		}
 
@@ -473,7 +479,7 @@ build.tags = function (tags) {
 		a_class = a_class + " search";
 	}
 
-	if (tags !== "") {
+	if (typeof tags === "string" && tags !== "") {
 		tags = tags.split(",");
 
 		tags.forEach(function (tag, index) {

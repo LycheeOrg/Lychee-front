@@ -13,7 +13,7 @@ notifications.update = function (params) {
 	}
 
 	api.post("User::UpdateEmail", params, function (data) {
-		if (data !== true) {
+		if (data) {
 			loadingBar.show("error", data.description);
 			lychee.error(null, params, data);
 		} else {
