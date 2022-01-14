@@ -108,14 +108,17 @@
 			}
 			h1 {
 				font-size: 28px;
+				line-height: 33px;
 				font-weight: bold;
 			}
 			h2 {
 				font-size: 24px;
+				line-height: 29px;
 				font-weight: bold;
 			}
 			h3 {
 				font-size: 20px;
+				line-height: 24px;
 				font-weight: bold;
 			}
 			ol {
@@ -266,7 +269,7 @@
 				font-size: 14px;
 			}
 
-			p {
+			p, .photo_description {
 				margin-top: 2px;
 				font-size: 11px;
 				line-height: 13px;
@@ -319,7 +322,7 @@
 				font-size: 18px;
 			}
 
-			p {
+			p, .photo_description {
 				margin-top: 4px;
 				font-size: 14px;
 				line-height: 16px;

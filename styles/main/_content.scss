@@ -412,9 +412,9 @@
 			}
 		}
 		.album_description {
-			p {
-				margin: 10px 0 -10px;
-			}
+			margin: 10px 0 0 0;
+			font-size: 12px;
+			line-height: 16px;
 		}
 	}
 }
@@ -474,9 +474,7 @@
 			}
 		}
 		.album_description {
-			p {
-				margin: 10px 0 -14px;
-			}
+			margin: 10px 0 0 0;
 		}
 	}
 }
@@ -536,9 +534,7 @@
 			}
 		}
 		.album_description {
-			p {
-				margin: 10px 0 -18px;
-			}
+			margin: 10px 0 0 0;
 		}
 	}
 }
