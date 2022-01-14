@@ -273,9 +273,17 @@ build.check_overlay_type = function (data, overlay_type, next = false) {
 
 build.overlay_image = function (data) {
 	let overlay = "";
+	let overlay_wrap = true;
 	switch (build.check_overlay_type(data, lychee.image_overlay_type)) {
 		case "desc":
-			overlay = data.description;
+			if (lychee.markdown_in_descriptions) {
+				// We don't want to escape markdown-generated HTML.
+				overlay = lychee.markdown(data.description);
+			} else {
+				overlay = lychee.html`<p>$${data.description}</p>`;
+			}
+			overlay = `<div class='photo_description'>${overlay}</div>`;
+			overlay_wrap = false;
 			break;
 		case "date":
 			if (data.taken_at != null)
@@ -305,12 +313,15 @@ build.overlay_image = function (data) {
 			return "";
 	}
 
+	if (overlay !== "" && overlay_wrap) {
+		overlay = `<p>${overlay}</p>`;
+	}
+
 	return (
 		lychee.html`
 		<div id="image_overlay">
 		<h1>$${data.title}</h1>
-		` +
-		(overlay !== "" ? `<p>${overlay}</p>` : ``) +
+		` + overlay +
 		`
 		</div>
 		`

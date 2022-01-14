@@ -28,6 +28,7 @@
 		"leaflet-spin": "^1.1.0",
 		"leaflet.markercluster": "^1.4.1",
 		"livephotoskit": "^1.5.6",
+		"marked": "^4.0.9",
 		"mousetrap": "^1.6.0",
 		"multiselect-two-sides": "^2.5.5",
 		"require": "^2.4.20",

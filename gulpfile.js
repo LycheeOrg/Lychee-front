@@ -29,7 +29,12 @@ paths.view = {
 		"./scripts/main/tabindex.js",
 		"./deps/basiccontext/scripts/basicContext.js",
 	],
-	scripts: ["node_modules/jquery/dist/jquery.min.js", "node_modules/lazysizes/lazysizes.min.js", "../dist/_view--javascript.js"],
+	scripts: [
+		"node_modules/jquery/dist/jquery.min.js",
+		"node_modules/lazysizes/lazysizes.min.js",
+		"node_modules/marked/marked.min.js",
+		"../dist/_view--javascript.js"
+	],
 	svg: ["./images/iconic.svg", "./images/ionicons.svg"],
 };
 
@@ -94,6 +99,7 @@ paths.main = {
 		"node_modules/leaflet-spin/leaflet.spin.min.js",
 		"node_modules/leaflet.markercluster/dist/leaflet.markercluster.js",
 		"node_modules/livephotoskit/livephotoskit.js",
+		"node_modules/marked/marked.min.js",
 		"modules/Leaflet.Photo-gh-pages/Leaflet.Photo.js",
 		"../dist/_main--javascript.js",
 	],

@@ -513,16 +513,23 @@ view.album = {
 	description: function () {
 		if (lychee.display_album_description) {
 			if (album.json.description) {
-				if ($(".album_description").length === 0) {
-					$(lychee.html`<div class='album_description'><p>${album.json.description}</p></div>`).prependTo(".content");
+				let description;
+				if (lychee.markdown_in_descriptions) {
+					// We don't want to escape markdown-generated HTML.
+					description = lychee.markdown(album.json.description);
 				} else {
-					$(".album_description > p").html(album.json.description);
+					description = lychee.html`<p>$${album.json.description}</p>`;
+				}
+				if ($(".album_description").length === 0) {
+					$(`<div class='album_description'>${description}</div>`).prependTo(".content");
+				} else {
+					$(".album_description").html(description);
 				}
 			} else {
 				$(".album_description").remove();
 			}
 		}
-		sidebar.changeAttr("description", album.json.description ? album.json.description : "");
+		sidebar.changeAttr("description", lychee.markdown(album.json.description), lychee.markdown_in_descriptions);
 	},
 
 	show_tags: function () {
@@ -683,7 +690,7 @@ view.photo = {
 	},
 
 	description: function () {
-		if (photo.json.init) sidebar.changeAttr("description", photo.json.description ? photo.json.description : "");
+		if (photo.json.init) sidebar.changeAttr("description", lychee.markdown(photo.json.description), lychee.markdown_in_descriptions);
 	},
 
 	license: function () {
