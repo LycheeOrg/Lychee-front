@@ -88,7 +88,9 @@
 			margin-top: 5px;
 			font-size: 20px;
 			line-height: 24px;
-			h1, h2, h3 {
+			h1,
+			h2,
+			h3 {
 				margin: 20px 0 20px;
 				&:first-child {
 					margin-top: 0;
@@ -97,7 +99,11 @@
 					margin-bottom: 0;
 				}
 			}
-			p, ol, ul, blockquote, pre {
+			p,
+			ol,
+			ul,
+			blockquote,
+			pre {
 				margin: 10px 0 10px;
 				&:first-child {
 					margin-top: 0;
@@ -130,7 +136,8 @@
 			blockquote {
 				margin-left: revert;
 			}
-			pre, code {
+			pre,
+			code {
 				font-family: revert;
 			}
 			hr {
@@ -269,7 +276,8 @@
 				font-size: 14px;
 			}
 
-			p, .photo_description {
+			p,
+			.photo_description {
 				margin-top: 2px;
 				font-size: 11px;
 				line-height: 13px;
@@ -322,7 +330,8 @@
 				font-size: 18px;
 			}
 
-			p, .photo_description {
+			p,
+			.photo_description {
 				margin-top: 4px;
 				font-size: 14px;
 				line-height: 16px;

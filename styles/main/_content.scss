@@ -293,7 +293,9 @@
 		color: white;
 		font-size: 14px;
 		line-height: 19px;
-		h1, h2, h3 {
+		h1,
+		h2,
+		h3 {
 			margin: 20px 0 20px;
 			&:first-child {
 				margin-top: 0;
@@ -302,7 +304,11 @@
 				margin-bottom: 0;
 			}
 		}
-		p, ol, ul, blockquote, pre {
+		p,
+		ol,
+		ul,
+		blockquote,
+		pre {
 			margin: 10px 0 10px;
 			&:first-child {
 				margin-top: 0;
@@ -334,7 +340,8 @@
 		blockquote {
 			margin-left: revert;
 		}
-		pre, code {
+		pre,
+		code {
 			font-family: revert;
 		}
 		hr {

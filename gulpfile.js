@@ -33,7 +33,7 @@ paths.view = {
 		"node_modules/jquery/dist/jquery.min.js",
 		"node_modules/lazysizes/lazysizes.min.js",
 		"node_modules/marked/marked.min.js",
-		"../dist/_view--javascript.js"
+		"../dist/_view--javascript.js",
 	],
 	svg: ["./images/iconic.svg", "./images/ionicons.svg"],
 };

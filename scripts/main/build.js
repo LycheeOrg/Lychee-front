@@ -321,7 +321,8 @@ build.overlay_image = function (data) {
 		lychee.html`
 		<div id="image_overlay">
 		<h1>$${data.title}</h1>
-		` + overlay +
+		` +
+		overlay +
 		`
 		</div>
 		`
