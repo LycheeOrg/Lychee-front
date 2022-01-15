@@ -194,7 +194,7 @@ lychee.init = function (isFirstInitialization = true) {
 			lychee.image_overlay_type = !data.config.image_overlay_type ? "exif" : data.config.image_overlay_type;
 			lychee.image_overlay_type_default = lychee.image_overlay_type;
 			lychee.display_album_description = data.config.display_album_description ? data.config.display_album_description === "1" : true;
-			lychee.markdown_in_descriptions = (data.markdown_in_descriptions && data.markdown_in_descriptions === "1") || false;
+			lychee.markdown_in_descriptions = (data.config.markdown_in_descriptions && data.config.markdown_in_descriptions === "1") || false;
 			lychee.map_display = (data.config.map_display && data.config.map_display === "1") || false;
 			lychee.map_display_public = (data.config.map_display_public && data.config.map_display_public === "1") || false;
 			lychee.map_display_direction = (data.config.map_display_direction && data.config.map_display_direction === "1") || false;
@@ -276,7 +276,7 @@ lychee.init = function (isFirstInitialization = true) {
 			lychee.image_overlay_type = !data.config.image_overlay_type ? "exif" : data.config.image_overlay_type;
 			lychee.image_overlay_type_default = lychee.image_overlay_type;
 			lychee.display_album_description = data.config.display_album_description ? data.config.display_album_description === "1" : true;
-			lychee.markdown_in_descriptions = (data.markdown_in_descriptions && data.markdown_in_descriptions === "1") || false;
+			lychee.markdown_in_descriptions = (data.config.markdown_in_descriptions && data.config.markdown_in_descriptions === "1") || false;
 			lychee.map_display = (data.config.map_display && data.config.map_display === "1") || false;
 			lychee.map_display_public = (data.config.map_display_public && data.config.map_display_public === "1") || false;
 			lychee.map_display_direction = (data.config.map_display_direction && data.config.map_display_direction === "1") || false;
