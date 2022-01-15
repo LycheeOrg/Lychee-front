@@ -535,7 +535,7 @@ sidebar.render = function (structure) {
 						value += lychee.html`<span class='attr_${row.kind} search'>$${v}</span>`;
 					});
 				} else {
-					if (row.kind == "description" && lychee.markdown_in_descriptions) {
+					if (row.kind === "description" && lychee.markdown_in_descriptions) {
 						// We don't want to escape markdown-generated HTML.
 						value = `<span class='attr_${row.kind}'>${value}</span>`;
 					} else {
