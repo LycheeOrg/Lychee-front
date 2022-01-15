@@ -2,7 +2,7 @@
  * @description This module provides the basic functions of Lychee.
  */
 
-let lychee = {
+const lychee = {
 	title: document.title,
 	version: "",
 	versionCode: "", // not really needed anymore
@@ -95,16 +95,25 @@ let lychee = {
 	nsfw_unlocked_albums: [],
 };
 
+/**
+ * @returns {string}
+ */
 lychee.diagnostics = function () {
 	return "/Diagnostics";
 };
 
+/**
+ * @returns {string}
+ */
 lychee.logs = function () {
 	return "/Logs";
 };
 
+/**
+ * @returns {void}
+ */
 lychee.aboutDialog = function () {
-	let msg = lychee.html`
+	const msg = lychee.html`
 				<h1>Lychee ${lychee.version}</h1>
 				<div class='version'><span><a target='_blank' href='${lychee.updateURL}'>${lychee.locale["UPDATE_AVAILABLE"]}</a></span></div>
 				<h1>${lychee.locale["ABOUT_SUBTITLE"]}</h1>
@@ -129,9 +138,12 @@ lychee.aboutDialog = function () {
  *                                        for re-initialization to prevent
  *                                        multiple registrations of global
  *                                        event handlers
+ * @returns {void}
  */
 lychee.init = function (isFirstInitialization = true) {
 	lychee.adjustContentHeight();
+
+	// TODO: Write a jsDoc in `./script/3rd-party/backend.js` for the `data` object (that might get tedious, because it includes all config options)
 
 	api.post("Session::init", {}, function (data) {
 		if (data.status === 0) {
@@ -153,6 +165,7 @@ lychee.init = function (isFirstInitialization = true) {
 		lychee.landing_page_enable = (data.config.landing_page_enable && data.config.landing_page_enable === "1") || false;
 		lychee.new_photos_notification = false;
 
+		// TODO: Let the backend report the version as a proper object with properties for major, minor and patch level
 		lychee.versionCode = data.config.version;
 		if (lychee.versionCode !== "") {
 			let digits = lychee.versionCode.match(/.{1,2}/g);
@@ -179,6 +192,7 @@ lychee.init = function (isFirstInitialization = true) {
 		if (data.status === 2) {
 			// Logged in
 
+			// TODO: Let the backend return `sorting_Photos` as a proper object with separate properties for column and direction (not as a string), as we split it in `view.js` anyway again
 			lychee.sortingPhotos = data.config.sorting_Photos || data.config.sortingPhotos || "";
 			lychee.sortingAlbums = data.config.sorting_Albums || data.config.sortingAlbums || "";
 			lychee.album_subtitle_type = data.config.album_subtitle_type || "oldstyle";
@@ -242,6 +256,7 @@ lychee.init = function (isFirstInitialization = true) {
 
 			lychee.new_photos_notification = (data.config.new_photos_notification && data.config.new_photos_notification === "1") || false;
 
+			// TODO: If configuration management is re-factored on the backend, remember to use proper types in the first place
 			lychee.upload_processing_limit = parseInt(data.config.upload_processing_limit);
 			// when null or any non stringified numeric value is sent from the server we get NaN.
 			// we fix this.
@@ -263,6 +278,7 @@ lychee.init = function (isFirstInitialization = true) {
 			// Logged out
 
 			// TODO remove sortingPhoto once the v4 is out
+			// TODO @ildyria who wrote the TODO above: v4 has been out for a long time now, why is the TODO still here?
 			lychee.sortingPhotos = data.config.sorting_Photos || data.config.sortingPhotos || "";
 			lychee.sortingAlbums = data.config.sorting_Albums || data.config.sortingAlbums || "";
 			lychee.album_subtitle_type = data.config.album_subtitle_type || "oldstyle";
@@ -320,27 +336,23 @@ lychee.init = function (isFirstInitialization = true) {
 	});
 };
 
+/**
+ * @param {{username: string, password: string}} data
+ * @returns {void}
+ */
 lychee.login = function (data) {
-	let username = data.username;
-	let password = data.password;
-
-	if (!username.trim()) {
+	if (!data.username.trim()) {
 		basicModal.error("username");
 		return;
 	}
-	if (!password.trim()) {
+	if (!data.password.trim()) {
 		basicModal.error("password");
 		return;
 	}
 
-	let params = {
-		username,
-		password,
-	};
-
 	api.post(
 		"Session::login",
-		params,
+		data,
 		() => window.location.reload(),
 		null,
 		function (jqXHR) {
@@ -354,13 +366,16 @@ lychee.login = function (data) {
 	);
 };
 
+/**
+ * @returns {void}
+ */
 lychee.loginDialog = function () {
-	// Make background make unfocusable
+	// Make background unfocusable
 	tabindex.makeUnfocusable(header.dom());
 	tabindex.makeUnfocusable(lychee.content);
 	tabindex.makeUnfocusable(lychee.imageview);
 
-	let msg = lychee.html`
+	const msg = lychee.html`
 			<a class='signInKeyLess' id='signInKeyLess'>${build.iconic("key")}</a>
 			<form>
 				<p class='signIn'>
@@ -392,6 +407,13 @@ lychee.loginDialog = function () {
 			},
 		},
 	});
+
+	// This feels awkward, because this hooks into the modal dialog in some
+	// unpredictable way.
+	// It would be better to have a checkbox for password-less login in the
+	// dialog and then let the action handler of the modal dialog, i.e.
+	// `lychee.login` handle both cases.
+	// TODO: Refactor this.
 	$("#signInKeyLess").on("click", u2f.login);
 
 	if (lychee.checkForUpdates === "1") lychee.getUpdate();
@@ -399,23 +421,38 @@ lychee.loginDialog = function () {
 	tabindex.makeFocusable(basicModal.dom());
 };
 
+/**
+ * @returns void
+ */
 lychee.logout = function () {
 	api.post("Session::logout", {}, () => window.location.reload());
 };
 
+/**
+ * @param {?string} [url=null]
+ * @param {boolean} [autoplay=true]
+ *
+ * @returns {void}
+ */
 lychee.goto = function (url = null, autoplay = true) {
 	url = "#" + (url !== null ? url : "");
 	history.pushState({ autoplay: autoplay }, null, url);
 	lychee.load(autoplay);
 };
 
-lychee.gotoMap = function (albumID = "", autoplay = true) {
+/**
+ * @param {?string} [albumID=null]
+ * @param {boolean} [autoplay=true]
+ *
+ * @returns {void}
+ */
+lychee.gotoMap = function (albumID = null, autoplay = true) {
 	// If map functionality is disabled -> go to album
 	if (!lychee.map_display) {
 		loadingBar.show("error", lychee.locale["ERROR_MAP_DEACTIVATED"]);
 		return;
 	}
-	lychee.goto("map/" + albumID, autoplay);
+	lychee.goto("map/" + (albumID !== null ? albumID : ""), autoplay);
 };
 
 /**
@@ -484,6 +521,10 @@ lychee.reloadIfLegacyIDs = function (albumID, photoID, autoplay) {
 	return true;
 };
 
+/**
+ * @param {boolean} [autoplay=true]
+ * @returns {void}
+ */
 lychee.load = function (autoplay = true) {
 	let hash = document.location.hash.replace("#", "").split("/");
 	let albumID = hash[0];
@@ -524,7 +565,7 @@ lychee.load = function (autoplay = true) {
 				// do nothing on "only space" search strings
 				return;
 			}
-			// If public search is diabled -> do nothing
+			// If public search is disabled -> do nothing
 			if (lychee.publicMode === true && !lychee.public_search) {
 				loadingBar.show("error", lychee.locale["ERROR_SEARCH_DEACTIVATED"]);
 				return;
@@ -641,6 +682,9 @@ lychee.load = function (autoplay = true) {
 	}
 };
 
+/**
+ * @returns {void}
+ */
 lychee.getUpdate = function () {
 	// console.log(lychee.update_available);
 	// console.log(lychee.update_json);
@@ -661,6 +705,10 @@ lychee.getUpdate = function () {
 	}
 };
 
+/**
+ * @param {string} title
+ * @param {boolean} editable
+ */
 lychee.setTitle = function (title, editable) {
 	if (lychee.title === title) {
 		document.title = lychee.title + " - " + lychee.locale["ALBUMS"];
@@ -672,6 +720,9 @@ lychee.setTitle = function (title, editable) {
 	header.setTitle(title);
 };
 
+/**
+ * @param {string} mode - one out of: `public`, `view`, `logged_in`
+ */
 lychee.setMode = function (mode) {
 	if (lychee.is_locked) {
 		$("#button_settings_open").remove();
@@ -701,6 +752,7 @@ lychee.setMode = function (mode) {
 
 	if (mode === "logged_in") {
 		// we are logged in, we do not need that short cut anymore. :)
+		// TODO @ildyria: Please elaborate on the comment above: What short-cut do you refer to? And if "something" isn't needed anymore, why it is still there?
 		Mousetrap.unbind(["l"]).unbind(["k"]);
 
 		// The code searches by class, so remove the other instance.
@@ -722,6 +774,7 @@ lychee.setMode = function (mode) {
 	if (mode === "public") {
 		lychee.publicMode = true;
 	} else if (mode === "view") {
+		// TODO: It seems as if this method is never called with `mode === "view"`. This might be dead code. Can it be removed?
 		Mousetrap.unbind(["esc", "command+up"]);
 
 		$("#button_back, a#next, a#previous").remove();
@@ -735,33 +788,45 @@ lychee.setMode = function (mode) {
 	header.bind_back();
 };
 
+/**
+ * @param {jQuery} obj
+ * @param {string} animation
+ *
+ * @returns {void}
+ */
 lychee.animate = function (obj, animation) {
-	let animations = [
+	const animations = [
 		["fadeIn", "fadeOut"],
 		["contentZoomIn", "contentZoomOut"],
 	];
 
-	if (!obj.jQuery) obj = $(obj);
-
 	for (let i = 0; i < animations.length; i++) {
 		for (let x = 0; x < animations[i].length; x++) {
-			if (animations[i][x] == animation) {
+			if (animations[i][x] === animation) {
 				obj.removeClass(animations[i][0] + " " + animations[i][1]).addClass(animation);
-				return true;
 			}
 		}
 	}
-
-	return false;
 };
 
+/**
+ * DON'T USE THIS METHOD.
+ *
+ * TODO: Find all invocations of this method and nuke them.
+ *
+ * This method is really bad. It assumes that the server follows a particular
+ * naming pattern for files and directories.
+ *
+ * @param {string} [path=""]
+ * @returns {{path: string, isPhoto: boolean}}
+ */
 lychee.retinize = function (path = "") {
-	let extention = path.split(".").pop();
-	let isPhoto = extention !== "svg";
+	const extension = path.split(".").pop();
+	const isPhoto = extension !== "svg";
 
 	if (isPhoto === true) {
 		path = path.replace(/\.[^/.]+$/, "");
-		path = path + "@2x" + "." + extention;
+		path = path + "@2x" + "." + extension;
 	}
 
 	return {
@@ -824,6 +889,18 @@ lychee.getEventName = function () {
 	return "click";
 };
 
+/**
+ * DON'T USE THIS METHOD.
+ *
+ * TODO: Find all invocations of this method and nuke them.
+ *
+ * This method does not cover all potentially dangerous characters and this
+ * method should not be required on the first place.
+ * jQuery and even native JS has better methods for this in the year 2022!
+ *
+ * @param {string} [html=""]
+ * @returns {string}
+ */
 lychee.escapeHTML = function (html = "") {
 	// Ensure that html is a string
 	html += "";
@@ -841,6 +918,15 @@ lychee.escapeHTML = function (html = "") {
 };
 
 /**
+ * Creates a HTML string with some fancy variable substitution.
+ *
+ * Actually, this method should not be required in the year 2022.
+ * jQuery and even native JS should probably provide a suitable alternative.
+ * But this method is used so ubiquitous that it might be difficult to get
+ * rid of it.
+ *
+ * TODO: Try it nonetheless.
+ *
  * @param literalSections
  * @param substs
  * @returns {string}
@@ -892,6 +978,9 @@ lychee.handleAPIError = function (jqXHR, params, lycheeException) {
 	return true;
 };
 
+/**
+ * @returns {void}
+ */
 lychee.fullscreenEnter = function () {
 	let elem = document.documentElement;
 	if (elem.requestFullscreen) {
@@ -908,6 +997,9 @@ lychee.fullscreenEnter = function () {
 	}
 };
 
+/**
+ * @returns {void}
+ */
 lychee.fullscreenExit = function () {
 	if (document.exitFullscreen) {
 		document.exitFullscreen();
@@ -923,6 +1015,9 @@ lychee.fullscreenExit = function () {
 	}
 };
 
+/**
+ * @returns {void}
+ */
 lychee.fullscreenToggle = function () {
 	if (lychee.fullscreenStatus()) {
 		lychee.fullscreenExit();
@@ -931,15 +1026,24 @@ lychee.fullscreenToggle = function () {
 	}
 };
 
+/**
+ * @returns {boolean}
+ */
 lychee.fullscreenStatus = function () {
 	let elem = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
-	return elem ? true : false;
+	return !!elem;
 };
 
+/**
+ * @returns {boolean}
+ */
 lychee.fullscreenAvailable = function () {
 	return document.fullscreenEnabled || document.mozFullscreenEnabled || document.webkitFullscreenEnabled || document.msFullscreenEnabled;
 };
 
+/**
+ * @returns {void}
+ */
 lychee.fullscreenUpdate = function () {
 	if (lychee.fullscreenStatus()) {
 		$("#button_fs_album_enter,#button_fs_enter").hide();
@@ -950,18 +1054,30 @@ lychee.fullscreenUpdate = function () {
 	}
 };
 
+/**
+ * @returns {void}
+ */
 lychee.footer_show = function () {
 	setTimeout(function () {
 		lychee.footer.removeClass("hide_footer");
 	}, 200);
 };
 
+/**
+ * @returns {void}
+ */
 lychee.footer_hide = function () {
 	lychee.footer.addClass("hide_footer");
 };
 
-// Because the height of the footer can vary, we need to set some
-// dimensions dynamically, at startup.
+/**
+ * Sets the height of the content area.
+ *
+ * Because the height of the footer can vary, we need to set some
+ * dimensions dynamically, at startup.
+ *
+ * @returns void
+ */
 lychee.adjustContentHeight = function () {
 	if (lychee.footer.length > 0) {
 		lychee.content.css(
@@ -980,6 +1096,9 @@ lychee.adjustContentHeight = function () {
 	}
 };
 
+/**
+ * @returns {string}
+ */
 lychee.getBaseUrl = function () {
 	if (location.href.includes("index.html")) {
 		return location.href.replace("index.html" + location.hash, "");
@@ -990,17 +1109,28 @@ lychee.getBaseUrl = function () {
 	}
 };
 
-// Copied from https://github.com/feross/clipboard-copy/blob/9eba597c774feed48301fef689099599d612387c/index.js
+/**
+ * Copied from https://github.com/feross/clipboard-copy/blob/9eba597c774feed48301fef689099599d612387c/index.js
+ *
+ * @param {string} text
+ * @returns {boolean}
+ */
 lychee.clipboardCopy = function (text) {
 	// Use the Async Clipboard API when available. Requires a secure browsing
 	// context (i.e. HTTPS)
 	if (navigator.clipboard) {
-		return navigator.clipboard.writeText(text).catch(function (err) {
+		navigator.clipboard.writeText(text).catch(function (err) {
 			throw err !== undefined ? err : new DOMException("The request is not allowed", "NotAllowedError");
 		});
+		return false;
 	}
 
 	// ...Otherwise, use document.execCommand() fallback
+	// TODO: The command `document.execCommand` is deprecated (used below)
+	// The clipboard API (used above) is provided by all recent browsers
+	// see https://developer.mozilla.org/en-US/docs/Web/API/Clipboard_API
+	// Probably, the code below is dead code
+	// TODO: Simply nuke it, if this is consensus among developers.
 
 	// Put the text to copy into a <span>
 	let span = document.createElement("span");
