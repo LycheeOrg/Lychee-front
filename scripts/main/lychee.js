@@ -90,6 +90,7 @@ const lychee = {
 	imageview: $("#imageview"),
 	footer: $("#footer"),
 
+	/** @type {Locale} */
 	locale: {},
 
 	nsfw_unlocked_albums: [],

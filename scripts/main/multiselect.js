@@ -2,23 +2,36 @@
  * @description Select multiple albums or photos.
  */
 
+/**
+ * @param {jQuery.Event} e
+ * @returns {boolean}
+ */
 const isSelectKeyPressed = function (e) {
 	return e.metaKey || e.ctrlKey;
 };
 
-let multiselect = {
+const multiselect = {
+	/** @type {string[]} */
 	ids: [],
 	albumsSelected: 0,
 	photosSelected: 0,
+	/** @type {?jQuery} */
 	lastClicked: null,
 };
 
-multiselect.position = {
-	top: null,
-	right: null,
-	bottom: null,
-	left: null,
-};
+/**
+ * @typedef SelectionPosition
+ *
+ * @property {number} top
+ * @property {number} right
+ * @property {number} bottom
+ * @property {number} left
+ */
+
+/**
+ * @type {?SelectionPosition}
+ */
+multiselect.position = null;
 
 multiselect.bind = function () {
 	$(".content").on("mousedown", (e) => {
@@ -28,12 +41,19 @@ multiselect.bind = function () {
 	return true;
 };
 
+/**
+ * @returns {void}
+ */
 multiselect.unbind = function () {
 	$(".content").off("mousedown");
 };
 
+/**
+ * @param {string} id
+ * @returns {{position: number, selected: boolean}}
+ */
 multiselect.isSelected = function (id) {
-	let pos = $.inArray(id, multiselect.ids);
+	const pos = multiselect.ids.indexOf(id);
 
 	return {
 		selected: pos !== -1,
@@ -41,6 +61,10 @@ multiselect.isSelected = function (id) {
 	};
 };
 
+/**
+ * @param {jQuery} object
+ * @param {string} id
+ */
 multiselect.toggleItem = function (object, id) {
 	if (album.isSmartID(id)) return;
 
@@ -50,6 +74,10 @@ multiselect.toggleItem = function (object, id) {
 	else multiselect.removeItem(object, id);
 };
 
+/**
+ * @param {jQuery} object
+ * @param {string} id
+ */
 multiselect.addItem = function (object, id) {
 	if (album.isSmartID(id)) return;
 	if (!lychee.admin && albums.isShared(id)) return;
@@ -74,6 +102,10 @@ multiselect.addItem = function (object, id) {
 	multiselect.lastClicked = object;
 };
 
+/**
+ * @param {jQuery} object
+ * @param {string} id
+ */
 multiselect.removeItem = function (object, id) {
 	let { selected, position } = multiselect.isSelected(id);
 
@@ -100,7 +132,7 @@ multiselect.removeItem = function (object, id) {
  * @returns {void}
  */
 multiselect.albumClick = function (e, albumObj) {
-	let id = albumObj.attr("data-id");
+	const id = albumObj.attr("data-id");
 
 	if ((isSelectKeyPressed(e) || e.shiftKey) && album.isUploadable()) {
 		if (albumObj.hasClass("disabled")) return;
@@ -193,8 +225,8 @@ multiselect.albumContextMenu = function (e, albumObj) {
  * @returns {void}
  */
 multiselect.photoContextMenu = function (e, photoObj) {
-	let id = photoObj.attr("data-id");
-	let selected = multiselect.isSelected(id).selected;
+	const id = photoObj.attr("data-id");
+	const selected = multiselect.isSelected(id).selected;
 
 	if (photoObj.hasClass("disabled")) return;
 
@@ -210,6 +242,9 @@ multiselect.photoContextMenu = function (e, photoObj) {
 	}
 };
 
+/**
+ * @returns {void}
+ */
 multiselect.clearSelection = function () {
 	multiselect.deselect(".photo.active, .album.active");
 	multiselect.ids = [];
@@ -218,6 +253,10 @@ multiselect.clearSelection = function () {
 	multiselect.lastClicked = null;
 };
 
+/**
+ * @param {jQuery.Event} e
+ * @returns {boolean}
+ */
 multiselect.show = function (e) {
 	if (!album.isUploadable()) return false;
 	if (!visible.albums() && !visible.album()) return false;
@@ -231,10 +270,12 @@ multiselect.show = function (e) {
 		multiselect.clearSelection();
 	}
 
-	multiselect.position.top = e.pageY;
-	multiselect.position.right = $(document).width() - e.pageX;
-	multiselect.position.bottom = $(document).height() - e.pageY;
-	multiselect.position.left = e.pageX;
+	multiselect.position = {
+		top: e.pageY,
+		right: $(document).width() - e.pageX,
+		bottom: $(document).height() - e.pageY,
+		left: e.pageX
+	};
 
 	$("body").append(build.multiselect(multiselect.position.top, multiselect.position.left));
 
@@ -247,13 +288,12 @@ multiselect.show = function (e) {
 		});
 };
 
+/**
+ * @param {jQuery.Event} e
+ * @returns {boolean}
+ */
 multiselect.resize = function (e) {
-	if (
-		multiselect.position.top === null ||
-		multiselect.position.right === null ||
-		multiselect.position.bottom === null ||
-		multiselect.position.left === null
-	)
+	if (multiselect.position === null)
 		return false;
 
 	// Default CSS
@@ -290,12 +330,18 @@ multiselect.resize = function (e) {
 	$("#multiselect").css(newCSS);
 };
 
+/**
+ * @returns {void}
+ */
 multiselect.stopResize = function () {
-	if (multiselect.position.top !== null) $(document).off("mousemove mouseup");
+	if (multiselect.position !== null) $(document).off("mousemove mouseup");
 };
 
+/**
+ * @returns {null|{top: number, left: number, width: number, height: number}}
+ */
 multiselect.getSize = function () {
-	if (!visible.multiselect()) return false;
+	if (!visible.multiselect()) return null;
 
 	let $elem = $("#multiselect");
 	let offset = $elem.offset();
@@ -308,11 +354,17 @@ multiselect.getSize = function () {
 	};
 };
 
+/**
+ * TODO: This method is called **`get...`** but it doesn't get anything.
+ *
+ * @param {jQuery.Event} e
+ * @returns {void}
+ */
 multiselect.getSelection = function (e) {
-	let size = multiselect.getSize();
+	const size = multiselect.getSize();
 
-	if (visible.contextMenu()) return false;
-	if (!visible.multiselect()) return false;
+	if (visible.contextMenu()) return;
+	if (!visible.multiselect()) return;
 
 	$(".photo, .album").each(function () {
 		// We select if there's even a slightest overlap.  Overlap between
@@ -339,6 +391,10 @@ multiselect.getSelection = function (e) {
 	multiselect.hide();
 };
 
+/**
+ * @param {string} id
+ * @returns {void}
+ */
 multiselect.select = function (id) {
 	let el = $(id);
 
@@ -346,6 +402,10 @@ multiselect.select = function (id) {
 	el.addClass("active");
 };
 
+/**
+ * @param {string} id
+ * @returns {void}
+ */
 multiselect.deselect = function (id) {
 	let el = $(id);
 
@@ -353,38 +413,37 @@ multiselect.deselect = function (id) {
 	el.removeClass("active");
 };
 
+/**
+ * Note, identical to {@link multiselect.close}
+ * @returns {void}
+ */
 multiselect.hide = function () {
 	sidebar.setSelectable(true);
-
 	multiselect.stopResize();
-
-	multiselect.position.top = null;
-	multiselect.position.right = null;
-	multiselect.position.bottom = null;
-	multiselect.position.left = null;
-
+	multiselect.position = null;
 	lychee.animate("#multiselect", "fadeOut");
 	setTimeout(() => $("#multiselect").remove(), 300);
 };
 
+/**
+ * Note, identical to {@link multiselect.hide}
+ * @returns {void}
+ */
 multiselect.close = function () {
 	sidebar.setSelectable(true);
-
 	multiselect.stopResize();
-
-	multiselect.position.top = null;
-	multiselect.position.right = null;
-	multiselect.position.bottom = null;
-	multiselect.position.left = null;
-
+	multiselect.position = null;
 	lychee.animate("#multiselect", "fadeOut");
 	setTimeout(() => $("#multiselect").remove(), 300);
 };
 
+/**
+ * @returns {void}
+ */
 multiselect.selectAll = function () {
-	if (!album.isUploadable()) return false;
-	if (visible.search()) return false;
-	if (!visible.albums() && !visible.album) return false;
+	if (!album.isUploadable()) return;
+	if (visible.search()) return;
+	if (!visible.albums() && !visible.album) return;
 	if (visible.multiselect()) $("#multiselect").remove();
 
 	sidebar.setSelectable(false);

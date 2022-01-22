@@ -208,3 +208,17 @@ const SmartAlbumID = Object.freeze({
  *
  * @property {string} id
  */
+
+/**
+ * @typedef PositionData
+ *
+ * @property {?string} id - album ID
+ * @property {?string} title - album title
+ * @property {Photo[]} photos
+ */
+
+/**
+ * @typedef EMailData
+ *
+ * @property {?string} email
+ */

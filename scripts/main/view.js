@@ -1470,7 +1470,7 @@ view.notifications = {
 				'<div class="setLogin"><p id="UserUpdate">' +
 				"Enter your email address:" +
 				'<input name="email" class="text" type="text" placeholder="email@example.com" value="' +
-				notifications.json +
+				notifications.json ? notifications.json.email : '' +
 				'">' +
 				'</p><div class="basicModal__buttons">' +
 				'<a id="UserUpdate_button" class="basicModal__button">Save</a>' +

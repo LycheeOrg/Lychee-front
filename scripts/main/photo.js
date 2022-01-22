@@ -28,20 +28,15 @@ photo.load = function (photoID, albumID, autoplay) {
 		else setTimeout(checkContent, 100);
 	};
 
-	const checkPasswd = function () {
-		if (password.value !== "") photo.load(photoID, albumID, autoplay);
-		else setTimeout(checkPasswd, 200);
-	};
-
+	// TODO: The comment below sounds suspicious, what exactly is going on here?
 	// we need to check the album.json.photos because otherwise the script is too fast and this raise an error.
 	if (album.json == null || album.json.photos == null) {
 		checkContent();
 		return false;
 	}
 
-	let params = {
-		photoID,
-		password: password.value,
+	const params = {
+		photoID: photoID,
 	};
 
 	api.post("Photo::get", params, function (data) {

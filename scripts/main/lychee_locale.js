@@ -1,3 +1,10 @@
+/**
+ * @typedef {Object.<string, string>} Locale
+ * @property {function} printFilesizeLocalized
+ * @property {function} printDateTime
+ * @property {function} printMonthYear
+ */
+
 lychee.locale = {
 	USERNAME: "username",
 	PASSWORD: "password",

@@ -2,25 +2,38 @@
  * @description Controls the access to password-protected albums and photos.
  */
 
-let password = {
-	value: "",
-};
+const password = {};
 
+/**
+ * @callback UnlockSuccessCB
+ * @returns {void}
+ */
+
+/**
+ * Shows the "album unlock"-dialog, tries to unlock the album and calls
+ * the provided callback in case success.
+ *
+ * @param {string} albumID - the ID of the album which shall be unlocked
+ * @param {UnlockSuccessCB} callback - called in case of success
+ */
 password.getDialog = function (albumID, callback) {
-	const action = (data) => {
-		let passwd = data.password;
+	/**
+	 * @typedef UnlockDialogResult
+	 * @property {string} password
+	 */
 
-		let params = {
-			albumID,
-			password: passwd,
+	/** @param {UnlockDialogResult} data */
+	const action = (data) => {
+		const params = {
+			albumID: albumID,
+			password: data.password,
 		};
 
 		api.post(
 			"Album::unlock",
 			params,
-			function (_data) {
+			function () {
 				basicModal.close();
-				password.value = passwd;
 				callback();
 			},
 			null,
@@ -34,12 +47,12 @@ password.getDialog = function (albumID, callback) {
 		);
 	};
 
-	const cancel = () => {
+	const cancel = function() {
 		basicModal.close();
 		if (!visible.albums() && !visible.album()) lychee.goto();
 	};
 
-	let msg =
+	const msg =
 		`
 			  <p>
 				  ` +
