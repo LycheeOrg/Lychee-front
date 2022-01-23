@@ -12,7 +12,7 @@ const album = {
  * @returns {boolean}
  */
 album.isSmartID = function (id) {
-	return id === "unsorted" || id === "starred" || id === "public" || id === "recent";
+	return id === SmartAlbumID.UNSORTED || id === SmartAlbumID.STARRED || id === SmartAlbumID.PUBLIC || id === SmartAlbumID.RECENT;
 };
 
 /**
@@ -110,25 +110,20 @@ album.getSubByID = function (albumID) {
 
 /**
  * @param {string} photoID
- * @returns {boolean}
+ * @returns {void}
  */
 album.deleteByID = function (photoID) {
 	if (photoID == null || !album.json || !album.json.photos) {
 		loadingBar.show("error", "Error: Album json not found !");
-		return false;
+		return;
 	}
-
-	let deleted = false;
 
 	$.each(album.json.photos, function (i) {
 		if (album.json.photos[i].id === photoID) {
 			album.json.photos.splice(i, 1);
-			deleted = true;
 			return false;
 		}
 	});
-
-	return deleted;
 };
 
 /**
@@ -158,7 +153,7 @@ album.deleteSubByID = function (albumID) {
  * @param {string} albumID
  * @param {boolean} refresh
  *
- * @returns void
+ * @returns {void}
  */
 album.load = function (albumID, refresh = false) {
 	const params = {
@@ -281,6 +276,7 @@ album.parse = function () {
 album.add = function (IDs = null, callback = null) {
 	/**
 	 * @param {{title: string}} data
+	 * @returns {void}
 	 */
 	const action = function (data) {
 		// let title = data.title;

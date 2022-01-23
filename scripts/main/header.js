@@ -35,8 +35,8 @@ header.bind = function () {
 		else contextMenu.albumTitle(album.getID(), e);
 	});
 
-	header.dom("#button_visibility").on(eventName, function (e) {
-		photo.setPublic(photo.getID(), e);
+	header.dom("#button_visibility").on(eventName, function () {
+		photo.setPublic(photo.getID());
 	});
 	header.dom("#button_share").on(eventName, function (e) {
 		contextMenu.sharePhoto(photo.getID(), e);

@@ -23,8 +23,12 @@ notifications.update = function (params) {
 };
 
 notifications.load = function () {
-	api.post("User::getEmail", {}, /** @param {EMailData} data */ function (data) {
-		notifications.json = data;
-		view.notifications.init();
-	});
+	api.post(
+		"User::getEmail",
+		{},
+		/** @param {EMailData} data */ function (data) {
+			notifications.json = data;
+			view.notifications.init();
+		}
+	);
 };

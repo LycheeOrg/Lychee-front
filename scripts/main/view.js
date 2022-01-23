@@ -332,6 +332,11 @@ view.album = {
 			view.album.content.justify();
 		},
 
+		/**
+		 * @param {string} photoID
+		 * @param {boolean} [justify=false]
+		 * @returns {void}
+		 */
 		delete: function (photoID, justify = false) {
 			$('.photo[data-id="' + photoID + '"]')
 				.css("opacity", 0)
@@ -595,10 +600,12 @@ view.album = {
 };
 
 view.photo = {
+	/**
+	 * @param {boolean} autoplay
+	 * @returns {void}
+	 */
 	init: function (autoplay) {
 		multiselect.clearSelection();
-
-		photo.parse();
 
 		view.photo.sidebar();
 		view.photo.title();
@@ -607,7 +614,8 @@ view.photo = {
 		view.photo.header();
 		view.photo.photo(autoplay);
 
-		photo.json.init = 1;
+		// TODO: `init` is not a property of the Photo JSON; this is a property of the view. Consider to move it to `view.photo.isInitialized`
+		photo.json.init = true;
 	},
 
 	show: function () {
@@ -667,6 +675,7 @@ view.photo = {
 
 	title: function () {
 		if (photo.json.init) sidebar.changeAttr("title", photo.json.title);
+		// TODO: This is the right place to replace an empty photo title by `lychee.locale["UNKNOWN"]`
 		lychee.setTitle(photo.json.title, true);
 	},
 
@@ -737,7 +746,7 @@ view.photo = {
 			// Package gives warning that function will be remove and
 			// shoud be replaced by LivePhotosKit.augementElementAsPlayer
 			// But, LivePhotosKit.augementElementAsPlayer is not yet available
-			photo.LivePhotosObject = LivePhotosKit.Player(document.getElementById("livephoto"));
+			photo.livePhotosObject = LivePhotosKit.Player(document.getElementById("livephoto"));
 		}
 
 		view.photo.onresize();
@@ -1470,11 +1479,13 @@ view.notifications = {
 				'<div class="setLogin"><p id="UserUpdate">' +
 				"Enter your email address:" +
 				'<input name="email" class="text" type="text" placeholder="email@example.com" value="' +
-				notifications.json ? notifications.json.email : '' +
-				'">' +
-				'</p><div class="basicModal__buttons">' +
-				'<a id="UserUpdate_button" class="basicModal__button">Save</a>' +
-				"</div></div>";
+				notifications.json
+					? notifications.json.email
+					: "" +
+					  '">' +
+					  '</p><div class="basicModal__buttons">' +
+					  '<a id="UserUpdate_button" class="basicModal__button">Save</a>' +
+					  "</div></div>";
 
 			$(".settings_view").append(html);
 			settings.bind("#UserUpdate_button", "#UserUpdate", notifications.update);

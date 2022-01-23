@@ -242,42 +242,44 @@ mapview.open = function (albumID = null) {
 		/** @type {MapPhotoEntry[]} */
 		let photos = [];
 
-		album.photos.forEach(/** @param {Photo} element */ function (element) {
-			// TODO: My IDE complains that `parseFloat` is unnecessary, because `element.latitude`/`element.longitude` is already a float
-			// TODO: My IDE complains that `element.size_variants.thumb !== null` is always false
-			if (element.latitude || element.longitude) {
-				photos.push({
-					lat: parseFloat(element.latitude),
-					lng: parseFloat(element.longitude),
-					thumbnail: element.size_variants.thumb !== null ? element.size_variants.thumb.url : "img/placeholder.png",
-					thumbnail2x: element.size_variants.thumb2x !== null ? element.size_variants.thumb2x.url : null,
-					url: element.size_variants.small !== null ? element.size_variants.small.url : element.url,
-					url2x: element.size_variants.small2x !== null ? element.size_variants.small2x.url : null,
-					name: element.title,
-					taken_at: element.taken_at,
-					albumID: element.album_id,
-					photoID: element.id,
-				});
+		album.photos.forEach(
+			/** @param {Photo} element */ function (element) {
+				// TODO: My IDE complains that `parseFloat` is unnecessary, because `element.latitude`/`element.longitude` is already a float
+				// TODO: My IDE complains that `element.size_variants.thumb !== null` is always false
+				if (element.latitude || element.longitude) {
+					photos.push({
+						lat: parseFloat(element.latitude),
+						lng: parseFloat(element.longitude),
+						thumbnail: element.size_variants.thumb !== null ? element.size_variants.thumb.url : "img/placeholder.png",
+						thumbnail2x: element.size_variants.thumb2x !== null ? element.size_variants.thumb2x.url : null,
+						url: element.size_variants.small !== null ? element.size_variants.small.url : element.url,
+						url2x: element.size_variants.small2x !== null ? element.size_variants.small2x.url : null,
+						name: element.title,
+						taken_at: element.taken_at,
+						albumID: element.album_id,
+						photoID: element.id,
+					});
 
-				// Update min/max lat/lng
-				if (mapview.min_lat === null || mapview.min_lat > element.latitude) {
-					// TODO: My IDE complains about unnecessary `parseFloat`
-					mapview.min_lat = parseFloat(element.latitude);
-				}
-				if (mapview.min_lng === null || mapview.min_lng > element.longitude) {
-					// TODO: My IDE complains about unnecessary `parseFloat`
-					mapview.min_lng = parseFloat(element.longitude);
-				}
-				if (mapview.max_lat === null || mapview.max_lat < element.latitude) {
-					// TODO: My IDE complains about unnecessary `parseFloat`
-					mapview.max_lat = parseFloat(element.latitude);
-				}
-				if (mapview.max_lng === null || mapview.max_lng < element.longitude) {
-					// TODO: My IDE complains about unnecessary `parseFloat`
-					mapview.max_lng = parseFloat(element.longitude);
+					// Update min/max lat/lng
+					if (mapview.min_lat === null || mapview.min_lat > element.latitude) {
+						// TODO: My IDE complains about unnecessary `parseFloat`
+						mapview.min_lat = parseFloat(element.latitude);
+					}
+					if (mapview.min_lng === null || mapview.min_lng > element.longitude) {
+						// TODO: My IDE complains about unnecessary `parseFloat`
+						mapview.min_lng = parseFloat(element.longitude);
+					}
+					if (mapview.max_lat === null || mapview.max_lat < element.latitude) {
+						// TODO: My IDE complains about unnecessary `parseFloat`
+						mapview.max_lat = parseFloat(element.latitude);
+					}
+					if (mapview.max_lng === null || mapview.max_lng < element.longitude) {
+						// TODO: My IDE complains about unnecessary `parseFloat`
+						mapview.max_lng = parseFloat(element.longitude);
+					}
 				}
 			}
-		});
+		);
 
 		// Add Photos to map
 		mapview.photoLayer.add(photos).addTo(mapview.map);
@@ -302,7 +304,7 @@ mapview.open = function (albumID = null) {
 		const successHandler = function (data) {
 			addPhotosToMap(data);
 			mapview.title(_albumID, data.title);
-		}
+		};
 
 		if (_albumID !== "" && _albumID !== null) {
 			// _albumID has been specified

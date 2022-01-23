@@ -256,7 +256,7 @@ contextMenu.buildList = function (lists, exclude, action, parentID = null, layer
 
 		items.push({
 			title: html,
-			disabled: exclude.findIndex( (id) => id === item.id) !== -1,
+			disabled: exclude.findIndex((id) => id === item.id) !== -1,
 			fn: () => action(item),
 		});
 
@@ -360,7 +360,7 @@ contextMenu.photo = function (photoID, e) {
  * @returns {number}
  */
 contextMenu.countSubAlbums = function (photoIDs) {
-	if(album.albums === null || album.albums.length === 0) {
+	if (album.albums === null || album.albums.length === 0) {
 		return 0;
 	}
 
@@ -461,10 +461,8 @@ contextMenu.photoMore = function (photoID, e) {
 
 	// TODO: Check, if `hasOwnProperty` is really required. IMHO, `photo` always has this property.
 	const showDownload = !!(
-		album.isUploadable() ||
-		(photo.json.hasOwnProperty("is_downloadable")
-			? photo.json.is_downloadable
-			: album.json && album.json.is_downloadable));
+		album.isUploadable() || (photo.json.hasOwnProperty("is_downloadable") ? photo.json.is_downloadable : album.json && album.json.is_downloadable)
+	);
 	const showFull = !!(photo.json.size_variants.original.url && photo.json.size_variants.original.url !== "");
 
 	const items = [
@@ -478,7 +476,7 @@ contextMenu.photoMore = function (photoID, e) {
 			items.unshift({
 				title: build.iconic("eye") + lychee.locale["VISIBILITY_PHOTO"],
 				visible: lychee.enable_button_visibility,
-				fn: (event) => photo.setPublic(photo.getID(), event),
+				fn: () => photo.setPublic(photo.getID()),
 			});
 		}
 		const button_trash = $("#button_trash");
@@ -535,7 +533,7 @@ contextMenu.photoMore = function (photoID, e) {
 contextMenu.getSubIDs = function (albums, albumID) {
 	let ids = [albumID];
 
-	albums.forEach(function (album){
+	albums.forEach(function (album) {
 		if (album.parent_id === albumID) {
 			ids = ids.concat(contextMenu.getSubIDs(albums, album.id));
 		}

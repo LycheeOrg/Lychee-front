@@ -44,6 +44,8 @@
  * @property {SizeVariants} size_variants
  * @property {boolean}      is_downloadable
  * @property {boolean}      is_share_button_visible
+ * @property {?string}      [next_photo_id]
+ * @property {?string}      [previous_photo_id]
  */
 
 /**
@@ -165,6 +167,8 @@
 /**
  * @typedef Albums
  *
+ * TODO: Split smart albums and tag albums into separate collections
+ *
  * @property {SmartAlbums} smart_albums - despite the name also includes tag albums
  * @property {Album[]}     albums
  * @property {Album[]}     shared_albums
@@ -172,6 +176,8 @@
 
 /**
  * @typedef SmartAlbums
+ *
+ * TODO: Split smart albums and tag albums into separate collections
  *
  * @type {Object.<string, TagAlbum>}
  *
@@ -187,10 +193,10 @@
  * @type {Readonly<{RECENT: string, STARRED: string, PUBLIC: string, UNSORTED: string}>}
  */
 const SmartAlbumID = Object.freeze({
-	UNSORTED: 'unsorted',
-	STARRED: 'starred',
-	PUBLIC: 'public',
-	RECENT: 'recent'
+	UNSORTED: "unsorted",
+	STARRED: "starred",
+	PUBLIC: "public",
+	RECENT: "recent",
 });
 
 /**

@@ -25,11 +25,10 @@ albums.load = function () {
 		albums.json = data;
 
 		// Skip delay when opening a blank Lychee
-		const skipDelay = (!visible.albums() && !visible.photo() && !visible.album()) ||
-			(visible.album() && lychee.content.html() === "");
+		const skipDelay = (!visible.albums() && !visible.photo() && !visible.album()) || (visible.album() && lychee.content.html() === "");
 		// Calculate delay
 		const durationTime = new Date().getTime() - startTime;
-		const waitTime = (durationTime > 300 || skipDelay) ? 0 : 300 - durationTime;
+		const waitTime = durationTime > 300 || skipDelay ? 0 : 300 - durationTime;
 
 		setTimeout(() => {
 			header.setMode("albums");
@@ -93,7 +92,7 @@ albums.parse = function (album) {
 			id: "",
 			thumb: album.has_password ? "img/password.svg" : "img/no_images.svg",
 			type: "image/svg+xml",
-			thumb2x: null
+			thumb2x: null,
 		};
 	}
 };

@@ -47,7 +47,7 @@ password.getDialog = function (albumID, callback) {
 		);
 	};
 
-	const cancel = function() {
+	const cancel = function () {
 		basicModal.close();
 		if (!visible.albums() && !visible.album()) lychee.goto();
 	};

@@ -274,7 +274,7 @@ multiselect.show = function (e) {
 		top: e.pageY,
 		right: $(document).width() - e.pageX,
 		bottom: $(document).height() - e.pageY,
-		left: e.pageX
+		left: e.pageX,
 	};
 
 	$("body").append(build.multiselect(multiselect.position.top, multiselect.position.left));
@@ -293,8 +293,7 @@ multiselect.show = function (e) {
  * @returns {boolean}
  */
 multiselect.resize = function (e) {
-	if (multiselect.position === null)
-		return false;
+	if (multiselect.position === null) return false;
 
 	// Default CSS
 	let newCSS = {

@@ -257,30 +257,52 @@ $(document).ready(function () {
 			if (visible.photo()) swipe.start($("#imageview #image, #imageview #livephoto"));
 		})
 		.swipe()
-		.on("swipeMove", /** @param {jQuery.Event} e */ function (e) {
-			if (visible.photo()) swipe.move(e.swipe);
-		})
+		.on(
+			"swipeMove",
+			/** @param {jQuery.Event} e */ function (e) {
+				if (visible.photo()) swipe.move(e.swipe);
+			}
+		)
 		.swipe()
-		.on("swipeEnd", /** @param {jQuery.Event} e */ function (e) {
-			if (visible.photo()) swipe.stop(e.swipe, photo.previous, photo.next);
-		});
+		.on(
+			"swipeEnd",
+			/** @param {jQuery.Event} e */ function (e) {
+				if (visible.photo()) swipe.stop(e.swipe, photo.previous, photo.next);
+			}
+		);
 
 	// Document
 	$(document)
 		// Navigation
-		.on("click", ".album", /** @param {jQuery.Event} e */ function (e) {
-			multiselect.albumClick(e, $(this));
-		})
-		.on("click", ".photo", /** @param {jQuery.Event} e */ function (e) {
-			multiselect.photoClick(e, $(this));
-		})
+		.on(
+			"click",
+			".album",
+			/** @param {jQuery.Event} e */ function (e) {
+				multiselect.albumClick(e, $(this));
+			}
+		)
+		.on(
+			"click",
+			".photo",
+			/** @param {jQuery.Event} e */ function (e) {
+				multiselect.photoClick(e, $(this));
+			}
+		)
 		// Context Menu
-		.on("contextmenu", ".photo", /** @param {jQuery.Event} e */ function (e) {
-			multiselect.photoContextMenu(e, $(this));
-		})
-		.on("contextmenu", ".album", /** @param {jQuery.Event} e */ function (e) {
-			multiselect.albumContextMenu(e, $(this));
-		})
+		.on(
+			"contextmenu",
+			".photo",
+			/** @param {jQuery.Event} e */ function (e) {
+				multiselect.photoContextMenu(e, $(this));
+			}
+		)
+		.on(
+			"contextmenu",
+			".album",
+			/** @param {jQuery.Event} e */ function (e) {
+				multiselect.albumContextMenu(e, $(this));
+			}
+		)
 		// Upload
 		.on("change", "#upload_files", function () {
 			basicModal.close();
@@ -294,59 +316,65 @@ $(document).ready(function () {
 			},
 			false
 		)
-		.on("drop", /** @param {jQuery.Event} e */ function (e) {
-			if (
-				!album.isUploadable() ||
-				visible.contextMenu() ||
-				basicModal.visible() ||
-				visible.leftMenu() ||
-				visible.config() ||
-				!(visible.album() || visible.albums())
-			) {
+		.on(
+			"drop",
+			/** @param {jQuery.Event} e */ function (e) {
+				if (
+					!album.isUploadable() ||
+					visible.contextMenu() ||
+					basicModal.visible() ||
+					visible.leftMenu() ||
+					visible.config() ||
+					!(visible.album() || visible.albums())
+				) {
+					return false;
+				}
+
+				// Detect if dropped item is a file or a link
+				if (e.originalEvent.dataTransfer.files.length > 0) upload.start.local(e.originalEvent.dataTransfer.files);
+				else if (e.originalEvent.dataTransfer.getData("Text").length > 3) upload.start.url(e.originalEvent.dataTransfer.getData("Text"));
+
 				return false;
 			}
-
-			// Detect if dropped item is a file or a link
-			if (e.originalEvent.dataTransfer.files.length > 0) upload.start.local(e.originalEvent.dataTransfer.files);
-			else if (e.originalEvent.dataTransfer.getData("Text").length > 3) upload.start.url(e.originalEvent.dataTransfer.getData("Text"));
-
-			return false;
-		})
+		)
 		// click on thumbnail on map
 		.on("click", ".image-leaflet-popup", function () {
 			mapview.goto($(this));
 		})
 		// Paste upload
-		.on("paste", /** @param {jQuery.Event} e */ function (e) {
-			if (e.originalEvent.clipboardData.items) {
-				const items = e.originalEvent.clipboardData.items;
-				let filesToUpload = [];
+		.on(
+			"paste",
+			/** @param {jQuery.Event} e */ function (e) {
+				if (e.originalEvent.clipboardData.items) {
+					const items = e.originalEvent.clipboardData.items;
+					let filesToUpload = [];
 
-				// Search clipboard items for an image
-				for (let i = 0; i < items.length; i++) {
-					if (items[i].type.indexOf("image") !== -1 || items[i].type.indexOf("video") !== -1) {
-						filesToUpload.push(items[i].getAsFile());
-					}
-				}
-
-				if (filesToUpload.length > 0) {
-					// We perform the check so deep because we don't want to
-					// prevent the paste from working in text input fields, etc.
-					if (
-						album.isUploadable() &&
-						!visible.contextMenu() &&
-						!basicModal.visible() &&
-						!visible.leftMenu() &&
-						!visible.config() &&
-						(visible.album() || visible.albums())
-					) {
-						upload.start.local(filesToUpload);
+					// Search clipboard items for an image
+					for (let i = 0; i < items.length; i++) {
+						if (items[i].type.indexOf("image") !== -1 || items[i].type.indexOf("video") !== -1) {
+							filesToUpload.push(items[i].getAsFile());
+						}
 					}
 
-					return false;
+					if (filesToUpload.length > 0) {
+						// We perform the check so deep because we don't want to
+						// prevent the paste from working in text input fields, etc.
+						if (
+							album.isUploadable() &&
+							!visible.contextMenu() &&
+							!basicModal.visible() &&
+							!visible.leftMenu() &&
+							!visible.config() &&
+							(visible.album() || visible.albums())
+						) {
+							upload.start.local(filesToUpload);
+						}
+
+						return false;
+					}
 				}
 			}
-		});
+		);
 	// Fullscreen
 	if (lychee.fullscreenAvailable())
 		$(document).on("fullscreenchange mozfullscreenchange webkitfullscreenchange msfullscreenchange", lychee.fullscreenUpdate);
