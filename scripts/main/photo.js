@@ -51,7 +51,7 @@ photo.load = function (photoID, albumID, autoplay) {
 		photo.json = data;
 		// TODO: `photo.json.original_album_id` is set only, but never read; do we need it?
 		photo.json.original_album_id = photo.json.album_id;
-		// TODO: Why do we overwrite the true album ID of a photo, by the externally provided one? Add a comment at least.
+		// TODO: Why do we overwrite the true album ID of a photo, by the externally provided one? I guess we need it, because the album which the user came from might also be a smart album or a tag album. However, in this case I would prefer to leave the `album_id  untouched (don't rename it to `original_album_id`) and call this one `effective_album_id` instead.
 		photo.json.album_id = albumID;
 		// TODO: The JSON should be left untouched. Replacing `null` by `lychee.locale["UNTITLED"]` should happen on the GUI layer, i.e. somewhere inside the `view` component.
 		if (!photo.json.title) photo.json.title = lychee.locale["UNTITLED"];

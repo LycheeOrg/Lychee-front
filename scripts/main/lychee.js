@@ -658,9 +658,9 @@ lychee.load = function (autoplay = true) {
 	} else {
 		$(".no_content").remove();
 		// Trash albums.json when filled with search results
-		if (search.hash != null) {
+		if (search.checksum !== null) {
 			albums.json = null;
-			search.hash = null;
+			search.checksum = null;
 		}
 
 		// Trash data

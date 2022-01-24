@@ -2,13 +2,19 @@
  * @description Searches through your photos and albums.
  */
 
-let search = {
-	hash: null,
+const search = {
+	/** @type {?string} - a checksum of the search result to efficiently determine if the result has changed since the last time */
+	checksum: null,
 };
 
+/**
+ * @param {string} term
+ * @returns {void}
+ */
 search.find = function (term) {
-	if (term.trim() === "") return false;
+	if (term.trim() === "") return;
 
+	/** @returns {void} */
 	const timeoutHandler = function () {
 		/** @param {SearchResult} data */
 		const successHandler = function (data) {
@@ -16,6 +22,7 @@ search.find = function (term) {
 			let albumsData = "";
 			let photosData = "";
 
+			// TODO: My IDE complains that `albums.json.albums` must be an array of `Album` only, however `SearchResult` returns an array with a mix of `Album` and `TagAlbum`. This probably only works "accidentally", because we don't use any of the special properties of a `TagAlbum` or `Album` when we display search results. However, the problem could be easily solved, when we would split `TagAlbums` from `SmartAlbums` (also see comment on {@link Albums}).
 			albums.json.albums = data.albums;
 			// Build HTML for photo
 			albums.json.albums.forEach(function (album) {
@@ -52,12 +59,12 @@ search.find = function (term) {
 			else html = build.divider(albums_divider) + albumsData + build.divider(photos_divider) + photosData;
 
 			// Only refresh view when search results are different
-			if (search.hash !== data.hash) {
+			if (search.checksum !== data.checksum) {
 				$(".no_content").remove();
 
-				lychee.animate(".content", "contentZoomOut");
+				lychee.animate($(".content"), "contentZoomOut");
 
-				search.hash = data.hash;
+				search.checksum = data.checksum;
 
 				setTimeout(() => {
 					if (visible.photo()) view.photo.hide();
@@ -96,14 +103,14 @@ search.reset = function () {
 	header.dom(".header__search").val("");
 	$(".no_content").remove();
 
-	if (search.hash != null) {
+	if (search.checksum != null) {
 		// Trash data
 		albums.json = null;
 		album.json = null;
 		photo.json = null;
-		search.hash = null;
+		search.checksum = null;
 
-		lychee.animate(".divider", "fadeOut");
+		lychee.animate($(".divider"), "fadeOut");
 		lychee.goto();
 	}
 };

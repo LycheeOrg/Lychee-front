@@ -420,7 +420,7 @@ multiselect.hide = function () {
 	sidebar.setSelectable(true);
 	multiselect.stopResize();
 	multiselect.position = null;
-	lychee.animate("#multiselect", "fadeOut");
+	lychee.animate($("#multiselect"), "fadeOut");
 	setTimeout(() => $("#multiselect").remove(), 300);
 };
 
@@ -432,7 +432,7 @@ multiselect.close = function () {
 	sidebar.setSelectable(true);
 	multiselect.stopResize();
 	multiselect.position = null;
-	lychee.animate("#multiselect", "fadeOut");
+	lychee.animate($("#multiselect"), "fadeOut");
 	setTimeout(() => $("#multiselect").remove(), 300);
 };
 

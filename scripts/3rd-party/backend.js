@@ -162,6 +162,10 @@
  *
  * @property {(Album|TagAlbum)[]} albums
  * @property {Photo[]}            photos
+ * @property {string}             checksum - checksum of the search result to
+ *                                           efficiently determine if the
+ *                                           result has changed since the last
+ *                                           time
  */
 
 /**

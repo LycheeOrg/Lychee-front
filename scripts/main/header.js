@@ -139,7 +139,7 @@ header.bind = function () {
 	header.dom(".header__search").on("keyup click", function () {
 		if ($(this).val().length > 0) {
 			lychee.goto("search/" + encodeURIComponent($(this).val()));
-		} else if (search.hash !== null) {
+		} else if (search.checksum !== null) {
 			search.reset();
 		}
 	});

@@ -96,13 +96,13 @@ sidebar.bind = function () {
 };
 
 sidebar.triggerSearch = function (search_string) {
-	// If public search is diabled -> do nothing
+	// If public search is disabled -> do nothing
 	if (lychee.publicMode === true && !lychee.public_search) {
 		// Do not display an error -> just do nothing to not confuse the user
 		return;
 	}
 
-	search.hash = null;
+	search.checksum = null;
 	// We're either logged in or public search is allowed
 	lychee.goto("search/" + encodeURIComponent(search_string));
 };

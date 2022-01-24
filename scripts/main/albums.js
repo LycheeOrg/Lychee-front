@@ -13,7 +13,7 @@ const albums = {
 albums.load = function () {
 	let startTime = new Date().getTime();
 
-	lychee.animate(".content", "contentZoomOut");
+	lychee.animate($(".content"), "contentZoomOut");
 
 	/**
 	 * @param {Albums} data
@@ -83,7 +83,7 @@ albums.load = function () {
 };
 
 /**
- * @param {Album} album
+ * @param {(Album|TagAlbum|SmartAlbum)} album
  * @returns void
  */
 albums.parse = function (album) {

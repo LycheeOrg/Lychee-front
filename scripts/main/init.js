@@ -219,7 +219,7 @@ $(document).ready(function () {
 		else if (visible.photo()) lychee.goto(album.getID());
 		else if (visible.album() && !album.json.parent_id) lychee.goto();
 		else if (visible.album()) lychee.goto(album.getParentID());
-		else if (visible.albums() && search.hash !== null) search.reset();
+		else if (visible.albums() && search.checksum !== null) search.reset();
 		else if (visible.mapview()) mapview.close();
 		else if (visible.albums() && lychee.enable_close_tab_on_esc) {
 			window.open("", "_self").close();

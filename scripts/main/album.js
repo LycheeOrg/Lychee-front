@@ -168,7 +168,7 @@ album.load = function (albumID, refresh = false) {
 		album.json = data;
 
 		if (refresh === false) {
-			lychee.animate(".content", "contentZoomOut");
+			lychee.animate($(".content"), "contentZoomOut");
 		}
 		let waitTime = 300;
 
