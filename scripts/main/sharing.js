@@ -1,11 +1,16 @@
 let sharing = {
+	/** @type {?SharingInfo} */
 	json: null,
 };
 
+/**
+ * @returns {void}
+ */
 sharing.add = function () {
-	let params = {
+	// TODO: Change `albumIDs` and `userIDs` to proper arrays. This would also simplify the code below.
+	const params = {
 		albumIDs: "",
-		UserIDs: "",
+		userIDs: "",
 	};
 
 	$("#albums_list_to option").each(function () {
@@ -14,17 +19,17 @@ sharing.add = function () {
 	});
 
 	$("#user_list_to option").each(function () {
-		if (params.UserIDs !== "") params.UserIDs += ",";
-		params.UserIDs += this.value;
+		if (params.userIDs !== "") params.userIDs += ",";
+		params.userIDs += this.value;
 	});
 
 	if (params.albumIDs === "") {
 		loadingBar.show("error", "Select an album to share!");
-		return false;
+		return;
 	}
-	if (params.UserIDs === "") {
+	if (params.userIDs === "") {
 		loadingBar.show("error", "Select a user to share with!");
-		return false;
+		return;
 	}
 
 	api.post("Sharing::add", params, function () {
@@ -33,19 +38,22 @@ sharing.add = function () {
 	});
 };
 
+/**
+ * @returns {void}
+ */
 sharing.delete = function () {
-	let params = {
-		ShareIDs: "",
+	// TODO: Change `shareIDs` to a proper array. This would also simplify the code below.
+	const params = {
+		shareIDs: "",
 	};
 
 	$('input[name="remove_id"]:checked').each(function () {
-		if (params.ShareIDs !== "") params.ShareIDs += ",";
-		params.ShareIDs += this.value;
+		if (params.shareIDs !== "") params.shareIDs += ",";
+		params.shareIDs += this.value;
 	});
 
-	if (params.ShareIDs === "") {
+	if (params.shareIDs === "") {
 		loadingBar.show("error", "Select a sharing to remove!");
-		return false;
 	}
 	api.post("Sharing::delete", params, function () {
 		loadingBar.show("success", "Sharing removed!");
@@ -53,9 +61,17 @@ sharing.delete = function () {
 	});
 };
 
+/**
+ * @returns {void}
+ */
 sharing.list = function () {
-	api.post("Sharing::list", {}, function (data) {
-		sharing.json = data;
-		view.sharing.init();
-	});
+	api.post(
+		"Sharing::list",
+		{},
+		/** @param {SharingInfo} data */
+		function (data) {
+			sharing.json = data;
+			view.sharing.init();
+		}
+	);
 };

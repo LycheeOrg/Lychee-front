@@ -11,7 +11,8 @@ photoeditor = {};
  */
 photoeditor.rotate = function (photoID, direction) {
 	api.post(
-		"PhotoEditor::rotate", {
+		"PhotoEditor::rotate",
+		{
 			photoID: photoID,
 			direction: direction,
 		},

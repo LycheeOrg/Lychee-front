@@ -113,13 +113,7 @@ settings.createConfig = function () {
 			dbTablePrefix,
 		};
 
-		api.post(
-			"Config::create",
-			params,
-			() => window.location.reload(),
-			null,
-			errorHandler
-		);
+		api.post("Config::create", params, () => window.location.reload(), null, errorHandler);
 	};
 
 	const msg = `
@@ -376,7 +370,7 @@ settings.setLayout = function (params) {
 settings.changePublicSearch = function () {
 	const params = {
 		// TODO: Presumably, the `SettingsFormData` also includes a property `PublicSearch: boolean`; in that case there is no need for an inefficient jQuery selector
-		public_search: ($("#PublicSearch:checked").length === 1)
+		public_search: $("#PublicSearch:checked").length === 1,
 	};
 
 	api.post("Settings::setPublicSearch", params, function () {
@@ -420,7 +414,7 @@ settings.setOverlayType = function () {
 settings.changeMapDisplay = function () {
 	const params = {
 		// TODO: Presumably, the `SettingsFormData` also includes a property `MapDisplay: boolean`; in that case there is no need for an inefficient jQuery selector
-		map_display: ($("#MapDisplay:checked").length === 1)
+		map_display: $("#MapDisplay:checked").length === 1,
 	};
 
 	api.post("Settings::setMapDisplay", params, function () {
@@ -440,8 +434,8 @@ settings.changeMapDisplay = function () {
 settings.changeMapDisplayPublic = function () {
 	const params = {
 		// TODO: Presumably, the `SettingsFormData` also includes a property `MapDisplayPublic: boolean`; in that case there is no need for an inefficient jQuery selector
-		map_display_public: ($("#MapDisplayPublic:checked").length === 1)
-	}
+		map_display_public: $("#MapDisplayPublic:checked").length === 1,
+	};
 
 	api.post("Settings::setMapDisplayPublic", params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY_PUBLIC"]);
@@ -460,7 +454,7 @@ settings.changeMapDisplayPublic = function () {
 settings.setMapProvider = function () {
 	// TODO: Presumably, the `SettingsFormData` also includes a property `MapProvider: string`; in that case there is no need for an inefficient jQuery selector
 	const params = {
-		map_provider: $("#MapProvider").val()
+		map_provider: $("#MapProvider").val(),
 	};
 
 	api.post("Settings::setMapProvider", params, function () {
@@ -475,7 +469,7 @@ settings.setMapProvider = function () {
 settings.changeMapIncludeSubalbums = function () {
 	const params = {
 		// TODO: Presumably, the `SettingsFormData` also includes a property `MapIncludeSubalbums: boolean`; in that case there is no need for an inefficient jQuery selector
-		map_include_subalbums: ($("#MapIncludeSubalbums:checked").length === 1),
+		map_include_subalbums: $("#MapIncludeSubalbums:checked").length === 1,
 	};
 	api.post("Settings::setMapIncludeSubalbums", params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
@@ -489,7 +483,7 @@ settings.changeMapIncludeSubalbums = function () {
 settings.changeLocationDecoding = function () {
 	const params = {
 		// TODO: Presumably, the `SettingsFormData` also includes a property `LocationDecoding: boolean`; in that case there is no need for an inefficient jQuery selector
-		location_decoding: ($("#LocationDecoding:checked").length === 1)
+		location_decoding: $("#LocationDecoding:checked").length === 1,
 	};
 	api.post("Settings::setLocationDecoding", params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
@@ -503,7 +497,7 @@ settings.changeLocationDecoding = function () {
 settings.changeNSFWVisible = function () {
 	const params = {
 		// TODO: Presumably, the `SettingsFormData` also includes a property `NSFWVisible: boolean`; in that case there is no need for an inefficient jQuery selector
-		nsfw_visible: ($("#NSFWVisible:checked").length === 1),
+		nsfw_visible: $("#NSFWVisible:checked").length === 1,
 	};
 	api.post("Settings::setNSFWVisible", params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_NSFW_VISIBLE"]);
@@ -523,7 +517,7 @@ settings.changeNSFWVisible = function () {
 settings.changeLocationShow = function () {
 	const params = {
 		// TODO: Presumably, the `SettingsFormData` also includes a property `LocationShow: boolean`; in that case there is no need for an inefficient jQuery selector
-		location_show: ($("#LocationShow:checked").length === 1)
+		location_show: $("#LocationShow:checked").length === 1,
 	};
 	api.post("Settings::setLocationShow", params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
@@ -542,7 +536,7 @@ settings.changeLocationShow = function () {
 settings.changeLocationShowPublic = function () {
 	const params = {
 		// TODO: Presumably, the `SettingsFormData` also includes a property `LocationShowPublic: boolean`; in that case there is no need for an inefficient jQuery selector
-		location_show_public: ($("#LocationShowPublic:checked").length === 1)
+		location_show_public: $("#LocationShowPublic:checked").length === 1,
 	};
 	api.post("Settings::setLocationShowPublic", params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
@@ -561,7 +555,7 @@ settings.changeLocationShowPublic = function () {
 settings.changeNewPhotosNotification = function () {
 	const params = {
 		// TODO: Presumably, the `SettingsFormData` also includes a property `NewPhotosNotification: boolean`; in that case there is no need for an inefficient jQuery selector
-		new_photos_notification: ($("#NewPhotosNotification:checked").length === 1)
+		new_photos_notification: $("#NewPhotosNotification:checked").length === 1,
 	};
 	api.post("Settings::setNewPhotosNotification", params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_NEW_PHOTOS_NOTIFICATION"]);
@@ -574,7 +568,7 @@ settings.changeNewPhotosNotification = function () {
  */
 settings.changeCSS = function () {
 	const params = {
-		css: $("#css").val()
+		css: $("#css").val(),
 	};
 	api.post("Settings::setCSS", params, function () {
 		lychee.css = params.css;

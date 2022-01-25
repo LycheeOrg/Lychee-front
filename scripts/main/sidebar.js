@@ -2,7 +2,11 @@
  * @description This module takes care of the sidebar.
  */
 
+/**
+ * @namespace
+ */
 let sidebar = {
+	/** @type {jQuery} */
 	_dom: $(".sidebar"),
 	types: {
 		DEFAULT: 0,
@@ -11,20 +15,25 @@ let sidebar = {
 	createStructure: {},
 };
 
+/**
+ * @param {?string} [selector=null]
+ * @returns {jQuery}
+ */
 sidebar.dom = function (selector) {
 	if (selector == null || selector === "") return sidebar._dom;
-
 	return sidebar._dom.find(selector);
 };
 
+/**
+ * This function should be called after building and appending
+ * the sidebars content to the DOM.
+ * This function can be called multiple times, therefore
+ * event handlers should be removed before binding a new one.
+ *
+ * @returns {void}
+ */
 sidebar.bind = function () {
-	// This function should be called after building and appending
-	// the sidebars content to the DOM.
-	// This function can be called multiple times, therefore
-	// event handlers should be removed before binding a new one.
-
-	// Event Name
-	let eventName = lychee.getEventName();
+	const eventName = lychee.getEventName();
 
 	sidebar
 		.dom("#edit_title")
@@ -91,13 +100,15 @@ sidebar.bind = function () {
 		.on(eventName, function () {
 			sidebar.triggerSearch($(this).text());
 		});
-
-	return true;
 };
 
+/**
+ * @param {string} search_string
+ * @returns {void}
+ */
 sidebar.triggerSearch = function (search_string) {
 	// If public search is disabled -> do nothing
-	if (lychee.publicMode === true && !lychee.public_search) {
+	if (lychee.publicMode && !lychee.public_search) {
 		// Do not display an error -> just do nothing to not confuse the user
 		return;
 	}
@@ -107,11 +118,20 @@ sidebar.triggerSearch = function (search_string) {
 	lychee.goto("search/" + encodeURIComponent(search_string));
 };
 
+/**
+ * @returns {boolean}
+ */
 sidebar.keepSidebarVisible = function () {
-	let v = sessionStorage.getItem("keepSidebarVisible");
+	const v = sessionStorage.getItem("keepSidebarVisible");
 	return v !== null ? v === "true" : false;
 };
 
+/**
+ * @param {boolean} is_user_initiated - indicates if the user requested to
+ *                                      toggle and hence the new state shall
+ *                                      be saved in session storage
+ * @returns {void}
+ */
 sidebar.toggle = function (is_user_initiated) {
 	if (visible.sidebar() || visible.sidebarbutton()) {
 		header.dom(".button--info").toggleClass("active");
@@ -122,37 +142,44 @@ sidebar.toggle = function (is_user_initiated) {
 		photo.updateSizeLivePhotoDuringAnimation();
 
 		if (is_user_initiated) sessionStorage.setItem("keepSidebarVisible", visible.sidebar());
-
-		return true;
 	}
-
-	return false;
 };
 
+/**
+ * Attributes/Values inside the sidebar are selectable by default.
+ * Selection needs to be deactivated to prevent an unwanted selection
+ * while using multiselect.
+ *
+ * @param {boolean} [selectable=true]
+ * @returns {void}
+ */
 sidebar.setSelectable = function (selectable = true) {
-	// Attributes/Values inside the sidebar are selectable by default.
-	// Selection needs to be deactivated to prevent an unwanted selection
-	// while using multiselect.
-
-	if (selectable === true) sidebar.dom().removeClass("notSelectable");
+	if (selectable) sidebar.dom().removeClass("notSelectable");
 	else sidebar.dom().addClass("notSelectable");
 };
 
+/**
+ * @param {string} attr - selector of attribute without the `attr_` prefix
+ * @param {?string} value - a `null` value is replaced by the empty string
+ * @param {boolean} [dangerouslySetInnerHTML=false]
+ *
+ * @returns {void}
+ */
 sidebar.changeAttr = function (attr, value = "", dangerouslySetInnerHTML = false) {
-	if (attr == null || attr === "") return false;
+	if (!attr) return;
+	if (!value) value = "";
 
-	// Set a default for the value
-	if (value === null) value = "";
-
+	// TODO: Don't use our home-brewed `escapeHTML` method; use `jQuery#text` instead
 	// Escape value
-	if (dangerouslySetInnerHTML === false) value = lychee.escapeHTML(value);
+	if (!dangerouslySetInnerHTML) value = lychee.escapeHTML(value);
 
-	// Set new value
 	sidebar.dom(".attr_" + attr).html(value);
-
-	return true;
 };
 
+/**
+ * @param {string} attr - selector of attribute without the `attr_` prefix
+ * @returns {void}
+ */
 sidebar.hideAttr = function (attr) {
 	sidebar
 		.dom(".attr_" + attr)
@@ -160,21 +187,46 @@ sidebar.hideAttr = function (attr) {
 		.hide();
 };
 
+/**
+ * Converts integer seconds into "hours:minutes:seconds".
+ *
+ * TODO: Consider to make this method part of `lychee.locale`.
+ *
+ * @param {(number|string)} d
+ * @returns {string}
+ */
 sidebar.secondsToHMS = function (d) {
 	d = Number(d);
-	var h = Math.floor(d / 3600);
-	var m = Math.floor((d % 3600) / 60);
-	var s = Math.floor(d % 60);
+	const h = Math.floor(d / 3600);
+	const m = Math.floor((d % 3600) / 60);
+	const s = Math.floor(d % 60);
 
 	return (h > 0 ? h.toString() + "h" : "") + (m > 0 ? m.toString() + "m" : "") + (s > 0 || (h === 0 && m === 0) ? s.toString() + "s" : "");
 };
 
 /**
- * @param {Photo} data
- * @returns void
+ * @typedef Section
+ *
+ * @property {string}       title
+ * @property {string}       type
+ * @property {SectionRow[]} rows
+ */
+
+/**
+ * @typedef SectionRow
+ *
+ * @property {string}            title
+ * @property {string}            kind
+ * @property {(string|string[])} value
+ * @property {boolean}           [editable]
+ */
+
+/**
+ * @param {?Photo} data
+ * @returns {Section[]}
  */
 sidebar.createStructure.photo = function (data) {
-	if (data == null || data === "") return false;
+	if (!data) return [];
 
 	let editable = typeof album !== "undefined" ? album.isUploadable() : false;
 	let exifHash = data.taken_at + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
@@ -258,8 +310,10 @@ sidebar.createStructure.photo = function (data) {
 	}
 
 	// Always create tags section - behaviour for editing
-	//tags handled when contructing the html code for tags
+	// tags handled when constructing the html code for tags
 
+	// TODO: IDE warns, that `value` is not property and `rows` is missing; the tags should actually be stored in a row for consistency
+	// TODO: Consider to NOT call `build.tags` here, but simply pass the plain JSON. `build.tags` should be called in `sidebar.render` below
 	structure.tags = {
 		title: lychee.locale["PHOTO_TAGS"],
 		type: sidebar.types.TAGS,
@@ -305,7 +359,7 @@ sidebar.createStructure.photo = function (data) {
 		rows: [{ title: lychee.locale["PHOTO_LICENSE"], kind: "license", value: license, editable: editable }],
 	};
 
-	if (locationHash !== "" && locationHash !== 0) {
+	if (locationHash) {
 		structure.location = {
 			title: lychee.locale["PHOTO_LOCATION"],
 			type: sidebar.types.DEFAULT,
@@ -324,9 +378,15 @@ sidebar.createStructure.photo = function (data) {
 				{
 					title: lychee.locale["PHOTO_ALTITUDE"],
 					kind: "altitude",
-					value: data.altitude ? (Math.round(parseFloat(data.altitude) * 10) / 10).toString() + "m" : "",
+					value: data.altitude ? (Math.round(data.altitude * 10) / 10).toString() + "m" : "",
 				},
-				{ title: lychee.locale["PHOTO_LOCATION"], kind: "location", value: data.location ? data.location : "" },
+				{
+					title: lychee.locale["PHOTO_LOCATION"],
+					kind: "location",
+					// Explode location string into an array to keep street, city etc. separate
+					// TODO: We should consider to keep the components apart on the server-side and send an structured object to the front-end.
+					value: data.location ? data.location.split(",").map((item) => item.trim()) : "",
+				},
 			],
 		};
 		if (data.img_direction) {
@@ -342,7 +402,7 @@ sidebar.createStructure.photo = function (data) {
 	}
 
 	// Construct all parts of the structure
-	let structure_ret = [structure.basics, structure.image, structure.tags, structure.exif, structure.location, structure.license];
+	const structure_ret = [structure.basics, structure.image, structure.tags, structure.exif, structure.location, structure.license];
 
 	if (!lychee.publicMode) {
 		structure_ret.push(structure.sharing);
@@ -351,10 +411,12 @@ sidebar.createStructure.photo = function (data) {
 	return structure_ret;
 };
 
-sidebar.createStructure.album = function (album) {
-	let data = album.json;
-
-	if (data == null || data === "") return false;
+/**
+ * @param {(Album|TagAlbum)} data
+ * @returns {Section[]}
+ */
+sidebar.createStructure.album = function (data) {
+	if (!data) return [];
 
 	let editable = album.isUploadable();
 	let structure = {};
@@ -439,7 +501,7 @@ sidebar.createStructure.album = function (album) {
 		],
 	};
 
-	if (data.owner_name != null) {
+	if (data.owner_name) {
 		structure.share.rows.push({ title: lychee.locale["ALBUM_OWNER"], kind: "owner", value: data.owner_name });
 	}
 
@@ -458,9 +520,11 @@ sidebar.createStructure.album = function (album) {
 	return structure_ret;
 };
 
+/**
+ * @param {Section[]} structure
+ * @returns {boolean} - true if the passed structure contains a "location" section
+ */
 sidebar.has_location = function (structure) {
-	if (structure == null || structure === "" || structure === false) return false;
-
 	let _has_location = false;
 
 	structure.forEach(function (section) {
@@ -472,15 +536,17 @@ sidebar.has_location = function (structure) {
 	return _has_location;
 };
 
+/**
+ * @param {Section[]} structure
+ * @returns {string} - HTML
+ */
 sidebar.render = function (structure) {
-	if (structure == null || structure === "" || structure === false) return false;
-
-	let html = "";
-
-	let renderDefault = function (section) {
-		let _html = "";
-
-		_html += `
+	/**
+	 * @param {Section} section
+	 * @returns {string}
+	 */
+	const renderDefault = function (section) {
+		let _html = `
 				 <div class='sidebar__divider'>
 					 <h1>${section.title}</h1>
 				 </div>
@@ -488,31 +554,14 @@ sidebar.render = function (structure) {
 				 `;
 
 		if (section.title === lychee.locale["PHOTO_LOCATION"]) {
-			let _has_latitude = false;
-			let _has_longitude = false;
-
-			section.rows.forEach(function (row, index, object) {
-				if (row.kind === "latitude" && row.value !== "") {
-					_has_latitude = true;
-				}
-
-				if (row.kind === "longitude" && row.value !== "") {
-					_has_longitude = true;
-				}
-
-				// Do not show location is not enabled
-				if (row.kind === "location" && ((lychee.publicMode === true && !lychee.location_show_public) || !lychee.location_show)) {
-					object.splice(index, 1);
-				} else {
-					// Explode location string into an array to keep street, city etc separate
-					if (!(row.value === "" || row.value == null)) {
-						section.rows[index].value = row.value.split(",").map(function (item) {
-							return item.trim();
-						});
-					}
-				}
-			});
-
+			const _has_latitude = section.rows.findIndex((row) => row.kind === "latitude" && row.value) !== -1;
+			const _has_longitude = section.rows.findIndex((row) => row.kind === "longitude" && row.value) !== -1;
+			const idxLocation = section.rows.findIndex((row) => row.kind === "location");
+			// Do not show location is not enabled
+			if (idxLocation !== -1 && ((lychee.publicMode === true && !lychee.location_show_public) || !lychee.location_show)) {
+				section.rows.splice(idxLocation, 1);
+			}
+			// Show map if we have coordinates
 			if (_has_latitude && _has_longitude && lychee.map_display) {
 				_html += `
 						 <div id="leaflet_map_single_photo"></div>
@@ -523,21 +572,24 @@ sidebar.render = function (structure) {
 		section.rows.forEach(function (row) {
 			let value = row.value;
 
-			// show only Exif rows which have a value or if its editable
+			// show only rows which have a value or are editable
 			if (!(value === "" || value == null) || row.editable === true) {
 				// Wrap span-element around value for easier selecting on change
 				if (Array.isArray(row.value)) {
-					value = "";
-					row.value.forEach(function (v) {
-						if (v === "" || v == null) {
-							return;
-						}
-						// Add separator if needed
-						if (value !== "") {
-							value += lychee.html`<span class='attr_${row.kind}_separator'>, </span>`;
-						}
-						value += lychee.html`<span class='attr_${row.kind} search'>$${v}</span>`;
-					});
+					value = row.value.reduce(
+						/**
+						 * @param {string} prev
+						 * @param {string} cur
+						 */
+						function (prev, cur) {
+							// Add separator if needed
+							if (prev !== "") {
+								prev += lychee.html`<span class='attr_${row.kind}_separator'>, </span>`;
+							}
+							return prev + lychee.html`<span class='attr_${row.kind} search'>$${cur}</span>`;
+						},
+						""
+					);
 				} else {
 					value = lychee.html`<span class='attr_${row.kind}'>$${value}</span>`;
 				}
@@ -561,10 +613,15 @@ sidebar.render = function (structure) {
 		return _html;
 	};
 
-	let renderTags = function (section) {
+	/**
+	 * @param {Section} section
+	 * @returns {string}
+	 */
+	const renderTags = function (section) {
 		let _html = "";
 		let editable = "";
 
+		// TODO: IDE warns me that the `Section` has no properties `editable` nor `value`; cause of the problem is that the section `tags` is built differently, see above
 		// Add edit-icon to the value when editable
 		if (section.editable === true) editable = build.editIcon("edit_tags");
 
@@ -581,6 +638,8 @@ sidebar.render = function (structure) {
 		return _html;
 	};
 
+	let html = "";
+
 	structure.forEach(function (section) {
 		if (section.type === sidebar.types.DEFAULT) html += renderDefault(section);
 		else if (section.type === sidebar.types.TAGS) html += renderTags(section);
@@ -589,22 +648,29 @@ sidebar.render = function (structure) {
 	return html;
 };
 
+/**
+ * Converts a decimal degree into integer degree, minutes and seconds.
+ *
+ * TODO: Consider to make this method part of `lychee.locale`.
+ *
+ * @param {number}  decimal
+ * @param {boolean} type    - indicates if the passed decimal indicates a
+ *                            latitude (`true`) or a longitude (`false`)
+ * @returns {string}
+ */
 function DecimalToDegreeMinutesSeconds(decimal, type) {
+	const d = Math.abs(decimal);
 	let degrees = 0;
 	let minutes = 0;
 	let seconds = 0;
 	let direction;
 
-	//decimal must be integer or float no larger than 180;
-	//type must be Boolean
-	if (Math.abs(decimal) > 180 || typeof type !== "boolean") {
-		return false;
+	// absolute value of decimal must be smaller than 180;
+	if (d > 180) {
+		return "";
 	}
 
-	//inputs OK, proceed
-	//type is latitude when true, longitude when false
-
-	//set direction; north assumed
+	// set direction; north assumed
 	if (type && decimal < 0) {
 		direction = "S";
 	} else if (!type && decimal < 0) {
@@ -614,9 +680,6 @@ function DecimalToDegreeMinutesSeconds(decimal, type) {
 	} else {
 		direction = "N";
 	}
-
-	//get absolute value of decimal
-	let d = Math.abs(decimal);
 
 	//get degrees
 	degrees = Math.floor(d);

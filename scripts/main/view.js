@@ -590,7 +590,7 @@ view.album = {
 
 	sidebar: function () {
 		if ((visible.album() || (album.json && !album.json.init)) && !visible.photo()) {
-			let structure = sidebar.createStructure.album(album);
+			let structure = sidebar.createStructure.album(album.json);
 			let html = sidebar.render(structure);
 
 			sidebar.dom(".sidebar__wrapper").html(html);
