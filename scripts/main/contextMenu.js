@@ -506,14 +506,14 @@ contextMenu.move = function (IDs, e, callback, kind = "UNSORTED", display_root =
 				// For merging, don't exclude the parent.
 				// For photo copy, don't exclude the current album.
 				if (callback !== album.merge && callback !== photo.copyTo) {
-					exclude.push(album.getID().toString());
+					exclude.push(album.getID());
 				}
 				if (IDs.length === 1 && IDs[0] === album.getID() && album.getParentID() && callback === album.setAlbum) {
 					// If moving the current album, exclude its parent.
-					exclude.push(album.getParentID().toString());
+					exclude.push(album.getParentID());
 				}
 			} else if (visible.photo()) {
-				exclude.push(photo.json.album.toString());
+				exclude.push(photo.json.album_id);
 			}
 			items = items.concat(contextMenu.buildList(albums, exclude.concat(IDs), (a) => callback(IDs, a.id)));
 		};
