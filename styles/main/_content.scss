@@ -332,17 +332,22 @@
 			font-weight: bold;
 		}
 		ol {
-			list-style: decimal inside;
+			list-style: decimal outside;
+			padding-left: 40px;
 		}
 		ul {
-			list-style: disc inside;
+			list-style: disc outside;
+			padding-left: 40px;
 		}
 		blockquote {
-			margin-left: revert;
+			margin-left: 40px;
+		}
+		pre {
+			overflow-x: scroll
 		}
 		pre,
 		code {
-			font-family: revert;
+			font-family: monospace;
 		}
 		hr {
 			border: 0;
