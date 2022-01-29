@@ -149,7 +149,7 @@ contextMenu.album = function (albumID, e) {
  * @param {string[]} albumIDs
  * @param {jQuery.Event} e
  *
- * @return {void}
+ * @returns {void}
  */
 contextMenu.albumMulti = function (albumIDs, e) {
 	multiselect.stopResize();
@@ -276,7 +276,7 @@ contextMenu.buildList = function (lists, exclude, action, parentID = null, layer
  * @param {string} albumID
  * @param {jQuery.Event} e
  *
- * @return {void}
+ * @returns {void}
  */
 contextMenu.albumTitle = function (albumID, e) {
 	api.post("Albums::tree", {}, function (data) {
@@ -566,7 +566,7 @@ contextMenu.getSubIDs = function (albums, albumID) {
  * @param {boolean} [confirm] indicates whether the callback shall show a
  *                            confirmation dialog to the user for whatever to
  *                            callback is going to do
- * @returns void
+ * @returns {void}
  */
 
 /**

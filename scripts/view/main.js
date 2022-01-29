@@ -249,7 +249,7 @@ const loadPhotoInfo = function (photoID) {
  * @param {XMLHttpRequest} jqXHR
  * @param {Object} params the original JSON parameters of the request
  * @param {?LycheeException} lycheeException the Lychee Exception
- * @return {boolean}
+ * @returns {boolean}
  */
 const handleAPIError = function (jqXHR, params, lycheeException) {
 	const msg = jqXHR.statusText + (lycheeException ? " - " + lycheeException.message : "");

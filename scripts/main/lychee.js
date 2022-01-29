@@ -526,7 +526,7 @@ lychee.loginDialog = function () {
 };
 
 /**
- * @returns void
+ * @returns {void}
  */
 lychee.logout = function () {
 	api.post("Session::logout", {}, () => window.location.reload());
@@ -576,7 +576,7 @@ lychee.gotoMap = function (albumID = null, autoplay = true) {
  * @param {boolean} autoplay indicates whether playback should start
  *                           automatically, if the indicated photo is a video
  *
- * @return {boolean} `true`, if any of the IDs has been in legacy format
+ * @returns {boolean} `true`, if any of the IDs has been in legacy format
  *                   and an asynchronous reloading has been scheduled
  */
 lychee.reloadIfLegacyIDs = function (albumID, photoID, autoplay) {
@@ -600,7 +600,7 @@ lychee.reloadIfLegacyIDs = function (albumID, photoID, autoplay) {
 	 * @param {?string} newAlbumID
 	 * @param {?string} newPhotoID
 	 *
-	 * @return void
+	 * @returns {void}
 	 */
 	const reloadWithNewIDs = function (newAlbumID, newPhotoID) {
 		let newUrl = "";
@@ -942,7 +942,7 @@ lychee.retinize = function (path = "") {
 
 /**
  * @callback DropboxLoadedCB
- * @return void
+ * @returns {void}
  */
 
 /**
@@ -1070,7 +1070,7 @@ lychee.html = function (literalSections, ...substs) {
  * @param {XMLHttpRequest} jqXHR
  * @param {Object} params the original JSON parameters of the request
  * @param {?LycheeException} lycheeException the Lychee Exception
- * @return {boolean}
+ * @returns {boolean}
  */
 lychee.handleAPIError = function (jqXHR, params, lycheeException) {
 	const msg = jqXHR.statusText + (lycheeException ? " - " + lycheeException.message : "");
@@ -1181,7 +1181,7 @@ lychee.footer_hide = function () {
  * Because the height of the footer can vary, we need to set some
  * dimensions dynamically, at startup.
  *
- * @returns void
+ * @returns {void}
  */
 lychee.adjustContentHeight = function () {
 	if (lychee.footer.length > 0) {

@@ -468,7 +468,7 @@ lychee.locale = {
 	/**
 	 * Formats a number representing a filesize in bytes as a localized string
 	 * @param {!number} filesize
-	 * @return {string} A formatted and localized string
+	 * @returns {string} A formatted and localized string
 	 */
 	printFilesizeLocalized: function (filesize) {
 		console.assert(Number.isInteger(filesize), "printFilesizeLocalized: expected integer, got %s", typeof filesize);
@@ -507,7 +507,7 @@ lychee.locale = {
 	 * and 14:24:13 for French/German).
 	 *
 	 * @param {?string} jsonDateTime
-	 * @return {string} A formatted and localized time
+	 * @returns {string} A formatted and localized time
 	 */
 	printDateTime: function (jsonDateTime) {
 		if (typeof jsonDateTime !== "string" || jsonDateTime === "") return "";
@@ -557,7 +557,7 @@ lychee.locale = {
 	 * "Aug 2020" in English or "Août 2020" in French).
 	 *
 	 * @param {?string} jsonDateTime
-	 * @return {string} A formatted and localized month and year
+	 * @returns {string} A formatted and localized month and year
 	 */
 	printMonthYear: function (jsonDateTime) {
 		if (typeof jsonDateTime !== "string" || jsonDateTime === "") return "";

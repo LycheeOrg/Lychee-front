@@ -167,7 +167,7 @@ frame.resize = function () {
  * @param {XMLHttpRequest} jqXHR
  * @param {Object} params the original JSON parameters of the request
  * @param {?LycheeException} lycheeException the Lychee Exception
- * @return {boolean}
+ * @returns {boolean}
  */
 frame.handleAPIError = function (jqXHR, params, lycheeException) {
 	const msg = jqXHR.statusText + (lycheeException ? " - " + lycheeException.message : "");
@@ -188,7 +188,7 @@ let loadingBar = {
 	 *
 	 * @param {?string} status the status, either `null`, `"error"` or `"success"`
 	 * @param {?string} errorText the error text to show
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	show(status, errorText) {
 		return false;

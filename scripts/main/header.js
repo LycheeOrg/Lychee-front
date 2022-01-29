@@ -151,7 +151,7 @@ header.bind = function () {
 };
 
 /**
- * @return {void}
+ * @returns {void}
  */
 header.bind_back = function () {
 	// Event Name

@@ -21,7 +21,7 @@ loadingBar.dom = function (selector) {
 /**
  * @param {?string} status the status, either `null`, `"error"` or `"success"`
  * @param {?string} errorText the error text to show
- * @return {void}
+ * @returns {void}
  */
 loadingBar.show = function (status, errorText) {
 	if (status === "error") {

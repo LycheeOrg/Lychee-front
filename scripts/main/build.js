@@ -470,7 +470,7 @@ build.no_content = function (type) {
 /**
  * @param {string}                                           title the title of the dialog
  * @param {(FileList|File[]|DropboxFile[]|{name: string}[])} files a list of file entries to be shown in the dialog
- * @return {string}                                                the HTML fragment for the dialog
+ * @returns {string}                                                the HTML fragment for the dialog
  */
 build.uploadModal = function (title, files) {
 	let html = "";

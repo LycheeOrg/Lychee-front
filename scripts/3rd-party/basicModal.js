@@ -38,7 +38,7 @@
  * @memberOf basicModal
  * @param {string} [nameAttribute] the name of the HTML input element which
  *                                 caused the error and shall be highlighted
- * @returns void
+ * @returns {void}
  */
 
 /**
@@ -110,7 +110,7 @@
 /**
  * @callback ModalDialogReadyCB
  * @param {ModalDialogData} data the configuration data which has been used to construct the dialog
- * @returns void
+ * @returns {void}
  */
 
 /**
@@ -130,5 +130,5 @@
  * @callback ModalDialogButtonCB
  * @param {Object} [values] an associative object with the values of all HTML
  *                          input elements; see {@link basicModal.getValues}
- * @returns void
+ * @returns {void}
  */

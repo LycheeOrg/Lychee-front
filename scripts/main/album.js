@@ -34,7 +34,7 @@ album.getParentID = function () {
 };
 
 /**
- * @return {?string} the album ID
+ * @returns {?string} the album ID
  */
 album.getID = function () {
 	/** @type {?string} */
@@ -249,7 +249,7 @@ album.load = function (albumID, refresh = false) {
 };
 
 /**
- * @returns void
+ * @returns {void}
  */
 album.parse = function () {
 	if (!album.json.title) album.json.title = lychee.locale["UNTITLED"];
@@ -271,7 +271,7 @@ album.parse = function () {
  * @param {string[]}              [IDs=null]      some IDs which are passed on to the callback
  * @param {TargetAlbumSelectedCB} [callback=null] called upon successful creation of the album
  *
- * @returns void
+ * @returns {void}
  */
 album.add = function (IDs = null, callback = null) {
 	/**
@@ -332,7 +332,7 @@ album.add = function (IDs = null, callback = null) {
 };
 
 /**
- * @returns void
+ * @returns {void}
  */
 album.addByTags = function () {
 	/** @param {{title: string, tags: string}} data */
@@ -518,7 +518,7 @@ album.setTitle = function (albumIDs) {
 
 /**
  * @param {string} albumID
- * @returns void
+ * @returns {void}
  */
 album.setDescription = function (albumID) {
 	const oldDescription = album.json.description ? album.json.description : "";
@@ -577,7 +577,7 @@ album.toggleCover = function (photoID) {
 
 /**
  * @param {string} albumID
- * @returns void
+ * @returns {void}
  */
 album.setLicense = function (albumID) {
 	const callback = function () {
@@ -666,7 +666,7 @@ album.setLicense = function (albumID) {
 
 /**
  * @param {string} albumID
- * @returns void
+ * @returns {void}
  */
 album.setSorting = function (albumID) {
 	const callback = function () {
@@ -1082,7 +1082,7 @@ album.shareUsers = function (albumID) {
 
 /**
  * @param {string} albumID
- * @returns void
+ * @returns {void}
  */
 album.setNSFW = function (albumID) {
 	album.json.is_nsfw = !album.json.is_nsfw;
@@ -1100,7 +1100,7 @@ album.setNSFW = function (albumID) {
 
 /**
  * @param {string} service - either `"twitter"`, `"facebook"` or `"mail"`
- * @returns void
+ * @returns {void}
  */
 album.share = function (service) {
 	if (album.json.hasOwnProperty("is_share_button_visible") && !album.json.is_share_button_visible) {
@@ -1124,7 +1124,7 @@ album.share = function (service) {
 
 /**
  * @param {string[]} albumIDs
- * @returns void
+ * @returns {void}
  */
 album.getArchive = function (albumIDs) {
 	location.href = "api/Album::getArchive?" + $.param({ albumIDs: albumIDs });
@@ -1340,7 +1340,7 @@ album.setAlbum = function (albumIDs, albumID, confirm = true) {
 };
 
 /**
- * @returns void
+ * @returns {void}
  */
 album.apply_nsfw_filter = function () {
 	if (lychee.nsfw_visible) {
@@ -1412,7 +1412,7 @@ album.updatePhoto = function (data) {
 };
 
 /**
- * @returns void
+ * @returns {void}
  */
 album.reload = function () {
 	const albumID = album.getID();
@@ -1425,7 +1425,7 @@ album.reload = function () {
 };
 
 /**
- * @returns void
+ * @returns {void}
  */
 album.refresh = function () {
 	album.json = null;

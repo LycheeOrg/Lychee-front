@@ -46,14 +46,14 @@
  *
  * @callback DropboxChooserSuccessCB
  * @param {DropboxFile[]} files
- * @returns void
+ * @returns {void}
  */
 
 /**
  * Callback if users cancelled selecting files from their Dropbox.
  *
  * @callback DropboxChooserCancelCB
- * @returns void
+ * @returns {void}
  */
 
 /**

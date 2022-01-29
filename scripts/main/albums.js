@@ -8,7 +8,7 @@ const albums = {
 };
 
 /**
- * @returns void
+ * @returns {void}
  */
 albums.load = function () {
 	let startTime = new Date().getTime();
@@ -84,7 +84,7 @@ albums.load = function () {
 
 /**
  * @param {(Album|TagAlbum|SmartAlbum)} album
- * @returns void
+ * @returns {void}
  */
 albums.parse = function (album) {
 	if (!album.thumb) {
@@ -103,7 +103,7 @@ albums.parse = function (album) {
  * TODO: REFACTOR THIS
  *
  * @param {SmartAlbums} data
- * @returns void
+ * @returns {void}
  */
 albums._createSmartAlbums = function (data) {
 	if (data.unsorted) {
@@ -223,7 +223,7 @@ albums.deleteByID = function (albumID) {
 };
 
 /**
- * @returns void
+ * @returns {void}
  */
 albums.refresh = function () {
 	albums.json = null;
