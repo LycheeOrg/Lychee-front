@@ -1,14 +1,24 @@
-let users = {
+const users = {
 	/** @type {?User[]} */
 	json: null,
 };
 
+/**
+ * Updates a user account.
+ *
+ * The object `params` must be kept in sync with the HTML form constructed
+ * by {@link build.user}.
+ *
+ * @param {{id: string, username: string, password: string, upload: boolean, lock: boolean}} params
+ * @returns {void}
+ */
 users.update = function (params) {
 	if (params.username.length < 1) {
 		loadingBar.show("error", "new username cannot be empty.");
-		return false;
+		return;
 	}
 
+	// TODO: Re-factor the HTML form constructed by `build.user`. Then the following lines would not be required.
 	params.may_upload = $("#UserData" + params.id + ' .choice input[name="upload"]:checked').length === 1;
 	params.is_locked = $("#UserData" + params.id + ' .choice input[name="lock"]:checked').length === 1;
 
@@ -18,16 +28,26 @@ users.update = function (params) {
 	});
 };
 
+/**
+ * Creates a new user account.
+ *
+ * The object `params` must be kept in sync with the HTML form constructed
+ * by {@link view.users.content}.
+ *
+ * @param {{id: string, username: string, password: string, upload: boolean, lock: boolean}} params
+ * @returns {void}
+ */
 users.create = function (params) {
 	if (params.username.length < 1) {
 		loadingBar.show("error", "new username cannot be empty.");
-		return false;
+		return;
 	}
 	if (params.password.length < 1) {
 		loadingBar.show("error", "new password cannot be empty.");
-		return false;
+		return;
 	}
 
+	// TODO: Re-factor the HTML form constructed by `view.users.content`. Then the following lines would not be required.
 	params.may_upload = $('#UserCreate .choice input[name="upload"]:checked').length === 1;
 	params.is_locked = $('#UserCreate .choice input[name="lock"]:checked').length === 1;
 
@@ -37,6 +57,15 @@ users.create = function (params) {
 	});
 };
 
+/**
+ * Deletes a user account.
+ *
+ * The object `params` must be kept in sync with the HTML form constructed
+ * by {@link build.user}.
+ *
+ * @param {{id: string}} params
+ * @returns {boolean}
+ */
 users.delete = function (params) {
 	api.post("User::delete", params, function () {
 		loadingBar.show("success", "User deleted!");
@@ -44,6 +73,9 @@ users.delete = function (params) {
 	});
 };
 
+/**
+ * @returns {void}
+ */
 users.list = function () {
 	api.post(
 		"User::list",

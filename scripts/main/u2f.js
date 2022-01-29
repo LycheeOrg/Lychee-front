@@ -1,11 +1,14 @@
-let u2f = {
-	/** @type {?WebAuthnCredential[]} * */
+const u2f = {
+	/** @type {?WebAuthnCredential[]} */
 	json: null,
 };
 
+/**
+ * @returns {boolean}
+ */
 u2f.is_available = function () {
 	if (!window.isSecureContext && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
-		let msg = lychee.html`<h1>${lychee.locale["U2F_NOT_SECURE"]}</h1>`;
+		const msg = lychee.html`<h1>${lychee.locale["U2F_NOT_SECURE"]}</h1>`;
 
 		basicModal.show({
 			body: msg,
@@ -22,6 +25,9 @@ u2f.is_available = function () {
 	return true;
 };
 
+/**
+ * @returns {void}
+ */
 u2f.login = function () {
 	if (!u2f.is_available()) {
 		return;
@@ -41,12 +47,15 @@ u2f.login = function () {
 		.catch((error) => loadingBar.show("error", "Something went wrong!"));
 };
 
+/**
+ * @returns {void}
+ */
 u2f.register = function () {
 	if (!u2f.is_available()) {
 		return;
 	}
 
-	let larapass = new Larapass({
+	const larapass = new Larapass({
 		register: "/api/WebAuthn::register",
 		registerOptions: "/api/WebAuthn::register/gen",
 	});
@@ -63,6 +72,9 @@ u2f.register = function () {
 	}
 };
 
+/**
+ * @param {{id: string}} params - ID of WebAuthn credential
+ */
 u2f.delete = function (params) {
 	api.post("WebAuthn::delete", params, function () {
 		loadingBar.show("success", lychee.locale["U2F_CREDENTIALS_DELETED"]);
@@ -71,8 +83,13 @@ u2f.delete = function (params) {
 };
 
 u2f.list = function () {
-	api.post("WebAuthn::list", {}, function (data) {
-		u2f.json = data;
-		view.u2f.init();
-	});
+	api.post(
+		"WebAuthn::list",
+		{},
+		/** @param {WebAuthnCredential[]} data*/
+		function (data) {
+			u2f.json = data;
+			view.u2f.init();
+		}
+	);
 };

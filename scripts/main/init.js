@@ -235,9 +235,11 @@ $(document).ready(function () {
 			// unable to reproduce problems arising from 'mousemove' on iOS devices
 			//			e.preventDefault();
 
+			// TODO: The first part of the condition is always false. `swipe.obj` is either `null` or an jQuery-instance. Was `null` meant?
 			if (typeof swipe.obj === "undefined" || (Math.abs(swipe.offsetX) <= 5 && Math.abs(swipe.offsetY) <= 5)) {
 				// Toggle header only if we're not moving to next/previous photo;
 				// In this case, swipe.preventNextHeaderToggle is set to true
+				// TODO: The first part of the condition is always false.
 				if (typeof swipe.preventNextHeaderToggle === "undefined" || !swipe.preventNextHeaderToggle) {
 					if (visible.header()) {
 						header.hide();
