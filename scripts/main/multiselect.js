@@ -246,7 +246,7 @@ multiselect.photoContextMenu = function (e, photoObj) {
  * @returns {void}
  */
 multiselect.clearSelection = function () {
-	multiselect.deselect(".photo.active, .album.active");
+	multiselect.deselect($(".photo.active, .album.active"));
 	multiselect.ids = [];
 	multiselect.albumsSelected = 0;
 	multiselect.photosSelected = 0;
@@ -348,8 +348,8 @@ multiselect.getSize = function () {
 	return {
 		top: offset.top,
 		left: offset.left,
-		width: parseFloat($elem.css("width"), 10),
-		height: parseFloat($elem.css("height"), 10),
+		width: parseFloat($elem.css("width")),
+		height: parseFloat($elem.css("height")),
 	};
 };
 
@@ -391,25 +391,21 @@ multiselect.getSelection = function (e) {
 };
 
 /**
- * @param {string} id
+ * @param {jQuery} elem
  * @returns {void}
  */
-multiselect.select = function (id) {
-	let el = $(id);
-
-	el.addClass("selected");
-	el.addClass("active");
+multiselect.select = function (elem) {
+	elem.addClass("selected");
+	elem.addClass("active");
 };
 
 /**
- * @param {string} id
+ * @param {jQuery} elem
  * @returns {void}
  */
-multiselect.deselect = function (id) {
-	let el = $(id);
-
-	el.removeClass("selected");
-	el.removeClass("active");
+multiselect.deselect = function (elem) {
+	elem.removeClass("selected");
+	elem.removeClass("active");
 };
 
 /**

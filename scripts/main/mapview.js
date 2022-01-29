@@ -60,7 +60,7 @@ const mapview = {
 	max_lng: null,
 	/** @type {?string} */
 	albumID: null,
-	/** @type {?MapProvider} */
+	/** @type {?string} */
 	map_provider: null,
 };
 

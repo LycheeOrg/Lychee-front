@@ -386,7 +386,7 @@ settings.setOverlayType = function () {
 	// validate the input
 	const params = {};
 	// TODO: Presumably, the `SettingsFormData` also includes the properties `ImageOverlay: boolean` and `ImgOverlayType: string`; in that case there is no need for an inefficient jQuery selector
-	const check = $("#ImageOverlay:checked") ? true : false;
+	const check = !!$("#ImageOverlay:checked");
 	const type = $("#ImgOverlayType").val();
 	if (check && type === "exif") {
 		params.image_overlay_type = "exif";

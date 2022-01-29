@@ -141,7 +141,7 @@ sidebar.toggle = function (is_user_initiated) {
 		sidebar.dom().toggleClass("active");
 		photo.updateSizeLivePhotoDuringAnimation();
 
-		if (is_user_initiated) sessionStorage.setItem("keepSidebarVisible", visible.sidebar());
+		if (is_user_initiated) sessionStorage.setItem("keepSidebarVisible", visible.sidebar() ? "true" : "false");
 	}
 };
 

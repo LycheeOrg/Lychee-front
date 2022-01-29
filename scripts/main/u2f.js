@@ -40,11 +40,11 @@ u2f.login = function () {
 		.login({
 			user_id: 0, // for now it is only available to Admin user via a secret key shortcut.
 		})
-		.then(function (data) {
+		.then(function () {
 			loadingBar.show("success", lychee.locale["U2F_AUTHENTIFICATION_SUCCESS"]);
 			window.location.reload();
 		})
-		.catch((error) => loadingBar.show("error", "Something went wrong!"));
+		.catch(() => loadingBar.show("error", "Something went wrong!"));
 };
 
 /**
@@ -62,11 +62,11 @@ u2f.register = function () {
 	if (Larapass.supportsWebAuthn()) {
 		larapass
 			.register()
-			.then(function (response) {
+			.then(function () {
 				loadingBar.show("success", lychee.locale["U2F_REGISTRATION_SUCCESS"]);
 				u2f.list(); // reload credential list
 			})
-			.catch((response) => loadingBar.show("error", "Something went wrong!"));
+			.catch(() => loadingBar.show("error", "Something went wrong!"));
 	} else {
 		loadingBar.show("error", lychee.locale["U2F_NOT_SUPPORTED"]);
 	}

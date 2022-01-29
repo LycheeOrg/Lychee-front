@@ -250,7 +250,7 @@ contextMenu.buildList = function (lists, exclude, action, parentID = null, layer
 
 		let html = lychee.html`
 			           ${prefix}
-			           <img class='cover' width='16' height='16' src='${thumb}'>
+			           <img class='cover' width='16' height='16' src='${thumb}' alt="thumbnail">
 			           <div class='title'>$${item.title}</div>
 			           `;
 
@@ -387,7 +387,7 @@ contextMenu.photoMulti = function (photoIDs, e) {
 	const photocount = photoIDs.length - subcount;
 
 	if (subcount && photocount) {
-		multiselect.deselect(".photo.active, .album.active");
+		multiselect.deselect($(".photo.active, .album.active"));
 		multiselect.close();
 		loadingBar.show("error", "Please select either albums or photos!");
 		return;

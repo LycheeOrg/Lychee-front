@@ -412,12 +412,12 @@ view.album = {
 									}
 								});
 								if (album.json.photos.length - videoCount > 0) {
-									sidebar.changeAttr("images", album.json.photos.length - videoCount);
+									sidebar.changeAttr("images", (album.json.photos.length - videoCount).toString());
 								} else {
 									sidebar.hideAttr("images");
 								}
 								if (videoCount > 0) {
-									sidebar.changeAttr("videos", videoCount);
+									sidebar.changeAttr("videos", videoCount.toString());
 								} else {
 									sidebar.hideAttr("videos");
 								}
@@ -2015,7 +2015,7 @@ view.diagnostics = {
 		multiselect.clearSelection();
 
 		view.photo.hide();
-		view.diagnostics.title("Diagnostics");
+		view.diagnostics.title();
 		header.setMode("config");
 		view.diagnostics.content.init();
 	},
@@ -2026,7 +2026,9 @@ view.diagnostics = {
 	},
 
 	/**
-	 * @param {number} update
+	 * @param {number} update - The update status: `0`: not on master branch;
+	 *                          `1`: up-to-date; `2`: not up-to-date;
+	 *                          `3`: requires migration
 	 * @returns {void}
 	 */
 	clearContent: function (update) {
@@ -2065,7 +2067,7 @@ view.diagnostics = {
 	content: {
 		/** @returns {void} */
 		init: function () {
-			view.diagnostics.clearContent(false);
+			view.diagnostics.clearContent(0);
 			view.diagnostics.content.v_2();
 		},
 

@@ -798,6 +798,9 @@ lychee.getUpdate = function () {
 			$(".version span").show();
 		}
 	} else {
+		/**
+		 * @param {{lychee: {version: number}}} data
+		 */
 		const success = function (data) {
 			if (data.lychee.version > parseInt(lychee.versionCode)) $(".version span").show();
 		};
@@ -963,7 +966,7 @@ lychee.loadDropbox = function (callback) {
 		g.src = "https://www.dropbox.com/static/api/1/dropins.js";
 		g.id = "dropboxjs";
 		g.type = "text/javascript";
-		g.async = "true";
+		g.async = true;
 		g.setAttribute("data-app-key", lychee.dropboxKey);
 		g.onload = g.onreadystatechange = function () {
 			let rs = this.readyState;

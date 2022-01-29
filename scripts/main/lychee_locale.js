@@ -405,7 +405,7 @@ lychee.locale = {
 
 	NSFW_VISIBLE_TEXT_1: "Make Sensitive albums visible by default.",
 	NSFW_VISIBLE_TEXT_2:
-		"If the album is public, it is still accessible, just hidden from the view and <b>can be revealed by pressing <hkb>H</hkb></b>.",
+		"If the album is public, it is still accessible, just hidden from the view and <b>can be revealed by pressing <kbd>H</kbd></b>.",
 	SETTINGS_SUCCESS_NSFW_VISIBLE: "Default sensitive album visibility updated with success.",
 
 	VIEW_NO_RESULT: "No results",

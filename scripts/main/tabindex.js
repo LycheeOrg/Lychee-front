@@ -8,7 +8,7 @@ const tabindex = {
 };
 
 /**
- * @param {string} elem
+ * @param {jQuery} elem
  * @returns {void}
  */
 tabindex.saveSettings = function (elem) {
@@ -17,7 +17,7 @@ tabindex.saveSettings = function (elem) {
 	// Todo: Make shorter notation
 	// Get all elements which have a tabindex
 	// TODO @Hallenser: What did you intended by the TODO above? It seems as if the jQuery selector is already as short as possible?
-	const tmp = $(elem).find("[tabindex]");
+	const tmp = elem.find("[tabindex]");
 
 	// iterate over all elements and set tabindex to stored value (i.e. make is not focusable)
 	tmp.each(
@@ -60,7 +60,7 @@ tabindex.restoreSettings = function (elem) {
 };
 
 /**
- * @param {string} elem
+ * @param {jQuery} elem
  * @param {boolean} [saveFocusElement=false]
  * @returns {void}
  */
@@ -69,7 +69,7 @@ tabindex.makeUnfocusable = function (elem, saveFocusElement = false) {
 
 	// Todo: Make shorter notation
 	// Get all elements which have a tabindex
-	const tmp = $(elem).find("[tabindex]");
+	const tmp = elem.find("[tabindex]");
 
 	// iterate over all elements and set tabindex to -1 (i.e. make is not focussable)
 	tmp.each(
@@ -89,11 +89,11 @@ tabindex.makeUnfocusable = function (elem, saveFocusElement = false) {
 	);
 
 	// Disable input fields
-	$(elem).find("input").attr("disabled", "disabled");
+	elem.find("input").attr("disabled", "disabled");
 };
 
 /**
- * @param {string} elem
+ * @param {jQuery} elem
  * @param {boolean} [restoreFocusElement=false]
  * @returns {void}
  */
@@ -102,7 +102,7 @@ tabindex.makeFocusable = function (elem, restoreFocusElement = false) {
 
 	// Todo: Make shorter notation
 	// Get all elements which have a tabindex
-	const tmp = $(elem).find("[data-tabindex]");
+	const tmp = elem.find("[data-tabindex]");
 
 	// iterate over all elements and set tabindex to stored value (i.e. make is not focusable)
 	tmp.each(
@@ -123,7 +123,7 @@ tabindex.makeFocusable = function (elem, restoreFocusElement = false) {
 	);
 
 	// Enable input fields
-	$(elem).find("input").removeAttr("disabled");
+	elem.find("input").removeAttr("disabled");
 };
 
 /**
