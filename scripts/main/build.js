@@ -100,6 +100,7 @@ build.album = function (data, disabled = false) {
 		case "oldstyle":
 		default:
 			if (lychee.sortingAlbums !== "" && data.min_taken_at && data.max_taken_at) {
+				// TODO: Let the backend return `sortingAlbums` as a proper object with separate properties for column and direction (not as a string)
 				let sortingAlbums = lychee.sortingAlbums.replace("ORDER BY ", "").split(" ");
 				if (sortingAlbums[0] === "max_taken_at" || sortingAlbums[0] === "min_taken_at") {
 					if (formattedMinTs !== "" && formattedMaxTs !== "") {
@@ -186,7 +187,7 @@ build.photo = function (data, disabled = false) {
 		} else if (isRaw) {
 			thumbnail = `<span class="thumbimg"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false' data-tabindex='${tabindex.get_next_tab_index()}'></span>`;
 		}
-	} else if (lychee.layout === "0") {
+	} else if (lychee.layout === 0) {
 		if (data.size_variants.thumb2x !== null) {
 			thumb2x = data.size_variants.thumb2x.url;
 		}

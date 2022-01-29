@@ -16,30 +16,124 @@ const lychee = {
 	full_photo: true,
 	downloadable: false,
 	public_photos_hidden: true,
-	share_button_visible: false, // enable only v4+
-	api_V2: false, // enable api_V2
-	sub_albums: false, // enable sub_albums features
-	admin: false, // enable admin mode (multi-user)
-	may_upload: false, // enable possibility to upload (multi-user)
-	is_locked: false, // locked user (multi-user)
+	/**
+	 * Enable only v4+
+	 * @type boolean
+	 */
+	share_button_visible: false,
+	/**
+	 * Enable api_V2
+	 * @type boolean
+	 */
+	api_V2: false,
+	/**
+	 * Enable sub_albums features
+	 * @type boolean
+	 */
+	sub_albums: false,
+	/**
+	 * Enable admin mode (multi-user)
+	 * @type boolean
+	 */
+	admin: false,
+	/**
+	 * Enable possibility to upload (multi-user)
+	 * @type boolean
+	 */
+	may_upload: false,
+	/**
+	 * Locked user (multi-user)
+	 * @type boolean
+	 */
+	is_locked: false,
+	/** @type {?string} */
 	username: null,
-	layout: "1", // 0: Use default, "square" layout. 1: Use Flickr-like "justified" layout. 2: Use Google-like "unjustified" layout
-	public_search: false, // display Search in publicMode
-	image_overlay_type: "exif", // current Overlay display type
-	image_overlay_type_default: "exif", // image overlay type default type
-	map_display: false, // display photo coordinates on map
-	map_display_public: false, // display photos of public album on map (user not logged in)
-	map_display_direction: true, // use the GPS direction data on displayed maps
-	map_provider: "Wikimedia", // Provider of OSM Tiles
-	map_include_subalbums: false, // include photos of subalbums on map
-	location_decoding: false, // retrieve location name from GPS data
-	location_decoding_caching_type: "Harddisk", // caching mode for GPS data decoding
-	location_show: false, // show location name
-	location_show_public: false, // show location name for public albums
-	swipe_tolerance_x: 150, // tolerance for navigating when swiping images to the left and right on mobile
-	swipe_tolerance_y: 250, // tolerance for navigating when swiping images up and down
+	/**
+	 * Values:
+	 *
+	 *  - `0`: Use default, "square" layout.
+	 *  - `1`: Use Flickr-like "justified" layout.
+	 *  - `2`: Use Google-like "unjustified" layout
+	 *
+	 * @type {number}
+	 */
+	layout: 1,
+	/**
+	 * Display search in public mode.
+	 * @type boolean
+	 */
+	public_search: false,
+	/**
+	 * Overlay display type
+	 * @type {string}
+	 */
+	image_overlay_type: "exif",
+	/**
+	 * Image overlay type default type
+	 * @type {string}
+	 */
+	image_overlay_type_default: "exif",
+	/**
+	 * Display photo coordinates on map
+	 * @type boolean
+	 */
+	map_display: false,
+	/**
+	 * Display photos of public album on map (user not logged in)
+	 * @type boolean
+	 */
+	map_display_public: false,
+	/**
+	 * Use the GPS direction data on displayed maps
+	 * @type boolean
+	 */
+	map_display_direction: true,
+	/**
+	 * Provider of OSM Tiles
+	 * @type {string}
+	 */
+	map_provider: "Wikimedia",
+	/**
+	 * Include photos of subalbums on map
+	 * @type boolean
+	 */
+	map_include_subalbums: false,
+	/**
+	 * Retrieve location name from GPS data
+	 * @type boolean
+	 */
+	location_decoding: false,
+	/**
+	 * Caching mode for GPS data decoding
+	 * @type {string}
+	 */
+	location_decoding_caching_type: "Harddisk",
+	/**
+	 * Show location name
+	 * @type boolean
+	 */
+	location_show: false,
+	/**
+	 * Show location name for public albums
+	 * @type boolean
+	 */
+	location_show_public: false,
+	/**
+	 * Tolerance for navigating when swiping images to the left and right on mobile
+	 * @type {number}
+	 */
+	swipe_tolerance_x: 150,
+	/**
+	 * Tolerance for navigating when swiping images up and down
+	 * @type {number}
+	 */
+	swipe_tolerance_y: 250,
 
-	landing_page_enabled: false, // is landing page enabled ?
+	/**
+	 * Is landing page enabled?
+	 * @type boolean
+	 */
+	landing_page_enabled: false,
 	delete_imported: false,
 	import_via_symlink: false,
 	skip_duplicates: false,
@@ -72,16 +166,25 @@ const lychee = {
 	hide_content_during_imageview: false,
 	device_type: "desktop",
 
-	checkForUpdates: "1",
+	checkForUpdates: true,
+	/**
+	 * The most recent, available Lychee version encoded as an integer, e.g. 040506
+	 * @type {number}
+	 */
 	update_json: 0,
 	update_available: false,
 	new_photos_notification: false,
 	sortingPhotos: "",
 	sortingAlbums: "",
+	/**
+	 * The absolute path of the server-side installation directory of Lychee, e.g. `/var/www/lychee`
+	 * @type {string}
+	 */
 	location: "",
 
 	lang: "",
-	lang_available: {},
+	/** @type {string[]} */
+	lang_available: [],
 
 	dropbox: false,
 	dropboxKey: "",
@@ -131,7 +234,7 @@ lychee.aboutDialog = function () {
 		},
 	});
 
-	if (lychee.checkForUpdates === "1") lychee.getUpdate();
+	if (lychee.checkForUpdates) lychee.getUpdate();
 };
 
 /**
@@ -199,10 +302,10 @@ lychee.init = function (isFirstInitialization = true) {
 			lychee.album_subtitle_type = data.config.album_subtitle_type || "oldstyle";
 			lychee.dropboxKey = data.config.dropbox_key || data.config.dropboxKey || "";
 			lychee.location = data.config.location || "";
-			lychee.checkForUpdates = data.config.check_for_updates || data.config.checkForUpdates || "1";
+			lychee.checkForUpdates = data.config.check_for_updates || data.config.checkForUpdates;
 			lychee.lang = data.config.lang || "";
 			lychee.lang_available = data.config.lang_available || {};
-			lychee.layout = data.config.layout || "1";
+			lychee.layout = data.config.layout || 1;
 			lychee.public_search = (data.config.public_search && data.config.public_search === "1") || false;
 			lychee.image_overlay_type = !data.config.image_overlay_type ? "exif" : data.config.image_overlay_type;
 			lychee.image_overlay_type_default = lychee.image_overlay_type;
@@ -283,7 +386,7 @@ lychee.init = function (isFirstInitialization = true) {
 			lychee.sortingPhotos = data.config.sorting_Photos || data.config.sortingPhotos || "";
 			lychee.sortingAlbums = data.config.sorting_Albums || data.config.sortingAlbums || "";
 			lychee.album_subtitle_type = data.config.album_subtitle_type || "oldstyle";
-			lychee.checkForUpdates = data.config.check_for_updates || data.config.checkForUpdates || "1";
+			lychee.checkForUpdates = data.config.check_for_updates || data.config.checkForUpdates;
 			lychee.layout = data.config.layout || "1";
 			lychee.public_search = (data.config.public_search && data.config.public_search === "1") || false;
 			lychee.image_overlay_type = !data.config.image_overlay_type ? "exif" : data.config.image_overlay_type;
@@ -417,7 +520,7 @@ lychee.loginDialog = function () {
 	// TODO: Refactor this.
 	$("#signInKeyLess").on("click", u2f.login);
 
-	if (lychee.checkForUpdates === "1") lychee.getUpdate();
+	if (lychee.checkForUpdates) lychee.getUpdate();
 
 	tabindex.makeFocusable(basicModal.dom());
 };
@@ -711,6 +814,7 @@ lychee.getUpdate = function () {
  * @param {boolean} editable
  */
 lychee.setTitle = function (title, editable) {
+	// TODO: Fix this odd condition. It seems to have something to do with `"Lychee v4"` being hard-coded in `view.albums.title`. Optimally, this code would be `document.title = lychee.title + " - " + title`.
 	if (lychee.title === title) {
 		document.title = lychee.title + " - " + lychee.locale["ALBUMS"];
 	} else {

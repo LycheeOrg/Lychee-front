@@ -232,3 +232,36 @@ const SmartAlbumID = Object.freeze({
  *
  * @property {?string} email
  */
+
+/**
+ * @typedef ConfigSetting
+ *
+ * @property {number} id
+ * @property {string} key
+ * @property {?string} value - TODO: this should have the correct type depending on `type_range`
+ * @property {string} cat
+ * @property {string} type_range
+ * @property {number} confidentiality - `0`: public setting, `2`: informational, `3`: admin only
+ * @property {string} description
+ */
+
+/**
+ * @typedef LogEntry
+ *
+ * @property {number} id
+ * @property {string} created_at
+ * @property {string} updated_at
+ * @property {string} type
+ * @property {string} function
+ * @property {number} line
+ * @property {string} text
+ */
+
+/**
+ * @typedef DiagnosticInfo
+ *
+ * @property {string[]} errors
+ * @property {string[]} infos
+ * @property {string[]} configs
+ * @property {number} update - `0`: not on master branch; `1`: up-to-date; `2`: not up-to-date; `3`: requires migration
+ */

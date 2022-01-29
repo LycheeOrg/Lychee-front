@@ -5,6 +5,7 @@
 /**
  * @callback APISuccessCB
  * @param {Object} data the decoded JSON response
+ * @returns {void}
  */
 
 /**
@@ -12,12 +13,13 @@
  * @param {XMLHttpRequest} jqXHR the jQuery XMLHttpRequest object, see {@link https://api.jquery.com/jQuery.ajax/#jqXHR}.
  * @param {Object} params the original JSON parameters of the request
  * @param {?LycheeException} lycheeException the Lychee exception
- * @return {boolean}
+ * @returns {boolean}
  */
 
 /**
  * @callback APIProgressCB
  * @param {ProgressEvent} event the progress event
+ * @returns {void}
  */
 
 /**
@@ -39,6 +41,7 @@ let api = {
  * @param {?APISuccessCB} successCallback
  * @param {?APIProgressCB} responseProgressCB
  * @param {?APIErrorCB} errorCallback
+ * @returns {void}
  */
 api.post = function (fn, params, successCallback = null, responseProgressCB = null, errorCallback = null) {
 	loadingBar.show();
@@ -93,6 +96,7 @@ api.post = function (fn, params, successCallback = null, responseProgressCB = nu
  *
  * @param {string} url
  * @param {APISuccessCB} callback
+ * @returns {void}
  */
 api.getCSS = function (url, callback) {
 	loadingBar.show();

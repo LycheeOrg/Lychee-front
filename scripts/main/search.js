@@ -42,9 +42,9 @@ search.find = function (term) {
 			if (albumsData !== "") albums_divider += " (" + data.albums.length + ")";
 			if (photosData !== "") {
 				photos_divider += " (" + data.photos.length + ")";
-				if (lychee.layout === "1") {
+				if (lychee.layout === 1) {
 					photosData = '<div class="justified-layout">' + photosData + "</div>";
-				} else if (lychee.layout === "2") {
+				} else if (lychee.layout === 2) {
 					photosData = '<div class="unjustified-layout">' + photosData + "</div>";
 				}
 			}

@@ -157,7 +157,7 @@ albums.isShared = function (albumID) {
 
 /**
  * @param {?string} albumID
- * @returns {?(Album|TagAlbum|SmartAlbum)}
+ * @returns {(null|Album|TagAlbum|SmartAlbum)}
  */
 albums.getByID = function (albumID) {
 	if (albumID == null) return null;

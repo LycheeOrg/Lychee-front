@@ -3,7 +3,7 @@
  */
 
 const album = {
-	/** @type {?(Album|TagAlbum)} */
+	/** @type {(null|Album|TagAlbum)} */
 	json: null,
 };
 
