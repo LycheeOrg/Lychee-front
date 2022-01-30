@@ -101,6 +101,7 @@ albums.parse = function (album) {
  * Normalizes the built-in smart albums.
  *
  * TODO: REFACTOR THIS
+ * TODO @ildyria: What did you intended to express by the TODO above? What did you want to be re-factored?
  *
  * @param {SmartAlbums} data
  * @returns {void}
