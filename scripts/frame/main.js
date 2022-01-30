@@ -1,6 +1,7 @@
 // Sub-implementation of lychee -------------------------------------------------------------- //
 
-let lychee = {
+// TODO: Find out and explain: Here we declare a global (empty) object `lychee`; we also declare one in `./main/lychee.js`. Why don't they interfere with each other? How do we end up with **one** `lychee` object which contains the properties and methods of both objects?!
+const lychee = {
 	api_V2: true,
 };
 
@@ -78,26 +79,38 @@ lychee.html = function (literalSections, ...substs) {
 	return result;
 };
 
+/**
+ * @returns {string} - either `"touchend"` or `"click"`
+ */
 lychee.getEventName = function () {
-	let touchendSupport =
+	const touchendSupport =
 		/Android|iPhone|iPad|iPod/i.test(navigator.userAgent || navigator.vendor || window.opera) && "ontouchend" in document.documentElement;
 	return touchendSupport === true ? "touchend" : "click";
 };
 
 // Sub-implementation of lychee -------------------------------------------------------------- //
 
-let frame = {
+const frame = {
+	/** @type {number} */
 	refresh: 30000,
+	/** @type {?Photo} */
+	photo: null,
 };
 
+/**
+ * @returns {void}
+ */
 frame.start_blur = function () {
-	let img = document.getElementById("background");
-	let canvas = document.getElementById("background_canvas");
+	const img = document.getElementById("background");
+	const canvas = document.getElementById("background_canvas");
 	StackBlur.image(img, canvas, 20);
 	canvas.style.width = "100%";
 	canvas.style.height = "100%";
 };
 
+/**
+ * @returns {void}
+ */
 frame.next = function () {
 	$("body").removeClass("loaded");
 	setTimeout(function () {
@@ -105,58 +118,73 @@ frame.next = function () {
 	}, 1000);
 };
 
+/**
+ * @returns {void}
+ */
 frame.refreshPicture = function () {
-	api.post("Photo::getRandom", {}, function (data) {
-		if (data.size_variants === null || (data.size_variants.original === null && data.size_variants.medium === null)) {
-			console.log("URL not found");
-		}
-		if (data.size_variants.thumb === null) console.log("Thumb not found");
-
-		$("#background").attr("src", data.size_variants.thumb.url);
-
-		let srcset = "";
-		let src = "";
-		this.frame.photo = null;
-		if (data.size_variants.medium !== null) {
-			src = data.size_variants.medium.url;
-
-			if (data.size_variants.medium2x !== null) {
-				srcset = `${data.size_variants.medium.url} ${data.size_variants.medium.width}w, ${data.size_variants.medium2x.url} ${data.size_variants.medium2x.width}w`;
-				// We use it in the resize callback.
-				this.frame.photo = data;
+	api.post(
+		"Photo::getRandom",
+		{},
+		/** @param {Photo} data */
+		function (data) {
+			// TODO: My IDE complains that this condition is always false, because each Photo has at least a thumbnail
+			if (data.size_variants === null || (data.size_variants.original === null && data.size_variants.medium === null)) {
+				console.log("URL not found");
 			}
-		} else {
-			src = data.size_variants.original.url;
+			// TODO My IDE complains that this condition is always false. Is this legacy?
+			if (data.size_variants.thumb === null) console.log("Thumb not found");
+
+			$("#background").attr("src", data.size_variants.thumb.url);
+
+			let srcset = "";
+			let src = "";
+			frame.photo = null;
+			if (data.size_variants.medium !== null) {
+				src = data.size_variants.medium.url;
+
+				if (data.size_variants.medium2x !== null) {
+					srcset = `${data.size_variants.medium.url} ${data.size_variants.medium.width}w, ${data.size_variants.medium2x.url} ${data.size_variants.medium2x.width}w`;
+					// We use it in the resize callback.
+					this.frame.photo = data;
+				}
+			} else {
+				src = data.size_variants.original.url;
+			}
+
+			$("#picture").attr("srcset", srcset);
+			frame.resize();
+			$("#picture").attr("src", src).css("display", "inline");
+
+			setTimeout(function () {
+				frame.next();
+			}, frame.refresh);
 		}
-
-		$("#picture").attr("srcset", srcset);
-		frame.resize();
-		$("#picture").attr("src", src).css("display", "inline");
-
-		setTimeout(function () {
-			frame.next();
-		}, frame.refresh);
-	});
+	);
 };
 
+/**
+ * @param {FrameSettings} data
+ * @returns {void}
+ */
 frame.set = function (data) {
-	//	console.log(data.refresh);
-	frame.refresh = data.refresh ? parseInt(data.refresh, 10) + 1000 : 31000; // 30 sec + 1 sec of blackout
-	//	console.log(frame.refresh);
+	frame.refresh = data.refresh + 1000; // + 1 sec of blackout
 	frame.refreshPicture();
 };
 
+/**
+ * @returns {void}
+ */
 frame.resize = function () {
 	if (this.photo) {
-		let ratio =
+		const ratio =
 			this.photo.size_variants.original.height > 0 ? this.photo.size_variants.original.width / this.photo.size_variants.original.height : 1;
-		let winWidth = $(window).width();
-		let winHeight = $(window).height();
+		const winWidth = $(window).width();
+		const winHeight = $(window).height();
 
 		// Our math assumes that the image occupies the whole frame.  That's
 		// not quite the case (the default css sets it to 95%) but it's close
 		// enough.
-		let width = winWidth / ratio > winHeight ? winHeight * ratio : winWidth;
+		const width = winWidth / ratio > winHeight ? winHeight * ratio : winWidth;
 
 		$("#picture").attr("sizes", width + "px");
 	}
@@ -183,9 +211,8 @@ frame.handleAPIError = function (jqXHR, params, lycheeException) {
 
 // Main -------------------------------------------------------------- //
 
-let loadingBar = {
+const loadingBar = {
 	/**
-	 *
 	 * @param {?string} status the status, either `null`, `"error"` or `"success"`
 	 * @param {?string} errorText the error text to show
 	 * @returns {boolean}
@@ -200,7 +227,8 @@ let loadingBar = {
 	hide(force) {},
 };
 
-let imageview = $("#imageview");
+// TODO: It seems that this object is used nowhere?! Delete it?
+const imageview = $("#imageview");
 
 $(function () {
 	// set CSRF protection (Laravel)
@@ -221,7 +249,12 @@ $(function () {
 		$("body").addClass("loaded");
 	});
 
-	api.post("Frame::getSettings", {}, function (data) {
-		frame.set(data);
-	});
+	api.post(
+		"Frame::getSettings",
+		{},
+		/** @param {FrameSettings} data */
+		function (data) {
+			frame.set(data);
+		}
+	);
 });

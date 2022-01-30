@@ -4,7 +4,8 @@
 
 // Sub-implementation of lychee -------------------------------------------------------------- //
 
-let lychee = {};
+// TODO: Find out and explain: Here we declare a global (empty) object `lychee`; we also declare one in `./main/lychee.js`. Why don't they interfere with each other? How do we end up with **one** `lychee` object which contains the properties and methods of both objects?!
+const lychee = {};
 
 lychee.content = $(".content");
 lychee.imageview = $("#imageview");
@@ -82,18 +83,28 @@ lychee.html = function (literalSections, ...substs) {
 	return result;
 };
 
+/**
+ * @returns {string} - either `"touchend"` or `"click"`
+ */
 lychee.getEventName = function () {
-	let touchendSupport =
+	const touchendSupport =
 		/Android|iPhone|iPad|iPod/i.test(navigator.userAgent || navigator.vendor || window.opera) && "ontouchend" in document.documentElement;
 	return touchendSupport === true ? "touchend" : "click";
 };
 
 // Sub-implementation of photo -------------------------------------------------------------- //
 
-let photo = {
+// TODO: Find out and explain: Here we declare a global object `photo`; we also declare one in `./main/photo.js`. Why don't they interfere with each other? How do we end up with **one** `lychee` object which contains the properties and methods of both objects?!
+const photo = {
+	/** @type {?Photo} */
 	json: null,
 };
 
+/**
+ * @param {string} photoID
+ * @param {string} service - one out of `"twitter"`, `"facebook"`, `"mail"` or `"dropbox"`
+ * @returns {void}
+ */
 photo.share = function (photoID, service) {
 	let url = location.toString();
 
@@ -110,6 +121,9 @@ photo.share = function (photoID, service) {
 	}
 };
 
+/**
+ * @returns {string}
+ */
 photo.getDirectLink = function () {
 	return $("#imageview img")
 		.attr("src")
@@ -117,32 +131,35 @@ photo.getDirectLink = function () {
 		.replace(/url\(|\)$/gi, "");
 };
 
+/**
+ * @returns {void}
+ */
 photo.show = function () {
 	$("#imageview").removeClass("full");
 	header.dom().removeClass("header--hidden");
-
-	return true;
 };
 
+/**
+ * @returns {void}
+ */
 photo.hide = function () {
 	if (visible.photo() && !visible.sidebar() && !visible.contextMenu()) {
 		$("#imageview").addClass("full");
 		header.dom().addClass("header--hidden");
-
-		return true;
 	}
-
-	return false;
 };
 
+/**
+ * @returns {void}
+ */
 photo.onresize = function () {
 	// Copy of view.photo.onresize
 	if (photo.json.size_variants.medium === null || photo.json.size_variants.medium2x === null) return;
 
 	let imgWidth = photo.json.size_variants.medium.width;
 	let imgHeight = photo.json.size_variants.medium.height;
-	let containerWidth = parseFloat($("#imageview").width(), 10);
-	let containerHeight = parseFloat($("#imageview").height(), 10);
+	let containerWidth = parseFloat($("#imageview").width());
+	let containerHeight = parseFloat($("#imageview").height());
 
 	let width = imgWidth < containerWidth ? imgWidth : containerWidth;
 	let height = (width * imgHeight) / imgWidth;
@@ -155,12 +172,17 @@ photo.onresize = function () {
 
 // Sub-implementation of contextMenu -------------------------------------------------------------- //
 
-let contextMenu = {};
+const contextMenu = {};
 
+/**
+ * @param {string} photoID
+ * @param {jQuery.Event} e
+ * @returns {void}
+ */
 contextMenu.sharePhoto = function (photoID, e) {
-	let iconClass = "ionicons";
+	const iconClass = "ionicons";
 
-	let items = [
+	const items = [
 		{ title: build.iconic("twitter", iconClass) + "Twitter", fn: () => photo.share(photoID, "twitter") },
 		{ title: build.iconic("facebook", iconClass) + "Facebook", fn: () => photo.share(photoID, "facebook") },
 		{ title: build.iconic("envelope-closed") + "Mail", fn: () => photo.share(photoID, "mail") },
@@ -172,12 +194,15 @@ contextMenu.sharePhoto = function (photoID, e) {
 
 // Main -------------------------------------------------------------- //
 
-let loadingBar = {
+const loadingBar = {
 	show() {},
 	hide() {},
 };
 
-let imageview = $("#imageview");
+/**
+ * @type {jQuery}
+ */
+const imageview = $("#imageview");
 
 $(document).ready(function () {
 	// set CSRF protection (Laravel)
@@ -186,8 +211,9 @@ $(document).ready(function () {
 	// Image View
 	$(window).on("resize", photo.onresize);
 
+	// TODO @ildyria: Why don't we simply use (https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/get#example)? Why do we need an home-brewed method which on top strikes me as overly complicated?
 	// Save ID of photo
-	let photoID = gup("p");
+	const photoID = gup("p");
 
 	// Set API error handler
 	api.onError = handleAPIError;
@@ -206,43 +232,54 @@ $(document).ready(function () {
 	loadPhotoInfo(photoID);
 });
 
+/**
+ * TODO: Why is this a global function?
+ * TODO: Why do we repeat code here which is a merge of code mostly in `photo.js` and some other files?
+ * @param {string} photoID
+ */
 const loadPhotoInfo = function (photoID) {
-	let params = {
-		photoID,
-		password: "",
+	const params = {
+		photoID: photoID,
 	};
 
-	api.post("Photo::get", params, function (data) {
-		photo.json = data;
+	api.post(
+		"Photo::get",
+		params,
+		/** @param {Photo} data */
+		function (data) {
+			photo.json = data;
 
-		// Set title
-		if (!data.title) data.title = "Untitled";
-		document.title = "Lychee - " + data.title;
-		header.dom(".header__title").html(lychee.escapeHTML(data.title));
+			// Set title
+			// TODO: Don't modify the original JSON object, replacing an empty title with a human-friendly placeholder should happen on the GUI layer.
+			// TODO: If at all, why don't we use `lychee.locale`?
+			if (!data.title) data.title = "Untitled";
+			document.title = "Lychee - " + data.title;
+			header.dom(".header__title").html(lychee.escapeHTML(data.title));
 
-		// Render HTML
-		imageview.html(build.imageview(data, true).html);
-		imageview.find(".arrow_wrapper").remove();
-		imageview.addClass("fadeIn").show();
-		photo.onresize();
+			// Render HTML
+			imageview.html(build.imageview(data, true, false).html);
+			imageview.find(".arrow_wrapper").remove();
+			imageview.addClass("fadeIn").show();
+			photo.onresize();
 
-		// Render Sidebar
-		let structure = sidebar.createStructure.photo(data);
-		let html = sidebar.render(structure);
+			// Render Sidebar
+			const structure = sidebar.createStructure.photo(data);
+			const html = sidebar.render(structure);
 
-		// Fullscreen
-		let timeout = null;
+			// Fullscreen
+			let timeout = null;
 
-		$(document).bind("mousemove", function () {
-			clearTimeout(timeout);
-			photo.show();
+			$(document).bind("mousemove", function () {
+				clearTimeout(timeout);
+				photo.show();
+				timeout = setTimeout(photo.hide, 2500);
+			});
 			timeout = setTimeout(photo.hide, 2500);
-		});
-		timeout = setTimeout(photo.hide, 2500);
 
-		sidebar.dom(".sidebar__wrapper").html(html);
-		sidebar.bind();
-	});
+			sidebar.dom(".sidebar__wrapper").html(html);
+			sidebar.bind();
+		}
+	);
 };
 
 /**

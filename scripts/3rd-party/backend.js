@@ -265,3 +265,9 @@ const SmartAlbumID = Object.freeze({
  * @property {string[]} configs
  * @property {number} update - `0`: not on master branch; `1`: up-to-date; `2`: not up-to-date; `3`: requires migration
  */
+
+/**
+ * @typedef FrameSettings
+ *
+ * @property {number} refresh
+ */
