@@ -444,7 +444,7 @@ album.setTitle = function (albumIDs) {
 			} else oldTitle = album.getSubByID(albumIDs[0]).title;
 		}
 		if (!oldTitle) {
-			let a = albums.getByID(albumIDs[0]);
+			const a = albums.getByID(albumIDs[0]);
 			if (a) oldTitle = a.title;
 		}
 	}
@@ -458,7 +458,7 @@ album.setTitle = function (albumIDs) {
 
 		basicModal.close();
 
-		let newTitle = data.title;
+		const newTitle = data.title;
 
 		if (visible.album()) {
 			if (albumIDs.length === 1 && album.getID() === albumIDs[0]) {
@@ -467,7 +467,7 @@ album.setTitle = function (albumIDs) {
 				album.json.title = newTitle;
 				view.album.title();
 
-				let a = albums.getByID(albumIDs[0]);
+				const a = albums.getByID(albumIDs[0]);
 				if (a) a.title = newTitle;
 			} else {
 				albumIDs.forEach(function (id) {
@@ -482,7 +482,7 @@ album.setTitle = function (albumIDs) {
 			// Rename all albums
 
 			albumIDs.forEach(function (id) {
-				let a = albums.getByID(id);
+				const a = albums.getByID(id);
 				if (a) a.title = newTitle;
 				view.albums.content.title(id);
 			});

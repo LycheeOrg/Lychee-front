@@ -40,8 +40,8 @@ contextMenu.add = function (e) {
 			// For tag albums the context menu is normally not used.
 			items = [];
 		}
-		if (albumID.length === 24 || albumID === "unsorted") {
-			if (albumID !== "unsorted") {
+		if (albumID.length === 24 || albumID === SmartAlbumID.UNSORTED) {
+			if (albumID !== SmartAlbumID.UNSORTED) {
 				let button_visibility_album = $("#button_visibility_album");
 				if (button_visibility_album && button_visibility_album.css("display") === "none") {
 					items.unshift({
@@ -59,7 +59,7 @@ contextMenu.add = function (e) {
 					fn: () => album.delete([albumID]),
 				});
 			}
-			if (albumID !== "unsorted") {
+			if (albumID !== SmartAlbumID.UNSORTED) {
 				if (!album.isTagAlbum()) {
 					let button_move_album = $("#button_move_album");
 					if (button_move_album && button_move_album.css("display") === "none") {
@@ -609,7 +609,7 @@ contextMenu.move = function (IDs, e, callback, kind = "UNSORTED", display_root =
 				// For merging, don't exclude the parent.
 				// For photo copy, don't exclude the current album.
 				if (callback !== album.merge && callback !== photo.copyTo) {
-					exclude.push(album.getID().toString());
+					exclude.push(album.getID());
 				}
 				if (IDs.length === 1 && IDs[0] === album.getID() && album.getParentID() && callback === album.setAlbum) {
 					// If moving the current album, exclude its parent.
