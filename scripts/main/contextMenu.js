@@ -613,7 +613,7 @@ contextMenu.move = function (IDs, e, callback, kind = "UNSORTED", display_root =
 				}
 				if (IDs.length === 1 && IDs[0] === album.getID() && album.getParentID() && callback === album.setAlbum) {
 					// If moving the current album, exclude its parent.
-					exclude.push(album.getParentID().toString());
+					exclude.push(album.getParentID());
 				}
 			} else if (visible.photo()) {
 				exclude.push(photo.json.album_id);
