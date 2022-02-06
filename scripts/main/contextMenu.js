@@ -360,14 +360,14 @@ contextMenu.photo = function (photoID, e) {
  * @returns {number}
  */
 contextMenu.countSubAlbums = function (photoIDs) {
-	if (album.albums === null || album.albums.length === 0) {
+	if (album.json.albums === null || album.json.albums.length === 0) {
 		return 0;
 	}
 
 	let count = 0;
 
 	photoIDs.forEach(function (id) {
-		if (album.albums.findIndex((a) => a.id === id) !== -1) {
+		if (album.json.albums.findIndex((a) => a.id === id) !== -1) {
 			count++;
 		}
 	});
