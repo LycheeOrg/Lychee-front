@@ -117,7 +117,7 @@ contextMenu.album = function (albumID, e) {
 		},
 		{
 			title: build.iconic("folder") + lychee.locale["MOVE"],
-			visible: lychee.sub_albums,
+			visible: true,
 			fn: () => {
 				basicContext.close();
 				contextMenu.move([albumID], e, album.setAlbum, "ROOT");
@@ -183,7 +183,7 @@ contextMenu.albumMulti = function (albumIDs, e) {
 		},
 		{
 			title: build.iconic("folder") + lychee.locale["MOVE_ALL"],
-			visible: lychee.sub_albums,
+			visible: true,
 			fn: () => {
 				basicContext.close();
 				contextMenu.move(albumIDs, e, album.setAlbum, "ROOT");
