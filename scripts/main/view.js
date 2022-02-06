@@ -481,8 +481,8 @@ view.album = {
 				}
 				/** @type {number[]} */
 				const ratio = album.json.photos.map(function (_photo) {
-					const height = this.size_variants.original.height;
-					const width = this.size_variants.original.width;
+					const height = _photo.size_variants.original.height;
+					const width = _photo.size_variants.original.width;
 					const ratio = height > 0 ? width / height : 1;
 					// If there is no small and medium size variants for videos,
 					// we have to fall back to square thumbs
