@@ -520,7 +520,7 @@ build.uploadNewFile = function (name) {
 };
 
 /**
- * @param {?string} tags
+ * @param {string[]} tags
  * @returns {string}
  */
 build.tags = function (tags) {
@@ -533,8 +533,8 @@ build.tags = function (tags) {
 	// build class_string for tag
 	const a_class = searchable ? "tag search" : "tag";
 
-	if (tags !== null && tags !== "") {
-		tags.split(",").forEach(function (tag, index) {
+	if (tags.length !== 0) {
+		tags.forEach(function (tag, index) {
 			if (editable) {
 				html += lychee.html`<a class='${a_class}'>$${tag}<span data-index='${index}'>${build.iconic("x")}</span></a>`;
 			} else {

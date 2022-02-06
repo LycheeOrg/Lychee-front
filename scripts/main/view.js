@@ -587,7 +587,7 @@ view.album = {
 	 * @returns {void}
 	 */
 	show_tags: function () {
-		sidebar.changeAttr("show_tags", album.json.show_tags);
+		sidebar.changeAttr("show_tags", album.json.show_tags.join(", "));
 	},
 
 	/**

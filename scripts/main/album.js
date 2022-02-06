@@ -352,7 +352,7 @@ album.addByTags = function () {
 			"Album::addByTags",
 			{
 				title: data.title,
-				tags: data.tags,
+				tags: data.tags.split(","),
 			},
 			/** @param {TagAlbum} _data */
 			function (_data) {
@@ -385,19 +385,22 @@ album.addByTags = function () {
  * @returns {void}
  */
 album.setShowTags = function (albumID) {
-	const oldShowTags = album.json.show_tags;
-
 	/** @param {{show_tags: string}} data */
 	const action = function (data) {
 		if (!data.show_tags.trim()) {
 			basicModal.error("show_tags");
 			return;
 		}
+		const new_show_tags = data.show_tags
+			.split(",")
+			.map((tag) => tag.trim())
+			.filter((tag) => tag !== "" && tag.indexOf(",") === -1)
+			.sort();
 
 		basicModal.close();
 
 		if (visible.album()) {
-			album.json.show_tags = data.show_tags;
+			album.json.show_tags = new_show_tags;
 			view.album.show_tags();
 		}
 
@@ -405,16 +408,24 @@ album.setShowTags = function (albumID) {
 			"Album::setShowTags",
 			{
 				albumID: albumID,
-				show_tags: data.show_tags,
+				show_tags: new_show_tags,
 			},
 			() => album.reload()
 		);
 	};
 
 	basicModal.show({
-		body: lychee.html`<p>${lychee.locale["ALBUM_NEW_SHOWTAGS"]}
-							<input class='text' name='show_tags' type='text' minlength='1' placeholder='Tags' value='$${oldShowTags}'>
-						</p>`,
+		body: lychee.html`
+			<p>${lychee.locale["ALBUM_NEW_SHOWTAGS"]}
+				<input
+					class='text'
+					name='show_tags'
+					type='text'
+					minlength='1'
+					placeholder='Tags'
+					value='$${album.json.show_tags.sort().join(", ")}'
+				>
+			</p>`,
 		buttons: {
 			action: {
 				title: lychee.locale["ALBUM_SET_SHOWTAGS"],

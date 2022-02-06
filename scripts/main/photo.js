@@ -778,24 +778,24 @@ photo.setDescription = function (photoID) {
  * @returns {void}
  */
 photo.editTags = function (photoIDs) {
-	let oldTags = "";
+	/** @type {string[]} */
+	let oldTags = [];
 
 	// Get tags
-	if (visible.photo()) oldTags = photo.json.tags;
-	else if (visible.album() && photoIDs.length === 1) oldTags = album.getByID(photoIDs[0]).tags;
-	else if (visible.search() && photoIDs.length === 1) oldTags = album.getByID(photoIDs[0]).tags;
+	if (visible.photo()) oldTags = photo.json.tags.sort();
+	else if (visible.album() && photoIDs.length === 1) oldTags = album.getByID(photoIDs[0]).tags.sort();
+	else if (visible.search() && photoIDs.length === 1) oldTags = album.getByID(photoIDs[0]).tags.sort();
 	else if (visible.album() && photoIDs.length > 1) {
-		oldTags = album.getByID(photoIDs[0]).tags;
-		// TODO: This condition does not properly take into account, that photos might have the same _set_ of tags, but in a different order
-		const areIdentical = photoIDs.every((id) => album.getByID(id).tags === oldTags);
-		if (!areIdentical) oldTags = "";
-	}
-
-	// Improve tags
-	if (typeof oldTags === "string" && oldTags !== "") {
-		oldTags = oldTags.replace(/,/g, ", ");
-	} else {
-		oldTags = "";
+		oldTags = album.getByID(photoIDs[0]).tags.sort();
+		const areIdentical = photoIDs.every(function (id) {
+			const oldTags2 = album.getByID(id).tags.sort();
+			if (oldTags.length !== oldTags2.length) return false;
+			for (let tagIdx = 0; tagIdx !== oldTags.length; tagIdx++) {
+				if (oldTags[tagIdx] !== oldTags2[tagIdx]) return false;
+			}
+			return true;
+		});
+		if (!areIdentical) oldTags = [];
 	}
 
 	/**
@@ -804,10 +804,15 @@ photo.editTags = function (photoIDs) {
 	 */
 	const action = function (data) {
 		basicModal.close();
-		photo.setTags(photoIDs, data.tags);
+		const newTags = data.tags
+			.split(",")
+			.map((tag) => tag.trim())
+			.filter((tag) => tag !== "" && tag.indexOf(",") === -1)
+			.sort();
+		photo.setTags(photoIDs, newTags);
 	};
 
-	const input = lychee.html`<input class='text' name='tags' type='text' maxlength='800' placeholder='Tags' value='$${oldTags}'>`;
+	const input = lychee.html`<input class='text' name='tags' type='text' maxlength='800' placeholder='Tags' value='$${oldTags.join(", ")}'>`;
 
 	const msg =
 		photoIDs.length === 1
@@ -831,14 +836,10 @@ photo.editTags = function (photoIDs) {
 
 /**
  * @param {string[]} photoIDs
- * @param {string} tags
+ * @param {string[]} tags
  * @returns {void}
  */
 photo.setTags = function (photoIDs, tags) {
-	// Parse tags
-	tags = tags.replace(/( , )|( ,)|(, )|(,+ *)|(,$|^,)/g, ",");
-	tags = tags.replace(/,$|^,|( )*$/g, "");
-
 	if (visible.photo()) {
 		photo.json.tags = tags;
 		view.photo.tags();
@@ -872,12 +873,7 @@ photo.setTags = function (photoIDs, tags) {
  * @param {number} index
  */
 photo.deleteTag = function (photoID, index) {
-	// Remove
-	const tags = photo.json.tags.split(",");
-	tags.splice(index, 1);
-
-	// Save
-	photo.json.tags = tags.toString();
+	photo.json.tags.splice(index, 1);
 	photo.setTags([photoID], photo.json.tags);
 };
 
