@@ -1127,7 +1127,7 @@ album.share = function (service) {
  * @returns {void}
  */
 album.getArchive = function (albumIDs) {
-	location.href = "api/Album::getArchive?" + $.param({ albumIDs: albumIDs });
+	location.href = "api/Album::getArchive?albumIDs=" + albumIDs.join();
 };
 
 /**

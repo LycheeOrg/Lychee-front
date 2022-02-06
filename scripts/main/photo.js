@@ -1104,7 +1104,7 @@ photo.getArchive = function (photoIDs, kind = null) {
 			photo.getArchive(photoIDs, kind);
 		});
 	} else {
-		location.href = "api/Photo::getArchive" + lychee.html`?photoIDs=${photoIDs.join()}&kind=${kind}`;
+		location.href = "api/Photo::getArchive?photoIDs=" + photoIDs.join() + "&kind=" + kind;
 	}
 };
 
