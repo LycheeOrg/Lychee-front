@@ -234,7 +234,7 @@ view.album = {
 			}
 			if (album.json.photos) {
 				// Build photos
-				albums.json.photos.forEach(function (_photos) {
+				album.json.photos.forEach(function (_photos) {
 					photosData += build.photo(_photos, !album.isUploadable());
 				});
 			}

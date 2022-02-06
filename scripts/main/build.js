@@ -135,10 +135,10 @@ build.album = function (data, disabled = false) {
 					<a class='badge ${data.is_nsfw ? "badge--nsfw" : ""} icn-warning'>${build.iconic("warning")}</a>
 					<a class='badge ${data.id === SmartAlbumID.STARRED ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
 					<a class='badge ${data.id === SmartAlbumID.RECENT ? "badge--visible badge--list" : ""}'>${build.iconic("clock")}</a>
-					<a class='badge ${data.is_public ? "badge--visible" : ""} ${data.requires_link ? "badge--hidden" : "badge--not--hidden"} icn-share'>${build.iconic(
-			"eye"
-		)}</a>
-					<a class='badge ${data.id === SmartAlbumID.RECENT ? "badge--visible" : ""}'>${build.iconic("list")}</a>
+					<a class='badge ${data.id === SmartAlbumID.PUBLIC || data.is_public ? "badge--visible" : ""} ${
+			data.requires_link ? "badge--hidden" : "badge--not--hidden"
+		} icn-share'>${build.iconic("eye")}</a>
+					<a class='badge ${data.id === SmartAlbumID.UNSORTED ? "badge--visible" : ""}'>${build.iconic("list")}</a>
 					<a class='badge ${data.has_password ? "badge--visible" : ""}'>${build.iconic("lock-locked")}</a>
 					<a class='badge ${data.is_tag_album ? "badge--tag" : ""}'>${build.iconic("tag")}</a>
 					<a class='badge ${isCover ? "badge--cover" : ""} icn-cover'>${build.iconic("folder-cover")}</a>
@@ -174,10 +174,6 @@ build.photo = function (data, disabled = false) {
 	const isRaw = data.type && data.type.indexOf("raw") > -1;
 	const isLivePhoto = data.live_photo_url !== "" && data.live_photo_url !== null;
 
-	// My IDE complains that `thumb` is always non-null and therefore the
-	// first branch of the condition is never taken.
-	// I am willing to agree.
-	// TODO: Revise this code, whether the first branch is really needed.
 	if (data.size_variants.thumb === null) {
 		if (isLivePhoto) {
 			thumbnail = `<span class="thumbimg"><img src='img/live-photo-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false' data-tabindex='${tabindex.get_next_tab_index()}'></span>`;
