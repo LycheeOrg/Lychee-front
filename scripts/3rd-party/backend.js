@@ -57,7 +57,7 @@
  * @property {?SizeVariant} small2x
  * @property {?SizeVariant} small
  * @property {?SizeVariant} thumb2x
- * @property {SizeVariant}  thumb
+ * @property {?SizeVariant} thumb
  */
 
 /**

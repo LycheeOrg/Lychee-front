@@ -27,6 +27,7 @@ paths.view = {
 		"./scripts/main/mapview.js",
 		"./scripts/main/lychee_locale.js",
 		"./scripts/main/tabindex.js",
+		"./scripts/3rd-party/backend.js",
 		"./deps/basiccontext/scripts/basicContext.js",
 	],
 	scripts: ["node_modules/jquery/dist/jquery.min.js", "node_modules/lazysizes/lazysizes.min.js", "../dist/_view--javascript.js"],
@@ -78,7 +79,7 @@ gulp.task("view--svg", function () {
 
 paths.main = {
 	html: ["../index.html"],
-	js: ["./scripts/*.js", "./scripts/main/*.js", "./deps/basiccontext/scripts/basicContext.js"],
+	js: ["./scripts/*.js", "./scripts/main/*.js", "./scripts/3rd-party/backend.js", "./deps/basiccontext/scripts/basicContext.js"],
 	scripts: [
 		"node_modules/jquery/dist/jquery.min.js",
 		"node_modules/lazysizes/lazysizes.min.js",
@@ -165,7 +166,7 @@ gulp.task("main--svg", function () {
 /* Frame -----------------------------------------  */
 
 paths.frame = {
-	js: ["./scripts/_gup.js", "./scripts/api.js", "./scripts/csrf_protection.js", "./scripts/frame/main.js"],
+	js: ["./scripts/_gup.js", "./scripts/api.js", "./scripts/csrf_protection.js", "./scripts/frame/main.js", "./scripts/3rd-party/backend.js"],
 	scss: ["./styles/frame/*.scss"],
 	styles: ["./styles/frame/frame.scss"],
 	scripts: [
