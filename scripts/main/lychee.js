@@ -266,7 +266,7 @@ lychee.init = function (isFirstInitialization = true) {
 
 			lychee.parseInitializationData(data);
 
-			if(data.status === 2) {
+			if (data.status === 2) {
 				// Logged in
 				leftMenu.build();
 				leftMenu.bind();
@@ -280,7 +280,7 @@ lychee.init = function (isFirstInitialization = true) {
 				if (data.config.login === false) settings.createLogin();
 			}
 
-			if(data.status === 1) {
+			if (data.status === 1) {
 				lychee.setMode("public");
 			}
 
@@ -299,7 +299,7 @@ lychee.init = function (isFirstInitialization = true) {
  * @param {InitializationData} data
  * @returns {void}
  */
-lychee.parseInitializationData = function(data) {
+lychee.parseInitializationData = function (data) {
 	lychee.update_json = data.update_json;
 	lychee.update_available = data.update_available;
 
@@ -324,19 +324,19 @@ lychee.parseInitializationData = function(data) {
 	// 2 = Logged in
 	if (data.status === 2) {
 		// Logged in
-		lychee._parsePublicInitializationData(data);
-		lychee._parseProtectedInitializationData(data);
+		lychee.parsePublicInitializationData(data);
+		lychee.parseProtectedInitializationData(data);
 
 		lychee.may_upload = data.admin || data.may_upload;
 		lychee.admin = data.admin;
 		lychee.is_locked = data.is_locked;
 		lychee.username = data.username;
 	} else if (data.status === 1) {
-		lychee._parsePublicInitializationData(data);
+		lychee.parsePublicInitializationData(data);
 	} else {
 		// should not happen.
 	}
-}
+};
 
 /**
  * Parses the configuration settings which are always available.
@@ -346,36 +346,31 @@ lychee.parseInitializationData = function(data) {
  * @param {InitializationData} data
  * @returns {void}
  */
-lychee._parsePublicInitializationData = function(data) {
-	const validatedSwipeToleranceX =
-		parseInt(data.config.swipe_tolerance_x, 10) || 150;
-	const validatedSwipeToleranceY =
-		parseInt(data.config.swipe_tolerance_y, 10) || 250;
-
+lychee.parsePublicInitializationData = function (data) {
 	// TODO: Let the backend return `sorting_Photos` as a proper object with separate properties for column and direction (not as a string), as we split it in `view.js` anyway again
-	lychee.sortingPhotos = data.config.sorting_Photos ?? "";
-	lychee.sortingAlbums = data.config.sorting_Albums ?? "";
-	lychee.album_subtitle_type = data.config.album_subtitle_type ?? "oldstyle";
+	lychee.sortingPhotos = data.config.sorting_Photos || "";
+	lychee.sortingAlbums = data.config.sorting_Albums || "";
+	lychee.album_subtitle_type = data.config.album_subtitle_type || "oldstyle";
 	lychee.checkForUpdates = data.config.check_for_updates;
-	lychee.layout = Number.parseInt(data.config.layout, 10);
-	lychee.landing_page_enable = (data.config.landing_page_enable === "1");
-	lychee.public_search = (data.config.public_search === "1");
-	lychee.image_overlay_type = data.config.image_overlay_type ?? "exif";
+	lychee.layout = Number.parseInt(data.config.layout, 10) || 0;
+	lychee.landing_page_enable = data.config.landing_page_enable === "1";
+	lychee.public_search = data.config.public_search === "1";
+	lychee.image_overlay_type = data.config.image_overlay_type || "exif";
 	lychee.image_overlay_type_default = lychee.image_overlay_type;
-	lychee.map_display = (data.config.map_display === "1");
-	lychee.map_display_public = (data.config.map_display_public === "1");
-	lychee.map_display_direction = (data.config.map_display_direction === "1");
-	lychee.map_provider = data.config.map_provider ?? "Wikimedia";
-	lychee.map_include_subalbums = (data.config.map_include_subalbums === "1");
-	lychee.location_show = (data.config.location_show === "1");
-	lychee.location_show_public = (data.config.location_show_public === "1");
-	lychee.swipe_tolerance_x = validatedSwipeToleranceX;
-	lychee.swipe_tolerance_y = validatedSwipeToleranceY;
+	lychee.map_display = data.config.map_display === "1";
+	lychee.map_display_public = data.config.map_display_public === "1";
+	lychee.map_display_direction = data.config.map_display_direction === "1";
+	lychee.map_provider = data.config.map_provider || "Wikimedia";
+	lychee.map_include_subalbums = data.config.map_include_subalbums === "1";
+	lychee.location_show = data.config.location_show === "1";
+	lychee.location_show_public = data.config.location_show_public === "1";
+	lychee.swipe_tolerance_x = Number.parseInt(data.config.swipe_tolerance_x, 10) || 150;
+	lychee.swipe_tolerance_y = Number.parseInt(data.config.swipe_tolerance_y, 10) || 250;
 
-	lychee.nsfw_visible = (data.config.nsfw_visible === "1");
+	lychee.nsfw_visible = data.config.nsfw_visible === "1";
 	lychee.nsfw_visible_saved = lychee.nsfw_visible;
-	lychee.nsfw_blur = (data.config.nsfw_blur === "1");
-	lychee.nsfw_warning = (data.config.nsfw_warning === "1");
+	lychee.nsfw_blur = data.config.nsfw_blur === "1";
+	lychee.nsfw_warning = data.config.nsfw_warning === "1";
 
 	lychee.header_auto_hide = data.config_device.header_auto_hide;
 	lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
@@ -393,8 +388,8 @@ lychee._parsePublicInitializationData = function(data) {
 	lychee.enable_tabindex = data.config_device.enable_tabindex;
 	lychee.enable_contextmenu_header = data.config_device.enable_contextmenu_header;
 	lychee.hide_content_during_imgview = data.config_device.hide_content_during_imgview;
-	lychee.device_type = data.config_device.device_type ?? "desktop"; // we set default as Desktop
-}
+	lychee.device_type = data.config_device.device_type || "desktop"; // we set default as Desktop
+};
 
 /**
  * Parses the configuration settings which are only available, if a user is authenticated.
@@ -404,26 +399,26 @@ lychee._parsePublicInitializationData = function(data) {
  * @param {InitializationData} data
  * @returns {void}
  */
-lychee._parseProtectedInitializationData = function(data) {
-	lychee.dropboxKey = data.config.dropbox_key ?? "";
-	lychee.location = data.config.location ?? "";
-	lychee.checkForUpdates = (data.config.check_for_updates === "1");
-	lychee.lang = data.config.lang ?? "";
-	lychee.lang_available = data.config.lang_available ?? [];
-	lychee.location_decoding = (data.config.location_decoding === "1");
-	lychee.default_license = data.config.default_license ?? "none";
-	lychee.css = data.config.css ?? "";
-	lychee.full_photo = (data.config.full_photo === "1");
-	lychee.downloadable = (data.config.downloadable === "1");
-	lychee.public_photos_hidden = (data.config.public_photos_hidden === "1");
-	lychee.share_button_visible = (data.config.share_button_visible === "1");
-	lychee.delete_imported = (data.config.delete_imported === "1");
-	lychee.import_via_symlink = (data.config.import_via_symlink === "1");
-	lychee.skip_duplicates = (data.config.skip_duplicates === "1");
-	lychee.editor_enabled = (data.config.editor_enabled === "1");
-	lychee.new_photos_notification = (data.config.new_photos_notification === "1");
-	lychee.upload_processing_limit = parseInt(data.config.upload_processing_limit) || 4;
-}
+lychee.parseProtectedInitializationData = function (data) {
+	lychee.dropboxKey = data.config.dropbox_key || "";
+	lychee.location = data.config.location || "";
+	lychee.checkForUpdates = data.config.check_for_updates === "1";
+	lychee.lang = data.config.lang || "";
+	lychee.lang_available = data.config.lang_available || [];
+	lychee.location_decoding = data.config.location_decoding === "1";
+	lychee.default_license = data.config.default_license || "none";
+	lychee.css = data.config.css || "";
+	lychee.full_photo = data.config.full_photo === "1";
+	lychee.downloadable = data.config.downloadable === "1";
+	lychee.public_photos_hidden = data.config.public_photos_hidden === "1";
+	lychee.share_button_visible = data.config.share_button_visible === "1";
+	lychee.delete_imported = data.config.delete_imported === "1";
+	lychee.import_via_symlink = data.config.import_via_symlink === "1";
+	lychee.skip_duplicates = data.config.skip_duplicates === "1";
+	lychee.editor_enabled = data.config.editor_enabled === "1";
+	lychee.new_photos_notification = data.config.new_photos_notification === "1";
+	lychee.upload_processing_limit = Number.parseInt(data.config.upload_processing_limit, 10) || 4;
+};
 
 /**
  * @param {{username: string, password: string}} data

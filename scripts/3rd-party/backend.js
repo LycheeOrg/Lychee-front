@@ -272,7 +272,6 @@ const SmartAlbumID = Object.freeze({
  * @property {number} refresh
  */
 
-
 /**
  * @typedef InitializationData
  *
