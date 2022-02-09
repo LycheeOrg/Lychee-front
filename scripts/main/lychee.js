@@ -695,6 +695,10 @@ lychee.setMode = function (mode) {
 		$("#button_users, #button_logs, #button_diagnostics").remove();
 	}
 
+	if (!lychee.admin && !album.isUploadable()) {
+		$(".button_add").remove();
+	}
+
 	if (mode === "logged_in") {
 		// we are logged in, we do not need that short cut anymore. :)
 		Mousetrap.unbind(["l"]).unbind(["k"]);
