@@ -670,27 +670,43 @@ lychee.load = function (autoplay = true) {
 			// Trash data
 			photo.json = null;
 
-			// Show Photo
+			/**
+			 * @param {boolean} isParentAlbumAccessible
+			 * @returns {void}
+			 */
+			const loadPhoto = function (isParentAlbumAccessible) {
+				if (!isParentAlbumAccessible) {
+					lychee.setMode("view");
+				}
+				photo.load(photoID, albumID, autoplay);
+
+				// Make imageview focussable
+				tabindex.makeFocusable(lychee.imageview);
+
+				// Make thumbnails unfocusable and store which element had focus
+				tabindex.makeUnfocusable(lychee.content, true);
+
+				// hide contentview if requested
+				if (lychee.hide_content_during_imgview) lychee.content.hide();
+
+				lychee.footer_hide();
+			};
+
+			// Load Photo
+			// If we don't have an album or the wrong album load the album
+			// first and let the album loader load the photo afterwards or
+			// load the photo directly.
 			if (
 				lychee.content.html() === "" ||
-				album.json == null ||
+				album.json === null ||
+				album.json.id !== albumID ||
 				(header.dom(".header__search").length && header.dom(".header__search").val().length !== 0)
 			) {
 				lychee.content.hide();
-				album.load(albumID, true);
+				album.load(albumID, loadPhoto);
+			} else {
+				loadPhoto(true);
 			}
-			photo.load(photoID, albumID, autoplay);
-
-			// Make imageview focussable
-			tabindex.makeFocusable(lychee.imageview);
-
-			// Make thumbnails unfocusable and store which element had focus
-			tabindex.makeUnfocusable(lychee.content, true);
-
-			// hide contentview if requested
-			if (lychee.hide_content_during_imgview) lychee.content.hide();
-
-			lychee.footer_hide();
 		}
 	} else if (albumID) {
 		if (albumID === "map") {
@@ -862,7 +878,6 @@ lychee.setMode = function (mode) {
 	if (mode === "public") {
 		lychee.publicMode = true;
 	} else if (mode === "view") {
-		// TODO: It seems as if this method is never called with `mode === "view"`. This might be dead code. Can it be removed?
 		Mousetrap.unbind(["esc", "command+up"]);
 
 		$("#button_back, a#next, a#previous").remove();

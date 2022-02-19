@@ -31,18 +31,6 @@ photo.getID = function () {
  * @returns {void}
  */
 photo.load = function (photoID, albumID, autoplay) {
-	const checkContent = function () {
-		if (album.json != null && album.json.photos) photo.load(photoID, albumID, autoplay);
-		else setTimeout(checkContent, 100);
-	};
-
-	// TODO: The comment below sounds suspicious, what exactly is going on here?
-	// we need to check the album.json.photos because otherwise the script is too fast and this raise an error.
-	if (album.json == null || album.json.photos == null) {
-		checkContent();
-		return;
-	}
-
 	/**
 	 * @param {Photo} data
 	 * @returns {void}

@@ -432,9 +432,11 @@ contextMenu.photoMulti = function (photoIDs, e) {
 contextMenu.photoTitle = function (albumID, photoID, e) {
 	let items = [{ title: build.iconic("pencil") + lychee.locale["RENAME"], fn: () => photo.setTitle([photoID]) }];
 
-	let data = album.json;
+	// Note: We can also have a photo without its parent album being loaded
+	// if the photo is a public photo within a private album
+	const photos = album.json ? album.json.photos : [];
 
-	if (data.photos !== false && data.photos.length > 0) {
+	if (photos.length > 0) {
 		items.push({});
 
 		items = items.concat(contextMenu.buildList(data.photos, [photoID], (a) => lychee.goto(albumID + "/" + a.id)));

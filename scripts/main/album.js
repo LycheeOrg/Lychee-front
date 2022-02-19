@@ -150,37 +150,40 @@ album.deleteSubByID = function (albumID) {
 };
 
 /**
+ * @callback AlbumLoadedCB
+ * @param {boolean} accessible - `true`, if the album has successfully been
+ *                                loaded and parsed; `false`, if the album is
+ *                                private or public, but unlocked
+ * @returns {void}
+ */
+
+/**
  * @param {string} albumID
- * @param {boolean} refresh
+ * @param {?AlbumLoadedCB} [albumLoadedCB=null]
  *
  * @returns {void}
  */
-album.load = function (albumID, refresh = false) {
-	const params = {
-		albumID: albumID,
-		password: "",
-	};
-
+album.load = function (albumID, albumLoadedCB = null) {
 	/**
 	 * @param {Album} data
 	 */
 	const processAlbum = function (data) {
 		album.json = data;
 
-		if (refresh === false) {
+		if (albumLoadedCB === null) {
 			lychee.animate($(".content"), "contentZoomOut");
 		}
 		let waitTime = 300;
 
-		// Skip delay when refresh is true
+		// Skip delay when we have a callback `albumLoadedCB`
 		// Skip delay when opening a blank Lychee
-		if (refresh === true) waitTime = 0;
+		if (albumLoadedCB) waitTime = 0;
 		if (!visible.albums() && !visible.photo() && !visible.album()) waitTime = 0;
 
 		setTimeout(() => {
 			view.album.init();
 
-			if (refresh === false) {
+			if (albumLoadedCB === null) {
 				lychee.animate(lychee.content, "contentZoomIn");
 				header.setMode("album");
 			}
@@ -221,6 +224,8 @@ album.load = function (albumID, refresh = false) {
 				}
 			}
 		}
+
+		if (albumLoadedCB) albumLoadedCB(true);
 	};
 
 	/**
@@ -230,24 +235,34 @@ album.load = function (albumID, refresh = false) {
 	 * @returns {boolean}
 	 */
 	const errorHandler = function (jqXHR, params, lycheeException) {
-		if ((jqXHR.status === 401 || jqXHR.status === 403) && lycheeException.message.includes("Password required")) {
-			password.getDialog(albumID, function () {
-				api.post(
-					"Album::get",
-					params,
-					/** @param {Album} _data */
-					function (_data) {
-						albums.refresh();
-						processAlbum(_data);
-					}
-				);
-			});
-			return true;
+		if (jqXHR.status !== 401 && jqXHR.status !== 403) {
+			// Any other error then unauthenticated or unauthorized
+			// shall be handled by the global error handler.
+			return false;
 		}
-		return false;
+
+		if (lycheeException.message.includes("Password required")) {
+			// If a password is required, then try to unlock the album
+			// and in case of success, try again to load album with same
+			// parameters
+			password.getDialog(albumID, function () {
+				album.load(albumID, albumLoadedCB);
+			});
+		} else {
+			album.json = null;
+			lychee.content.show();
+			lychee.footer_show();
+			if (albumLoadedCB) {
+				albumLoadedCB(false);
+			} else {
+				lychee.goto();
+			}
+		}
+
+		return true;
 	};
 
-	api.post("Album::get", params, successHandler, null, errorHandler);
+	api.post("Album::get", { albumID: albumID }, successHandler, null, errorHandler);
 };
 
 /**
@@ -1379,12 +1394,8 @@ album.isUploadable = function () {
 		return false;
 	}
 
-	if (album.json === null || !album.json.owner_name) {
-		return true;
-	}
-
 	// TODO: Comparison of numeric user IDs (instead of names) should be more robust
-	return album.json.owner_name === lychee.username;
+	return album.json !== null && album.json.owner_name === lychee.username;
 };
 
 /**
