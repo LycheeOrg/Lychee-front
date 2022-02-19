@@ -38,7 +38,7 @@ password.getDialog = function (albumID, callback) {
 			},
 			null,
 			function (jqXHR) {
-				if (jqXHR.status === 403) {
+				if (jqXHR.status === 401 || jqXHR.status === 403) {
 					basicModal.error("password");
 					return true;
 				}

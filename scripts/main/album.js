@@ -228,7 +228,7 @@ album.load = function (albumID, refresh = false) {
 	 * @returns {boolean}
 	 */
 	const errorHandler = function (jqXHR) {
-		if (jqXHR.status === 403) {
+		if (jqXHR.status === 401 || jqXHR.status === 403) {
 			password.getDialog(albumID, function () {
 				api.post(
 					"Album::get",
