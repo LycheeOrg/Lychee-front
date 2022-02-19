@@ -9,7 +9,7 @@ const users = {
  * The object `params` must be kept in sync with the HTML form constructed
  * by {@link build.user}.
  *
- * @param {{id: string, username: string, password: string, upload: boolean, lock: boolean}} params
+ * @param {{id: number, username: string, password: string, upload: boolean, lock: boolean}} params
  * @returns {void}
  */
 users.update = function (params) {
@@ -19,6 +19,7 @@ users.update = function (params) {
 	}
 
 	// TODO: Re-factor the HTML form constructed by `build.user`. Then the following lines would not be required.
+	params.id = parseInt(params.id, 10);
 	params.may_upload = $("#UserData" + params.id + ' .choice input[name="upload"]:checked').length === 1;
 	params.is_locked = $("#UserData" + params.id + ' .choice input[name="lock"]:checked').length === 1;
 
@@ -63,10 +64,11 @@ users.create = function (params) {
  * The object `params` must be kept in sync with the HTML form constructed
  * by {@link build.user}.
  *
- * @param {{id: string}} params
+ * @param {{id: number}} params
  * @returns {boolean}
  */
 users.delete = function (params) {
+	params.id = parseInt(params.id, 10);
 	api.post("User::delete", params, function () {
 		loadingBar.show("success", "User deleted!");
 		users.list(); // reload user list
