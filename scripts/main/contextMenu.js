@@ -234,7 +234,6 @@ contextMenu.buildList = function (lists, exclude, action, parentID = null, layer
 				thumb = item.thumb.thumb;
 			}
 		} else if (item.size_variants) {
-			// TODO: My IDE complains that thumb is always non-null, and I would agree
 			if (item.size_variants.thumb === null) {
 				if (item.type && item.type.indexOf("video") > -1) {
 					thumb = "img/play-icon.png";
@@ -459,10 +458,7 @@ contextMenu.photoMore = function (photoID, e) {
 	// b) the photo is explicitly marked as downloadable (v4-only)
 	// c) or, the album is explicitly marked as downloadable
 
-	// TODO: Check, if `hasOwnProperty` is really required. IMHO, `photo` always has this property.
-	const showDownload = !!(
-		album.isUploadable() || (photo.json.hasOwnProperty("is_downloadable") ? photo.json.is_downloadable : album.json && album.json.is_downloadable)
-	);
+	const showDownload = album.isUploadable() || photo.json.is_downloadable || (album.json && album.json.is_downloadable);
 	const showFull = !!(photo.json.size_variants.original.url && photo.json.size_variants.original.url !== "");
 
 	const items = [
@@ -656,9 +652,7 @@ contextMenu.move = function (IDs, e, callback, kind = "UNSORTED", display_root =
  * @returns {void}
  */
 contextMenu.sharePhoto = function (photoID, e) {
-	// v4+ only
-	// TODO: IMHO `photo.json` always jas the property `is_share_button_visible`
-	if (photo.json.hasOwnProperty("is_share_button_visible") && !photo.json.is_share_button_visible) {
+	if (!photo.json.is_share_button_visible) {
 		return;
 	}
 
@@ -682,9 +676,7 @@ contextMenu.sharePhoto = function (photoID, e) {
  * @returns {void}
  */
 contextMenu.shareAlbum = function (albumID, e) {
-	// v4+ only
-	// TODO: IMHO `album.json` always jas the property `is_share_button_visible`
-	if (album.json.hasOwnProperty("is_share_button_visible") && !album.json.is_share_button_visible) {
+	if (!album.json.is_share_button_visible) {
 		return;
 	}
 

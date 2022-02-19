@@ -839,8 +839,8 @@ lychee.setMode = function (mode) {
 	}
 
 	if (mode === "logged_in") {
-		// we are logged in, we do not need that short cut anymore. :)
-		// TODO @ildyria: Please elaborate on the comment above: What short-cut do you refer to? And if "something" isn't needed anymore, why it is still there?
+		// After login the keyboard short-cuts to login by password (l) and
+		// by key (k) are not required anymore, so we unbind them.
 		Mousetrap.unbind(["l"]).unbind(["k"]);
 
 		// The code searches by class, so remove the other instance.

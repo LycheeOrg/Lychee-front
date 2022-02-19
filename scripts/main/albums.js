@@ -100,9 +100,6 @@ albums.parse = function (album) {
 /**
  * Normalizes the built-in smart albums.
  *
- * TODO: REFACTOR THIS
- * TODO @ildyria: What did you intended to express by the TODO above? What did you want to be re-factored?
- *
  * @param {SmartAlbums} data
  * @returns {void}
  */
@@ -117,6 +114,7 @@ albums._createSmartAlbums = function (data) {
 
 	if (data.public) {
 		data.public.title = lychee.locale["PUBLIC"];
+		// TODO: Why do we need to set these two attributes? What component relies upon them, what happens if we don't set them? Is it legacy?
 		data.public.is_public = true;
 		data.public.requires_link = true;
 	}
