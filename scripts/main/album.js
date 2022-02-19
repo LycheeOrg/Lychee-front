@@ -225,10 +225,12 @@ album.load = function (albumID, refresh = false) {
 
 	/**
 	 * @param {XMLHttpRequest} jqXHR
+	 * @param {Object} params the original JSON parameters of the request
+	 * @param {?LycheeException} lycheeException the Lychee exception
 	 * @returns {boolean}
 	 */
-	const errorHandler = function (jqXHR) {
-		if (jqXHR.status === 401 || jqXHR.status === 403) {
+	const errorHandler = function (jqXHR, params, lycheeException) {
+		if ((jqXHR.status === 401 || jqXHR.status === 403) && lycheeException.message.includes("Password required")) {
 			password.getDialog(albumID, function () {
 				api.post(
 					"Album::get",
