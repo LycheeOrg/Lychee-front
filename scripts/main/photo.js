@@ -844,11 +844,9 @@ photo.setTags = function (photoIDs, tags) {
 			tags: tags,
 		},
 		function () {
-			if (albums.json && albums.json.smart_albums) {
-				// TODO: If smart albums and tag albums were not mixed into one, but tag albums were organized in their own collection, we would not need this ugliness
-				const hasTagAlbums = Object.entries(albums.json.smart_albums).findIndex((prop) => prop[1].is_tag_album === true) !== -1;
-				// If we have any tag albums, force a refresh.
-				if (hasTagAlbums) albums.refresh();
+			// If we have any tag albums, force a refresh.
+			if (albums.json && albums.json.tag_albums.length !== 0) {
+				albums.refresh();
 			}
 		}
 	);

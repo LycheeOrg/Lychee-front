@@ -20,7 +20,7 @@ albums.load = function () {
 	 */
 	const successCallback = function (data) {
 		// Smart Albums
-		if (data.smart_albums.length > 0) albums._createSmartAlbums(data.smart_albums);
+		if (data.smart_albums.length > 0) albums.localizeSmartAlbums(data.smart_albums);
 
 		albums.json = data;
 
@@ -103,7 +103,7 @@ albums.parse = function (album) {
  * @param {SmartAlbums} data
  * @returns {void}
  */
-albums._createSmartAlbums = function (data) {
+albums.localizeSmartAlbums = function (data) {
 	if (data.unsorted) {
 		data.unsorted.title = lychee.locale["UNSORTED"];
 	}
@@ -163,29 +163,26 @@ albums.getByID = function (albumID) {
 	if (!albums.json) return null;
 	if (!albums.json.albums) return null;
 
-	let json = null;
+	if (albums.json.smart_albums.hasOwnProperty(albumID)) {
+		return albums.json.smart_albums[albumID];
+	}
 
-	/**
-	 * @this {(Album|TagAlbum|SmartAlbum)}
-	 * @returns {boolean}
-	 */
-	const func = function () {
-		if (this.id === albumID) {
-			json = this;
-			return false; // stop the loop
-		}
-		if (this.albums) {
-			$.each(this.albums, func);
-		}
-	};
+	let result = albums.json.tag_albums.find((tagAlbum) => tagAlbum.id === albumID);
+	if (result) {
+		return result;
+	}
 
-	$.each(albums.json.albums, func);
+	result = albums.json.albums.find((album) => album.id === albumID);
+	if (result) {
+		return result;
+	}
 
-	if (json === null) $.each(albums.json.shared_albums, func);
+	result = albums.json.shared_albums.find((album) => album.id === albumID);
+	if (result) {
+		return result;
+	}
 
-	if (json === null) $.each(albums.json.smart_albums, func);
-
-	return json;
+	return null;
 };
 
 /**
@@ -218,7 +215,8 @@ albums.deleteByID = function (albumID) {
 
 	if (idx !== -1) return;
 
-	delete albums.json.smart_albums[albumID];
+	idx = albums.json.tag_albums.findIndex((a) => a.id === albumID);
+	albums.json.tag_albums.splice(idx, 1);
 };
 
 /**

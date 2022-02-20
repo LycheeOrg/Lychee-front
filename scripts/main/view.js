@@ -35,79 +35,60 @@ view.albums = {
 		/** @returns {void} */
 		init: function () {
 			let smartData = "";
+			let tagAlbumsData = "";
 			let albumsData = "";
 			let sharedData = "";
 
 			// Smart Albums
-			// TODO: My IDE complains that `smart_albums` is always non-null.
-			// If albums has not yet been loaded, then the *parent* object
-			// `albums.json` is null, but if `albums.json` exists, then
-			// `albums.json.smart_albums` exists too.
-			// However, `albums.json.smart_albums` might be empty if the
-			// use is un-authenticated and no public smart album exists.
-			// But being empty is something different than being `null`.
-			if (albums.json.smart_albums !== null) {
-				if (lychee.publicMode === false) {
-					smartData = build.divider(lychee.locale["SMART_ALBUMS"]);
-				}
-				if (albums.json.smart_albums.unsorted) {
-					albums.parse(albums.json.smart_albums.unsorted);
-					smartData += build.album(albums.json.smart_albums.unsorted);
-				}
-				if (albums.json.smart_albums.public) {
-					albums.parse(albums.json.smart_albums.public);
-					smartData += build.album(albums.json.smart_albums.public);
-				}
-				if (albums.json.smart_albums.starred) {
-					albums.parse(albums.json.smart_albums.starred);
-					smartData += build.album(albums.json.smart_albums.starred);
-				}
-				if (albums.json.smart_albums.recent) {
-					albums.parse(albums.json.smart_albums.recent);
-					smartData += build.album(albums.json.smart_albums.recent);
-				}
-
-				Object.entries(albums.json.smart_albums).forEach(([, albumData]) => {
-					if (albumData["is_tag_album"]) {
-						albums.parse(albumData);
-						smartData += build.album(albumData);
-					}
-				});
+			if (lychee.publicMode === false) {
+				smartData = build.divider(lychee.locale["SMART_ALBUMS"]);
 			}
+			if (albums.json.smart_albums.unsorted) {
+				albums.parse(albums.json.smart_albums.unsorted);
+				smartData += build.album(albums.json.smart_albums.unsorted);
+			}
+			if (albums.json.smart_albums.public) {
+				albums.parse(albums.json.smart_albums.public);
+				smartData += build.album(albums.json.smart_albums.public);
+			}
+			if (albums.json.smart_albums.starred) {
+				albums.parse(albums.json.smart_albums.starred);
+				smartData += build.album(albums.json.smart_albums.starred);
+			}
+			if (albums.json.smart_albums.recent) {
+				albums.parse(albums.json.smart_albums.recent);
+				smartData += build.album(albums.json.smart_albums.recent);
+			}
+
+			// Tag albums
+			tagAlbumsData += albums.json.tag_albums.reduce(function (html, tagAlbum) {
+				albums.parse(tagAlbum);
+				return html + build.album(tagAlbum);
+			}, "");
 
 			// Albums
-			if (albums.json.albums && albums.json.albums.length !== 0) {
-				$.each(albums.json.albums, function () {
-					if (!this.parent_id) {
-						albums.parse(this);
-						albumsData += build.album(this);
-					}
-				});
-
-				// Add divider
-				if (lychee.publicMode === false) albumsData = build.divider(lychee.locale["ALBUMS"]) + albumsData;
-			}
+			if (lychee.publicMode === false) albumsData = build.divider(lychee.locale["ALBUMS"]);
+			albumsData += albums.json.albums.reduce(function (html, album) {
+				albums.parse(album);
+				return html + build.album(album);
+			}, "");
 
 			let current_owner = "";
 			// Shared
-			if (albums.json.shared_albums) {
-				albums.json.shared_albums.forEach(function (alb) {
-					// Skip non-top level albums
-					if (alb.parent_id) return;
-					albums.parse(alb);
-					if (current_owner !== alb.owner_name && lychee.publicMode === false) {
-						sharedData += build.divider(alb.owner_name);
-						current_owner = alb.owner_name;
-					}
-					sharedData += build.album(alb, !lychee.admin);
-				});
-			}
+			sharedData += albums.json.shared_albums.reduce(function (html, album) {
+				albums.parse(album);
+				if (current_owner !== album.owner_name && lychee.publicMode === false) {
+					sharedData += build.divider(album.owner_name);
+					current_owner = album.owner_name;
+				}
+				return html + build.album(album, !lychee.admin);
+			}, "");
 
-			if (smartData === "" && albumsData === "" && sharedData === "") {
+			if (smartData === "" && tagAlbumsData === "" && albumsData === "" && sharedData === "") {
 				lychee.content.html("");
 				$("body").append(build.no_content("eye"));
 			} else {
-				lychee.content.html(smartData + albumsData + sharedData);
+				lychee.content.html(smartData + tagAlbumsData + albumsData + sharedData);
 			}
 
 			album.apply_nsfw_filter();

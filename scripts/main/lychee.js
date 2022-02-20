@@ -502,7 +502,7 @@ lychee.loginDialog = function () {
 
 	if (lychee.checkForUpdates) lychee.getUpdate();
 
-	tabindex.makeFocusable(basicModal.dom());
+	tabindex.makeFocusable($(".basicModal"));
 };
 
 /**
