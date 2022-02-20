@@ -700,7 +700,6 @@ album.setSorting = function (albumID) {
 	const callback = function () {
 		$("select#sortingCol").val(album.json.sorting_col);
 		$("select#sortingOrder").val(album.json.sorting_order === null ? "ASC" : album.json.sorting_order);
-		return false;
 	};
 
 	/** @param {{sortingCol: string, sortingOrder: string}} data */
@@ -798,203 +797,174 @@ album.setSorting = function (albumID) {
  *
  * TODO: Find a better name for the method.
  *
- * **ATTENTION**: This method is structurally very different from the other
- * methods in this file which use a modal dialog.
- * In particular, this methods does not use callbacks to handle the result
- * of the dialog after the dialog has been closed, but calls itself
- * recursively to open, to close and to handle the results. Why?
- *
- * TODO: Consider re-writing this method to match the structure of the other
- * methods.
- *
  * @param {string} albumID
  * @returns {void}
  */
 album.setPublic = function (albumID) {
-	if (!basicModal.visible()) {
-		const msg = lychee.html`
-			<form>
-				<div class='switch'>
-					<label>
-						${lychee.locale["ALBUM_PUBLIC"]}:&nbsp;
-						<input type='checkbox' name='is_public'>
-						<span class='slider round'></span>
-					</label>
-					<p>${lychee.locale["ALBUM_PUBLIC_EXPL"]}</p>
-				</div>
-				<div class='choice'>
-					<label>
-						<input type='checkbox' name='grants_full_photo'>
-						<span class='checkbox'>${build.iconic("check")}</span>
-						<span class='label'>${lychee.locale["ALBUM_FULL"]}</span>
-					</label>
-					<p>${lychee.locale["ALBUM_FULL_EXPL"]}</p>
-				</div>
-				<div class='choice'>
-					<label>
-						<input type='checkbox' name='requires_link'>
-						<span class='checkbox'>${build.iconic("check")}</span>
-						<span class='label'>${lychee.locale["ALBUM_HIDDEN"]}</span>
-					</label>
-					<p>${lychee.locale["ALBUM_HIDDEN_EXPL"]}</p>
-				</div>
-				<div class='choice'>
-					<label>
-						<input type='checkbox' name='is_downloadable'>
-						<span class='checkbox'>${build.iconic("check")}</span>
-						<span class='label'>${lychee.locale["ALBUM_DOWNLOADABLE"]}</span>
-					</label>
-					<p>${lychee.locale["ALBUM_DOWNLOADABLE_EXPL"]}</p>
-				</div>
-				<div class='choice'>
-					<label>
-						<input type='checkbox' name='is_share_button_visible'>
-						<span class='checkbox'>${build.iconic("check")}</span>
-						<span class='label'>${lychee.locale["ALBUM_SHARE_BUTTON_VISIBLE"]}</span>
-					</label>
-					<p>${lychee.locale["ALBUM_SHARE_BUTTON_VISIBLE_EXPL"]}</p>
-				</div>
-				<div class='choice'>
-					<label>
-						<input type='checkbox' name='has_password'>
-						<span class='checkbox'>${build.iconic("check")}</span>
-						<span class='label'>${lychee.locale["ALBUM_PASSWORD_PROT"]}</span>
-					</label>
-					<p>${lychee.locale["ALBUM_PASSWORD_PROT_EXPL"]}</p>
-					<input class='text' name='passwordtext' type='text' placeholder='${lychee.locale["PASSWORD"]}' value=''>
-				</div>
-				<div class='hr'><hr></div>
-				<div class='switch'>
-					<label>
-						${lychee.locale["ALBUM_NSFW"]}:&nbsp;
-						<input type='checkbox' name='is_nsfw'>
-						<span class='slider round'></span>
-					</label>
-					<p>${lychee.locale["ALBUM_NSFW_EXPL"]}</p>
-				</div>
-			</form>
-		`;
+	const action = function (data) {
+		albums.refresh();
 
-		basicModal.show({
-			body: msg,
-			buttons: {
-				action: {
-					title: lychee.locale["ALBUM_SHARING_CONFIRM"],
-					// Call setPublic function without showing the modal
-					fn: () => album.setPublic(albumID),
-				},
-				cancel: {
-					title: lychee.locale["CANCEL"],
-					fn: basicModal.close,
-				},
-			},
+		// TODO: If the modal dialog would provide us with proper boolean values for the checkboxes as part of `data` the same way as it does for text inputs, then we would not need these slow and awkward jQeury selectors
+		album.json.is_nsfw = $('.basicModal .switch input[name="is_nsfw"]:checked').length === 1;
+		album.json.is_public = $('.basicModal .switch input[name="is_public"]:checked').length === 1;
+		album.json.grants_full_photo = $('.basicModal .choice input[name="grants_full_photo"]:checked').length === 1;
+		album.json.requires_link = $('.basicModal .choice input[name="requires_link"]:checked').length === 1;
+		album.json.is_downloadable = $('.basicModal .choice input[name="is_downloadable"]:checked').length === 1;
+		album.json.is_share_button_visible = $('.basicModal .choice input[name="is_share_button_visible"]:checked').length === 1;
+		album.json.has_password = $('.basicModal .choice input[name="has_password"]:checked').length === 1;
+		const newPassword = $('.basicModal .choice input[name="passwordtext"]').val() || null;
+
+		// Modal input has been processed, now it can be closed
+		basicModal.close();
+
+		// Set data and refresh view
+		if (visible.album()) {
+			view.album.nsfw();
+			view.album.public();
+			view.album.requiresLink();
+			view.album.downloadable();
+			view.album.shareButtonVisible();
+			view.album.password();
+		}
+
+		const params = {
+			albumID: albumID,
+			grants_full_photo: album.json.grants_full_photo,
+			is_public: album.json.is_public,
+			is_nsfw: album.json.is_nsfw,
+			requires_link: album.json.requires_link,
+			is_downloadable: album.json.is_downloadable,
+			is_share_button_visible: album.json.is_share_button_visible,
+		};
+		if (album.json.has_password) {
+			if (newPassword) {
+				// We send the password only if there's been a change; that way the
+				// server will keep the current password if it wasn't changed.
+				params.password = newPassword;
+			}
+		} else {
+			params.password = null;
+		}
+
+		api.post("Album::setPublic", params);
+	};
+
+	const msg = lychee.html`
+		<form>
+			<div class='switch'>
+				<label>
+					${lychee.locale["ALBUM_PUBLIC"]}:&nbsp;
+					<input type='checkbox' name='is_public'>
+					<span class='slider round'></span>
+				</label>
+				<p>${lychee.locale["ALBUM_PUBLIC_EXPL"]}</p>
+			</div>
+			<div class='choice'>
+				<label>
+					<input type='checkbox' name='grants_full_photo'>
+					<span class='checkbox'>${build.iconic("check")}</span>
+					<span class='label'>${lychee.locale["ALBUM_FULL"]}</span>
+				</label>
+				<p>${lychee.locale["ALBUM_FULL_EXPL"]}</p>
+			</div>
+			<div class='choice'>
+				<label>
+					<input type='checkbox' name='requires_link'>
+					<span class='checkbox'>${build.iconic("check")}</span>
+					<span class='label'>${lychee.locale["ALBUM_HIDDEN"]}</span>
+				</label>
+				<p>${lychee.locale["ALBUM_HIDDEN_EXPL"]}</p>
+			</div>
+			<div class='choice'>
+				<label>
+					<input type='checkbox' name='is_downloadable'>
+					<span class='checkbox'>${build.iconic("check")}</span>
+					<span class='label'>${lychee.locale["ALBUM_DOWNLOADABLE"]}</span>
+				</label>
+				<p>${lychee.locale["ALBUM_DOWNLOADABLE_EXPL"]}</p>
+			</div>
+			<div class='choice'>
+				<label>
+					<input type='checkbox' name='is_share_button_visible'>
+					<span class='checkbox'>${build.iconic("check")}</span>
+					<span class='label'>${lychee.locale["ALBUM_SHARE_BUTTON_VISIBLE"]}</span>
+				</label>
+				<p>${lychee.locale["ALBUM_SHARE_BUTTON_VISIBLE_EXPL"]}</p>
+			</div>
+			<div class='choice'>
+				<label>
+					<input type='checkbox' name='has_password'>
+					<span class='checkbox'>${build.iconic("check")}</span>
+					<span class='label'>${lychee.locale["ALBUM_PASSWORD_PROT"]}</span>
+				</label>
+				<p>${lychee.locale["ALBUM_PASSWORD_PROT_EXPL"]}</p>
+				<input class='text' name='passwordtext' type='text' placeholder='${lychee.locale["PASSWORD"]}' value=''>
+			</div>
+			<div class='hr'><hr></div>
+			<div class='switch'>
+				<label>
+					${lychee.locale["ALBUM_NSFW"]}:&nbsp;
+					<input type='checkbox' name='is_nsfw'>
+					<span class='slider round'></span>
+				</label>
+				<p>${lychee.locale["ALBUM_NSFW_EXPL"]}</p>
+			</div>
+		</form>
+	`;
+
+	const dialogSetupCB = function () {
+		// TODO: If the modal dialog would provide this callback with proper jQuery objects for all input/select/choice elements, then we would not need these jQuery selectors
+		$('.basicModal .switch input[name="is_public"]').prop("checked", album.json.is_public);
+		$('.basicModal .switch input[name="is_nsfw"]').prop("checked", album.json.is_nsfw);
+		if (album.json.is_public) {
+			$(".basicModal .choice input").attr("disabled", false);
+			// Initialize options based on album settings.
+			$('.basicModal .choice input[name="grants_full_photo"]').prop("checked", album.json.grants_full_photo);
+			$('.basicModal .choice input[name="requires_link"]').prop("checked", album.json.requires_link);
+			$('.basicModal .choice input[name="is_downloadable"]').prop("checked", album.json.is_downloadable);
+			$('.basicModal .choice input[name="is_share_button_visible"]').prop("checked", album.json.is_share_button_visible);
+			$('.basicModal .choice input[name="has_password"]').prop("checked", album.json.has_password);
+			if (album.json.has_password) {
+				$('.basicModal .choice input[name="passwordtext"]').show();
+			}
+		} else {
+			$(".basicModal .choice input").attr("disabled", true);
+			// Initialize options based on global settings.
+			$('.basicModal .choice input[name="grants_full_photo"]').prop("checked", lychee.grants_full_photo);
+			$('.basicModal .choice input[name="requires_link"]').prop("checked", false);
+			$('.basicModal .choice input[name="is_downloadable"]').prop("checked", lychee.is_downloadable);
+			$('.basicModal .choice input[name="is_share_button_visible"]').prop("checked", lychee.is_share_button_visible);
+			$('.basicModal .choice input[name="has_password"]').prop("checked", false);
+			$('.basicModal .choice input[name="passwordtext"]').hide();
+		}
+
+		$('.basicModal .switch input[name="is_public"]').on("change", function () {
+			$(".basicModal .choice input").attr("disabled", $(this).prop("checked") !== true);
 		});
 
-		$('.basicModal .switch input[name="is_public"]').on("click", function () {
+		$('.basicModal .choice input[name="has_password"]').on("change", function () {
 			if ($(this).prop("checked") === true) {
-				$(".basicModal .choice input").attr("disabled", false);
-
-				if (album.json.is_public) {
-					// Initialize options based on album settings.
-					if (album.json.grants_full_photo) $('.basicModal .choice input[name="grants_full_photo"]').prop("checked", true);
-					if (album.json.requires_link) $('.basicModal .choice input[name="requires_link"]').prop("checked", true);
-					if (album.json.is_downloadable) $('.basicModal .choice input[name="is_downloadable"]').prop("checked", true);
-					if (album.json.is_share_button_visible) $('.basicModal .choice input[name="is_share_button_visible"]').prop("checked", true);
-					if (album.json.has_password) {
-						$('.basicModal .choice input[name="has_password"]').prop("checked", true);
-						$('.basicModal .choice input[name="passwordtext"]').show();
-					}
-				} else {
-					// Initialize options based on global settings.
-					if (lychee.grants_full_photo) {
-						$('.basicModal .choice input[name="grants_full_photo"]').prop("checked", true);
-					}
-					if (lychee.is_downloadable) {
-						$('.basicModal .choice input[name="is_downloadable"]').prop("checked", true);
-					}
-					if (lychee.is_share_button_visible) {
-						$('.basicModal .choice input[name="is_share_button_visible"]').prop("checked", true);
-					}
-				}
+				$('.basicModal .choice input[name="passwordtext"]').show().focus();
 			} else {
-				$(".basicModal .choice input").prop("checked", false).attr("disabled", true);
 				$('.basicModal .choice input[name="passwordtext"]').hide();
 			}
 		});
-
-		if (album.json.is_nsfw) {
-			$('.basicModal .switch input[name="is_nsfw"]').prop("checked", true);
-		} else {
-			$('.basicModal .switch input[name="is_nsfw"]').prop("checked", false);
-		}
-
-		if (album.json.is_public) {
-			$('.basicModal .switch input[name="is_public"]').click();
-		} else {
-			$(".basicModal .choice input").attr("disabled", true);
-		}
-
-		$('.basicModal .choice input[name="has_password"]').on("change", function () {
-			if ($(this).prop("checked") === true) $('.basicModal .choice input[name="passwordtext"]').show().focus();
-			else $('.basicModal .choice input[name="passwordtext"]').hide();
-		});
-	}
-
-	albums.refresh();
-
-	// Set public
-	album.json.is_nsfw = $('.basicModal .switch input[name="is_nsfw"]:checked').length === 1;
-
-	// Set public
-	album.json.is_public = $('.basicModal .switch input[name="is_public"]:checked').length === 1;
-
-	// Set full photo
-	album.json.grants_full_photo = $('.basicModal .choice input[name="grants_full_photo"]:checked').length === 1;
-
-	// Set visible
-	album.json.requires_link = $('.basicModal .choice input[name="requires_link"]:checked').length === 1;
-
-	// Set downloadable
-	album.json.is_downloadable = $('.basicModal .choice input[name="is_downloadable"]:checked').length === 1;
-
-	// Set share_button_visible
-	album.json.is_share_button_visible = $('.basicModal .choice input[name="is_share_button_visible"]:checked').length === 1;
-
-	// Set password
-	// TODO: IMHO the following line does not make much sense. The JSON has no attribute `password`, because the server does not send it. Thus `oldPassword` is always undefined.
-	const oldPassword = album.json.password;
-	album.json.has_password = $('.basicModal .choice input[name="has_password"]:checked').length === 1;
-	const newPassword = album.json.has_password ? $('.basicModal .choice input[name="passwordtext"]').val() : "";
-
-	// Modal input has been processed, now it can be closed
-	basicModal.close();
-
-	// Set data and refresh view
-	if (visible.album()) {
-		view.album.nsfw();
-		view.album.public();
-		view.album.requiresLink();
-		view.album.downloadable();
-		view.album.shareButtonVisible();
-		view.album.password();
-	}
-
-	const params = {
-		albumID: albumID,
-		grants_full_photo: album.json.grants_full_photo,
-		is_public: album.json.is_public,
-		is_nsfw: album.json.is_nsfw,
-		requires_link: album.json.requires_link,
-		is_downloadable: album.json.is_downloadable,
-		is_share_button_visible: album.json.is_share_button_visible,
 	};
-	if (oldPassword !== newPassword || newPassword.length > 0) {
-		// We send the password only if there's been a change; that way the
-		// server will keep the current password if it wasn't changed.
-		params.password = newPassword;
-	}
 
-	api.post("Album::setPublic", params);
+	basicModal.show({
+		body: msg,
+		callback: dialogSetupCB,
+		buttons: {
+			action: {
+				title: lychee.locale["ALBUM_SHARING_CONFIRM"],
+				fn: action,
+			},
+			cancel: {
+				title: lychee.locale["CANCEL"],
+				fn: basicModal.close,
+			},
+		},
+	});
 };
 
 /**
