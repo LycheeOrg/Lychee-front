@@ -970,28 +970,54 @@ album.setPublic = function (albumID) {
 /**
  * Lets a user update the sharing settings of an album.
  *
- * ATTENTION**: This method is structurally very different from the other
- * methods in this file which use a modal dialog.
- * In particular, this methods does not use callbacks to handle the result
- * of the dialog after the dialog has been closed, but calls itself
- * recursively to open, to close and to handle the results. Why?
- *
- * TODO: Consider re-writing this method to match the structure of the other methods.
- *
  * @param {string} albumID
  * @returns {void}
  */
 album.shareUsers = function (albumID) {
-	if (!basicModal.visible()) {
-		let msg = `<form id="sharing_people_form">
-			<p>${lychee.locale["WAIT_FETCH_DATA"]}</p>
-		</form>`;
+	const action = function (data) {
+		basicModal.close();
 
+		/** @type {number[]} */
+		const sharingToAdd = [];
+		/** @type {number[]} */
+		const sharingToDelete = [];
+		$(".basicModal .choice input").each((_, input) => {
+			const $input = $(input);
+			if ($input.is(":checked")) {
+				if ($input.data("sharingId") === undefined) {
+					// Input is checked but has no sharing id => new share to create
+					sharingToAdd.push(Number.parseInt(input.name));
+				}
+			} else {
+				const sharingId = $input.data("sharingId");
+				if (sharingId !== undefined) {
+					// Input is not checked but has a sharing id => existing share to remove
+					sharingToDelete.push(Number.parseInt(sharingId));
+				}
+			}
+		});
+
+		if (sharingToDelete.length > 0) {
+			api.post("Sharing::delete", {
+				shareIDs: sharingToDelete,
+			});
+		}
+		if (sharingToAdd.length > 0) {
+			api.post("Sharing::add", {
+				albumIDs: [albumID],
+				userIDs: sharingToAdd,
+			});
+		}
+	};
+
+	const msg = `<form id="sharing_people_form"><p>${lychee.locale["WAIT_FETCH_DATA"]}</p></form>`;
+
+	const dialogSetupCB = function () {
 		/** @param {SharingInfo} data */
 		const successCallback = function (data) {
 			const sharingForm = $("#sharing_people_form");
 			sharingForm.empty();
-			if (data.users !== undefined) {
+			if (data.users.length !== 0) {
 				sharingForm.append(`<p>${lychee.locale["SHARING_ALBUM_USERS_LONG_MESSAGE"]}</p>`);
 				// Fill with the list of users
 				data.users.forEach((user) => {
@@ -1004,78 +1030,36 @@ album.shareUsers = function (albumID) {
 						<p></p>
 					</div>`);
 				});
-				const sharingOfAlbum = data.shared !== undefined ? data.shared.filter((val) => val.album_id === albumID) : [];
-				sharingOfAlbum.forEach((sharing) => {
-					// Check all the shares who already exists, and store their sharing id on the element
-					const elem = $(`.basicModal .choice input[name="${sharing.user_id}"]`);
-					elem.prop("checked", true);
-					elem.data("sharingId", sharing.id);
-				});
+				data.shared
+					.filter((val) => val.album_id === albumID)
+					.forEach((sharing) => {
+						// Check all the shares who already exists, and store their sharing id on the element
+						const elem = $(`.basicModal .choice input[name="${sharing.user_id}"]`);
+						elem.prop("checked", true);
+						elem.data("sharingId", sharing.id);
+					});
 			} else {
 				sharingForm.append(`<p>${lychee.locale["SHARING_ALBUM_USERS_NO_USERS"]}</p>`);
 			}
 		};
 
 		api.post("Sharing::list", {}, successCallback);
+	};
 
-		basicModal.show({
-			body: msg,
-			buttons: {
-				action: {
-					title: lychee.locale["ALBUM_SHARING_CONFIRM"],
-					fn: () => {
-						album.shareUsers(albumID);
-					},
-				},
-				cancel: {
-					title: lychee.locale["CANCEL"],
-					fn: basicModal.close,
-				},
+	basicModal.show({
+		body: msg,
+		callback: dialogSetupCB,
+		buttons: {
+			action: {
+				title: lychee.locale["ALBUM_SHARING_CONFIRM"],
+				fn: action,
 			},
-		});
-	}
-
-	basicModal.close();
-
-	/** @type {number[]} */
-	let sharingToAdd = [];
-	/** @type {number[]} */
-	let sharingToDelete = [];
-	$(".basicModal .choice input").each((_, input) => {
-		const $input = $(input);
-		if ($input.is(":checked")) {
-			if ($input.data("sharingId") === undefined) {
-				// Input is checked but has no sharing id => new share to create
-				sharingToAdd.push(Number.parseInt(input.name));
-			}
-		} else {
-			const sharingId = $input.data("sharingId");
-			if (sharingId !== undefined) {
-				// Input is not checked but has a sharing id => existing share to remove
-				sharingToDelete.push(Number.parseInt(sharingId));
-			}
-		}
+			cancel: {
+				title: lychee.locale["CANCEL"],
+				fn: basicModal.close,
+			},
+		},
 	});
-
-	// TODO: The success handler below are asymmetric, in particular the user only sees a success message for added shares
-
-	if (sharingToDelete.length > 0) {
-		api.post("Sharing::delete", {
-			shareIDs: sharingToDelete,
-		});
-	}
-	if (sharingToAdd.length > 0) {
-		api.post(
-			"Sharing::add",
-			{
-				albumIDs: [albumID],
-				userIDs: sharingToAdd,
-			},
-			function () {
-				loadingBar.show("success", "Sharing updated!");
-			}
-		);
-	}
 };
 
 /**
