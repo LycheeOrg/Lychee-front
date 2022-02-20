@@ -7,27 +7,26 @@ let sharing = {
  * @returns {void}
  */
 sharing.add = function () {
-	// TODO: Change `albumIDs` and `userIDs` to proper arrays. This would also simplify the code below.
 	const params = {
-		albumIDs: "",
-		userIDs: "",
+		/** @type {string[]} */
+		albumIDs: [],
+		/** @type {number[]} */
+		userIDs: [],
 	};
 
 	$("#albums_list_to option").each(function () {
-		if (params.albumIDs !== "") params.albumIDs += ",";
-		params.albumIDs += this.value;
+		params.albumIDs.push(this.value);
 	});
 
 	$("#user_list_to option").each(function () {
-		if (params.userIDs !== "") params.userIDs += ",";
-		params.userIDs += this.value;
+		params.userIDs.push(Number.parseInt(this.value, 10));
 	});
 
-	if (params.albumIDs === "") {
+	if (params.albumIDs.length === 0) {
 		loadingBar.show("error", "Select an album to share!");
 		return;
 	}
-	if (params.userIDs === "") {
+	if (params.userIDs.length === 0) {
 		loadingBar.show("error", "Select a user to share with!");
 		return;
 	}
@@ -42,18 +41,18 @@ sharing.add = function () {
  * @returns {void}
  */
 sharing.delete = function () {
-	// TODO: Change `shareIDs` to a proper array. This would also simplify the code below.
 	const params = {
-		shareIDs: "",
+		/** @type {number[]} */
+		shareIDs: [],
 	};
 
 	$('input[name="remove_id"]:checked').each(function () {
-		if (params.shareIDs !== "") params.shareIDs += ",";
-		params.shareIDs += this.value;
+		params.shareIDs.push(Number.parseInt(this.value, 10));
 	});
 
-	if (params.shareIDs === "") {
+	if (params.shareIDs.length === 0) {
 		loadingBar.show("error", "Select a sharing to remove!");
+		return;
 	}
 	api.post("Sharing::delete", params, function () {
 		loadingBar.show("success", "Sharing removed!");
