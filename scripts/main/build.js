@@ -99,15 +99,13 @@ build.album = function (data, disabled = false) {
 			break;
 		case "oldstyle":
 		default:
-			if (lychee.sortingAlbums !== "" && data.min_taken_at && data.max_taken_at) {
-				// TODO: Let the backend return `sortingAlbums` as a proper object with separate properties for column and direction (not as a string)
-				let sortingAlbums = lychee.sortingAlbums.replace("ORDER BY ", "").split(" ");
-				if (sortingAlbums[0] === "max_taken_at" || sortingAlbums[0] === "min_taken_at") {
+			if (lychee.sorting_albums && data.min_taken_at && data.max_taken_at) {
+				if (lychee.sorting_albums.column === "max_taken_at" || lychee.sorting_albums.column === "min_taken_at") {
 					if (formattedMinTs !== "" && formattedMaxTs !== "") {
 						subtitle = formattedMinTs === formattedMaxTs ? formattedMaxTs : formattedMinTs + " - " + formattedMaxTs;
-					} else if (formattedMinTs !== "" && sortingAlbums[0] === "min_taken_at") {
+					} else if (formattedMinTs !== "" && lychee.sorting_albums.column === "min_taken_at") {
 						subtitle = formattedMinTs;
-					} else if (formattedMaxTs !== "" && sortingAlbums[0] === "max_taken_at") {
+					} else if (formattedMaxTs !== "" && lychee.sorting_albums.column === "max_taken_at") {
 						subtitle = formattedMaxTs;
 					}
 				}

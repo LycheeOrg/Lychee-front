@@ -698,8 +698,13 @@ album.setLicense = function (albumID) {
  */
 album.setSorting = function (albumID) {
 	const callback = function () {
-		$("select#sortingCol").val(album.json.sorting_col);
-		$("select#sortingOrder").val(album.json.sorting_order === null ? "ASC" : album.json.sorting_order);
+		if (album.json.sorting) {
+			$("select#sortingCol").val(album.json.sorting.column);
+			$("select#sortingOrder").val(album.json.sorting.order);
+		} else {
+			$("select#sortingCol").val("");
+			$("select#sortingOrder").val("");
+		}
 	};
 
 	/** @param {{sortingCol: string, sortingOrder: string}} data */
@@ -710,8 +715,8 @@ album.setSorting = function (albumID) {
 			"Album::setSorting",
 			{
 				albumID: albumID,
-				sortingCol: data.sortingCol,
-				sortingOrder: data.sortingOrder,
+				sorting_column: data.sortingCol,
+				sorting_order: data.sortingOrder,
 			},
 			function () {
 				if (visible.album()) {
@@ -721,56 +726,31 @@ album.setSorting = function (albumID) {
 		);
 	};
 
-	let msg =
-		lychee.html`
-	<div>
-		<p>` +
-		lychee.locale["SORT_PHOTO_BY_1"] +
-		`
-		<span class="select">
-			<select id="sortingCol" name="sortingCol">
-				<option value=''>-</option>
-				<option value='created_at'>` +
-		lychee.locale["SORT_PHOTO_SELECT_1"] +
-		`</option>
-				<option value='taken_at'>` +
-		lychee.locale["SORT_PHOTO_SELECT_2"] +
-		`</option>
-				<option value='title'>` +
-		lychee.locale["SORT_PHOTO_SELECT_3"] +
-		`</option>
-				<option value='description'>` +
-		lychee.locale["SORT_PHOTO_SELECT_4"] +
-		`</option>
-				<option value='is_public'>` +
-		lychee.locale["SORT_PHOTO_SELECT_5"] +
-		`</option>
-				<option value='is_starred'>` +
-		lychee.locale["SORT_PHOTO_SELECT_6"] +
-		`</option>
-				<option value='type'>` +
-		lychee.locale["SORT_PHOTO_SELECT_7"] +
-		`</option>
-			</select>
-		</span>
-		` +
-		lychee.locale["SORT_PHOTO_BY_2"] +
-		`
-		<span class="select">
-			<select id="sortingOrder" name="sortingOrder">
-				<option value='ASC'>` +
-		lychee.locale["SORT_ASCENDING"] +
-		`</option>
-				<option value='DESC'>` +
-		lychee.locale["SORT_DESCENDING"] +
-		`</option>
-			</select>
-		</span>
-		` +
-		lychee.locale["SORT_PHOTO_BY_3"] +
-		`
-		</p>
-	</div>`;
+	let msg = lychee.html`
+		<div><p>
+			${lychee.locale["SORT_PHOTO_BY_1"]}
+			<span class="select">
+				<select id="sortingCol" name="sortingCol">
+					<option value=''>-</option>
+					<option value='created_at'>${lychee.locale["SORT_PHOTO_SELECT_1"]}</option>
+					<option value='taken_at'>${lychee.locale["SORT_PHOTO_SELECT_2"]}</option>
+					<option value='title'>${lychee.locale["SORT_PHOTO_SELECT_3"]}</option>
+					<option value='description'>${lychee.locale["SORT_PHOTO_SELECT_4"]}</option>
+					<option value='is_public'>${lychee.locale["SORT_PHOTO_SELECT_5"]}</option>
+					<option value='is_starred'>${lychee.locale["SORT_PHOTO_SELECT_6"]}</option>
+					<option value='type'>${lychee.locale["SORT_PHOTO_SELECT_7"]}</option>
+				</select>
+			</span>
+			${lychee.locale["SORT_PHOTO_BY_2"]}
+			<span class="select">
+				<select id="sortingOrder" name="sortingOrder">
+					<option value=''>-</option>
+					<option value='ASC'>${lychee.locale["SORT_ASCENDING"]}</option>
+					<option value='DESC'>${lychee.locale["SORT_DESCENDING"]}</option>
+				</select>
+			</span>
+			${lychee.locale["SORT_PHOTO_BY_3"]}
+		</p></div>`;
 
 	basicModal.show({
 		body: msg,

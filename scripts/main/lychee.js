@@ -174,8 +174,10 @@ const lychee = {
 	update_json: 0,
 	update_available: false,
 	new_photos_notification: false,
-	sortingPhotos: "",
-	sortingAlbums: "",
+	/** @type {?SortingCriterion} */
+	sorting_photos: null,
+	/** @type {?SortingCriterion} */
+	sorting_albums: null,
 	/**
 	 * The absolute path of the server-side installation directory of Lychee, e.g. `/var/www/lychee`
 	 * @type {string}
@@ -347,9 +349,8 @@ lychee.parseInitializationData = function (data) {
  * @returns {void}
  */
 lychee.parsePublicInitializationData = function (data) {
-	// TODO: Let the backend return `sorting_Photos` as a proper object with separate properties for column and direction (not as a string), as we split it in `view.js` anyway again
-	lychee.sortingPhotos = data.config.sorting_Photos || "";
-	lychee.sortingAlbums = data.config.sorting_Albums || "";
+	lychee.sorting_photos = data.config.sorting_photos;
+	lychee.sorting_albums = data.config.sorting_albums;
 	lychee.album_subtitle_type = data.config.album_subtitle_type || "oldstyle";
 	lychee.checkForUpdates = data.config.check_for_updates;
 	lychee.layout = Number.parseInt(data.config.layout, 10) || 0;

@@ -311,8 +311,10 @@ settings.changeLogin = function (params) {
  */
 settings.changeSorting = function (params) {
 	api.post("Settings::setSorting", params, function () {
-		lychee.sortingAlbums = "ORDER BY " + params["typeAlbums"] + " " + params["orderAlbums"];
-		lychee.sortingPhotos = "ORDER BY " + params["typePhotos"] + " " + params["orderPhotos"];
+		lychee.sorting_albums.column = params["sorting_albums_column"];
+		lychee.sorting_albums.order = params["sorting_albums_order"];
+		lychee.sorting_photos.column = params["sorting_photos_column"];
+		lychee.sorting_photos.order = params["sorting_photos_order"];
 		albums.refresh();
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_SORT"]);
 	});

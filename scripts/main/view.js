@@ -1105,7 +1105,7 @@ view.settings = {
 					<p>
 						$${lychee.locale["SORT_ALBUM_BY_1"]}
 						<span class="select">
-							<select id="settings_albums_type" name="typeAlbums">
+							<select id="settings_albums_sorting_column" name="sorting_albums_column">
 								<option value='created_at'>$${lychee.locale["SORT_ALBUM_SELECT_1"]}</option>
 								<option value='title'>$${lychee.locale["SORT_ALBUM_SELECT_2"]}</option>
 								<option value='description'>$${lychee.locale["SORT_ALBUM_SELECT_3"]}</option>
@@ -1116,7 +1116,7 @@ view.settings = {
 						</span>
 						$${lychee.locale["SORT_ALBUM_BY_2"]}
 						<span class="select">
-							<select id="settings_albums_order" name="orderAlbums">
+							<select id="settings_albums_sorting_order" name="sorting_albums_order">
 								<option value='ASC'>$${lychee.locale["SORT_ASCENDING"]}</option>
 								<option value='DESC'>$${lychee.locale["SORT_DESCENDING"]}</option>
 							</select>
@@ -1126,7 +1126,7 @@ view.settings = {
 					<p>
 						$${lychee.locale["SORT_PHOTO_BY_1"]}
 						<span class="select">
-							<select id="settings_photos_type" name="typePhotos">
+							<select id="settings_photos_sorting_column" name="sorting_photos_column">
 								<option value='created_at'>$${lychee.locale["SORT_PHOTO_SELECT_1"]}</option>
 								<option value='taken_at'>$${lychee.locale["SORT_PHOTO_SELECT_2"]}</option>
 								<option value='title'>$${lychee.locale["SORT_PHOTO_SELECT_3"]}</option>
@@ -1138,7 +1138,7 @@ view.settings = {
 				  		</span>
 						$${lychee.locale["SORT_PHOTO_BY_2"]}
 				  		<span class="select">
-							<select id="settings_photos_order" name="orderPhotos">
+							<select id="settings_photos_sorting_order" name="sorting_photos_order">
 								<option value='ASC'>$${lychee.locale["SORT_ASCENDING"]}</option>
 								<option value='DESC'>$${lychee.locale["SORT_DESCENDING"]}</option>
 							</select>
@@ -1154,20 +1154,14 @@ view.settings = {
 
 			$(".settings_view").append(msg);
 
-			if (lychee.sortingAlbums !== "") {
-				// TODO: Let the backend return `sortingAlbums` as a proper object with separate properties for column and direction (not as a string)
-				const sortingAlbums = lychee.sortingAlbums.replace("ORDER BY ", "").split(" ");
-
-				$(".setSorting select#settings_albums_type").val(sortingAlbums[0]);
-				$(".setSorting select#settings_albums_order").val(sortingAlbums[1]);
+			if (lychee.sorting_albums) {
+				$(".setSorting select#settings_albums_sorting_column").val(lychee.sorting_albums.column);
+				$(".setSorting select#settings_albums_sorting_order").val(lychee.sorting_albums.order);
 			}
 
-			if (lychee.sortingPhotos !== "") {
-				// TODO: Let the backend return `sortingPhotos` as a proper object with separate properties for column and direction (not as a string)
-				const sortingPhotos = lychee.sortingPhotos.replace("ORDER BY ", "").split(" ");
-
-				$(".setSorting select#settings_photos_type").val(sortingPhotos[0]);
-				$(".setSorting select#settings_photos_order").val(sortingPhotos[1]);
+			if (lychee.sorting_photos) {
+				$(".setSorting select#settings_photos_sorting_column").val(lychee.sorting_photos.column);
+				$(".setSorting select#settings_photos_sorting_order").val(lychee.sorting_photos.order);
 			}
 
 			settings.bind("#basicModal__action_sorting_change", ".setSorting", settings.changeSorting);
@@ -1198,21 +1192,19 @@ view.settings = {
 		setLang: function () {
 			let msg = `
 				<div class="setLang">
-				<p>${lychee.locale["LANG_TEXT"]}
-			  	<span class="select">
-				<select id="settings_photos_order" name="lang">`;
-
-			lychee.lang_available.forEach(function (lang_av) {
-				msg += `<option ${lychee.lang === lang_av ? "selected" : ""}>${lang_av}</option>`;
-			});
-
-			msg += `
-				</select>
-			  	</span>
-				</p>
-				<div class="basicModal__buttons">
-				<a id="basicModal__action_set_lang" class="basicModal__button">${lychee.locale["LANG_TITLE"]}</a>
-				</div>
+					<p>
+						${lychee.locale["LANG_TEXT"]}
+			  			<span class="select">
+							<select id="settings_lang" name="lang">
+								${lychee.lang_available.reduce(function (html, lang_av) {
+									return html + (lychee.lang === lang_av ? "<option selected>" : "<option>") + lang_av + "</option>";
+								}, "")}
+							</select>
+			  			</span>
+					</p>
+					<div class="basicModal__buttons">
+						<a id="basicModal__action_set_lang" class="basicModal__button">${lychee.locale["LANG_TITLE"]}</a>
+					</div>
 				</div>`;
 
 			$(".settings_view").append(msg);

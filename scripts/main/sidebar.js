@@ -442,10 +442,10 @@ sidebar.createStructure.album = function (data) {
 	}
 
 	if (!lychee.publicMode) {
-		if (data.sorting_col === null) {
+		if (data.sorting === null) {
 			sorting = lychee.locale["DEFAULT"];
 		} else {
-			sorting = data.sorting_col + " " + data.sorting_order;
+			sorting = data.sorting.column + " " + data.sorting.order;
 		}
 	}
 
