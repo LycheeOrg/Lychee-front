@@ -257,9 +257,6 @@ const loadingBar = {
 const imageview = $("#imageview");
 
 $(document).ready(function () {
-	// set CSRF protection (Laravel)
-	csrf.bind();
-
 	// Image View
 	$(window).on("resize", photo.onresize);
 

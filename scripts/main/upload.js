@@ -305,7 +305,7 @@ upload.start = {
 			xhr.onloadend = onComplete;
 			xhr.responseType = "json";
 			xhr.open("POST", "api/Photo::add");
-			xhr.setRequestHeader("X-XSRF-TOKEN", csrf.getCookie("XSRF-TOKEN"));
+			xhr.setRequestHeader("X-XSRF-TOKEN", csrf.getCSRFCookieValue());
 			xhr.setRequestHeader("Accept", "application/json");
 
 			outstandingResponsesCount++;

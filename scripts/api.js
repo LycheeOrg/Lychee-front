@@ -82,6 +82,9 @@ api.post = function (fn, params, successCallback = null, responseProgressCB = nu
 		contentType: "application/json",
 		data: JSON.stringify(params),
 		dataType: "json",
+		headers: {
+			"X-XSRF-TOKEN": csrf.getCSRFCookieValue(),
+		},
 		success: successHandler,
 		error: errorHandler,
 	};
@@ -127,6 +130,9 @@ api.getCSS = function (url, callback) {
 		url: url,
 		data: {},
 		dataType: "text",
+		headers: {
+			"X-XSRF-TOKEN": csrf.getCSRFCookieValue(),
+		},
 		success: successHandler,
 		error: errorHandler,
 	});

@@ -247,9 +247,6 @@ const loadingBar = {
 const imageview = $("#imageview");
 
 $(function () {
-	// set CSRF protection (Laravel)
-	csrf.bind();
-
 	// Set API error handler
 	api.onError = frame.handleAPIError;
 
