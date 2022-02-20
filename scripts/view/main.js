@@ -1,10 +1,18 @@
 /**
  * @description Used as an alternative `main` to view single photos with `view.php`
  *
- * Note the build script picks a subset of the JS files to build a variant
- * of the JS code which does not include all objects.
- * Hence, we must partially re-implement these objects here to the extent
- * which is required by the methods we call.
+ * Note, the build script picks a subset of the JS files to build a variant
+ * of the JS code for the special "view mode".
+ * As this variant does not include all JS files, some objects are missing.
+ * Hence, we must partially re-implement these objects to the extent which is
+ * required by the methods we call.
+ *
+ * This approach is very tedious and error-prone, because we actually
+ * duplicate code.
+ * Also, it is not documented nor obvious why these "subset implementations"
+ * are necessary.
+ * Ideally, the full code base would be used all the time independent of
+ * the users entry point.
  *
  * TODO: Find out why we actually need this approach. Re-implementing different variants of the same objects is very error-prone.
  */
