@@ -272,7 +272,7 @@ contextMenu.buildList = function (lists, exclude, action, parentID = null, layer
 };
 
 /**
- * @param {string} albumID
+ * @param {?string} albumID
  * @param {jQuery.Event} e
  *
  * @returns {void}
@@ -281,19 +281,19 @@ contextMenu.albumTitle = function (albumID, e) {
 	api.post("Albums::tree", {}, function (data) {
 		let items = [];
 
-		items = items.concat({ title: lychee.locale["ROOT"], disabled: albumID === false, fn: () => lychee.goto() });
+		items = items.concat({ title: lychee.locale["ROOT"], disabled: albumID === null, fn: () => lychee.goto() });
 
 		if (data.albums && data.albums.length > 0) {
 			items = items.concat({});
-			items = items.concat(contextMenu.buildList(data.albums, albumID !== false ? [parseInt(albumID, 10)] : [], (a) => lychee.goto(a.id)));
+			items = items.concat(contextMenu.buildList(data.albums, albumID !== null ? [albumID] : [], (a) => lychee.goto(a.id)));
 		}
 
 		if (data.shared_albums && data.shared_albums.length > 0) {
 			items = items.concat({});
-			items = items.concat(contextMenu.buildList(data.shared_albums, albumID !== false ? [albumID] : [], (a) => lychee.goto(a.id)));
+			items = items.concat(contextMenu.buildList(data.shared_albums, albumID !== null ? [albumID] : [], (a) => lychee.goto(a.id)));
 		}
 
-		if (albumID !== false && !album.isSmartID(albumID) && album.isUploadable()) {
+		if (albumID !== null && !album.isSmartID(albumID) && album.isUploadable()) {
 			if (items.length > 0) {
 				items.unshift({});
 			}

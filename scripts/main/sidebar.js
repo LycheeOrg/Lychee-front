@@ -208,7 +208,7 @@ sidebar.secondsToHMS = function (d) {
  * @typedef Section
  *
  * @property {string}       title
- * @property {string}       type
+ * @property {number}       type
  * @property {SectionRow[]} rows
  */
 
@@ -462,12 +462,8 @@ sidebar.createStructure.album = function (data) {
 		structure.basics.rows.push({ title: lychee.locale["ALBUM_SHOW_TAGS"], kind: "showtags", value: data.show_tags, editable });
 	}
 
-	let videoCount = 0;
-	$.each(data.photos, function () {
-		if (this.type && this.type.indexOf("video") > -1) {
-			videoCount++;
-		}
-	});
+	const videoCount = data.photos.reduce((count, photo) => count + (photo.type.indexOf("video") > -1), 0);
+
 	structure.album = {
 		title: lychee.locale["ALBUM_ALBUM"],
 		type: sidebar.types.DEFAULT,
