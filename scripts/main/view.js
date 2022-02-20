@@ -260,7 +260,7 @@ view.album = {
 			lychee.content.html(html);
 			album.apply_nsfw_filter();
 
-			view.album.content.justify();
+			view.album.content.justify(album.json ? album.json.photos : []);
 
 			// Restore scroll position
 			const urls = JSON.parse(localStorage.getItem("scroll"));
@@ -383,7 +383,7 @@ view.album = {
 				.attr("data-srcset", srcset)
 				.addClass("lazyload");
 
-			view.album.content.justify();
+			view.album.content.justify(album.json ? album.json.photos : []);
 		},
 
 		/**
@@ -426,7 +426,7 @@ view.album = {
 								lychee.content.find(".divider").remove();
 							}
 							if (justify) {
-								view.album.content.justify();
+								view.album.content.justify(album.json ? album.json.photos : []);
 							}
 						}
 					}
@@ -465,10 +465,22 @@ view.album = {
 		},
 
 		/**
+		 * Layouts the photos inside an album or a search result.
+		 *
+		 * This method is a misnomer, because it does not necessarily
+		 * create a justified layout, but the configured layout as specified
+		 * by `lychee.layout` which can also be a non-justified layout.
+		 *
+		 * Also note that this method is bastardized by `search.find`.
+		 * Hence, this method would better not be part of `view.album.content`,
+		 * because it is not exclusively used for an album.
+		 *
+		 * @param {Photo[]} photos - the photos to be laid out
+		 *
 		 * @returns {void}
 		 */
-		justify: function () {
-			if (!album.json || album.json.photos.length === 0) return;
+		justify: function (photos) {
+			if (photos.length === 0) return;
 			if (lychee.layout === 1) {
 				let containerWidth = parseFloat($(".justified-layout").width());
 				if (containerWidth === 0) {
@@ -480,7 +492,7 @@ view.album = {
 						parseFloat($(".content").css("padding-right"));
 				}
 				/** @type {number[]} */
-				const ratio = album.json.photos.map(function (_photo) {
+				const ratio = photos.map(function (_photo) {
 					const height = _photo.size_variants.original.height;
 					const width = _photo.size_variants.original.width;
 					const ratio = height > 0 ? width / height : 1;
@@ -508,7 +520,7 @@ view.album = {
 				$(".justified-layout > div").each(function (i) {
 					if (!layoutGeometry.boxes[i]) {
 						// Race condition in search.find -- window content
-						// and album.json can get out of sync as search
+						// and `photos` can get out of sync as search
 						// query is being modified.
 						return false;
 					}
@@ -539,20 +551,20 @@ view.album = {
 				let margin = parseFloat($(".photo").css("margin-right"));
 				let origHeight = parseFloat($(".photo").css("max-height"));
 				$(".unjustified-layout > div").each(function (i) {
-					if (!album.json.photos[i]) {
+					if (!photos[i]) {
 						// Race condition in search.find -- window content
-						// and album.json can get out of sync as search
+						// and `photos` can get out of sync as search
 						// query is being modified.
 						return false;
 					}
 					let ratio =
-						album.json.photos[i].size_variants.original.height > 0
-							? album.json.photos[i].size_variants.original.width / album.json.photos[i].size_variants.original.height
+						photos[i].size_variants.original.height > 0
+							? photos[i].size_variants.original.width / photos[i].size_variants.original.height
 							: 1;
-					if (album.json.photos[i].type && album.json.photos[i].type.indexOf("video") > -1) {
+					if (photos[i].type && photos[i].type.indexOf("video") > -1) {
 						// Video.  If there's no small and medium, we have
 						// to fall back to the square thumb.
-						if (album.json.photos[i].size_variants.small === null && album.json.photos[i].size_variants.medium === null) {
+						if (photos[i].size_variants.small === null && photos[i].size_variants.medium === null) {
 							ratio = 1;
 						}
 					}

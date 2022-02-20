@@ -34,7 +34,7 @@ visible.config = function () {
 
 /** @returns {boolean} */
 visible.search = function () {
-	return search.checksum !== null;
+	return search.json !== null;
 };
 
 /** @returns {boolean} */

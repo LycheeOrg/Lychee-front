@@ -168,7 +168,10 @@ build.photo = function (data, disabled = false) {
 	let html = "";
 	let thumbnail = "";
 	let thumb2x = "";
-	const isCover = data.id === album.json.cover_id;
+	// Note, album.json might not be loaded, if
+	//  a) the photo is a single public photo in a private album
+	//  b) the photo is part of a search result
+	const isCover = album.json && album.json.cover_id === data.id;
 
 	const isVideo = data.type && data.type.indexOf("video") > -1;
 	const isRaw = data.type && data.type.indexOf("raw") > -1;
@@ -263,10 +266,17 @@ build.photo = function (data, disabled = false) {
 	html += `</div>`;
 
 	if (album.isUploadable()) {
+		// Note, `album.json` might be null, if the photo is displayed as
+		// part of a search result and therefore the actual parent album
+		// is not loaded. (The "parent" album is the virtual "search album"
+		// in this case).
+		// This also means that the displayed variant of the public badge of
+		// a photo depends on the availability of the parent album.
+		// This seems to be an undesired but unavoidable side effect.
 		html += lychee.html`
 				<div class='badges'>
 				<a class='badge ${data.is_starred ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
-				<a class='badge ${data.is_public && !album.json.is_public ? "badge--visible badge--hidden" : ""} icn-share'>${build.iconic("eye")}</a>
+				<a class='badge ${data.is_public && album.json && !album.json.is_public ? "badge--visible badge--hidden" : ""} icn-share'>${build.iconic("eye")}</a>
 				<a class='badge ${isCover ? "badge--cover" : ""} icn-cover'>${build.iconic("folder-cover")}</a>
 				</div>
 				`;

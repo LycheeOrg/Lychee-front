@@ -113,7 +113,7 @@ sidebar.triggerSearch = function (search_string) {
 		return;
 	}
 
-	search.checksum = null;
+	search.json = null;
 	// We're either logged in or public search is allowed
 	lychee.goto("search/" + encodeURIComponent(search_string));
 };
@@ -137,7 +137,7 @@ sidebar.toggle = function (is_user_initiated) {
 		header.dom(".button--info").toggleClass("active");
 		lychee.content.toggleClass("content--sidebar");
 		lychee.imageview.toggleClass("image--sidebar");
-		if (typeof view !== "undefined") view.album.content.justify();
+		if (typeof view !== "undefined") view.album.content.justify(album.json ? album.json.photos : []);
 		sidebar.dom().toggleClass("active");
 		photo.updateSizeLivePhotoDuringAnimation();
 
