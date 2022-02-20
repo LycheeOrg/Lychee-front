@@ -244,12 +244,10 @@ mapview.open = function (albumID = null) {
 
 		album.photos.forEach(
 			/** @param {Photo} element */ function (element) {
-				// TODO: My IDE complains that `parseFloat` is unnecessary, because `element.latitude`/`element.longitude` is already a float
-				// TODO: My IDE complains that `element.size_variants.thumb !== null` is always false
 				if (element.latitude || element.longitude) {
 					photos.push({
-						lat: parseFloat(element.latitude),
-						lng: parseFloat(element.longitude),
+						lat: element.latitude,
+						lng: element.longitude,
 						thumbnail: element.size_variants.thumb !== null ? element.size_variants.thumb.url : "img/placeholder.png",
 						thumbnail2x: element.size_variants.thumb2x !== null ? element.size_variants.thumb2x.url : null,
 						url: element.size_variants.small !== null ? element.size_variants.small.url : element.url,
@@ -262,20 +260,16 @@ mapview.open = function (albumID = null) {
 
 					// Update min/max lat/lng
 					if (mapview.min_lat === null || mapview.min_lat > element.latitude) {
-						// TODO: My IDE complains about unnecessary `parseFloat`
-						mapview.min_lat = parseFloat(element.latitude);
+						mapview.min_lat = element.latitude;
 					}
 					if (mapview.min_lng === null || mapview.min_lng > element.longitude) {
-						// TODO: My IDE complains about unnecessary `parseFloat`
-						mapview.min_lng = parseFloat(element.longitude);
+						mapview.min_lng = element.longitude;
 					}
 					if (mapview.max_lat === null || mapview.max_lat < element.latitude) {
-						// TODO: My IDE complains about unnecessary `parseFloat`
-						mapview.max_lat = parseFloat(element.latitude);
+						mapview.max_lat = element.latitude;
 					}
 					if (mapview.max_lng === null || mapview.max_lng < element.longitude) {
-						// TODO: My IDE complains about unnecessary `parseFloat`
-						mapview.max_lng = parseFloat(element.longitude);
+						mapview.max_lng = element.longitude;
 					}
 				}
 			}
@@ -359,12 +353,17 @@ mapview.goto = function (elem) {
 	const photoID = elem.attr("data-id");
 	let albumID = elem.attr("data-album-id");
 
-	if (albumID === "null") albumID = null;
+	if (albumID === "null") albumID = "unsorted";
 
-	if (album.json == null || albumID !== album.json.id) {
+	// The condition below looks suspicious and like a violation of the
+	// principle of separation of concerns.
+	// In theory, if the currently loaded album does not match the desired
+	// album, then `lychee.goto` and `lychee.load` should take care of that.
+	// But I am afraid of deleting these lines of code and breaking something.
+	// TODO: Clean this up.
+	if (album.json && album.json.id !== albumID) {
 		album.refresh();
 	}
 
-	// TODO: This line looks suspicious, if `albumID === null` this doesn't make much sense
 	lychee.goto(albumID + "/" + photoID);
 };
