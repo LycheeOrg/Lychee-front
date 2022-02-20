@@ -260,9 +260,9 @@ $(document).ready(function () {
 	// Image View
 	$(window).on("resize", photo.onresize);
 
-	// TODO @ildyria: Why don't we simply use (https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/get#example)? Why do we need an home-brewed method which on top strikes me as overly complicated?
 	// Save ID of photo
-	const photoID = gup("p");
+	const queryParams = new URLSearchParams(document.location.search);
+	const photoID = queryParams.get("p");
 
 	// Set API error handler
 	api.onError = handleAPIError;
@@ -283,7 +283,6 @@ $(document).ready(function () {
 
 /**
  * TODO: Why is this a global function?
- * TODO: Why do we repeat code here which is a merge of code mostly in `photo.js` and some other files?
  * @param {string} photoID
  */
 const loadPhotoInfo = function (photoID) {
