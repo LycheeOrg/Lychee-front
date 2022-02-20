@@ -18,8 +18,7 @@ const swipe = {
  * @returns {void}
  */
 swipe.start = function (obj) {
-	// TODO: The condition is always true and the method is only called in one place
-	if (obj) swipe.obj = obj;
+	swipe.obj = obj;
 };
 
 /**
