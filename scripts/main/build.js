@@ -515,7 +515,7 @@ build.uploadModal = function (title, files) {
  */
 build.uploadNewFile = function (name) {
 	if (name.length > 40) {
-		name = name.substr(0, 17) + "..." + name.substr(name.length - 20, 20);
+		name = name.substring(0, 17) + "..." + name.substring(name.length - 20, name.length);
 	}
 
 	return lychee.html`
