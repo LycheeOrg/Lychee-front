@@ -1948,7 +1948,7 @@ view.logs = {
 			 */
 			const successHandler = function (logEntries) {
 				/**
-				 * TODO: Consider moveing this method to `lychee.locale`
+				 * TODO: Consider moving this method to `lychee.locale`
 				 * @param {Date} datetime
 				 * @returns {string}
 				 */
@@ -1957,9 +1957,9 @@ view.logs = {
 						"" +
 						datetime.getUTCFullYear() +
 						"-" +
-						String(datetime.getUTCMonth()).padStart(2, "0") +
+						String(datetime.getUTCMonth() + 1).padStart(2, "0") +
 						"-" +
-						String(datetime.getUTCDay()).padStart(2, "0") +
+						String(datetime.getUTCDate()).padStart(2, "0") +
 						" " +
 						String(datetime.getUTCHours()).padStart(2, "0") +
 						":" +
