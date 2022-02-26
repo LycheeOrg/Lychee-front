@@ -412,7 +412,7 @@ sidebar.createStructure.photo = function (data) {
 };
 
 /**
- * @param {(Album|TagAlbum)} data
+ * @param {(Album|TagAlbum|SmartAlbum)} data
  * @returns {Section[]}
  */
 sidebar.createStructure.album = function (data) {
@@ -442,7 +442,7 @@ sidebar.createStructure.album = function (data) {
 	}
 
 	if (!lychee.publicMode) {
-		if (data.sorting === null) {
+		if (!data.sorting) {
 			sorting = lychee.locale["DEFAULT"];
 		} else {
 			sorting = data.sorting.column + " " + data.sorting.order;
