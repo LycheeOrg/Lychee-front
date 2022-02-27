@@ -317,19 +317,20 @@ $(document).ready(function () {
 			"drop",
 			/** @param {jQuery.Event} e */ function (e) {
 				if (
-					!album.isUploadable() ||
-					visible.contextMenu() ||
-					basicModal.visible() ||
-					visible.leftMenu() ||
-					visible.config() ||
-					!(visible.album() || visible.albums())
+					album.isUploadable() &&
+					!visible.contextMenu() &&
+					!basicModal.visible() &&
+					!visible.leftMenu() &&
+					!visible.config() &&
+					(visible.album() || visible.albums())
 				) {
-					return false;
+					// Detect if dropped item is a file or a link
+					if (e.originalEvent.dataTransfer.files.length > 0) {
+						upload.start.local(e.originalEvent.dataTransfer.files);
+					} else if (e.originalEvent.dataTransfer.getData("Text").length > 3) {
+						upload.start.url(e.originalEvent.dataTransfer.getData("Text"));
+					}
 				}
-
-				// Detect if dropped item is a file or a link
-				if (e.originalEvent.dataTransfer.files.length > 0) upload.start.local(e.originalEvent.dataTransfer.files);
-				else if (e.originalEvent.dataTransfer.getData("Text").length > 3) upload.start.url(e.originalEvent.dataTransfer.getData("Text"));
 
 				return false;
 			}
@@ -353,21 +354,22 @@ $(document).ready(function () {
 						}
 					}
 
-					if (filesToUpload.length > 0) {
-						// We perform the check so deep because we don't want to
-						// prevent the paste from working in text input fields, etc.
-						if (
-							album.isUploadable() &&
-							!visible.contextMenu() &&
-							!basicModal.visible() &&
-							!visible.leftMenu() &&
-							!visible.config() &&
-							(visible.album() || visible.albums())
-						) {
-							upload.start.local(filesToUpload);
-						}
+					// We perform the check so deep because we don't want to
+					// prevent the paste from working in text input fields, etc.
+					if (
+						filesToUpload.length > 0 &&
+						album.isUploadable() &&
+						!visible.contextMenu() &&
+						!basicModal.visible() &&
+						!visible.leftMenu() &&
+						!visible.config() &&
+						(visible.album() || visible.albums())
+					) {
+						upload.start.local(filesToUpload);
 
 						return false;
+					} else {
+						return true;
 					}
 				}
 			}

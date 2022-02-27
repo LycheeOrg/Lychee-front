@@ -37,7 +37,7 @@ password.getDialog = function (albumID, callback) {
 				callback();
 			},
 			null,
-			function (jqXHR, params, lycheeException) {
+			function (jqXHR, params2, lycheeException) {
 				if ((jqXHR.status === 401 || jqXHR.status === 403) && lycheeException.message.includes("Password is invalid")) {
 					basicModal.error("password");
 					return true;
