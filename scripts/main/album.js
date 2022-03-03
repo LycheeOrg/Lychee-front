@@ -1286,7 +1286,6 @@ album.updatePhoto = function (data) {
 	if (album.json) {
 		$.each(album.json.photos, function () {
 			if (this.id === data.id) {
-				this.filesize = data.filesize;
 				// Deep copy size variants
 				this.size_variants = {
 					thumb: null,
