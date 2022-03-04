@@ -1280,6 +1280,7 @@ album.updatePhoto = function (data) {
 		result.url = src.url;
 		result.width = src.width;
 		result.height = src.height;
+		result.filesize = src.filesize;
 		return result;
 	};
 
