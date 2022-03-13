@@ -11,7 +11,7 @@ csrf.getCSRFCookieValue = function () {
 	const cookie = document.cookie.split(";").find((row) => /^\s*(X-)?[XC]SRF-TOKEN\s*=/.test(row));
 	// We must remove all '%3D' from the end of the string.
 	// Background:
-	// The actual binary value of the CSFR value is encoded in Bade64.
+	// The actual binary value of the CSFR value is encoded in Base64.
 	// If the length of original, binary value is not a multiple of 3 bytes,
 	// the encoding gets padded with `=` on the right; i.e. there might be
 	// zero, one or two `=` at the end of the encoded value.
