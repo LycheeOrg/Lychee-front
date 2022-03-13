@@ -315,7 +315,7 @@ contextMenu.photo = function (photoID, e) {
 	const coverActive = photoID === album.json.cover_id;
 
 	const items = [
-		{ title: build.iconic("star") + lychee.locale["STAR"], fn: () => photo.setStar([photoID]) },
+		{ title: build.iconic("star") + lychee.locale["STAR"], fn: () => photo.toggleStar([photoID]) },
 		{ title: build.iconic("tag") + lychee.locale["TAGS"], fn: () => photo.editTags([photoID]) },
 		// for future work, use a list of all the ancestors.
 		{
@@ -399,7 +399,7 @@ contextMenu.photoMulti = function (photoIDs, e) {
 	multiselect.stopResize();
 
 	let items = [
-		{ title: build.iconic("star") + lychee.locale["STAR_ALL"], fn: () => photo.setStar(photoIDs) },
+		{ title: build.iconic("star") + lychee.locale["STAR_ALL"], fn: () => photo.toggleStar(photoIDs) },
 		{ title: build.iconic("tag") + lychee.locale["TAGS_ALL"], fn: () => photo.editTags(photoIDs) },
 		{},
 		{ title: build.iconic("pencil") + lychee.locale["RENAME_ALL"], fn: () => photo.setTitle(photoIDs) },

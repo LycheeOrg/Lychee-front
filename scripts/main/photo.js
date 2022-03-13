@@ -518,15 +518,12 @@ photo.setAlbum = function (photoIDs, albumID) {
 };
 
 /**
- * *Toggles* the star-property of the given photos.
- *
- * Note: The method is a misnomer, because it does not _set_ something, it
- * _toggles_.
+ * Toggles the star-property of the given photos.
  *
  * @param {string[]} photoIDs
  * @returns {void}
  */
-photo.setStar = function (photoIDs) {
+photo.toggleStar = function (photoIDs) {
 	if (visible.photo()) {
 		photo.json.is_starred = !photo.json.is_starred;
 		view.photo.star();
@@ -539,7 +536,7 @@ photo.setStar = function (photoIDs) {
 
 	albums.refresh();
 
-	api.post("Photo::setStar", { photoIDs: photoIDs });
+	api.post("Photo::toggleStar", { photoIDs: photoIDs });
 };
 
 /**
