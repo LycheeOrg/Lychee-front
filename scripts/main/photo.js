@@ -543,14 +543,15 @@ photo.setStar = function (photoIDs) {
 };
 
 /**
- * Edits the visibility properties of a photo.
+ * Edits the protection policy of a photo.
  *
- * This method is a misnomer, it does not only set the properties, it also creates and handles the edit dialog
+ * This method is a misnomer, it does not only set the policy, it also creates
+ * and handles the edit dialog
  *
  * @param {string} photoID
  * @returns {void}
  */
-photo.setPublic = function (photoID) {
+photo.setProtectionPolicy = function (photoID) {
 	const msg_switch = lychee.html`
 		<div class='switch'>
 			<label>
@@ -654,7 +655,10 @@ photo.setPublic = function (photoID) {
 
 		// TODO: Actually, the action handler receives an object with values of all input fields. There is no need to run use a jQuery-selector
 		const action = function () {
-			// Note: `newIsPublic` must be of type `number`, because `photo.is_public` is a number, too
+			/**
+			 * Note: `newIsPublic` must be of type `number`, because `photo.is_public` is a number, too
+			 * @type {number}
+			 */
 			const newIsPublic = $('.basicModal .switch input[name="is_public"]:checked').length;
 
 			if (newIsPublic !== photo.json.is_public) {
@@ -668,9 +672,10 @@ photo.setPublic = function (photoID) {
 
 				albums.refresh();
 
-				// Photo::setPublic simply flips the current state.
-				// Ugly API but effective...
-				api.post("Photo::setPublic", { photoID });
+				api.post("Photo::setPublic", {
+					photoID: photoID,
+					is_public: newIsPublic !== 0,
+				});
 			}
 
 			basicModal.close();

@@ -47,7 +47,7 @@ contextMenu.add = function (e) {
 					items.unshift({
 						title: build.iconic("eye") + lychee.locale["VISIBILITY_ALBUM"],
 						visible: lychee.enable_button_visibility,
-						fn: () => album.setPublic(albumID),
+						fn: () => album.setProtectionPolicy(albumID),
 					});
 				}
 			}
@@ -474,7 +474,7 @@ contextMenu.photoMore = function (photoID, e) {
 			items.unshift({
 				title: build.iconic("eye") + lychee.locale["VISIBILITY_PHOTO"],
 				visible: lychee.enable_button_visibility,
-				fn: () => photo.setPublic(photo.getID()),
+				fn: () => photo.setProtectionPolicy(photo.getID()),
 			});
 		}
 		const button_trash = $("#button_trash");

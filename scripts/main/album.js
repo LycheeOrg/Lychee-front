@@ -771,16 +771,10 @@ album.setSorting = function (albumID) {
 /**
  * Sets the accessibility attributes of an album.
  *
- * **ATTENTION**: Despite its name this method does not only set the
- * `is_public` attribute of the album, but configures most of the attributes
- * which contribute to the accessibility of an album.
- *
- * TODO: Find a better name for the method.
- *
  * @param {string} albumID
  * @returns {void}
  */
-album.setPublic = function (albumID) {
+album.setProtectionPolicy = function (albumID) {
 	const action = function (data) {
 		albums.refresh();
 
@@ -826,7 +820,7 @@ album.setPublic = function (albumID) {
 			params.password = null;
 		}
 
-		api.post("Album::setPublic", params);
+		api.post("Album::setProtectionPolicy", params);
 	};
 
 	const msg = lychee.html`

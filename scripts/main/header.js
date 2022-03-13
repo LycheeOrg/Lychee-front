@@ -36,14 +36,14 @@ header.bind = function () {
 	});
 
 	header.dom("#button_visibility").on(eventName, function () {
-		photo.setPublic(photo.getID());
+		photo.setProtectionPolicy(photo.getID());
 	});
 	header.dom("#button_share").on(eventName, function (e) {
 		contextMenu.sharePhoto(photo.getID(), e);
 	});
 
 	header.dom("#button_visibility_album").on(eventName, function () {
-		album.setPublic(album.getID());
+		album.setProtectionPolicy(album.getID());
 	});
 
 	header.dom("#button_sharing_album_users").on(eventName, function () {
