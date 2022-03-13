@@ -16,21 +16,7 @@ const lychee = {
 	full_photo: true,
 	downloadable: false,
 	public_photos_hidden: true,
-	/**
-	 * Enable only v4+
-	 * @type boolean
-	 */
 	share_button_visible: false,
-	/**
-	 * Enable api_V2
-	 * @type boolean
-	 */
-	api_V2: false,
-	/**
-	 * Enable sub_albums features
-	 * @type boolean
-	 */
-	sub_albums: false,
 	/**
 	 * Enable admin mode (multi-user)
 	 * @type boolean
@@ -254,18 +240,6 @@ lychee.init = function (isFirstInitialization = true) {
 		{},
 		/** @param {InitializationData} data */
 		function (data) {
-			// TODO: The case with "status = 0" (i.e. no configuration) should result in a HTTP error response
-			if (data.status === 0) {
-				// No configuration
-				lychee.setMode("public");
-				header.dom().hide();
-				lychee.content.hide();
-				$("body").append(build.no_content("cog"));
-				settings.createConfig();
-
-				return;
-			}
-
 			lychee.parseInitializationData(data);
 
 			if (data.status === 2) {
@@ -280,10 +254,11 @@ lychee.init = function (isFirstInitialization = true) {
 				// This might leak confidential photos to anybody if the DB is filled
 				// with photos and the admin password reset to `null`.
 				if (data.config.login === false) settings.createLogin();
-			}
-
-			if (data.status === 1) {
+			} else if (data.status === 1) {
 				lychee.setMode("public");
+			} else {
+				loadingBar.show("error", "Error: Unexpected status");
+				return;
 			}
 
 			if (isFirstInitialization) {
@@ -949,7 +924,17 @@ lychee.retinize = function (path = "") {
  * @param {DropboxLoadedCB} callback
  */
 lychee.loadDropbox = function (callback) {
-	if (lychee.dropbox === false && lychee.dropboxKey != null && lychee.dropboxKey !== "") {
+	if (!lychee.dropboxKey) {
+		loadingBar.show("error", "Error: Dropbox key not set");
+		return;
+	}
+
+	// If the dropbox component has already been loaded, immediately call
+	// the callback; otherwise load the component first and call callback
+	// on success.
+	if (lychee.dropbox) {
+		callback();
+	} else {
 		loadingBar.show();
 
 		let g = document.createElement("script");
@@ -968,14 +953,6 @@ lychee.loadDropbox = function (callback) {
 			callback();
 		};
 		s.parentNode.insertBefore(g, s);
-	} else if (lychee.dropbox === true && lychee.dropboxKey != null && lychee.dropboxKey !== "") {
-		callback();
-	} else {
-		// TODO: Is this branch ever called?
-		// In particular, this branch behaves differently from the other two
-		// in the sense that it neither loads the Dropbox component nor
-		// calls the callback.
-		settings.setDropboxKey();
 	}
 };
 
@@ -1207,62 +1184,4 @@ lychee.getBaseUrl = function () {
 	} else {
 		return location.href.replace(location.hash, "");
 	}
-};
-
-/**
- * Copied from https://github.com/feross/clipboard-copy/blob/9eba597c774feed48301fef689099599d612387c/index.js
- *
- * @param {string} text
- * @returns {boolean}
- */
-lychee.clipboardCopy = function (text) {
-	// Use the Async Clipboard API when available. Requires a secure browsing
-	// context (i.e. HTTPS)
-	if (navigator.clipboard) {
-		navigator.clipboard.writeText(text).catch(function (err) {
-			throw err !== undefined ? err : new DOMException("The request is not allowed", "NotAllowedError");
-		});
-		return false;
-	}
-
-	// ...Otherwise, use document.execCommand() fallback
-	// TODO: The command `document.execCommand` is deprecated (used below)
-	// The clipboard API (used above) is provided by all recent browsers
-	// see https://developer.mozilla.org/en-US/docs/Web/API/Clipboard_API
-	// Probably, the code below is dead code
-	// TODO: Simply nuke it, if this is consensus among developers.
-
-	// Put the text to copy into a <span>
-	let span = document.createElement("span");
-	span.textContent = text;
-
-	// Preserve consecutive spaces and newlines
-	span.style.whiteSpace = "pre";
-
-	// Add the <span> to the page
-	document.body.appendChild(span);
-
-	// Make a selection object representing the range of text selected by the user
-	let selection = window.getSelection();
-	let range = window.document.createRange();
-	selection.removeAllRanges();
-	range.selectNode(span);
-	selection.addRange(range);
-
-	// Copy text to the clipboard
-	let success = false;
-
-	try {
-		success = window.document.execCommand("copy");
-	} catch (err) {
-		console.log("error", err);
-	}
-
-	// Cleanup
-	selection.removeAllRanges();
-	window.document.body.removeChild(span);
-
-	return success;
-	// ? Promise.resolve()
-	// : Promise.reject(new DOMException('The request is not allowed', 'NotAllowedError'))
 };

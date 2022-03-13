@@ -92,7 +92,7 @@ album.getByID = function (photoID) {
  */
 album.getSubByID = function (albumID) {
 	if (albumID == null || !album.json || !album.json.albums) {
-		lychee.error("Error: Album json not found!");
+		loadingBar.show("error", "Error: Album json not found!");
 		return null;
 	}
 

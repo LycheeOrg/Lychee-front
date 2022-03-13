@@ -1208,8 +1208,6 @@ photo.showDirectLinks = function (photoID) {
 	$(".basicModal input:focus").blur();
 
 	$(".directLinks .basicModal__button").on(lychee.getEventName(), function () {
-		if (lychee.clipboardCopy($(this).prev().val())) {
-			loadingBar.show("success", lychee.locale["URL_COPIED_TO_CLIPBOARD"]);
-		}
+		navigator.clipboard.writeText($(this).prev().val()).then(() => loadingBar.show("success", lychee.locale["URL_COPIED_TO_CLIPBOARD"]));
 	});
 };

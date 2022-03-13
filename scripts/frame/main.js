@@ -19,9 +19,7 @@
 
 // Sub-implementation of lychee -------------------------------------------------------------- //
 
-const lychee = {
-	api_V2: true,
-};
+const lychee = {};
 
 lychee.content = $(".content");
 
@@ -231,11 +229,9 @@ const loadingBar = {
 	/**
 	 * @param {?string} status the status, either `null`, `"error"` or `"success"`
 	 * @param {?string} errorText the error text to show
-	 * @returns {boolean}
+	 * @returns {void}
 	 */
-	show(status, errorText) {
-		return false;
-	},
+	show(status, errorText) {},
 
 	/**
 	 * @param {?boolean} force

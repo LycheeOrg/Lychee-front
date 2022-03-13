@@ -584,10 +584,26 @@ contextMenu.getSubIDs = function (albums, albumID) {
  *
  * TODO: Actually the callbacks should enclose all additional parameters (e.g., `IDs`) they need. Refactor the callbacks.
  *
+ * The name of the root node in the context menu may be provided by the caller
+ * depending on the use-case.
+ * Keep in mind, that the root album is not visible to the user during normal
+ * browsing.
+ * Photos on the root level are stashed away into an virtual album called
+ * "Unsorted".
+ * Albums on the root level are shown as siblings, but the root node itself
+ * is invisible.
+ * So the user actually sees a forest.
+ * Hence, the root node should be named differently to meet the user's
+ * expectations.
+ * When the user moves/copies/merges photos, then the root node should be
+ * called "Unsorted".
+ * When the user moves/copies/merges albums, then the root node should be
+ * called "Root".
+ *
  * @param {string[]} IDs - IDs of source objects (either album or photo IDs)
  * @param {jQuery.Event} e - Some (?) event
  * @param {TargetAlbumSelectedCB} callback - to be called after the user has selected a target ID
- * @param {string} [kind=UNSORTED] - Name of root album; either "UNSORTED" or "ROOT"; TODO: Why do we need two different names for the same thing?
+ * @param {string} [kind=UNSORTED] - Name of root album; either "UNSORTED" or "ROOT"
  * @param {boolean} [display_root=true] - Whether the root (aka unsorted) album shall be shown
  */
 contextMenu.move = function (IDs, e, callback, kind = "UNSORTED", display_root = true) {
@@ -696,9 +712,7 @@ contextMenu.shareAlbum = function (albumID, e) {
 					// Copy the url with prefilled password param
 					url += "?password=";
 				}
-				if (lychee.clipboardCopy(url)) {
-					loadingBar.show("success", lychee.locale["URL_COPIED_TO_CLIPBOARD"]);
-				}
+				navigator.clipboard.writeText(url).then(() => loadingBar.show("success", lychee.locale["URL_COPIED_TO_CLIPBOARD"]));
 			},
 		},
 	];
