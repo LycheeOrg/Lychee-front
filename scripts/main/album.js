@@ -1040,7 +1040,7 @@ album.shareUsers = function (albumID) {
  * @param {string} albumID
  * @returns {void}
  */
-album.setNSFW = function (albumID) {
+album.toggleNSFW = function (albumID) {
 	album.json.is_nsfw = !album.json.is_nsfw;
 
 	view.album.nsfw();
@@ -1049,6 +1049,7 @@ album.setNSFW = function (albumID) {
 		"Album::setNSFW",
 		{
 			albumID: albumID,
+			is_nsfw: album.json.is_nsfw,
 		},
 		() => albums.refresh()
 	);

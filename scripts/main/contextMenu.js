@@ -75,7 +75,7 @@ contextMenu.add = function (e) {
 					items.unshift({
 						title: build.iconic("warning") + lychee.locale["ALBUM_MARK_NSFW"],
 						visible: true,
-						fn: () => album.setNSFW(albumID),
+						fn: () => album.toggleNSFW(albumID),
 					});
 				}
 			}
