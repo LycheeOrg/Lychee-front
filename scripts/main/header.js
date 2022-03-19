@@ -94,7 +94,7 @@ header.bind = function () {
 		contextMenu.move([album.getID()], e, album.setAlbum, "ROOT", album.getParentID() != null);
 	});
 	header.dom("#button_nsfw_album").on(eventName, function () {
-		album.toggleNSFW(album.getID());
+		album.toggleNSFW();
 	});
 	header.dom("#button_move").on(eventName, function (e) {
 		contextMenu.move([photo.getID()], e, photo.setAlbum);
@@ -112,7 +112,7 @@ header.bind = function () {
 		album.getArchive([album.getID()]);
 	});
 	header.dom("#button_star").on(eventName, function () {
-		photo.toggleStar([photo.getID()]);
+		photo.toggleStar();
 	});
 	header.dom("#button_rotate_ccwise").on(eventName, function () {
 		photoeditor.rotate(photo.getID(), -1);

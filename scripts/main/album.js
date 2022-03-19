@@ -1037,10 +1037,11 @@ album.shareUsers = function (albumID) {
 };
 
 /**
- * @param {string} albumID
+ * Toggles the NSFW attribute of the currently loaded album.
+ *
  * @returns {void}
  */
-album.toggleNSFW = function (albumID) {
+album.toggleNSFW = function () {
 	album.json.is_nsfw = !album.json.is_nsfw;
 
 	view.album.nsfw();
@@ -1048,7 +1049,7 @@ album.toggleNSFW = function (albumID) {
 	api.post(
 		"Album::setNSFW",
 		{
-			albumID: albumID,
+			albumID: album.json.id,
 			is_nsfw: album.json.is_nsfw,
 		},
 		() => albums.refresh()

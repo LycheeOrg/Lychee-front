@@ -75,7 +75,7 @@ contextMenu.add = function (e) {
 					items.unshift({
 						title: build.iconic("warning") + lychee.locale["ALBUM_MARK_NSFW"],
 						visible: true,
-						fn: () => album.toggleNSFW(albumID),
+						fn: () => album.toggleNSFW(),
 					});
 				}
 			}
@@ -314,8 +314,13 @@ contextMenu.albumTitle = function (albumID, e) {
 contextMenu.photo = function (photoID, e) {
 	const coverActive = photoID === album.json.cover_id;
 
+	const isPhotoStarred = album.getByID(photoID).is_starred;
+
 	const items = [
-		{ title: build.iconic("star") + lychee.locale["STAR"], fn: () => photo.toggleStar([photoID]) },
+		{
+			title: build.iconic("star") + (isPhotoStarred ? lychee.locale["UNSTAR"] : lychee.locale["STAR"]),
+			fn: () => photo.setStar([photoID], !isPhotoStarred),
+		},
 		{ title: build.iconic("tag") + lychee.locale["TAGS"], fn: () => photo.editTags([photoID]) },
 		// for future work, use a list of all the ancestors.
 		{
@@ -399,7 +404,8 @@ contextMenu.photoMulti = function (photoIDs, e) {
 	multiselect.stopResize();
 
 	let items = [
-		{ title: build.iconic("star") + lychee.locale["STAR_ALL"], fn: () => photo.toggleStar(photoIDs) },
+		{ title: build.iconic("star") + lychee.locale["STAR_ALL"], fn: () => photo.setStar(photoIDs, true) },
+		{ title: build.iconic("star") + lychee.locale["UNSTAR_ALL"], fn: () => photo.setStar(photoIDs, false) },
 		{ title: build.iconic("tag") + lychee.locale["TAGS_ALL"], fn: () => photo.editTags(photoIDs) },
 		{},
 		{ title: build.iconic("pencil") + lychee.locale["RENAME_ALL"], fn: () => photo.setTitle(photoIDs) },

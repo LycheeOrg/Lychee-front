@@ -116,7 +116,9 @@ lychee.locale = {
 
 	STAR_PHOTO: "Star Photo",
 	STAR: "Star",
-	STAR_ALL: "Star All",
+	UNSTAR: "Unstar",
+	STAR_ALL: "Star Selected",
+	UNSTAR_ALL: "Unstar Selected",
 	TAGS: "Tags",
 	TAGS_ALL: "Tags All",
 	UNSTAR_PHOTO: "Unstar Photo",

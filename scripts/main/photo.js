@@ -518,25 +518,40 @@ photo.setAlbum = function (photoIDs, albumID) {
 };
 
 /**
- * Toggles the star-property of the given photos.
+ * Toggles the star-property of the currently visible photo.
  *
- * @param {string[]} photoIDs
  * @returns {void}
  */
-photo.toggleStar = function (photoIDs) {
-	if (visible.photo()) {
-		photo.json.is_starred = !photo.json.is_starred;
-		view.photo.star();
-	}
+photo.toggleStar = function () {
+	photo.json.is_starred = !photo.json.is_starred;
+	view.photo.star();
+	albums.refresh();
 
+	api.post("Photo::setStar", {
+		photoIDs: [photo.json.id],
+		is_starred: photo.json.is_starred,
+	});
+};
+
+/**
+ * Sets the star-property of the given photos.
+ *
+ * @param {string[]} photoIDs
+ * @param {boolean} isStarred
+ * @returns {void}
+ */
+photo.setStar = function (photoIDs, isStarred) {
 	photoIDs.forEach(function (id) {
-		album.getByID(id).is_starred = !album.getByID(id).is_starred;
+		album.getByID(id).is_starred = isStarred;
 		view.album.content.star(id);
 	});
 
 	albums.refresh();
 
-	api.post("Photo::toggleStar", { photoIDs: photoIDs });
+	api.post("Photo::setStar", {
+		photoIDs: photoIDs,
+		is_starred: isStarred,
+	});
 };
 
 /**
