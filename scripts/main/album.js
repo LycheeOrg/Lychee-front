@@ -1343,13 +1343,13 @@ album.updatePhoto = function (data) {
 			url: src.url,
 			width: src.width,
 			height: src.height,
+			filesize: src.filesize,
 		};
 	};
 
 	if (album.json && album.json.photos) {
 		const photo = album.json.photos.find((p) => p.id === data.id);
 
-		photo.filesize = data.filesize;
 		// Deep copy size variants
 		photo.size_variants = {
 			thumb: deepCopySizeVariant(data.size_variants.thumb),

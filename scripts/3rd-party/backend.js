@@ -17,7 +17,6 @@
  * @property {string[]}     tags
  * @property {number}       is_public
  * @property {?string}      type
- * @property {number}       filesize
  * @property {?string}      iso
  * @property {?string}      aperture
  * @property {?string}      make
@@ -67,6 +66,7 @@
  * @property {string} url
  * @property {number} width
  * @property {number} height
+ * @property {number} filesize
  */
 
 /**

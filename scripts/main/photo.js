@@ -1038,9 +1038,8 @@ photo.getArchive = function (photoIDs, kind = null) {
 		if (myPhoto.size_variants.original.url) {
 			msg += buildButton(
 				"FULL",
-				`${lychee.locale["PHOTO_FULL"]} (${myPhoto.size_variants.original.width}x${
-					myPhoto.size_variants.original.height
-				}, ${lychee.locale.printFilesizeLocalized(myPhoto.filesize)})`
+				`${lychee.locale["PHOTO_FULL"]} (${myPhoto.size_variants.original.width}x${myPhoto.size_variants.original.height},
+				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.original.filesize)})`
 			);
 		}
 		if (myPhoto.live_photo_url !== null) {
@@ -1049,37 +1048,43 @@ photo.getArchive = function (photoIDs, kind = null) {
 		if (myPhoto.size_variants.medium2x !== null) {
 			msg += buildButton(
 				"MEDIUM2X",
-				`${lychee.locale["PHOTO_MEDIUM_HIDPI"]} (${myPhoto.size_variants.medium2x.width}x${myPhoto.size_variants.medium2x.height})`
+				`${lychee.locale["PHOTO_MEDIUM_HIDPI"]} (${myPhoto.size_variants.medium2x.width}x${myPhoto.size_variants.medium2x.height},
+				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.medium2x.filesize)})`
 			);
 		}
 		if (myPhoto.size_variants.medium !== null) {
 			msg += buildButton(
 				"MEDIUM",
-				`${lychee.locale["PHOTO_MEDIUM"]} (${myPhoto.size_variants.medium.width}x${myPhoto.size_variants.medium.height})`
+				`${lychee.locale["PHOTO_MEDIUM"]} (${myPhoto.size_variants.medium.width}x${myPhoto.size_variants.medium.height},
+				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.medium.filesize)})`
 			);
 		}
 		if (myPhoto.size_variants.small2x !== null) {
 			msg += buildButton(
 				"SMALL2X",
-				`${lychee.locale["PHOTO_SMALL_HIDPI"]} (${myPhoto.size_variants.small2x.width}x${myPhoto.size_variants.small2x.height})`
+				`${lychee.locale["PHOTO_SMALL_HIDPI"]} (${myPhoto.size_variants.small2x.width}x${myPhoto.size_variants.small2x.height},
+				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.small2x.filesize)})`
 			);
 		}
 		if (myPhoto.size_variants.small !== null) {
 			msg += buildButton(
 				"SMALL",
-				`${lychee.locale["PHOTO_SMALL"]} (${myPhoto.size_variants.small.width}x${myPhoto.size_variants.small.height})`
+				`${lychee.locale["PHOTO_SMALL"]} (${myPhoto.size_variants.small.width}x${myPhoto.size_variants.small.height},
+				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.small.filesize)})`
 			);
 		}
 		if (myPhoto.size_variants.thumb2x !== null) {
 			msg += buildButton(
 				"THUMB2X",
-				`${lychee.locale["PHOTO_THUMB_HIDPI"]} (${myPhoto.size_variants.thumb2x.width}x${myPhoto.size_variants.thumb2x.height})`
+				`${lychee.locale["PHOTO_THUMB_HIDPI"]} (${myPhoto.size_variants.thumb2x.width}x${myPhoto.size_variants.thumb2x.height},
+				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.thumb2x.filesize)})`
 			);
 		}
 		if (myPhoto.size_variants.thumb !== null) {
 			msg += buildButton(
 				"THUMB",
-				`${lychee.locale["PHOTO_THUMB"]} (${myPhoto.size_variants.thumb.width}x${myPhoto.size_variants.thumb.height})`
+				`${lychee.locale["PHOTO_THUMB"]} (${myPhoto.size_variants.thumb.width}x${myPhoto.size_variants.thumb.height},
+				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.thumb.filesize)})`
 			);
 		}
 
