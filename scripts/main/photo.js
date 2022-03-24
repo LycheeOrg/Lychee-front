@@ -991,7 +991,7 @@ photo.getArchive = function (photoIDs, kind = null) {
 			msg += buildButton(
 				"THUMB",
 				`${lychee.locale["PHOTO_THUMB"]} (${myPhoto.size_variants.thumb.width}x${myPhoto.size_variants.thumb.height},
-				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.thumb.filesize})`
+				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.thumb.filesize)})`
 			);
 		}
 
