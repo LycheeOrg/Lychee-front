@@ -1280,13 +1280,13 @@ album.updatePhoto = function (data) {
 		result.url = src.url;
 		result.width = src.width;
 		result.height = src.height;
+		result.filesize = src.filesize;
 		return result;
 	};
 
 	if (album.json) {
 		$.each(album.json.photos, function () {
 			if (this.id === data.id) {
-				this.filesize = data.filesize;
 				// Deep copy size variants
 				this.size_variants = {
 					thumb: null,
