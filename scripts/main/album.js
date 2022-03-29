@@ -171,7 +171,7 @@ album.load = function (albumID, albumLoadedCB = null) {
 		album.json = data;
 
 		if (albumLoadedCB === null) {
-			lychee.animate($(".content"), "contentZoomOut");
+			lychee.animate(lychee.content, "contentZoomOut");
 		}
 		let waitTime = 300;
 
@@ -275,7 +275,7 @@ album.parse = function () {
 /**
  * Creates a new album.
  *
- * The method optionally calls the provided callback after the new albums
+ * The method optionally calls the provided callback after the new album
  * has been created and passes the ID of the newly created album plus the
  * provided `IDs`.
  *
@@ -1007,7 +1007,7 @@ album.shareUsers = function (albumID) {
 				data.shared
 					.filter((val) => val.album_id === albumID)
 					.forEach((sharing) => {
-						// Check all the shares who already exists, and store their sharing id on the element
+						// Check all the shares that already exist, and store their sharing id on the element
 						const elem = $(`.basicModal .choice input[name="${sharing.user_id}"]`);
 						elem.prop("checked", true);
 						elem.data("sharingId", sharing.id);
