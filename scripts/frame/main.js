@@ -9,12 +9,10 @@
  *
  * This approach is very tedious and error-prone, because we actually
  * duplicate code.
- * Also, it is not documented nor obvious why these "subset implementations"
- * are necessary.
- * Ideally, the full code base would be used all the time independent of
- * the users entry point.
- *
- * TODO: Find out why we actually need this approach. Re-implementing different variants of the same objects is very error-prone.
+ * This variant of a sub-implementation only exists, because it saves some
+ * AJAX calls.
+ * For example certain meta-data about the viewed photo (e.g. tags) is not
+ * fetch via AJAX, but inlined by the backend into the eventual HTML page.
  */
 
 // Sub-implementation of lychee -------------------------------------------------------------- //

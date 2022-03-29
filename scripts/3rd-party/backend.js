@@ -275,7 +275,7 @@ const SmartAlbumID = Object.freeze({
 /**
  * @typedef InitializationData
  *
- * @property {number} status - `0`: no config, `1`: unauthenticated, `2`: authenticated
+ * @property {number} status - `1`: unauthenticated, `2`: authenticated
  * @property {boolean} admin
  * @property {boolean} may_upload
  * @property {boolean} is_locked
