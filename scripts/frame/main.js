@@ -237,9 +237,6 @@ const loadingBar = {
 	hide(force) {},
 };
 
-// TODO: It seems that this object is used nowhere?! Delete it?
-const imageview = $("#imageview");
-
 $(function () {
 	// Set API error handler
 	api.onError = frame.handleAPIError;
