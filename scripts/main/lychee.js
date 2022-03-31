@@ -328,7 +328,7 @@ lychee.parsePublicInitializationData = function (data) {
 	lychee.sorting_albums = data.config.sorting_albums;
 	lychee.album_subtitle_type = data.config.album_subtitle_type || "oldstyle";
 	lychee.checkForUpdates = data.config.check_for_updates;
-	lychee.layout = Number.parseInt(data.config.layout, 10) || 0;
+	lychee.layout = Number.parseInt(data.config.layout, 10) || 1;
 	lychee.landing_page_enable = data.config.landing_page_enable === "1";
 	lychee.public_search = data.config.public_search === "1";
 	lychee.image_overlay_type = data.config.image_overlay_type || "exif";
@@ -882,32 +882,6 @@ lychee.animate = function (obj, animation) {
 			}
 		}
 	}
-};
-
-/**
- * DON'T USE THIS METHOD.
- *
- * TODO: Find all invocations of this method and nuke them.
- *
- * This method is really bad. It assumes that the server follows a particular
- * naming pattern for files and directories.
- *
- * @param {string} [path=""]
- * @returns {{path: string, isPhoto: boolean}}
- */
-lychee.retinize = function (path = "") {
-	const extension = path.split(".").pop();
-	const isPhoto = extension !== "svg";
-
-	if (isPhoto === true) {
-		path = path.replace(/\.[^/.]+$/, "");
-		path = path + "@2x" + "." + extension;
-	}
-
-	return {
-		path,
-		isPhoto,
-	};
 };
 
 /**
