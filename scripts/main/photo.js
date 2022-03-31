@@ -6,7 +6,7 @@ const photo = {
 	/** @type {?Photo} */
 	json: null,
 	cache: null,
-	/** @type {?boolean} indicates whether the browser supports prefetching of images; `null` if support hasn't determined yet */
+	/** @type {?boolean} indicates whether the browser supports prefetching of images; `null` if support hasn't been determined yet */
 	supportsPrefetch: null,
 	/** @type {?LivePhotosKit.Player} */
 	livePhotosObject: null,
@@ -137,6 +137,7 @@ photo.preloadNextPrev = function (photoID) {
 	if (!photo) return;
 
 	const imgs = $("img#image");
+	// TODO: consider replacing the test for "@2x." by a simple comparison to photo.size_variants.medium2x.url.
 	const isUsing2xCurrently = imgs.length > 0 && imgs[0].currentSrc !== null && imgs[0].currentSrc.includes("@2x.");
 
 	$("head [data-prefetch]").remove();
@@ -248,7 +249,6 @@ photo.previous = function (animate) {
 	}
 
 	setTimeout(() => {
-		if (photo.getID() === null) return false;
 		photo.livePhotosObject = null;
 		lychee.goto(album.getID() + "/" + curPhoto.previous_photo_id, false);
 	}, delay);
@@ -274,7 +274,6 @@ photo.next = function (animate) {
 	}
 
 	setTimeout(() => {
-		if (photo.getID() === null) return false;
 		photo.livePhotosObject = null;
 		lychee.goto(album.getID() + "/" + curPhoto.next_photo_id, false);
 	}, delay);
@@ -1019,7 +1018,7 @@ photo.getArchive = function (photoIDs, kind = null) {
 		}
 
 		/**
-		 * @param {string} id - the ID if the button, same semantics as "kind"
+		 * @param {string} id - the ID of the button, same semantics as "kind"
 		 * @param {string} label - the caption on the button
 		 * @returns {string} - HTML
 		 */

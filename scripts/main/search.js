@@ -25,7 +25,7 @@ search.find = function (term) {
 		let albumsData = "";
 		let photosData = "";
 
-		// Build HTML for photo
+		// Build HTML for album
 		search.json.albums.forEach(function (album) {
 			albums.parse(album);
 			albumsData += build.album(album);

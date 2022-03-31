@@ -11,7 +11,7 @@ const password = {};
 
 /**
  * Shows the "album unlock"-dialog, tries to unlock the album and calls
- * the provided callback in case success.
+ * the provided callback in case of success.
  *
  * @param {string} albumID - the ID of the album which shall be unlocked
  * @param {UnlockSuccessCB} callback - called in case of success

@@ -470,7 +470,7 @@ contextMenu.photoMore = function (photoID, e) {
 	const showFull = !!(photo.json.size_variants.original.url && photo.json.size_variants.original.url !== "");
 
 	const items = [
-		{ title: build.iconic("fullscreen-enter") + lychee.locale["FULL_PHOTO"], visible: !!showFull, fn: () => window.open(photo.getDirectLink()) },
+		{ title: build.iconic("fullscreen-enter") + lychee.locale["FULL_PHOTO"], visible: showFull, fn: () => window.open(photo.getDirectLink()) },
 		{ title: build.iconic("cloud-download") + lychee.locale["DOWNLOAD"], visible: showDownload, fn: () => photo.getArchive([photoID]) },
 	];
 	if (album.isUploadable()) {
@@ -579,7 +579,7 @@ contextMenu.getSubIDs = function (albums, albumID) {
  * **ATTENTION:** The name `move` of this method is very badly chosen.
  * The method does not move anything, but only shows the menu and reports
  * the selected album.
- * In particular, the method is used by any operation which needs an target
+ * In particular, the method is used by any operation which needs a target
  * album (i.e. merge, copy-to, etc.)
  *
  * TODO: Find a better name for this function.
@@ -594,7 +594,7 @@ contextMenu.getSubIDs = function (albums, albumID) {
  * depending on the use-case.
  * Keep in mind, that the root album is not visible to the user during normal
  * browsing.
- * Photos on the root level are stashed away into an virtual album called
+ * Photos on the root level are stashed away into a virtual album called
  * "Unsorted".
  * Albums on the root level are shown as siblings, but the root node itself
  * is invisible.

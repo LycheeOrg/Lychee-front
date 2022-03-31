@@ -136,7 +136,7 @@ mapview.open = function (albumID = null) {
 
 	// initialize container only once
 	if (!mapview.isInitialized()) {
-		// Leaflet searches for icon in same directory as js file -> paths needs
+		// Leaflet searches for icon in same directory as js file -> paths need
 		// to be overwritten
 		delete L.Icon.Default.prototype._getIconUrl;
 		L.Icon.Default.mergeOptions({
@@ -282,7 +282,7 @@ mapview.open = function (albumID = null) {
 	};
 
 	/**
-	 * Calls backend, retrieves information about photos and display them.
+	 * Calls backend, retrieves information about photos and displays them.
 	 *
 	 * This function is called recursively to retrieve data for sub-albums.
 	 * Possible enhancement could be to only have a single ajax call.

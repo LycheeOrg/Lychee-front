@@ -13,7 +13,7 @@ const albums = {
 albums.load = function () {
 	let startTime = new Date().getTime();
 
-	lychee.animate($(".content"), "contentZoomOut");
+	lychee.animate(lychee.content, "contentZoomOut");
 
 	/**
 	 * @param {Albums} data
@@ -211,7 +211,7 @@ albums.deleteByID = function (albumID) {
 	if (idx !== -1) return;
 
 	idx = albums.json.shared_albums.findIndex((a) => a.id === albumID);
-	albums.json.albums.splice(idx, 1);
+	albums.json.shared_albums.splice(idx, 1);
 
 	if (idx !== -1) return;
 

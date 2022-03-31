@@ -656,7 +656,7 @@ lychee.load = function (autoplay = true) {
 				}
 				photo.load(photoID, albumID, autoplay);
 
-				// Make imageview focussable
+				// Make imageview focusable
 				tabindex.makeFocusable(lychee.imageview);
 
 				// Make thumbnails unfocusable and store which element had focus
