@@ -112,7 +112,7 @@ tabindex.makeFocusable = function (elem, restoreFocusElement = false) {
 		 */
 		function (i, e) {
 			$(e).attr("tabindex", $(e).data("tabindex"));
-			// restore focus elemente if wanted
+			// restore focus element if wanted
 			if (restoreFocusElement) {
 				if ($(e).data("tabindex-focus") && lychee.active_focus_on_page_load) {
 					$(e).focus();

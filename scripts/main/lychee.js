@@ -879,6 +879,7 @@ lychee.animate = function (obj, animation) {
 		for (let x = 0; x < animations[i].length; x++) {
 			if (animations[i][x] === animation) {
 				obj.removeClass(animations[i][0] + " " + animations[i][1]).addClass(animation);
+				return;
 			}
 		}
 	}

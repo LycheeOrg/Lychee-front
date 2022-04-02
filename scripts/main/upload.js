@@ -211,7 +211,7 @@ upload.start = {
 			const onLoaded = function () {
 				/** @type {?LycheeException} */
 				const lycheeException = this.status >= 400 ? this.response : null;
-				let errorText;
+				let errorText = "";
 				let statusText;
 				let statusClass;
 
@@ -250,9 +250,11 @@ upload.start = {
 					api.onError(this, { albumID: albumID }, lycheeException);
 				}
 
-				$(".basicModal .rows .row:nth-child(" + (fileIdx + 1) + ") p.notice")
-					.html(errorText)
-					.show();
+				if (errorText !== "") {
+					$(".basicModal .rows .row:nth-child(" + (fileIdx + 1) + ") p.notice")
+						.html(errorText)
+						.show();
+				}
 			};
 
 			/**

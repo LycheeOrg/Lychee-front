@@ -553,7 +553,7 @@ sidebar.render = function (structure) {
 			const _has_latitude = section.rows.findIndex((row) => row.kind === "latitude" && row.value) !== -1;
 			const _has_longitude = section.rows.findIndex((row) => row.kind === "longitude" && row.value) !== -1;
 			const idxLocation = section.rows.findIndex((row) => row.kind === "location");
-			// Do not show location is not enabled
+			// Do not show location if not enabled
 			if (idxLocation !== -1 && ((lychee.publicMode === true && !lychee.location_show_public) || !lychee.location_show)) {
 				section.rows.splice(idxLocation, 1);
 			}
