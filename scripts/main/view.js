@@ -40,7 +40,7 @@ view.albums = {
 			let sharedData = "";
 
 			// Smart Albums
-			if (lychee.publicMode === false) {
+			if (lychee.publicMode === false && (!Array.isArray(albums.json.smart_albums) || albums.json.tag_albums.length > 0)) {
 				smartData = build.divider(lychee.locale["SMART_ALBUMS"]);
 			}
 			if (albums.json.smart_albums.unsorted) {
@@ -67,7 +67,7 @@ view.albums = {
 			}, "");
 
 			// Albums
-			if (lychee.publicMode === false) albumsData = build.divider(lychee.locale["ALBUMS"]);
+			if (lychee.publicMode === false && albums.json.albums.length > 0) albumsData = build.divider(lychee.locale["ALBUMS"]);
 			albumsData += albums.json.albums.reduce(function (html, album) {
 				albums.parse(album);
 				return html + build.album(album);
@@ -78,7 +78,7 @@ view.albums = {
 			sharedData += albums.json.shared_albums.reduce(function (html, album) {
 				albums.parse(album);
 				if (current_owner !== album.owner_name && lychee.publicMode === false) {
-					sharedData += build.divider(album.owner_name);
+					html += build.divider(album.owner_name);
 					current_owner = album.owner_name;
 				}
 				return html + build.album(album, !lychee.admin);
