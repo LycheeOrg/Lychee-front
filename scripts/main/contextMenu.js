@@ -403,9 +403,24 @@ contextMenu.photoMulti = function (photoIDs, e) {
 
 	multiselect.stopResize();
 
+	let arePhotosStarred = false;
+	let arePhotosNotStarred = false;
+	photoIDs.forEach(function (id) {
+		if (album.getByID(id).is_starred) {
+			arePhotosStarred = true;
+		} else {
+			arePhotosNotStarred = true;
+		}
+	});
+
 	let items = [
-		{ title: build.iconic("star") + lychee.locale["STAR_ALL"], fn: () => photo.setStar(photoIDs, true) },
-		{ title: build.iconic("star") + lychee.locale["UNSTAR_ALL"], fn: () => photo.setStar(photoIDs, false) },
+		// Only show the star/unstar menu item when the selected photos are
+		// consistently either all starred or all not starred.
+		{
+			title: build.iconic("star") + (arePhotosNotStarred ? lychee.locale["STAR_ALL"] : lychee.locale["UNSTAR_ALL"]),
+			visible: !(arePhotosStarred && arePhotosNotStarred),
+			fn: () => photo.setStar(photoIDs, arePhotosNotStarred),
+		},
 		{ title: build.iconic("tag") + lychee.locale["TAGS_ALL"], fn: () => photo.editTags(photoIDs) },
 		{},
 		{ title: build.iconic("pencil") + lychee.locale["RENAME_ALL"], fn: () => photo.setTitle(photoIDs) },
@@ -466,7 +481,7 @@ contextMenu.photoMore = function (photoID, e) {
 	// b) the photo is explicitly marked as downloadable (v4-only)
 	// c) or, the album is explicitly marked as downloadable
 
-	const showDownload = album.isUploadable() || photo.json.is_downloadable || (album.json && album.json.is_downloadable);
+	const showDownload = album.isUploadable() || photo.json.is_downloadable;
 	const showFull = !!(photo.json.size_variants.original.url && photo.json.size_variants.original.url !== "");
 
 	const items = [
