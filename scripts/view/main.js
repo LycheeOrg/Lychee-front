@@ -282,7 +282,7 @@ $(document).ready(function () {
 });
 
 /**
- * TODO: Why is this a global function?
+ * TODO: This method is global for no particular reason. In case we ever clean up the view mode, this should be fixed, too.
  * @param {string} photoID
  */
 const loadPhotoInfo = function (photoID) {
