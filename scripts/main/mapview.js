@@ -354,15 +354,5 @@ mapview.goto = function (elem) {
 
 	if (albumID === "null") albumID = "unsorted";
 
-	// The condition below looks suspicious and like a violation of the
-	// principle of separation of concerns.
-	// In theory, if the currently loaded album does not match the desired
-	// album, then `lychee.goto` and `lychee.load` should take care of that.
-	// But I am afraid of deleting these lines of code and breaking something.
-	// TODO: Clean this up.
-	if (album.json && album.json.id !== albumID) {
-		album.refresh();
-	}
-
 	lychee.goto(albumID + "/" + photoID);
 };
