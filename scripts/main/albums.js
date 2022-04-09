@@ -186,16 +186,10 @@ albums.getByID = function (albumID) {
 };
 
 /**
- * Deletes an album by ID.
+ * Deletes a top-level album by ID from the cached JSON for albums.
  *
- * This function is only ever invoked for top-level albums, so it doesn't
- * need to walk the albums tree.
- *
- * TODO: Check above statement.
- *
- * The method is called by {@link album.delete} after the album has
+ * The method is called by {@link album.delete} after a top-level album has
  * successfully been deleted at the server-side.
- * How does this match the statement above?
  *
  * @param {?string} albumID
  * @returns {void}
