@@ -96,7 +96,7 @@ view.albums = {
 		 */
 		title: function (albumID) {
 			const album = albums.getByID(albumID);
-			const title =  album.title ? album.title : lychee.locale["UNTITLED"];
+			const title = album.title ? album.title : lychee.locale["UNTITLED"];
 
 			$('.album[data-id="' + albumID + '"] .overlay h1')
 				.text(title)
@@ -242,7 +242,7 @@ view.album = {
 		 */
 		title: function (photoID) {
 			const photo = album.getByID(photoID);
-			const title =  photo.title ? photo.title : lychee.locale["UNTITLED"];
+			const title = photo.title ? photo.title : lychee.locale["UNTITLED"];
 
 			$('.photo[data-id="' + photoID + '"] .overlay h1')
 				.text(title)
@@ -255,7 +255,7 @@ view.album = {
 		 */
 		titleSub: function (albumID) {
 			const album = album.getSubByID(albumID);
-			const title =  album.title ? album.title : lychee.locale["UNTITLED"];
+			const title = album.title ? album.title : lychee.locale["UNTITLED"];
 
 			$('.album[data-id="' + albumID + '"] .overlay h1')
 				.text(title)
@@ -2035,18 +2035,14 @@ view.diagnostics = {
 		/** @returns {void} */
 		init: function () {
 			view.diagnostics.clearContent(0);
-			api.post(
-				"Diagnostics::get",
-				{},
-				view.diagnostics.content.parseResponse
-			);
+			api.post("Diagnostics::get", {}, view.diagnostics.content.parseResponse);
 		},
 
 		/**
 		 * @param {DiagnosticInfo} data
 		 * @returns {void}
 		 */
-		parseResponse: function(data) {
+		parseResponse: function (data) {
 			view.diagnostics.clearContent(data.update);
 			let html = "";
 
