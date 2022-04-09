@@ -266,13 +266,6 @@ album.load = function (albumID, albumLoadedCB = null) {
 };
 
 /**
- * @returns {void}
- */
-album.parse = function () {
-	if (!album.json.title) album.json.title = lychee.locale["UNTITLED"];
-};
-
-/**
  * Creates a new album.
  *
  * The method optionally calls the provided callback after the new album
@@ -334,7 +327,7 @@ album.add = function (IDs = null, callback = null) {
 	};
 
 	basicModal.show({
-		body: lychee.html`<p>${lychee.locale["TITLE_NEW_ALBUM"]} <input class='text' name='title' type='text' maxlength='100' placeholder='Title' value='Untitled'></p>`,
+		body: lychee.html`<p>${lychee.locale["TITLE_NEW_ALBUM"]} <input class='text' name='title' type='text' maxlength='100' placeholder='Title' value='${lychee.locale["UNTITLED"]}'></p>`,
 		buttons: {
 			action: {
 				title: lychee.locale["CREATE_ALBUM"],
@@ -381,7 +374,7 @@ album.addByTags = function () {
 
 	basicModal.show({
 		body: lychee.html`<p>${lychee.locale["TITLE_NEW_ALBUM"]}
-							<input class='text' name='title' type='text' maxlength='100' placeholder='Title' value='Untitled'>
+							<input class='text' name='title' type='text' maxlength='100' placeholder='Title' value='${lychee.locale["UNTITLED"]}'>
 							<input class='text' name='tags' type='text' minlength='1' placeholder='Tags' value=''>
 						</p>`,
 		buttons: {
@@ -1112,7 +1105,7 @@ album.buildMessage = function (albumIDs, albumID, op1, op2, ops) {
 	}
 
 	// Fallback for first album without a title
-	if (title === "") title = lychee.locale["UNTITLED"];
+	if (!title) title = lychee.locale["UNTITLED"];
 
 	if (albumIDs.length === 1) {
 		// Get title of second album
@@ -1122,7 +1115,7 @@ album.buildMessage = function (albumIDs, albumID, op1, op2, ops) {
 		}
 
 		// Fallback for second album without a title
-		if (sTitle === "") sTitle = lychee.locale["UNTITLED"];
+		if (!sTitle) sTitle = lychee.locale["UNTITLED"];
 
 		msg = lychee.html`<p>${lychee.locale[op1]} '$${sTitle}' ${lychee.locale[op2]} '$${title}'?</p>`;
 	} else {
@@ -1193,7 +1186,7 @@ album.delete = function (albumIDs) {
 		}
 
 		// Fallback for album without a title
-		if (albumTitle === "") albumTitle = lychee.locale["UNTITLED"];
+		if (!albumTitle) albumTitle = lychee.locale["UNTITLED"];
 
 		msg = lychee.html`<p>${lychee.locale["DELETE_ALBUM_CONFIRMATION_1"]} '$${albumTitle}' ${lychee.locale["DELETE_ALBUM_CONFIRMATION_2"]}</p>`;
 	} else {

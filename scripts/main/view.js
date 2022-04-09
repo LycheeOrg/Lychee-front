@@ -16,16 +16,7 @@ view.albums = {
 	/** @returns {void} */
 	title: function () {
 		if (lychee.landing_page_enable) {
-			// TODO: Fix this odd condition. Also see `lychee.setTitle` for the associated TODO.
-			// I don't understand the intention of this code. IMHO, the code
-			//  should always be the same no matter if the prefix of the
-			// title equals the default `"Lychee v4"` or if it is customized
-			// by the user
-			if (lychee.title !== "Lychee v4") {
-				lychee.setTitle(lychee.title, false);
-			} else {
-				lychee.setTitle(lychee.locale["ALBUMS"], false);
-			}
+			lychee.setTitle("", false);
 		} else {
 			lychee.setTitle(lychee.locale["ALBUMS"], false);
 		}
@@ -104,13 +95,11 @@ view.albums = {
 		 * @returns {void}
 		 */
 		title: function (albumID) {
-			// TODO: This method is actually buggy.
-			// 1. Don't use our home-brewed `escapeHTML` method to escape special character; just use `jQuery.text` below
-			// 2. Using the escaped version for `attr("title", title)` is actually harmful, as this will lead to double escaping
-			const title = lychee.escapeHTML(albums.getByID(albumID).title);
+			const album = albums.getByID(albumID);
+			const title =  album.title ? album.title : lychee.locale["UNTITLED"];
 
 			$('.album[data-id="' + albumID + '"] .overlay h1')
-				.html(title)
+				.text(title)
 				.attr("title", title);
 		},
 
@@ -140,8 +129,6 @@ view.album = {
 	/** @returns {void} */
 	init: function () {
 		multiselect.clearSelection();
-
-		album.parse();
 
 		view.album.sidebar();
 		view.album.title();
@@ -254,13 +241,11 @@ view.album = {
 		 * @returns {void}
 		 */
 		title: function (photoID) {
-			// TODO: This method is actually buggy.
-			// 1. Don't use our home-brewed `escapeHTML` method to escape special character; just use `jQuery.text` below
-			// 2. Using the escaped version for `attr("title", title)` is actually harmful, as this will lead to double escaping
-			const title = lychee.escapeHTML(album.getByID(photoID).title);
+			const photo = album.getByID(photoID);
+			const title =  photo.title ? photo.title : lychee.locale["UNTITLED"];
 
 			$('.photo[data-id="' + photoID + '"] .overlay h1')
-				.html(title)
+				.text(title)
 				.attr("title", title);
 		},
 
@@ -269,13 +254,11 @@ view.album = {
 		 * @returns {void}
 		 */
 		titleSub: function (albumID) {
-			// TODO: This method is actually buggy.
-			// 1. Don't use our home-brewed `escapeHTML` method to escape special character; just use `jQuery.text` below
-			// 2. Using the escaped version for `attr("title", title)` is actually harmful, as this will lead to double escaping
-			const title = lychee.escapeHTML(album.getSubByID(albumID).title);
+			const album = album.getSubByID(albumID);
+			const title =  album.title ? album.title : lychee.locale["UNTITLED"];
 
 			$('.album[data-id="' + albumID + '"] .overlay h1')
-				.html(title)
+				.text(title)
 				.attr("title", title);
 		},
 
@@ -769,9 +752,8 @@ view.photo = {
 	 * @returns {void}
 	 */
 	title: function () {
-		if (photo.json.init) sidebar.changeAttr("title", photo.json.title);
-		// TODO: This is the right place to replace an empty photo title by `lychee.locale["UNKNOWN"]`
-		lychee.setTitle(photo.json.title, true);
+		if (photo.json.init) sidebar.changeAttr("title", photo.json.title ? photo.json.title : "");
+		lychee.setTitle(photo.json.title ? photo.json.title : lychee.locale["UNTITLED"], true);
 	},
 
 	/**

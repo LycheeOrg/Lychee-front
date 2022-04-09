@@ -243,7 +243,7 @@ contextMenu.buildList = function (lists, exclude, action, parentID = null, layer
 			}
 		}
 
-		if (item.title === "") item.title = lychee.locale["UNTITLED"];
+		if (!item.title) item.title = lychee.locale["UNTITLED"];
 
 		let prefix = layer > 0 ? "&nbsp;&nbsp;".repeat(layer - 1) + "└ " : "";
 

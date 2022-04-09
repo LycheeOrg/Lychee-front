@@ -202,10 +202,10 @@ header.hide = function () {
 };
 
 /**
- * @param {string} [title="Untitled"]
+ * @param {string} title
  * @returns {void}
  */
-header.setTitle = function (title = "Untitled") {
+header.setTitle = function (title) {
 	let $title = header.dom(".header__title");
 	let html = lychee.html`$${title}${build.iconic("caret-bottom")}`;
 

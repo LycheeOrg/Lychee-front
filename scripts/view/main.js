@@ -298,11 +298,10 @@ const loadPhotoInfo = function (photoID) {
 			photo.json = data;
 
 			// Set title
-			// TODO: Don't modify the original JSON object, replacing an empty title with a human-friendly placeholder should happen on the GUI layer.
-			// TODO: If at all, why don't we use `lychee.locale`?
-			if (!data.title) data.title = "Untitled";
-			document.title = "Lychee - " + data.title;
-			header.dom(".header__title").html(lychee.escapeHTML(data.title));
+			const _title = data.title ? data.title : lychee.locale["UNTITLED"];
+			// TODO: Actually the prefix should not be a hard-coded, but the value of `lychee.title`. However, I am unsure whether we load the configuration options in view mode.
+			document.title = "Lychee – " + _title;
+			header.dom(".header__title").text(_title);
 
 			// Render HTML
 			imageview.html(build.imageview(data, true, false).html);

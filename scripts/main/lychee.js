@@ -781,17 +781,19 @@ lychee.getUpdate = function () {
 };
 
 /**
- * @param {string} title
- * @param {boolean} editable
+ * Sets the title of the browser window and the title shown in the header bar.
+ *
+ * The window title is prefixed by the value of the configuration setting
+ * `lychee.title`.
+ *
+ * If both, the prefix `lychee.title` and the given title, are not empty,
+ * they are seperated by an en-dash.
+ *
+ * @param {string} [title=""]
+ * @param {boolean} [editable=false]
  */
-lychee.setTitle = function (title, editable) {
-	// TODO: Fix this odd condition. It seems to have something to do with `"Lychee v4"` being hard-coded in `view.albums.title`. Optimally, this code would be `document.title = lychee.title + " - " + title`.
-	if (lychee.title === title) {
-		document.title = lychee.title + " - " + lychee.locale["ALBUMS"];
-	} else {
-		document.title = lychee.title + " - " + title;
-	}
-
+lychee.setTitle = function (title = "", editable = false) {
+	document.title = lychee.title + (lychee.title && title ? " – " : "") + title;
 	header.setEditable(editable);
 	header.setTitle(title);
 };
