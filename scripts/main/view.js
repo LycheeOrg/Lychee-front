@@ -2053,34 +2053,34 @@ view.diagnostics = {
 		/** @returns {void} */
 		init: function () {
 			view.diagnostics.clearContent(0);
-			view.diagnostics.content.v_2();
-		},
-
-		/** @returns {void} */
-		v_2: function () {
 			api.post(
 				"Diagnostics::get",
 				{},
-				/** @param {DiagnosticInfo} data */
-				function (data) {
-					view.diagnostics.clearContent(data.update);
-					let html = "";
-
-					html += view.diagnostics.content.block("error", "Diagnostics", data.errors);
-					html += view.diagnostics.content.block("sys", "System Information", data.infos);
-					html += '<a id="Get_Size_Lychee" class="basicModal__button button_left">';
-					html += '<svg class="iconic"><use xlink:href="#reload"></use></svg>';
-					html += lychee.html`${lychee.locale["DIAGNOSTICS_GET_SIZE"]}`;
-					html += "</a>";
-					html += view.diagnostics.content.block("conf", "Config Information", data.configs);
-
-					$(".logs_diagnostics_view").html(html);
-
-					view.diagnostics.bind();
-
-					$("#Get_Size_Lychee").on("click", view.diagnostics.call_get_size);
-				}
+				view.diagnostics.content.parseResponse
 			);
+		},
+
+		/**
+		 * @param {DiagnosticInfo} data
+		 * @returns {void}
+		 */
+		parseResponse: function(data) {
+			view.diagnostics.clearContent(data.update);
+			let html = "";
+
+			html += view.diagnostics.content.block("error", "Diagnostics", data.errors);
+			html += view.diagnostics.content.block("sys", "System Information", data.infos);
+			html += '<a id="Get_Size_Lychee" class="basicModal__button button_left">';
+			html += '<svg class="iconic"><use xlink:href="#reload"></use></svg>';
+			html += lychee.html`${lychee.locale["DIAGNOSTICS_GET_SIZE"]}`;
+			html += "</a>";
+			html += view.diagnostics.content.block("conf", "Config Information", data.configs);
+
+			$(".logs_diagnostics_view").html(html);
+
+			view.diagnostics.bind();
+
+			$("#Get_Size_Lychee").on("click", view.diagnostics.call_get_size);
 		},
 
 		/**
