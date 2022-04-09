@@ -185,10 +185,10 @@
 /**
  * @typedef SmartAlbums
  *
- * @property {SmartAlbum} unsorted
- * @property {SmartAlbum} starred
- * @property {SmartAlbum} public
- * @property {SmartAlbum} recent
+ * @property {?SmartAlbum} unsorted
+ * @property {?SmartAlbum} starred
+ * @property {?SmartAlbum} public
+ * @property {?SmartAlbum} recent
  */
 
 /**

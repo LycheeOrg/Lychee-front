@@ -31,7 +31,14 @@ view.albums = {
 			let sharedData = "";
 
 			// Smart Albums
-			if (lychee.publicMode === false && (!Array.isArray(albums.json.smart_albums) || albums.json.tag_albums.length > 0)) {
+			if (
+				lychee.publicMode === false &&
+				(albums.json.smart_albums.public ||
+					albums.json.smart_albums.recent ||
+					albums.json.smart_albums.starred ||
+					albums.json.smart_albums.unsorted ||
+					albums.json.tag_albums.length > 0)
+			) {
 				smartData = build.divider(lychee.locale["SMART_ALBUMS"]);
 			}
 			if (albums.json.smart_albums.unsorted) {
