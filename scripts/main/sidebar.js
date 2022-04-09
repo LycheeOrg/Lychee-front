@@ -268,7 +268,7 @@ sidebar.createStructure.photo = function (data) {
 	};
 
 	// Only create EXIF section when EXIF data available
-	if (hasExif !== "") {
+	if (hasExif) {
 		structure.exif = {
 			title: lychee.locale["PHOTO_CAMERA"],
 			type: sidebar.types.DEFAULT,
