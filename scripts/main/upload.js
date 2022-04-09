@@ -645,8 +645,7 @@ upload.start = {
 									statusText = lychee.locale["UPLOAD_SKIPPED"];
 									noteText = lychee.locale["UPLOAD_IMPORT_SKIPPED_DUPLICATE"];
 									break;
-								// TODO: Check with old master branch when and where the back-end disintgiushed between "skipped only" and "skipped + resynced". At the moment we only have one exception for that.
-								case "Skipped duplicate (resynced metadata)":
+								case "PhotoResyncedException":
 									statusText = lychee.locale["UPLOAD_UPDATED"];
 									noteText = lychee.locale["UPLOAD_IMPORT_RESYNCED_DUPLICATE"];
 									break;
