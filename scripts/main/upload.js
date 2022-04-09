@@ -101,7 +101,7 @@ upload.start = {
 		 */
 		let latestFileIdx = 0;
 		/**
-		 * Indicator whether a file is currently being uploaded.
+		 * Semaphore whether a file is currently being uploaded.
 		 *
 		 * This is used as a semaphore to serialize the upload transmissions
 		 * between several instances of the method {@link process}.
@@ -109,6 +109,12 @@ upload.start = {
 		 * @type {boolean}
 		 */
 		let isUploadRunning = false;
+		/**
+		 * Semaphore whether a further upload shall be cancelled on the next
+		 * occasion.
+		 *
+		 * @type {boolean}
+		 */
 		let shallCancelUpload = false;
 
 		/**
@@ -147,8 +153,7 @@ upload.start = {
 		 *
 		 * Note that up to `lychee.upload_processing_limit` "instances" of
 		 * this method can be "alive" simultaneously.
-		 * The parameter `fileIdx` is constrained to the range between
-		 * `latestFileIdx - lychee.upload_processing_limit` and `latestFileIdx`.
+		 * The parameter `fileIdx` is limited by `latestFileIdx`.
 		 *
 		 * @param {number} fileIdx the index of the file being processed
 		 */
@@ -165,6 +170,22 @@ upload.start = {
 			 *
 			 * This method updates the upload percentage counter in the dialog.
 			 *
+			 * If the progress equals 100%, i.e. if the upload has been
+			 * completed, this method
+			 *
+			 *  - unsets the semaphore for a running upload,
+			 *  - scrolls the dialog such that the file with index `fileIdx`
+			 *    becomes visible, and
+			 *  - changes the status text to "Upload processing".
+			 *
+			 * After the current upload has reached 100%, this method starts a
+			 * new upload, if
+			 *
+			 *  - there are more files to be uploaded,
+			 *  - no other upload is currently running, and
+			 *  - the number of outstanding responses does not exceed the
+			 *    processing limit of Lychee.
+			 *
 			 * @param {ProgressEvent} e
 			 * @this XMLHttpRequest
 			 */
@@ -177,28 +198,30 @@ upload.start = {
 				// Set progress when progress has changed
 				if (progress > uploadProgress) {
 					uploadProgress = progress;
-					$(nRowStatusSelector(fileIdx + 1)).html(uploadProgress + "%");
-				}
-			};
+					/** @type {?jQuery} */
+					const jqStatusMsg = $(nRowStatusSelector(fileIdx + 1));
+					jqStatusMsg.html(uploadProgress + "%");
 
-			/**
-			 * A function to be called when the upload has completed.
-			 *
-			 * This method
-			 *
-			 *  - unsets the indicator for a running upload,
-			 *  - scrolls the dialog such that the file with index `fileIdx`
-			 *    becomes visible, and
-			 *  - changes the status text to "Upload processing".
-			 *
-			 * @this XMLHttpRequest
-			 */
-			const onUploadComplete = function () {
-				$(nRowStatusSelector(fileIdx + 1)).html(lychee.locale["UPLOAD_PROCESSING"]);
-				isUploadRunning = false;
-				let scrollPos = 0;
-				if (fileIdx + 1 > 4) scrollPos = (fileIdx + 1 - 4) * 40;
-				$(".basicModal .rows").scrollTop(scrollPos);
+					if (progress >= 100) {
+						jqStatusMsg.html(lychee.locale["UPLOAD_PROCESSING"]);
+						isUploadRunning = false;
+						let scrollPos = 0;
+						if (fileIdx + 1 > 4) scrollPos = (fileIdx + 1 - 4) * 40;
+						$(".basicModal .rows").scrollTop(scrollPos);
+
+						// Start a new upload, if there are still pending
+						// files
+						if (
+							!isUploadRunning &&
+							!shallCancelUpload &&
+							(outstandingResponsesCount < lychee.upload_processing_limit || lychee.upload_processing_limit === 0) &&
+							latestFileIdx + 1 < files.length
+						) {
+							latestFileIdx++;
+							process(latestFileIdx);
+						}
+					}
+				}
 			};
 
 			/**
@@ -277,18 +300,19 @@ upload.start = {
 			 * @this XMLHttpRequest
 			 */
 			const onComplete = function () {
-				latestFileIdx++;
 				outstandingResponsesCount--;
+
 				if (
 					!isUploadRunning &&
 					!shallCancelUpload &&
 					(outstandingResponsesCount < lychee.upload_processing_limit || lychee.upload_processing_limit === 0) &&
-					latestFileIdx < files.length
+					latestFileIdx + 1 < files.length
 				) {
+					latestFileIdx++;
 					process(latestFileIdx);
 				}
 
-				if ((shallCancelUpload || latestFileIdx >= files.length) && !isUploadRunning && outstandingResponsesCount === 0) {
+				if ((shallCancelUpload || latestFileIdx + 1 === files.length) && !isUploadRunning && outstandingResponsesCount === 0) {
 					finish();
 				}
 			};
@@ -299,8 +323,18 @@ upload.start = {
 			formData.append("albumID", albumID);
 			formData.append("file", files[fileIdx]);
 
+			// We must not use the `onload` event of the `XMLHttpRequestUpload`
+			// object.
+			// Instead, we only use the `onprogress` event and check within
+			// the event handler if the progress counter reached 100%.
+			// The reason is that `upload.onload` is not immediately called
+			// after the browser has completed the upload (as the name
+			// suggests), but only after the browser has already received the
+			// response header.
+			// For our purposes this is too late, as this way we would never
+			// show the "processing" status, during which the backend has
+			// received the upload, but has not yet started to send a response.
 			xhr.upload.onprogress = onUploadProgress;
-			xhr.upload.onload = onUploadComplete;
 			xhr.onload = onLoaded;
 			xhr.onloadend = onComplete;
 			xhr.responseType = "json";
