@@ -149,7 +149,7 @@ const lychee = {
 	enable_close_tab_on_esc: false,
 	enable_tabindex: false,
 	enable_contextmenu_header: true,
-	hide_content_during_imageview: false,
+	hide_content_during_imgview: false,
 	device_type: "desktop",
 
 	checkForUpdates: true,

@@ -215,8 +215,8 @@ view.album = {
 			}
 			if (album.json.photos) {
 				// Build photos
-				album.json.photos.forEach(function (_photos) {
-					photosData += build.photo(_photos, !album.isUploadable());
+				album.json.photos.forEach(function (_photo) {
+					photosData += build.photo(_photo, !album.isUploadable());
 				});
 			}
 
@@ -446,7 +446,7 @@ view.album = {
 		},
 
 		/**
-		 * Layouts the photos inside an album or a search result.
+		 * Lays out the photos inside an album or a search result.
 		 *
 		 * This method is a misnomer, because it does not necessarily
 		 * create a justified layout, but the configured layout as specified
