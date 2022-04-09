@@ -104,7 +104,7 @@ tabindex.makeFocusable = function (elem, restoreFocusElement = false) {
 	// Get all elements which have a tabindex
 	const tmp = elem.find("[data-tabindex]");
 
-	// iterate over all elements and set tabindex to stored value (i.e. make is not focusable)
+	// iterate over all elements and set tabindex to stored value
 	tmp.each(
 		/**
 		 * @param {number} i
