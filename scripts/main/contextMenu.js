@@ -450,7 +450,7 @@ contextMenu.photoMore = function (photoID, e) {
 	const items = [
 		{ title: build.iconic("fullscreen-enter") + lychee.locale["FULL_PHOTO"], visible: showFull, fn: () => window.open(photo.getDirectLink()) },
 		{ title: build.iconic("cloud-download") + lychee.locale["DOWNLOAD"], visible: showDownload, fn: () => photo.getArchive([photoID]) },
-		{ title: build.iconic("cloud-download") + lychee.locale["QR_CODE"], fn: () => photo.qrCode([photoID]) },
+		{ title: build.iconic("grid-two-up") + lychee.locale["QR_CODE"], fn: () => photo.qrCode([photoID]) },
 	];
 	if (album.isUploadable()) {
 		// prepend further buttons if menu bar is reduced on small screens
