@@ -1116,7 +1116,7 @@ photo.getArchive = function (photoIDs, kind = null) {
  */
 photo.qrCode = function (photoID) {
 	/** @type {?Photo} */
-	const myPhoto = (photo.json && photo.json.id === photoID) ? photo.json : album.getByID(photoID);
+	const myPhoto = photo.json && photo.json.id === photoID ? photo.json : album.getByID(photoID);
 
 	if (myPhoto == null) {
 		lychee.error("Error: photo " + photoID + " not found !");
