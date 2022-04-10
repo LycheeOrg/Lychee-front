@@ -1133,6 +1133,7 @@ photo.qrCode = function (photoID) {
 			QrCreator.render(
 				{
 					text: photo.getViewLink(myPhoto.id),
+					radius: 0.0,
 					ecLevel: "H",
 					fill: "#000000",
 					background: "#FFFFFF",
