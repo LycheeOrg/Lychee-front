@@ -1115,12 +1115,12 @@ photo.getArchive = function (photoIDs, kind = null) {
  * @returns {void}
  */
 photo.qrCode = function (photoID) {
-	let myPhoto;
+	/** @type {?Photo} */
+	const myPhoto = (photo.json && photo.json.id === photoID) ? photo.json : album.getByID(photoID);
 
-	if (photo.json && photo.json.id === photoID) {
-		myPhoto = photo.json;
-	} else {
-		myPhoto = album.getByID(photoID);
+	if (myPhoto == null) {
+		lychee.error("Error: photo " + photoID + " not found !");
+		return;
 	}
 
 	let msg = lychee.html`
