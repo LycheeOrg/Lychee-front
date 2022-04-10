@@ -94,6 +94,7 @@ paths.main = {
 		"node_modules/leaflet-spin/leaflet.spin.min.js",
 		"node_modules/leaflet.markercluster/dist/leaflet.markercluster.js",
 		"node_modules/livephotoskit/livephotoskit.js",
+		"node_modules/qr-creator/dist/qr-creator.min.js",
 		"modules/Leaflet.Photo-gh-pages/Leaflet.Photo.js",
 		"../dist/_main--javascript.js",
 	],
