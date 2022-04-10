@@ -1109,45 +1109,45 @@ photo.getArchive = function (photoIDs, kind = null) {
 };
 
 /**
- * @param {string[]} photoIDs
+ * Shows a dialog to share the view URL via a QR code.
+ *
+ * @param {string} photoID
  * @returns {void}
  */
-photo.qrCode = function (photoIDs) {
-	if (photoIDs.length === 1) {
-		let myPhoto;
+photo.qrCode = function (photoID) {
+	let myPhoto;
 
-		if (photo.json && photo.json.id === photoIDs[0]) {
-			myPhoto = photo.json;
-		} else {
-			myPhoto = album.getByID(photoIDs[0]);
-		}
-
-		let msg = lychee.html`
-			<div id='qr-code' class='downloads'></div>
-		`;
-
-		basicModal.show({
-			body: msg,
-			callback: function () {
-				QrCreator.render(
-					{
-						text: photo.getViewLink(myPhoto.id),
-						ecLevel: "H",
-						fill: "#000000",
-						background: "#FFFFFF",
-						size: 440, // 500px (modal width) - 2*30px (padding)
-					},
-					document.getElementById("qr-code")
-				);
-			},
-			buttons: {
-				cancel: {
-					title: lychee.locale["CLOSE"],
-					fn: basicModal.close,
-				},
-			},
-		});
+	if (photo.json && photo.json.id === photoID) {
+		myPhoto = photo.json;
+	} else {
+		myPhoto = album.getByID(photoID);
 	}
+
+	let msg = lychee.html`
+		<div id='qr-code' class='downloads'></div>
+	`;
+
+	basicModal.show({
+		body: msg,
+		callback: function () {
+			QrCreator.render(
+				{
+					text: photo.getViewLink(myPhoto.id),
+					ecLevel: "H",
+					fill: "#000000",
+					background: "#FFFFFF",
+					size: 440, // 500px (modal width) - 2*30px (padding)
+				},
+				document.getElementById("qr-code")
+			);
+		},
+		buttons: {
+			cancel: {
+				title: lychee.locale["CLOSE"],
+				fn: basicModal.close,
+			},
+		},
+	});
 };
 
 /**
