@@ -1020,7 +1020,7 @@ view.settings = {
 			let msg = `
 			<div class="setDropBox">
 			  <p>${lychee.locale["DROPBOX_TEXT"]}
-			  <input class='text' name='key' type='text' placeholder='Dropbox API Key' value='${lychee.dropboxKey}'>
+			  <input class='text' name='key' type='text' placeholder='${lychee.locale["SETTINGS_DROPBOX_KEY"]}' value='${lychee.dropboxKey}'>
 			  </p>
 				<div class="basicModal__buttons">
 					<a id="basicModal__action_dropbox_change" class="basicModal__button">${lychee.locale["DROPBOX_TITLE"]}</a>
@@ -1380,7 +1380,7 @@ view.full_settings = {
 	},
 
 	title: function () {
-		lychee.setTitle("Full Settings", false);
+		lychee.setTitle(lychee.locale["FULL_SETTINGS"], false);
 	},
 
 	clearContent: function () {
@@ -1451,7 +1451,7 @@ view.notifications = {
 	},
 
 	title: function () {
-		lychee.setTitle("Notifications", false);
+		lychee.setTitle(lychee.locale["NOTIFICATIONS"], false);
 	},
 
 	clearContent: function () {
@@ -1493,7 +1493,7 @@ view.users = {
 	},
 
 	title: function () {
-		lychee.setTitle("Users", false);
+		lychee.setTitle(lychee.locale["USERS"], false);
 	},
 
 	clearContent: function () {
@@ -1506,7 +1506,7 @@ view.users = {
 
 			if (users.json.length === 0) {
 				$(".users_view").append(
-					'<div class="users_view_line" style="margin-bottom: 50px;"><p style="text-align: center">User list is empty!</p></div>'
+					`<div class="users_view_line" style="margin-bottom: 50px;"><p style="text-align: center">${lychee.locale["USERS_EMPTY"]}</p></div>`
 				);
 			}
 
@@ -1515,12 +1515,12 @@ view.users = {
 			html +=
 				'<div class="users_view_line">' +
 				"<p>" +
-				'<span class="text">username</span>' +
-				'<span class="text">new password</span>' +
-				'<span class="text_icon" title="Allow uploads">' +
+				`<span class="text">${lychee.locale["USERNAME"]}</span>` +
+				`<span class="text">${lychee.locale["LOGIN_PASSWORD"]}</span>` +
+				`<span class="text_icon" title="${lychee.locale["ALLOW_UPLOADS"]}">` +
 				build.iconic("data-transfer-upload") +
 				"</span>" +
-				'<span class="text_icon" title="Restricted account">' +
+				`<span class="text_icon" title="${lychee.locale["RESTRICTED_ACCOUNT"]}">` +
 				build.iconic("lock-locked") +
 				"</span>" +
 				"</p>" +
@@ -1548,22 +1548,22 @@ view.users = {
 			html +=
 				">" +
 				'<p id="UserCreate">' +
-				'<input class="text" name="username" type="text" value="" placeholder="new username" /> ' +
-				'<input class="text" name="password" type="text" placeholder="new password" /> ' +
-				'<span class="choice" title="Allow uploads">' +
+				`<input class="text" name="username" type="text" value="" placeholder="${lychee.locale["LOGIN_USERNAME"]}" /> ` +
+				`<input class="text" name="password" type="text" placeholder="${lychee.locale["LOGIN_PASSWORD"]}" /> ` +
+				`<span class="choice" title="${lychee.locale["ALLOW_UPLOADS"]}">` +
 				"<label>" +
 				'<input type="checkbox" name="upload" />' +
 				'<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
 				"</label>" +
 				"</span> " +
-				'<span class="choice" title="Restricted account">' +
+				`<span class="choice" title="${lychee.locale["RESTRICTED_ACCOUNT"]}">` +
 				"<label>" +
 				'<input type="checkbox" name="lock" />' +
 				'<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>' +
 				"</label>" +
 				"</span>" +
 				"</p> " +
-				'<a id="UserCreate_button"  class="basicModal__button basicModal__button_CREATE">Create</a>' +
+				`<a id="UserCreate_button"  class="basicModal__button basicModal__button_CREATE">${lychee.locale["CREATE"]}</a>` +
 				"</div>";
 			$(".users_view").append(html);
 			settings.bind("#UserCreate_button", "#UserCreate", users.create);
@@ -1582,7 +1582,7 @@ view.sharing = {
 	},
 
 	title: function () {
-		lychee.setTitle("Sharing", false);
+		lychee.setTitle(lychee.locale["SHARING"], false);
 	},
 
 	clearContent: function () {
@@ -1595,14 +1595,14 @@ view.sharing = {
 
 			if (sharing.json.shared.length === 0) {
 				$(".sharing_view").append(
-					'<div class="sharing_view_line" style="margin-bottom: 50px;"><p style="text-align: center">Sharing list is empty!</p></div>'
+					`<div class="sharing_view_line" style="margin-bottom: 50px;"><p style="text-align: center">"${lychee.locale["SHARING_EMPTY"]}"!</p></div>`
 				);
 			}
 
 			let html = "";
 
 			html += `
-			<div class="sharing_view_line"><p>Share</p></div>
+			<div class="sharing_view_line"><p>${lychee.locale["SHARING_SHARE"]}</p></div>
 			<div class="sharing_view_line">
 				<div class="col-xs-5">
 					<select name="from" id="albums_list" class="form-control select" size="13" multiple="multiple">`;
@@ -1616,7 +1616,7 @@ view.sharing = {
 				</div>
 
 				<div class="col-xs-2">
-					<!--<button type="button" id="albums_list_undo" class="btn btn-primary btn-block">undo</button>-->
+					<!--<button type="button" id="albums_list_undo" class="btn btn-primary btn-block">${lychee.locale["SHARING_UNDO"]}</button>-->
 					<button type="button" id="albums_list_rightAll" class="btn btn-default btn-block blue">` +
 				build.iconic("media-skip-forward") +
 				`</button>
@@ -1629,7 +1629,7 @@ view.sharing = {
 					<button type="button" id="albums_list_leftAll" class="btn btn-default btn-block grey">` +
 				build.iconic("media-skip-backward") +
 				`</button>
-					<!--<button type="button" id="albums_list_redo" class="btn btn-warning btn-block">redo</button>-->
+					<!--<button type="button" id="albums_list_redo" class="btn btn-warning btn-block">${lychee.locale["SHARING_REDO"]}</button>-->
 				</div>
 
 				<div class="col-xs-5">
@@ -1638,7 +1638,7 @@ view.sharing = {
 			</div>`;
 
 			html += `
-			<div class="sharing_view_line"><p class="with">with</p></div>
+			<div class="sharing_view_line"><p class="with">${lychee.locale["SHARING_WITH"]}</p></div>
 			<div class="sharing_view_line">
 				<div class="col-xs-5">
 					<select name="from" id="user_list" class="form-control select" size="13" multiple="multiple">`;
@@ -1726,7 +1726,7 @@ view.logs = {
 	},
 
 	title: function () {
-		lychee.setTitle("Logs", false);
+		lychee.setTitle(lychee.locale["LOGS"], false);
 	},
 
 	clearContent: function () {
@@ -1757,13 +1757,13 @@ view.diagnostics = {
 		multiselect.clearSelection();
 
 		view.photo.hide();
-		view.diagnostics.title("Diagnostics");
+		view.diagnostics.title();
 		header.setMode("config");
 		view.diagnostics.content.init();
 	},
 
 	title: function () {
-		lychee.setTitle("Diagnostics", false);
+		lychee.setTitle(lychee.locale["DIAGNOSTICS"], false);
 	},
 
 	clearContent: function (update) {
@@ -1879,7 +1879,7 @@ view.update = {
 	},
 
 	title: function () {
-		lychee.setTitle("Update", false);
+		lychee.setTitle(lychee.locale["UPDATE"], false);
 	},
 
 	clearContent: function () {
@@ -1940,7 +1940,7 @@ view.u2f = {
 			let html = "";
 
 			if (u2f.json.length === 0) {
-				$(".u2f_view").append('<div class="u2f_view_line"><p class="single">Credentials list is empty!</p></div>');
+				$(".u2f_view").append(`<div class="u2f_view_line"><p class="single">${lychee.locale["U2F_NO_CREDENTIALS"]}</p></div>`);
 			} else {
 				html +=
 					'<div class="u2f_view_line">' +

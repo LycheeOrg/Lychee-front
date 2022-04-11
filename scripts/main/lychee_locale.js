@@ -8,9 +8,16 @@ lychee.locale = {
 
 	SETTINGS: "Settings",
 	USERS: "Users",
+	ALLOW_UPLOAD: "Allow uploads",
+	RESTRICTED_ACCOUT: "Restricted account",
+	CREATE: "Create",
+	USERS_EMPTY: "User list is empty!",
 	U2F: "U2F",
 	NOTIFICATIONS: "Notifications",
 	SHARING: "Sharing",
+	SHARING_EMPTY: "Sharing list is empty!",
+	SHARING_WITH: "with",
+	SHARING_SHARE: "Share",
 	CHANGE_LOGIN: "Change Login",
 	CHANGE_SORTING: "Change Sorting",
 	SET_DROPBOX: "Set Dropbox",
@@ -30,6 +37,8 @@ lychee.locale = {
 	SAVE_RISK: "Save my modifications, I accept the Risk!",
 	MORE: "More",
 	DEFAULT: "Default",
+	FULL_SETTINGS: "Full Settings",
+	UPDATE: "Update",
 
 	SMART_ALBUMS: "Smart albums",
 	SHARED_ALBUMS: "Shared albums",
@@ -86,6 +95,7 @@ lychee.locale = {
 	COPY_ALL_TO: "Copy All to...",
 	DELETE: "Delete",
 	DELETE_ALL: "Delete All",
+	SAVE: "Save",
 	DOWNLOAD: "Download",
 	DOWNLOAD_MEDIUM: "Download medium size",
 	DOWNLOAD_SMALL: "Download small size",
@@ -287,6 +297,7 @@ lychee.locale = {
 	SETTINGS_SUCCESS_MAP_DISPLAY: "Map display settings updated",
 	SETTINGS_SUCCESS_MAP_DISPLAY_PUBLIC: "Map display settings for public albums updated",
 	SETTINGS_SUCCESS_MAP_PROVIDER: "Map provider settings updated",
+	SETTINGS_DROPBOX_KEY: "Dropbox API Key",
 
 	U2F_NOT_SUPPORTED: "U2F not supported. Sorry.",
 	U2F_NOT_SECURE: "Environment not secured. U2F not available.",
@@ -294,6 +305,7 @@ lychee.locale = {
 	U2F_REGISTRATION_SUCCESS: "Registration successful!",
 	U2F_AUTHENTIFICATION_SUCCESS: "Authentication successful!",
 	U2F_CREDENTIALS: "Credentials",
+	U2F_NO_CREDENTIALS: "Credentials list is empty!",
 	U2F_CREDENTIALS_DELETED: "Credentials deleted!",
 
 	NEW_PHOTOS_NOTIFICATION: "Send new photos notification emails.",
@@ -455,8 +467,10 @@ lychee.locale = {
 	PHOTO_SMALL_HIDPI: "Thumb HiDPI",
 	PHOTO_THUMB: "Square thumb",
 	PHOTO_THUMB_HIDPI: "Square thumb HiDPI",
+	PHOTO_THUMBNAIL: "Photo thumbnail",
 	PHOTO_LIVE_VIDEO: "Video part of live-photo",
 	PHOTO_VIEW: "Lychee Photo View:",
+	VIDEO_NOT_SUPPORTED: "Your browser does not support the video tag.",
 
 	/**
 	 * Formats a number representing a filesize in bytes as a localized string

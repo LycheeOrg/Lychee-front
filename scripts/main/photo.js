@@ -736,7 +736,7 @@ photo.editTags = function (photoIDs) {
 		photo.setTags(photoIDs, data.tags);
 	};
 
-	let input = lychee.html`<input class='text' name='tags' type='text' maxlength='800' placeholder='Tags' value='$${oldTags}'>`;
+	let input = lychee.html`<input class='text' name='tags' type='text' maxlength='800' placeholder='${lychee.locale["PHOTO_TAGS"]}' value='$${oldTags}'>`;
 
 	if (photoIDs.length === 1) msg = lychee.html`<p>${lychee.locale["PHOTO_NEW_TAGS"]} ${input}</p>`;
 	else msg = lychee.html`<p>${lychee.locale["PHOTO_NEW_TAGS_1"]} ${photoIDs.length} ${lychee.locale["PHOTO_NEW_TAGS_2"]} ${input}</p>`;
