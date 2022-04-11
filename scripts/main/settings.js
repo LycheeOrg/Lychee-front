@@ -248,7 +248,7 @@ settings.bind = function (item, name, fn) {
 
 settings.changeLogin = function (params) {
 	if (params.username.length < 1) {
-		loadingBar.show("error", "new username cannot be empty.");
+		loadingBar.show("error", lychee.locale["ERROR_EMPTY_USERNAME"]);
 		$("input[name=username]").addClass("error");
 		return false;
 	} else {
@@ -256,7 +256,7 @@ settings.changeLogin = function (params) {
 	}
 
 	if (params.password.length < 1) {
-		loadingBar.show("error", "new password cannot be empty.");
+		loadingBar.show("error", lychee.locale["ERROR_EMPTY_PASSWORD"]);
 		$("input[name=password]").addClass("error");
 		return false;
 	} else {
@@ -264,7 +264,7 @@ settings.changeLogin = function (params) {
 	}
 
 	if (params.password !== params.confirm) {
-		loadingBar.show("error", "new password does not match.");
+		loadingBar.show("error", lychee.locale["ERROR_PASSWORD_NOT_MATCH"]);
 		$("input[name=confirm]").addClass("error");
 		return false;
 	} else {
@@ -557,7 +557,7 @@ settings.save = function (params) {
 			view.full_settings.init();
 			// re-read settings
 			lychee.init(false);
-		} else lychee.error("Check the Logs", params, data);
+		} else lychee.error(lychee.locale["ERROR_LOGS"], params, data);
 	});
 };
 

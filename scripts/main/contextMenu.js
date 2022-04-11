@@ -346,7 +346,7 @@ contextMenu.photoMulti = function (photoIDs, e) {
 	if (subcount && photocount) {
 		multiselect.deselect(".photo.active, .album.active");
 		multiselect.close();
-		lychee.error("Please select either albums or photos!");
+		lychee.error(lychee.locale["ERROR_ALBUMS_OR_PHOTOS"]);
 		return;
 	}
 	if (subcount) {

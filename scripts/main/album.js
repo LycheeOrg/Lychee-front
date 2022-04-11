@@ -52,7 +52,7 @@ album.getByID = function (photoID) {
 	// Function returns the JSON of a photo
 
 	if (photoID == null || !album.json || !album.json.photos) {
-		lychee.error("Error: Album json not found !");
+		lychee.error(lychee.locale["ERROR_ALBUM_NOT_FOUND"]);
 		return null;
 	}
 
@@ -64,7 +64,7 @@ album.getByID = function (photoID) {
 		i++;
 	}
 
-	lychee.error("Error: photo " + photoID + " not found !");
+	lychee.error(lychee.locale["ERROR_PHOTO_NOT_FOUND"].replace("%photoID", photoID.toString()));
 	return null;
 };
 
@@ -72,7 +72,7 @@ album.getSubByID = function (albumID) {
 	// Function returns the JSON of a subalbum
 
 	if (albumID == null || !album.json || !album.json.albums) {
-		lychee.error("Error: Album json not found!");
+		lychee.error(lychee.locale["ERROR_ALBUM_NOT_FOUND"]);
 		return undefined;
 	}
 
@@ -84,14 +84,14 @@ album.getSubByID = function (albumID) {
 		i++;
 	}
 
-	lychee.error("Error: album " + albumID + " not found!");
+	lychee.error(lychee.locale["ERROR_ALBUM_NOT_FOUND"].replace("%albumID", albumID.toString()));
 	return undefined;
 };
 
 // noinspection DuplicatedCode
 album.deleteByID = function (photoID) {
 	if (photoID == null || !album.json || !album.json.photos) {
-		lychee.error("Error: Album json not found !");
+		lychee.error(lychee.locale["ERROR_ALBUM_NOT_FOUND"]);
 		return false;
 	}
 
@@ -111,7 +111,7 @@ album.deleteByID = function (photoID) {
 // noinspection DuplicatedCode
 album.deleteSubByID = function (albumID) {
 	if (albumID == null || !album.json || !album.json.albums) {
-		lychee.error("Error: Album json not found !");
+		lychee.error(lychee.locale["ERROR_ALBUM_NOT_FOUND"]);
 		return false;
 	}
 
@@ -987,7 +987,7 @@ album.shareUsers = function (albumID, e) {
 				loadingBar.show("error", data.description);
 				lychee.error(null, params, data);
 			} else {
-				loadingBar.show("success", "Sharing updated!");
+				loadingBar.show("success", lychee.locale["SUCCESS_SHARING_UPDATE"]);
 			}
 		});
 	}
