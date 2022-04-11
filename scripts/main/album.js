@@ -84,7 +84,7 @@ album.getSubByID = function (albumID) {
 		i++;
 	}
 
-	lychee.error(lychee.locale["ERROR_ALBUM_NOT_FOUND"].replace("%albumID", albumID.toString()));
+	lychee.error(lychee.locale["ERROR_ALBUM_ID_NOT_FOUND"].replace("%albumID", albumID.toString()));
 	return undefined;
 };
 

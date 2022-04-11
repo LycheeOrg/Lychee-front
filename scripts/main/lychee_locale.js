@@ -485,7 +485,7 @@ lychee.locale = {
 	ERROR_SELECT_USER: "Select an user to share with!",
 	ERROR_SELECT_SHARING: "Select a sharing to remove!",
 	ERROR_PHOTO_NOT_FOUND: "Error: photo %photoID not found!",
-	ERROR_ALBUM_NOT_FOUND: "Error: album %albumID not found!",
+	ERROR_ALBUM_ID_NOT_FOUND: "Error: album %albumID not found!",
 	ERROR_TIMEOUT: "Session timed out.",
 	ERROR_SERVER_GENERIC: "Server error or API not found.",
 	SUCCESS_SHARING_UPDATE: "Sharing updated!",
