@@ -170,7 +170,7 @@ mapview.open = function (albumID = null) {
 			// Mapview has already shown data -> remove only photoLayer and trackLayer showing photos and tracks
 			mapview.photoLayer.clear();
 			if (mapview.trackLayer != null) {
-				mapview.trackLayer.clear();
+				mapview.map.removeLayer(mapview.trackLayer);
 			}
 		}
 
@@ -297,10 +297,14 @@ mapview.open = function (albumID = null) {
 				},
 			})
 				.on("error", function (e) {
-					console.log("Error loading GPX file: " + e.err);
+					lychee.error(lycche.locale["ERROR_GPX"] + e.err);
 				})
 				.on("loaded", function (e) {
-					if (album.photos.length < 1) {
+					if (
+						album.photos.filter((element) => {
+							return element.latitude || element.longitude;
+						}).length < 1
+					) {
 						// no photos, center track
 						mapview.map.fitBounds(e.target.getBounds());
 					}

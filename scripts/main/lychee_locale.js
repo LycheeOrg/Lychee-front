@@ -469,6 +469,8 @@ lychee.locale = {
 	PHOTO_LIVE_VIDEO: "Video part of live-photo",
 	PHOTO_VIEW: "Lychee Photo View:",
 
+	ERROR_GPX: "Error loading GPX file: ",
+
 	/**
 	 * Formats a number representing a filesize in bytes as a localized string
 	 * @param {!number} filesize
