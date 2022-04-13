@@ -1397,3 +1397,19 @@ album.reload = function () {
 album.refresh = function () {
 	album.json = null;
 };
+
+album.deleteTrack = function (albumID) {
+	album.json.track_id = null;
+
+	let params = {
+		albumID: albumID,
+	};
+
+	api.post("Album::deleteTrack", params, function (data) {
+		if (data) {
+			lychee.error(null, params, data);
+		} else {
+			albums.refresh();
+		}
+	});
+};

@@ -10,6 +10,8 @@ const choiceDuplicateSelector = '.basicModal .choice input[name="skip_duplicates
 const choiceResyncSelector = '.basicModal .choice input[name="resync_metadata"]';
 const actionSelector = ".basicModal #basicModal__action";
 const cancelSelector = ".basicModal #basicModal__cancel";
+const firstRowStatusSelector = ".basicModal .rows .row .status";
+const firstRowNoticeSelector = ".basicModal .rows .row p.notice";
 
 let nRowStatusSelector = function (row) {
 	return ".basicModal .rows .row:nth-child(" + row + ") .status";
@@ -385,7 +387,7 @@ upload.start = {
 		/** @param {UrlDialogResult} data */
 		const action = function (data) {
 			const runImport = function () {
-				$(".basicModal .rows .row .status").html(lychee.locale["UPLOAD_IMPORTING"]);
+				$(firstRowStatusSelector).html(lychee.locale["UPLOAD_IMPORTING"]);
 
 				const successHandler = function () {
 					// Same code as in import.dropbox()
@@ -419,8 +421,8 @@ upload.start = {
 							break;
 					}
 
-					$(".basicModal .rows .row p.notice").html(errorText).show();
-					$(".basicModal .rows .row .status").html(statusText).addClass(statusClass);
+					$(firstRowNoticeSelector).html(errorText).show();
+					$(firstRowStatusSelector).html(statusText).addClass(statusClass);
 					// Show close button
 					$(".basicModal #basicModal__action.hidden").show();
 					upload.notify(lychee.locale["UPLOAD_IMPORT_WARN_ERR"]);
@@ -848,8 +850,8 @@ upload.start = {
 							break;
 					}
 
-					$(".basicModal .rows .row p.notice").html(errorText).show();
-					$(".basicModal .rows .row .status").html(statusText).addClass(statusClass);
+					$(firstRowNoticeSelector).html(errorText).show();
+					$(firstRowStatusSelector).html(statusText).addClass(statusClass);
 					// Show close button
 					$(".basicModal #basicModal__action.hidden").show();
 					upload.notify(lychee.locale["UPLOAD_IMPORT_WARN_ERR"]);
@@ -857,7 +859,7 @@ upload.start = {
 					return true;
 				};
 
-				$(".basicModal .rows .row .status").html(lychee.locale["UPLOAD_IMPORTING"]);
+				$(firstRowStatusSelector).html(lychee.locale["UPLOAD_IMPORTING"]);
 
 				// TODO: Use a streamed response; see long comment in `import.url()` for the reasons
 				api.post(
@@ -909,4 +911,84 @@ upload.check = function () {
 	} else {
 		$resync.prop("checked", false).prop("disabled", true);
 	}
+};
+
+/**
+ * @param {(FileList|File[])} files
+ */
+upload.uploadTrack = function (files) {
+	const albumID = album.getID();
+	if (files.length <= 0 || albumID === null) return;
+
+	const runUpload = function () {
+		/**
+		 * A function to be called when a response has been received.
+		 *
+		 * It closes the modal dialog or shows the close button and
+		 * reloads the album.
+		 *
+		 * @this XMLHttpRequest
+		 */
+		const finish = function () {
+			/** @type {?LycheeException} */
+			const lycheeException = this.status >= 400 ? this.response : null;
+			let errorText = "";
+			let statusText;
+			let statusClass;
+
+			$("#upload_track_file").val("");
+
+			switch (this.status) {
+				case 200:
+				case 201:
+				case 204:
+					statusText = lychee.locale["UPLOAD_FINISHED"];
+					statusClass = "success";
+					break;
+				case 413:
+					statusText = lychee.locale["UPLOAD_FAILED"];
+					errorText = lychee.locale["UPLOAD_ERROR_POSTSIZE"];
+					statusClass = "error";
+					break;
+				default:
+					statusText = lychee.locale["UPLOAD_FAILED"];
+					errorText = lycheeException ? lycheeException.message : lychee.locale["UPLOAD_ERROR_UNKNOWN"];
+					statusClass = "error";
+					break;
+			}
+
+			$(firstRowStatusSelector).html(statusText).addClass(statusClass);
+
+			if (errorText !== "") {
+				$(firstRowNoticeSelector).html(errorText).show();
+
+				api.onError(this, { albumID: albumID }, lycheeException);
+				showCloseButton();
+				upload.notify(lychee.locale["UPLOAD_COMPLETE"], lychee.locale["UPLOAD_COMPLETE_FAILED"]);
+			} else {
+				basicModal.close();
+				upload.notify(lychee.locale["UPLOAD_COMPLETE"]);
+			}
+
+			album.reload();
+		}; // finish
+
+		$(firstRowStatusSelector).html(lychee.locale["UPLOAD_UPLOADING"]);
+
+		const formData = new FormData();
+		const xhr = new XMLHttpRequest();
+
+		formData.append("albumID", albumID);
+		formData.append("file", files[0]);
+
+		xhr.onload = finish;
+		xhr.responseType = "json";
+		xhr.open("POST", "api/Album::setTrack");
+		xhr.setRequestHeader("X-XSRF-TOKEN", csrf.getCSRFCookieValue());
+		xhr.setRequestHeader("Accept", "application/json");
+
+		xhr.send(formData);
+	}; // runUpload
+
+	upload.show(lychee.locale["UPLOAD_UPLOADING"], files, runUpload);
 };

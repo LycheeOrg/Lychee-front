@@ -50,6 +50,7 @@ const mapview = {
 	/** @type {?L.Map} */
 	map: null,
 	photoLayer: null,
+	trackLayer: null,
 	/** @type {?number} */
 	min_lat: null,
 	/** @type {?number} */
@@ -166,8 +167,11 @@ mapview.open = function (albumID = null) {
 
 			mapview.map_provider = lychee.map_provider;
 		} else {
-			// Mapview has already shown data -> remove only photoLayer showing photos
+			// Mapview has already shown data -> remove only photoLayer and trackLayer showing photos and tracks
 			mapview.photoLayer.clear();
+			if (mapview.trackLayer != null) {
+				mapview.trackLayer.clear();
+			}
 		}
 
 		// Reset min/max lat/lgn Values
@@ -281,6 +285,23 @@ mapview.open = function (albumID = null) {
 		updateZoom();
 	};
 
+	const setTrack = function (album) {
+		// add track
+		if (album.track_id) {
+			mapview.trackLayer = new L.GPX("uploads/tracks/" + album.track_id + ".xml", {
+				async: true,
+				marker_options: {
+					startIconUrl: null,
+					endIconUrl: null,
+					shadowUrl: null,
+				},
+			}).on("error", function (e) {
+				console.log("Error loading GPX file: " + e.err);
+			});
+			mapview.trackLayer.addTo(mapview.map);
+		}
+	};
+
 	/**
 	 * Calls backend, retrieves information about photos and displays them.
 	 *
@@ -296,6 +317,7 @@ mapview.open = function (albumID = null) {
 		 */
 		const successHandler = function (data) {
 			addPhotosToMap(data);
+			setTrack(data);
 			mapview.title(_albumID, data.title);
 		};
 
@@ -317,6 +339,7 @@ mapview.open = function (albumID = null) {
 	// we reuse it
 	if (lychee.map_include_subalbums === false && album.json !== null && album.json.photos !== null) {
 		addPhotosToMap(album.json);
+		setTrack(album.json);
 	} else {
 		// Not all needed data has been  preloaded - we need to load everything
 		getAlbumData(albumID, lychee.map_include_subalbums);
