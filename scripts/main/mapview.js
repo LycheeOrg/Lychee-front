@@ -295,9 +295,16 @@ mapview.open = function (albumID = null) {
 					endIconUrl: null,
 					shadowUrl: null,
 				},
-			}).on("error", function (e) {
-				console.log("Error loading GPX file: " + e.err);
-			});
+			})
+				.on("error", function (e) {
+					console.log("Error loading GPX file: " + e.err);
+				})
+				.on("loaded", function (e) {
+					if (album.photos.length < 1) {
+						// no photos, center track
+						mapview.map.fitBounds(e.target.getBounds());
+					}
+				});
 			mapview.trackLayer.addTo(mapview.map);
 		}
 	};
