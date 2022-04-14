@@ -466,7 +466,7 @@ sidebar.createStructure.album = function (data) {
 		structure.basics.rows.push({ title: lychee.locale["ALBUM_SHOW_TAGS"], kind: "showtags", value: data.show_tags, editable });
 	}
 
-	const videoCount = data.photos.reduce((count, photo) => (count + (photo.type.indexOf("video") > -1) ? 1 : 0), 0);
+	const videoCount = data.photos.reduce((count, photo) => (count + ((photo.type.indexOf("video") > -1) ? 1 : 0)), 0);
 
 	structure.album = {
 		title: lychee.locale["ALBUM_ALBUM"],
