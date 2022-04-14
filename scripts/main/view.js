@@ -1656,7 +1656,7 @@ view.notifications = {
 						<input
 							name="email" class="text" type="text"
 							placeholder="email@example.com"
-							value="${notifications.json ? notifications.json.email : ""}"
+							value="${notifications.json && notifications.json.email ? notifications.json.email : ""}"
 						>
 					</p>
 					<div class="basicModal__buttons">
