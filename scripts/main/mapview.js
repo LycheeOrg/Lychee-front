@@ -285,6 +285,11 @@ mapview.open = function (albumID = null) {
 		updateZoom();
 	};
 
+	/**
+	 * Add a track to the map.
+	 *
+	 * @param {(Album|PositionData)} album
+	 */
 	const setTrack = function (album) {
 		// add track
 		if (album.track_id) {
