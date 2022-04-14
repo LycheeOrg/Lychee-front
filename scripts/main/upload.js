@@ -920,7 +920,7 @@ upload.uploadTrack = function (files) {
 	const albumID = album.getID();
 	if (files.length <= 0 || albumID === null) return;
 
-	const runUpload = function () {
+	const runUpload = function() {
 		/**
 		 * A function to be called when a response has been received.
 		 *
@@ -930,6 +930,65 @@ upload.uploadTrack = function (files) {
 		 * @this XMLHttpRequest
 		 */
 		const finish = function () {
+			/** @type {?LycheeException} */
+			const lycheeException = this.status >= 400 ? this.response : null;
+			let errorText = "";
+			let statusText;
+			let statusClass;
+
+			$("#upload_track_file").val("");
+
+			switch (this.status) {
+				case 200:
+				case 201:
+				case 204:
+					statusText = lychee.locale["UPLOAD_FINISHED"];
+					statusClass = "success";
+					break;
+				case 413:
+					statusText = lychee.locale["UPLOAD_FAILED"];
+					errorText = lychee.locale["UPLOAD_ERROR_POSTSIZE"];
+					hasErrorOccurred = true;
+					statusClass = "error";
+					break;
+				default:
+					statusText = lychee.locale["UPLOAD_FAILED"];
+					errorText = lycheeException ? lycheeException.message : lychee.locale["UPLOAD_ERROR_UNKNOWN"];
+					hasErrorOccurred = true;
+					statusClass = "error";
+					break;
+			}
+
+			$(".basicModal .rows .row .status").html(statusText).addClass(statusClass);
+
+			if (errorText !== "") {
+				$(".basicModal .rows .row p.notice").html(errorText).show();
+
+				api.onError(this, { albumID: albumID }, lycheeException);
+				showCloseButton();
+				upload.notify(lychee.locale["UPLOAD_COMPLETE"], lychee.locale["UPLOAD_COMPLETE_FAILED"]);
+			} else {
+				basicModal.close();
+				upload.notify(lychee.locale["UPLOAD_COMPLETE"]);
+			}
+
+			album.reload();
+		}; // finish
+
+		$(".basicModal .rows .row .status").html(lychee.locale["UPLOAD_UPLOADING"]);
+
+		const formData = new FormData();
+		const xhr = new XMLHttpRequest();
+
+		formData.append("albumID", albumID);
+		formData.append("file", files[0]);
+
+		xhr.onload = finish;
+		xhr.responseType = "json";
+		xhr.open("POST", "api/Album::setTrack");
+		xhr.setRequestHeader("X-XSRF-TOKEN", csrf.getCSRFCookieValue());
+		xhr.setRequestHeader("Accept", "application/json");
+
 			/** @type {?LycheeException} */
 			const lycheeException = this.status >= 400 ? this.response : null;
 			let errorText = "";
