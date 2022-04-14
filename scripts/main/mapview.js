@@ -292,8 +292,8 @@ mapview.open = function (albumID = null) {
 	 */
 	const setTrack = function (album) {
 		// add track
-		if (album.track_id) {
-			mapview.trackLayer = new L.GPX("uploads/tracks/" + album.track_id + ".xml", {
+		if (album.track_short_path) {
+			mapview.trackLayer = new L.GPX("uploads/" + album.track_short_path, {
 				async: true,
 				marker_options: {
 					startIconUrl: null,
