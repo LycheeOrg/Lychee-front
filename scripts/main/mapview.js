@@ -307,7 +307,7 @@ mapview.open = function (albumID = null) {
 				.on("loaded", function (e) {
 					if (
 						album.photos.filter((element) => {
-							return element.latitude || element.longitude;
+							return element.latitude !== null || element.longitude !== null;
 						}).length < 1
 					) {
 						// no photos, center track
