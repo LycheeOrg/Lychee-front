@@ -379,8 +379,6 @@ $(document).ready(function () {
 			}
 		);
 
-	// hide track uploader
-	$("#upload_track").hide();
 	// Fullscreen
 	if (lychee.fullscreenAvailable())
 		$(document).on("fullscreenchange mozfullscreenchange webkitfullscreenchange msfullscreenchange", lychee.fullscreenUpdate);
