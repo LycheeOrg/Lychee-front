@@ -140,7 +140,9 @@ upload.start = {
 				// Error
 				showCloseButton();
 				if (shallCancelUpload) {
-					$(".basicModal .rows .row:nth-child(n+" + (latestFileIdx + 2).toString() + ") .status").html(lychee.locale["UPLOAD_CANCELLED"]).addClass("warning");
+					$(".basicModal .rows .row:nth-child(n+" + (latestFileIdx + 2).toString() + ") .status")
+						.html(lychee.locale["UPLOAD_CANCELLED"])
+						.addClass("warning");
 				}
 				upload.notify(lychee.locale["UPLOAD_COMPLETE"], lychee.locale["UPLOAD_COMPLETE_FAILED"]);
 			}
