@@ -948,21 +948,19 @@ upload.uploadTrack = function (files) {
 				case 413:
 					statusText = lychee.locale["UPLOAD_FAILED"];
 					errorText = lychee.locale["UPLOAD_ERROR_POSTSIZE"];
-					hasErrorOccurred = true;
 					statusClass = "error";
 					break;
 				default:
 					statusText = lychee.locale["UPLOAD_FAILED"];
 					errorText = lycheeException ? lycheeException.message : lychee.locale["UPLOAD_ERROR_UNKNOWN"];
-					hasErrorOccurred = true;
 					statusClass = "error";
 					break;
 			}
 
-			$(".basicModal .rows .row .status").html(statusText).addClass(statusClass);
+			$(firstRowStatusSelector).html(statusText).addClass(statusClass);
 
 			if (errorText !== "") {
-				$(".basicModal .rows .row p.notice").html(errorText).show();
+				$(firstRowNoticeSelector).html(errorText).show();
 
 				api.onError(this, { albumID: albumID }, lycheeException);
 				showCloseButton();
@@ -975,7 +973,7 @@ upload.uploadTrack = function (files) {
 			album.reload();
 		}; // finish
 
-		$(".basicModal .rows .row .status").html(lychee.locale["UPLOAD_UPLOADING"]);
+		$(firstRowStatusSelector).html(lychee.locale["UPLOAD_UPLOADING"]);
 
 		const formData = new FormData();
 		const xhr = new XMLHttpRequest();
