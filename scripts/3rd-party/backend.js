@@ -225,6 +225,7 @@ const SmartAlbumID = Object.freeze({
  * @property {?string} id - album ID
  * @property {?string} title - album title
  * @property {Photo[]} photos
+ * @property {?string} track_url - URL to GPX track
  */
 
 /**
