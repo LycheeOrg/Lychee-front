@@ -51,7 +51,7 @@ const mapview = {
 	map: null,
 	photoLayer: null,
 	trackLayer: null,
-	/** @type {?LatLngBounds|?number[][]} */
+	/** @type {(?LatLngBounds|?number[][])} */
 	bounds: null,
 	/** @type {?string} */
 	albumID: null,
