@@ -300,7 +300,7 @@ mapview.open = function (albumID = null) {
 					lychee.error(lycche.locale["ERROR_GPX"] + e.err);
 				})
 				.on("loaded", function (e) {
-					if (photos.length < 1) {
+					if (photos.length === 0) {
 						// no photos, update map bound to center track
 						mapview.bounds = e.target.getBounds();
 						updateZoom();
