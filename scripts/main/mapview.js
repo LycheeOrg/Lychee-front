@@ -287,8 +287,8 @@ mapview.open = function (albumID = null) {
 		}
 
 		// add track
-		if (album.track_short_path) {
-			mapview.trackLayer = new L.GPX("uploads/" + album.track_short_path, {
+		if (album.track_url) {
+			mapview.trackLayer = new L.GPX(album.track_url, {
 				async: true,
 				marker_options: {
 					startIconUrl: null,

@@ -82,7 +82,7 @@ contextMenu.add = function (e) {
 			if (!album.isSmartID(albumID) && lychee.map_display) {
 				// display track add button if it's a regular album
 				items.push({}, { title: build.iconic("location") + lychee.locale["UPLOAD_TRACK"], fn: () => $("#upload_track_file").click() });
-				if (album.json.track_short_path) {
+				if (album.json.track_url) {
 					items.push({ title: build.iconic("trash") + lychee.locale["DELETE_TRACK"], fn: album.deleteTrack });
 				}
 			}

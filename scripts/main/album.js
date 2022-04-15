@@ -1399,7 +1399,7 @@ album.refresh = function () {
 };
 
 album.deleteTrack = function () {
-	album.json.track_short_path = null;
+	album.json.track_url = null;
 
 	api.post("Album::deleteTrack", {
 		albumID: album.json.id,
