@@ -163,7 +163,7 @@ mapview.open = function (albumID = null) {
 		} else {
 			// Mapview has already shown data -> remove only photoLayer and trackLayer showing photos and tracks
 			mapview.photoLayer.clear();
-			if (mapview.trackLayer != null) {
+			if (mapview.trackLayer !== null) {
 				mapview.map.removeLayer(mapview.trackLayer);
 			}
 		}
