@@ -360,17 +360,22 @@ contextMenu.photo = function (photoID, e) {
 };
 
 /**
- * @param {string[]} photoIDs
+ * Counts how many of the provided IDs are sub-albums of the current album
+ *
+ * @param {string[]} albumEntryIDs - IDs of entries in an album, i.e. IDs of photos or sub-albums
  * @returns {number}
  */
-contextMenu.countSubAlbums = function (photoIDs) {
-	if (album.json.albums === null || album.json.albums.length === 0) {
+contextMenu.countSubAlbums = function (albumEntryIDs) {
+	// If the currently loaded album is a smart or tag album, then
+	// `album.json.albums` does not exist.
+	// Hence, we must not test for `null` but for a "falsy" value
+	if (!album.json.albums || album.json.albums.length === 0) {
 		return 0;
 	}
 
 	let count = 0;
 
-	photoIDs.forEach(function (id) {
+	albumEntryIDs.forEach(function (id) {
 		if (album.json.albums.findIndex((a) => a.id === id) !== -1) {
 			count++;
 		}
@@ -380,15 +385,15 @@ contextMenu.countSubAlbums = function (photoIDs) {
 };
 
 /**
- * @param {string[]} photoIDs
+ * @param {string[]} albumEntryIDs - IDs of entries in an album, i.e. IDs of photos or sub-albums
  * @param {jQuery.Event} e
  */
-contextMenu.photoMulti = function (photoIDs, e) {
+contextMenu.photoMulti = function (albumEntryIDs, e) {
 	// Notice for 'Move All':
 	// fn must call basicContext.close() first,
 	// in order to keep the selection and multiselect
-	const subcount = contextMenu.countSubAlbums(photoIDs);
-	const photocount = photoIDs.length - subcount;
+	const subcount = contextMenu.countSubAlbums(albumEntryIDs);
+	const photocount = albumEntryIDs.length - subcount;
 
 	if (subcount && photocount) {
 		multiselect.deselect($(".photo.active, .album.active"));
@@ -397,7 +402,7 @@ contextMenu.photoMulti = function (photoIDs, e) {
 		return;
 	}
 	if (subcount) {
-		contextMenu.albumMulti(photoIDs, e);
+		contextMenu.albumMulti(albumEntryIDs, e);
 		return;
 	}
 
@@ -405,7 +410,7 @@ contextMenu.photoMulti = function (photoIDs, e) {
 
 	let arePhotosStarred = false;
 	let arePhotosNotStarred = false;
-	photoIDs.forEach(function (id) {
+	albumEntryIDs.forEach(function (id) {
 		if (album.getByID(id).is_starred) {
 			arePhotosStarred = true;
 		} else {
@@ -419,27 +424,27 @@ contextMenu.photoMulti = function (photoIDs, e) {
 		{
 			title: build.iconic("star") + (arePhotosNotStarred ? lychee.locale["STAR_ALL"] : lychee.locale["UNSTAR_ALL"]),
 			visible: !(arePhotosStarred && arePhotosNotStarred),
-			fn: () => photo.setStar(photoIDs, arePhotosNotStarred),
+			fn: () => photo.setStar(albumEntryIDs, arePhotosNotStarred),
 		},
-		{ title: build.iconic("tag") + lychee.locale["TAGS_ALL"], fn: () => photo.editTags(photoIDs) },
+		{ title: build.iconic("tag") + lychee.locale["TAGS_ALL"], fn: () => photo.editTags(albumEntryIDs) },
 		{},
-		{ title: build.iconic("pencil") + lychee.locale["RENAME_ALL"], fn: () => photo.setTitle(photoIDs) },
+		{ title: build.iconic("pencil") + lychee.locale["RENAME_ALL"], fn: () => photo.setTitle(albumEntryIDs) },
 		{
 			title: build.iconic("layers") + lychee.locale["COPY_ALL_TO"],
 			fn: () => {
 				basicContext.close();
-				contextMenu.move(photoIDs, e, photo.copyTo);
+				contextMenu.move(albumEntryIDs, e, photo.copyTo);
 			},
 		},
 		{
 			title: build.iconic("folder") + lychee.locale["MOVE_ALL"],
 			fn: () => {
 				basicContext.close();
-				contextMenu.move(photoIDs, e, photo.setAlbum);
+				contextMenu.move(albumEntryIDs, e, photo.setAlbum);
 			},
 		},
-		{ title: build.iconic("trash") + lychee.locale["DELETE_ALL"], fn: () => photo.delete(photoIDs) },
-		{ title: build.iconic("cloud-download") + lychee.locale["DOWNLOAD_ALL"], fn: () => photo.getArchive(photoIDs, "FULL") },
+		{ title: build.iconic("trash") + lychee.locale["DELETE_ALL"], fn: () => photo.delete(albumEntryIDs) },
+		{ title: build.iconic("cloud-download") + lychee.locale["DOWNLOAD_ALL"], fn: () => photo.getArchive(albumEntryIDs, "FULL") },
 	];
 
 	basicContext.show(items, e.originalEvent, contextMenu.close);
