@@ -110,14 +110,46 @@ settings.createLogin = function () {
  */
 settings.getValues = function (formSelector) {
 	const values = {};
-	const inputs_select = $(formSelector + " input[name], " + formSelector + " select[name]");
+
+	/** @type {?NodeListOf<HTMLInputElement>} */
+	const inputElements = document.querySelectorAll(formSelector + " input[name]");
 
 	// Get value from all inputs
-	$(inputs_select).each(function () {
-		const name = $(this).attr("name");
-		// Store name and value of input
-		values[name] = $(this).val();
+	inputElements.forEach(function (inputElement) {
+		switch (inputElement.type) {
+			case "checkbox":
+			case "radio":
+				values[inputElement.name] = inputElement.checked;
+				break;
+			case "number":
+			case "range":
+				values[inputElement.name] = parseInt(inputElement.value, 10);
+				break;
+			case "file":
+				values[inputElement.name] = inputElement.files;
+				break;
+			default:
+				switch (inputElement.getAttribute("inputmode")) {
+					case "numeric":
+						values[inputElement.name] = parseInt(inputElement.value, 10);
+						break;
+					case "decimal":
+						values[inputElement.name] = parseFloat(inputElement.value);
+						break;
+					default:
+						values[inputElement.name] = inputElement.value;
+				}
+		}
 	});
+
+	/** @type {?NodeListOf<HTMLSelectElement>} */
+	const selectElements = document.querySelectorAll(formSelector + " select[name]");
+
+	// Get name of selected option from all selects
+	selectElements.forEach(function (selectElement) {
+		values[selectElement.name] = selectElement.selectedIndex !== -1 ? selectElement.options[selectElement.selectedIndex].value : null;
+	});
+
 	return values;
 };
 

@@ -563,18 +563,18 @@ build.tags = function (tags) {
 build.user = function (user) {
 	return lychee.html`<div class="users_view_line">
 			<p id="UserData${user.id}">
-			<input name="id" type="hidden" value="${user.id}" />
+			<input name="id" type="hidden" inputmode="numeric" value="${user.id}" />
 			<input class="text" name="username" type="text" value="$${user.username}" placeholder="username" />
 			<input class="text" name="password" type="text" placeholder="new password" />
 			<span class="choice" title="Allow uploads">
 			<label>
-			<input type="checkbox" name="upload" />
+			<input type="checkbox" name="may_upload" />
 			<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
 			</label>
 			</span>
 			<span class="choice" title="Restricted account">
 			<label>
-			<input type="checkbox" name="lock" />
+			<input type="checkbox" name="is_locked" />
 			<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
 			</label>
 			</span>
@@ -592,17 +592,17 @@ build.user = function (user) {
 build.u2f = function (credential) {
 	return lychee.html`<div class="u2f_view_line">
 			<p id="CredentialData${credential.id}">
-			<input name="id" type="hidden" value="${credential.id}" />
+			<input name="id" type="hidden" inputmode="numeric" value="${credential.id}" />
 			<span class="text">${credential.id.slice(0, 30)}</span>
 			<!--- <span class="choice" title="Allow uploads">
 			<label>
-			<input type="checkbox" name="upload" />
+			<input type="checkbox" name="may_upload" />
 			<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
 			</label>
 			</span>
 			<span class="choice" title="Restricted account">
 			<label>
-			<input type="checkbox" name="lock" />
+			<input type="checkbox" name="is_locked" />
 			<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
 			</label>
 			</span>--->

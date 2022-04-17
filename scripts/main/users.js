@@ -9,7 +9,7 @@ const users = {
  * The object `params` must be kept in sync with the HTML form constructed
  * by {@link build.user}.
  *
- * @param {{id: number, username: string, password: string, upload: boolean, lock: boolean}} params
+ * @param {{id: number, username: string, password: string, may_upload: boolean, is_locked: boolean}} params
  * @returns {void}
  */
 users.update = function (params) {
@@ -18,10 +18,13 @@ users.update = function (params) {
 		return;
 	}
 
-	// TODO: Re-factor the HTML form constructed by `build.user`. Then the following lines would not be required.
-	params.id = parseInt(params.id, 10);
-	params.may_upload = $("#UserData" + params.id + ' .choice input[name="upload"]:checked').length === 1;
-	params.is_locked = $("#UserData" + params.id + ' .choice input[name="lock"]:checked').length === 1;
+	// If the password is empty, then the password shall not be changed.
+	// In this case, the password must not be an attribute of the object at
+	// all.
+	// An existing, but empty password, would indicate the clear the password.
+	if (params.password.length === 0) {
+		delete params.password;
+	}
 
 	api.post("User::save", params, function () {
 		loadingBar.show("success", "User updated!");
@@ -35,7 +38,7 @@ users.update = function (params) {
  * The object `params` must be kept in sync with the HTML form constructed
  * by {@link view.users.content}.
  *
- * @param {{id: string, username: string, password: string, upload: boolean, lock: boolean}} params
+ * @param {{id: string, username: string, password: string, may_upload: boolean, is_locked: boolean}} params
  * @returns {void}
  */
 users.create = function (params) {
@@ -47,10 +50,6 @@ users.create = function (params) {
 		loadingBar.show("error", "new password cannot be empty.");
 		return;
 	}
-
-	// TODO: Re-factor the HTML form constructed by `view.users.content`. Then the following lines would not be required.
-	params.may_upload = $('#UserCreate .choice input[name="upload"]:checked').length === 1;
-	params.is_locked = $('#UserCreate .choice input[name="lock"]:checked').length === 1;
 
 	api.post("User::create", params, function () {
 		loadingBar.show("success", "User created!");
@@ -68,7 +67,6 @@ users.create = function (params) {
  * @returns {boolean}
  */
 users.delete = function (params) {
-	params.id = parseInt(params.id, 10);
 	api.post("User::delete", params, function () {
 		loadingBar.show("success", "User deleted!");
 		users.list(); // reload user list

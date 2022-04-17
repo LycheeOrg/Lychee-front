@@ -1722,10 +1722,10 @@ view.users = {
 				settings.bind("#UserUpdate" + _user.id, "#UserData" + _user.id, users.update);
 				settings.bind("#UserDelete" + _user.id, "#UserData" + _user.id, users.delete);
 				if (_user.may_upload) {
-					$("#UserData" + _user.id + ' .choice input[name="upload"]').click();
+					$("#UserData" + _user.id + ' .choice input[name="may_upload"]').click();
 				}
 				if (_user.is_locked) {
-					$("#UserData" + _user.id + ' .choice input[name="lock"]').click();
+					$("#UserData" + _user.id + ' .choice input[name="is_locked"]').click();
 				}
 			});
 
@@ -1736,13 +1736,13 @@ view.users = {
 						<input class="text" name="password" type="text" placeholder="new password" />
 						<span class="choice" title="Allow uploads">
 							<label>
-								<input type="checkbox" name="upload" />
+								<input type="checkbox" name="may_upload" />
 								<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
 							</label>
 						</span>
 						<span class="choice" title="Restricted account">
 							<label>
-								<input type="checkbox" name="lock" />
+								<input type="checkbox" name="is_locked" />
 								<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
 							</label>
 						</span>
