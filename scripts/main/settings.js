@@ -271,14 +271,10 @@ settings.setLayout = function (params) {
 };
 
 /**
+ * @param {SettingsFormData} params
  * @returns {void}
  */
-settings.changePublicSearch = function () {
-	const params = {
-		// TODO: Presumably, the `SettingsFormData` also includes a property `PublicSearch: boolean`; in that case there is no need for an inefficient jQuery selector
-		public_search: $("#PublicSearch:checked").length === 1,
-	};
-
+settings.changePublicSearch = function (params) {
 	api.post("Settings::setPublicSearch", params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_PUBLIC_SEARCH"]);
 		lychee.public_search = params.public_search;
@@ -315,14 +311,10 @@ settings.setOverlayType = function () {
 };
 
 /**
+ * @param {SettingsFormData} params
  * @returns {void}
  */
-settings.changeMapDisplay = function () {
-	const params = {
-		// TODO: Presumably, the `SettingsFormData` also includes a property `MapDisplay: boolean`; in that case there is no need for an inefficient jQuery selector
-		map_display: $("#MapDisplay:checked").length === 1,
-	};
-
+settings.changeMapDisplay = function (params) {
 	api.post("Settings::setMapDisplay", params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
 		lychee.map_display = params.map_display;
@@ -335,14 +327,10 @@ settings.changeMapDisplay = function () {
 };
 
 /**
+ * @param {SettingsFormData} params
  * @returns {void}
  */
-settings.changeMapDisplayPublic = function () {
-	const params = {
-		// TODO: Presumably, the `SettingsFormData` also includes a property `MapDisplayPublic: boolean`; in that case there is no need for an inefficient jQuery selector
-		map_display_public: $("#MapDisplayPublic:checked").length === 1,
-	};
-
+settings.changeMapDisplayPublic = function (params) {
 	api.post("Settings::setMapDisplayPublic", params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY_PUBLIC"]);
 		lychee.map_display_public = params.map_display_public;
@@ -370,27 +358,21 @@ settings.setMapProvider = function () {
 };
 
 /**
+ * @param {SettingsFormData} params
  * @returns {void}
  */
-settings.changeMapIncludeSubalbums = function () {
-	const params = {
-		// TODO: Presumably, the `SettingsFormData` also includes a property `MapIncludeSubalbums: boolean`; in that case there is no need for an inefficient jQuery selector
-		map_include_subalbums: $("#MapIncludeSubalbums:checked").length === 1,
-	};
-	api.post("Settings::setMapIncludeSubalbums", params, function () {
+settings.changeMapIncludeSubAlbums = function (params) {
+	api.post("Settings::setMapIncludeSubAlbums", params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
 		lychee.map_include_subalbums = params.map_include_subalbums;
 	});
 };
 
 /**
+ * @param {SettingsFormData} params
  * @returns {void}
  */
-settings.changeLocationDecoding = function () {
-	const params = {
-		// TODO: Presumably, the `SettingsFormData` also includes a property `LocationDecoding: boolean`; in that case there is no need for an inefficient jQuery selector
-		location_decoding: $("#LocationDecoding:checked").length === 1,
-	};
+settings.changeLocationDecoding = function (params) {
 	api.post("Settings::setLocationDecoding", params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
 		lychee.location_decoding = params.location_decoding;
@@ -398,13 +380,10 @@ settings.changeLocationDecoding = function () {
 };
 
 /**
+ * @param {SettingsFormData} params
  * @returns {void}
  */
-settings.changeNSFWVisible = function () {
-	const params = {
-		// TODO: Presumably, the `SettingsFormData` also includes a property `NSFWVisible: boolean`; in that case there is no need for an inefficient jQuery selector
-		nsfw_visible: $("#NSFWVisible:checked").length === 1,
-	};
+settings.changeNSFWVisible = function (params) {
 	api.post("Settings::setNSFWVisible", params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_NSFW_VISIBLE"]);
 		lychee.nsfw_visible = params.nsfw_visible;
@@ -418,13 +397,10 @@ settings.changeNSFWVisible = function () {
 // lychee.nsfw_warning_text = data.config.nsfw_warning_text || '<b>Sensitive content</b><br><p>This album contains sensitive content which some people may find offensive or disturbing.</p>';
 
 /**
+ * @param {SettingsFormData} params
  * @returns {void}
  */
-settings.changeLocationShow = function () {
-	const params = {
-		// TODO: Presumably, the `SettingsFormData` also includes a property `LocationShow: boolean`; in that case there is no need for an inefficient jQuery selector
-		location_show: $("#LocationShow:checked").length === 1,
-	};
+settings.changeLocationShow = function (params) {
 	api.post("Settings::setLocationShow", params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
 		lychee.location_show = params.location_show;
@@ -437,13 +413,10 @@ settings.changeLocationShow = function () {
 };
 
 /**
+ * @param {SettingsFormData} params
  * @returns {void}
  */
-settings.changeLocationShowPublic = function () {
-	const params = {
-		// TODO: Presumably, the `SettingsFormData` also includes a property `LocationShowPublic: boolean`; in that case there is no need for an inefficient jQuery selector
-		location_show_public: $("#LocationShowPublic:checked").length === 1,
-	};
+settings.changeLocationShowPublic = function (params) {
 	api.post("Settings::setLocationShowPublic", params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
 		lychee.location_show_public = params.location_show_public;
@@ -456,13 +429,10 @@ settings.changeLocationShowPublic = function () {
 };
 
 /**
+ * @param {SettingsFormData} params
  * @returns {void}
  */
-settings.changeNewPhotosNotification = function () {
-	const params = {
-		// TODO: Presumably, the `SettingsFormData` also includes a property `NewPhotosNotification: boolean`; in that case there is no need for an inefficient jQuery selector
-		new_photos_notification: $("#NewPhotosNotification:checked").length === 1,
-	};
+settings.changeNewPhotosNotification = function (params) {
 	api.post("Settings::setNewPhotosNotification", params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_NEW_PHOTOS_NOTIFICATION"]);
 		lychee.new_photos_notification = params.new_photos_notification;

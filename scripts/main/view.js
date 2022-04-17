@@ -1290,7 +1290,7 @@ view.settings = {
 			<div class="setPublicSearch">
 			<p>${lychee.locale["PUBLIC_SEARCH_TEXT"]}
 			<label class="switch">
-			  <input id="PublicSearch" type="checkbox">
+			  <input id="PublicSearch" type="checkbox" name="public_search">
 			  <span class="slider round"></span>
 			</label>
 			</p>
@@ -1311,7 +1311,7 @@ view.settings = {
 			<div class="setNSFWVisible">
 			<p>${lychee.locale["NSFW_VISIBLE_TEXT_1"]}
 			<label class="switch">
-			  <input id="NSFWVisible" type="checkbox">
+			  <input id="NSFWVisible" type="checkbox" name="nsfw_visible">
 			  <span class="slider round"></span>
 			</label></p>
 			<p>${lychee.locale["NSFW_VISIBLE_TEXT_2"]}
@@ -1363,7 +1363,7 @@ view.settings = {
 			<div class="setMapDisplay">
 			<p>${lychee.locale["MAP_DISPLAY_TEXT"]}
 			<label class="switch">
-			  <input id="MapDisplay" type="checkbox">
+			  <input id="MapDisplay" type="checkbox" name="map_display">
 			  <span class="slider round"></span>
 			</label>
 			</p>
@@ -1379,7 +1379,7 @@ view.settings = {
 			<div class="setMapDisplayPublic">
 			<p>${lychee.locale["MAP_DISPLAY_PUBLIC_TEXT"]}
 			<label class="switch">
-				<input id="MapDisplayPublic" type="checkbox">
+				<input id="MapDisplayPublic" type="checkbox" name="map_display_public">
 				<span class="slider round"></span>
 			</label>
 			</p>
@@ -1415,10 +1415,10 @@ view.settings = {
 			settings.bind("#basicModal__action_set_map_provider", ".setMapProvider", settings.setMapProvider);
 
 			msg = `
-			<div class="setMapIncludeSubalbums">
+			<div class="setMapIncludeSubAlbums">
 			<p>${lychee.locale["MAP_INCLUDE_SUBALBUMS_TEXT"]}
 			<label class="switch">
-			  <input id="MapIncludeSubalbums" type="checkbox">
+			  <input id="MapIncludeSubAlbums" type="checkbox" name="map_include_subalbums">
 			  <span class="slider round"></span>
 			</label>
 			</p>
@@ -1426,15 +1426,15 @@ view.settings = {
 			`;
 
 			$(".settings_view").append(msg);
-			if (lychee.map_include_subalbums) $("#MapIncludeSubalbums").click();
+			if (lychee.map_include_subalbums) $("#MapIncludeSubAlbums").click();
 
-			settings.bind("#MapIncludeSubalbums", ".setMapIncludeSubalbums", settings.changeMapIncludeSubalbums);
+			settings.bind("#MapIncludeSubAlbums", ".setMapIncludeSubAlbums", settings.changeMapIncludeSubAlbums);
 
 			msg = `
 			<div class="setLocationDecoding">
 			<p>${lychee.locale["LOCATION_DECODING"]}
 			<label class="switch">
-			  <input id="LocationDecoding" type="checkbox">
+			  <input id="LocationDecoding" type="checkbox" name="location_decoding">
 			  <span class="slider round"></span>
 			</label>
 			</p>
@@ -1450,7 +1450,7 @@ view.settings = {
 			<div class="setLocationShow">
 			<p>${lychee.locale["LOCATION_SHOW"]}
 			<label class="switch">
-			  <input id="LocationShow" type="checkbox">
+			  <input id="LocationShow" type="checkbox" name="location_show">
 			  <span class="slider round"></span>
 			</label>
 			</p>
@@ -1466,7 +1466,7 @@ view.settings = {
 			<div class="setLocationShowPublic">
 			<p>${lychee.locale["LOCATION_SHOW_PUBLIC"]}
 			<label class="switch">
-				<input id="LocationShowPublic" type="checkbox">
+				<input id="LocationShowPublic" type="checkbox" name="location_show_public">
 				<span class="slider round"></span>
 			</label>
 			</p>
@@ -1487,7 +1487,7 @@ view.settings = {
 			<div class="setNewPhotosNotification">
 			<p>${lychee.locale["NEW_PHOTOS_NOTIFICATION"]}
 			<label class="switch">
-				<input id="NewPhotosNotification" type="checkbox">
+				<input id="NewPhotosNotification" type="checkbox" name="new_photos_notification">
 				<span class="slider round"></span>
 			</label>
 			</p>
