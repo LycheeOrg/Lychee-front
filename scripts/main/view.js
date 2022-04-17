@@ -1336,7 +1336,7 @@ view.settings = {
 			<div class="setOverlayType">
 			<p>${lychee.locale["OVERLAY_TYPE"]}
 			<span class="select" style="width:270px">
-				<select name="OverlayType" id="ImgOverlayType">
+				<select name="image_overlay_type" id="ImgOverlayType">
 					<option value="exif">${lychee.locale["OVERLAY_EXIF"]}</option>
 					<option value="desc">${lychee.locale["OVERLAY_DESCRIPTION"]}</option>
 					<option value="date">${lychee.locale["OVERLAY_DATE"]}</option>
@@ -1395,7 +1395,7 @@ view.settings = {
 			<div class="setMapProvider">
 			<p>${lychee.locale["MAP_PROVIDER"]}
 			<span class="select" style="width:270px">
-				<select name="MapProvider" id="MapProvider">
+				<select name="map_provider" id="MapProvider">
 					<option value="Wikimedia">${lychee.locale["MAP_PROVIDER_WIKIMEDIA"]}</option>
 					<option value="OpenStreetMap.org">${lychee.locale["MAP_PROVIDER_OSM_ORG"]}</option>
 					<option value="OpenStreetMap.de">${lychee.locale["MAP_PROVIDER_OSM_DE"]}</option>

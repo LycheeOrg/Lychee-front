@@ -282,27 +282,10 @@ settings.changePublicSearch = function (params) {
 };
 
 /**
+ * @param {SettingsFormData} params
  * @returns {void}
  */
-settings.setOverlayType = function () {
-	// validate the input
-	const params = {};
-	// TODO: Presumably, the `SettingsFormData` also includes the properties `ImageOverlay: boolean` and `ImgOverlayType: string`; in that case there is no need for an inefficient jQuery selector
-	const check = !!$("#ImageOverlay:checked");
-	const type = $("#ImgOverlayType").val();
-	if (check && type === "exif") {
-		params.image_overlay_type = "exif";
-	} else if (check && type === "desc") {
-		params.image_overlay_type = "desc";
-	} else if (check && type === "date") {
-		params.image_overlay_type = "date";
-	} else if (check && type === "none") {
-		params.image_overlay_type = "none";
-	} else {
-		params.image_overlay_type = "exif";
-		console.log("Error - default used");
-	}
-
+settings.setOverlayType = function (params) {
 	api.post("Settings::setOverlayType", params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_IMAGE_OVERLAY"]);
 		lychee.image_overlay_type = params.image_overlay_type;
@@ -343,14 +326,10 @@ settings.changeMapDisplayPublic = function (params) {
 };
 
 /**
+ * @param {SettingsFormData} params
  * @returns {void}
  */
-settings.setMapProvider = function () {
-	// TODO: Presumably, the `SettingsFormData` also includes a property `MapProvider: string`; in that case there is no need for an inefficient jQuery selector
-	const params = {
-		map_provider: $("#MapProvider").val(),
-	};
-
+settings.setMapProvider = function (params) {
 	api.post("Settings::setMapProvider", params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_PROVIDER"]);
 		lychee.map_provider = params.map_provider;
