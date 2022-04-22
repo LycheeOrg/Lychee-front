@@ -55,13 +55,15 @@ build.getAlbumThumb = function (data) {
 	const thumb2x = data.thumb.thumb2x;
 
 	if (thumb === "uploads/thumb/" && isVideo) {
-		return `<span class="thumbimg"><img src='img/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
+		return `<span class="thumbimg"><img id='album-${data.id}' src='img/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
 	}
 	if (thumb === "uploads/thumb/" && isRaw) {
-		return `<span class="thumbimg"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
+		return `<span class="thumbimg"><img id='album-${data.id}' src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
 	}
 
-	return `<span class="thumbimg${isVideo ? " video" : ""}"><img class='lazyload' src='img/placeholder.png' data-src='${thumb}' ${
+	return `<span class="thumbimg${isVideo ? " video" : ""}"><img id='album-${
+		data.id
+	}' class='lazyload' src='img/placeholder.png' data-src='${thumb}' ${
 		thumb2x !== null ? "data-srcset='" + thumb2x + " 2x'" : ""
 	} alt='Photo thumbnail' data-overlay='false' draggable='false'></span>`;
 };
@@ -114,9 +116,14 @@ build.album = function (data, disabled = false) {
 
 	let html = lychee.html`
 			<div class='album ${disabled ? `disabled` : ``} ${data.is_nsfw && lychee.nsfw_blur ? `blurred` : ``}'
+				id='album-${data.id}'
 				data-id='${data.id}'
 				data-nsfw='${data.is_nsfw ? `1` : `0`}'
-				data-tabindex='${tabindex.get_next_tab_index()}'>
+				data-tabindex='${tabindex.get_next_tab_index()}'
+				draggable='${album.isSmartID(data.id) ? "false" : "true"}'
+				ondragstart='startAlbumDrag(event)'
+				ondragover='event.preventDefault()'
+				ondrop='dropAlbum(event)'>
 				  ${build.getAlbumThumb(data)}
 				  ${build.getAlbumThumb(data)}
 				  ${build.getAlbumThumb(data)}
@@ -249,9 +256,10 @@ build.photo = function (data, disabled = false) {
 	}
 
 	html += lychee.html`
-			<div class='photo ${disabled ? `disabled` : ``}' data-album-id='${data.album_id}' data-id='${
+			<div id='photo-${data.id}' class='photo ${disabled ? `disabled` : ``}' data-album-id='${data.album_id}' data-id='${
 		data.id
-	}' data-tabindex='${tabindex.get_next_tab_index()}'>
+	}' data-tabindex='${tabindex.get_next_tab_index()}'
+			draggable='true' ondragstart='startAlbumDrag(event)'>
 				${thumbnail}
 				<div class='overlay'>
 					<h1 title='$${data.title}'>$${data.title}</h1>

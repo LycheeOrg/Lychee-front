@@ -327,7 +327,11 @@ $(document).ready(function () {
 					// Detect if dropped item is a file or a link
 					if (e.originalEvent.dataTransfer.files.length > 0) {
 						upload.start.local(e.originalEvent.dataTransfer.files);
-					} else if (e.originalEvent.dataTransfer.getData("Text").length > 3) {
+					} else if (
+						e.originalEvent.dataTransfer.getData("Text").length > 3 &&
+						!e.originalEvent.dataTransfer.getData("Text").startsWith("photo-") && // block drag and drop from albums/photos in web UI
+						!e.originalEvent.dataTransfer.getData("Text").startsWith("album-")
+					) {
 						upload.start.url(e.originalEvent.dataTransfer.getData("Text"));
 					}
 				}

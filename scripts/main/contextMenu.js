@@ -146,6 +146,34 @@ contextMenu.album = function (albumID, e) {
 };
 
 /**
+ *
+ * @returns {void}
+ * @param sourceAlbumID source album (which is being dragged)
+ * @param targetAlbumID target album (where it is dropped)
+ * @param {DragEvent} e
+ */
+contextMenu.albumDrop = function (sourceAlbumID, targetAlbumID, e) {
+	const items = [
+		{
+			title: build.iconic("collapse-left") + lychee.locale["MERGE"],
+			fn: () => {
+				album.merge([targetAlbumID], sourceAlbumID);
+			},
+		},
+		{
+			title: build.iconic("folder") + lychee.locale["MOVE"],
+			visible: true,
+			fn: () => {
+				basicContext.close();
+				album.setAlbum([targetAlbumID], sourceAlbumID);
+			},
+		},
+	];
+
+	basicContext.show(items, e, contextMenu.close);
+};
+
+/**
  * @param {string[]} albumIDs
  * @param {jQuery.Event} e
  *
@@ -357,6 +385,28 @@ contextMenu.photo = function (photoID, e) {
 	$('.photo[data-id="' + photoID + '"]').addClass("active");
 
 	basicContext.show(items, e.originalEvent, contextMenu.close);
+};
+
+/**
+ * @param {string} photoID
+ * @param {string} albumID
+ * @param {DragEvent} e
+ *
+ * @returns {void}
+ */
+contextMenu.photoDrop = function (photoID, albumID, e) {
+	const items = [
+		{
+			title: build.iconic("folder") + lychee.locale["MOVE"],
+			fn: () => {
+				photo.setAlbum([photoID], albumID);
+			},
+		},
+	];
+
+	$('.photo[data-id="' + photoID + '"]').addClass("active");
+
+	basicContext.show(items, e, contextMenu.close);
 };
 
 /**
