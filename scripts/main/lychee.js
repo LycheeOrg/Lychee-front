@@ -1022,13 +1022,21 @@ lychee.html = function (literalSections, ...substs) {
  * @returns {boolean}
  */
 lychee.handleAPIError = function (jqXHR, params, lycheeException) {
-	const msg = jqXHR.statusText + (lycheeException ? " - " + lycheeException.message : "");
-	loadingBar.show("error", msg);
-	console.error("The server returned an error response", {
-		description: msg,
-		params: params,
-		response: lycheeException,
-	});
+	if (api.hasSessionExpired(jqXHR, lycheeException)) {
+		loadingBar.show("error", "Session expired.");
+		setTimeout(() => {
+			lychee.goto();
+			window.location.reload();
+		}, 3000);
+	} else {
+		const msg = jqXHR.statusText + (lycheeException ? " - " + lycheeException.message : "");
+		loadingBar.show("error", msg);
+		console.error("The server returned an error response", {
+			description: msg,
+			params: params,
+			response: lycheeException,
+		});
+	}
 	return true;
 };
 
