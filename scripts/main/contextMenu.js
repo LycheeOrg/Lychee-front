@@ -423,7 +423,7 @@ contextMenu.photoTitle = function (albumID, photoID, e) {
 	if (photos.length > 0) {
 		items.push({});
 
-		items = items.concat(contextMenu.buildList(data.photos, [photoID], (a) => lychee.goto(albumID + "/" + a.id)));
+		items = items.concat(contextMenu.buildList(photos, [photoID], (a) => lychee.goto(albumID + "/" + a.id)));
 	}
 
 	if (!album.isUploadable()) {

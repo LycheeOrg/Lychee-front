@@ -21,7 +21,7 @@ users.update = function (params) {
 	// If the password is empty, then the password shall not be changed.
 	// In this case, the password must not be an attribute of the object at
 	// all.
-	// An existing, but empty password, would indicate the clear the password.
+	// An existing, but empty password, would indicate to clear the password.
 	if (params.password.length === 0) {
 		delete params.password;
 	}

@@ -248,6 +248,7 @@ album.load = function (albumID, albumLoadedCB = null) {
 			// and in case of success, try again to load album with same
 			// parameters
 			password.getDialog(albumID, function () {
+				albums.refresh();
 				album.load(albumID, albumLoadedCB);
 			});
 		} else {
@@ -1318,7 +1319,7 @@ album.isUploadable = function () {
 	}
 
 	// TODO: Comparison of numeric user IDs (instead of names) should be more robust
-	return album.json !== null && album.json.owner_name === lychee.username;
+	return album.json === null || !album.json.owner_name || album.json.owner_name === lychee.username;
 };
 
 /**
