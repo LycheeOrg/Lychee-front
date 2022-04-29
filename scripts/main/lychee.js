@@ -725,6 +725,9 @@ lychee.load = function (autoplay = true) {
 				view.album.title();
 				lychee.content.show();
 				tabindex.makeFocusable(lychee.content, true);
+				// If the album was loaded in the background (when content is
+				// hidden), scrolling may not have worked.
+				view.album.content.restoreScroll();
 			} else {
 				album.load(albumID);
 			}

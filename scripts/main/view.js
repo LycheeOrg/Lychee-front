@@ -237,6 +237,11 @@ view.album = {
 
 			view.album.content.justify(album.json ? album.json.photos : []);
 
+			view.album.content.restoreScroll();
+		},
+
+		/** @returns {void} */
+		restoreScroll: function () {
 			// Restore scroll position
 			const urls = JSON.parse(localStorage.getItem("scroll"));
 			const urlWindow = window.location.href;
