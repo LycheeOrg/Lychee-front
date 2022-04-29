@@ -672,13 +672,13 @@ lychee.load = function (autoplay = true) {
 			// If we don't have an album or the wrong album load the album
 			// first and let the album loader load the photo afterwards or
 			// load the photo directly.
-			lychee.content.hide();
 			if (
 				lychee.content.html() === "" ||
 				album.json === null ||
 				album.json.id !== albumID ||
 				(header.dom(".header__search").length && header.dom(".header__search").val().length !== 0)
 			) {
+				lychee.content.hide();
 				album.load(albumID, loadPhoto);
 			} else {
 				loadPhoto(true);

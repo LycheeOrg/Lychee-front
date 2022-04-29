@@ -210,8 +210,6 @@ album.load = function (albumID, albumLoadedCB = null) {
 	const successHandler = function (data) {
 		processAlbum(data);
 
-		lychee.content.show();
-		lychee.footer_show();
 		tabindex.makeFocusable(lychee.content);
 
 		if (lychee.active_focus_on_page_load) {
