@@ -1173,3 +1173,38 @@ lychee.getBaseUrl = function () {
 		return location.href.replace(location.hash, "");
 	}
 };
+
+/**
+ * drag album to another one
+ * @param {DragEvent} ev
+ * @returns {void}
+ */
+lychee.startDrag = function (ev) {
+	ev.preventDefault();
+	ev.dataTransfer.setData("text", `${ev.target.className.split(" ")[0]}-${ev.target.getAttribute("data-id")}`);
+};
+
+/**
+ * drop album
+ * @param {DragEvent} ev
+ * @returns {void}
+ */
+lychee.finishDrag = function (ev) {
+	ev.preventDefault();
+
+	/** @type string */
+	const data = ev.dataTransfer.getData("text");
+	/** @type string */
+	let targetId = ev.target.getAttribute("data-id");
+	if (targetId == null) {
+		targetId = ev.target.parentNode.getAttribute("data-id");
+	}
+
+	if (data.startsWith("photo-")) {
+		// photo is dragged
+		contextMenu.photoDrop(data.substring(6), targetId, ev);
+	} else {
+		// album is dragged
+		contextMenu.albumDrop(targetId, data.substring(6), ev);
+	}
+};
