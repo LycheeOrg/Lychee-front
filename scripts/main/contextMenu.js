@@ -20,8 +20,8 @@ contextMenu.add = function (e) {
 
 	if (visible.albums()) {
 		items.push({ title: build.iconic("tags") + lychee.locale["NEW_TAG_ALBUM"], fn: () => album.addByTags() });
-	} else if (album.isSmartID(album.getID())) {
-		// remove Import and New album if smart album
+	} else if (album.isSmartID(album.getID()) || album.isSearchID(album.getID())) {
+		// remove Import and New album if smart album or search results
 		items.splice(1);
 	}
 
@@ -98,7 +98,7 @@ contextMenu.album = function (albumID, e) {
 	// fn must call basicContext.close() first,
 	// in order to keep the selection
 
-	if (album.isSmartID(albumID)) return;
+	if (album.isSmartID(albumID) || album.isSearchID(albumID)) return;
 
 	// Show merge-item when there's more than one album
 	// Commented out because it doesn't consider subalbums or shared albums.
@@ -293,7 +293,7 @@ contextMenu.albumTitle = function (albumID, e) {
 			items = items.concat(contextMenu.buildList(data.shared_albums, albumID !== null ? [albumID] : [], (a) => lychee.goto(a.id)));
 		}
 
-		if (albumID !== null && !album.isSmartID(albumID) && album.isUploadable()) {
+		if (albumID !== null && !album.isSmartID(albumID) && !album.isSearchID(albumID) && album.isUploadable()) {
 			if (items.length > 0) {
 				items.unshift({});
 			}
@@ -349,8 +349,8 @@ contextMenu.photo = function (photoID, e) {
 		{ title: build.iconic("trash") + lychee.locale["DELETE"], fn: () => photo.delete([photoID]) },
 		{ title: build.iconic("cloud-download") + lychee.locale["DOWNLOAD"], fn: () => photo.getArchive([photoID]) },
 	];
-	if (album.isSmartID(album.getID()) || album.isTagAlbum()) {
-		// Cover setting not supported for smart or tag albums.
+	if (album.isSmartID(album.getID()) || album.isSearchID(album.getID) || album.isTagAlbum()) {
+		// Cover setting not supported for smart or tag albums and search results.
 		items.splice(2, 1);
 	}
 

@@ -3,7 +3,7 @@
  */
 
 const album = {
-	/** @type {(?Album|?TagAlbum)} */
+	/** @type {(?Album|?TagAlbum|?SearchAlbum)} */
 	json: null,
 };
 
@@ -19,6 +19,14 @@ album.isSmartID = function (id) {
  * @param {?string} id
  * @returns {boolean}
  */
+album.isSearchID = function (id) {
+	return id === SearchAlbumID;
+};
+
+/**
+ * @param {?string} id
+ * @returns {boolean}
+ */
 album.isModelID = function (id) {
 	return typeof id === "string" && /^[-_0-9a-zA-Z]{24}$/.test(id);
 };
@@ -27,7 +35,7 @@ album.isModelID = function (id) {
  * @returns {?string}
  */
 album.getParentID = function () {
-	if (album.json == null || album.isSmartID(album.json.id) === true || !album.json.parent_id) {
+	if (album.json === null || album.isSmartID(album.json.id) || album.isSearchID(album.json.id) || !album.json.parent_id) {
 		return null;
 	}
 	return album.json.parent_id;
@@ -42,7 +50,7 @@ album.getID = function () {
 
 	// this is a Lambda
 	let isID = (_id) => {
-		return album.isSmartID(_id) || album.isModelID(_id);
+		return album.isSmartID(_id) || album.isSearchID(_id) || album.isModelID(_id);
 	};
 
 	if (photo.json) id = photo.json.album_id;
@@ -87,21 +95,29 @@ album.getByID = function (photoID) {
 };
 
 /**
+ * Returns the sub-album of the current album by ID, if found.
+ *
+ * Note: If the current album is the special {@link SearchAlbum}, then
+ * also {@link TagAlbum} may be returned as a "sub album".
+ *
  * @param {?string} albumID
- * @returns {?Album} the album model
+ * @returns {(?Album|?TagAlbum)} the sub-album model
  */
 album.getSubByID = function (albumID) {
-	if (albumID == null || !album.json || !album.json.albums) {
+	// The special `SearchAlbum`  may also contain `TagAlbum` as sub-albums
+	if (albumID == null || !album.json || (!album.json.albums && !album.json.tag_albums)) {
 		loadingBar.show("error", "Error: Album json not found!");
 		return null;
 	}
 
-	let i = 0;
-	while (i < album.json.albums.length) {
-		if (album.json.albums[i].id === albumID) {
-			return album.json.albums[i];
-		}
-		i++;
+	const subAlbum = album.json.albums ? album.json.albums.find((a) => a.id === albumID) : null;
+	if (subAlbum) {
+		return subAlbum;
+	}
+
+	const subTagAlbum = album.json.tag_albums ? album.json.tag_albums.find((a) => a.id === albumID) : null;
+	if (subTagAlbum) {
+		return subTagAlbum;
 	}
 
 	loadingBar.show("error", "Error: album " + albumID + " not found!");
@@ -307,7 +323,7 @@ album.add = function (IDs = null, callback = null) {
 			parent_id: null,
 		};
 
-		if (visible.albums() || album.isSmartID(album.json.id)) {
+		if (visible.albums() || album.isSmartID(album.json.id) || album.isSearchID(album.json.id)) {
 			params.parent_id = null;
 		} else if (visible.album()) {
 			params.parent_id = album.json.id;

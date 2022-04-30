@@ -2,6 +2,36 @@
  * @description Searches through your photos and albums.
  */
 
+/**
+ * The ID of the search album
+ *
+ * Constant `'search'`.
+ *
+ * @type {string}
+ */
+const SearchAlbumID = "search";
+
+/**
+ * @typedef SearchAlbum
+ *
+ * A "virtual" album which holds the search results in a form which is
+ * mostly compatible with the other album types, i.e.
+ * {@link Album}, {@link TagAlbum} and {@link SmartAlbum}.
+ *
+ * @property {string}  id                       - always equals `SearchAlbumID`
+ * @property {string}  title                    - always equals `lychee.locale["SEARCH_RESULTS"]`
+ * @property {Photo[]} photos                   - the found photos
+ * @property {Album[]} albums                   - the found albums
+ * @property {TagAlbum[]} tag_albums            - the found tag albums
+ * @property {?Thumb}  thumb                    - always `null`; just a dummy entry, because all other albums {@link Album}, {@link TagAlbum}, {@link SmartAlbum} have it
+ * @property {boolean} is_public                - always `false`; just a dummy entry, because all other albums {@link Album}, {@link TagAlbum}, {@link SmartAlbum} have it
+ * @property {boolean} is_downloadable          - always `false`; just a dummy entry, because all other albums {@link Album}, {@link TagAlbum}, {@link SmartAlbum} have it
+ * @property {boolean} is_share_button_visible  - always `false`; just a dummy entry, because all other albums {@link Album}, {@link TagAlbum}, {@link SmartAlbum} have it
+ */
+
+/**
+ * The search object
+ */
 const search = {
 	/** @type {?SearchResult} */
 	json: null,
@@ -22,10 +52,28 @@ search.find = function (term) {
 		}
 
 		search.json = data;
+
+		// Create and assign a `SearchAlbum`
+		album.json = {
+			id: SearchAlbumID,
+			title: lychee.locale["SEARCH_RESULTS"],
+			photos: search.json.photos,
+			albums: search.json.albums,
+			tag_albums: search.json.tag_albums,
+			thumb: null,
+			is_public: false,
+			is_downloadable: false,
+			is_share_button_visible: false,
+		};
+
 		let albumsData = "";
 		let photosData = "";
 
 		// Build HTML for album
+		search.json.tag_albums.forEach(function (album) {
+			albums.parse(album);
+			albumsData += build.album(album);
+		});
 		search.json.albums.forEach(function (album) {
 			albums.parse(album);
 			albumsData += build.album(album);
@@ -39,7 +87,7 @@ search.find = function (term) {
 		let albums_divider = lychee.locale["ALBUMS"];
 		let photos_divider = lychee.locale["PHOTOS"];
 
-		if (albumsData !== "") albums_divider += " (" + search.json.albums.length + ")";
+		if (albumsData !== "") albums_divider += " (" + (search.json.tag_albums.length + search.json.albums.length) + ")";
 		if (photosData !== "") {
 			photos_divider += " (" + search.json.photos.length + ")";
 			if (lychee.layout === 1) {

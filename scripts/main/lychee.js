@@ -719,7 +719,7 @@ lychee.load = function (autoplay = true) {
 				tabindex.makeUnfocusable(lychee.imageview);
 			}
 			if (visible.mapview()) mapview.close();
-			if (visible.sidebar() && album.isSmartID(albumID)) sidebar.toggle(false);
+			if (visible.sidebar() && (album.isSmartID(albumID) || album.isSearchID(albumID))) sidebar.toggle(false);
 			$("#sensitive_warning").hide();
 			if (album.json && albumID === album.json.id) {
 				view.album.title();
