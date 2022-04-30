@@ -1181,7 +1181,7 @@ lychee.getBaseUrl = function () {
  */
 lychee.startDrag = function (ev) {
 	ev.preventDefault();
-	ev.dataTransfer.setData("text", `${ev.target.className.split(" ")[0]}-${ev.target.getAttribute("data-id")}`);
+	ev.dataTransfer.setData("text", `${ev.target.className.split(" ")[0]}-${ev.target.dataset.id}`);
 };
 
 /**
@@ -1195,9 +1195,9 @@ lychee.finishDrag = function (ev) {
 	/** @type string */
 	const data = ev.dataTransfer.getData("text");
 	/** @type string */
-	let targetId = ev.target.getAttribute("data-id");
-	if (targetId == null) {
-		targetId = ev.target.parentNode.getAttribute("data-id");
+	let targetId = ev.target.dataset.id;
+	if (targetId === undefined) {
+		targetId = ev.target.parentNode.dataset.id;
 	}
 
 	if (data.startsWith("photo-")) {
