@@ -35,7 +35,7 @@ album.isModelID = function (id) {
  * @returns {?string}
  */
 album.getParentID = function () {
-	if (album.json === null || album.isSmartID(album.json.id) || /* album.isSearchID(album.json.id) || */ !album.json.parent_id) {
+	if (album.json === null || album.isSmartID(album.json.id) || album.isSearchID(album.json.id) || !album.json.parent_id) {
 		return null;
 	}
 	return album.json.parent_id;
@@ -50,7 +50,7 @@ album.getID = function () {
 
 	// this is a Lambda
 	let isID = (_id) => {
-		return album.isSmartID(_id) || album.isSearchID(_id) || album.isModelID(_id);
+		return album.isSmartID(_id) || /*album.isSearchID(_id) || */ album.isModelID(_id);
 	};
 
 	if (photo.json) id = photo.json.album_id;
