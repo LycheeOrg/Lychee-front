@@ -1181,7 +1181,16 @@ lychee.getBaseUrl = function () {
  */
 lychee.startDrag = function (ev) {
 	ev.preventDefault();
-	ev.dataTransfer.setData("text", `${ev.target.className.split(" ")[0]}-${ev.target.dataset.id}`);
+	/** @type string */
+	let type = "album";
+	/** @type ?HTMLElementTagNameMap */
+	let div = ev.target.closest("div.album");
+	if (div == null) {
+		type = "photo";
+		div = ev.target.closest("div.photo");
+		if (div == null) return;
+	}
+	ev.dataTransfer.setData("text", `${type}-${div.dataset.id}`);
 };
 
 /**
@@ -1195,10 +1204,8 @@ lychee.finishDrag = function (ev) {
 	/** @type string */
 	const data = ev.dataTransfer.getData("text");
 	/** @type string */
-	let targetId = ev.target.dataset.id;
-	if (targetId === undefined) {
-		targetId = ev.target.parentNode.dataset.id;
-	}
+	let targetId = ev.target.closest("div.album").dataset.id;
+	if (targetId === undefined || data.substring(6) === targetId) return;
 
 	if (data.startsWith("photo-")) {
 		// photo is dragged
