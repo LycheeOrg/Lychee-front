@@ -1184,7 +1184,7 @@ lychee.startDrag = function (ev) {
 	let type = "album";
 	/** @type ?HTMLElementTagNameMap */
 	let div = ev.target.closest("div.album");
-	if (div == null) {
+	if (!div) {
 		type = "photo";
 		div = ev.target.closest("div.photo");
 		if (div == null) return;
