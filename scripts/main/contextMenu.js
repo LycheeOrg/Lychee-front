@@ -700,6 +700,7 @@ contextMenu.shareAlbum = function (albumID, e) {
 				navigator.clipboard.writeText(url).then(() => loadingBar.show("success", lychee.locale["URL_COPIED_TO_CLIPBOARD"]));
 			},
 		},
+		{ title: build.iconic("grid-two-up") + lychee.locale["QR_CODE"], fn: () => photo.qrCode(photoID) },
 	];
 
 	basicContext.show(items, e.originalEvent);

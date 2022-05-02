@@ -1094,6 +1094,42 @@ album.share = function (service) {
 };
 
 /**
+ * @returns {void}
+ */
+album.qrCode = function () {
+	if (album.json.hasOwnProperty("is_share_button_visible") && !album.json.is_share_button_visible) {
+		return;
+	}
+
+	let msg = lychee.html`
+		<div id='qr-code' class='downloads'></div>
+	`;
+
+	basicModal.show({
+		body: msg,
+		callback: function () {
+			QrCreator.render(
+				{
+					text: location.href,
+					radius: 0.0,
+					ecLevel: "H",
+					fill: "#000000",
+					background: "#FFFFFF",
+					size: 440, // 500px (modal width) - 2*30px (padding)
+				},
+				document.getElementById("qr-code")
+			);
+		},
+		buttons: {
+			cancel: {
+				title: lychee.locale["CLOSE"],
+				fn: basicModal.close,
+			},
+		},
+	});
+};
+
+/**
  * @param {string[]} albumIDs
  * @returns {void}
  */
