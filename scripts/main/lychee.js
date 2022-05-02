@@ -1204,7 +1204,7 @@ lychee.finishDrag = function (ev) {
 	const data = ev.dataTransfer.getData("text");
 	/** @type string */
 	let targetId = ev.target.closest("div.album").dataset.id;
-	if (targetId === undefined || data.substring(6) === targetId) return;
+	if (!targetId || data.substring(6) === targetId) return;
 
 	if (data.startsWith("photo-")) {
 		// photo is dragged
