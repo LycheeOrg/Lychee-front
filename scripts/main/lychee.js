@@ -1180,7 +1180,6 @@ lychee.getBaseUrl = function () {
  * @returns {void}
  */
 lychee.startDrag = function (ev) {
-	ev.preventDefault();
 	/** @type string */
 	let type = "album";
 	/** @type ?HTMLElementTagNameMap */
