@@ -450,7 +450,6 @@ contextMenu.photoMore = function (photoID, e) {
 	const items = [
 		{ title: build.iconic("fullscreen-enter") + lychee.locale["FULL_PHOTO"], visible: showFull, fn: () => window.open(photo.getDirectLink()) },
 		{ title: build.iconic("cloud-download") + lychee.locale["DOWNLOAD"], visible: showDownload, fn: () => photo.getArchive([photoID]) },
-		{ title: build.iconic("grid-two-up") + lychee.locale["QR_CODE"], fn: () => photo.qrCode([photoID]) },
 	];
 	if (album.isUploadable()) {
 		// prepend further buttons if menu bar is reduced on small screens
@@ -667,6 +666,7 @@ contextMenu.sharePhoto = function (photoID, e) {
 		{ title: build.iconic("envelope-closed") + "Mail", fn: () => photo.share(photoID, "mail") },
 		{ title: build.iconic("dropbox", iconClass) + "Dropbox", visible: lychee.admin === true, fn: () => photo.share(photoID, "dropbox") },
 		{ title: build.iconic("link-intact") + lychee.locale["DIRECT_LINKS"], fn: () => photo.showDirectLinks(photoID) },
+		{ title: build.iconic("grid-two-up") + lychee.locale["QR_CODE"], fn: () => photo.qrCode(photoID) },
 	];
 
 	basicContext.show(items, e.originalEvent);
