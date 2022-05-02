@@ -1187,7 +1187,7 @@ lychee.startDrag = function (ev) {
 	if (!div) {
 		type = "photo";
 		div = ev.target.closest("div.photo");
-		if (div == null) return;
+		if (!div) return;
 	}
 	ev.dataTransfer.setData("text", `${type}-${div.dataset.id}`);
 };
