@@ -2,48 +2,44 @@
  * @description Takes care of every action a photo can handle and execute.
  */
 
-let photo = {
+const photo = {
+	/** @type {?Photo} */
 	json: null,
 	cache: null,
+	/** @type {?boolean} indicates whether the browser supports prefetching of images; `null` if support hasn't been determined yet */
 	supportsPrefetch: null,
-	LivePhotosObject: null,
+	/** @type {?LivePhotosKit.Player} */
+	livePhotosObject: null,
 };
 
+/**
+ * @returns {?string} - the photo ID
+ */
 photo.getID = function () {
-	let id = null;
+	let id = photo.json ? photo.json.id : $(".photo:hover, .photo.active").attr("data-id");
+	id = typeof id === "string" && /^[-_0-9a-zA-Z]{24}$/.test(id) ? id : null;
 
-	if (photo.json) id = photo.json.id;
-	else id = $(".photo:hover, .photo.active").attr("data-id");
-
-	if (typeof id === "string" && id.length === 24) return id;
-	else return null;
+	return id;
 };
 
+/**
+ *
+ * @param {string} photoID
+ * @param {string} albumID
+ * @param {boolean} autoplay - automatically start playback, if the photo is a video or live photo
+ *
+ * @returns {void}
+ */
 photo.load = function (photoID, albumID, autoplay) {
-	const checkContent = function () {
-		if (album.json != null && album.json.photos) photo.load(photoID, albumID, autoplay);
-		else setTimeout(checkContent, 100);
-	};
-
-	const checkPasswd = function () {
-		if (password.value !== "") photo.load(photoID, albumID, autoplay);
-		else setTimeout(checkPasswd, 200);
-	};
-
-	// we need to check the album.json.photos because otherwise the script is too fast and this raise an error.
-	if (album.json == null || album.json.photos == null) {
-		checkContent();
-		return false;
-	}
-
-	let params = {
-		photoID,
-		password: password.value,
-	};
-
-	api.post("Photo::get", params, function (data) {
+	/**
+	 * @param {Photo} data
+	 * @returns {void}
+	 */
+	const successHandler = function (data) {
 		photo.json = data;
+		// TODO: `photo.json.original_album_id` is set only, but never read; do we need it?
 		photo.json.original_album_id = photo.json.album_id;
+		// TODO: Why do we overwrite the true album ID of a photo, by the externally provided one? I guess we need it, because the album which the user came from might also be a smart album or a tag album. However, in this case I would prefer to leave the `album_id  untouched (don't rename it to `original_album_id`) and call this one `effective_album_id` instead.
 		photo.json.album_id = albumID;
 
 		if (!visible.photo()) view.photo.show();
@@ -56,186 +52,240 @@ photo.load = function (photoID, albumID, autoplay) {
 				tabindex.makeUnfocusable(lychee.content);
 			}, 300);
 		}
-	});
+	};
+
+	api.post(
+		"Photo::get",
+		{
+			photoID: photoID,
+		},
+		successHandler
+	);
 };
 
+/**
+ * @returns {boolean}
+ */
 photo.hasExif = function () {
-	let exifHash = photo.json.make + photo.json.model + photo.json.shutter + photo.json.aperture + photo.json.focal + photo.json.iso;
-
-	return exifHash !== "";
+	return !!photo.json.make || !!photo.json.model || !!photo.json.shutter || !!photo.json.aperture || !!photo.json.focal || !!photo.json.iso;
 };
 
+/**
+ * @returns {boolean}
+ */
 photo.hasTakestamp = function () {
-	return photo.json.taken_at !== null;
+	return !!photo.json.taken_at;
 };
 
+/**
+ * @returns {boolean}
+ */
 photo.hasDesc = function () {
-	return photo.json.description && photo.json.description !== "";
+	return !!photo.json.description;
 };
 
+/**
+ * @returns {boolean}
+ */
 photo.isLivePhoto = function () {
-	if (!photo.json) return false; // In case it's called, but not initialized
-	return photo.json.live_photo_url && photo.json.live_photo_url !== "";
+	return (
+		!!photo.json && // In case it's called, but not initialized
+		!!photo.json.live_photo_url
+	);
 };
 
-photo.isLivePhotoInitizalized = function () {
-	return photo.LivePhotosObject !== null;
+/**
+ * @returns {boolean}
+ */
+photo.isLivePhotoInitialized = function () {
+	return !!photo.livePhotosObject;
 };
 
+/**
+ * @returns {boolean}
+ */
 photo.isLivePhotoPlaying = function () {
-	if (photo.isLivePhotoInitizalized() === false) return false;
-	return photo.LivePhotosObject.isPlaying;
+	return photo.isLivePhotoInitialized() && photo.livePhotosObject.isPlaying;
 };
 
+/**
+ * @returns {void}
+ */
 photo.cycle_display_overlay = function () {
-	let oldtype = build.check_overlay_type(photo.json, lychee.image_overlay_type);
-	let newtype = build.check_overlay_type(photo.json, oldtype, true);
-	if (oldtype !== newtype) {
-		lychee.image_overlay_type = newtype;
+	const oldType = build.check_overlay_type(photo.json, lychee.image_overlay_type);
+	const newType = build.check_overlay_type(photo.json, oldType, true);
+	if (oldType !== newType) {
+		lychee.image_overlay_type = newType;
 		$("#image_overlay").remove();
-		let newoverlay = build.overlay_image(photo.json);
-		if (newoverlay !== "") lychee.imageview.append(newoverlay);
+		const newOverlay = build.overlay_image(photo.json);
+		if (newOverlay !== "") lychee.imageview.append(newOverlay);
 	}
 };
 
-// Preload the next and previous photos for better response time
+/**
+ * Preloads the next and previous photos for better response time
+ *
+ * @param {string} photoID
+ * @returns {void}
+ */
 photo.preloadNextPrev = function (photoID) {
-	if (album.json && album.json.photos && album.getByID(photoID)) {
-		let previousPhotoID = album.getByID(photoID).previous_photo_id;
-		let nextPhotoID = album.getByID(photoID).next_photo_id;
-		let imgs = $("img#image");
-		let isUsing2xCurrently = imgs.length > 0 && imgs[0].currentSrc !== null && imgs[0].currentSrc.includes("@2x.");
+	if (!album.json || !album.json.photos) return;
 
-		$("head [data-prefetch]").remove();
+	const photo = album.getByID(photoID);
+	if (!photo) return;
 
-		let preload = function (preloadID) {
-			let preloadPhoto = album.getByID(preloadID);
-			let href = "";
+	const imgs = $("img#image");
+	// TODO: consider replacing the test for "@2x." by a simple comparison to photo.size_variants.medium2x.url.
+	const isUsing2xCurrently = imgs.length > 0 && imgs[0].currentSrc !== null && imgs[0].currentSrc.includes("@2x.");
 
-			if (preloadPhoto.size_variants.medium != null) {
-				href = preloadPhoto.size_variants.medium.url;
-				if (preloadPhoto.size_variants.medium2x != null && isUsing2xCurrently) {
-					// If the currently displayed image uses the 2x variant,
-					// chances are that so will the next one.
-					href = preloadPhoto.size_variants.medium2x.url;
-				}
-			} else if (preloadPhoto.type && preloadPhoto.type.indexOf("video") === -1) {
-				// Preload the original size, but only if it's not a video
-				href = preloadPhoto.url;
+	$("head [data-prefetch]").remove();
+
+	/**
+	 * @param {string} preloadID
+	 * @returns {void}
+	 */
+	const preload = function (preloadID) {
+		const preloadPhoto = album.getByID(preloadID);
+		let href = "";
+
+		if (preloadPhoto.size_variants.medium != null) {
+			href = preloadPhoto.size_variants.medium.url;
+			if (preloadPhoto.size_variants.medium2x != null && isUsing2xCurrently) {
+				// If the currently displayed image uses the 2x variant,
+				// chances are that so will the next one.
+				href = preloadPhoto.size_variants.medium2x.url;
 			}
+		} else if (preloadPhoto.type && preloadPhoto.type.indexOf("video") === -1) {
+			// Preload the original size, but only if it's not a video
+			href = preloadPhoto.size_variants.original.url;
+		}
 
-			if (href !== "") {
-				if (photo.supportsPrefetch === null) {
-					// Copied from https://www.smashingmagazine.com/2016/02/preload-what-is-it-good-for/
-					let DOMTokenListSupports = function (tokenList, token) {
+		if (href !== "") {
+			if (photo.supportsPrefetch === null) {
+				/**
+				 * Copied from https://www.smashingmagazine.com/2016/02/preload-what-is-it-good-for/
+				 *
+				 * TODO: This method should not be defined dynamically, but defined and executed upon initialization once
+				 *
+				 * @param {DOMTokenList} tokenList
+				 * @param {string} token
+				 * @returns {boolean}
+				 */
+				const DOMTokenListSupports = function (tokenList, token) {
+					try {
 						if (!tokenList || !tokenList.supports) {
-							return null;
+							return false;
 						}
-						try {
-							return tokenList.supports(token);
-						} catch (e) {
-							if (e instanceof TypeError) {
-								console.log("The DOMTokenList doesn't have a supported tokens list");
-							} else {
-								console.error("That shouldn't have happened");
-							}
+						return tokenList.supports(token);
+					} catch (e) {
+						if (e instanceof TypeError) {
+							console.log("The DOMTokenList doesn't have a supported tokens list");
+						} else {
+							console.error("That shouldn't have happened");
 						}
-					};
-					photo.supportsPrefetch = DOMTokenListSupports(document.createElement("link").relList, "prefetch");
-				}
-
-				if (photo.supportsPrefetch) {
-					$("head").append(lychee.html`<link data-prefetch rel="prefetch" href="${href}">`);
-				} else {
-					// According to https://caniuse.com/#feat=link-rel-prefetch,
-					// as of mid-2019 it's mainly Safari (both on desktop and mobile)
-					new Image().src = href;
-				}
+						return false;
+					}
+				};
+				photo.supportsPrefetch = DOMTokenListSupports(document.createElement("link").relList, "prefetch");
 			}
-		};
 
-		if (nextPhotoID) {
-			preload(nextPhotoID);
+			if (photo.supportsPrefetch) {
+				$("head").append(lychee.html`<link data-prefetch rel="prefetch" href="${href}">`);
+			} else {
+				// According to https://caniuse.com/#feat=link-rel-prefetch,
+				// as of mid-2019 it's mainly Safari (both on desktop and mobile)
+				new Image().src = href;
+			}
 		}
-		if (previousPhotoID) {
-			preload(previousPhotoID);
-		}
+	};
+
+	if (photo.next_photo_id) {
+		preload(photo.next_photo_id);
+	}
+	if (photo.previous_photo_id) {
+		preload(photo.previous_photo_id);
 	}
 };
 
-photo.parse = function () {
-	if (!photo.json.title) photo.json.title = lychee.locale["UNTITLED"];
-};
-
-photo.updateSizeLivePhotoDuringAnimation = function (animationDuraction = 300, pauseBetweenUpdated = 10) {
+/**
+ * @param {number} [animationDuration=300]
+ * @param {number} [pauseBetweenUpdated=10]
+ * @returns {void}
+ */
+photo.updateSizeLivePhotoDuringAnimation = function (animationDuration = 300, pauseBetweenUpdated = 10) {
 	// For the LivePhotoKit, we need to call the updateSize manually
 	// during CSS animations
 	//
-	var interval = setInterval(function () {
-		if (photo.isLivePhotoInitizalized()) {
-			photo.LivePhotosObject.updateSize();
+	const interval = setInterval(function () {
+		if (photo.isLivePhotoInitialized()) {
+			photo.livePhotosObject.updateSize();
 		}
 	}, pauseBetweenUpdated);
 
 	setTimeout(function () {
 		clearInterval(interval);
-	}, animationDuraction);
+	}, animationDuration);
 };
 
+/**
+ * @param {boolean} animate
+ * @returns {void}
+ */
 photo.previous = function (animate) {
-	if (photo.getID() !== null && album.json && album.getByID(photo.getID()) && album.getByID(photo.getID()).previous_photo_id !== null) {
-		let delay = 0;
+	const curPhoto = photo.getID() !== null && album.json ? album.getByID(photo.getID()) : null;
+	if (!curPhoto || !curPhoto.previous_photo_id) return;
 
-		if (animate === true) {
-			delay = 200;
+	const delay = animate ? 200 : 0;
 
-			$("#imageview #image").css({
-				WebkitTransform: "translateX(100%)",
-				MozTransform: "translateX(100%)",
-				transform: "translateX(100%)",
-				opacity: 0,
-			});
-		}
-
-		setTimeout(() => {
-			if (photo.getID() === null) return false;
-			photo.LivePhotosObject = null;
-			lychee.goto(album.getID() + "/" + album.getByID(photo.getID()).previous_photo_id, false);
-		}, delay);
+	if (animate) {
+		$("#imageview #image").css({
+			WebkitTransform: "translateX(100%)",
+			MozTransform: "translateX(100%)",
+			transform: "translateX(100%)",
+			opacity: 0,
+		});
 	}
+
+	setTimeout(() => {
+		photo.livePhotosObject = null;
+		lychee.goto(album.getID() + "/" + curPhoto.previous_photo_id, false);
+	}, delay);
 };
 
+/**
+ * @param {boolean} animate
+ * @returns {void}
+ */
 photo.next = function (animate) {
-	if (photo.getID() !== null && album.json && album.getByID(photo.getID()) && album.getByID(photo.getID()).next_photo_id !== null) {
-		let delay = 0;
+	const curPhoto = photo.getID() !== null && album.json ? album.getByID(photo.getID()) : null;
+	if (!curPhoto || !curPhoto.next_photo_id) return;
 
-		if (animate === true) {
-			delay = 200;
+	const delay = animate ? 200 : 0;
 
-			$("#imageview #image").css({
-				WebkitTransform: "translateX(-100%)",
-				MozTransform: "translateX(-100%)",
-				transform: "translateX(-100%)",
-				opacity: 0,
-			});
-		}
-
-		setTimeout(() => {
-			if (photo.getID() === null) return false;
-			photo.LivePhotosObject = null;
-			lychee.goto(album.getID() + "/" + album.getByID(photo.getID()).next_photo_id, false);
-		}, delay);
+	if (animate === true) {
+		$("#imageview #image").css({
+			WebkitTransform: "translateX(-100%)",
+			MozTransform: "translateX(-100%)",
+			transform: "translateX(-100%)",
+			opacity: 0,
+		});
 	}
+
+	setTimeout(() => {
+		photo.livePhotosObject = null;
+		lychee.goto(album.getID() + "/" + curPhoto.next_photo_id, false);
+	}, delay);
 };
 
+/**
+ * @param {string[]} photoIDs
+ * @returns {boolean}
+ */
 photo.delete = function (photoIDs) {
 	let action = {};
 	let cancel = {};
 	let msg = "";
 	let photoTitle = "";
-
-	if (!photoIDs) return false;
-	if (!(photoIDs instanceof Array)) photoIDs = [photoIDs];
 
 	if (photoIDs.length === 1) {
 		// Get title if only one photo is selected
@@ -243,7 +293,7 @@ photo.delete = function (photoIDs) {
 		else photoTitle = album.getByID(photoIDs[0]).title;
 
 		// Fallback for photos without a title
-		if (photoTitle === "") photoTitle = lychee.locale["UNTITLED"];
+		if (!photoTitle) photoTitle = lychee.locale["UNTITLED"];
 	}
 
 	action.fn = function () {
@@ -288,11 +338,7 @@ photo.delete = function (photoIDs) {
 			lychee.goto(album.getID());
 		}
 
-		let params = {
-			photoIDs: photoIDs.join(),
-		};
-
-		api.post("Photo::delete", params, null);
+		api.post("Photo::delete", { photoIDs: photoIDs });
 	};
 
 	if (photoIDs.length === 1) {
@@ -323,12 +369,14 @@ photo.delete = function (photoIDs) {
 	});
 };
 
+/**
+ *
+ * @param {string[]} photoIDs
+ * @returns {void}
+ */
 photo.setTitle = function (photoIDs) {
 	let oldTitle = "";
 	let msg = "";
-
-	if (!photoIDs) return false;
-	if (photoIDs instanceof Array === false) photoIDs = [photoIDs];
 
 	if (photoIDs.length === 1) {
 		// Get old title if only one photo is selected
@@ -336,6 +384,10 @@ photo.setTitle = function (photoIDs) {
 		else if (album.json) oldTitle = album.getByID(photoIDs[0]).title;
 	}
 
+	/**
+	 * @param {{title: string}} data
+	 * @returns {void}
+	 */
 	const action = function (data) {
 		if (!data.title.trim()) {
 			basicModal.error("title");
@@ -344,31 +396,26 @@ photo.setTitle = function (photoIDs) {
 
 		basicModal.close();
 
-		let newTitle = data.title;
+		const newTitle = data.title ? data.title : null;
 
 		if (visible.photo()) {
-			photo.json.title = newTitle === "" ? "Untitled" : newTitle;
+			photo.json.title = newTitle;
 			view.photo.title();
 		}
 
 		photoIDs.forEach(function (id) {
+			// TODO: The line below looks suspicious: It is inconsistent to the code some lines above.
 			album.getByID(id).title = newTitle;
 			view.album.content.title(id);
 		});
 
-		let params = {
-			photoIDs: photoIDs.join(),
+		api.post("Photo::setTitle", {
+			photoIDs: photoIDs,
 			title: newTitle,
-		};
-
-		api.post("Photo::setTitle", params, function (_data) {
-			if (_data !== true) {
-				lychee.error(null, params, _data);
-			}
 		});
 	};
 
-	let input = lychee.html`<input class='text' name='title' type='text' maxlength='100' placeholder='Title' value='$${oldTitle}'>`;
+	const input = lychee.html`<input class='text' name='title' type='text' maxlength='100' placeholder='Title' value='$${oldTitle}'>`;
 
 	if (photoIDs.length === 1) msg = lychee.html`<p>${lychee.locale["PHOTO_NEW_TITLE"]} ${input}</p>`;
 	else msg = lychee.html`<p>${lychee.locale["PHOTOS_NEW_TITLE_1"]} ${photoIDs.length} ${lychee.locale["PHOTOS_NEW_TITLE_2"]} ${input}</p>`;
@@ -392,32 +439,27 @@ photo.setTitle = function (photoIDs) {
  *
  * @param {string[]} photoIDs IDs of photos to be copied
  * @param {?string} albumID ID of destination album; `null` means root album
- * @return {void}
+ * @returns {void}
  */
 photo.copyTo = function (photoIDs, albumID) {
-	if (!photoIDs) return;
-	if (!(photoIDs instanceof Array)) photoIDs = [photoIDs];
-
-	let params = {
-		photoIDs: photoIDs.join(),
-		albumID,
-	};
-
-	api.post("Photo::duplicate", params, function (data) {
-		if (data instanceof Object) {
-			album.reload();
-		} else {
-			lychee.error(null, params, data);
-		}
-	});
+	api.post(
+		"Photo::duplicate",
+		{
+			photoIDs: photoIDs,
+			albumID: albumID,
+		},
+		() => album.reload()
+	);
 };
 
+/**
+ * @param {string[]} photoIDs
+ * @param {string} albumID
+ * @returns {void}
+ */
 photo.setAlbum = function (photoIDs, albumID) {
 	let nextPhotoID = null;
 	let previousPhotoID = null;
-
-	if (!photoIDs) return false;
-	if (!(photoIDs instanceof Array)) photoIDs = [photoIDs];
 
 	photoIDs.forEach(function (id, index) {
 		// Change reference for the next and previous photo
@@ -453,15 +495,13 @@ photo.setAlbum = function (photoIDs, albumID) {
 		}
 	}
 
-	let params = {
-		photoIDs: photoIDs.join(),
-		albumID,
-	};
-
-	api.post("Photo::setAlbum", params, function (data) {
-		if (data !== true) {
-			lychee.error(null, params, data);
-		} else {
+	api.post(
+		"Photo::setAlbum",
+		{
+			photoIDs: photoIDs,
+			albumID: albumID,
+		},
+		function () {
 			// We only really need to do anything here if the destination
 			// is a (possibly nested) subalbum of the current album; but
 			// since we have no way of figuring it out (albums.json is
@@ -470,35 +510,57 @@ photo.setAlbum = function (photoIDs, albumID) {
 				album.reload();
 			}
 		}
+	);
+};
+
+/**
+ * Toggles the star-property of the currently visible photo.
+ *
+ * @returns {void}
+ */
+photo.toggleStar = function () {
+	photo.json.is_starred = !photo.json.is_starred;
+	view.photo.star();
+	albums.refresh();
+
+	api.post("Photo::setStar", {
+		photoIDs: [photo.json.id],
+		is_starred: photo.json.is_starred,
 	});
 };
 
-photo.setStar = function (photoIDs) {
-	if (!photoIDs) return false;
-
-	if (visible.photo()) {
-		photo.json.is_starred = !photo.json.is_starred;
-		view.photo.star();
-	}
-
+/**
+ * Sets the star-property of the given photos.
+ *
+ * @param {string[]} photoIDs
+ * @param {boolean} isStarred
+ * @returns {void}
+ */
+photo.setStar = function (photoIDs, isStarred) {
 	photoIDs.forEach(function (id) {
-		album.getByID(id).is_starred = !album.getByID(id).is_starred;
+		album.getByID(id).is_starred = isStarred;
 		view.album.content.star(id);
 	});
 
 	albums.refresh();
 
-	let params = {
-		photoIDs: photoIDs.join(),
-	};
-
-	api.post("Photo::setStar", params, function (data) {
-		if (data !== true) lychee.error(null, params, data);
+	api.post("Photo::setStar", {
+		photoIDs: photoIDs,
+		is_starred: isStarred,
 	});
 };
 
-photo.setPublic = function (photoID, e) {
-	let msg_switch = lychee.html`
+/**
+ * Edits the protection policy of a photo.
+ *
+ * This method is a misnomer, it does not only set the policy, it also creates
+ * and handles the edit dialog
+ *
+ * @param {string} photoID
+ * @returns {void}
+ */
+photo.setProtectionPolicy = function (photoID) {
+	const msg_switch = lychee.html`
 		<div class='switch'>
 			<label>
 				<span class='label'>${lychee.locale["PHOTO_PUBLIC"]}:</span>
@@ -509,7 +571,7 @@ photo.setPublic = function (photoID, e) {
 		</div>
 	`;
 
-	let msg_choices = lychee.html`
+	const msg_choices = lychee.html`
 		<div class='choice'>
 			<label>
 				<input type='checkbox' name='grants_full_photo' disabled>
@@ -552,11 +614,11 @@ photo.setPublic = function (photoID, e) {
 		</div>
 	`;
 
-	if (photo.json.is_public == 2) {
-		// Public album. We can't actually change anything but we will
+	if (photo.json.is_public === 2) {
+		// Public album. We can't actually change anything, but we will
 		// display the current settings.
 
-		let msg = lychee.html`
+		const msg = lychee.html`
 			<p class='less'>${lychee.locale["PHOTO_NO_EDIT_SHARING_TEXT"]}</p>
 			${msg_switch}
 			${msg_choices}
@@ -593,14 +655,19 @@ photo.setPublic = function (photoID, e) {
 	} else {
 		// Private album -- each photo can be shared individually.
 
-		let msg = lychee.html`
+		const msg = lychee.html`
 			${msg_switch}
 			<p class='photoPublic'>${lychee.locale["PHOTO_EDIT_GLOBAL_SHARING_TEXT"]}</p>
 			${msg_choices}
 		`;
 
+		// TODO: Actually, the action handler receives an object with values of all input fields. There is no need to run use a jQuery-selector
 		const action = function () {
-			let newIsPublic = $('.basicModal .switch input[name="is_public"]:checked').length === 1;
+			/**
+			 * Note: `newIsPublic` must be of type `number`, because `photo.is_public` is a number, too
+			 * @type {number}
+			 */
+			const newIsPublic = $('.basicModal .switch input[name="is_public"]:checked').length;
 
 			if (newIsPublic !== photo.json.is_public) {
 				if (visible.photo()) {
@@ -613,10 +680,9 @@ photo.setPublic = function (photoID, e) {
 
 				albums.refresh();
 
-				// Photo::setPublic simply flips the current state.
-				// Ugly API but effective...
-				api.post("Photo::setPublic", { photoID }, function (data) {
-					if (data !== true) lychee.error(null, params, data);
+				api.post("Photo::setPublic", {
+					photoID: photoID,
+					is_public: newIsPublic !== 0,
 				});
 			}
 
@@ -657,36 +723,39 @@ photo.setPublic = function (photoID, e) {
 			}
 		});
 
-		if (photo.json.is_public == 1) {
+		if (photo.json.is_public === 1) {
 			$('.basicModal .switch input[name="is_public"]').click();
 		}
 	}
-
-	return true;
 };
 
+/**
+ * Edits the description of a photo.
+ *
+ * This method is a misnomer, it does not only set the description, it also creates and handles the edit dialog
+ *
+ * @param {string} photoID
+ * @returns {void}
+ */
 photo.setDescription = function (photoID) {
-	let oldDescription = photo.json.description ? photo.json.description : "";
+	const oldDescription = photo.json.description ? photo.json.description : "";
 
+	/**
+	 * @param {{description: string}} data
+	 */
 	const action = function (data) {
 		basicModal.close();
 
-		let description = data.description ? data.description : null;
+		const description = data.description ? data.description : null;
 
 		if (visible.photo()) {
 			photo.json.description = description;
 			view.photo.description();
 		}
 
-		let params = {
-			photoID,
-			description,
-		};
-
-		api.post("Photo::setDescription", params, function (_data) {
-			if (_data !== true) {
-				lychee.error(null, params, _data);
-			}
+		api.post("Photo::setDescription", {
+			photoID: photoID,
+			description: description,
 		});
 	};
 
@@ -705,41 +774,51 @@ photo.setDescription = function (photoID) {
 	});
 };
 
+/**
+ * @param {string[]} photoIDs
+ * @returns {void}
+ */
 photo.editTags = function (photoIDs) {
-	let oldTags = "";
-	let msg = "";
-
-	if (!photoIDs) return false;
-	if (photoIDs instanceof Array === false) photoIDs = [photoIDs];
+	/** @type {string[]} */
+	let oldTags = [];
 
 	// Get tags
-	if (visible.photo()) oldTags = photo.json.tags;
-	else if (visible.album() && photoIDs.length === 1) oldTags = album.getByID(photoIDs[0]).tags;
-	else if (visible.search() && photoIDs.length === 1) oldTags = album.getByID(photoIDs[0]).tags;
+	if (visible.photo()) oldTags = photo.json.tags.sort();
+	else if (visible.album() && photoIDs.length === 1) oldTags = album.getByID(photoIDs[0]).tags.sort();
+	else if (visible.search() && photoIDs.length === 1) oldTags = album.getByID(photoIDs[0]).tags.sort();
 	else if (visible.album() && photoIDs.length > 1) {
-		let same = true;
-		photoIDs.forEach(function (id) {
-			same = album.getByID(id).tags === album.getByID(photoIDs[0]).tags && same === true;
+		oldTags = album.getByID(photoIDs[0]).tags.sort();
+		const areIdentical = photoIDs.every(function (id) {
+			const oldTags2 = album.getByID(id).tags.sort();
+			if (oldTags.length !== oldTags2.length) return false;
+			for (let tagIdx = 0; tagIdx !== oldTags.length; tagIdx++) {
+				if (oldTags[tagIdx] !== oldTags2[tagIdx]) return false;
+			}
+			return true;
 		});
-		if (same === true) oldTags = album.getByID(photoIDs[0]).tags;
+		if (!areIdentical) oldTags = [];
 	}
 
-	// Improve tags
-	if (typeof oldTags === "string" && oldTags !== "") {
-		oldTags = oldTags.replace(/,/g, ", ");
-	} else {
-		oldTags = "";
-	}
-
+	/**
+	 * @param {{tags: string}} data
+	 * @returns {void}
+	 */
 	const action = function (data) {
 		basicModal.close();
-		photo.setTags(photoIDs, data.tags);
+		const newTags = data.tags
+			.split(",")
+			.map((tag) => tag.trim())
+			.filter((tag) => tag !== "" && tag.indexOf(",") === -1)
+			.sort();
+		photo.setTags(photoIDs, newTags);
 	};
 
-	let input = lychee.html`<input class='text' name='tags' type='text' maxlength='800' placeholder='Tags' value='$${oldTags}'>`;
+	const input = lychee.html`<input class='text' name='tags' type='text' maxlength='800' placeholder='Tags' value='$${oldTags.join(", ")}'>`;
 
-	if (photoIDs.length === 1) msg = lychee.html`<p>${lychee.locale["PHOTO_NEW_TAGS"]} ${input}</p>`;
-	else msg = lychee.html`<p>${lychee.locale["PHOTO_NEW_TAGS_1"]} ${photoIDs.length} ${lychee.locale["PHOTO_NEW_TAGS_2"]} ${input}</p>`;
+	const msg =
+		photoIDs.length === 1
+			? lychee.html`<p>${lychee.locale["PHOTO_NEW_TAGS"]} ${input}</p>`
+			: lychee.html`<p>${lychee.locale["PHOTO_NEW_TAGS_1"]} ${photoIDs.length} ${lychee.locale["PHOTO_NEW_TAGS_2"]} ${input}</p>`;
 
 	basicModal.show({
 		body: msg,
@@ -756,61 +835,58 @@ photo.editTags = function (photoIDs) {
 	});
 };
 
+/**
+ * @param {string[]} photoIDs
+ * @param {string[]} tags
+ * @returns {void}
+ */
 photo.setTags = function (photoIDs, tags) {
-	if (!photoIDs) return false;
-	if (!(photoIDs instanceof Array)) photoIDs = [photoIDs];
-
-	// Parse tags
-	tags = tags.replace(/( , )|( ,)|(, )|(,+ *)|(,$|^,)/g, ",");
-	tags = tags.replace(/,$|^,|( )*$/g, "");
-
 	if (visible.photo()) {
 		photo.json.tags = tags;
 		view.photo.tags();
 	}
 
-	photoIDs.forEach(function (id, index, array) {
+	photoIDs.forEach(function (id) {
 		album.getByID(id).tags = tags;
 	});
 
-	let params = {
-		photoIDs: photoIDs.join(),
-		tags,
-	};
-
-	api.post("Photo::setTags", params, function (data) {
-		if (data !== true) {
-			lychee.error(null, params, data);
-		} else if (albums.json && albums.json.smart_albums) {
-			$.each(Object.entries(albums.json.smart_albums), function () {
-				if (this.length === 2 && this[1]["is_tag_album"] === true) {
-					// If we have any tag albums, force a refresh.
-					albums.refresh();
-					return false;
-				}
-			});
+	api.post(
+		"Photo::setTags",
+		{
+			photoIDs: photoIDs,
+			tags: tags,
+		},
+		function () {
+			// If we have any tag albums, force a refresh.
+			if (albums.json && albums.json.tag_albums.length !== 0) {
+				albums.refresh();
+			}
 		}
-	});
+	);
 };
 
+/**
+ * Deletes the tag at the given index from the photo.
+ *
+ * @param {string} photoID
+ * @param {number} index
+ */
 photo.deleteTag = function (photoID, index) {
-	let tags;
-
-	// Remove
-	tags = photo.json.tags.split(",");
-	tags.splice(index, 1);
-
-	// Save
-	photo.json.tags = tags.toString();
+	photo.json.tags.splice(index, 1);
 	photo.setTags([photoID], photo.json.tags);
 };
 
+/**
+ * @param {string} photoID
+ * @param {string} service - one out of `"twitter"`, `"facebook"`, `"mail"` or `"dropbox"`
+ * @returns {void}
+ */
 photo.share = function (photoID, service) {
-	if (photo.json.hasOwnProperty("is_share_button_visible") && !photo.json.is_share_button_visible) {
+	if (!photo.json.is_share_button_visible) {
 		return;
 	}
 
-	let url = photo.getViewLink(photoID);
+	const url = photo.getViewLink(photoID);
 
 	switch (service) {
 		case "twitter":
@@ -831,12 +907,14 @@ photo.share = function (photoID, service) {
 	}
 };
 
+/**
+ * @param {string} photoID
+ * @returns {void}
+ */
 photo.setLicense = function (photoID) {
-	const callback = function () {
-		$("select#license").val(photo.json.license === "" ? "none" : photo.json.license);
-		return false;
-	};
-
+	/**
+	 * @param {{license: string}} data
+	 */
 	const action = function (data) {
 		basicModal.close();
 		let license = data.license;
@@ -846,18 +924,14 @@ photo.setLicense = function (photoID) {
 			license,
 		};
 
-		api.post("Photo::setLicense", params, function (_data) {
-			if (_data) {
-				lychee.error(null, params, _data);
-			} else {
-				// update the photo JSON and reload the license in the sidebar
-				photo.json.license = params.license;
-				view.photo.license();
-			}
+		api.post("Photo::setLicense", params, function () {
+			// update the photo JSON and reload the license in the sidebar
+			photo.json.license = params.license;
+			view.photo.license();
 		});
 	};
 
-	let msg = lychee.html`
+	const msg = lychee.html`
 	<div>
 		<p>${lychee.locale["PHOTO_LICENSE"]}
 		<span class="select" style="width:270px">
@@ -904,7 +978,9 @@ photo.setLicense = function (photoID) {
 
 	basicModal.show({
 		body: msg,
-		callback: callback,
+		callback: function () {
+			$("select#license").val(photo.json.license === "" ? "none" : photo.json.license);
+		},
 		buttons: {
 			action: {
 				title: lychee.locale["PHOTO_SET_LICENSE"],
@@ -918,6 +994,14 @@ photo.setLicense = function (photoID) {
 	});
 };
 
+/**
+ * @param {string[]} photoIDs
+ * @param {?string} [kind=null] - the type of size variant; one out of
+ *                                `"FULL"`, `"MEDIUM2X"`, `"MEDIUM"`,
+ *                                `"SMALL2X"`, `"SMALL"`, `"THUMB2X"` or
+ *                                `"THUMB"`,
+ * @returns {void}
+ */
 photo.getArchive = function (photoIDs, kind = null) {
 	if (photoIDs.length === 1 && kind === null) {
 		// For a single photo, allow to pick the kind via a dialog box.
@@ -930,6 +1014,11 @@ photo.getArchive = function (photoIDs, kind = null) {
 			myPhoto = album.getByID(photoIDs[0]);
 		}
 
+		/**
+		 * @param {string} id - the ID of the button, same semantics as "kind"
+		 * @param {string} label - the caption on the button
+		 * @returns {string} - HTML
+		 */
 		const buildButton = function (id, label) {
 			return lychee.html`
 				<a class='basicModal__button' id='${id}' title='${lychee.locale["DOWNLOAD"]}'>
@@ -1010,43 +1099,46 @@ photo.getArchive = function (photoIDs, kind = null) {
 		});
 
 		$(".downloads .basicModal__button").on(lychee.getEventName(), function () {
-			kind = this.id;
+			const kind = this.id;
 			basicModal.close();
 			photo.getArchive(photoIDs, kind);
 		});
-
-		return true;
+	} else {
+		location.href = "api/Photo::getArchive?photoIDs=" + photoIDs.join() + "&kind=" + kind;
 	}
-
-	location.href = "api/Photo::getArchive" + lychee.html`?photoIDs=${photoIDs.join()}&kind=${kind}`;
 };
 
+/**
+ * @returns {string}
+ */
 photo.getDirectLink = function () {
-	let url = "";
-
-	if (
-		photo.json &&
-		photo.json.size_variants &&
-		photo.json.size_variants.original &&
-		photo.json.size_variants.original.url &&
-		photo.json.size_variants.original.url !== ""
-	)
-		url = photo.json.size_variants.original.url;
-
-	return url;
+	return photo.json && photo.json.size_variants && photo.json.size_variants.original && photo.json.size_variants.original.url
+		? photo.json.size_variants.original.url
+		: "";
 };
 
+/**
+ * @param {string} photoID
+ * @returns {string}
+ */
 photo.getViewLink = function (photoID) {
-	let url = "view?p=" + photoID;
-
-	return lychee.getBaseUrl() + url;
+	return lychee.getBaseUrl() + "view?p=" + photoID;
 };
 
+/**
+ * @param photoID
+ * @returns {void}
+ */
 photo.showDirectLinks = function (photoID) {
-	if (!photo.json || photo.json.id != photoID) {
+	if (!photo.json || photo.json.id !== photoID) {
 		return;
 	}
 
+	/**
+	 * @param {string} label
+	 * @param {string} url
+	 * @returns {string} - HTML
+	 */
 	const buildLine = function (label, url) {
 		return lychee.html`
 			<p>
@@ -1111,7 +1203,7 @@ photo.showDirectLinks = function (photoID) {
 			lychee.getBaseUrl() + photo.json.size_variants.thumb.url
 		);
 	}
-	if (photo.json.live_photo_url !== "") {
+	if (photo.json.live_photo_url) {
 		msg += buildLine(` ${lychee.locale["PHOTO_LIVE_VIDEO"]} `, lychee.getBaseUrl() + photo.json.live_photo_url);
 	}
 
@@ -1134,8 +1226,6 @@ photo.showDirectLinks = function (photoID) {
 	$(".basicModal input:focus").blur();
 
 	$(".directLinks .basicModal__button").on(lychee.getEventName(), function () {
-		if (lychee.clipboardCopy($(this).prev().val())) {
-			loadingBar.show("success", lychee.locale["URL_COPIED_TO_CLIPBOARD"]);
-		}
+		navigator.clipboard.writeText($(this).prev().val()).then(() => loadingBar.show("success", lychee.locale["URL_COPIED_TO_CLIPBOARD"]));
 	});
 };

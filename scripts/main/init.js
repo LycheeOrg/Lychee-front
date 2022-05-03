@@ -6,13 +6,10 @@ $(document).ready(function () {
 	$("#sensitive_warning").hide();
 
 	// Event Name
-	let eventName = lychee.getEventName();
-
-	// set CSRF protection (Laravel)
-	csrf.bind();
+	const eventName = lychee.getEventName();
 
 	// Set API error handler
-	api.onError = lychee.error;
+	api.onError = lychee.handleAPIError;
 
 	$("html").css("visibility", "visible");
 
@@ -24,9 +21,9 @@ $(document).ready(function () {
 
 	// Image View
 	lychee.imageview
-		.on(eventName, ".arrow_wrapper--previous", photo.previous)
-		.on(eventName, ".arrow_wrapper--next", photo.next)
-		.on(eventName, "img, #livephoto", photo.cycle_display_overlay);
+		.on(eventName, ".arrow_wrapper--previous", () => photo.previous(false))
+		.on(eventName, ".arrow_wrapper--next", () => photo.next(false))
+		.on(eventName, "img, #livephoto", () => photo.cycle_display_overlay());
 
 	// Keyboard
 	Mousetrap.addKeycodes({
@@ -88,7 +85,7 @@ $(document).ready(function () {
 		.bind(["r"], function () {
 			if (album.isUploadable()) {
 				if (visible.album()) {
-					album.setTitle(album.getID());
+					album.setTitle([album.getID()]);
 					return false;
 				} else if (visible.photo()) {
 					photo.setTitle([photo.getID()]);
@@ -96,7 +93,11 @@ $(document).ready(function () {
 				}
 			}
 		})
-		.bind(["h"], album.toggle_nsfw_filter)
+		.bind(["h"], function () {
+			lychee.nsfw_visible = !lychee.nsfw_visible;
+			album.apply_nsfw_filter();
+			return false;
+		})
 		.bind(["d"], function () {
 			if (album.isUploadable()) {
 				if (visible.photo()) {
@@ -215,7 +216,7 @@ $(document).ready(function () {
 		else if (visible.photo()) lychee.goto(album.getID());
 		else if (visible.album() && !album.json.parent_id) lychee.goto();
 		else if (visible.album()) lychee.goto(album.getParentID());
-		else if (visible.albums() && search.hash !== null) search.reset();
+		else if (visible.albums() && search.json !== null) search.reset();
 		else if (visible.mapview()) mapview.close();
 		else if (visible.albums() && lychee.enable_close_tab_on_esc) {
 			window.open("", "_self").close();
@@ -225,18 +226,18 @@ $(document).ready(function () {
 
 	$(document)
 		// Fullscreen on mobile
-		.on("touchend", "#imageview #image", function (e) {
+		.on("touchend", "#imageview #image", function () {
 			// prevent triggering event 'mousemove'
 			// why? this also prevents 'click' from firing which results in unexpected behaviour
 			// unable to reproduce problems arising from 'mousemove' on iOS devices
 			//			e.preventDefault();
 
-			if (typeof swipe.obj === "undefined" || (Math.abs(swipe.offsetX) <= 5 && Math.abs(swipe.offsetY) <= 5)) {
+			if (typeof swipe.obj === null || (Math.abs(swipe.offsetX) <= 5 && Math.abs(swipe.offsetY) <= 5)) {
 				// Toggle header only if we're not moving to next/previous photo;
 				// In this case, swipe.preventNextHeaderToggle is set to true
-				if (typeof swipe.preventNextHeaderToggle === "undefined" || !swipe.preventNextHeaderToggle) {
+				if (!swipe.preventNextHeaderToggle) {
 					if (visible.header()) {
-						header.hide(e);
+						header.hide();
 					} else {
 						header.show();
 					}
@@ -253,30 +254,52 @@ $(document).ready(function () {
 			if (visible.photo()) swipe.start($("#imageview #image, #imageview #livephoto"));
 		})
 		.swipe()
-		.on("swipeMove", function (e) {
-			if (visible.photo()) swipe.move(e.swipe);
-		})
+		.on(
+			"swipeMove",
+			/** @param {jQuery.Event} e */ function (e) {
+				if (visible.photo()) swipe.move(e.swipe);
+			}
+		)
 		.swipe()
-		.on("swipeEnd", function (e) {
-			if (visible.photo()) swipe.stop(e.swipe, photo.previous, photo.next);
-		});
+		.on(
+			"swipeEnd",
+			/** @param {jQuery.Event} e */ function (e) {
+				if (visible.photo()) swipe.stop(e.swipe, photo.previous, photo.next);
+			}
+		);
 
 	// Document
 	$(document)
 		// Navigation
-		.on("click", ".album", function (e) {
-			multiselect.albumClick(e, $(this));
-		})
-		.on("click", ".photo", function (e) {
-			multiselect.photoClick(e, $(this));
-		})
+		.on(
+			"click",
+			".album",
+			/** @param {jQuery.Event} e */ function (e) {
+				multiselect.albumClick(e, $(this));
+			}
+		)
+		.on(
+			"click",
+			".photo",
+			/** @param {jQuery.Event} e */ function (e) {
+				multiselect.photoClick(e, $(this));
+			}
+		)
 		// Context Menu
-		.on("contextmenu", ".photo", function (e) {
-			multiselect.photoContextMenu(e, $(this));
-		})
-		.on("contextmenu", ".album", function (e) {
-			multiselect.albumContextMenu(e, $(this));
-		})
+		.on(
+			"contextmenu",
+			".photo",
+			/** @param {jQuery.Event} e */ function (e) {
+				multiselect.photoContextMenu(e, $(this));
+			}
+		)
+		.on(
+			"contextmenu",
+			".album",
+			/** @param {jQuery.Event} e */ function (e) {
+				multiselect.albumContextMenu(e, $(this));
+			}
+		)
 		// Upload
 		.on("change", "#upload_files", function () {
 			basicModal.close();
@@ -290,45 +313,51 @@ $(document).ready(function () {
 			},
 			false
 		)
-		.on("drop", function (e) {
-			if (
-				!album.isUploadable() ||
-				visible.contextMenu() ||
-				basicModal.visible() ||
-				visible.leftMenu() ||
-				visible.config() ||
-				!(visible.album() || visible.albums())
-			) {
-				return false;
-			}
-
-			// Detect if dropped item is a file or a link
-			if (e.originalEvent.dataTransfer.files.length > 0) upload.start.local(e.originalEvent.dataTransfer.files);
-			else if (e.originalEvent.dataTransfer.getData("Text").length > 3) upload.start.url(e.originalEvent.dataTransfer.getData("Text"));
-
-			return false;
-		})
-		// click on thumbnail on map
-		.on("click", ".image-leaflet-popup", function (e) {
-			mapview.goto($(this));
-		})
-		// Paste upload
-		.on("paste", function (e) {
-			if (e.originalEvent.clipboardData.items) {
-				const items = e.originalEvent.clipboardData.items;
-				let filesToUpload = [];
-
-				// Search clipboard items for an image
-				for (let i = 0; i < items.length; i++) {
-					if (items[i].type.indexOf("image") !== -1 || items[i].type.indexOf("video") !== -1) {
-						filesToUpload.push(items[i].getAsFile());
+		.on(
+			"drop",
+			/** @param {jQuery.Event} e */ function (e) {
+				if (
+					album.isUploadable() &&
+					!visible.contextMenu() &&
+					!basicModal.visible() &&
+					!visible.leftMenu() &&
+					!visible.config() &&
+					(visible.album() || visible.albums())
+				) {
+					// Detect if dropped item is a file or a link
+					if (e.originalEvent.dataTransfer.files.length > 0) {
+						upload.start.local(e.originalEvent.dataTransfer.files);
+					} else if (e.originalEvent.dataTransfer.getData("Text").length > 3) {
+						upload.start.url(e.originalEvent.dataTransfer.getData("Text"));
 					}
 				}
 
-				if (filesToUpload.length > 0) {
+				return false;
+			}
+		)
+		// click on thumbnail on map
+		.on("click", ".image-leaflet-popup", function () {
+			mapview.goto($(this));
+		})
+		// Paste upload
+		.on(
+			"paste",
+			/** @param {jQuery.Event} e */ function (e) {
+				if (e.originalEvent.clipboardData.items) {
+					const items = e.originalEvent.clipboardData.items;
+					let filesToUpload = [];
+
+					// Search clipboard items for an image
+					for (let i = 0; i < items.length; i++) {
+						if (items[i].type.indexOf("image") !== -1 || items[i].type.indexOf("video") !== -1) {
+							filesToUpload.push(items[i].getAsFile());
+						}
+					}
+
 					// We perform the check so deep because we don't want to
 					// prevent the paste from working in text input fields, etc.
 					if (
+						filesToUpload.length > 0 &&
 						album.isUploadable() &&
 						!visible.contextMenu() &&
 						!basicModal.visible() &&
@@ -337,18 +366,24 @@ $(document).ready(function () {
 						(visible.album() || visible.albums())
 					) {
 						upload.start.local(filesToUpload);
-					}
 
-					return false;
+						return false;
+					} else {
+						return true;
+					}
 				}
 			}
-		});
+		);
 	// Fullscreen
 	if (lychee.fullscreenAvailable())
 		$(document).on("fullscreenchange mozfullscreenchange webkitfullscreenchange msfullscreenchange", lychee.fullscreenUpdate);
 
 	$("#sensitive_warning").on("click", view.album.nsfw_warning.next);
 
+	/**
+	 * @param {number} scrollPos
+	 * @returns {void}
+	 */
 	const rememberScrollPage = function (scrollPos) {
 		if ((visible.albums() && !visible.search()) || visible.album()) {
 			let urls = JSON.parse(localStorage.getItem("scroll"));
@@ -372,7 +407,8 @@ $(document).ready(function () {
 	$(window)
 		// resize
 		.on("resize", function () {
-			if (visible.album() || visible.search()) view.album.content.justify();
+			if (visible.album()) view.album.content.justify(album.json ? album.json.photos : []);
+			if (visible.search()) view.album.content.justify(search.json.photos);
 			if (visible.photo()) view.photo.onresize();
 		})
 		// remember scroll positions

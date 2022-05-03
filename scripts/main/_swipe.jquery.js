@@ -1,6 +1,6 @@
 (function ($) {
-	var Swipe = function (el) {
-		var self = this;
+	const Swipe = function (el) {
+		const self = this;
 
 		this.el = $(el);
 		this.pos = { start: { x: 0, y: 0 }, end: { x: 0, y: 0 } };
@@ -22,19 +22,19 @@
 
 	Swipe.prototype = {
 		touchStart: function (e) {
-			var touch = e.originalEvent.touches[0];
+			const touch = e.originalEvent.touches[0];
 
 			this.swipeStart(e, touch.pageX, touch.pageY);
 		},
 
 		touchMove: function (e) {
-			var touch = e.originalEvent.touches[0];
+			const touch = e.originalEvent.touches[0];
 
 			this.swipeMove(e, touch.pageX, touch.pageY);
 		},
 
 		mouseDown: function (e) {
-			var self = this;
+			const self = this;
 
 			this.swipeStart(e, e.pageX, e.pageY);
 

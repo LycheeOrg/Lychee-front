@@ -2,71 +2,125 @@
  * @description This module takes care of the map view of a full album and its sub-albums.
  */
 
+/**
+ * @typedef MapProvider
+ * @property {string} layer - URL pattern for map tile
+ * @property {string} attribution - HTML with attribution
+ */
+
 const map_provider_layer_attribution = {
+	/**
+	 * @type {MapProvider}
+	 */
 	Wikimedia: {
 		layer: "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png",
 		attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>',
 	},
+	/**
+	 * @type {MapProvider}
+	 */
 	"OpenStreetMap.org": {
 		layer: "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
 		attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
 	},
+	/**
+	 * @type {MapProvider}
+	 */
 	"OpenStreetMap.de": {
 		layer: "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png ",
 		attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
 	},
+	/**
+	 * @type {MapProvider}
+	 */
 	"OpenStreetMap.fr": {
 		layer: "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png ",
 		attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
 	},
+	/**
+	 * @type {MapProvider}
+	 */
 	RRZE: {
 		layer: "https://{s}.osm.rrze.fau.de/osmhd/{z}/{x}/{y}.png",
 		attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
 	},
 };
 
-let mapview = {
+const mapview = {
+	/** @type {?L.Map} */
 	map: null,
 	photoLayer: null,
+	/** @type {?number} */
 	min_lat: null,
+	/** @type {?number} */
 	min_lng: null,
+	/** @type {?number} */
 	max_lat: null,
+	/** @type {?number} */
 	max_lng: null,
+	/** @type {?string} */
 	albumID: null,
+	/** @type {?string} */
 	map_provider: null,
 };
 
+/**
+ * @typedef MapPhotoEntry
+ *
+ * @property {number} [lat] - latitude
+ * @property {number} [lng] - longitude
+ * @property {string} [thumbnail] - URL to the thumbnail
+ * @property {string} [thumbnail2x] - URL to the high-res thumbnail
+ * @property {string} url - URL to the small size-variant; quite a misnomer
+ * @property {string} url2x - URL to the small, high-res size-variant; quite a misnomer
+ * @property {string} name - the title of the photo
+ * @property {string} taken_at - the takedate of the photo, formatted as a locale string
+ * @property {string} albumID - the album ID
+ * @property {string} photoID - the photo ID
+ */
+
+/**
+ * @returns {boolean}
+ */
 mapview.isInitialized = function () {
-	if (mapview.map === null || mapview.photoLayer === null) {
-		return false;
-	}
-	return true;
+	return !(mapview.map === null || mapview.photoLayer === null);
 };
 
+/**
+ * @param {?string} _albumID
+ * @param {string} _albumTitle
+ *
+ * @returns {void}
+ */
 mapview.title = function (_albumID, _albumTitle) {
 	switch (_albumID) {
-		case "f":
+		case SmartAlbumID.STARRED:
 			lychee.setTitle(lychee.locale["STARRED"], false);
 			break;
-		case "s":
+		case SmartAlbumID.PUBLIC:
 			lychee.setTitle(lychee.locale["PUBLIC"], false);
 			break;
-		case "r":
+		case SmartAlbumID.RECENT:
 			lychee.setTitle(lychee.locale["RECENT"], false);
 			break;
-		case "0":
+		case SmartAlbumID.UNSORTED:
 			lychee.setTitle(lychee.locale["UNSORTED"], false);
 			break;
 		case null:
 			lychee.setTitle(lychee.locale["ALBUMS"], false);
 			break;
 		default:
-			lychee.setTitle(_albumTitle, false);
+			lychee.setTitle(_albumTitle ? _albumTitle : lychee.locale["UNTITLED"], false);
 			break;
 	}
 };
 
-// Open the map view
+/**
+ * Opens the map view
+ *
+ * @param {?string} [albumID=null]
+ * @returns {void}
+ */
 mapview.open = function (albumID = null) {
 	// If map functionality is disabled -> do nothing
 	if (!lychee.map_display || (lychee.publicMode === true && !lychee.map_display_public)) {
@@ -81,8 +135,8 @@ mapview.open = function (albumID = null) {
 	mapview.albumID = albumID;
 
 	// initialize container only once
-	if (mapview.isInitialized() == false) {
-		// Leaflet seaches for icon in same directoy as js file -> paths needs
+	if (!mapview.isInitialized()) {
+		// Leaflet searches for icon in same directory as js file -> paths need
 		// to be overwritten
 		delete L.Icon.Default.prototype._getIconUrl;
 		L.Icon.Default.mergeOptions({
@@ -125,6 +179,7 @@ mapview.open = function (albumID = null) {
 
 	// Define how the photos on the map should look like
 	mapview.photoLayer = L.photo.cluster().on("click", function (e) {
+		/** @type {MapPhotoEntry} */
 		const photo = {
 			photoID: e.layer.photo.photoID,
 			albumID: e.layer.photo.albumID,
@@ -163,8 +218,8 @@ mapview.open = function (albumID = null) {
 	// Adjusts zoom and position of map to show all images
 	const updateZoom = function () {
 		if (mapview.min_lat && mapview.min_lng && mapview.max_lat && mapview.max_lng) {
-			var dist_lat = mapview.max_lat - mapview.min_lat;
-			var dist_lng = mapview.max_lng - mapview.min_lng;
+			const dist_lat = mapview.max_lat - mapview.min_lat;
+			const dist_lng = mapview.max_lng - mapview.min_lng;
 			mapview.map.fitBounds([
 				[mapview.min_lat - 0.1 * dist_lat, mapview.min_lng - 0.1 * dist_lng],
 				[mapview.max_lat + 0.1 * dist_lat, mapview.max_lng + 0.1 * dist_lng],
@@ -174,43 +229,50 @@ mapview.open = function (albumID = null) {
 		}
 	};
 
-	// Adds photos to the map
+	/**
+	 * Adds photos to the map.
+	 *
+	 * @param {(Album|TagAlbum|PositionData)} album
+	 */
 	const addPhotosToMap = function (album) {
 		// check if empty
 		if (!album.photos) return;
 
+		/** @type {MapPhotoEntry[]} */
 		let photos = [];
 
-		album.photos.forEach(function (element, index) {
-			if (element.latitude || element.longitude) {
-				photos.push({
-					lat: parseFloat(element.latitude),
-					lng: parseFloat(element.longitude),
-					thumbnail: element.size_variants.thumb !== null ? element.size_variants.thumb.url : "img/placeholder.png",
-					thumbnail2x: element.size_variants.thumb2x !== null ? element.size_variants.thumb2x.url : null,
-					url: element.size_variants.small !== null ? element.size_variants.small.url : element.url,
-					url2x: element.size_variants.small2x !== null ? element.size_variants.small2x.url : null,
-					name: element.title,
-					taken_at: element.taken_at,
-					albumID: element.album_id,
-					photoID: element.id,
-				});
+		album.photos.forEach(
+			/** @param {Photo} element */ function (element) {
+				if (element.latitude || element.longitude) {
+					photos.push({
+						lat: element.latitude,
+						lng: element.longitude,
+						thumbnail: element.size_variants.thumb !== null ? element.size_variants.thumb.url : "img/placeholder.png",
+						thumbnail2x: element.size_variants.thumb2x !== null ? element.size_variants.thumb2x.url : null,
+						url: element.size_variants.small !== null ? element.size_variants.small.url : element.url,
+						url2x: element.size_variants.small2x !== null ? element.size_variants.small2x.url : null,
+						name: element.title,
+						taken_at: element.taken_at,
+						albumID: element.album_id,
+						photoID: element.id,
+					});
 
-				// Update min/max lat/lng
-				if (mapview.min_lat === null || mapview.min_lat > element.latitude) {
-					mapview.min_lat = parseFloat(element.latitude);
-				}
-				if (mapview.min_lng === null || mapview.min_lng > element.longitude) {
-					mapview.min_lng = parseFloat(element.longitude);
-				}
-				if (mapview.max_lat === null || mapview.max_lat < element.latitude) {
-					mapview.max_lat = parseFloat(element.latitude);
-				}
-				if (mapview.max_lng === null || mapview.max_lng < element.longitude) {
-					mapview.max_lng = parseFloat(element.longitude);
+					// Update min/max lat/lng
+					if (mapview.min_lat === null || mapview.min_lat > element.latitude) {
+						mapview.min_lat = element.latitude;
+					}
+					if (mapview.min_lng === null || mapview.min_lng > element.longitude) {
+						mapview.min_lng = element.longitude;
+					}
+					if (mapview.max_lat === null || mapview.max_lat < element.latitude) {
+						mapview.max_lat = element.latitude;
+					}
+					if (mapview.max_lng === null || mapview.max_lng < element.longitude) {
+						mapview.max_lng = element.longitude;
+					}
 				}
 			}
-		});
+		);
 
 		// Add Photos to map
 		mapview.photoLayer.add(photos).addTo(mapview.map);
@@ -219,27 +281,35 @@ mapview.open = function (albumID = null) {
 		updateZoom();
 	};
 
-	// Call backend, retrieve information of photos and display them
-	// This function is called recursively to retrieve data for sub-albums
-	// Possible enhancement could be to only have a single ajax call
+	/**
+	 * Calls backend, retrieves information about photos and displays them.
+	 *
+	 * This function is called recursively to retrieve data for sub-albums.
+	 * Possible enhancement could be to only have a single ajax call.
+	 *
+	 * @param {?string} _albumID
+	 * @param {boolean} [_includeSubAlbums=true]
+	 */
 	const getAlbumData = function (_albumID, _includeSubAlbums = true) {
+		/**
+		 * @param {PositionData} data
+		 */
+		const successHandler = function (data) {
+			addPhotosToMap(data);
+			mapview.title(_albumID, data.title);
+		};
+
 		if (_albumID !== "" && _albumID !== null) {
 			// _albumID has been specified
-			let params = {
+			const params = {
 				albumID: _albumID,
 				includeSubAlbums: _includeSubAlbums,
 			};
 
-			api.post("Album::getPositionData", params, function (data) {
-				addPhotosToMap(data);
-				mapview.title(_albumID, data.title);
-			});
+			api.post("Album::getPositionData", params, successHandler);
 		} else {
 			// AlbumID is empty -> fetch all photos of all albums
-			api.post("Albums::getPositionData", {}, function (data) {
-				addPhotosToMap(data);
-				mapview.title(_albumID, data.title);
-			});
+			api.post("Albums::getPositionData", {}, successHandler);
 		}
 	};
 
@@ -256,6 +326,9 @@ mapview.open = function (albumID = null) {
 	updateZoom();
 };
 
+/**
+ * @returns {void}
+ */
 mapview.close = function () {
 	// If map functionality is disabled -> do nothing
 	if (!lychee.map_display) return;
@@ -264,22 +337,22 @@ mapview.close = function () {
 	$("#mapview").hide();
 	header.setMode("album");
 
-	// Make album focussable
+	// Make album focusable
 	tabindex.makeFocusable(lychee.content);
 };
 
+/**
+ * @param {jQuery} elem
+ * @returns {void}
+ */
 mapview.goto = function (elem) {
 	// If map functionality is disabled -> do nothing
 	if (!lychee.map_display) return;
 
-	var photoID = elem.attr("data-id");
-	var albumID = elem.attr("data-album-id");
+	const photoID = elem.attr("data-id");
+	let albumID = elem.attr("data-album-id");
 
-	if (albumID == "null") albumID = 0;
-
-	if (album.json == null || albumID !== album.json.id) {
-		album.refresh();
-	}
+	if (albumID === "null") albumID = "unsorted";
 
 	lychee.goto(albumID + "/" + photoID);
 };

@@ -2,16 +2,27 @@
  * @description This module is used to show and hide the loading bar.
  */
 
-let loadingBar = {
+const loadingBar = {
+	/** @type {?string} */
 	status: null,
+	/** @type {jQuery} */
 	_dom: $("#loading"),
 };
 
+/**
+ * @param {string} [selector=""]
+ * @returns {jQuery}
+ */
 loadingBar.dom = function (selector) {
 	if (selector == null || selector === "") return loadingBar._dom;
 	return loadingBar._dom.find(selector);
 };
 
+/**
+ * @param {?string} status the status, either `null`, `"error"` or `"success"`
+ * @param {?string} errorText the error text to show
+ * @returns {void}
+ */
 loadingBar.show = function (status, errorText) {
 	if (status === "error") {
 		// Set status
@@ -42,7 +53,7 @@ loadingBar.show = function (status, errorText) {
 		clearTimeout(loadingBar._timeout);
 		loadingBar._timeout = setTimeout(() => loadingBar.hide(true), 3000);
 
-		return true;
+		return;
 	}
 
 	if (status === "success") {
@@ -74,7 +85,7 @@ loadingBar.show = function (status, errorText) {
 		clearTimeout(loadingBar._timeout);
 		loadingBar._timeout = setTimeout(() => loadingBar.hide(true), 2000);
 
-		return true;
+		return;
 	}
 
 	if (loadingBar.status === null) {
@@ -90,11 +101,13 @@ loadingBar.show = function (status, errorText) {
 			// Modify loading
 			loadingBar.dom().removeClass("loading uploading error").html("").addClass("loading").show();
 		}, 1000);
-
-		return true;
 	}
 };
 
+/**
+ * @param {boolean} force
+ * @returns {void}
+ */
 loadingBar.hide = function (force) {
 	if ((loadingBar.status !== "error" && loadingBar.status !== "success" && loadingBar.status != null) || force) {
 		// Remove status

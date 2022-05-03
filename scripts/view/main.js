@@ -1,15 +1,42 @@
 /**
- * @description Used to view single photos with view.php
+ * @description Used as an alternative `main` to view single photos with `view.php`
+ *
+ * Note, the build script picks a subset of the JS files to build a variant
+ * of the JS code for the special "view mode".
+ * As this variant does not include all JS files, some objects are missing.
+ * Hence, we must partially re-implement these objects to the extent which is
+ * required by the methods we call.
+ *
+ * This approach is very tedious and error-prone, because we actually
+ * duplicate code.
+ * Also, it is not documented nor obvious why these "subset implementations"
+ * are necessary.
+ * Ideally, the full code base would be used all the time independent of
+ * the users entry point.
+ *
+ * TODO: Find out why we actually need this approach. Re-implementing different variants of the same objects is very error-prone.
  */
 
 // Sub-implementation of lychee -------------------------------------------------------------- //
 
-let lychee = {};
+const lychee = {};
 
 lychee.content = $(".content");
 lychee.imageview = $("#imageview");
 lychee.mapview = $("#mapview");
 
+/**
+ * DON'T USE THIS METHOD.
+ *
+ * TODO: Find all invocations of this method and nuke them.
+ *
+ * This method does not cover all potentially dangerous characters and this
+ * method should not be required on the first place.
+ * jQuery and even native JS has better methods for this in the year 2022!
+ *
+ * @param {string} [html=""]
+ * @returns {string}
+ */
 lychee.escapeHTML = function (html = "") {
 	// Ensure that html is a string
 	html += "";
@@ -26,6 +53,20 @@ lychee.escapeHTML = function (html = "") {
 	return html;
 };
 
+/**
+ * Creates a HTML string with some fancy variable substitution.
+ *
+ * Actually, this method should not be required in the year 2022.
+ * jQuery and even native JS should probably provide a suitable alternative.
+ * But this method is used so ubiquitous that it might be difficult to get
+ * rid of it.
+ *
+ * TODO: Try it nonetheless.
+ *
+ * @param literalSections
+ * @param substs
+ * @returns {string}
+ */
 lychee.html = function (literalSections, ...substs) {
 	// Use raw literal sections: we don’t want
 	// backslashes (\n etc.) to be interpreted
@@ -56,18 +97,29 @@ lychee.html = function (literalSections, ...substs) {
 	return result;
 };
 
+/**
+ * @returns {string} - either `"touchend"` or `"click"`
+ */
 lychee.getEventName = function () {
-	let touchendSupport =
+	const touchendSupport =
 		/Android|iPhone|iPad|iPod/i.test(navigator.userAgent || navigator.vendor || window.opera) && "ontouchend" in document.documentElement;
 	return touchendSupport === true ? "touchend" : "click";
 };
 
 // Sub-implementation of photo -------------------------------------------------------------- //
 
-let photo = {
+const photo = {
+	/** @type {?Photo} */
 	json: null,
+	/** @type {?LivePhotosKit.Player} */
+	livePhotosObject: null,
 };
 
+/**
+ * @param {string} photoID
+ * @param {string} service - one out of `"twitter"`, `"facebook"`, `"mail"` or `"dropbox"`
+ * @returns {void}
+ */
 photo.share = function (photoID, service) {
 	let url = location.toString();
 
@@ -84,6 +136,9 @@ photo.share = function (photoID, service) {
 	}
 };
 
+/**
+ * @returns {string}
+ */
 photo.getDirectLink = function () {
 	return $("#imageview img")
 		.attr("src")
@@ -91,32 +146,62 @@ photo.getDirectLink = function () {
 		.replace(/url\(|\)$/gi, "");
 };
 
+/**
+ * @returns {void}
+ */
 photo.show = function () {
 	$("#imageview").removeClass("full");
 	header.dom().removeClass("header--hidden");
-
-	return true;
 };
 
+/**
+ * @returns {void}
+ */
 photo.hide = function () {
 	if (visible.photo() && !visible.sidebar() && !visible.contextMenu()) {
 		$("#imageview").addClass("full");
 		header.dom().addClass("header--hidden");
-
-		return true;
 	}
-
-	return false;
 };
 
+/**
+ * @param {number} [animationDuration=300]
+ * @param {number} [pauseBetweenUpdated=10]
+ * @returns {void}
+ */
+photo.updateSizeLivePhotoDuringAnimation = function (animationDuration = 300, pauseBetweenUpdated = 10) {
+	// For the LivePhotoKit, we need to call the updateSize manually
+	// during CSS animations
+	//
+	const interval = setInterval(function () {
+		if (photo.isLivePhotoInitialized()) {
+			photo.livePhotosObject.updateSize();
+		}
+	}, pauseBetweenUpdated);
+
+	setTimeout(function () {
+		clearInterval(interval);
+	}, animationDuration);
+};
+
+/**
+ * @returns {boolean}
+ */
+photo.isLivePhotoInitialized = function () {
+	return !!photo.livePhotosObject;
+};
+
+/**
+ * @returns {void}
+ */
 photo.onresize = function () {
 	// Copy of view.photo.onresize
 	if (photo.json.size_variants.medium === null || photo.json.size_variants.medium2x === null) return;
 
 	let imgWidth = photo.json.size_variants.medium.width;
 	let imgHeight = photo.json.size_variants.medium.height;
-	let containerWidth = parseFloat($("#imageview").width(), 10);
-	let containerHeight = parseFloat($("#imageview").height(), 10);
+	let containerWidth = parseFloat($("#imageview").width());
+	let containerHeight = parseFloat($("#imageview").height());
 
 	let width = imgWidth < containerWidth ? imgWidth : containerWidth;
 	let height = (width * imgHeight) / imgWidth;
@@ -129,12 +214,17 @@ photo.onresize = function () {
 
 // Sub-implementation of contextMenu -------------------------------------------------------------- //
 
-let contextMenu = {};
+const contextMenu = {};
 
+/**
+ * @param {string} photoID
+ * @param {jQuery.Event} e
+ * @returns {void}
+ */
 contextMenu.sharePhoto = function (photoID, e) {
-	let iconClass = "ionicons";
+	const iconClass = "ionicons";
 
-	let items = [
+	const items = [
 		{ title: build.iconic("twitter", iconClass) + "Twitter", fn: () => photo.share(photoID, "twitter") },
 		{ title: build.iconic("facebook", iconClass) + "Facebook", fn: () => photo.share(photoID, "facebook") },
 		{ title: build.iconic("envelope-closed") + "Mail", fn: () => photo.share(photoID, "mail") },
@@ -144,27 +234,38 @@ contextMenu.sharePhoto = function (photoID, e) {
 	basicContext.show(items, e.originalEvent);
 };
 
+// Sub-implementation of photo -------------------------------------------------------------- //
+
+const album = {
+	json: null,
+};
+
+album.isUploadable = function () {
+	return false;
+};
+
 // Main -------------------------------------------------------------- //
 
-let loadingBar = {
+const loadingBar = {
 	show() {},
 	hide() {},
 };
 
-let imageview = $("#imageview");
+/**
+ * @type {jQuery}
+ */
+const imageview = $("#imageview");
 
 $(document).ready(function () {
-	// set CSRF protection (Laravel)
-	csrf.bind();
-
 	// Image View
 	$(window).on("resize", photo.onresize);
 
 	// Save ID of photo
-	let photoID = gup("p");
+	const queryParams = new URLSearchParams(document.location.search);
+	const photoID = queryParams.get("p");
 
 	// Set API error handler
-	api.onError = error;
+	api.onError = handleAPIError;
 
 	// Share
 	header.dom("#button_share").on("click", function (e) {
@@ -180,51 +281,67 @@ $(document).ready(function () {
 	loadPhotoInfo(photoID);
 });
 
+/**
+ * TODO: This method is global for no particular reason. In case we ever clean up the view mode, this should be fixed, too.
+ * @param {string} photoID
+ */
 const loadPhotoInfo = function (photoID) {
-	let params = {
-		photoID,
-		password: "",
+	const params = {
+		photoID: photoID,
 	};
 
-	api.post("Photo::get", params, function (data) {
-		photo.json = data;
+	api.post(
+		"Photo::get",
+		params,
+		/** @param {Photo} data */
+		function (data) {
+			photo.json = data;
 
-		// Set title
-		if (!data.title) data.title = "Untitled";
-		document.title = "Lychee - " + data.title;
-		header.dom(".header__title").html(lychee.escapeHTML(data.title));
+			// Set title
+			const _title = data.title ? data.title : lychee.locale["UNTITLED"];
+			// TODO: Actually the prefix should not be a hard-coded, but the value of `lychee.title`. However, I am unsure whether we load the configuration options in view mode.
+			document.title = "Lychee – " + _title;
+			header.dom(".header__title").text(_title);
 
-		// Render HTML
-		imageview.html(build.imageview(data, true).html);
-		imageview.find(".arrow_wrapper").remove();
-		imageview.addClass("fadeIn").show();
-		photo.onresize();
+			// Render HTML
+			imageview.html(build.imageview(data, true, false).html);
+			imageview.find(".arrow_wrapper").remove();
+			imageview.addClass("fadeIn").show();
+			photo.onresize();
 
-		// Render Sidebar
-		let structure = sidebar.createStructure.photo(data);
-		let html = sidebar.render(structure);
+			// Render Sidebar
+			const structure = sidebar.createStructure.photo(data);
+			const html = sidebar.render(structure);
 
-		// Fullscreen
-		let timeout = null;
+			// Fullscreen
+			let timeout = null;
 
-		$(document).bind("mousemove", function () {
-			clearTimeout(timeout);
-			photo.show();
+			$(document).bind("mousemove", function () {
+				clearTimeout(timeout);
+				photo.show();
+				timeout = setTimeout(photo.hide, 2500);
+			});
 			timeout = setTimeout(photo.hide, 2500);
-		});
-		timeout = setTimeout(photo.hide, 2500);
 
-		sidebar.dom(".sidebar__wrapper").html(html);
-		sidebar.bind();
-	});
+			sidebar.dom(".sidebar__wrapper").html(html);
+			sidebar.bind();
+		}
+	);
 };
 
-const error = function (errorThrown, params, data) {
-	console.error({
-		description: errorThrown,
+/**
+ * @param {XMLHttpRequest} jqXHR
+ * @param {Object} params the original JSON parameters of the request
+ * @param {?LycheeException} lycheeException the Lychee Exception
+ * @returns {boolean}
+ */
+const handleAPIError = function (jqXHR, params, lycheeException) {
+	const msg = jqXHR.statusText + (lycheeException ? " - " + lycheeException.message : "");
+	loadingBar.show("error", msg);
+	console.error("The server returned an error response", {
+		description: msg,
 		params: params,
-		response: data,
+		response: lycheeException,
 	});
-
-	loadingBar.show("error", errorThrown);
+	return true;
 };

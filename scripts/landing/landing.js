@@ -1,98 +1,51 @@
-let landing = {
-	galleryGrid: null,
-	loaderPerc: null,
-	load_wrap: null,
-};
+const landing = {};
 
-landing.init = function () {
-	this.load_wrap = $("#load_wrap");
-};
-
-landing.endLoader = function () {
-	clearInterval(loaderPerc);
-};
-
+/**
+ * @returns {void}
+ */
 landing.runInitAnimations = function () {
-	if ($("#loader_wrap").length > 0) {
-		$("#loader_wrap").fadeOut(1000);
-	}
+	$("#loader_wrap").fadeOut(1000);
 
-	if ($(".animate-down").length > 0) {
-		$(".animate-down").each(function (index) {
-			var $this = $(this);
-			setTimeout(function () {
-				$this.addClass("toggled");
-			}, 100 * index);
-		});
-	}
+	$(".animate-down").each(function (index) {
+		setTimeout((elem) => elem.addClass("toggled"), 100 * index, $(this));
+	});
 
-	if ($(".animate-up").length > 0) {
-		$(".animate-up").each(function (index) {
-			var $this = $(this);
-			setTimeout(function () {
-				$this.addClass("toggled");
-			}, 100 * index);
-		});
-	}
+	$(".animate-up").each(function (index) {
+		setTimeout((elem) => elem.addClass("toggled"), 100 * index, $(this));
+	});
 
-	if ($(".pop-in").length > 0) {
-		$(".pop-in").each(function (index) {
-			var $this = $(this);
-			setTimeout(function () {
-				$this.addClass("toggled");
-			}, 100 * index);
-		});
-	}
+	$(".pop-in").each(function (index) {
+		setTimeout((elem) => elem.addClass("toggled"), 100 * index, $(this));
+	});
 
-	if ($(".pop-out").length > 0) {
-		$(".pop-out").each(function (index) {
-			var $this = $(this);
-			setTimeout(function () {
-				$this.addClass("toggled");
-			}, 100 * index);
-		});
-	}
+	$(".pop-out").each(function (index) {
+		setTimeout((elem) => elem.addClass("toggled"), 100 * index, $(this));
+	});
 };
 
+/**
+ * @returns {void}
+ */
 landing.runInitAnimationsHome = function () {
-	if ($(".pop-in").length > 0) {
-		$(".pop-in").each(function (index) {
-			var $this = $(this);
-			setTimeout(function () {
-				$this.addClass("toggled");
-			}, 100 * index);
-		});
-	}
+	$(".pop-in").each(function (index) {
+		setTimeout((elem) => elem.addClass("toggled"), 100 * index, $(this));
+	});
 
-	setTimeout(function () {
-		$("#intro").fadeOut(1000, function () {
-			if ($(".pop-in-last").length > 0) {
-				$(".pop-in-last").each(function (index) {
-					var $this = $(this);
-					setTimeout(function () {
-						$this.addClass("toggled");
-					}, 100 * index);
-				});
-			}
-			if ($(".animate-down").length > 0) {
-				$(".animate-down").each(function (index) {
-					var $this = $(this);
-					setTimeout(function () {
-						$this.addClass("toggled");
-					}, 100 * index);
-				});
-			}
-
-			if ($(".animate-up").length > 0) {
-				$(".animate-up").each(function (index) {
-					var $this = $(this);
-					setTimeout(function () {
-						$this.addClass("toggled");
-					}, 100 * index);
-				});
-			}
+	const onFadedOut = function () {
+		$(".pop-in-last").each(function (index) {
+			setTimeout((elem) => elem.addClass("toggled"), 100 * index, $(this));
 		});
-	}, 2500);
+
+		$(".animate-down").each(function (index) {
+			setTimeout((elem) => elem.addClass("toggled"), 100 * index, $(this));
+		});
+
+		$(".animate-up").each(function (index) {
+			setTimeout((elem) => elem.addClass("toggled"), 100 * index, $(this));
+		});
+	};
+
+	setTimeout(() => $("#intro").fadeOut(1000, onFadedOut), 2500);
 };
 
 $(document).ready(function () {

@@ -1,3 +1,10 @@
+/**
+ * @typedef {Object.<string, string>} Locale
+ * @property {function} printFilesizeLocalized
+ * @property {function} printDateTime
+ * @property {function} printMonthYear
+ */
+
 lychee.locale = {
 	USERNAME: "username",
 	PASSWORD: "password",
@@ -97,7 +104,7 @@ lychee.locale = {
 	NEW_TAG_ALBUM: "New Tag Album",
 
 	TITLE_NEW_ALBUM: "Enter a title for the new album:",
-	UNTITLED: "Untilted",
+	UNTITLED: "Untitled",
 	UNSORTED: "Unsorted",
 	STARRED: "Starred",
 	RECENT: "Recent",
@@ -109,7 +116,9 @@ lychee.locale = {
 
 	STAR_PHOTO: "Star Photo",
 	STAR: "Star",
-	STAR_ALL: "Star All",
+	UNSTAR: "Unstar",
+	STAR_ALL: "Star Selected",
+	UNSTAR_ALL: "Unstar Selected",
 	TAGS: "Tags",
 	TAGS_ALL: "Tags All",
 	UNSTAR_PHOTO: "Unstar Photo",
@@ -398,7 +407,7 @@ lychee.locale = {
 
 	NSFW_VISIBLE_TEXT_1: "Make Sensitive albums visible by default.",
 	NSFW_VISIBLE_TEXT_2:
-		"If the album is public, it is still accessible, just hidden from the view and <b>can be revealed by pressing <hkb>H</hkb></b>.",
+		"If the album is public, it is still accessible, just hidden from the view and <b>can be revealed by pressing <kbd>H</kbd></b>.",
 	SETTINGS_SUCCESS_NSFW_VISIBLE: "Default sensitive album visibility updated with success.",
 
 	VIEW_NO_RESULT: "No results",
@@ -461,10 +470,9 @@ lychee.locale = {
 	/**
 	 * Formats a number representing a filesize in bytes as a localized string
 	 * @param {!number} filesize
-	 * @return {string} A formatted and localized string
+	 * @returns {string} A formatted and localized string
 	 */
 	printFilesizeLocalized: function (filesize) {
-		console.assert(Number.isInteger(filesize), "printFilesizeLocalized: expected integer, got %s", typeof filesize);
 		const suffix = [" B", " kB", " MB", " GB"];
 		let i = 0;
 		// Sic! We check if the number is larger than 1000 but divide by 1024 by intention
@@ -500,7 +508,7 @@ lychee.locale = {
 	 * and 14:24:13 for French/German).
 	 *
 	 * @param {?string} jsonDateTime
-	 * @return {string} A formatted and localized time
+	 * @returns {string} A formatted and localized time
 	 */
 	printDateTime: function (jsonDateTime) {
 		if (typeof jsonDateTime !== "string" || jsonDateTime === "") return "";
@@ -550,7 +558,7 @@ lychee.locale = {
 	 * "Aug 2020" in English or "Août 2020" in French).
 	 *
 	 * @param {?string} jsonDateTime
-	 * @return {string} A formatted and localized month and year
+	 * @returns {string} A formatted and localized month and year
 	 */
 	printMonthYear: function (jsonDateTime) {
 		if (typeof jsonDateTime !== "string" || jsonDateTime === "") return "";
