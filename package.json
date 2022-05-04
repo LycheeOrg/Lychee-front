@@ -24,6 +24,7 @@
 		"justified-layout": "^2.1.1",
 		"lazysizes": "^5.3.0",
 		"leaflet": "^1.7.1",
+		"leaflet-gpx": "^1.7.0",
 		"leaflet-rotatedmarker": "^0.2.0",
 		"leaflet-spin": "^1.1.0",
 		"leaflet.markercluster": "^1.4.1",

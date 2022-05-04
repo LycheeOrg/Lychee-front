@@ -102,6 +102,8 @@ lychee.locale = {
 	IMPORT_SERVER: "Import from Server",
 	NEW_ALBUM: "New Album",
 	NEW_TAG_ALBUM: "New Tag Album",
+	UPLOAD_TRACK: "Upload track",
+	DELETE_TRACK: "Delete track",
 
 	TITLE_NEW_ALBUM: "Enter a title for the new album:",
 	UNTITLED: "Untitled",
@@ -467,6 +469,8 @@ lychee.locale = {
 	PHOTO_THUMB_HIDPI: "Square thumb HiDPI",
 	PHOTO_LIVE_VIDEO: "Video part of live-photo",
 	PHOTO_VIEW: "Lychee Photo View:",
+
+	ERROR_GPX: "Error loading GPX file: ",
 
 	/**
 	 * Formats a number representing a filesize in bytes as a localized string
