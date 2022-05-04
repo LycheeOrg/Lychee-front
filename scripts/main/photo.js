@@ -1130,6 +1130,7 @@ photo.qrCode = function (photoID) {
 	basicModal.show({
 		body: msg,
 		callback: function () {
+			qrcode = $("#qr-code");
 			QrCreator.render(
 				{
 					text: photo.getViewLink(myPhoto.id),
@@ -1137,9 +1138,9 @@ photo.qrCode = function (photoID) {
 					ecLevel: "H",
 					fill: "#000000",
 					background: "#FFFFFF",
-					size: 440, // 500px (modal width) - 2*30px (padding)
+					size: qrcode.width(),
 				},
-				document.getElementById("qr-code")
+				qrcode[0]
 			);
 		},
 		buttons: {
