@@ -223,6 +223,8 @@ mapview.open = function (albumID = null) {
 	 * Adds photos to the map.
 	 *
 	 * @param {(Album|TagAlbum|PositionData)} album
+	 *
+	 * @returns {void}
 	 */
 	const addContentsToMap = function (album) {
 		// check if empty
