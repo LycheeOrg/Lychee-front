@@ -915,6 +915,8 @@ upload.check = function () {
 
 /**
  * @param {(FileList|File[])} files
+ *
+ * @returns {void}
  */
 upload.uploadTrack = function (files) {
 	const albumID = album.getID();
