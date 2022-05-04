@@ -1398,6 +1398,9 @@ album.refresh = function () {
 	album.json = null;
 };
 
+/**
+ * @returns {void}
+ */
 album.deleteTrack = function () {
 	album.json.track_url = null;
 
