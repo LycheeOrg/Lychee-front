@@ -31,6 +31,7 @@
 		"livephotoskit": "^1.5.6",
 		"mousetrap": "^1.6.0",
 		"multiselect-two-sides": "^2.5.5",
+		"qr-creator": "^1.0.0",
 		"require": "^2.4.20",
 		"scroll-lock": "^2.1.2",
 		"spin.js": "^2.3.2"
