@@ -55,7 +55,7 @@
 
 // restrict hover features to devices that support it
 @media (hover: hover) {
-	.basicContext__item:not(.basicContext__item--disabled):hover &__data {
+	.basicContext__item:not(.basicContext__item--disabled):hover .basicContext__data {
 		background: linear-gradient(to bottom, $colorBlue, darken($colorBlue, 5%));
 	}
 
