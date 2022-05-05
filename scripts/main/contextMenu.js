@@ -671,10 +671,20 @@ contextMenu.sharePhoto = function (photoID, e) {
 		{ title: build.iconic("twitter", iconClass) + "Twitter", fn: () => photo.share(photoID, "twitter") },
 		{ title: build.iconic("facebook", iconClass) + "Facebook", fn: () => photo.share(photoID, "facebook") },
 		{ title: build.iconic("envelope-closed") + "Mail", fn: () => photo.share(photoID, "mail") },
-		{ title: build.iconic("dropbox", iconClass) + "Dropbox", visible: lychee.admin === true, fn: () => photo.share(photoID, "dropbox") },
-		{ title: build.iconic("link-intact") + lychee.locale["DIRECT_LINKS"], fn: () => photo.showDirectLinks(photoID) },
-		{ title: build.iconic("grid-two-up") + lychee.locale["QR_CODE"], fn: () => photo.qrCode(photoID) },
 	];
+
+	if (lychee.dropboxKey) {
+		items.push({
+			title: build.iconic("dropbox", iconClass) + "Dropbox",
+			visible: lychee.admin === true,
+			fn: () => photo.share(photoID, "dropbox"),
+		});
+	}
+
+	items.push(
+		{ title: build.iconic("link-intact") + lychee.locale["DIRECT_LINKS"], fn: () => photo.showDirectLinks(photoID) },
+		{ title: build.iconic("grid-two-up") + lychee.locale["QR_CODE"], fn: () => photo.qrCode(photoID) }
+	);
 
 	basicContext.show(items, e.originalEvent);
 };
