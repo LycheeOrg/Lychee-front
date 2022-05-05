@@ -79,6 +79,13 @@ contextMenu.add = function (e) {
 					});
 				}
 			}
+			if (!album.isSmartID(albumID) && lychee.map_display) {
+				// display track add button if it's a regular album
+				items.push({}, { title: build.iconic("location") + lychee.locale["UPLOAD_TRACK"], fn: () => $("#upload_track_file").click() });
+				if (album.json.track_url) {
+					items.push({ title: build.iconic("trash") + lychee.locale["DELETE_TRACK"], fn: album.deleteTrack });
+				}
+			}
 		}
 	}
 
@@ -716,6 +723,7 @@ contextMenu.sharePhoto = function (photoID, e) {
 		{ title: build.iconic("envelope-closed") + "Mail", fn: () => photo.share(photoID, "mail") },
 		{ title: build.iconic("dropbox", iconClass) + "Dropbox", visible: lychee.admin === true, fn: () => photo.share(photoID, "dropbox") },
 		{ title: build.iconic("link-intact") + lychee.locale["DIRECT_LINKS"], fn: () => photo.showDirectLinks(photoID) },
+		{ title: build.iconic("grid-two-up") + lychee.locale["QR_CODE"], fn: () => photo.qrCode(photoID) },
 	];
 
 	basicContext.show(items, e.originalEvent);
@@ -749,6 +757,7 @@ contextMenu.shareAlbum = function (albumID, e) {
 				navigator.clipboard.writeText(url).then(() => loadingBar.show("success", lychee.locale["URL_COPIED_TO_CLIPBOARD"]));
 			},
 		},
+		{ title: build.iconic("grid-two-up") + lychee.locale["QR_CODE"], fn: () => album.qrCode() },
 	];
 
 	basicContext.show(items, e.originalEvent);

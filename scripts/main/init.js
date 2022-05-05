@@ -305,6 +305,10 @@ $(document).ready(function () {
 			basicModal.close();
 			upload.start.local(this.files);
 		})
+		.on("change", "#upload_track_file", function () {
+			basicModal.close();
+			upload.uploadTrack(this.files);
+		})
 		// Drag and Drop upload
 		.on(
 			"dragover",
@@ -378,6 +382,7 @@ $(document).ready(function () {
 				}
 			}
 		);
+
 	// Fullscreen
 	if (lychee.fullscreenAvailable())
 		$(document).on("fullscreenchange mozfullscreenchange webkitfullscreenchange msfullscreenchange", lychee.fullscreenUpdate);

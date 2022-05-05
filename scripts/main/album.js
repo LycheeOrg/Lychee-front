@@ -1094,6 +1094,43 @@ album.share = function (service) {
 };
 
 /**
+ * @returns {void}
+ */
+album.qrCode = function () {
+	if (album.json.hasOwnProperty("is_share_button_visible") && !album.json.is_share_button_visible) {
+		return;
+	}
+
+	let msg = lychee.html`
+		<div id='qr-code' class='downloads'></div>
+	`;
+
+	basicModal.show({
+		body: msg,
+		callback: function () {
+			qrcode = $("#qr-code");
+			QrCreator.render(
+				{
+					text: location.href,
+					radius: 0.0,
+					ecLevel: "H",
+					fill: "#000000",
+					background: "#FFFFFF",
+					size: qrcode.width(),
+				},
+				qrcode[0]
+			);
+		},
+		buttons: {
+			cancel: {
+				title: lychee.locale["CLOSE"],
+				fn: basicModal.close,
+			},
+		},
+	});
+};
+
+/**
  * @param {string[]} albumIDs
  * @returns {void}
  */
@@ -1396,4 +1433,15 @@ album.reload = function () {
  */
 album.refresh = function () {
 	album.json = null;
+};
+
+/**
+ * @returns {void}
+ */
+album.deleteTrack = function () {
+	album.json.track_url = null;
+
+	api.post("Album::deleteTrack", {
+		albumID: album.json.id,
+	});
 };

@@ -1109,6 +1109,50 @@ photo.getArchive = function (photoIDs, kind = null) {
 };
 
 /**
+ * Shows a dialog to share the view URL via a QR code.
+ *
+ * @param {string} photoID
+ * @returns {void}
+ */
+photo.qrCode = function (photoID) {
+	/** @type {?Photo} */
+	const myPhoto = photo.json && photo.json.id === photoID ? photo.json : album.getByID(photoID);
+
+	if (myPhoto == null) {
+		lychee.error("Error: photo " + photoID + " not found !");
+		return;
+	}
+
+	let msg = lychee.html`
+		<div id='qr-code' class='downloads'></div>
+	`;
+
+	basicModal.show({
+		body: msg,
+		callback: function () {
+			qrcode = $("#qr-code");
+			QrCreator.render(
+				{
+					text: photo.getViewLink(myPhoto.id),
+					radius: 0.0,
+					ecLevel: "H",
+					fill: "#000000",
+					background: "#FFFFFF",
+					size: qrcode.width(),
+				},
+				qrcode[0]
+			);
+		},
+		buttons: {
+			cancel: {
+				title: lychee.locale["CLOSE"],
+				fn: basicModal.close,
+			},
+		},
+	});
+};
+
+/**
  * @returns {string}
  */
 photo.getDirectLink = function () {

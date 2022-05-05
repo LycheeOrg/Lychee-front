@@ -2,6 +2,7 @@ let gulp = require("gulp"),
 	plugins = require("gulp-load-plugins")(),
 	cleanCSS = require("gulp-clean-css"),
 	del = require("del"),
+	sass = require("gulp-sass")(require("sass")),
 	paths = {};
 
 /* Error Handler -------------------------------- */
@@ -91,9 +92,11 @@ paths.main = {
 		"node_modules/leaflet/dist/leaflet.js",
 		"node_modules/leaflet-rotatedmarker/leaflet.rotatedMarker.js",
 		"node_modules/spin.js/spin.min.js",
+		"node_modules/leaflet-gpx/gpx.js",
 		"node_modules/leaflet-spin/leaflet.spin.min.js",
 		"node_modules/leaflet.markercluster/dist/leaflet.markercluster.js",
 		"node_modules/livephotoskit/livephotoskit.js",
+		"node_modules/qr-creator/dist/qr-creator.min.js",
 		"modules/Leaflet.Photo-gh-pages/Leaflet.Photo.js",
 		"../dist/_main--javascript.js",
 	],
@@ -140,8 +143,7 @@ gulp.task(
 gulp.task("main--styles", function () {
 	return gulp
 		.src(paths.main.styles)
-		.pipe(plugins.sass())
-		.on("error", catchError)
+		.pipe(sass().on("error", catchError))
 		.pipe(plugins.concat("main.css", { newLine: "\n" }))
 		.pipe(plugins.autoprefixer("last 4 versions", "> 5%"))
 		.pipe(cleanCSS({ level: 2 }))
@@ -192,8 +194,7 @@ gulp.task("frame--js", function () {
 gulp.task("frame--styles", function () {
 	return gulp
 		.src(paths.frame.styles)
-		.pipe(plugins.sass())
-		.on("error", catchError)
+		.pipe(sass().on("error", catchError))
 		.pipe(plugins.concat("frame.css", { newLine: "\n" }))
 		.pipe(plugins.autoprefixer("last 4 versions", "> 5%"))
 		.pipe(cleanCSS({ level: 2 }))
@@ -260,8 +261,7 @@ gulp.task("landing--styles", function () {
 	return (
 		gulp
 			.src(paths.landing.styles)
-			.pipe(plugins.sass())
-			.on("error", catchError)
+			.pipe(sass().on("error", catchError))
 			.pipe(plugins.concat("landing.css", { newLine: "\n" }))
 			.pipe(plugins.autoprefixer("last 4 versions", "> 5%"))
 			// .pipe(cleanCSS({level: 2}))
@@ -280,8 +280,7 @@ gulp.task("page--styles", function () {
 	return (
 		gulp
 			.src(paths.page.styles)
-			.pipe(plugins.sass())
-			.on("error", catchError)
+			.pipe(sass().on("error", catchError))
 			.pipe(plugins.concat("page.css", { newLine: "\n" }))
 			.pipe(plugins.autoprefixer("last 4 versions", "> 5%"))
 			// .pipe(cleanCSS({level: 2}))

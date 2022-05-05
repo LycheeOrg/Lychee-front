@@ -24,12 +24,14 @@
 		"justified-layout": "^2.1.1",
 		"lazysizes": "^5.3.0",
 		"leaflet": "^1.7.1",
+		"leaflet-gpx": "^1.7.0",
 		"leaflet-rotatedmarker": "^0.2.0",
 		"leaflet-spin": "^1.1.0",
 		"leaflet.markercluster": "^1.4.1",
 		"livephotoskit": "^1.5.6",
 		"mousetrap": "^1.6.0",
 		"multiselect-two-sides": "^2.5.5",
+		"qr-creator": "^1.0.0",
 		"require": "^2.4.20",
 		"scroll-lock": "^2.1.2",
 		"spin.js": "^2.3.2"
@@ -44,11 +46,11 @@
 		"gulp-concat": "^2.6.1",
 		"gulp-inject": "^4.2.0",
 		"gulp-load-plugins": "^1.5.0",
-		"gulp-sass": "^4.0.2",
+		"gulp-sass": "^5.1.0",
 		"gulp-uglify": "^3.0.2",
-		"node-sass": "^4.13.0",
 		"npm": "^6.14.16",
 		"prettier": "2.2.1",
+		"sass": "^1.51.0",
 		"uglify-js": "^3.12.4"
 	}
 }
