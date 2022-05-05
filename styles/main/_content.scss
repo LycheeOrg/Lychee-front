@@ -297,8 +297,8 @@
 
 		.album,
 		.photo {
-			// 3 thumbnails per row
-			--size: calc((100vw - 3px) / 3);
+			// 2 thumbnails per row
+			--size: calc((100vw - 5px) / 2);
 			width: calc(var(--size) - 3px);
 			height: calc(var(--size) - 3px);
 			margin: 3px 0 0 3px;
@@ -320,16 +320,16 @@
 				}
 			}
 			.badge {
-				padding: 4px 3px 3px;
-				width: 12px;
+				padding: 6px 4px 4px;
+				width: 18px;
 				.iconic {
-					width: 12px;
-					height: 12px;
+					width: 18px;
+					height: 18px;
 				}
 				&--folder {
 					.iconic {
-						width: 8px;
-						height: 8px;
+						width: 18px;
+						height: 18px;
 					}
 				}
 			}
