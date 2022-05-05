@@ -122,7 +122,9 @@ build.album = function (data, disabled = false) {
 					album.isSmartID(data.id) || data.is_tag_album
 						? ``
 						: `ondragstart='lychee.startDrag(event)'
-				ondragover='event.preventDefault()'
+				ondragover='lychee.overDrag(event)'
+				ondragleave='lychee.leaveDrag(event)'
+				ondragend='lychee.endDrag(event)'
 				ondrop='lychee.finishDrag(event)'`
 				}>
 				  ${build.getAlbumThumb(data)}
@@ -260,7 +262,9 @@ build.photo = function (data, disabled = false) {
 			<div class='photo ${disabled ? `disabled` : ``}' data-album-id='${data.album_id}' data-id='${
 		data.id
 	}' data-tabindex='${tabindex.get_next_tab_index()}'
-			draggable='true' ondragstart='lychee.startDrag(event)'>
+			draggable='true'
+			ondragstart='lychee.startDrag(event)'
+			ondragend='lychee.endDrag(event)'>
 				${thumbnail}
 				<div class='overlay'>
 					<h1 title='$${data.title}'>$${data.title}</h1>

@@ -1214,3 +1214,39 @@ lychee.finishDrag = function (ev) {
 		contextMenu.albumDrop(data.substring(6), targetId, ev);
 	}
 };
+
+/**
+ * Album drag-over callback
+ * @param {DragEvent} ev
+ * @returns {void}
+ */
+lychee.overDrag = function (ev) {
+	ev.preventDefault();
+	/** @type ?HTMLElementTagNameMap */
+	let div = ev.target.closest("div.album");
+	if (div) {
+		div.classList.add("album__dragover");
+	}
+};
+
+/**
+ * Album drag-leave callback
+ * @param {DragEvent} ev
+ * @returns {void}
+ */
+lychee.leaveDrag = function (ev) {
+	/** @type ?HTMLElementTagNameMap */
+	let div = ev.target.closest("div.album");
+	if (div) {
+		div.classList.remove("album__dragover");
+	}
+};
+
+/**
+ * drag-end callback
+ * @param {DragEvent} ev
+ * @returns {void}
+ */
+lychee.endDrag = function (ev) {
+	$("div.album").removeClass("album__dragover");
+};
