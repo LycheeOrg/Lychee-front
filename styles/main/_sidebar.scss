@@ -243,7 +243,7 @@
 @media only screen and (max-width: 567px), only screen and (max-width: 640px) and (orientation: portrait) {
 	// sidebar as overlay, small size
 	.sidebar {
-		width: 240px;
+		width: 300px;
 		height: unset;
 		background-color: rgba(0, 0, 0, 0.6);
 
@@ -286,7 +286,7 @@
 
 		#tags {
 			margin: 4px 0 6px 10px;
-			width: calc(100% - 16px);
+			width: 284px;
 
 			.empty {
 				margin: 0;
