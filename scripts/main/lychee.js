@@ -1182,7 +1182,7 @@ lychee.getBaseUrl = function () {
 lychee.startDrag = function (ev) {
 	/** @type string */
 	let type = "album";
-	/** @type ?HTMLElementTagNameMap */
+	/** @type ?Element */
 	let div = ev.target.closest("div.album");
 	if (!div) {
 		type = "photo";
@@ -1222,7 +1222,7 @@ lychee.finishDrag = function (ev) {
  */
 lychee.overDrag = function (ev) {
 	ev.preventDefault();
-	/** @type ?HTMLElementTagNameMap */
+	/** @type ?Element */
 	let div = ev.target.closest("div.album");
 	if (div) {
 		div.classList.add("album__dragover");
@@ -1235,7 +1235,7 @@ lychee.overDrag = function (ev) {
  * @returns {void}
  */
 lychee.leaveDrag = function (ev) {
-	/** @type ?HTMLElementTagNameMap */
+	/** @type ?Element */
 	let div = ev.target.closest("div.album");
 	if (div) {
 		div.classList.remove("album__dragover");
