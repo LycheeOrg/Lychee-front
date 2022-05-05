@@ -12,7 +12,8 @@
 		-moz-user-select: text;
 		-ms-user-select: text;
 		user-select: text;
-		width: fit-content;
+		overflow-x: scroll;
+		overflow-y: hidden;
 		padding-right: 30px;
 	}
 }
