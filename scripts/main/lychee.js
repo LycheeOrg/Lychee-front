@@ -1211,6 +1211,6 @@ lychee.finishDrag = function (ev) {
 		contextMenu.photoDrop(data.substring(6), targetId, ev);
 	} else {
 		// album is dragged
-		contextMenu.albumDrop(targetId, data.substring(6), ev);
+		contextMenu.albumDrop(data.substring(6), targetId, ev);
 	}
 };

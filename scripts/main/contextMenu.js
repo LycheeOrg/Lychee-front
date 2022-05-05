@@ -157,7 +157,7 @@ contextMenu.albumDrop = function (sourceAlbumID, targetAlbumID, e) {
 		{
 			title: build.iconic("collapse-left") + lychee.locale["MERGE"],
 			fn: () => {
-				album.merge([targetAlbumID], sourceAlbumID);
+				album.merge([sourceAlbumID], targetAlbumID);
 			},
 		},
 		{
@@ -165,7 +165,7 @@ contextMenu.albumDrop = function (sourceAlbumID, targetAlbumID, e) {
 			visible: true,
 			fn: () => {
 				basicContext.close();
-				album.setAlbum([targetAlbumID], sourceAlbumID);
+				album.setAlbum([sourceAlbumID], targetAlbumID);
 			},
 		},
 	];
