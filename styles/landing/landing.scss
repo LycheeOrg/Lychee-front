@@ -1,28 +1,4 @@
 // Rest -------------------------------------------------------------------- //
-/* roboto-300 - vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic */
-@font-face {
-	font-family: "Roboto";
-	font-style: normal;
-	font-weight: 300;
-	src: local(""), url("../../../fonts/roboto-v29-300.woff2") format("woff2");
-}
-
-/* roboto-regular - vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic */
-@font-face {
-	font-family: "Roboto";
-	font-style: normal;
-	font-weight: 400;
-	src: local(""), url("../../../fonts/roboto-v29-400.woff2") format("woff2");
-}
-
-/* roboto-700 - vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic */
-@font-face {
-	font-family: "Roboto";
-	font-style: normal;
-	font-weight: 700;
-	src: local(""), url("../../../fonts/roboto-v29-700.woff2") format("woff2");
-}
-
 @import "../reset";
 
 * {
@@ -34,7 +10,7 @@
 
 html,
 body {
-	font-family: "Roboto", sans-serif;
+	font-family: sans-serif;
 	background: #000000;
 	overflow: hidden;
 }
@@ -46,6 +22,10 @@ ul {
 
 a {
 	text-decoration: none;
+}
+
+.subtitle {
+	margin-top: 8px;
 }
 
 @import "../page/fonts";
