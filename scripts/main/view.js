@@ -2119,6 +2119,7 @@ view.diagnostics = {
 
 	/** @returns {void} */
 	call_get_size: function () {
+		$("#Get_Size_Lychee").text(lychee.locale["LOADING"]);
 		api.post(
 			"Diagnostics::getSize",
 			{},
