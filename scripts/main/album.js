@@ -1147,36 +1147,30 @@ album.getArchive = function (albumIDs) {
  * @returns {string} the HTML content of the dialog
  */
 album.buildMessage = function (albumIDs, albumID, op1, op2, ops) {
-	let title = "";
-	let sTitle = "";
+	let targetTitle = lychee.locale["UNTITLED"];
+	let sourceTitle = lychee.locale["UNTITLED"];
 	let msg = "";
 
-	// Get title of first album
+	// Get title of target album
 	if (albumID === null) {
-		title = lychee.locale["ROOT"];
+		targetTitle = lychee.locale["ROOT"];
 	} else {
-		const album1 = albums.getByID(albumID);
-		if (album1) {
-			title = album1.title;
+		const targetAlbum = albums.getByID(albumID) || album.getSubByID(albumID);
+		if (targetAlbum) {
+			targetTitle = targetAlbum.title;
 		}
 	}
 
-	// Fallback for first album without a title
-	if (!title) title = lychee.locale["UNTITLED"];
-
 	if (albumIDs.length === 1) {
-		// Get title of second album
-		const album2 = albums.getByID(albumIDs[0]);
-		if (album2) {
-			sTitle = album2.title;
+		// Get title of the unique source album
+		const sourceAlbum = albums.getByID(albumIDs[0]) || album.getSubByID(albumIDs[0]);
+		if (sourceAlbum) {
+			sourceTitle = sourceAlbum.title;
 		}
 
-		// Fallback for second album without a title
-		if (!sTitle) sTitle = lychee.locale["UNTITLED"];
-
-		msg = lychee.html`<p>${lychee.locale[op1]} '$${sTitle}' ${lychee.locale[op2]} '$${title}'?</p>`;
+		msg = lychee.html`<p>${lychee.locale[op1]} '$${sourceTitle}' ${lychee.locale[op2]} '$${targetTitle}'?</p>`;
 	} else {
-		msg = lychee.html`<p>${lychee.locale[ops]} '$${title}'?</p>`;
+		msg = lychee.html`<p>${lychee.locale[ops]} '$${targetTitle}'?</p>`;
 	}
 
 	return msg;
