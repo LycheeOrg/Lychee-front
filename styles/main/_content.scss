@@ -309,10 +309,10 @@
 			.overlay {
 				width: calc(var(--size) - 5px);
 				h1 {
-					min-height: 14px;
+					min-height: 18px;
 					width: calc(var(--size) - 19px);
-					margin: 8px 0 2px 6px;
-					font-size: 12px;
+					margin: 8px 0 6px 6px;
+					font-size: 16px;
 				}
 				a {
 					// suppress subtitles on small screens
@@ -341,7 +341,7 @@
 			}
 			h1 {
 				margin: 0 0 6px 8px;
-				font-size: 12px;
+				font-size: 16px;
 			}
 		}
 	}
