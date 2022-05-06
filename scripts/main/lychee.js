@@ -1196,7 +1196,7 @@ lychee.finishDrag = function (ev) {
 	ev.preventDefault();
 
 	/** @type string */
-	const data = ev.dataTransfer.getData("text");
+	const data = ev.dataTransfer.getData("text/plain");
 	/** @type string */
 	let targetId = ev.target.closest("div.album").dataset.id;
 	if (!targetId || data.substring(6) === targetId) return;
