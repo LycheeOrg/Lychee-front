@@ -1230,8 +1230,8 @@ lychee.overDrag = function (ev) {
  * @returns {void}
  */
 lychee.leaveDrag = function (ev) {
-	/** @type ?Element */
-	let div = ev.target.closest("div.album");
+	/** @type ?HTMLDivElement */
+	const div = ev.target.closest("div.album");
 	if (div) {
 		div.classList.remove("album__dragover");
 	}
