@@ -154,7 +154,7 @@ contextMenu.album = function (albumID, e) {
 
 /**
  * Handles drop event of an album onto an album and shows context menu to let the user pick the actions.
- * 
+ *
  * @param {string} sourceAlbumID source album (which is being dragged)
  * @param {string} targetAlbumID target album (where it is dropped)
  * @param {DragEvent} e
