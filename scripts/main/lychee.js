@@ -1217,7 +1217,7 @@ lychee.finishDrag = function (ev) {
  */
 lychee.overDrag = function (ev) {
 	ev.preventDefault();
-	/** @type ?Element */
+	/** @type ?HTMLDivElement */
 	let div = ev.target.closest("div.album");
 	if (div) {
 		div.classList.add("album__dragover");
