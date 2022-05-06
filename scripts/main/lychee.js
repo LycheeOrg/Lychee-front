@@ -1180,16 +1180,11 @@ lychee.getBaseUrl = function () {
  * @returns {void}
  */
 lychee.startDrag = function (ev) {
-	/** @type string */
-	let type = "album";
-	/** @type ?Element */
-	let div = ev.target.closest("div.album");
-	if (!div) {
-		type = "photo";
-		div = ev.target.closest("div.photo");
-		if (!div) return;
-	}
-	ev.dataTransfer.setData("text", `${type}-${div.dataset.id}`);
+	/** @type ?HTMLDivElement */
+	const div = ev.target.closest("div.album,div.photo");
+	if (!div) return;
+	const type = div.classList.contains("album") ? "album" : "photo";
+	ev.dataTransfer.setData("text/plain", `${type}-${div.dataset.id}`);
 };
 
 /**
