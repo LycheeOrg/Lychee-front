@@ -1173,3 +1173,75 @@ lychee.getBaseUrl = function () {
 		return location.href.replace(location.hash, "");
 	}
 };
+
+/**
+ * drag album to another one
+ * @param {DragEvent} ev
+ * @returns {void}
+ */
+lychee.startDrag = function (ev) {
+	/** @type ?HTMLDivElement */
+	const div = ev.target.closest("div.album,div.photo");
+	if (!div) return;
+	const type = div.classList.contains("album") ? "album" : "photo";
+	ev.dataTransfer.setData("text/plain", `${type}-${div.dataset.id}`);
+};
+
+/**
+ * drop album
+ * @param {DragEvent} ev
+ * @returns {void}
+ */
+lychee.finishDrag = function (ev) {
+	ev.preventDefault();
+
+	/** @type string */
+	const data = ev.dataTransfer.getData("text/plain");
+	/** @type string */
+	let targetId = ev.target.closest("div.album").dataset.id;
+	if (!targetId || data.substring(6) === targetId) return;
+
+	if (data.startsWith("photo-")) {
+		// photo is dragged
+		contextMenu.photoDrop(data.substring(6), targetId, ev);
+	} else {
+		// album is dragged
+		contextMenu.albumDrop(data.substring(6), targetId, ev);
+	}
+};
+
+/**
+ * Album drag-over callback
+ * @param {DragEvent} ev
+ * @returns {void}
+ */
+lychee.overDrag = function (ev) {
+	ev.preventDefault();
+	/** @type ?HTMLDivElement */
+	let div = ev.target.closest("div.album");
+	if (div) {
+		div.classList.add("album__dragover");
+	}
+};
+
+/**
+ * Album drag-leave callback
+ * @param {DragEvent} ev
+ * @returns {void}
+ */
+lychee.leaveDrag = function (ev) {
+	/** @type ?HTMLDivElement */
+	const div = ev.target.closest("div.album");
+	if (div) {
+		div.classList.remove("album__dragover");
+	}
+};
+
+/**
+ * drag-end callback
+ * @param {DragEvent} ev
+ * @returns {void}
+ */
+lychee.endDrag = function (ev) {
+	$("div.album").removeClass("album__dragover");
+};

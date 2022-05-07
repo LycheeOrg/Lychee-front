@@ -153,6 +153,36 @@ contextMenu.album = function (albumID, e) {
 };
 
 /**
+ * Handles drop event of an album onto an album and shows context menu to let the user pick the actions.
+ *
+ * @param {string} sourceAlbumID source album (which is being dragged)
+ * @param {string} targetAlbumID target album (where it is dropped)
+ * @param {DragEvent} e
+ *
+ * @returns {void}
+ */
+contextMenu.albumDrop = function (sourceAlbumID, targetAlbumID, e) {
+	const items = [
+		{
+			title: build.iconic("collapse-left") + lychee.locale["MERGE"],
+			fn: () => {
+				album.merge([sourceAlbumID], targetAlbumID);
+			},
+		},
+		{
+			title: build.iconic("folder") + lychee.locale["MOVE"],
+			visible: true,
+			fn: () => {
+				basicContext.close();
+				album.setAlbum([sourceAlbumID], targetAlbumID);
+			},
+		},
+	];
+
+	basicContext.show(items, e, contextMenu.close);
+};
+
+/**
  * @param {string[]} albumIDs
  * @param {jQuery.Event} e
  *
@@ -364,6 +394,28 @@ contextMenu.photo = function (photoID, e) {
 	$('.photo[data-id="' + photoID + '"]').addClass("active");
 
 	basicContext.show(items, e.originalEvent, contextMenu.close);
+};
+
+/**
+ * @param {string} photoID
+ * @param {string} albumID
+ * @param {DragEvent} e
+ *
+ * @returns {void}
+ */
+contextMenu.photoDrop = function (photoID, albumID, e) {
+	const items = [
+		{
+			title: build.iconic("folder") + lychee.locale["MOVE"],
+			fn: () => {
+				photo.setAlbum([photoID], albumID);
+			},
+		},
+	];
+
+	$('.photo[data-id="' + photoID + '"]').addClass("active");
+
+	basicContext.show(items, e, contextMenu.close);
 };
 
 /**
