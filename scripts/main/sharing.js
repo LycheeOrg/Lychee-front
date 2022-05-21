@@ -54,7 +54,7 @@ sharing.delete = function () {
 		loadingBar.show("error", "Select a sharing to remove!");
 		return;
 	}
-	api.post("Sharing::delete", params, function () {
+	api.delete("Sharing::delete", params, function () {
 		loadingBar.show("success", "Sharing removed!");
 		sharing.list(); // reload user list
 	});
@@ -64,7 +64,7 @@ sharing.delete = function () {
  * @returns {void}
  */
 sharing.list = function () {
-	api.post(
+	api.get(
 		"Sharing::list",
 		{},
 		/** @param {SharingInfo} data */

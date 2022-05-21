@@ -235,7 +235,7 @@ lychee.aboutDialog = function () {
 lychee.init = function (isFirstInitialization = true) {
 	lychee.adjustContentHeight();
 
-	api.post(
+	api.get(
 		"Session::init",
 		{},
 		/** @param {InitializationData} data */

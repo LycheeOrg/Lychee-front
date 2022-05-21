@@ -985,7 +985,7 @@ album.shareUsers = function (albumID) {
 		});
 
 		if (sharingToDelete.length > 0) {
-			api.post("Sharing::delete", {
+			api.delete("Sharing::delete", {
 				shareIDs: sharingToDelete,
 			});
 		}
@@ -1030,7 +1030,7 @@ album.shareUsers = function (albumID) {
 			}
 		};
 
-		api.post("Sharing::list", {}, successCallback);
+		api.get("Sharing::list", {}, successCallback);
 	};
 
 	basicModal.show({
@@ -1188,7 +1188,7 @@ album.delete = function (albumIDs) {
 	action.fn = function () {
 		basicModal.close();
 
-		api.post(
+		api.delete(
 			"Album::delete",
 			{
 				albumIDs: albumIDs,
@@ -1435,7 +1435,7 @@ album.refresh = function () {
 album.deleteTrack = function () {
 	album.json.track_url = null;
 
-	api.post("Album::deleteTrack", {
+	api.delete("Album::deleteTrack", {
 		albumID: album.json.id,
 	});
 };

@@ -340,10 +340,10 @@ mapview.open = function (albumID = null) {
 				includeSubAlbums: _includeSubAlbums,
 			};
 
-			api.post("Album::getPositionData", params, successHandler);
+			api.get("Album::getPositionData", params, successHandler);
 		} else {
 			// AlbumID is empty -> fetch all photos of all albums
-			api.post("Albums::getPositionData", {}, successHandler);
+			api.get("Albums::getPositionData", {}, successHandler);
 		}
 	};
 

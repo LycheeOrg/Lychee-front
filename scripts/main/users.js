@@ -67,7 +67,7 @@ users.create = function (params) {
  * @returns {boolean}
  */
 users.delete = function (params) {
-	api.post("User::delete", params, function () {
+	api.delete("User::delete", params, function () {
 		loadingBar.show("success", "User deleted!");
 		users.list(); // reload user list
 	});
@@ -77,7 +77,7 @@ users.delete = function (params) {
  * @returns {void}
  */
 users.list = function () {
-	api.post(
+	api.get(
 		"User::list",
 		{},
 		/** @param {User[]} data */

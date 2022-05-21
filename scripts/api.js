@@ -77,6 +77,149 @@ api.hasSessionExpired = function (jqXHR, lycheeException) {
  * @param {?APIErrorCB} errorCallback
  * @returns {void}
  */
+api.get = function (fn, params, successCallback = null, responseProgressCB = null, errorCallback = null) {
+	loadingBar.show();
+
+	/**
+	 * The success handler
+	 * @param {Object} data the decoded JSON object of the response
+	 */
+	const successHandler = (data) => {
+		setTimeout(loadingBar.hide, 100);
+		if (successCallback) successCallback(data);
+	};
+
+	/**
+	 * The error handler
+	 * @param {XMLHttpRequest} jqXHR the jQuery XMLHttpRequest object, see {@link https://api.jquery.com/jQuery.ajax/#jqXHR}.
+	 */
+	const errorHandler = (jqXHR) => {
+		/**
+		 * @type {?LycheeException}
+		 */
+		const lycheeException = jqXHR.responseJSON;
+
+		if (errorCallback) {
+			let isHandled = errorCallback(jqXHR, params, lycheeException);
+			if (isHandled) {
+				setTimeout(loadingBar.hide, 100);
+				return;
+			}
+		}
+		// Call global error handler for unhandled errors
+		api.onError(jqXHR, params, lycheeException);
+	};
+
+	const urlParams = new URLSearchParams();
+	for (const param in params) {
+		let value = params[param];
+		if (value === true) value = "1";
+		else if (value === false) value = "0";
+		urlParams.set(param, value);
+	}
+
+	let ajaxParams = {
+		type: "GET",
+		url: "api/" + fn,
+		contentType: "application/json",
+		data: urlParams.toString(),
+		headers: {
+			"X-XSRF-TOKEN": csrf.getCSRFCookieValue(),
+		},
+		success: successHandler,
+		error: errorHandler,
+	};
+
+	if (responseProgressCB !== null) {
+		ajaxParams.xhrFields = {
+			onprogress: responseProgressCB,
+		};
+	}
+
+	$.ajax(ajaxParams);
+};
+
+/**
+ *
+ * @param {string} fn
+ * @param {Object} params
+ * @param {?APISuccessCB} successCallback
+ * @param {?APIProgressCB} responseProgressCB
+ * @param {?APIErrorCB} errorCallback
+ * @returns {void}
+ */
+api.delete = function (fn, params, successCallback = null, responseProgressCB = null, errorCallback = null) {
+	loadingBar.show();
+
+	/**
+	 * The success handler
+	 * @param {Object} data the decoded JSON object of the response
+	 */
+	const successHandler = (data) => {
+		setTimeout(loadingBar.hide, 100);
+		if (successCallback) successCallback(data);
+	};
+
+	/**
+	 * The error handler
+	 * @param {XMLHttpRequest} jqXHR the jQuery XMLHttpRequest object, see {@link https://api.jquery.com/jQuery.ajax/#jqXHR}.
+	 */
+	const errorHandler = (jqXHR) => {
+		/**
+		 * @type {?LycheeException}
+		 */
+		const lycheeException = jqXHR.responseJSON;
+
+		if (errorCallback) {
+			let isHandled = errorCallback(jqXHR, params, lycheeException);
+			if (isHandled) {
+				setTimeout(loadingBar.hide, 100);
+				return;
+			}
+		}
+		// Call global error handler for unhandled errors
+		api.onError(jqXHR, params, lycheeException);
+	};
+
+	const urlParams = new URLSearchParams();
+	for (const param in params) {
+		let value = params[param];
+		if (value === true) value = "1";
+		else if (value === false) value = "0";
+		urlParams.set(param, value);
+	}
+
+	let ajaxParams = {
+		type: "DELETE",
+		url: "api/" + fn,
+		contentType: "application/json",
+		data: JSON.stringify(params),
+		dataType: "json",
+		headers: {
+			"X-XSRF-TOKEN": csrf.getCSRFCookieValue(),
+		},
+		success: successHandler,
+		error: errorHandler,
+	};
+
+	if (responseProgressCB !== null) {
+		ajaxParams.xhrFields = {
+			onprogress: responseProgressCB,
+		};
+	}
+
+	$.ajax(ajaxParams);
+};
+
+/**
+ *
+ * @param {string} fn
+ * @param {Object} params
+ * @param {?APISuccessCB} successCallback
+ * @param {?APIProgressCB} responseProgressCB
+ * @param {?APIErrorCB} errorCallback
+ * @returns {void}
+ */
 api.post = function (fn, params, successCallback = null, responseProgressCB = null, errorCallback = null) {
 	loadingBar.show();
 

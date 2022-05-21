@@ -54,7 +54,7 @@ photo.load = function (photoID, albumID, autoplay) {
 		}
 	};
 
-	api.post(
+	api.get(
 		"Photo::get",
 		{
 			photoID: photoID,
@@ -338,7 +338,7 @@ photo.delete = function (photoIDs) {
 			lychee.goto(album.getID());
 		}
 
-		api.post("Photo::delete", { photoIDs: photoIDs });
+		api.delete("Photo::delete", { photoIDs: photoIDs });
 	};
 
 	if (photoIDs.length === 1) {

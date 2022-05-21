@@ -136,7 +136,7 @@ frame.next = function () {
  * @returns {void}
  */
 frame.refreshPicture = function () {
-	api.post(
+	api.get(
 		"Photo::getRandom",
 		{},
 		/** @param {Photo} data */
@@ -253,7 +253,7 @@ $(function () {
 		$("body").addClass("loaded");
 	});
 
-	api.post(
+	api.get(
 		"Frame::getSettings",
 		{},
 		/** @param {FrameSettings} data */

@@ -1575,7 +1575,7 @@ view.full_settings = {
 		init: function () {
 			view.full_settings.clearContent();
 
-			api.post(
+			api.get(
 				"Settings::getAll",
 				{},
 				/** @param {ConfigSetting[]} data */
@@ -1983,7 +1983,7 @@ view.logs = {
 			};
 
 			view.logs.clearContent();
-			api.post("Logs::list", {}, successHandler);
+			api.get("Logs::list", {}, successHandler);
 		},
 	},
 };
@@ -2047,7 +2047,7 @@ view.diagnostics = {
 		/** @returns {void} */
 		init: function () {
 			view.diagnostics.clearContent(0);
-			api.post("Diagnostics::get", {}, view.diagnostics.content.parseResponse);
+			api.get("Diagnostics::get", {}, view.diagnostics.content.parseResponse);
 		},
 
 		/**
@@ -2119,7 +2119,7 @@ view.diagnostics = {
 
 	/** @returns {void} */
 	call_get_size: function () {
-		api.post(
+		api.get(
 			"Diagnostics::getSize",
 			{},
 			/** @param {string[]} data */

@@ -76,14 +76,14 @@ u2f.register = function () {
  * @param {{id: string}} params - ID of WebAuthn credential
  */
 u2f.delete = function (params) {
-	api.post("WebAuthn::delete", params, function () {
+	api.delete("WebAuthn::delete", params, function () {
 		loadingBar.show("success", lychee.locale["U2F_CREDENTIALS_DELETED"]);
 		u2f.list(); // reload credential list
 	});
 };
 
 u2f.list = function () {
-	api.post(
+	api.get(
 		"WebAuthn::list",
 		{},
 		/** @param {WebAuthnCredential[]} data*/

@@ -23,7 +23,7 @@ notifications.update = function (params) {
 };
 
 notifications.load = function () {
-	api.post(
+	api.get(
 		"User::getEmail",
 		{},
 		/** @param {EMailData} data */ function (data) {
