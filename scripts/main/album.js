@@ -282,7 +282,7 @@ album.load = function (albumID, albumLoadedCB = null) {
 		}
 	};
 
-	api.post("Album::get", { albumID: albumID }, successHandler, null, errorHandler);
+	api.get("Album::get", { albumID: albumID }, successHandler, null, errorHandler);
 };
 
 /**
