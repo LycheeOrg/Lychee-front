@@ -290,8 +290,7 @@ const loadPhotoInfo = function (photoID) {
 		photoID: photoID,
 	};
 
-	api.get(
-		"Photo::get",
+	api.v2.getPhoto(
 		params,
 		/** @param {Photo} data */
 		function (data) {

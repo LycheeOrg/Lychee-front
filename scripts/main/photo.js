@@ -54,8 +54,7 @@ photo.load = function (photoID, albumID, autoplay) {
 		}
 	};
 
-	api.get(
-		"Photo::get",
+	api.v2.getPhoto(
 		{
 			photoID: photoID,
 		},
@@ -680,7 +679,7 @@ photo.setProtectionPolicy = function (photoID) {
 
 				albums.refresh();
 
-				api.post("Photo::setPublic", {
+				api.v2.photoSetPublic({
 					photoID: photoID,
 					is_public: newIsPublic !== 0,
 				});
@@ -753,7 +752,7 @@ photo.setDescription = function (photoID) {
 			view.photo.description();
 		}
 
-		api.post("Photo::setDescription", {
+		api.v2.photoSetDescription({
 			photoID: photoID,
 			description: description,
 		});
@@ -924,7 +923,7 @@ photo.setLicense = function (photoID) {
 			license,
 		};
 
-		api.post("Photo::setLicense", params, function () {
+		api.v2.photoSetLicense(params, function () {
 			// update the photo JSON and reload the license in the sidebar
 			photo.json.license = params.license;
 			view.photo.license();

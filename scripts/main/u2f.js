@@ -34,8 +34,8 @@ u2f.login = function () {
 	}
 
 	new Larapass({
-		login: "/api/WebAuthn::login",
-		loginOptions: "/api/WebAuthn::login/gen",
+		login: "/api/webauthn/login",
+		loginOptions: "/api/webauthn/login/gen",
 	})
 		.login({
 			user_id: 0, // for now it is only available to Admin user via a secret key shortcut.
@@ -56,8 +56,8 @@ u2f.register = function () {
 	}
 
 	const larapass = new Larapass({
-		register: "/api/WebAuthn::register",
-		registerOptions: "/api/WebAuthn::register/gen",
+		register: "/api/webauthn/register",
+		registerOptions: "/api/webauthn/register/gen",
 	});
 	if (Larapass.supportsWebAuthn()) {
 		larapass
@@ -76,15 +76,14 @@ u2f.register = function () {
  * @param {{id: string}} params - ID of WebAuthn credential
  */
 u2f.delete = function (params) {
-	api.delete("WebAuthn::delete", params, function () {
+	api.delete("webauthn", params, function () {
 		loadingBar.show("success", lychee.locale["U2F_CREDENTIALS_DELETED"]);
 		u2f.list(); // reload credential list
 	});
 };
 
 u2f.list = function () {
-	api.get(
-		"WebAuthn::list",
+	api.v2.listWebAuthn(
 		{},
 		/** @param {WebAuthnCredential[]} data*/
 		function (data) {

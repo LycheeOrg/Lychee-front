@@ -331,8 +331,7 @@ album.add = function (IDs = null, callback = null) {
 			params.parent_id = photo.json.album_id;
 		}
 
-		api.post(
-			"Album::add",
+		api.v2.addAlbum(
 			params,
 			/** @param {Album} _data */
 			function (_data) {
@@ -378,8 +377,7 @@ album.addByTags = function () {
 
 		basicModal.close();
 
-		api.post(
-			"Album::addByTags",
+		api.v2.addTagAlbum(
 			{
 				title: data.title,
 				tags: data.tags.split(","),
@@ -434,8 +432,7 @@ album.setShowTags = function (albumID) {
 			view.album.show_tags();
 		}
 
-		api.post(
-			"Album::setShowTags",
+		api.v2.setTagAlbumTags(
 			{
 				albumID: albumID,
 				show_tags: new_show_tags,
@@ -575,7 +572,7 @@ album.setDescription = function (albumID) {
 			view.album.description();
 		}
 
-		api.post("Album::setDescription", {
+		api.v2.setAlbumDescription({
 			albumID: albumID,
 			description: description,
 		});
@@ -608,7 +605,7 @@ album.toggleCover = function (photoID) {
 		photoID: album.json.cover_id,
 	};
 
-	api.post("Album::setCover", params, function () {
+	api.v2.setAlbumCover(params, function () {
 		view.album.content.cover(photoID);
 		if (!album.getParentID()) {
 			albums.refresh();
@@ -629,8 +626,7 @@ album.setLicense = function (albumID) {
 	const action = function (data) {
 		basicModal.close();
 
-		api.post(
-			"Album::setLicense",
+		api.v2.setAlbumLicense(
 			{
 				albumID: albumID,
 				license: data.license,
@@ -724,8 +720,7 @@ album.setSorting = function (albumID) {
 	const action = function (data) {
 		basicModal.close();
 
-		api.post(
-			"Album::setSorting",
+		api.v2.setAlbumSorting(
 			{
 				albumID: albumID,
 				sorting_column: data.sortingCol,
@@ -833,7 +828,7 @@ album.setProtectionPolicy = function (albumID) {
 			params.password = null;
 		}
 
-		api.post("Album::setProtectionPolicy", params);
+		api.v2.setAlbumProtectionPolicy(params);
 	};
 
 	const msg = lychee.html`
@@ -1059,8 +1054,7 @@ album.toggleNSFW = function () {
 
 	view.album.nsfw();
 
-	api.post(
-		"Album::setNSFW",
+	api.v2.setAlbumNSFW(
 		{
 			albumID: album.json.id,
 			is_nsfw: album.json.is_nsfw,

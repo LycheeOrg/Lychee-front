@@ -343,7 +343,7 @@ mapview.open = function (albumID = null) {
 			api.v2.getAlbumPosition(params, successHandler);
 		} else {
 			// AlbumID is empty -> fetch all photos of all albums
-			api.get("Albums::getPositionData", {}, successHandler);
+			api.v2.albumsPosition({}, successHandler);
 		}
 	};
 

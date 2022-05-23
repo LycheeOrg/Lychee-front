@@ -345,7 +345,7 @@ upload.start = {
 			xhr.onload = onLoaded;
 			xhr.onloadend = onComplete;
 			xhr.responseType = "json";
-			xhr.open("POST", "api/Photo::add");
+			xhr.open("POST", "api/photo");
 			xhr.setRequestHeader("X-XSRF-TOKEN", csrf.getCSRFCookieValue());
 			xhr.setRequestHeader("Accept", "application/json");
 
@@ -537,7 +537,7 @@ upload.start = {
 
 			const cancelUpload = function () {
 				if (!isUploadCancelled) {
-					api.post("Import::serverCancel", {}, function () {
+					api.v2.importServerCancel({}, function () {
 						isUploadCancelled = true;
 					});
 				}
@@ -741,7 +741,7 @@ upload.start = {
 					resync_metadata: data.resync_metadata,
 				};
 
-				api.post("Import::server", params, successHandler, progressHandler);
+				api.v2.importServer(params, successHandler, progressHandler);
 			};
 
 			upload.show(lychee.locale["UPLOAD_IMPORT_SERVER"], [], runUpload, cancelUpload);

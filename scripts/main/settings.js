@@ -72,7 +72,7 @@ settings.createLogin = function () {
 			password,
 		};
 
-		api.post("Settings::setLogin", params, null, null, errorHandler);
+		api.v2.setLogin(params, null, null, errorHandler);
 	};
 
 	const msg = `

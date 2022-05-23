@@ -315,7 +315,7 @@ contextMenu.buildList = function (lists, exclude, action, parentID = null, layer
  * @returns {void}
  */
 contextMenu.albumTitle = function (albumID, e) {
-	api.get("Albums::tree", {}, function (data) {
+	api.v2.albumsTree({}, function (data) {
 		let items = [];
 
 		items = items.concat({ title: lychee.locale["ROOT"], disabled: albumID === null, fn: () => lychee.goto() });
@@ -652,7 +652,7 @@ contextMenu.getSubIDs = function (albums, albumID) {
 contextMenu.move = function (IDs, e, callback, kind = "UNSORTED", display_root = true) {
 	let items = [];
 
-	api.get("Albums::tree", {}, function (data) {
+	api.v2.albumsTree({}, function (data) {
 		const addItems = function (albums) {
 			// Disable all children
 			// It's not possible to move us into them

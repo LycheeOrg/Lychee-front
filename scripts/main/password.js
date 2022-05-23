@@ -29,8 +29,7 @@ password.getDialog = function (albumID, callback) {
 			password: data.password,
 		};
 
-		api.post(
-			"Album::unlock",
+		api.v2.unlockAlbum(
 			params,
 			function () {
 				basicModal.close();

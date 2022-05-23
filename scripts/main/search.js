@@ -143,7 +143,7 @@ search.find = function (term) {
 	/** @returns {void} */
 	const timeoutHandler = function () {
 		if (header.dom(".header__search").val().length !== 0) {
-			api.get("Search::run", { term }, successHandler);
+			api.v2.search({ term }, successHandler);
 		} else {
 			search.reset();
 		}

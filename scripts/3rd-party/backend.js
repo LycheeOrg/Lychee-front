@@ -163,7 +163,7 @@
 /**
  * @typedef SearchResult
  *
- * DTO returned by `Search::run`
+ * DTO returned by `search/{term}`
  *
  * @property {Album[]}    albums
  * @property {TagAlbum[]} tag_albums
