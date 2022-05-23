@@ -26,7 +26,7 @@ users.update = function (params) {
 		delete params.password;
 	}
 
-	api.post("User::save", params, function () {
+	api.v2.saveUser(params, function () {
 		loadingBar.show("success", "User updated!");
 		users.list(); // reload user list
 	});
@@ -51,7 +51,7 @@ users.create = function (params) {
 		return;
 	}
 
-	api.post("User::create", params, function () {
+	api.v2.createUser(params, function () {
 		loadingBar.show("success", "User created!");
 		users.list(); // reload user list
 	});
@@ -67,7 +67,7 @@ users.create = function (params) {
  * @returns {boolean}
  */
 users.delete = function (params) {
-	api.delete("User::delete", params, function () {
+	api.v2.deleteUser(params, function () {
 		loadingBar.show("success", "User deleted!");
 		users.list(); // reload user list
 	});
@@ -77,8 +77,7 @@ users.delete = function (params) {
  * @returns {void}
  */
 users.list = function () {
-	api.get(
-		"User::list",
+	api.v2.listUsers(
 		{},
 		/** @param {User[]} data */
 		function (data) {

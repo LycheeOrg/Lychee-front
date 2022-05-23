@@ -1575,8 +1575,7 @@ view.full_settings = {
 		init: function () {
 			view.full_settings.clearContent();
 
-			api.get(
-				"Settings::getAll",
+			api.v2.allSettings(
 				{},
 				/** @param {ConfigSetting[]} data */
 				function (data) {
@@ -1929,7 +1928,7 @@ view.logs = {
 		lychee.content.html(html);
 
 		$("#Clean_Noise").on("click", function () {
-			api.post("Logs::clearNoise", {}, view.logs.init);
+			api.v2.clearLogsNoise({}, view.logs.init);
 		});
 	},
 
@@ -1983,7 +1982,7 @@ view.logs = {
 			};
 
 			view.logs.clearContent();
-			api.get("Logs::list", {}, successHandler);
+			api.v2.listLogs({}, successHandler);
 		},
 	},
 };
@@ -2047,7 +2046,7 @@ view.diagnostics = {
 		/** @returns {void} */
 		init: function () {
 			view.diagnostics.clearContent(0);
-			api.get("Diagnostics::get", {}, view.diagnostics.content.parseResponse);
+			api.v2.diagnostics({}, view.diagnostics.content.parseResponse);
 		},
 
 		/**
@@ -2092,8 +2091,7 @@ view.diagnostics = {
 
 	/** @returns {void} */
 	call_check_update: function () {
-		api.post(
-			"Update::check",
+		api.v2.checkUpdate(
 			{},
 			/** @param {{updateStatus: string}} data */
 			function (data) {
@@ -2105,8 +2103,7 @@ view.diagnostics = {
 
 	/** @returns {void} */
 	call_apply_update: function () {
-		api.post(
-			"Update::apply",
+		api.v2.applyUpdate(
 			{},
 			/** @param {{updateMsgs: string[]}} data */
 			function (data) {
@@ -2119,8 +2116,7 @@ view.diagnostics = {
 
 	/** @returns {void} */
 	call_get_size: function () {
-		api.get(
-			"Diagnostics::getSize",
+		api.v2.diagnosticsSize(
 			{},
 			/** @param {string[]} data */
 			function (data) {
@@ -2159,8 +2155,7 @@ view.update = {
 			view.update.clearContent();
 
 			// code duplicate
-			api.post(
-				"Update::apply",
+			api.v2.applyUpdate(
 				{},
 				/** @param {{updateMsgs: string[]}} data */
 				function (data) {

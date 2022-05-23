@@ -202,7 +202,7 @@ settings.changeLogin = function (params) {
 		$("input[name=confirm]").removeClass("error");
 	}
 
-	api.post("Settings::setLogin", params, function () {
+	api.v2.setLogin(params, function () {
 		$("input[name]").removeClass("error");
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_LOGIN"]);
 		view.settings.content.clearLogin();
@@ -214,7 +214,7 @@ settings.changeLogin = function (params) {
  * @returns {void}
  */
 settings.changeSorting = function (params) {
-	api.post("Settings::setSorting", params, function () {
+	api.v2.sorting(params, function () {
 		lychee.sorting_albums.column = params["sorting_albums_column"];
 		lychee.sorting_albums.order = params["sorting_albums_order"];
 		lychee.sorting_photos.column = params["sorting_photos_column"];
@@ -230,7 +230,7 @@ settings.changeSorting = function (params) {
  */
 settings.changeDropboxKey = function (params) {
 	// if params.key == "" key is cleared
-	api.post("Settings::setDropboxKey", params, function () {
+	api.v2.dropboxKey(params, function () {
 		lychee.dropboxKey = params.key;
 		// if (callback) lychee.loadDropbox(callback)
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_DROPBOX"]);
@@ -242,7 +242,7 @@ settings.changeDropboxKey = function (params) {
  * @returns {void}
  */
 settings.changeLang = function (params) {
-	api.post("Settings::setLang", params, function () {
+	api.v2.lang(params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_LANG"]);
 		lychee.init();
 	});
@@ -253,7 +253,7 @@ settings.changeLang = function (params) {
  * @returns {void}
  */
 settings.setDefaultLicense = function (params) {
-	api.post("Settings::setDefaultLicense", params, function () {
+	api.v2.defaultLicense(params, function () {
 		lychee.default_license = params.license;
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_LICENSE"]);
 	});
@@ -264,7 +264,7 @@ settings.setDefaultLicense = function (params) {
  * @returns {void}
  */
 settings.setLayout = function (params) {
-	api.post("Settings::setLayout", params, function () {
+	api.v2.layout(params, function () {
 		lychee.layout = params.layout;
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_LAYOUT"]);
 	});
@@ -275,7 +275,7 @@ settings.setLayout = function (params) {
  * @returns {void}
  */
 settings.changePublicSearch = function (params) {
-	api.post("Settings::setPublicSearch", params, function () {
+	api.v2.publicSearch(params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_PUBLIC_SEARCH"]);
 		lychee.public_search = params.public_search;
 	});
@@ -286,7 +286,7 @@ settings.changePublicSearch = function (params) {
  * @returns {void}
  */
 settings.setOverlayType = function (params) {
-	api.post("Settings::setOverlayType", params, function () {
+	api.v2.overlayType(params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_IMAGE_OVERLAY"]);
 		lychee.image_overlay_type = params.image_overlay_type;
 		lychee.image_overlay_type_default = params.image_overlay_type;
@@ -298,7 +298,7 @@ settings.setOverlayType = function (params) {
  * @returns {void}
  */
 settings.changeMapDisplay = function (params) {
-	api.post("Settings::setMapDisplay", params, function () {
+	api.v2.mapDisplay(params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
 		lychee.map_display = params.map_display;
 		// Map functionality is disabled
@@ -314,7 +314,7 @@ settings.changeMapDisplay = function (params) {
  * @returns {void}
  */
 settings.changeMapDisplayPublic = function (params) {
-	api.post("Settings::setMapDisplayPublic", params, function () {
+	api.v2.mapDisplayPublic(params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY_PUBLIC"]);
 		lychee.map_display_public = params.map_display_public;
 		// If public map functionality is enabled, but map in general is disabled
@@ -330,7 +330,7 @@ settings.changeMapDisplayPublic = function (params) {
  * @returns {void}
  */
 settings.setMapProvider = function (params) {
-	api.post("Settings::setMapProvider", params, function () {
+	api.v2.mapProvider(params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_PROVIDER"]);
 		lychee.map_provider = params.map_provider;
 	});
@@ -341,7 +341,7 @@ settings.setMapProvider = function (params) {
  * @returns {void}
  */
 settings.changeMapIncludeSubAlbums = function (params) {
-	api.post("Settings::setMapIncludeSubAlbums", params, function () {
+	api.v2.mapIncludeSubAlbums(params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
 		lychee.map_include_subalbums = params.map_include_subalbums;
 	});
@@ -352,7 +352,7 @@ settings.changeMapIncludeSubAlbums = function (params) {
  * @returns {void}
  */
 settings.changeLocationDecoding = function (params) {
-	api.post("Settings::setLocationDecoding", params, function () {
+	api.v2.locationDecoding(params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
 		lychee.location_decoding = params.location_decoding;
 	});
@@ -363,7 +363,7 @@ settings.changeLocationDecoding = function (params) {
  * @returns {void}
  */
 settings.changeNSFWVisible = function (params) {
-	api.post("Settings::setNSFWVisible", params, function () {
+	api.v2.nsfwVisible(params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_NSFW_VISIBLE"]);
 		lychee.nsfw_visible = params.nsfw_visible;
 		lychee.nsfw_visible_saved = lychee.nsfw_visible;
@@ -380,7 +380,7 @@ settings.changeNSFWVisible = function (params) {
  * @returns {void}
  */
 settings.changeLocationShow = function (params) {
-	api.post("Settings::setLocationShow", params, function () {
+	api.v2.locationShow(params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
 		lychee.location_show = params.location_show;
 		// Don't show location
@@ -396,7 +396,7 @@ settings.changeLocationShow = function (params) {
  * @returns {void}
  */
 settings.changeLocationShowPublic = function (params) {
-	api.post("Settings::setLocationShowPublic", params, function () {
+	api.v2.locationShowPublic(params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_MAP_DISPLAY"]);
 		lychee.location_show_public = params.location_show_public;
 		// If public map functionality is enabled, but map in general is disabled
@@ -412,7 +412,7 @@ settings.changeLocationShowPublic = function (params) {
  * @returns {void}
  */
 settings.changeNewPhotosNotification = function (params) {
-	api.post("Settings::setNewPhotosNotification", params, function () {
+	api.v2.newPhotosNotification(params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_NEW_PHOTOS_NOTIFICATION"]);
 		lychee.new_photos_notification = params.new_photos_notification;
 	});
@@ -425,7 +425,7 @@ settings.changeCSS = function () {
 	const params = {
 		css: $("#css").val(),
 	};
-	api.post("Settings::setCSS", params, function () {
+	api.v2.css(params, function () {
 		lychee.css = params.css;
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_CSS"]);
 	});
@@ -436,7 +436,7 @@ settings.changeCSS = function () {
  * @returns {void}
  */
 settings.save = function (params) {
-	api.post("Settings::saveAll", params, function () {
+	api.v2.saveAllSettings(params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_UPDATE"]);
 		view.full_settings.init();
 		// re-read settings
