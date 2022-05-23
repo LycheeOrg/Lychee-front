@@ -562,4 +562,8 @@ api.v2 = {
 	 * @type APIV2Call
 	 */
 	setLogin: api.createV2API("settings/login", "POST"),
+	/**
+	 * @type APIV2Call
+	 */
+	sharingList: api.createV2API("sharing", "GET"),
 };

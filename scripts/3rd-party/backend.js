@@ -153,7 +153,7 @@
 /**
  * @typedef SharingInfo
  *
- * DTO returned by `Sharing::list`
+ * DTO returned by `sharing`
  *
  * @property {{id: number, album_id: string, user_id: number, username: string, title: string}[]} shared
  * @property {{id: string, title: string}[]}                                                      albums

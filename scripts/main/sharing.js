@@ -64,8 +64,7 @@ sharing.delete = function () {
  * @returns {void}
  */
 sharing.list = function () {
-	api.get(
-		"Sharing::list",
+	api.v2.sharingList(
 		{},
 		/** @param {SharingInfo} data */
 		function (data) {

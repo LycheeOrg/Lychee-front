@@ -1025,7 +1025,7 @@ album.shareUsers = function (albumID) {
 			}
 		};
 
-		api.get("Sharing::list", {}, successCallback);
+		api.v2.sharingList({}, successCallback);
 	};
 
 	basicModal.show({
