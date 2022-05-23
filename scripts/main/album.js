@@ -282,7 +282,7 @@ album.load = function (albumID, albumLoadedCB = null) {
 		}
 	};
 
-	api.get(`album/${albumID}`, {}, successHandler, null, errorHandler);
+	api.v2.getAlbum({ albumID: albumID }, successHandler, null, errorHandler);
 };
 
 /**
@@ -1435,7 +1435,7 @@ album.refresh = function () {
 album.deleteTrack = function () {
 	album.json.track_url = null;
 
-	api.delete("Album::deleteTrack", {
+	api.v2.deleteAlbumTrack({
 		albumID: album.json.id,
 	});
 };

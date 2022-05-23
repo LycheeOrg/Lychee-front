@@ -980,12 +980,11 @@ upload.uploadTrack = function (files) {
 		const formData = new FormData();
 		const xhr = new XMLHttpRequest();
 
-		formData.append("albumID", albumID);
 		formData.append("file", files[0]);
 
 		xhr.onload = finish;
 		xhr.responseType = "json";
-		xhr.open("POST", "api/Album::setTrack");
+		xhr.open("POST", `api/album/${albumID}/track`);
 		xhr.setRequestHeader("X-XSRF-TOKEN", csrf.getCSRFCookieValue());
 		xhr.setRequestHeader("Accept", "application/json");
 

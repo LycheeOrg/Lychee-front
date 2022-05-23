@@ -23,6 +23,15 @@
  */
 
 /**
+ * @callback APIV2Call
+ * @param {Object} params the parameters
+ * @param {?APISuccessCB} [successCallback = null]
+ * @param {?APIProgressCB} [responseProgressCB = null]
+ * @param {?APIErrorCB} [errorCallback = null]
+ * @returns {void}
+ */
+
+/**
  * The main API object
  */
 let api = {
@@ -313,4 +322,128 @@ api.getCSS = function (url, callback) {
 		success: successHandler,
 		error: errorHandler,
 	});
+};
+
+/**
+ * create a function which queries the API
+ * @param {string} endpoint
+ * @param {string} method
+ * @return APIV2Call
+ */
+api.createV2API = function (endpoint, method) {
+	return function (params, successCallback = null, responseProgressCB = null, errorCallback = null) {
+		loadingBar.show();
+
+		let url = endpoint;
+		for (const param in params) {
+			if (url.includes(`{${param}}`)) {
+				url = url.replace(`{${param}}`, params[param]);
+				delete params[param];
+			}
+		}
+
+		/**
+		 * The success handler
+		 * @param {Object} data the decoded JSON object of the response
+		 */
+		const successHandler = (data) => {
+			setTimeout(loadingBar.hide, 100);
+			if (successCallback) successCallback(data);
+		};
+
+		/**
+		 * The error handler
+		 * @param {XMLHttpRequest} jqXHR the jQuery XMLHttpRequest object, see {@link https://api.jquery.com/jQuery.ajax/#jqXHR}.
+		 */
+		const errorHandler = (jqXHR) => {
+			/**
+			 * @type {?LycheeException}
+			 */
+			const lycheeException = jqXHR.responseJSON;
+
+			if (errorCallback) {
+				let isHandled = errorCallback(jqXHR, params, lycheeException);
+				if (isHandled) {
+					setTimeout(loadingBar.hide, 100);
+					return;
+				}
+			}
+			// Call global error handler for unhandled errors
+			api.onError(jqXHR, params, lycheeException);
+		};
+
+		let ajaxParams;
+		switch (method) {
+			case "POST":
+				ajaxParams = {
+					type: "POST",
+					url: "api/" + url,
+					contentType: "application/json",
+					data: JSON.stringify(params),
+					dataType: "json",
+					headers: {
+						"X-XSRF-TOKEN": csrf.getCSRFCookieValue(),
+					},
+					success: successHandler,
+					error: errorHandler,
+				};
+				break;
+			case "GET":
+				const urlParams = new URLSearchParams();
+				for (const param in params) {
+					let value = params[param];
+					if (value === true) value = "1";
+					else if (value === false) value = "0";
+					urlParams.set(param, value);
+				}
+				ajaxParams = {
+					type: "GET",
+					url: "api/" + url,
+					contentType: "application/json",
+					data: urlParams.toString(),
+					headers: {
+						"X-XSRF-TOKEN": csrf.getCSRFCookieValue(),
+					},
+					success: successHandler,
+					error: errorHandler,
+				};
+				break;
+			case "DELETE":
+				ajaxParams = {
+					type: "DELETE",
+					url: "api/" + url,
+					contentType: "application/json",
+					data: JSON.stringify(params),
+					dataType: "json",
+					headers: {
+						"X-XSRF-TOKEN": csrf.getCSRFCookieValue(),
+					},
+					success: successHandler,
+					error: errorHandler,
+				};
+				break;
+		}
+		if (responseProgressCB !== null) {
+			ajaxParams.xhrFields = {
+				onprogress: responseProgressCB,
+			};
+		}
+
+		$.ajax(ajaxParams);
+	};
+};
+
+api.v2 = {
+	/**
+	 * @type APIV2Call
+	 */
+	getAlbum: api.createV2API("album/{albumID}", "GET"),
+	/**
+	 * @type APIV2Call
+	 */
+	getAlbumPosition: api.createV2API("album/{albumID}/positions", "GET"),
+	/**
+	 * @type APIV2Call
+	 */
+	deleteAlbumTrack: api.createV2API("album/{albumID}/track", "DELETE"),
 };
