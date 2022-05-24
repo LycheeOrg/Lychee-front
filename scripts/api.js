@@ -467,7 +467,7 @@ api.v2 = {
 	/** @type APIV2Call */
 	albumsTree: api.createV2API("albums/tree", "GET"),
 	/** @type APIV2Call */
-	albumsPosition: api.createV2API("albums/position", "GET"),
+	albumsPosition: api.createV2API("albums/positions", "GET"),
 	/** @type APIV2Call */
 	getAlbums: api.createV2API("albums", "GET"),
 	/** @type APIV2Call */
