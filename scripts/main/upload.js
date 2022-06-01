@@ -447,8 +447,7 @@ upload.start = {
 				// This way, the server could also report its own progress of
 				// downloading the images.
 				// TODO: Use a streamed response (see description above).
-				api.post(
-					"Import::url",
+				api.v2.importUrl(
 					{
 						urls: [data.url],
 						albumID: albumID,
@@ -862,8 +861,7 @@ upload.start = {
 				$(firstRowStatusSelector).html(lychee.locale["UPLOAD_IMPORTING"]);
 
 				// TODO: Use a streamed response; see long comment in `import.url()` for the reasons
-				api.post(
-					"Import::url",
+				api.v2.importUrl(
 					{
 						urls: files.map((file) => file.link),
 						albumID: albumID,

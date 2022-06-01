@@ -526,7 +526,7 @@ album.setTitle = function (albumIDs) {
 			});
 		}
 
-		api.post("Album::setTitle", {
+		api.v2.setAlbumTitle({
 			albumIDs: albumIDs,
 			title: newTitle,
 		});
@@ -980,12 +980,12 @@ album.shareUsers = function (albumID) {
 		});
 
 		if (sharingToDelete.length > 0) {
-			api.delete("Sharing::delete", {
+			api.v2.sharingDelete({
 				shareIDs: sharingToDelete,
 			});
 		}
 		if (sharingToAdd.length > 0) {
-			api.post("Sharing::add", {
+			api.v2.sharingAdd({
 				albumIDs: [albumID],
 				userIDs: sharingToAdd,
 			});
@@ -1129,7 +1129,7 @@ album.qrCode = function () {
  * @returns {void}
  */
 album.getArchive = function (albumIDs) {
-	location.href = "api/Album::getArchive?albumIDs=" + albumIDs.join();
+	location.href = "api/albums/" + albumIDs.join() + "/archive";
 };
 
 /**
@@ -1182,8 +1182,7 @@ album.delete = function (albumIDs) {
 	action.fn = function () {
 		basicModal.close();
 
-		api.delete(
-			"Album::delete",
+		api.v2.deleteAlbums(
 			{
 				albumIDs: albumIDs,
 			},
@@ -1266,8 +1265,7 @@ album.merge = function (albumIDs, albumID, confirm = true) {
 	const action = function () {
 		basicModal.close();
 
-		api.post(
-			"Album::merge",
+		api.v2.mergeAlbums(
 			{
 				albumID: albumID,
 				albumIDs: albumIDs,
@@ -1305,8 +1303,7 @@ album.setAlbum = function (albumIDs, albumID, confirm = true) {
 	const action = function () {
 		basicModal.close();
 
-		api.post(
-			"Album::move",
+		api.v2.moveAlbums(
 			{
 				albumID: albumID,
 				albumIDs: albumIDs,
