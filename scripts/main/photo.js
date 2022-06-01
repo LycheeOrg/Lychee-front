@@ -337,7 +337,7 @@ photo.delete = function (photoIDs) {
 			lychee.goto(album.getID());
 		}
 
-		api.delete("Photo::delete", { photoIDs: photoIDs });
+		api.v2.photoDelete({ photoIDs: photoIDs });
 	};
 
 	if (photoIDs.length === 1) {
@@ -408,7 +408,7 @@ photo.setTitle = function (photoIDs) {
 			view.album.content.title(id);
 		});
 
-		api.post("Photo::setTitle", {
+		api.v2.photoSetTitle({
 			photoIDs: photoIDs,
 			title: newTitle,
 		});
@@ -441,8 +441,7 @@ photo.setTitle = function (photoIDs) {
  * @returns {void}
  */
 photo.copyTo = function (photoIDs, albumID) {
-	api.post(
-		"Photo::duplicate",
+	api.v2.photoDuplicate(
 		{
 			photoIDs: photoIDs,
 			albumID: albumID,
@@ -494,8 +493,7 @@ photo.setAlbum = function (photoIDs, albumID) {
 		}
 	}
 
-	api.post(
-		"Photo::setAlbum",
+	api.v2.photoSetAlbum(
 		{
 			photoIDs: photoIDs,
 			albumID: albumID,
@@ -522,7 +520,7 @@ photo.toggleStar = function () {
 	view.photo.star();
 	albums.refresh();
 
-	api.post("Photo::setStar", {
+	api.v2.photoSetStar({
 		photoIDs: [photo.json.id],
 		is_starred: photo.json.is_starred,
 	});
@@ -543,7 +541,7 @@ photo.setStar = function (photoIDs, isStarred) {
 
 	albums.refresh();
 
-	api.post("Photo::setStar", {
+	api.v2.photoSetStar({
 		photoIDs: photoIDs,
 		is_starred: isStarred,
 	});
@@ -849,8 +847,7 @@ photo.setTags = function (photoIDs, tags) {
 		album.getByID(id).tags = tags;
 	});
 
-	api.post(
-		"Photo::setTags",
+	api.v2.photoSetTags(
 		{
 			photoIDs: photoIDs,
 			tags: tags,
@@ -1103,7 +1100,7 @@ photo.getArchive = function (photoIDs, kind = null) {
 			photo.getArchive(photoIDs, kind);
 		});
 	} else {
-		location.href = "api/Photo::getArchive?photoIDs=" + photoIDs.join() + "&kind=" + kind;
+		location.href = "api/photos/" + photoIDs.join() + "/archive?kind=" + kind;
 	}
 };
 

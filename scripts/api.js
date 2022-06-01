@@ -79,213 +79,6 @@ api.hasSessionExpired = function (jqXHR, lycheeException) {
 
 /**
  *
- * @param {string} fn
- * @param {Object} params
- * @param {?APISuccessCB} successCallback
- * @param {?APIProgressCB} responseProgressCB
- * @param {?APIErrorCB} errorCallback
- * @returns {void}
- */
-api.get = function (fn, params, successCallback = null, responseProgressCB = null, errorCallback = null) {
-	loadingBar.show();
-
-	/**
-	 * The success handler
-	 * @param {Object} data the decoded JSON object of the response
-	 */
-	const successHandler = (data) => {
-		setTimeout(loadingBar.hide, 100);
-		if (successCallback) successCallback(data);
-	};
-
-	/**
-	 * The error handler
-	 * @param {XMLHttpRequest} jqXHR the jQuery XMLHttpRequest object, see {@link https://api.jquery.com/jQuery.ajax/#jqXHR}.
-	 */
-	const errorHandler = (jqXHR) => {
-		/**
-		 * @type {?LycheeException}
-		 */
-		const lycheeException = jqXHR.responseJSON;
-
-		if (errorCallback) {
-			let isHandled = errorCallback(jqXHR, params, lycheeException);
-			if (isHandled) {
-				setTimeout(loadingBar.hide, 100);
-				return;
-			}
-		}
-		// Call global error handler for unhandled errors
-		api.onError(jqXHR, params, lycheeException);
-	};
-
-	const urlParams = new URLSearchParams();
-	for (const param in params) {
-		let value = params[param];
-		if (value === true) value = "1";
-		else if (value === false) value = "0";
-		urlParams.set(param, value);
-	}
-
-	let ajaxParams = {
-		type: "GET",
-		url: "api/" + fn,
-		contentType: "application/json",
-		data: urlParams.toString(),
-		headers: {
-			"X-XSRF-TOKEN": csrf.getCSRFCookieValue(),
-		},
-		success: successHandler,
-		error: errorHandler,
-	};
-
-	if (responseProgressCB !== null) {
-		ajaxParams.xhrFields = {
-			onprogress: responseProgressCB,
-		};
-	}
-
-	$.ajax(ajaxParams);
-};
-
-/**
- *
- * @param {string} fn
- * @param {Object} params
- * @param {?APISuccessCB} successCallback
- * @param {?APIProgressCB} responseProgressCB
- * @param {?APIErrorCB} errorCallback
- * @returns {void}
- */
-api.delete = function (fn, params, successCallback = null, responseProgressCB = null, errorCallback = null) {
-	loadingBar.show();
-
-	/**
-	 * The success handler
-	 * @param {Object} data the decoded JSON object of the response
-	 */
-	const successHandler = (data) => {
-		setTimeout(loadingBar.hide, 100);
-		if (successCallback) successCallback(data);
-	};
-
-	/**
-	 * The error handler
-	 * @param {XMLHttpRequest} jqXHR the jQuery XMLHttpRequest object, see {@link https://api.jquery.com/jQuery.ajax/#jqXHR}.
-	 */
-	const errorHandler = (jqXHR) => {
-		/**
-		 * @type {?LycheeException}
-		 */
-		const lycheeException = jqXHR.responseJSON;
-
-		if (errorCallback) {
-			let isHandled = errorCallback(jqXHR, params, lycheeException);
-			if (isHandled) {
-				setTimeout(loadingBar.hide, 100);
-				return;
-			}
-		}
-		// Call global error handler for unhandled errors
-		api.onError(jqXHR, params, lycheeException);
-	};
-
-	const urlParams = new URLSearchParams();
-	for (const param in params) {
-		let value = params[param];
-		if (value === true) value = "1";
-		else if (value === false) value = "0";
-		urlParams.set(param, value);
-	}
-
-	let ajaxParams = {
-		type: "DELETE",
-		url: "api/" + fn,
-		contentType: "application/json",
-		data: JSON.stringify(params),
-		dataType: "json",
-		headers: {
-			"X-XSRF-TOKEN": csrf.getCSRFCookieValue(),
-		},
-		success: successHandler,
-		error: errorHandler,
-	};
-
-	if (responseProgressCB !== null) {
-		ajaxParams.xhrFields = {
-			onprogress: responseProgressCB,
-		};
-	}
-
-	$.ajax(ajaxParams);
-};
-
-/**
- *
- * @param {string} fn
- * @param {Object} params
- * @param {?APISuccessCB} successCallback
- * @param {?APIProgressCB} responseProgressCB
- * @param {?APIErrorCB} errorCallback
- * @returns {void}
- */
-api.post = function (fn, params, successCallback = null, responseProgressCB = null, errorCallback = null) {
-	loadingBar.show();
-
-	/**
-	 * The success handler
-	 * @param {Object} data the decoded JSON object of the response
-	 */
-	const successHandler = (data) => {
-		setTimeout(loadingBar.hide, 100);
-		if (successCallback) successCallback(data);
-	};
-
-	/**
-	 * The error handler
-	 * @param {XMLHttpRequest} jqXHR the jQuery XMLHttpRequest object, see {@link https://api.jquery.com/jQuery.ajax/#jqXHR}.
-	 */
-	const errorHandler = (jqXHR) => {
-		/**
-		 * @type {?LycheeException}
-		 */
-		const lycheeException = jqXHR.responseJSON;
-
-		if (errorCallback) {
-			let isHandled = errorCallback(jqXHR, params, lycheeException);
-			if (isHandled) {
-				setTimeout(loadingBar.hide, 100);
-				return;
-			}
-		}
-		// Call global error handler for unhandled errors
-		api.onError(jqXHR, params, lycheeException);
-	};
-
-	let ajaxParams = {
-		type: "POST",
-		url: "api/" + fn,
-		contentType: "application/json",
-		data: JSON.stringify(params),
-		dataType: "json",
-		headers: {
-			"X-XSRF-TOKEN": csrf.getCSRFCookieValue(),
-		},
-		success: successHandler,
-		error: errorHandler,
-	};
-
-	if (responseProgressCB !== null) {
-		ajaxParams.xhrFields = {
-			onprogress: responseProgressCB,
-		};
-	}
-
-	$.ajax(ajaxParams);
-};
-
-/**
- *
  * @param {string} url
  * @param {APISuccessCB} callback
  * @returns {void}
@@ -337,7 +130,7 @@ api.createV2API = function (endpoint, method) {
 		let url = endpoint;
 		for (const param in params) {
 			if (url.includes(`{${param}}`)) {
-				if (typeof params[param] === Array) {
+				if (Array.isArray(params[param])) {
 					params[param] = params[param].join();
 				}
 				url = url.replace(`{${param}}`, params[param]);
@@ -446,6 +239,8 @@ api.v2 = {
 	/** @type APIV2Call */
 	listWebAuthn: api.createV2API("webauthn", "GET"),
 	/** @type APIV2Call */
+	deleteWebAuthn: api.createV2API("webauthn", "DELETE"),
+	/** @type APIV2Call */
 	search: api.createV2API("search/{term}", "GET"),
 	/** @type APIV2Call */
 	photoEditorRotate: api.createV2API("photo/{photoID}/editor/rotate/{direction}", "POST"),
@@ -453,6 +248,18 @@ api.v2 = {
 	photoSetLicense: api.createV2API("photo/{photoID}/license", "POST"),
 	/** @type APIV2Call */
 	photoSetPublic: api.createV2API("photo/{photoID}/public", "POST"),
+	/** @type APIV2Call */
+	photoSetTitle: api.createV2API("photos/{photoIDs}/title", "POST"),
+	/** @type APIV2Call */
+	photoSetStar: api.createV2API("photos/{photoIDs}/star", "POST"),
+	/** @type APIV2Call */
+	photoSetAlbum: api.createV2API("photos/{photoIDs}/album", "POST"),
+	/** @type APIV2Call */
+	photoDuplicate: api.createV2API("photos/{photoIDs}/duplicate", "POST"),
+	/** @type APIV2Call */
+	photoSetTags: api.createV2API("photos/{photoIDs}/tags", "POST"),
+	/** @type APIV2Call */
+	photoDelete: api.createV2API("photos/{photoIDs}", "DELETE"),
 	/** @type APIV2Call */
 	photoSetDescription: api.createV2API("photo/{photoID}/description", "POST"),
 	/** @type APIV2Call */
