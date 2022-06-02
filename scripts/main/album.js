@@ -432,10 +432,10 @@ album.setShowTags = function (albumID) {
 			view.album.show_tags();
 		}
 
-		api.v2.setTagAlbumTags(
+		api.v2.patchTagAlbum(
 			{
 				albumID: albumID,
-				show_tags: new_show_tags,
+				tags: new_show_tags,
 			},
 			() => album.reload()
 		);
@@ -572,10 +572,17 @@ album.setDescription = function (albumID) {
 			view.album.description();
 		}
 
-		api.v2.setAlbumDescription({
-			albumID: albumID,
-			description: description,
-		});
+		if (album.isTagAlbum()) {
+			api.v2.patchTagAlbum({
+				albumID: albumID,
+				description: description,
+			});
+		} else {
+			api.v2.patchAlbum({
+				albumID: albumID,
+				description: description,
+			});
+		}
 	};
 
 	basicModal.show({
@@ -626,7 +633,7 @@ album.setLicense = function (albumID) {
 	const action = function (data) {
 		basicModal.close();
 
-		api.v2.setAlbumLicense(
+		api.v2.patchAlbum(
 			{
 				albumID: albumID,
 				license: data.license,
@@ -720,6 +727,33 @@ album.setSorting = function (albumID) {
 	const action = function (data) {
 		basicModal.close();
 
+		if (album.isTagAlbum()) {
+			api.v2.patchTagAlbum(
+				{
+					albumID: albumID,
+					sorting_column: data.sortingCol,
+					sorting_order: data.sortingOrder,
+				},
+				function () {
+					if (visible.album()) {
+						album.reload();
+					}
+				}
+			);
+		} else {
+			api.v2.patchAlbum(
+				{
+					albumID: albumID,
+					sorting_column: data.sortingCol,
+					sorting_order: data.sortingOrder,
+				},
+				function () {
+					if (visible.album()) {
+						album.reload();
+					}
+				}
+			);
+		}
 		api.v2.setAlbumSorting(
 			{
 				albumID: albumID,
@@ -1054,7 +1088,7 @@ album.toggleNSFW = function () {
 
 	view.album.nsfw();
 
-	api.v2.setAlbumNSFW(
+	api.v2.patchAlbum(
 		{
 			albumID: album.json.id,
 			is_nsfw: album.json.is_nsfw,
