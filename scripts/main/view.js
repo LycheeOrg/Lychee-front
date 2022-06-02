@@ -1923,12 +1923,18 @@ view.logs = {
 				<a id="Clean_Noise" class="basicModal__button">
 					${lychee.locale["CLEAN_LOGS"]}
 				</a>
+				<a id="Clear" class="basicModal__button">
+					${lychee.locale["CLEAR"]}
+				</a>
 			</div>
 			<pre class="logs_diagnostics_view"></pre>`;
 		lychee.content.html(html);
 
 		$("#Clean_Noise").on("click", function () {
 			api.v2.clearLogsNoise({}, view.logs.init);
+		});
+		$("#Clear").on("click", function () {
+			api.v2.clearLogs({}, view.logs.init);
 		});
 	},
 
