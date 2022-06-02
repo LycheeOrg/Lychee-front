@@ -408,7 +408,7 @@ photo.setTitle = function (photoIDs) {
 			view.album.content.title(id);
 		});
 
-		api.v2.photoSetTitle({
+		api.v2.photoPatch({
 			photoIDs: photoIDs,
 			title: newTitle,
 		});
@@ -493,7 +493,7 @@ photo.setAlbum = function (photoIDs, albumID) {
 		}
 	}
 
-	api.v2.photoSetAlbum(
+	api.v2.photoPatch(
 		{
 			photoIDs: photoIDs,
 			albumID: albumID,
@@ -520,7 +520,7 @@ photo.toggleStar = function () {
 	view.photo.star();
 	albums.refresh();
 
-	api.v2.photoSetStar({
+	api.v2.photoPatch({
 		photoIDs: [photo.json.id],
 		is_starred: photo.json.is_starred,
 	});
@@ -541,7 +541,7 @@ photo.setStar = function (photoIDs, isStarred) {
 
 	albums.refresh();
 
-	api.v2.photoSetStar({
+	api.v2.photoPatch({
 		photoIDs: photoIDs,
 		is_starred: isStarred,
 	});
@@ -677,8 +677,8 @@ photo.setProtectionPolicy = function (photoID) {
 
 				albums.refresh();
 
-				api.v2.photoSetPublic({
-					photoID: photoID,
+				api.v2.photoPatch({
+					photoIDs: photoID,
 					is_public: newIsPublic !== 0,
 				});
 			}
@@ -750,8 +750,8 @@ photo.setDescription = function (photoID) {
 			view.photo.description();
 		}
 
-		api.v2.photoSetDescription({
-			photoID: photoID,
+		api.v2.photoPatch({
+			photoIDs: photoID,
 			description: description,
 		});
 	};
@@ -847,7 +847,7 @@ photo.setTags = function (photoIDs, tags) {
 		album.getByID(id).tags = tags;
 	});
 
-	api.v2.photoSetTags(
+	api.v2.photoPatch(
 		{
 			photoIDs: photoIDs,
 			tags: tags,
@@ -916,11 +916,11 @@ photo.setLicense = function (photoID) {
 		let license = data.license;
 
 		let params = {
-			photoID,
+			photoIDs: photoID,
 			license,
 		};
 
-		api.v2.photoSetLicense(params, function () {
+		api.v2.photoPatch(params, function () {
 			// update the photo JSON and reload the license in the sidebar
 			photo.json.license = params.license;
 			view.photo.license();
