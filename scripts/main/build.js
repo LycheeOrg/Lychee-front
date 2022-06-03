@@ -116,7 +116,17 @@ build.album = function (data, disabled = false) {
 			<div class='album ${disabled ? `disabled` : ``} ${data.is_nsfw && lychee.nsfw_blur ? `blurred` : ``}'
 				data-id='${data.id}'
 				data-nsfw='${data.is_nsfw ? `1` : `0`}'
-				data-tabindex='${tabindex.get_next_tab_index()}'>
+				data-tabindex='${tabindex.get_next_tab_index()}'
+				draggable='${album.isSmartID(data.id) || data.is_tag_album ? "false" : "true"}'
+				${
+					album.isSmartID(data.id) || data.is_tag_album
+						? ``
+						: `ondragstart='lychee.startDrag(event)'
+				ondragover='lychee.overDrag(event)'
+				ondragleave='lychee.leaveDrag(event)'
+				ondragend='lychee.endDrag(event)'
+				ondrop='lychee.finishDrag(event)'`
+				}>
 				  ${build.getAlbumThumb(data)}
 				  ${build.getAlbumThumb(data)}
 				  ${build.getAlbumThumb(data)}
@@ -251,7 +261,10 @@ build.photo = function (data, disabled = false) {
 	html += lychee.html`
 			<div class='photo ${disabled ? `disabled` : ``}' data-album-id='${data.album_id}' data-id='${
 		data.id
-	}' data-tabindex='${tabindex.get_next_tab_index()}'>
+	}' data-tabindex='${tabindex.get_next_tab_index()}'
+			draggable='true'
+			ondragstart='lychee.startDrag(event)'
+			ondragend='lychee.endDrag(event)'>
 				${thumbnail}
 				<div class='overlay'>
 					<h1 title='$${data.title}'>$${data.title}</h1>
