@@ -2,7 +2,7 @@
 
 The current API is described in details [here](https://lycheeorg.github.io/docs/api.html)
 
-## v2
+## v3
 
 The JS functions to query the v2 API are declared explicitly in [api.js &#187;](scripts/api.js) like this
 
