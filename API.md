@@ -2,9 +2,7 @@
 
 The current API is described in details [here](https://lycheeorg.github.io/docs/api.html)
 
-## v2
-
-The JS functions to query the v2 API are declared explicitly in [api.js &#187;](scripts/api.js) like this
+The JS functions to query the API are declared explicitly in [api.js &#187;](scripts/api.js) like this
 
 ```js
 api.v2 = {
@@ -20,3 +18,5 @@ You can then call this to invoke the API:
 ```js
 api.v2.getAlbum({ albumID: albumID }, successHandler, null, errorHandler);
 ```
+
+The URL parameter `albumID` will be replaced with the value given in the parameters, parameters that are not in the URL are added as query params or as JSON in the body.
