@@ -1337,13 +1337,22 @@ album.setAlbum = function (albumIDs, albumID, confirm = true) {
 	const action = function () {
 		basicModal.close();
 
-		api.v2.moveAlbums(
-			{
-				albumID: albumID,
-				albumIDs: albumIDs,
-			},
-			() => album.reload()
-		);
+		if (albumID === null) {
+			api.v2.moveAlbumsToTop(
+				{
+					albumIDs: albumIDs,
+				},
+				() => album.reload()
+			);
+		} else {
+			api.v2.moveAlbums(
+				{
+					albumID: albumID,
+					albumIDs: albumIDs,
+				},
+				() => album.reload()
+			);
+		}
 	};
 
 	if (confirm) {
