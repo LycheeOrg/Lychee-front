@@ -282,7 +282,7 @@ album.load = function (albumID, albumLoadedCB = null) {
 		}
 	};
 
-	api.v2.getAlbum({ albumID: albumID }, successHandler, null, errorHandler);
+	api.getAlbum({ albumID: albumID }, successHandler, null, errorHandler);
 };
 
 /**
@@ -331,7 +331,7 @@ album.add = function (IDs = null, callback = null) {
 			params.parent_id = photo.json.album_id;
 		}
 
-		api.v2.addAlbum(
+		api.addAlbum(
 			params,
 			/** @param {Album} _data */
 			function (_data) {
@@ -377,7 +377,7 @@ album.addByTags = function () {
 
 		basicModal.close();
 
-		api.v2.addTagAlbum(
+		api.addTagAlbum(
 			{
 				title: data.title,
 				tags: data.tags.split(","),
@@ -432,7 +432,7 @@ album.setShowTags = function (albumID) {
 			view.album.show_tags();
 		}
 
-		api.v2.patchTagAlbum(
+		api.patchTagAlbum(
 			{
 				albumID: albumID,
 				tags: new_show_tags,
@@ -526,7 +526,7 @@ album.setTitle = function (albumIDs) {
 			});
 		}
 
-		api.v2.setAlbumTitle({
+		api.setAlbumTitle({
 			albumIDs: albumIDs,
 			title: newTitle,
 		});
@@ -573,12 +573,12 @@ album.setDescription = function (albumID) {
 		}
 
 		if (album.isTagAlbum()) {
-			api.v2.patchTagAlbum({
+			api.patchTagAlbum({
 				albumID: albumID,
 				description: description,
 			});
 		} else {
-			api.v2.patchAlbum({
+			api.patchAlbum({
 				albumID: albumID,
 				description: description,
 			});
@@ -612,7 +612,7 @@ album.toggleCover = function (photoID) {
 		photoID: album.json.cover_id,
 	};
 
-	api.v2.setAlbumCover(params, function () {
+	api.setAlbumCover(params, function () {
 		view.album.content.cover(photoID);
 		if (!album.getParentID()) {
 			albums.refresh();
@@ -633,7 +633,7 @@ album.setLicense = function (albumID) {
 	const action = function (data) {
 		basicModal.close();
 
-		api.v2.patchAlbum(
+		api.patchAlbum(
 			{
 				albumID: albumID,
 				license: data.license,
@@ -728,7 +728,7 @@ album.setSorting = function (albumID) {
 		basicModal.close();
 
 		if (album.isTagAlbum()) {
-			api.v2.patchTagAlbum(
+			api.patchTagAlbum(
 				{
 					albumID: albumID,
 					sorting_column: data.sortingCol,
@@ -741,7 +741,7 @@ album.setSorting = function (albumID) {
 				}
 			);
 		} else {
-			api.v2.patchAlbum(
+			api.patchAlbum(
 				{
 					albumID: albumID,
 					sorting_column: data.sortingCol,
@@ -754,7 +754,7 @@ album.setSorting = function (albumID) {
 				}
 			);
 		}
-		api.v2.setAlbumSorting(
+		api.setAlbumSorting(
 			{
 				albumID: albumID,
 				sorting_column: data.sortingCol,
@@ -862,7 +862,7 @@ album.setProtectionPolicy = function (albumID) {
 			params.password = null;
 		}
 
-		api.v2.setAlbumProtectionPolicy(params);
+		api.setAlbumProtectionPolicy(params);
 	};
 
 	const msg = lychee.html`
@@ -1014,12 +1014,12 @@ album.shareUsers = function (albumID) {
 		});
 
 		if (sharingToDelete.length > 0) {
-			api.v2.sharingDelete({
+			api.sharingDelete({
 				shareIDs: sharingToDelete,
 			});
 		}
 		if (sharingToAdd.length > 0) {
-			api.v2.sharingAdd({
+			api.sharingAdd({
 				albumIDs: [albumID],
 				userIDs: sharingToAdd,
 			});
@@ -1059,7 +1059,7 @@ album.shareUsers = function (albumID) {
 			}
 		};
 
-		api.v2.sharingList({}, successCallback);
+		api.sharingList({}, successCallback);
 	};
 
 	basicModal.show({
@@ -1088,7 +1088,7 @@ album.toggleNSFW = function () {
 
 	view.album.nsfw();
 
-	api.v2.patchAlbum(
+	api.patchAlbum(
 		{
 			albumID: album.json.id,
 			is_nsfw: album.json.is_nsfw,
@@ -1216,7 +1216,7 @@ album.delete = function (albumIDs) {
 	action.fn = function () {
 		basicModal.close();
 
-		api.v2.deleteAlbums(
+		api.deleteAlbums(
 			{
 				albumIDs: albumIDs,
 			},
@@ -1299,7 +1299,7 @@ album.merge = function (albumIDs, albumID, confirm = true) {
 	const action = function () {
 		basicModal.close();
 
-		api.v2.mergeAlbums(
+		api.mergeAlbums(
 			{
 				albumID: albumID,
 				albumIDs: albumIDs,
@@ -1338,14 +1338,14 @@ album.setAlbum = function (albumIDs, albumID, confirm = true) {
 		basicModal.close();
 
 		if (albumID === null) {
-			api.v2.moveAlbumsToTop(
+			api.moveAlbumsToTop(
 				{
 					albumIDs: albumIDs,
 				},
 				() => album.reload()
 			);
 		} else {
-			api.v2.moveAlbums(
+			api.moveAlbums(
 				{
 					albumID: albumID,
 					albumIDs: albumIDs,
@@ -1469,7 +1469,7 @@ album.refresh = function () {
 album.deleteTrack = function () {
 	album.json.track_url = null;
 
-	api.v2.deleteAlbumTrack({
+	api.deleteAlbumTrack({
 		albumID: album.json.id,
 	});
 };

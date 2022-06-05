@@ -31,7 +31,7 @@ sharing.add = function () {
 		return;
 	}
 
-	api.v2.sharingAdd(params, function () {
+	api.sharingAdd(params, function () {
 		loadingBar.show("success", "Sharing updated!");
 		sharing.list(); // reload user list
 	});
@@ -54,7 +54,7 @@ sharing.delete = function () {
 		loadingBar.show("error", "Select a sharing to remove!");
 		return;
 	}
-	api.v2.sharingDelete(params, function () {
+	api.sharingDelete(params, function () {
 		loadingBar.show("success", "Sharing removed!");
 		sharing.list(); // reload user list
 	});
@@ -64,7 +64,7 @@ sharing.delete = function () {
  * @returns {void}
  */
 sharing.list = function () {
-	api.v2.sharingList(
+	api.sharingList(
 		{},
 		/** @param {SharingInfo} data */
 		function (data) {

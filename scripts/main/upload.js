@@ -447,7 +447,7 @@ upload.start = {
 				// This way, the server could also report its own progress of
 				// downloading the images.
 				// TODO: Use a streamed response (see description above).
-				api.v2.importUrl(
+				api.importUrl(
 					{
 						urls: [data.url],
 						albumID: albumID,
@@ -536,7 +536,7 @@ upload.start = {
 
 			const cancelUpload = function () {
 				if (!isUploadCancelled) {
-					api.v2.importServerCancel({}, function () {
+					api.importServerCancel({}, function () {
 						isUploadCancelled = true;
 					});
 				}
@@ -740,7 +740,7 @@ upload.start = {
 					resync_metadata: data.resync_metadata,
 				};
 
-				api.v2.importServer(params, successHandler, progressHandler);
+				api.importServer(params, successHandler, progressHandler);
 			};
 
 			upload.show(lychee.locale["UPLOAD_IMPORT_SERVER"], [], runUpload, cancelUpload);
@@ -861,7 +861,7 @@ upload.start = {
 				$(firstRowStatusSelector).html(lychee.locale["UPLOAD_IMPORTING"]);
 
 				// TODO: Use a streamed response; see long comment in `import.url()` for the reasons
-				api.v2.importUrl(
+				api.importUrl(
 					{
 						urls: files.map((file) => file.link),
 						albumID: albumID,

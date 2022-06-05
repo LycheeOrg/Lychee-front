@@ -235,7 +235,7 @@ lychee.aboutDialog = function () {
 lychee.init = function (isFirstInitialization = true) {
 	lychee.adjustContentHeight();
 
-	api.v2.initSession(
+	api.initSession(
 		{},
 		/** @param {InitializationData} data */
 		function (data) {
@@ -409,7 +409,7 @@ lychee.login = function (data) {
 		return;
 	}
 
-	api.v2.loginSession(
+	api.loginSession(
 		data,
 		() => window.location.reload(),
 		null,
@@ -483,7 +483,7 @@ lychee.loginDialog = function () {
  * @returns {void}
  */
 lychee.logout = function () {
-	api.v2.logoutSession({}, () => window.location.reload());
+	api.logoutSession({}, () => window.location.reload());
 };
 
 /**
@@ -572,7 +572,7 @@ lychee.reloadIfLegacyIDs = function (albumID, photoID, autoplay) {
 	let params = {};
 	if (isLegacyID(albumID)) params.albumID = parseInt(albumID, 10);
 	if (isLegacyID(photoID)) params.photoID = parseInt(photoID, 10);
-	api.v2.translateLegacy(params, function (data) {
+	api.translateLegacy(params, function (data) {
 		reloadWithNewIDs(data.hasOwnProperty("albumID") ? data.albumID : albumID, data.hasOwnProperty("photoID") ? data.photoID : photoID);
 	});
 

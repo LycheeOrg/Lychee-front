@@ -54,7 +54,7 @@ photo.load = function (photoID, albumID, autoplay) {
 		}
 	};
 
-	api.v2.getPhoto(
+	api.getPhoto(
 		{
 			photoID: photoID,
 		},
@@ -337,7 +337,7 @@ photo.delete = function (photoIDs) {
 			lychee.goto(album.getID());
 		}
 
-		api.v2.photoDelete({ photoIDs: photoIDs });
+		api.photoDelete({ photoIDs: photoIDs });
 	};
 
 	if (photoIDs.length === 1) {
@@ -408,7 +408,7 @@ photo.setTitle = function (photoIDs) {
 			view.album.content.title(id);
 		});
 
-		api.v2.photoPatch({
+		api.photoPatch({
 			photoIDs: photoIDs,
 			title: newTitle,
 		});
@@ -441,7 +441,7 @@ photo.setTitle = function (photoIDs) {
  * @returns {void}
  */
 photo.copyTo = function (photoIDs, albumID) {
-	api.v2.photoDuplicate(
+	api.photoDuplicate(
 		{
 			photoIDs: photoIDs,
 			albumID: albumID,
@@ -493,7 +493,7 @@ photo.setAlbum = function (photoIDs, albumID) {
 		}
 	}
 
-	api.v2.photoPatch(
+	api.photoPatch(
 		{
 			photoIDs: photoIDs,
 			albumID: albumID,
@@ -520,7 +520,7 @@ photo.toggleStar = function () {
 	view.photo.star();
 	albums.refresh();
 
-	api.v2.photoPatch({
+	api.photoPatch({
 		photoIDs: [photo.json.id],
 		is_starred: photo.json.is_starred,
 	});
@@ -541,7 +541,7 @@ photo.setStar = function (photoIDs, isStarred) {
 
 	albums.refresh();
 
-	api.v2.photoPatch({
+	api.photoPatch({
 		photoIDs: photoIDs,
 		is_starred: isStarred,
 	});
@@ -677,7 +677,7 @@ photo.setProtectionPolicy = function (photoID) {
 
 				albums.refresh();
 
-				api.v2.photoPatch({
+				api.photoPatch({
 					photoIDs: photoID,
 					is_public: newIsPublic !== 0,
 				});
@@ -750,7 +750,7 @@ photo.setDescription = function (photoID) {
 			view.photo.description();
 		}
 
-		api.v2.photoPatch({
+		api.photoPatch({
 			photoIDs: photoID,
 			description: description,
 		});
@@ -847,7 +847,7 @@ photo.setTags = function (photoIDs, tags) {
 		album.getByID(id).tags = tags;
 	});
 
-	api.v2.photoPatch(
+	api.photoPatch(
 		{
 			photoIDs: photoIDs,
 			tags: tags,
@@ -920,7 +920,7 @@ photo.setLicense = function (photoID) {
 			license,
 		};
 
-		api.v2.photoPatch(params, function () {
+		api.photoPatch(params, function () {
 			// update the photo JSON and reload the license in the sidebar
 			photo.json.license = params.license;
 			view.photo.license();

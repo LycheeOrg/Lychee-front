@@ -57,7 +57,7 @@ albums.load = function () {
 	};
 
 	if (albums.json === null) {
-		api.v2.getAlbums({}, successCallback);
+		api.getAlbums({}, successCallback);
 	} else {
 		setTimeout(() => {
 			header.setMode("albums");

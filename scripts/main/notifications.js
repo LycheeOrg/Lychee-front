@@ -17,13 +17,13 @@ notifications.update = function (params) {
 		}
 	}
 
-	api.v2.userSetEmail(params, function () {
+	api.userSetEmail(params, function () {
 		loadingBar.show("success", "Email updated!");
 	});
 };
 
 notifications.load = function () {
-	api.v2.userGetEmail(
+	api.userGetEmail(
 		{},
 		/** @param {EMailData} data */ function (data) {
 			notifications.json = data;

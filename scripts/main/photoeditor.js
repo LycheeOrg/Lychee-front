@@ -10,7 +10,7 @@ photoeditor = {};
  * @returns {void}
  */
 photoeditor.rotate = function (photoID, direction) {
-	api.v2.photoEditorRotate(
+	api.photoEditorRotate(
 		{
 			photoID: photoID,
 			direction: direction,
