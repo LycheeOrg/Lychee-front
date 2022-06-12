@@ -488,3 +488,30 @@ settings.save_enter = function (e) {
 		},
 	});
 };
+
+settings.viewToken = function () {
+	api.post("User::getCurrent", {}, function (data) {
+		basicModal.show({
+			body: lychee.html`<div class='directLinks'><p>${data.token} <a id="button_copy_token" class='basicModal__button' title='${
+				lychee.locale["URL_COPY_TO_CLIPBOARD"]
+			}'>${build.iconic("copy", "ionicons")}</a></p></div>`,
+			buttons: {
+				action: {
+					title: lychee.locale["RESET"],
+					fn: function () {
+						api.post("User::resetToken", {});
+						basicModal.close();
+					},
+					class: "red",
+				},
+				cancel: {
+					title: lychee.locale["CLOSE"],
+					fn: basicModal.close,
+				},
+			},
+		});
+		$("#button_copy_token").on(lychee.getEventName(), function () {
+			navigator.clipboard.writeText(data.token);
+		});
+	});
+};
