@@ -906,7 +906,7 @@ lychee.animate = function (obj, animation) {
  */
 lychee.loadDropbox = function (callback) {
 	if (!lychee.dropboxKey) {
-		loadingBar.show("error", "Error: Dropbox key not set");
+		loadingBar.show("error", lychee.locale["ERROR_DROPBOX_KEY"]);
 		return;
 	}
 
@@ -1027,7 +1027,7 @@ lychee.html = function (literalSections, ...substs) {
  */
 lychee.handleAPIError = function (jqXHR, params, lycheeException) {
 	if (api.hasSessionExpired(jqXHR, lycheeException)) {
-		loadingBar.show("error", "Session expired.");
+		loadingBar.show("error", lychee.locale["ERROR_SESSION"]);
 		setTimeout(() => {
 			lychee.goto();
 			window.location.reload();

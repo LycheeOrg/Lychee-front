@@ -23,16 +23,16 @@ sharing.add = function () {
 	});
 
 	if (params.albumIDs.length === 0) {
-		loadingBar.show("error", "Select an album to share!");
+		loadingBar.show("error", lychee.locale["ERROR_SELECT_ALBUM"]);
 		return;
 	}
 	if (params.userIDs.length === 0) {
-		loadingBar.show("error", "Select a user to share with!");
+		loadingBar.show("error", lychee.locale["ERROR_SELECT_USER"]);
 		return;
 	}
 
 	api.post("Sharing::add", params, function () {
-		loadingBar.show("success", "Sharing updated!");
+		loadingBar.show("success", lychee.locale["SHARING_SUCCESS"]);
 		sharing.list(); // reload user list
 	});
 };
@@ -51,11 +51,11 @@ sharing.delete = function () {
 	});
 
 	if (params.shareIDs.length === 0) {
-		loadingBar.show("error", "Select a sharing to remove!");
+		loadingBar.show("error", lychee.locale["ERROR_SELECT_SHARING"]);
 		return;
 	}
 	api.post("Sharing::delete", params, function () {
-		loadingBar.show("success", "Sharing removed!");
+		loadingBar.show("success", lychee.locale["SHARING_REMOVED"]);
 		sharing.list(); // reload user list
 	});
 };

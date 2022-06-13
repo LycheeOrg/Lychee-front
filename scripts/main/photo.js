@@ -1119,7 +1119,7 @@ photo.qrCode = function (photoID) {
 	const myPhoto = photo.json && photo.json.id === photoID ? photo.json : album.getByID(photoID);
 
 	if (myPhoto == null) {
-		lychee.error("Error: photo " + photoID + " not found !");
+		lychee.error(lychee.locale["ERROR_PHOTO_NOT_FOUND"].replace("%0", photoID));
 		return;
 	}
 

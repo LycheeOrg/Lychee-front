@@ -14,7 +14,7 @@ const users = {
  */
 users.update = function (params) {
 	if (params.username.length < 1) {
-		loadingBar.show("error", "new username cannot be empty.");
+		loadingBar.show("error", lychee.locale["ERROR_EMPTY_USERNAME"]);
 		return;
 	}
 
@@ -27,7 +27,7 @@ users.update = function (params) {
 	}
 
 	api.post("User::save", params, function () {
-		loadingBar.show("success", "User updated!");
+		loadingBar.show("success", lychee.locale["USER_UPDATED"]);
 		users.list(); // reload user list
 	});
 };
@@ -43,16 +43,16 @@ users.update = function (params) {
  */
 users.create = function (params) {
 	if (params.username.length < 1) {
-		loadingBar.show("error", "new username cannot be empty.");
+		loadingBar.show("error", lychee.locale["ERROR_EMPTY_USERNAME"]);
 		return;
 	}
 	if (params.password.length < 1) {
-		loadingBar.show("error", "new password cannot be empty.");
+		loadingBar.show("error", lychee.locale["ERROR_EMPTY_PASSWORD"]);
 		return;
 	}
 
 	api.post("User::create", params, function () {
-		loadingBar.show("success", "User created!");
+		loadingBar.show("success", lychee.locale["USER_CREATED"]);
 		users.list(); // reload user list
 	});
 };
@@ -68,7 +68,7 @@ users.create = function (params) {
  */
 users.delete = function (params) {
 	api.post("User::delete", params, function () {
-		loadingBar.show("success", "User deleted!");
+		loadingBar.show("success", lychee.locale["USER_DELETED"]);
 		users.list(); // reload user list
 	});
 };

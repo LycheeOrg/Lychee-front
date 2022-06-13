@@ -179,7 +179,7 @@ settings.bind = function (inputSelector, formSelector, settingClickCB) {
  */
 settings.changeLogin = function (params) {
 	if (params.username.length < 1) {
-		loadingBar.show("error", "new username cannot be empty.");
+		loadingBar.show("error", lychee.locale["ERROR_EMPTY_USERNAME"]);
 		$("input[name=username]").addClass("error");
 		return;
 	} else {
@@ -187,7 +187,7 @@ settings.changeLogin = function (params) {
 	}
 
 	if (params.password.length < 1) {
-		loadingBar.show("error", "new password cannot be empty.");
+		loadingBar.show("error", lychee.locale["ERROR_EMPTY_PASSWORD"]);
 		$("input[name=password]").addClass("error");
 		return;
 	} else {
@@ -195,7 +195,7 @@ settings.changeLogin = function (params) {
 	}
 
 	if (params.password !== params.confirm) {
-		loadingBar.show("error", "new password does not match.");
+		loadingBar.show("error", lychee.locale["ERROR_PASSWORD_DOES_NOT_MATCH"]);
 		$("input[name=confirm]").addClass("error");
 		return;
 	} else {

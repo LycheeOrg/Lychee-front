@@ -106,7 +106,7 @@ album.getByID = function (photoID) {
 album.getSubByID = function (albumID) {
 	// The special `SearchAlbum`  may also contain `TagAlbum` as sub-albums
 	if (albumID == null || !album.json || (!album.json.albums && !album.json.tag_albums)) {
-		loadingBar.show("error", "Error: Album json not found!");
+		loadingBar.show("error", lychee.locale["ERROR_ALBUM_JSON_NOT_FOUND"]);
 		return null;
 	}
 
@@ -120,7 +120,7 @@ album.getSubByID = function (albumID) {
 		return subTagAlbum;
 	}
 
-	loadingBar.show("error", "Error: album " + albumID + " not found!");
+	loadingBar.show("error", lychee.locale["ERROR_ALBUM_NOT_FOUND"].replace("%0", albumID));
 	return null;
 };
 
@@ -130,7 +130,7 @@ album.getSubByID = function (albumID) {
  */
 album.deleteByID = function (photoID) {
 	if (photoID == null || !album.json || !album.json.photos) {
-		loadingBar.show("error", "Error: Album json not found !");
+		loadingBar.show("error", lychee.locale["ERROR_ALBUM_JSON_NOT_FOUND"]);
 		return;
 	}
 
@@ -148,7 +148,7 @@ album.deleteByID = function (photoID) {
  */
 album.deleteSubByID = function (albumID) {
 	if (albumID == null || !album.json || !album.json.albums) {
-		loadingBar.show("error", "Error: Album json not found !");
+		loadingBar.show("error", lychee.locale["ERROR_ALBUM_JSON_NOT_FOUND"]);
 		return false;
 	}
 
@@ -1108,7 +1108,7 @@ album.qrCode = function () {
 	basicModal.show({
 		body: msg,
 		callback: function () {
-			qrcode = $("#qr-code");
+			let qrcode = $("#qr-code");
 			QrCreator.render(
 				{
 					text: location.href,

@@ -20,7 +20,7 @@ albums.load = function () {
 	 */
 	const successCallback = function (data) {
 		// Smart Albums
-		if (data.smart_albums.length > 0) albums.localizeSmartAlbums(data.smart_albums);
+		if (data.smart_albums) albums.localizeSmartAlbums(data.smart_albums);
 
 		albums.json = data;
 
