@@ -1168,7 +1168,7 @@ view.settings = {
 			let msg = `
 			<div class="setDropBox">
 			  <p>${lychee.locale["DROPBOX_TEXT"]}
-			  <input class='text' name='key' type='text' placeholder='${lychee.locale["DROPBOX_API_KEY"]}' value='${lychee.dropboxKey}'>
+			  <input class='text' name='key' type='text' placeholder='${lychee.locale["SETTINGS_DROPBOX_KEY"]}' value='${lychee.dropboxKey}'>
 			  </p>
 				<div class="basicModal__buttons">
 					<a id="basicModal__action_dropbox_change" class="basicModal__button">${lychee.locale["DROPBOX_TITLE"]}</a>
