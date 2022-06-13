@@ -34,7 +34,7 @@
 		"qr-creator": "^1.0.0",
 		"require": "^2.4.20",
 		"scroll-lock": "^2.1.2",
-		"spin.js": "^2.3.2"
+		"sprintf-js": "^1.1.2"
 	},
 	"devDependencies": {
 		"babel-preset-env": "^1.7.0",

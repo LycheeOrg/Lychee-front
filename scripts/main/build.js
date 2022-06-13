@@ -355,7 +355,7 @@ build.overlay_image = function (data) {
 				}
 				if (data.iso && data.iso !== "") {
 					if (overlay !== "") overlay += ", ";
-					overlay += lychee.locale["PHOTO_ISO"].replace("%0", data.iso);
+					overlay += sprintf(lychee.locale["PHOTO_ISO"], data.iso);
 				}
 				if (data.focal && data.focal !== "") {
 					if (overlay !== "") overlay += "<br>";

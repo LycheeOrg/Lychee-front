@@ -344,7 +344,7 @@ sidebar.createStructure.photo = function (data) {
 						{ title: lychee.locale["PHOTO_SHUTTER"], kind: "shutter", value: data.shutter },
 						{ title: lychee.locale["PHOTO_APERTURE"], kind: "aperture", value: data.aperture },
 						{ title: lychee.locale["PHOTO_FOCAL"], kind: "focal", value: data.focal },
-						{ title: lychee.locale["PHOTO_ISO"], kind: "iso", value: data.iso },
+						{ title: sprintf(lychee.locale["PHOTO_ISO"], ""), kind: "iso", value: data.iso },
 				  ],
 		};
 	} else {
@@ -354,7 +354,7 @@ sidebar.createStructure.photo = function (data) {
 	structure.sharing = {
 		title: lychee.locale["PHOTO_SHARING"],
 		type: sidebar.types.DEFAULT,
-		rows: [{ title: lychee.locale["PHOTO_SHR_PLUBLIC"], kind: "public", value: isPublic }],
+		rows: [{ title: lychee.locale["PHOTO_SHR_PUBLIC"], kind: "public", value: isPublic }],
 	};
 
 	structure.license = {

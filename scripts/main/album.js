@@ -120,7 +120,7 @@ album.getSubByID = function (albumID) {
 		return subTagAlbum;
 	}
 
-	loadingBar.show("error", lychee.locale["ERROR_ALBUM_NOT_FOUND"].replace("%0", albumID));
+	loadingBar.show("error", sprintf(lychee.locale["ERROR_ALBUM_NOT_FOUND"], albumID));
 	return null;
 };
 
@@ -540,7 +540,7 @@ album.setTitle = function (albumIDs) {
 	const dialogHTML =
 		albumIDs.length === 1
 			? lychee.html`<p>${lychee.locale["ALBUM_NEW_TITLE"]} ${inputHTML}</p>`
-			: lychee.html`<p>${lychee.locale["ALBUMS_NEW_TITLE"].replace("%0", albumIDs.length.toString())} ${inputHTML}</p>`;
+			: lychee.html`<p>${sprintf(lychee.locale["ALBUMS_NEW_TITLE"], albumIDs.length)} ${inputHTML}</p>`;
 
 	basicModal.show({
 		body: dialogHTML,
@@ -741,10 +741,9 @@ album.setSorting = function (albumID) {
 
 	let msg = lychee.html`
 		<div><p>
-			${lychee.locale["SORT_PHOTO_BY"]
-				.replace(
-					"%0",
-					`<span class="select">
+			${sprintf(
+				lychee.locale["SORT_PHOTO_BY"],
+				`<span class="select">
 				<select id="sortingCol" name="sortingCol">
 					<option value=''>-</option>
 					<option value='created_at'>${lychee.locale["SORT_PHOTO_SELECT_1"]}</option>
@@ -755,18 +754,15 @@ album.setSorting = function (albumID) {
 					<option value='is_starred'>${lychee.locale["SORT_PHOTO_SELECT_6"]}</option>
 					<option value='type'>${lychee.locale["SORT_PHOTO_SELECT_7"]}</option>
 				</select>
-			</span>`
-				)
-				.replace(
-					"%1",
-					`<span class="select">
+			</span>`,
+				`<span class="select">
 				<select id="sortingOrder" name="sortingOrder">
 					<option value=''>-</option>
 					<option value='ASC'>${lychee.locale["SORT_ASCENDING"]}</option>
 					<option value='DESC'>${lychee.locale["SORT_DESCENDING"]}</option>
 				</select>
 			</span>`
-				)}
+			)}
 		</p></div>`;
 
 	basicModal.show({
@@ -1171,9 +1167,9 @@ album.buildMessage = function (albumIDs, albumID, op1, ops) {
 			sourceTitle = sourceAlbum.title;
 		}
 
-		msg = lychee.html`<p>${lychee.locale[op1].replace("%0", sourceTitle).replace("%1", targetTitle)}'</p>`;
+		msg = lychee.html`<p>${sprintf(lychee.locale[op1], sourceTitle, targetTitle)}'</p>`;
 	} else {
-		msg = lychee.html`<p>${lychee.locale[ops].replace("%0", targetTitle)}</p>`;
+		msg = lychee.html`<p>${sprintf(lychee.locale[ops], targetTitle)}</p>`;
 	}
 
 	return msg;
@@ -1242,12 +1238,12 @@ album.delete = function (albumIDs) {
 		// Fallback for album without a title
 		if (!albumTitle) albumTitle = lychee.locale["UNTITLED"];
 
-		msg = lychee.html`<p>${lychee.locale["DELETE_ALBUM_CONFIRMATION"].replace("%0", albumTitle)}</p>`;
+		msg = lychee.html`<p>${sprintf(lychee.locale["DELETE_ALBUM_CONFIRMATION"], albumTitle)}</p>`;
 	} else {
 		action.title = lychee.locale["DELETE_ALBUMS_QUESTION"];
 		cancel.title = lychee.locale["KEEP_ALBUMS"];
 
-		msg = lychee.html`<p>${lychee.locale["DELETE_ALBUMS_CONFIRMATION"].replace("%0", albumIDs.length.toString())}</p>`;
+		msg = lychee.html`<p>${sprintf(lychee.locale["DELETE_ALBUMS_CONFIRMATION"], albumIDs.length)}</p>`;
 	}
 
 	basicModal.show({

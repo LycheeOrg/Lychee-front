@@ -209,7 +209,7 @@ lychee.aboutDialog = function () {
 				<h1>Lychee ${lychee.version}</h1>
 				<div class='version'><span><a target='_blank' href='${lychee.updateURL}'>${lychee.locale["UPDATE_AVAILABLE"]}</a></span></div>
 				<h1>${lychee.locale["ABOUT_SUBTITLE"]}</h1>
-				<p>${lychee.locale["ABOUT_DESCRIPTION"].replace("%0", lychee.website)}</p>
+				<p>${sprintf(lychee.locale["ABOUT_DESCRIPTION"], lychee.website)}</p>
 			  `;
 
 	basicModal.show({
