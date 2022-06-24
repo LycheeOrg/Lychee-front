@@ -62,7 +62,7 @@ $(document).ready(function () {
 			return true;
 		})
 		.bind(["u"], function () {
-			if (!visible.photo() && album.isUploadable()) {
+			if (!visible.photo() && album.isUploadable() && !album.isTagAlbum()) {
 				$("#upload_files").click();
 				return false;
 			}
