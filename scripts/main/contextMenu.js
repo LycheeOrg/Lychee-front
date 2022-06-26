@@ -107,9 +107,6 @@ contextMenu.album = function (albumID, e) {
 
 	if (album.isSmartID(albumID) || album.isSearchID(albumID)) return;
 
-	// Show merge-item when there's more than one album
-	// Commented out because it doesn't consider subalbums or shared albums.
-	// let showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1);
 	const showMergeMove = !albums.isTagAlbum(albumID);
 
 	const items = [
@@ -195,9 +192,6 @@ contextMenu.albumMulti = function (albumIDs, e) {
 	// Show list of albums otherwise
 	const autoMerge = albumIDs.length > 1;
 
-	// Show merge-item when there's more than one album
-	// Commented out because it doesn't consider subalbums or shared albums.
-	// let showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1);
 	const showMergeMove = albumIDs.every((albumID) => !albums.isTagAlbum(albumID));
 
 	let items = [
