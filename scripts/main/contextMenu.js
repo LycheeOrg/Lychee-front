@@ -107,16 +107,13 @@ contextMenu.album = function (albumID, e) {
 
 	if (album.isSmartID(albumID) || album.isSearchID(albumID)) return;
 
-	// Show merge-item when there's more than one album
-	// Commented out because it doesn't consider subalbums or shared albums.
-	// let showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1);
-	const showMerge = true;
+	const showMergeMove = !albums.isTagAlbum(albumID);
 
 	const items = [
 		{ title: build.iconic("pencil") + lychee.locale["RENAME"], fn: () => album.setTitle([albumID]) },
 		{
 			title: build.iconic("collapse-left") + lychee.locale["MERGE"],
-			visible: showMerge,
+			visible: showMergeMove,
 			fn: () => {
 				basicContext.close();
 				contextMenu.move([albumID], e, album.merge, "ROOT", false);
@@ -124,7 +121,7 @@ contextMenu.album = function (albumID, e) {
 		},
 		{
 			title: build.iconic("folder") + lychee.locale["MOVE"],
-			visible: true,
+			visible: showMergeMove,
 			fn: () => {
 				basicContext.close();
 				contextMenu.move([albumID], e, album.setAlbum, "ROOT");
@@ -195,16 +192,13 @@ contextMenu.albumMulti = function (albumIDs, e) {
 	// Show list of albums otherwise
 	const autoMerge = albumIDs.length > 1;
 
-	// Show merge-item when there's more than one album
-	// Commented out because it doesn't consider subalbums or shared albums.
-	// let showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1);
-	const showMerge = true;
+	const showMergeMove = albumIDs.every((albumID) => !albums.isTagAlbum(albumID));
 
 	let items = [
 		{ title: build.iconic("pencil") + lychee.locale["RENAME_ALL"], fn: () => album.setTitle(albumIDs) },
 		{
 			title: build.iconic("collapse-left") + lychee.locale["MERGE_ALL"],
-			visible: showMerge && autoMerge,
+			visible: showMergeMove && autoMerge,
 			fn: () => {
 				let albumID = albumIDs.shift();
 				album.merge(albumIDs, albumID);
@@ -212,7 +206,7 @@ contextMenu.albumMulti = function (albumIDs, e) {
 		},
 		{
 			title: build.iconic("collapse-left") + lychee.locale["MERGE"],
-			visible: showMerge && !autoMerge,
+			visible: showMergeMove && !autoMerge,
 			fn: () => {
 				basicContext.close();
 				contextMenu.move(albumIDs, e, album.merge, "ROOT", false);
@@ -220,7 +214,7 @@ contextMenu.albumMulti = function (albumIDs, e) {
 		},
 		{
 			title: build.iconic("folder") + lychee.locale["MOVE_ALL"],
-			visible: true,
+			visible: showMergeMove,
 			fn: () => {
 				basicContext.close();
 				contextMenu.move(albumIDs, e, album.setAlbum, "ROOT");

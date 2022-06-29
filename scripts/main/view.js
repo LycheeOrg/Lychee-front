@@ -1007,7 +1007,7 @@ view.settings = {
 	init: function () {
 		multiselect.clearSelection();
 
-		view.photo.hide();
+		if (visible.photo()) view.photo.hide();
 		view.settings.title();
 		header.setMode("config");
 		view.settings.content.init();
@@ -1631,7 +1631,7 @@ view.notifications = {
 	init: function () {
 		multiselect.clearSelection();
 
-		view.photo.hide();
+		if (visible.photo()) view.photo.hide();
 		view.notifications.title();
 		header.setMode("config");
 		view.notifications.content.init();
@@ -1680,7 +1680,7 @@ view.users = {
 	init: function () {
 		multiselect.clearSelection();
 
-		view.photo.hide();
+		if (visible.photo()) view.photo.hide();
 		view.users.title();
 		header.setMode("config");
 		view.users.content.init();
@@ -1765,7 +1765,7 @@ view.sharing = {
 	init: function () {
 		multiselect.clearSelection();
 
-		view.photo.hide();
+		if (visible.photo()) view.photo.hide();
 		view.sharing.title();
 		header.setMode("config");
 		view.sharing.content.init();
@@ -1906,7 +1906,7 @@ view.logs = {
 	init: function () {
 		multiselect.clearSelection();
 
-		view.photo.hide();
+		if (visible.photo()) view.photo.hide();
 		view.logs.title();
 		header.setMode("config");
 		view.logs.content.init();
@@ -1999,7 +1999,7 @@ view.diagnostics = {
 	init: function () {
 		multiselect.clearSelection();
 
-		view.photo.hide();
+		if (visible.photo()) view.photo.hide();
 		view.diagnostics.title();
 		header.setMode("config");
 		view.diagnostics.content.init();
@@ -2143,7 +2143,7 @@ view.update = {
 	init: function () {
 		multiselect.clearSelection();
 
-		view.photo.hide();
+		if (visible.photo()) view.photo.hide();
 		view.update.title();
 		header.setMode("config");
 		view.update.content.init();
@@ -2192,7 +2192,7 @@ view.u2f = {
 	init: function () {
 		multiselect.clearSelection();
 
-		view.photo.hide();
+		if (visible.photo()) view.photo.hide();
 		view.u2f.title();
 		header.setMode("config");
 		view.u2f.content.init();
