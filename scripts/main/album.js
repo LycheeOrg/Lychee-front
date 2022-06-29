@@ -1220,8 +1220,9 @@ album.delete = function (albumIDs) {
 		msg = `<p>` + lychee.locale["DELETE_UNSORTED_CONFIRM"] + `</p>`;
 	} else if (albumIDs.length === 1) {
 		let albumTitle = "";
+		const isTagAlbum = albums.isTagAlbum(albumIDs[0]);
 
-		action.title = lychee.locale["DELETE_ALBUM_QUESTION"];
+		action.title = lychee.locale[isTagAlbum ? "DELETE_TAG_ALBUM_QUESTION" : "DELETE_ALBUM_QUESTION"];
 		cancel.title = lychee.locale["KEEP_ALBUM"];
 
 		// Get title
@@ -1238,7 +1239,7 @@ album.delete = function (albumIDs) {
 		// Fallback for album without a title
 		if (!albumTitle) albumTitle = lychee.locale["UNTITLED"];
 
-		msg = lychee.html`<p>${sprintf(lychee.locale["DELETE_ALBUM_CONFIRMATION"], albumTitle)}</p>`;
+		msg = lychee.html`<p>${sprintf(isTagAlbum ? "DELETE_TAG_ALBUM_CONFIRMATION" : lychee.locale["DELETE_ALBUM_CONFIRMATION"], albumTitle)}</p>`;
 	} else {
 		action.title = lychee.locale["DELETE_ALBUMS_QUESTION"];
 		cancel.title = lychee.locale["KEEP_ALBUMS"];

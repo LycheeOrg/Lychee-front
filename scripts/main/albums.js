@@ -219,3 +219,11 @@ albums.deleteByID = function (albumID) {
 albums.refresh = function () {
 	albums.json = null;
 };
+
+/**
+ * @param {?string} albumID
+ * @returns {boolean}
+ */
+albums.isTagAlbum = function (albumID) {
+	return albums.json && albums.json.tag_albums.find((tagAlbum) => tagAlbum.id === albumID);
+};
