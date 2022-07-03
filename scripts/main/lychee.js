@@ -209,7 +209,7 @@ lychee.aboutDialog = function () {
 				<h1>Lychee ${lychee.version}</h1>
 				<div class='version'><span><a target='_blank' href='${lychee.updateURL}'>${lychee.locale["UPDATE_AVAILABLE"]}</a></span></div>
 				<h1>${lychee.locale["ABOUT_SUBTITLE"]}</h1>
-				<p><a target='_blank' href='${lychee.website}'>Lychee</a> ${lychee.locale["ABOUT_DESCRIPTION"]}</p>
+				<p>${sprintf(lychee.locale["ABOUT_DESCRIPTION"], lychee.website)}</p>
 			  `;
 
 	basicModal.show({
@@ -906,7 +906,7 @@ lychee.animate = function (obj, animation) {
  */
 lychee.loadDropbox = function (callback) {
 	if (!lychee.dropboxKey) {
-		loadingBar.show("error", "Error: Dropbox key not set");
+		loadingBar.show("error", lychee.locale["ERROR_DROPBOX_KEY"]);
 		return;
 	}
 
@@ -1027,7 +1027,7 @@ lychee.html = function (literalSections, ...substs) {
  */
 lychee.handleAPIError = function (jqXHR, params, lycheeException) {
 	if (api.hasSessionExpired(jqXHR, lycheeException)) {
-		loadingBar.show("error", "Session expired.");
+		loadingBar.show("error", lychee.locale["ERROR_SESSION"]);
 		setTimeout(() => {
 			lychee.goto();
 			window.location.reload();

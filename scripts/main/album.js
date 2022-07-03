@@ -106,7 +106,7 @@ album.getByID = function (photoID) {
 album.getSubByID = function (albumID) {
 	// The special `SearchAlbum`  may also contain `TagAlbum` as sub-albums
 	if (albumID == null || !album.json || (!album.json.albums && !album.json.tag_albums)) {
-		loadingBar.show("error", "Error: Album json not found!");
+		loadingBar.show("error", lychee.locale["ERROR_ALBUM_JSON_NOT_FOUND"]);
 		return null;
 	}
 
@@ -120,7 +120,7 @@ album.getSubByID = function (albumID) {
 		return subTagAlbum;
 	}
 
-	loadingBar.show("error", "Error: album " + albumID + " not found!");
+	loadingBar.show("error", sprintf(lychee.locale["ERROR_ALBUM_NOT_FOUND"], albumID));
 	return null;
 };
 
@@ -130,7 +130,7 @@ album.getSubByID = function (albumID) {
  */
 album.deleteByID = function (photoID) {
 	if (photoID == null || !album.json || !album.json.photos) {
-		loadingBar.show("error", "Error: Album json not found !");
+		loadingBar.show("error", lychee.locale["ERROR_ALBUM_JSON_NOT_FOUND"]);
 		return;
 	}
 
@@ -148,7 +148,7 @@ album.deleteByID = function (photoID) {
  */
 album.deleteSubByID = function (albumID) {
 	if (albumID == null || !album.json || !album.json.albums) {
-		loadingBar.show("error", "Error: Album json not found !");
+		loadingBar.show("error", lychee.locale["ERROR_ALBUM_JSON_NOT_FOUND"]);
 		return false;
 	}
 
@@ -540,7 +540,7 @@ album.setTitle = function (albumIDs) {
 	const dialogHTML =
 		albumIDs.length === 1
 			? lychee.html`<p>${lychee.locale["ALBUM_NEW_TITLE"]} ${inputHTML}</p>`
-			: lychee.html`<p>${lychee.locale["ALBUMS_NEW_TITLE_1"]} $${albumIDs.length} ${lychee.locale["ALBUMS_NEW_TITLE_2"]} ${inputHTML}</p>`;
+			: lychee.html`<p>${sprintf(lychee.locale["ALBUMS_NEW_TITLE"], albumIDs.length)} ${inputHTML}</p>`;
 
 	basicModal.show({
 		body: dialogHTML,
@@ -741,8 +741,9 @@ album.setSorting = function (albumID) {
 
 	let msg = lychee.html`
 		<div><p>
-			${lychee.locale["SORT_PHOTO_BY_1"]}
-			<span class="select">
+			${sprintf(
+				lychee.locale["SORT_PHOTO_BY"],
+				`<span class="select">
 				<select id="sortingCol" name="sortingCol">
 					<option value=''>-</option>
 					<option value='created_at'>${lychee.locale["SORT_PHOTO_SELECT_1"]}</option>
@@ -753,16 +754,15 @@ album.setSorting = function (albumID) {
 					<option value='is_starred'>${lychee.locale["SORT_PHOTO_SELECT_6"]}</option>
 					<option value='type'>${lychee.locale["SORT_PHOTO_SELECT_7"]}</option>
 				</select>
-			</span>
-			${lychee.locale["SORT_PHOTO_BY_2"]}
-			<span class="select">
+			</span>`,
+				`<span class="select">
 				<select id="sortingOrder" name="sortingOrder">
 					<option value=''>-</option>
 					<option value='ASC'>${lychee.locale["SORT_ASCENDING"]}</option>
 					<option value='DESC'>${lychee.locale["SORT_DESCENDING"]}</option>
 				</select>
-			</span>
-			${lychee.locale["SORT_PHOTO_BY_3"]}
+			</span>`
+			)}
 		</p></div>`;
 
 	basicModal.show({
@@ -943,7 +943,7 @@ album.setProtectionPolicy = function (albumID) {
 		callback: dialogSetupCB,
 		buttons: {
 			action: {
-				title: lychee.locale["ALBUM_SHARING_CONFIRM"],
+				title: lychee.locale["SAVE"],
 				fn: action,
 			},
 			cancel: {
@@ -1038,7 +1038,7 @@ album.shareUsers = function (albumID) {
 		callback: dialogSetupCB,
 		buttons: {
 			action: {
-				title: lychee.locale["ALBUM_SHARING_CONFIRM"],
+				title: lychee.locale["SAVE"],
 				fn: action,
 			},
 			cancel: {
@@ -1108,7 +1108,7 @@ album.qrCode = function () {
 	basicModal.show({
 		body: msg,
 		callback: function () {
-			qrcode = $("#qr-code");
+			let qrcode = $("#qr-code");
 			QrCreator.render(
 				{
 					text: location.href,
@@ -1142,11 +1142,10 @@ album.getArchive = function (albumIDs) {
  * @param {string[]} albumIDs
  * @param {?string} albumID
  * @param {string} op1
- * @param {string} op2
  * @param {string} ops
  * @returns {string} the HTML content of the dialog
  */
-album.buildMessage = function (albumIDs, albumID, op1, op2, ops) {
+album.buildMessage = function (albumIDs, albumID, op1, ops) {
 	let targetTitle = lychee.locale["UNTITLED"];
 	let sourceTitle = lychee.locale["UNTITLED"];
 	let msg = "";
@@ -1168,9 +1167,9 @@ album.buildMessage = function (albumIDs, albumID, op1, op2, ops) {
 			sourceTitle = sourceAlbum.title;
 		}
 
-		msg = lychee.html`<p>${lychee.locale[op1]} '$${sourceTitle}' ${lychee.locale[op2]} '$${targetTitle}'?</p>`;
+		msg = lychee.html`<p>${sprintf(lychee.locale[op1], sourceTitle, targetTitle)}'</p>`;
 	} else {
-		msg = lychee.html`<p>${lychee.locale[ops]} '$${targetTitle}'?</p>`;
+		msg = lychee.html`<p>${sprintf(lychee.locale[ops], targetTitle)}</p>`;
 	}
 
 	return msg;
@@ -1240,14 +1239,12 @@ album.delete = function (albumIDs) {
 		// Fallback for album without a title
 		if (!albumTitle) albumTitle = lychee.locale["UNTITLED"];
 
-		msg = lychee.html`<p>${lychee.locale[isTagAlbum ? "DELETE_TAG_ALBUM_CONFIRMATION_1" : "DELETE_ALBUM_CONFIRMATION_1"]} '$${albumTitle}' ${
-			lychee.locale[isTagAlbum ? "DELETE_TAG_ALBUM_CONFIRMATION_2" : "DELETE_ALBUM_CONFIRMATION_2"]
-		}</p>`;
+		msg = lychee.html`<p>${sprintf(lychee.locale[isTagAlbum ? "DELETE_TAG_ALBUM_CONFIRMATION" : "DELETE_ALBUM_CONFIRMATION"], albumTitle)}</p>`;
 	} else {
 		action.title = lychee.locale["DELETE_ALBUMS_QUESTION"];
 		cancel.title = lychee.locale["KEEP_ALBUMS"];
 
-		msg = lychee.html`<p>${lychee.locale["DELETE_ALBUMS_CONFIRMATION_1"]} $${albumIDs.length} ${lychee.locale["DELETE_ALBUMS_CONFIRMATION_2"]}</p>`;
+		msg = lychee.html`<p>${sprintf(lychee.locale["DELETE_ALBUMS_CONFIRMATION"], albumIDs.length)}</p>`;
 	}
 
 	basicModal.show({
@@ -1287,7 +1284,7 @@ album.merge = function (albumIDs, albumID, confirm = true) {
 
 	if (confirm) {
 		basicModal.show({
-			body: album.buildMessage(albumIDs, albumID, "ALBUM_MERGE_1", "ALBUM_MERGE_2", "ALBUMS_MERGE"),
+			body: album.buildMessage(albumIDs, albumID, "ALBUM_MERGE", "ALBUMS_MERGE"),
 			buttons: {
 				action: {
 					title: lychee.locale["MERGE_ALBUM"],
@@ -1326,7 +1323,7 @@ album.setAlbum = function (albumIDs, albumID, confirm = true) {
 
 	if (confirm) {
 		basicModal.show({
-			body: album.buildMessage(albumIDs, albumID, "ALBUM_MOVE_1", "ALBUM_MOVE_2", "ALBUMS_MOVE"),
+			body: album.buildMessage(albumIDs, albumID, "ALBUM_MOVE", "ALBUMS_MOVE"),
 			buttons: {
 				action: {
 					title: lychee.locale["MOVE_ALBUMS"],

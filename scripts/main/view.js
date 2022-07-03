@@ -1097,47 +1097,47 @@ view.settings = {
 			const msg = lychee.html`
 				<div class="setSorting">
 					<p>
-						$${lychee.locale["SORT_ALBUM_BY_1"]}
-						<span class="select">
+						${sprintf(
+							lychee.locale["SORT_ALBUM_BY"],
+							`<span class="select">
 							<select id="settings_albums_sorting_column" name="sorting_albums_column">
-								<option value='created_at'>$${lychee.locale["SORT_ALBUM_SELECT_1"]}</option>
-								<option value='title'>$${lychee.locale["SORT_ALBUM_SELECT_2"]}</option>
-								<option value='description'>$${lychee.locale["SORT_ALBUM_SELECT_3"]}</option>
-								<option value='is_public'>$${lychee.locale["SORT_ALBUM_SELECT_4"]}</option>
-								<option value='max_taken_at'>$${lychee.locale["SORT_ALBUM_SELECT_5"]}</option>
-								<option value='min_taken_at'>$${lychee.locale["SORT_ALBUM_SELECT_6"]}</option>
+								<option value='created_at'>${lychee.locale["SORT_ALBUM_SELECT_1"]}</option>
+								<option value='title'>${lychee.locale["SORT_ALBUM_SELECT_2"]}</option>
+								<option value='description'>${lychee.locale["SORT_ALBUM_SELECT_3"]}</option>
+								<option value='is_public'>${lychee.locale["SORT_ALBUM_SELECT_4"]}</option>
+								<option value='max_taken_at'>${lychee.locale["SORT_ALBUM_SELECT_5"]}</option>
+								<option value='min_taken_at'>${lychee.locale["SORT_ALBUM_SELECT_6"]}</option>
 							</select>
-						</span>
-						$${lychee.locale["SORT_ALBUM_BY_2"]}
-						<span class="select">
+						</span>`,
+							`<span class="select">
 							<select id="settings_albums_sorting_order" name="sorting_albums_order">
-								<option value='ASC'>$${lychee.locale["SORT_ASCENDING"]}</option>
-								<option value='DESC'>$${lychee.locale["SORT_DESCENDING"]}</option>
+								<option value='ASC'>${lychee.locale["SORT_ASCENDING"]}</option>
+								<option value='DESC'>${lychee.locale["SORT_DESCENDING"]}</option>
 							</select>
-						</span>
-						$${lychee.locale["SORT_ALBUM_BY_3"]}
+						</span>`
+						)}
 					</p>
 					<p>
-						$${lychee.locale["SORT_PHOTO_BY_1"]}
-						<span class="select">
+						${sprintf(
+							lychee.locale["SORT_PHOTO_BY"],
+							`<span class="select">
 							<select id="settings_photos_sorting_column" name="sorting_photos_column">
-								<option value='created_at'>$${lychee.locale["SORT_PHOTO_SELECT_1"]}</option>
-								<option value='taken_at'>$${lychee.locale["SORT_PHOTO_SELECT_2"]}</option>
-								<option value='title'>$${lychee.locale["SORT_PHOTO_SELECT_3"]}</option>
-								<option value='description'>$${lychee.locale["SORT_PHOTO_SELECT_4"]}</option>
-								<option value='is_public'>$${lychee.locale["SORT_PHOTO_SELECT_5"]}</option>
-								<option value='is_starred'>$${lychee.locale["SORT_PHOTO_SELECT_6"]}</option>
-								<option value='type'>$${lychee.locale["SORT_PHOTO_SELECT_7"]}</option>
+								<option value='created_at'>${lychee.locale["SORT_PHOTO_SELECT_1"]}</option>
+								<option value='taken_at'>${lychee.locale["SORT_PHOTO_SELECT_2"]}</option>
+								<option value='title'>${lychee.locale["SORT_PHOTO_SELECT_3"]}</option>
+								<option value='description'>${lychee.locale["SORT_PHOTO_SELECT_4"]}</option>
+								<option value='is_public'>${lychee.locale["SORT_PHOTO_SELECT_5"]}</option>
+								<option value='is_starred'>${lychee.locale["SORT_PHOTO_SELECT_6"]}</option>
+								<option value='type'>${lychee.locale["SORT_PHOTO_SELECT_7"]}</option>
 							</select>
-				  		</span>
-						$${lychee.locale["SORT_PHOTO_BY_2"]}
-				  		<span class="select">
+				  		</span>`,
+							`<span class="select">
 							<select id="settings_photos_sorting_order" name="sorting_photos_order">
-								<option value='ASC'>$${lychee.locale["SORT_ASCENDING"]}</option>
-								<option value='DESC'>$${lychee.locale["SORT_DESCENDING"]}</option>
+								<option value='ASC'>${lychee.locale["SORT_ASCENDING"]}</option>
+								<option value='DESC'>${lychee.locale["SORT_DESCENDING"]}</option>
 							</select>
-						</span>
-						$${lychee.locale["SORT_PHOTO_BY_3"]}
+						</span>`
+						)}
 					</p>
 					<div class="basicModal__buttons">
 						<!--<a id="basicModal__cancel" class="basicModal__button ">Cancel</a>-->
@@ -1168,7 +1168,7 @@ view.settings = {
 			let msg = `
 			<div class="setDropBox">
 			  <p>${lychee.locale["DROPBOX_TEXT"]}
-			  <input class='text' name='key' type='text' placeholder='Dropbox API Key' value='${lychee.dropboxKey}'>
+			  <input class='text' name='key' type='text' placeholder='${lychee.locale["SETTINGS_DROPBOX_KEY"]}' value='${lychee.dropboxKey}'>
 			  </p>
 				<div class="basicModal__buttons">
 					<a id="basicModal__action_dropbox_change" class="basicModal__button">${lychee.locale["DROPBOX_TITLE"]}</a>
@@ -1561,7 +1561,7 @@ view.full_settings = {
 	 * @returns {void}
 	 */
 	title: function () {
-		lychee.setTitle("Full Settings", false);
+		lychee.setTitle(lychee.locale["FULL_SETTINGS"], false);
 	},
 
 	/**
@@ -1639,7 +1639,7 @@ view.notifications = {
 
 	/** @returns {void} */
 	title: function () {
-		lychee.setTitle("Notifications", false);
+		lychee.setTitle(lychee.locale["NOTIFICATIONS"], false);
 	},
 
 	/** @returns {void} */
@@ -1657,7 +1657,7 @@ view.notifications = {
 					<p>${lychee.locale["USER_EMAIL_INSTRUCTION"]}</p>
 				</div><div class="setLogin">
 					<p id="UserUpdate">
-						Enter your email address:
+						${lychee.locale["ENTER_EMAIL"]}
 						<input
 							name="email" class="text" type="text"
 							placeholder="email@example.com"
@@ -1665,7 +1665,7 @@ view.notifications = {
 						>
 					</p>
 					<div class="basicModal__buttons">
-						<a id="UserUpdate_button" class="basicModal__button">Save</a>
+						<a id="UserUpdate_button" class="basicModal__button">${lychee.locale["SAVE"]}</a>
 					</div>
 				</div>`;
 
@@ -1688,7 +1688,7 @@ view.users = {
 
 	/** @returns {void} */
 	title: function () {
-		lychee.setTitle("Users", false);
+		lychee.setTitle(lychee.locale["USERS"], false);
 	},
 
 	/** @returns {void} */
@@ -1711,10 +1711,10 @@ view.users = {
 				<div class="users_view_line"><p>
 					<span class="text">username</span>
 					<span class="text">new password</span>
-					<span class="text_icon" title="Allow uploads">
+					<span class="text_icon" title="${lychee.locale["ALLOW_UPLOADS"]}">
 						${build.iconic("data-transfer-upload")}
 					</span>
-					<span class="text_icon" title="Restricted account">
+					<span class="text_icon" title="${lychee.locale["RESTRICTED_ACCOUNT"]}">
 						${build.iconic("lock-locked")}
 					</span>
 				</p></div>`;
@@ -1737,22 +1737,22 @@ view.users = {
 			html = `
 				<div class="users_view_line" ${users.json.length === 0 ? 'style="padding-top: 0px;"' : ""}>
 					<p id="UserCreate">
-						<input class="text" name="username" type="text" value="" placeholder="new username" />
-						<input class="text" name="password" type="text" placeholder="new password" />
-						<span class="choice" title="Allow uploads">
+						<input class="text" name="username" type="text" value="" placeholder="${lychee.locale["LOGIN_USERNAME"]}" />
+						<input class="text" name="password" type="text" placeholder="${lychee.locale["LOGIN_PASSWORD"]}" />
+						<span class="choice" title="${lychee.locale["ALLOW_UPLOADS"]}">
 							<label>
 								<input type="checkbox" name="may_upload" />
 								<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
 							</label>
 						</span>
-						<span class="choice" title="Restricted account">
+						<span class="choice" title="${lychee.locale["RESTRICTED_ACCOUNT"]}">
 							<label>
 								<input type="checkbox" name="is_locked" />
 								<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
 							</label>
 						</span>
 					</p>
-					<a id="UserCreate_button"  class="basicModal__button basicModal__button_CREATE">Create</a>
+					<a id="UserCreate_button"  class="basicModal__button basicModal__button_CREATE">${lychee.locale["CREATE"]}</a>
 				</div>`;
 			$(".users_view").append(html);
 			settings.bind("#UserCreate_button", "#UserCreate", users.create);
@@ -1773,7 +1773,7 @@ view.sharing = {
 
 	/** @returns {void} */
 	title: function () {
-		lychee.setTitle("Sharing", false);
+		lychee.setTitle(lychee.locale["SHARING"], false);
 	},
 
 	/** @returns {void} */
@@ -1874,13 +1874,13 @@ view.sharing = {
 						<select name="to" id="user_list_to" class="form-control select" size="13" multiple="multiple"></select>
 					</div>
 				</div>
-				<div class="sharing_view_line"><a id="Share_button" class="basicModal__button">Share</a></div>
+				<div class="sharing_view_line"><a id="Share_button" class="basicModal__button">${lychee.locale["SHARE"]}</a></div>
 				<div class="sharing_view_line">
 					${sharingOptions}
 				</div>`;
 
 			if (sharing.json.shared.length !== 0) {
-				html += '<div class="sharing_view_line"><a id="Remove_button"  class="basicModal__button">Remove</a></div>';
+				html += `<div class="sharing_view_line"><a id="Remove_button"  class="basicModal__button">${lychee.locale["REMOVE"]}</a></div>`;
 			}
 
 			$(".sharing_view").append(html);
@@ -1914,7 +1914,7 @@ view.logs = {
 
 	/** @returns {void} */
 	title: function () {
-		lychee.setTitle("Logs", false);
+		lychee.setTitle(lychee.locale["LOGS"], false);
 	},
 
 	/** @returns {void} */
@@ -2001,7 +2001,7 @@ view.diagnostics = {
 
 	/** @returns {void} */
 	title: function () {
-		lychee.setTitle("Diagnostics", false);
+		lychee.setTitle(lychee.locale["DIAGNOSTICS"], false);
 	},
 
 	/**
@@ -2145,7 +2145,7 @@ view.update = {
 
 	/** @returns {void} */
 	title: function () {
-		lychee.setTitle("Update", false);
+		lychee.setTitle(lychee.locale["UPDATE"], false);
 	},
 
 	/** @returns {void} */
