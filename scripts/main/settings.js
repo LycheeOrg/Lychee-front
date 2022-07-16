@@ -491,13 +491,24 @@ settings.save_enter = function (e) {
 
 settings.viewToken = function () {
 	api.post("User::getCurrent", {}, function (data) {
-		basicModal.show({
-			body: lychee.html`<div class='directLinks'><p>${data.token} <a id="button_copy_token" class='basicModal__button' title='${
+		let bodyHtml = '';
+		let enableReset = '';
+		if (data.token === '') {
+			bodyHtml = "<div class='directLinks'><p>disabled</p></div>";
+			enableReset = lychee.locale["ENABLE"];
+		} else {
+			bodyHtml = lychee.html`<div class='directLinks'><p><span id="apiToken">${data.token}</span> <a id="button_copy_token" class='basicModal__button' title='${
 				lychee.locale["URL_COPY_TO_CLIPBOARD"]
-			}'>${build.iconic("copy", "ionicons")}</a></p></div>`,
+			}'>${build.iconic("copy", "ionicons")}</a> <a id="button_disable_token" class='basicModal__button' title='${
+				lychee.locale["DISABLE"]
+			}'>${build.iconic("ban")}</a></p></div>`;
+			enableReset = lychee.locale["RESET"];
+		}
+		basicModal.show({
+			body: bodyHtml,
 			buttons: {
 				action: {
-					title: lychee.locale["RESET"],
+					title: enableReset,
 					fn: function () {
 						api.post("User::resetToken", {});
 						basicModal.close();
@@ -512,6 +523,11 @@ settings.viewToken = function () {
 		});
 		$("#button_copy_token").on(lychee.getEventName(), function () {
 			navigator.clipboard.writeText(data.token);
+		});
+		$("#button_disable_token").on(lychee.getEventName(), function () {
+			api.post("User::disableToken", {}, function () {
+				$('#apiToken').html('disabled');
+			});
 		});
 	});
 };
