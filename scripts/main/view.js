@@ -1056,8 +1056,8 @@ view.settings = {
 		setLogin: function () {
 			const msg = lychee.html`
 			<div class="setLogin">
+			<form>
 			  <p>$${lychee.locale["PASSWORD_TITLE"]}
-				  <input name='oldUsername' class='text' type='text' placeholder='$${lychee.locale["USERNAME_CURRENT"]}' value=''>
 				  <input name='oldPassword' class='text' type='password' placeholder='$${lychee.locale["PASSWORD_CURRENT"]}' value=''>
 			  </p>
 			  <p>$${lychee.locale["PASSWORD_TEXT"]}
@@ -1069,6 +1069,7 @@ view.settings = {
 				<!--<a id="basicModal__cancel" class="basicModal__button ">Cancel</a>-->
 				<a id="basicModal__action_password_change" class="basicModal__button ">$${lychee.locale["PASSWORD_CHANGE"]}</a>
 			</div>
+			</form>
 			</div>`;
 
 			$(".settings_view").append(msg);
