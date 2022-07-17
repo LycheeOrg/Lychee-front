@@ -44,7 +44,7 @@ u2f.login = function () {
 			loadingBar.show("success", lychee.locale["U2F_AUTHENTIFICATION_SUCCESS"]);
 			window.location.reload();
 		})
-		.catch(() => loadingBar.show("error", "Something went wrong!"));
+		.catch(() => loadingBar.show("error", lychee.locale["ERROR_TEXT"]));
 };
 
 /**
@@ -66,7 +66,7 @@ u2f.register = function () {
 				loadingBar.show("success", lychee.locale["U2F_REGISTRATION_SUCCESS"]);
 				u2f.list(); // reload credential list
 			})
-			.catch(() => loadingBar.show("error", "Something went wrong!"));
+			.catch(() => loadingBar.show("error", lychee.locale["ERROR_TEXT"]));
 	} else {
 		loadingBar.show("error", lychee.locale["U2F_NOT_SUPPORTED"]);
 	}

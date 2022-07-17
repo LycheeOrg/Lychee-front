@@ -21,28 +21,28 @@ const map_provider_layer_attribution = {
 	 */
 	"OpenStreetMap.org": {
 		layer: "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
-		attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+		attribution: `&copy; <a href="https://osm.org/copyright">${lychee.locale["OSM_CONTRIBUTORS"]}</a>`,
 	},
 	/**
 	 * @type {MapProvider}
 	 */
 	"OpenStreetMap.de": {
 		layer: "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png ",
-		attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+		attribution: `&copy; <a href="https://osm.org/copyright">${lychee.locale["OSM_CONTRIBUTORS"]}</a>`,
 	},
 	/**
 	 * @type {MapProvider}
 	 */
 	"OpenStreetMap.fr": {
 		layer: "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png ",
-		attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+		attribution: `&copy; <a href="https://osm.org/copyright">${lychee.locale["OSM_CONTRIBUTORS"]}</a>`,
 	},
 	/**
 	 * @type {MapProvider}
 	 */
 	RRZE: {
 		layer: "https://{s}.osm.rrze.fau.de/osmhd/{z}/{x}/{y}.png",
-		attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+		attribution: `&copy; <a href="https://osm.org/copyright">${lychee.locale["OSM_CONTRIBUTORS"]}</a>`,
 	},
 };
 
@@ -190,14 +190,14 @@ mapview.open = function (albumID = null) {
 			template = template.concat(
 				'<img class="image-leaflet-popup" src="{url}" ',
 				'srcset="{url} 1x, {url2x} 2x" ',
-				'data-album-id="{albumID}" data-id="{photoID}"/><div><h1>{name}</h1><span title="Camera Date">',
+				'data-album-id="{albumID}" data-id="{photoID}"/><div><h1>{name}</h1><span title="' + lychee.locale["CAMERA_DATE"] + '">',
 				build.iconic("camera-slr"),
 				"</span><p>{taken_at}</p></div>"
 			);
 		} else {
 			template = template.concat(
 				'<img class="image-leaflet-popup" src="{url}" ',
-				'data-album-id="{albumID}" data-id="{photoID}"/><div><h1>{name}</h1><span title="Camera Date">',
+				'data-album-id="{albumID}" data-id="{photoID}"/><div><h1>{name}</h1><span title="' + lychee.locale["CAMERA_DATE"] + '">',
 				build.iconic("camera-slr"),
 				"</span><p>{taken_at}</p></div>"
 			);

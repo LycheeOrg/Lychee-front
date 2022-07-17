@@ -345,12 +345,12 @@ photo.delete = function (photoIDs) {
 		action.title = lychee.locale["PHOTO_DELETE"];
 		cancel.title = lychee.locale["PHOTO_KEEP"];
 
-		msg = lychee.html`<p>${lychee.locale["PHOTO_DELETE_1"]} '${photoTitle}'${lychee.locale["PHOTO_DELETE_2"]}</p>`;
+		msg = lychee.html`<p>${sprintf(lychee.locale["PHOTO_DELETE_CONFIRMATION"], photoTitle)}</p>`;
 	} else {
 		action.title = lychee.locale["PHOTO_DELETE"];
 		cancel.title = lychee.locale["PHOTO_KEEP"];
 
-		msg = lychee.html`<p>${lychee.locale["PHOTO_DELETE_ALL_1"]} ${photoIDs.length} ${lychee.locale["PHOTO_DELETE_ALL_2"]}</p>`;
+		msg = lychee.html`<p>${sprintf(lychee.locale["PHOTO_DELETE_ALL"], photoIDs.length)}</p>`;
 	}
 
 	basicModal.show({
@@ -418,7 +418,7 @@ photo.setTitle = function (photoIDs) {
 	const input = lychee.html`<input class='text' name='title' type='text' maxlength='100' placeholder='Title' value='$${oldTitle}'>`;
 
 	if (photoIDs.length === 1) msg = lychee.html`<p>${lychee.locale["PHOTO_NEW_TITLE"]} ${input}</p>`;
-	else msg = lychee.html`<p>${lychee.locale["PHOTOS_NEW_TITLE_1"]} ${photoIDs.length} ${lychee.locale["PHOTOS_NEW_TITLE_2"]} ${input}</p>`;
+	else msg = lychee.html`<p>${sprintf(lychee.locale["PHOTOS_NEW_TITLE"], photoIDs.length)} ${input}</p>`;
 
 	basicModal.show({
 		body: msg,
@@ -693,7 +693,7 @@ photo.setProtectionPolicy = function (photoID) {
 			body: msg,
 			buttons: {
 				action: {
-					title: lychee.locale["PHOTO_SHARING_CONFIRM"],
+					title: lychee.locale["SAVE"],
 					fn: action,
 				},
 				cancel: {
@@ -818,7 +818,7 @@ photo.editTags = function (photoIDs) {
 	const msg =
 		photoIDs.length === 1
 			? lychee.html`<p>${lychee.locale["PHOTO_NEW_TAGS"]} ${input}</p>`
-			: lychee.html`<p>${lychee.locale["PHOTO_NEW_TAGS_1"]} ${photoIDs.length} ${lychee.locale["PHOTO_NEW_TAGS_2"]} ${input}</p>`;
+			: lychee.html`<p>${sprintf(lychee.locale["PHOTOS_NEW_TAGS"], photoIDs.length)} ${input}</p>`;
 
 	basicModal.show({
 		body: msg,
@@ -1119,7 +1119,7 @@ photo.qrCode = function (photoID) {
 	const myPhoto = photo.json && photo.json.id === photoID ? photo.json : album.getByID(photoID);
 
 	if (myPhoto == null) {
-		lychee.error("Error: photo " + photoID + " not found !");
+		lychee.error(sprintf(lychee.locale["ERROR_PHOTO_NOT_FOUND"], photoID));
 		return;
 	}
 
