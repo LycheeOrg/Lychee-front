@@ -194,7 +194,7 @@ settings.changeLogin = function (params) {
 		$("input[name=confirm]").removeClass("error");
 	}
 
-	api.post("Settings::setLogin", params, function () {
+	api.post("Settings::updateLogin", params, function () {
 		$("input[name]").removeClass("error");
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_LOGIN"]);
 		view.settings.content.clearLogin();
