@@ -489,7 +489,7 @@ settings.viewToken = function () {
 		let bodyHtml = "";
 		let enableReset = "";
 		if (data.token === "") {
-			bodyHtml = "<div class='directLinks'><p>disabled</p></div>";
+			bodyHtml = `<div class='directLinks'><p>${lychee.locale["DISABLED"]}</p></div>`;
 			enableReset = lychee.locale["ENABLE"];
 		} else {
 			bodyHtml = lychee.html`<div class='directLinks'><p><span id="apiToken">${
