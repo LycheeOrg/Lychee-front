@@ -24,6 +24,7 @@ const lychee = {};
 lychee.content = $(".content");
 lychee.imageview = $("#imageview");
 lychee.mapview = $("#mapview");
+lychee.locale = {};
 
 /**
  * DON'T USE THIS METHOD.
@@ -302,6 +303,10 @@ const loadPhotoInfo = function (photoID) {
 			// TODO: Actually the prefix should not be a hard-coded, but the value of `lychee.title`. However, I am unsure whether we load the configuration options in view mode.
 			document.title = "Lychee – " + _title;
 			header.dom(".header__title").text(_title);
+
+			if (photo.json.hasOwnProperty("is_share_button_visible") && !photo.json.is_share_button_visible) {
+				$("#button_share").hide();
+			}
 
 			// Render HTML
 			imageview.html(build.imageview(data, true, false).html);
