@@ -20,7 +20,7 @@ album.isSmartID = function (id) {
  * @returns {boolean}
  */
 album.isSearchID = function (id) {
-	return id === SearchAlbumID;
+	return id === SearchAlbumIDPrefix || id.startsWith(SearchAlbumIDPrefix + "/");
 };
 
 /**
@@ -50,7 +50,7 @@ album.getID = function () {
 
 	// this is a Lambda
 	let isID = (_id) => {
-		return album.isSmartID(_id) || /*album.isSearchID(_id) || */ album.isModelID(_id);
+		return album.isSmartID(_id) || album.isSearchID(_id) || album.isModelID(_id);
 	};
 
 	if (photo.json) id = photo.json.album_id;
@@ -176,15 +176,23 @@ album.deleteSubByID = function (albumID) {
 /**
  * @param {string} albumID
  * @param {?AlbumLoadedCB} [albumLoadedCB=null]
+ * @param {?string} parentID
  *
  * @returns {void}
  */
-album.load = function (albumID, albumLoadedCB = null) {
+album.load = function (albumID, albumLoadedCB = null, parentID = null) {
 	/**
 	 * @param {Album} data
 	 */
 	const processAlbum = function (data) {
 		album.json = data;
+
+		if (parentID !== null) {
+			// Used with search so that the back button sends back to the
+			// search results.
+			album.json.original_parent_id = album.json.parent_id;
+			album.json.parent_id = parentID;
+		}
 
 		if (albumLoadedCB === null) {
 			lychee.animate(lychee.content, "contentZoomOut");

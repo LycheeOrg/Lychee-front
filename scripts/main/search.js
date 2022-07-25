@@ -9,7 +9,7 @@
  *
  * @type {string}
  */
-const SearchAlbumID = "search";
+const SearchAlbumIDPrefix = "search";
 
 /**
  * @typedef SearchAlbum
@@ -18,7 +18,7 @@ const SearchAlbumID = "search";
  * mostly compatible with the other album types, i.e.
  * {@link Album}, {@link TagAlbum} and {@link SmartAlbum}.
  *
- * @property {string}  id                       - always equals `SearchAlbumID`
+ * @property {string}  id                       - always equals `SearchAlbumIDPrefix/search-term`
  * @property {string}  title                    - always equals `lychee.locale["SEARCH_RESULTS"]`
  * @property {Photo[]} photos                   - the found photos
  * @property {Album[]} albums                   - the found albums
@@ -55,7 +55,7 @@ search.find = function (term) {
 
 		// Create and assign a `SearchAlbum`
 		album.json = {
-			id: SearchAlbumID,
+			id: SearchAlbumIDPrefix + "/" + term,
 			title: lychee.locale["SEARCH_RESULTS"],
 			photos: search.json.photos,
 			albums: search.json.albums,
