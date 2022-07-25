@@ -76,6 +76,7 @@ build.album = function (data, disabled = false) {
 	const formattedCreationTs = lychee.locale.printMonthYear(data.created_at);
 	const formattedMinTs = lychee.locale.printMonthYear(data.min_taken_at);
 	const formattedMaxTs = lychee.locale.printMonthYear(data.max_taken_at);
+	const disableDragDrop = !album.isUploadable() || disabled || album.isSmartID(data.id) || data.is_tag_album;
 	let subtitle = formattedCreationTs;
 
 	// check setting album_subtitle_type:
@@ -117,9 +118,9 @@ build.album = function (data, disabled = false) {
 				data-id='${data.id}'
 				data-nsfw='${data.is_nsfw ? `1` : `0`}'
 				data-tabindex='${tabindex.get_next_tab_index()}'
-				draggable='${album.isSmartID(data.id) || data.is_tag_album ? "false" : "true"}'
+				draggable='${disableDragDrop ? "false" : "true"}'
 				${
-					album.isSmartID(data.id) || data.is_tag_album
+					disableDragDrop
 						? ``
 						: `ondragstart='lychee.startDrag(event)'
 				ondragover='lychee.overDrag(event)'
@@ -268,7 +269,7 @@ build.photo = function (data, disabled = false) {
 			<div class='photo ${disabled ? `disabled` : ``}' data-album-id='${data.album_id}' data-id='${
 		data.id
 	}' data-tabindex='${tabindex.get_next_tab_index()}'
-			draggable='true'
+			draggable='${!album.isUploadable() || disabled ? "false" : "true"}'
 			ondragstart='lychee.startDrag(event)'
 			ondragend='lychee.endDrag(event)'>
 				${thumbnail}
