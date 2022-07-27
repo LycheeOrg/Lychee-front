@@ -511,7 +511,7 @@ upload.start = {
 
 		/**
 		 * @typedef ServerImportDialogResult
-		 * @property {string} path
+		 * @property {string} paths
 		 * @property {boolean} delete_imported
 		 * @property {boolean} import_via_symlink
 		 * @property {boolean} skip_duplicates
@@ -520,12 +520,13 @@ upload.start = {
 
 		/** @param {ServerImportDialogResult} data */
 		const action = function (data) {
-			if (!data.path.trim()) {
-				basicModal.error("path");
+			if (!data.paths.trim()) {
+				basicModal.error("paths");
 				return;
 			} else {
 				// Consolidate `data` before we close the modal dialog
 				// TODO: We should fix the modal dialog to properly return the values of all input fields, incl. check boxes
+				data.paths = data.paths.match(/(?:\\.|\S)+/g);
 				data.delete_imported = !!$(choiceDeleteSelector).prop("checked");
 				data.import_via_symlink = !!$(choiceSymlinkSelector).prop("checked");
 				data.skip_duplicates = !!$(choiceDuplicateSelector).prop("checked");
@@ -734,7 +735,7 @@ upload.start = {
 
 				const params = {
 					albumID: albumID,
-					path: data.path,
+					paths: data.paths,
 					delete_imported: data.delete_imported,
 					import_via_symlink: data.import_via_symlink,
 					skip_duplicates: data.skip_duplicates,
@@ -750,7 +751,7 @@ upload.start = {
 		const msg = lychee.html`
 			<p class='importServer'>
 				${lychee.locale["UPLOAD_IMPORT_SERVER_INSTR"]}
-				<input class='text' name='path' type='text' placeholder='${lychee.locale["UPLOAD_ABSOLUTE_PATH"]}' value='${lychee.location}uploads/import/'>
+				<input class='text' name='paths' type='text' placeholder='${lychee.locale["UPLOAD_ABSOLUTE_PATH"]}' value='${lychee.location}uploads/import/'>
 			</p>
 			<div class='choice'>
 				<label>
