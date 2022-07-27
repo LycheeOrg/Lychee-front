@@ -33,7 +33,6 @@ paths.view = {
 	scripts: [
 		"node_modules/jquery/dist/jquery.min.js",
 		"node_modules/lazysizes/lazysizes.min.js",
-		"node_modules/marked/marked.min.js",
 		"node_modules/sprintf-js/dist/sprintf.min.js",
 		"node_modules/marked/marked.min.js",
 		"../dist/_view--javascript.js",
