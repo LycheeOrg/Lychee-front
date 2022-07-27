@@ -139,7 +139,7 @@ sidebar.toggle = function (is_user_initiated) {
 		lychee.imageview.toggleClass("image--sidebar");
 		if (typeof view !== "undefined") view.album.content.justify(album.json ? album.json.photos : []);
 		sidebar.dom().toggleClass("active");
-		photo.updateSizeLivePhotoDuringAnimation();
+		if (photo.updateSizeLivePhotoDuringAnimation) photo.updateSizeLivePhotoDuringAnimation();
 
 		if (is_user_initiated) sessionStorage.setItem("keepSidebarVisible", visible.sidebar() ? "true" : "false");
 	}
