@@ -2,21 +2,32 @@
  * @description Swipes and moves an object.
  */
 
-let swipe = {
+const swipe = {
+	/** @type {?jQuery} */
 	obj: null,
+	/** @type {number} */
 	offsetX: 0,
+	/** @type {number} */
 	offsetY: 0,
+	/** @type {boolean} */
 	preventNextHeaderToggle: false,
 };
 
+/**
+ * @param {jQuery} obj
+ * @returns {void}
+ */
 swipe.start = function (obj) {
-	if (obj) swipe.obj = obj;
-	return true;
+	swipe.obj = obj;
 };
 
+/**
+ * @param {jQuery.Event} e
+ * @returns {void}
+ */
 swipe.move = function (e) {
 	if (swipe.obj === null) {
-		return false;
+		return;
 	}
 
 	if (Math.abs(e.x) > Math.abs(e.y)) {
@@ -33,13 +44,28 @@ swipe.move = function (e) {
 		MozTransform: value,
 		transform: value,
 	});
-	return;
 };
 
+/**
+ * @callback SwipeStoppedCB
+ *
+ * Find a better name for that, but I have no idea what this callback is
+ * supposed to do.
+ *
+ * @param {boolean} animate
+ * @returns {void}
+ */
+
+/**
+ * @param {{x: number, y: number, direction: number, distance: number, angle: number, speed: number, }} e
+ * @param {SwipeStoppedCB} left
+ * @param {SwipeStoppedCB} right
+ * @returns {void}
+ */
 swipe.stop = function (e, left, right) {
 	// Only execute once
-	if (swipe.obj == null) {
-		return false;
+	if (swipe.obj === null) {
+		return;
 	}
 
 	if (e.y <= -lychee.swipe_tolerance_y) {
@@ -72,6 +98,4 @@ swipe.stop = function (e, left, right) {
 	swipe.obj = null;
 	swipe.offsetX = 0;
 	swipe.offsetY = 0;
-
-	return;
 };

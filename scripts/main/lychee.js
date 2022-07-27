@@ -2,7 +2,7 @@
  * @description This module provides the basic functions of Lychee.
  */
 
-let lychee = {
+const lychee = {
 	title: document.title,
 	version: "",
 	versionCode: "", // not really needed anymore
@@ -16,32 +16,120 @@ let lychee = {
 	full_photo: true,
 	downloadable: false,
 	public_photos_hidden: true,
-	share_button_visible: false, // enable only v4+
-	api_V2: false, // enable api_V2
-	sub_albums: false, // enable sub_albums features
-	admin: false, // enable admin mode (multi-user)
-	may_upload: false, // enable possibility to upload (multi-user)
-	is_locked: false, // locked user (multi-user)
+	share_button_visible: false,
+	/**
+	 * Enable admin mode (multi-user)
+	 * @type boolean
+	 */
+	admin: false,
+	/**
+	 * Enable possibility to upload (multi-user)
+	 * @type boolean
+	 */
+	may_upload: false,
+	/**
+	 * Locked user (multi-user)
+	 * @type boolean
+	 */
+	is_locked: false,
+	/** @type {?string} */
 	username: null,
-	layout: "1", // 0: Use default, "square" layout. 1: Use Flickr-like "justified" layout. 2: Use Google-like "unjustified" layout
-	public_search: false, // display Search in publicMode
-	image_overlay_type: "exif", // current Overlay display type
-	image_overlay_type_default: "exif", // image overlay type default type
-	display_album_description: true, // display album description underneath the header in album view
-	markdown_in_descriptions: false, // render album and photo descriptions as markdown
-	map_display: false, // display photo coordinates on map
-	map_display_public: false, // display photos of public album on map (user not logged in)
-	map_display_direction: true, // use the GPS direction data on displayed maps
-	map_provider: "Wikimedia", // Provider of OSM Tiles
-	map_include_subalbums: false, // include photos of subalbums on map
-	location_decoding: false, // retrieve location name from GPS data
-	location_decoding_caching_type: "Harddisk", // caching mode for GPS data decoding
-	location_show: false, // show location name
-	location_show_public: false, // show location name for public albums
-	swipe_tolerance_x: 150, // tolerance for navigating when swiping images to the left and right on mobile
-	swipe_tolerance_y: 250, // tolerance for navigating when swiping images up and down
+	/**
+	 * Values:
+	 *
+	 *  - `0`: Use default, "square" layout.
+	 *  - `1`: Use Flickr-like "justified" layout.
+	 *  - `2`: Use Google-like "unjustified" layout
+	 *
+	 * @type {number}
+	 */
+	layout: 1,
+	/**
+	 * Display search in public mode.
+	 * @type boolean
+	 */
+	public_search: false,
+	/**
+	 * Overlay display type
+	 * @type {string}
+	 */
+	image_overlay_type: "exif",
+	/**
+	 * Image overlay type default type
+	 * @type {string}
+	 */
+	image_overlay_type_default: "exif",
+	/**
+	 * Display album description underneath the header in album view.
+	 * @type boolean
+	 */
+	display_album_description: true,
+	/**
+	 * Render album and photo descriptions as markdown.
+	 * @type boolean
+	 */
+	markdown_in_descriptions: false,
+	/**
+	 * Display photo coordinates on map
+	 * @type boolean
+	 */
+	map_display: false,
+	/**
+	 * Display photos of public album on map (user not logged in)
+	 * @type boolean
+	 */
+	map_display_public: false,
+	/**
+	 * Use the GPS direction data on displayed maps
+	 * @type boolean
+	 */
+	map_display_direction: true,
+	/**
+	 * Provider of OSM Tiles
+	 * @type {string}
+	 */
+	map_provider: "Wikimedia",
+	/**
+	 * Include photos of subalbums on map
+	 * @type boolean
+	 */
+	map_include_subalbums: false,
+	/**
+	 * Retrieve location name from GPS data
+	 * @type boolean
+	 */
+	location_decoding: false,
+	/**
+	 * Caching mode for GPS data decoding
+	 * @type {string}
+	 */
+	location_decoding_caching_type: "Harddisk",
+	/**
+	 * Show location name
+	 * @type boolean
+	 */
+	location_show: false,
+	/**
+	 * Show location name for public albums
+	 * @type boolean
+	 */
+	location_show_public: false,
+	/**
+	 * Tolerance for navigating when swiping images to the left and right on mobile
+	 * @type {number}
+	 */
+	swipe_tolerance_x: 150,
+	/**
+	 * Tolerance for navigating when swiping images up and down
+	 * @type {number}
+	 */
+	swipe_tolerance_y: 250,
 
-	landing_page_enabled: false, // is landing page enabled ?
+	/**
+	 * Is landing page enabled?
+	 * @type boolean
+	 */
+	landing_page_enabled: false,
 	delete_imported: false,
 	import_via_symlink: false,
 	skip_duplicates: false,
@@ -71,19 +159,30 @@ let lychee = {
 	enable_close_tab_on_esc: false,
 	enable_tabindex: false,
 	enable_contextmenu_header: true,
-	hide_content_during_imageview: false,
+	hide_content_during_imgview: false,
 	device_type: "desktop",
 
-	checkForUpdates: "1",
+	checkForUpdates: true,
+	/**
+	 * The most recent, available Lychee version encoded as an integer, e.g. 040506
+	 * @type {number}
+	 */
 	update_json: 0,
 	update_available: false,
 	new_photos_notification: false,
-	sortingPhotos: "",
-	sortingAlbums: "",
+	/** @type {?SortingCriterion} */
+	sorting_photos: null,
+	/** @type {?SortingCriterion} */
+	sorting_albums: null,
+	/**
+	 * The absolute path of the server-side installation directory of Lychee, e.g. `/var/www/lychee`
+	 * @type {string}
+	 */
 	location: "",
 
 	lang: "",
-	lang_available: {},
+	/** @type {string[]} */
+	lang_available: [],
 
 	dropbox: false,
 	dropboxKey: "",
@@ -92,25 +191,35 @@ let lychee = {
 	imageview: $("#imageview"),
 	footer: $("#footer"),
 
+	/** @type {Locale} */
 	locale: {},
 
 	nsfw_unlocked_albums: [],
 };
 
+/**
+ * @returns {string}
+ */
 lychee.diagnostics = function () {
 	return "/Diagnostics";
 };
 
+/**
+ * @returns {string}
+ */
 lychee.logs = function () {
 	return "/Logs";
 };
 
+/**
+ * @returns {void}
+ */
 lychee.aboutDialog = function () {
-	let msg = lychee.html`
+	const msg = lychee.html`
 				<h1>Lychee ${lychee.version}</h1>
 				<div class='version'><span><a target='_blank' href='${lychee.updateURL}'>${lychee.locale["UPDATE_AVAILABLE"]}</a></span></div>
 				<h1>${lychee.locale["ABOUT_SUBTITLE"]}</h1>
-				<p><a target='_blank' href='${lychee.website}'>Lychee</a> ${lychee.locale["ABOUT_DESCRIPTION"]}</p>
+				<p>${sprintf(lychee.locale["ABOUT_DESCRIPTION"], lychee.website)}</p>
 			  `;
 
 	basicModal.show({
@@ -123,7 +232,7 @@ lychee.aboutDialog = function () {
 		},
 	});
 
-	if (lychee.checkForUpdates === "1") lychee.getUpdate();
+	if (lychee.checkForUpdates) lychee.getUpdate();
 };
 
 /**
@@ -131,236 +240,213 @@ lychee.aboutDialog = function () {
  *                                        for re-initialization to prevent
  *                                        multiple registrations of global
  *                                        event handlers
+ * @returns {void}
  */
 lychee.init = function (isFirstInitialization = true) {
 	lychee.adjustContentHeight();
 
-	api.post("Session::init", {}, function (data) {
-		if (data.status === 0) {
-			// No configuration
+	api.post(
+		"Session::init",
+		{},
+		/** @param {InitializationData} data */
+		function (data) {
+			lychee.parseInitializationData(data);
 
-			lychee.setMode("public");
+			if (data.status === 2) {
+				// Logged in
+				leftMenu.build();
+				leftMenu.bind();
+				lychee.setMode("logged_in");
 
-			header.dom().hide();
-			lychee.content.hide();
-			$("body").append(build.no_content("cog"));
-			settings.createConfig();
+				// Show dialog when there is no username and password
+				// TODO: Refactor this. At least rename the flag `login` to something more understandable like `isAdminUserConfigured`, but rather re-factor the whole logic, i.e. the initial user should be created as part of the installation routine.
+				// In particular it is completely insane to build the UI as if the admin user was successfully authenticated.
+				// This might leak confidential photos to anybody if the DB is filled
+				// with photos and the admin password reset to `null`.
+				if (data.config.login === false) settings.createLogin();
+			} else if (data.status === 1) {
+				lychee.setMode("public");
+			} else {
+				loadingBar.show("error", "Error: Unexpected status");
+				return;
+			}
 
-			return true;
+			if (isFirstInitialization) {
+				$(window).on("popstate", function () {
+					const autoplay = history.state && history.state.hasOwnProperty("autoplay") ? history.state.autoplay : true;
+					lychee.load(autoplay);
+				});
+				lychee.load();
+			}
 		}
-
-		lychee.sub_albums = data.sub_albums || false;
-		lychee.update_json = data.update_json;
-		lychee.update_available = data.update_available;
-		lychee.landing_page_enable = (data.config.landing_page_enable && data.config.landing_page_enable === "1") || false;
-		lychee.new_photos_notification = false;
-
-		lychee.versionCode = data.config.version;
-		if (lychee.versionCode !== "") {
-			let digits = lychee.versionCode.match(/.{1,2}/g);
-			lychee.version = parseInt(digits[0]).toString() + "." + parseInt(digits[1]).toString() + "." + parseInt(digits[2]).toString();
-		}
-
-		// we copy the locale that exists only.
-		// This ensure forward and backward compatibility.
-		// e.g. if the front localization is unfished in a language
-		// or if we need to change some locale string
-		for (let key in data.locale) {
-			lychee.locale[key] = data.locale[key];
-		}
-
-		const validatedSwipeToleranceX =
-			(data.config.swipe_tolerance_x && !isNaN(parseInt(data.config.swipe_tolerance_x)) && parseInt(data.config.swipe_tolerance_x)) || 150;
-		const validatedSwipeToleranceY =
-			(data.config.swipe_tolerance_y && !isNaN(parseInt(data.config.swipe_tolerance_y)) && parseInt(data.config.swipe_tolerance_y)) || 250;
-
-		// Check status
-		// 0 = No configuration
-		// 1 = Logged out
-		// 2 = Logged in
-		if (data.status === 2) {
-			// Logged in
-
-			lychee.sortingPhotos = data.config.sorting_Photos || data.config.sortingPhotos || "";
-			lychee.sortingAlbums = data.config.sorting_Albums || data.config.sortingAlbums || "";
-			lychee.album_subtitle_type = data.config.album_subtitle_type || "oldstyle";
-			lychee.dropboxKey = data.config.dropbox_key || data.config.dropboxKey || "";
-			lychee.location = data.config.location || "";
-			lychee.checkForUpdates = data.config.check_for_updates || data.config.checkForUpdates || "1";
-			lychee.lang = data.config.lang || "";
-			lychee.lang_available = data.config.lang_available || {};
-			lychee.layout = data.config.layout || "1";
-			lychee.public_search = (data.config.public_search && data.config.public_search === "1") || false;
-			lychee.image_overlay_type = !data.config.image_overlay_type ? "exif" : data.config.image_overlay_type;
-			lychee.image_overlay_type_default = lychee.image_overlay_type;
-			lychee.display_album_description = data.config.display_album_description ? data.config.display_album_description === "1" : true;
-			lychee.markdown_in_descriptions = (data.config.markdown_in_descriptions && data.config.markdown_in_descriptions === "1") || false;
-			lychee.map_display = (data.config.map_display && data.config.map_display === "1") || false;
-			lychee.map_display_public = (data.config.map_display_public && data.config.map_display_public === "1") || false;
-			lychee.map_display_direction = (data.config.map_display_direction && data.config.map_display_direction === "1") || false;
-			lychee.map_provider = !data.config.map_provider ? "Wikimedia" : data.config.map_provider;
-			lychee.map_include_subalbums = (data.config.map_include_subalbums && data.config.map_include_subalbums === "1") || false;
-			lychee.location_decoding = (data.config.location_decoding && data.config.location_decoding === "1") || false;
-			lychee.location_decoding_caching_type = !data.config.location_decoding_caching_type
-				? "Harddisk"
-				: data.config.location_decoding_caching_type;
-			lychee.location_show = (data.config.location_show && data.config.location_show === "1") || false;
-			lychee.location_show_public = (data.config.location_show_public && data.config.location_show_public === "1") || false;
-			lychee.swipe_tolerance_x = validatedSwipeToleranceX;
-			lychee.swipe_tolerance_y = validatedSwipeToleranceY;
-
-			lychee.default_license = data.config.default_license || "none";
-			lychee.css = data.config.css || "";
-			lychee.full_photo = data.config.full_photo == null || data.config.full_photo === "1";
-			lychee.downloadable = (data.config.downloadable && data.config.downloadable === "1") || false;
-			lychee.public_photos_hidden = data.config.public_photos_hidden == null || data.config.public_photos_hidden === "1";
-			lychee.share_button_visible = (data.config.share_button_visible && data.config.share_button_visible === "1") || false;
-			lychee.delete_imported = data.config.delete_imported && data.config.delete_imported === "1";
-			lychee.import_via_symlink = data.config.import_via_symlink && data.config.import_via_symlink === "1";
-			lychee.skip_duplicates = data.config.skip_duplicates && data.config.skip_duplicates === "1";
-			lychee.nsfw_visible = (data.config.nsfw_visible && data.config.nsfw_visible === "1") || false;
-			lychee.nsfw_blur = (data.config.nsfw_blur && data.config.nsfw_blur === "1") || false;
-			lychee.nsfw_warning = (data.config.nsfw_warning_admin && data.config.nsfw_warning_admin === "1") || false;
-
-			lychee.header_auto_hide = data.config_device.header_auto_hide;
-			lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
-			lychee.enable_button_visibility = data.config_device.enable_button_visibility;
-			lychee.enable_button_share = data.config_device.enable_button_share;
-			lychee.enable_button_archive = data.config_device.enable_button_archive;
-			lychee.enable_button_move = data.config_device.enable_button_move;
-			lychee.enable_button_trash = data.config_device.enable_button_trash;
-			lychee.enable_button_fullscreen = data.config_device.enable_button_fullscreen;
-			lychee.enable_button_download = data.config_device.enable_button_download;
-			lychee.enable_button_add = data.config_device.enable_button_add;
-			lychee.enable_button_more = data.config_device.enable_button_more;
-			lychee.enable_button_rotate = data.config_device.enable_button_rotate;
-			lychee.enable_close_tab_on_esc = data.config_device.enable_close_tab_on_esc;
-			lychee.enable_tabindex = data.config_device.enable_tabindex;
-			lychee.enable_contextmenu_header = data.config_device.enable_contextmenu_header;
-			lychee.hide_content_during_imgview = data.config_device.hide_content_during_imgview;
-			lychee.device_type = data.config_device.device_type || "desktop"; // we set default as Desktop
-
-			lychee.editor_enabled = (data.config.editor_enabled && data.config.editor_enabled === "1") || false;
-
-			lychee.nsfw_visible_saved = lychee.nsfw_visible;
-
-			lychee.new_photos_notification = (data.config.new_photos_notification && data.config.new_photos_notification === "1") || false;
-
-			lychee.upload_processing_limit = parseInt(data.config.upload_processing_limit);
-			// when null or any non stringified numeric value is sent from the server we get NaN.
-			// we fix this.
-			if (isNaN(lychee.upload_processing_limit)) lychee.upload_processing_limit = 4;
-
-			// leftMenu
-			leftMenu.build();
-			leftMenu.bind();
-
-			lychee.may_upload = data.admin || data.may_upload;
-			lychee.admin = data.admin;
-			lychee.is_locked = data.is_locked;
-			lychee.username = data.username;
-			lychee.setMode("logged_in");
-
-			// Show dialog when there is no username and password
-			if (data.config.login === false) settings.createLogin();
-		} else if (data.status === 1) {
-			// Logged out
-
-			// TODO remove sortingPhoto once the v4 is out
-			lychee.sortingPhotos = data.config.sorting_Photos || data.config.sortingPhotos || "";
-			lychee.sortingAlbums = data.config.sorting_Albums || data.config.sortingAlbums || "";
-			lychee.album_subtitle_type = data.config.album_subtitle_type || "oldstyle";
-			lychee.checkForUpdates = data.config.check_for_updates || data.config.checkForUpdates || "1";
-			lychee.layout = data.config.layout || "1";
-			lychee.public_search = (data.config.public_search && data.config.public_search === "1") || false;
-			lychee.image_overlay_type = !data.config.image_overlay_type ? "exif" : data.config.image_overlay_type;
-			lychee.image_overlay_type_default = lychee.image_overlay_type;
-			lychee.display_album_description = data.config.display_album_description ? data.config.display_album_description === "1" : true;
-			lychee.markdown_in_descriptions = (data.config.markdown_in_descriptions && data.config.markdown_in_descriptions === "1") || false;
-			lychee.map_display = (data.config.map_display && data.config.map_display === "1") || false;
-			lychee.map_display_public = (data.config.map_display_public && data.config.map_display_public === "1") || false;
-			lychee.map_display_direction = (data.config.map_display_direction && data.config.map_display_direction === "1") || false;
-			lychee.map_provider = !data.config.map_provider ? "Wikimedia" : data.config.map_provider;
-			lychee.map_include_subalbums = (data.config.map_include_subalbums && data.config.map_include_subalbums === "1") || false;
-			lychee.location_show = (data.config.location_show && data.config.location_show === "1") || false;
-			lychee.location_show_public = (data.config.location_show_public && data.config.location_show_public === "1") || false;
-			lychee.swipe_tolerance_x = validatedSwipeToleranceX;
-			lychee.swipe_tolerance_y = validatedSwipeToleranceY;
-
-			lychee.nsfw_visible = (data.config.nsfw_visible && data.config.nsfw_visible === "1") || false;
-			lychee.nsfw_blur = (data.config.nsfw_blur && data.config.nsfw_blur === "1") || false;
-			lychee.nsfw_warning = (data.config.nsfw_warning && data.config.nsfw_warning === "1") || false;
-
-			lychee.header_auto_hide = data.config_device.header_auto_hide;
-			lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
-			lychee.enable_button_visibility = data.config_device.enable_button_visibility;
-			lychee.enable_button_share = data.config_device.enable_button_share;
-			lychee.enable_button_archive = data.config_device.enable_button_archive;
-			lychee.enable_button_move = data.config_device.enable_button_move;
-			lychee.enable_button_trash = data.config_device.enable_button_trash;
-			lychee.enable_button_fullscreen = data.config_device.enable_button_fullscreen;
-			lychee.enable_button_download = data.config_device.enable_button_download;
-			lychee.enable_button_add = data.config_device.enable_button_add;
-			lychee.enable_button_more = data.config_device.enable_button_more;
-			lychee.enable_button_rotate = data.config_device.enable_button_rotate;
-			lychee.enable_close_tab_on_esc = data.config_device.enable_close_tab_on_esc;
-			lychee.enable_tabindex = data.config_device.enable_tabindex;
-			lychee.enable_contextmenu_header = data.config_device.enable_contextmenu_header;
-			lychee.hide_content_during_imgview = data.config_device.hide_content_during_imgview;
-			lychee.device_type = data.config_device.device_type || "desktop"; // we set default as Desktop
-			lychee.nsfw_visible_saved = lychee.nsfw_visible;
-
-			// console.log(lychee.full_photo);
-			lychee.setMode("public");
-		} else {
-			// should not happen.
-		}
-
-		if (isFirstInitialization) {
-			$(window).on("popstate", function () {
-				const autoplay = history.state && history.state.hasOwnProperty("autoplay") ? history.state.autoplay : true;
-				lychee.load(autoplay);
-			});
-			lychee.load();
-		}
-	});
+	);
 };
 
-lychee.login = function (data) {
-	let username = data.username;
-	let password = data.password;
+/**
+ * @param {InitializationData} data
+ * @returns {void}
+ */
+lychee.parseInitializationData = function (data) {
+	lychee.update_json = data.update_json;
+	lychee.update_available = data.update_available;
 
-	if (!username.trim()) {
+	// TODO: Let the backend report the version as a proper object with properties for major, minor and patch level
+	lychee.versionCode = data.config.version;
+	if (lychee.versionCode !== "") {
+		const digits = lychee.versionCode.match(/.{1,2}/g);
+		lychee.version = parseInt(digits[0]).toString() + "." + parseInt(digits[1]).toString() + "." + parseInt(digits[2]).toString();
+	}
+
+	// we copy the locale that exists only.
+	// This ensures forward and backward compatibility.
+	// e.g. if the front localization is unfinished in a language
+	// or if we need to change some locale string
+	for (let key in data.locale) {
+		lychee.locale[key] = data.locale[key];
+	}
+
+	// Check status
+	// 0 = No configuration
+	// 1 = Logged out
+	// 2 = Logged in
+	if (data.status === 2) {
+		// Logged in
+		lychee.parsePublicInitializationData(data);
+		lychee.parseProtectedInitializationData(data);
+
+		lychee.may_upload = data.admin || data.may_upload;
+		lychee.admin = data.admin;
+		lychee.is_locked = data.is_locked;
+		lychee.username = data.username;
+	} else if (data.status === 1) {
+		lychee.parsePublicInitializationData(data);
+	} else {
+		// should not happen.
+	}
+};
+
+/**
+ * Parses the configuration settings which are always available.
+ *
+ * TODO: If configuration management is re-factored on the backend, remember to use proper types in the first place
+ *
+ * @param {InitializationData} data
+ * @returns {void}
+ */
+lychee.parsePublicInitializationData = function (data) {
+	lychee.sorting_photos = data.config.sorting_photos;
+	lychee.sorting_albums = data.config.sorting_albums;
+	lychee.album_subtitle_type = data.config.album_subtitle_type || "oldstyle";
+	lychee.checkForUpdates = data.config.check_for_updates;
+	lychee.layout = Number.parseInt(data.config.layout, 10);
+	if (Number.isNaN(lychee.layout)) lychee.layout = 1;
+	lychee.landing_page_enable = data.config.landing_page_enable === "1";
+	lychee.public_search = data.config.public_search === "1";
+	lychee.image_overlay_type = data.config.image_overlay_type || "exif";
+	lychee.image_overlay_type_default = lychee.image_overlay_type;
+	lychee.map_display = data.config.map_display === "1";
+	lychee.map_display_public = data.config.map_display_public === "1";
+	lychee.map_display_direction = data.config.map_display_direction === "1";
+	lychee.map_provider = data.config.map_provider || "Wikimedia";
+	lychee.map_include_subalbums = data.config.map_include_subalbums === "1";
+	lychee.location_show = data.config.location_show === "1";
+	lychee.location_show_public = data.config.location_show_public === "1";
+	lychee.swipe_tolerance_x = Number.parseInt(data.config.swipe_tolerance_x, 10) || 150;
+	lychee.swipe_tolerance_y = Number.parseInt(data.config.swipe_tolerance_y, 10) || 250;
+
+	lychee.nsfw_visible = data.config.nsfw_visible === "1";
+	lychee.nsfw_visible_saved = lychee.nsfw_visible;
+	lychee.nsfw_blur = data.config.nsfw_blur === "1";
+	lychee.nsfw_warning = data.config.nsfw_warning === "1";
+
+	lychee.header_auto_hide = data.config_device.header_auto_hide;
+	lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
+	lychee.enable_button_visibility = data.config_device.enable_button_visibility;
+	lychee.enable_button_share = data.config_device.enable_button_share;
+	lychee.enable_button_archive = data.config_device.enable_button_archive;
+	lychee.enable_button_move = data.config_device.enable_button_move;
+	lychee.enable_button_trash = data.config_device.enable_button_trash;
+	lychee.enable_button_fullscreen = data.config_device.enable_button_fullscreen;
+	lychee.enable_button_download = data.config_device.enable_button_download;
+	lychee.enable_button_add = data.config_device.enable_button_add;
+	lychee.enable_button_more = data.config_device.enable_button_more;
+	lychee.enable_button_rotate = data.config_device.enable_button_rotate;
+	lychee.enable_close_tab_on_esc = data.config_device.enable_close_tab_on_esc;
+	lychee.enable_tabindex = data.config_device.enable_tabindex;
+	lychee.enable_contextmenu_header = data.config_device.enable_contextmenu_header;
+	lychee.hide_content_during_imgview = data.config_device.hide_content_during_imgview;
+	lychee.device_type = data.config_device.device_type || "desktop"; // we set default as Desktop
+};
+
+/**
+ * Parses the configuration settings which are only available, if a user is authenticated.
+ *
+ * TODO: If configuration management is re-factored on the backend, remember to use proper types in the first place
+ *
+ * @param {InitializationData} data
+ * @returns {void}
+ */
+lychee.parseProtectedInitializationData = function (data) {
+	lychee.dropboxKey = data.config.dropbox_key || "";
+	lychee.location = data.config.location || "";
+	lychee.checkForUpdates = data.config.check_for_updates === "1";
+	lychee.lang = data.config.lang || "";
+	lychee.lang_available = data.config.lang_available || [];
+	lychee.location_decoding = data.config.location_decoding === "1";
+	lychee.default_license = data.config.default_license || "none";
+	lychee.css = data.config.css || "";
+	lychee.full_photo = data.config.full_photo === "1";
+	lychee.downloadable = data.config.downloadable === "1";
+	lychee.public_photos_hidden = data.config.public_photos_hidden === "1";
+	lychee.share_button_visible = data.config.share_button_visible === "1";
+	lychee.delete_imported = data.config.delete_imported === "1";
+	lychee.import_via_symlink = data.config.import_via_symlink === "1";
+	lychee.skip_duplicates = data.config.skip_duplicates === "1";
+	lychee.editor_enabled = data.config.editor_enabled === "1";
+	lychee.new_photos_notification = data.config.new_photos_notification === "1";
+	lychee.upload_processing_limit = Number.parseInt(data.config.upload_processing_limit, 10) || 4;
+};
+
+/**
+ * @param {{username: string, password: string}} data
+ * @returns {void}
+ */
+lychee.login = function (data) {
+	if (!data.username.trim()) {
 		basicModal.error("username");
 		return;
 	}
-	if (!password.trim()) {
+	if (!data.password.trim()) {
 		basicModal.error("password");
 		return;
 	}
 
-	let params = {
-		username,
-		password,
-	};
-
-	api.post("Session::login", params, function (_data) {
-		if (typeof _data === "undefined") {
-			window.location.reload();
-		} else {
-			// Show error and reactive button
-			basicModal.error("password");
+	api.post(
+		"Session::login",
+		data,
+		() => window.location.reload(),
+		null,
+		function (jqXHR) {
+			if (jqXHR.status === 401) {
+				basicModal.error("password");
+				return true;
+			} else {
+				return false;
+			}
 		}
-	});
+	);
 };
 
+/**
+ * @returns {void}
+ */
 lychee.loginDialog = function () {
-	// Make background make unfocusable
+	// Make background unfocusable
 	tabindex.makeUnfocusable(header.dom());
 	tabindex.makeUnfocusable(lychee.content);
 	tabindex.makeUnfocusable(lychee.imageview);
 
-	let msg = lychee.html`
+	const msg = lychee.html`
 			<a class='signInKeyLess' id='signInKeyLess'>${build.iconic("key")}</a>
 			<form>
 				<p class='signIn'>
@@ -392,32 +478,52 @@ lychee.loginDialog = function () {
 			},
 		},
 	});
+
+	// This feels awkward, because this hooks into the modal dialog in some
+	// unpredictable way.
+	// It would be better to have a checkbox for password-less login in the
+	// dialog and then let the action handler of the modal dialog, i.e.
+	// `lychee.login` handle both cases.
+	// TODO: Refactor this.
 	$("#signInKeyLess").on("click", u2f.login);
 
-	if (lychee.checkForUpdates === "1") lychee.getUpdate();
+	if (lychee.checkForUpdates) lychee.getUpdate();
 
-	tabindex.makeFocusable(basicModal.dom());
+	tabindex.makeFocusable($(".basicModal"));
 };
 
+/**
+ * @returns {void}
+ */
 lychee.logout = function () {
-	api.post("Session::logout", {}, function () {
-		window.location.reload();
-	});
+	api.post("Session::logout", {}, () => window.location.reload());
 };
 
+/**
+ * @param {?string} [url=null]
+ * @param {boolean} [autoplay=true]
+ *
+ * @returns {void}
+ */
 lychee.goto = function (url = null, autoplay = true) {
 	url = "#" + (url !== null ? url : "");
 	history.pushState({ autoplay: autoplay }, null, url);
 	lychee.load(autoplay);
 };
 
-lychee.gotoMap = function (albumID = "", autoplay = true) {
+/**
+ * @param {?string} [albumID=null]
+ * @param {boolean} [autoplay=true]
+ *
+ * @returns {void}
+ */
+lychee.gotoMap = function (albumID = null, autoplay = true) {
 	// If map functionality is disabled -> go to album
 	if (!lychee.map_display) {
 		loadingBar.show("error", lychee.locale["ERROR_MAP_DEACTIVATED"]);
 		return;
 	}
-	lychee.goto("map/" + albumID, autoplay);
+	lychee.goto("map/" + (albumID !== null ? albumID : ""), autoplay);
 };
 
 /**
@@ -437,7 +543,7 @@ lychee.gotoMap = function (albumID = "", autoplay = true) {
  * @param {boolean} autoplay indicates whether playback should start
  *                           automatically, if the indicated photo is a video
  *
- * @return {boolean} `true`, if any of the IDs has been in legacy format
+ * @returns {boolean} `true`, if any of the IDs has been in legacy format
  *                   and an asynchronous reloading has been scheduled
  */
 lychee.reloadIfLegacyIDs = function (albumID, photoID, autoplay) {
@@ -447,7 +553,7 @@ lychee.reloadIfLegacyIDs = function (albumID, photoID, autoplay) {
 		// have 24 digits, because these could also be modern IDs.
 		// A modern IDs is a 24 character long, base64 encoded value and thus
 		// could also match 24 digits by accident.
-		return id && id.length !== 24 && parseInt(id).toString() === id;
+		return id && id.length !== 24 && parseInt(id, 10).toString() === id;
 	};
 
 	if (!isLegacyID(albumID) && !isLegacyID(photoID)) {
@@ -461,7 +567,7 @@ lychee.reloadIfLegacyIDs = function (albumID, photoID, autoplay) {
 	 * @param {?string} newAlbumID
 	 * @param {?string} newPhotoID
 	 *
-	 * @return void
+	 * @returns {void}
 	 */
 	const reloadWithNewIDs = function (newAlbumID, newPhotoID) {
 		let newUrl = "";
@@ -477,8 +583,8 @@ lychee.reloadIfLegacyIDs = function (albumID, photoID, autoplay) {
 	//  2. only the album ID needs to be translated
 	//  3. only the photo ID needs to be translated
 	let params = {};
-	if (isLegacyID(albumID)) params.albumID = albumID;
-	if (isLegacyID(photoID)) params.photoID = photoID;
+	if (isLegacyID(albumID)) params.albumID = parseInt(albumID, 10);
+	if (isLegacyID(photoID)) params.photoID = parseInt(photoID, 10);
 	api.post("Legacy::translateLegacyModelIDs", params, function (data) {
 		reloadWithNewIDs(data.hasOwnProperty("albumID") ? data.albumID : albumID, data.hasOwnProperty("photoID") ? data.photoID : photoID);
 	});
@@ -486,6 +592,10 @@ lychee.reloadIfLegacyIDs = function (albumID, photoID, autoplay) {
 	return true;
 };
 
+/**
+ * @param {boolean} [autoplay=true]
+ * @returns {void}
+ */
 lychee.load = function (autoplay = true) {
 	let hash = document.location.hash.replace("#", "").split("/");
 	let albumID = hash[0];
@@ -526,7 +636,7 @@ lychee.load = function (autoplay = true) {
 				// do nothing on "only space" search strings
 				return;
 			}
-			// If public search is diabled -> do nothing
+			// If public search is disabled -> do nothing
 			if (lychee.publicMode === true && !lychee.public_search) {
 				loadingBar.show("error", lychee.locale["ERROR_SEARCH_DEACTIVATED"]);
 				return;
@@ -547,27 +657,43 @@ lychee.load = function (autoplay = true) {
 			// Trash data
 			photo.json = null;
 
-			// Show Photo
+			/**
+			 * @param {boolean} isParentAlbumAccessible
+			 * @returns {void}
+			 */
+			const loadPhoto = function (isParentAlbumAccessible) {
+				if (!isParentAlbumAccessible) {
+					lychee.setMode("view");
+				}
+				photo.load(photoID, albumID, autoplay);
+
+				// Make imageview focusable
+				tabindex.makeFocusable(lychee.imageview);
+
+				// Make thumbnails unfocusable and store which element had focus
+				tabindex.makeUnfocusable(lychee.content, true);
+
+				// hide contentview if requested
+				if (lychee.hide_content_during_imgview) lychee.content.hide();
+
+				lychee.footer_hide();
+			};
+
+			// Load Photo
+			// If we don't have an album or the wrong album load the album
+			// first and let the album loader load the photo afterwards or
+			// load the photo directly.
 			if (
 				lychee.content.html() === "" ||
-				album.json == null ||
+				album.json === null ||
+				album.json.id !== albumID ||
 				(header.dom(".header__search").length && header.dom(".header__search").val().length !== 0)
 			) {
 				lychee.content.hide();
-				album.load(albumID, true);
+				album.load(albumID, loadPhoto);
+			} else {
+				loadPhoto(true);
 			}
-			photo.load(photoID, albumID, autoplay);
-
-			// Make imageview focussable
-			tabindex.makeFocusable(lychee.imageview);
-
-			// Make thumbnails unfocusable and store which element had focus
-			tabindex.makeUnfocusable(lychee.content, true);
-
-			// hide contentview if requested
-			if (lychee.hide_content_during_imgview) lychee.content.hide();
-
-			lychee.footer_hide();
 		}
 	} else if (albumID) {
 		if (albumID === "map") {
@@ -604,12 +730,15 @@ lychee.load = function (autoplay = true) {
 				tabindex.makeUnfocusable(lychee.imageview);
 			}
 			if (visible.mapview()) mapview.close();
-			if (visible.sidebar() && album.isSmartID(albumID)) sidebar.toggle(false);
+			if (visible.sidebar() && (album.isSmartID(albumID) || album.isSearchID(albumID))) sidebar.toggle(false);
 			$("#sensitive_warning").hide();
 			if (album.json && albumID === album.json.id) {
 				view.album.title();
 				lychee.content.show();
 				tabindex.makeFocusable(lychee.content, true);
+				// If the album was loaded in the background (when content is
+				// hidden), scrolling may not have worked.
+				view.album.content.restoreScroll();
 			} else {
 				album.load(albumID);
 			}
@@ -617,13 +746,9 @@ lychee.load = function (autoplay = true) {
 		}
 	} else {
 		$(".no_content").remove();
-		// Trash albums.json when filled with search results
-		if (search.hash != null) {
-			albums.json = null;
-			search.hash = null;
-		}
 
 		// Trash data
+		search.json = null;
 		album.json = null;
 		photo.json = null;
 
@@ -643,6 +768,9 @@ lychee.load = function (autoplay = true) {
 	}
 };
 
+/**
+ * @returns {void}
+ */
 lychee.getUpdate = function () {
 	// console.log(lychee.update_available);
 	// console.log(lychee.update_json);
@@ -652,6 +780,9 @@ lychee.getUpdate = function () {
 			$(".version span").show();
 		}
 	} else {
+		/**
+		 * @param {{lychee: {version: number}}} data
+		 */
 		const success = function (data) {
 			if (data.lychee.version > parseInt(lychee.versionCode)) $(".version span").show();
 		};
@@ -663,17 +794,27 @@ lychee.getUpdate = function () {
 	}
 };
 
-lychee.setTitle = function (title, editable) {
-	if (lychee.title === title) {
-		document.title = lychee.title + " - " + lychee.locale["ALBUMS"];
-	} else {
-		document.title = lychee.title + " - " + title;
-	}
-
+/**
+ * Sets the title of the browser window and the title shown in the header bar.
+ *
+ * The window title is prefixed by the value of the configuration setting
+ * `lychee.title`.
+ *
+ * If both, the prefix `lychee.title` and the given title, are not empty,
+ * they are seperated by an en-dash.
+ *
+ * @param {string} [title=""]
+ * @param {boolean} [editable=false]
+ */
+lychee.setTitle = function (title = "", editable = false) {
+	document.title = lychee.title + (lychee.title && title ? " – " : "") + title;
 	header.setEditable(editable);
 	header.setTitle(title);
 };
 
+/**
+ * @param {string} mode - one out of: `public`, `view`, `logged_in`
+ */
 lychee.setMode = function (mode) {
 	if (lychee.is_locked) {
 		$("#button_settings_open").remove();
@@ -702,7 +843,8 @@ lychee.setMode = function (mode) {
 	}
 
 	if (mode === "logged_in") {
-		// we are logged in, we do not need that short cut anymore. :)
+		// After login the keyboard short-cuts to login by password (l) and
+		// by key (k) are not required anymore, so we unbind them.
 		Mousetrap.unbind(["l"]).unbind(["k"]);
 
 		// The code searches by class, so remove the other instance.
@@ -737,43 +879,53 @@ lychee.setMode = function (mode) {
 	header.bind_back();
 };
 
+/**
+ * @param {jQuery} obj
+ * @param {string} animation
+ *
+ * @returns {void}
+ */
 lychee.animate = function (obj, animation) {
-	let animations = [
+	const animations = [
 		["fadeIn", "fadeOut"],
 		["contentZoomIn", "contentZoomOut"],
 	];
 
-	if (!obj.jQuery) obj = $(obj);
-
 	for (let i = 0; i < animations.length; i++) {
 		for (let x = 0; x < animations[i].length; x++) {
-			if (animations[i][x] == animation) {
+			if (animations[i][x] === animation) {
 				obj.removeClass(animations[i][0] + " " + animations[i][1]).addClass(animation);
-				return true;
+				return;
 			}
 		}
 	}
-
-	return false;
 };
 
-lychee.retinize = function (path = "") {
-	let extention = path.split(".").pop();
-	let isPhoto = extention !== "svg";
+/**
+ * @callback DropboxLoadedCB
+ * @returns {void}
+ */
 
-	if (isPhoto === true) {
-		path = path.replace(/\.[^/.]+$/, "");
-		path = path + "@2x" + "." + extention;
+/**
+ * Ensures that the Dropbox Chooser JS component is loaded and calls the
+ * provided callback after loading.
+ *
+ * See {@link Dropbox}
+ *
+ * @param {DropboxLoadedCB} callback
+ */
+lychee.loadDropbox = function (callback) {
+	if (!lychee.dropboxKey) {
+		loadingBar.show("error", lychee.locale["ERROR_DROPBOX_KEY"]);
+		return;
 	}
 
-	return {
-		path,
-		isPhoto,
-	};
-};
-
-lychee.loadDropbox = function (callback) {
-	if (lychee.dropbox === false && lychee.dropboxKey != null && lychee.dropboxKey !== "") {
+	// If the dropbox component has already been loaded, immediately call
+	// the callback; otherwise load the component first and call callback
+	// on success.
+	if (lychee.dropbox) {
+		callback();
+	} else {
 		loadingBar.show();
 
 		let g = document.createElement("script");
@@ -782,7 +934,7 @@ lychee.loadDropbox = function (callback) {
 		g.src = "https://www.dropbox.com/static/api/1/dropins.js";
 		g.id = "dropboxjs";
 		g.type = "text/javascript";
-		g.async = "true";
+		g.async = true;
 		g.setAttribute("data-app-key", lychee.dropboxKey);
 		g.onload = g.onreadystatechange = function () {
 			let rs = this.readyState;
@@ -792,13 +944,12 @@ lychee.loadDropbox = function (callback) {
 			callback();
 		};
 		s.parentNode.insertBefore(g, s);
-	} else if (lychee.dropbox === true && lychee.dropboxKey != null && lychee.dropboxKey !== "") {
-		callback();
-	} else {
-		settings.setDropboxKey(callback);
 	}
 };
 
+/**
+ * @returns {string}
+ */
 lychee.getEventName = function () {
 	if (lychee.device_type === "mobile") {
 		return "touchend";
@@ -806,6 +957,18 @@ lychee.getEventName = function () {
 	return "click";
 };
 
+/**
+ * DON'T USE THIS METHOD.
+ *
+ * TODO: Find all invocations of this method and nuke them.
+ *
+ * This method does not cover all potentially dangerous characters and this
+ * method should not be required on the first place.
+ * jQuery and even native JS has better methods for this in the year 2022!
+ *
+ * @param {string} [html=""]
+ * @returns {string}
+ */
 lychee.escapeHTML = function (html = "") {
 	// Ensure that html is a string
 	html += "";
@@ -822,6 +985,20 @@ lychee.escapeHTML = function (html = "") {
 	return html;
 };
 
+/**
+ * Creates a HTML string with some fancy variable substitution.
+ *
+ * Actually, this method should not be required in the year 2022.
+ * jQuery and even native JS should probably provide a suitable alternative.
+ * But this method is used so ubiquitous that it might be difficult to get
+ * rid of it.
+ *
+ * TODO: Try it nonetheless.
+ *
+ * @param literalSections
+ * @param substs
+ * @returns {string}
+ */
 lychee.html = function (literalSections, ...substs) {
 	// Use raw literal sections: we don’t want
 	// backslashes (\n etc.) to be interpreted
@@ -852,23 +1029,34 @@ lychee.html = function (literalSections, ...substs) {
 	return result;
 };
 
-lychee.error = function (errorThrown, params = "", data = "") {
-	loadingBar.show("error", errorThrown);
-
-	if (errorThrown === "Session timed out.") {
+/**
+ * @param {XMLHttpRequest} jqXHR
+ * @param {Object} params the original JSON parameters of the request
+ * @param {?LycheeException} lycheeException the Lychee Exception
+ * @returns {boolean}
+ */
+lychee.handleAPIError = function (jqXHR, params, lycheeException) {
+	if (api.hasSessionExpired(jqXHR, lycheeException)) {
+		loadingBar.show("error", lychee.locale["ERROR_SESSION"]);
 		setTimeout(() => {
 			lychee.goto();
 			window.location.reload();
 		}, 3000);
 	} else {
-		console.error({
-			description: errorThrown,
+		const msg = jqXHR.statusText + (lycheeException ? " - " + lycheeException.message : "");
+		loadingBar.show("error", msg);
+		console.error("The server returned an error response", {
+			description: msg,
 			params: params,
-			response: data,
+			response: lycheeException,
 		});
 	}
+	return true;
 };
 
+/**
+ * @returns {void}
+ */
 lychee.fullscreenEnter = function () {
 	let elem = document.documentElement;
 	if (elem.requestFullscreen) {
@@ -885,6 +1073,9 @@ lychee.fullscreenEnter = function () {
 	}
 };
 
+/**
+ * @returns {void}
+ */
 lychee.fullscreenExit = function () {
 	if (document.exitFullscreen) {
 		document.exitFullscreen();
@@ -900,6 +1091,9 @@ lychee.fullscreenExit = function () {
 	}
 };
 
+/**
+ * @returns {void}
+ */
 lychee.fullscreenToggle = function () {
 	if (lychee.fullscreenStatus()) {
 		lychee.fullscreenExit();
@@ -908,15 +1102,24 @@ lychee.fullscreenToggle = function () {
 	}
 };
 
+/**
+ * @returns {boolean}
+ */
 lychee.fullscreenStatus = function () {
 	let elem = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
-	return elem ? true : false;
+	return !!elem;
 };
 
+/**
+ * @returns {boolean}
+ */
 lychee.fullscreenAvailable = function () {
 	return document.fullscreenEnabled || document.mozFullscreenEnabled || document.webkitFullscreenEnabled || document.msFullscreenEnabled;
 };
 
+/**
+ * @returns {void}
+ */
 lychee.fullscreenUpdate = function () {
 	if (lychee.fullscreenStatus()) {
 		$("#button_fs_album_enter,#button_fs_enter").hide();
@@ -927,18 +1130,30 @@ lychee.fullscreenUpdate = function () {
 	}
 };
 
+/**
+ * @returns {void}
+ */
 lychee.footer_show = function () {
 	setTimeout(function () {
 		lychee.footer.removeClass("hide_footer");
 	}, 200);
 };
 
+/**
+ * @returns {void}
+ */
 lychee.footer_hide = function () {
 	lychee.footer.addClass("hide_footer");
 };
 
-// Because the height of the footer can vary, we need to set some
-// dimensions dynamically, at startup.
+/**
+ * Sets the height of the content area.
+ *
+ * Because the height of the footer can vary, we need to set some
+ * dimensions dynamically, at startup.
+ *
+ * @returns {void}
+ */
 lychee.adjustContentHeight = function () {
 	if (lychee.footer.length > 0) {
 		lychee.content.css(
@@ -957,6 +1172,9 @@ lychee.adjustContentHeight = function () {
 	}
 };
 
+/**
+ * @returns {string}
+ */
 lychee.getBaseUrl = function () {
 	if (location.href.includes("index.html")) {
 		return location.href.replace("index.html" + location.hash, "");
@@ -967,51 +1185,76 @@ lychee.getBaseUrl = function () {
 	}
 };
 
-// Copied from https://github.com/feross/clipboard-copy/blob/9eba597c774feed48301fef689099599d612387c/index.js
-lychee.clipboardCopy = function (text) {
-	// Use the Async Clipboard API when available. Requires a secure browsing
-	// context (i.e. HTTPS)
-	if (navigator.clipboard) {
-		return navigator.clipboard.writeText(text).catch(function (err) {
-			throw err !== undefined ? err : new DOMException("The request is not allowed", "NotAllowedError");
-		});
+/**
+ * drag album to another one
+ * @param {DragEvent} ev
+ * @returns {void}
+ */
+lychee.startDrag = function (ev) {
+	/** @type ?HTMLDivElement */
+	const div = ev.target.closest("div.album,div.photo");
+	if (!div) return;
+	const type = div.classList.contains("album") ? "album" : "photo";
+	ev.dataTransfer.setData("text/plain", `${type}-${div.dataset.id}`);
+};
+
+/**
+ * drop album
+ * @param {DragEvent} ev
+ * @returns {void}
+ */
+lychee.finishDrag = function (ev) {
+	ev.preventDefault();
+
+	/** @type string */
+	const data = ev.dataTransfer.getData("text/plain");
+	/** @type string */
+	let targetId = ev.target.closest("div.album").dataset.id;
+	if (!targetId || data.substring(6) === targetId) return;
+
+	if (data.startsWith("photo-")) {
+		// photo is dragged
+		contextMenu.photoDrop(data.substring(6), targetId, ev);
+	} else {
+		// album is dragged
+		contextMenu.albumDrop(data.substring(6), targetId, ev);
 	}
+};
 
-	// ...Otherwise, use document.execCommand() fallback
-
-	// Put the text to copy into a <span>
-	let span = document.createElement("span");
-	span.textContent = text;
-
-	// Preserve consecutive spaces and newlines
-	span.style.whiteSpace = "pre";
-
-	// Add the <span> to the page
-	document.body.appendChild(span);
-
-	// Make a selection object representing the range of text selected by the user
-	let selection = window.getSelection();
-	let range = window.document.createRange();
-	selection.removeAllRanges();
-	range.selectNode(span);
-	selection.addRange(range);
-
-	// Copy text to the clipboard
-	let success = false;
-
-	try {
-		success = window.document.execCommand("copy");
-	} catch (err) {
-		console.log("error", err);
+/**
+ * Album drag-over callback
+ * @param {DragEvent} ev
+ * @returns {void}
+ */
+lychee.overDrag = function (ev) {
+	ev.preventDefault();
+	/** @type ?HTMLDivElement */
+	let div = ev.target.closest("div.album");
+	if (div) {
+		div.classList.add("album__dragover");
 	}
+};
 
-	// Cleanup
-	selection.removeAllRanges();
-	window.document.body.removeChild(span);
+/**
+ * Album drag-leave callback
+ * @param {DragEvent} ev
+ * @returns {void}
+ */
+lychee.leaveDrag = function (ev) {
+	/** @type ?HTMLDivElement */
+	const div = ev.target.closest("div.album");
+	if (div) {
+		div.classList.remove("album__dragover");
+	}
+};
 
-	return success;
-	// ? Promise.resolve()
-	// : Promise.reject(new DOMException('The request is not allowed', 'NotAllowedError'))
+/**
+ * drag-end callback
+ * @param {DragEvent} ev
+ * @returns {void}
+ */
+lychee.endDrag = function (ev) {
+	$("div.album").removeClass("album__dragover");
 };
 
 lychee.markdown = function (description) {

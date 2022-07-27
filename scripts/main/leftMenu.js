@@ -2,17 +2,29 @@
  * @description This module is used for the context menu.
  */
 
-let leftMenu = {
+/**
+ * @namespace
+ * @property {jQuery} _dom
+ */
+const leftMenu = {
 	_dom: $(".leftMenu"),
 };
 
+/**
+ * @param {?string} [selector=null]
+ * @returns {jQuery}
+ */
 leftMenu.dom = function (selector) {
 	if (selector == null || selector === "") return leftMenu._dom;
 	return leftMenu._dom.find(selector);
 };
 
-// Note: on mobile we use a context menu instead; please make sure that
-// contextMenu.config is kept in sync with any changes here!
+/**
+ * Note: on mobile we use a context menu instead; please make sure that
+ * contextMenu.config is kept in sync with any changes here!
+ *
+ * @returns {void}
+ */
 leftMenu.build = function () {
 	let html = lychee.html`
 		<a id="text_settings_close" class="closetxt" data-tabindex="-1">${lychee.locale["CLOSE"]}</a>
@@ -40,7 +52,10 @@ leftMenu.build = function () {
 	leftMenu._dom.html(html);
 };
 
-/* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
+/** Set the width of the side navigation to 250px and the left margin of the page content to 250px
+ *
+ * @returns {void}
+ */
 leftMenu.open = function () {
 	leftMenu._dom.addClass("leftMenu__visible");
 	lychee.content.addClass("leftMenu__open");
@@ -57,7 +72,11 @@ leftMenu.open = function () {
 	multiselect.unbind();
 };
 
-/* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
+/**
+ * Set the width of the side navigation to 0 and the left margin of the page content to 0
+ *
+ * @returns {void}
+ */
 leftMenu.close = function () {
 	leftMenu._dom.removeClass("leftMenu__visible");
 	lychee.content.removeClass("leftMenu__open");
@@ -74,6 +93,9 @@ leftMenu.close = function () {
 	lychee.load();
 };
 
+/**
+ * @returns {void}
+ */
 leftMenu.bind = function () {
 	// Event Name
 	let eventName = lychee.getEventName();
@@ -90,34 +112,53 @@ leftMenu.bind = function () {
 	leftMenu.dom("#button_u2f").on(eventName, leftMenu.u2f);
 	leftMenu.dom("#button_sharing").on(eventName, leftMenu.Sharing);
 	leftMenu.dom("#button_update").on(eventName, leftMenu.Update);
-
-	return true;
 };
 
+/**
+ * @returns {void}
+ */
 leftMenu.Logs = function () {
 	view.logs.init();
 };
 
+/**
+ * @returns {void}
+ */
 leftMenu.Diagnostics = function () {
 	view.diagnostics.init();
 };
 
+/**
+ * @returns {void}
+ */
 leftMenu.Update = function () {
 	view.update.init();
 };
 
+/**
+ * @returns {void}
+ */
 leftMenu.Notifications = function () {
 	notifications.load();
 };
 
+/**
+ * @returns {void}
+ */
 leftMenu.Users = function () {
 	users.list();
 };
 
+/**
+ * @returns {void}
+ */
 leftMenu.u2f = function () {
 	u2f.list();
 };
 
+/**
+ * @returns {void}
+ */
 leftMenu.Sharing = function () {
 	sharing.list();
 };

@@ -51,7 +51,7 @@
 
 // restrict hover features to devices that support it
 @media (hover: hover) {
-	.basicContext__item--noHover:hover &__data {
+	.basicContext__item--noHover:hover .basicContext__data {
 		background: none !important;
 	}
 }

@@ -594,7 +594,8 @@
 			}
 		}
 
-		.album:hover {
+		.album:hover,
+		.album__dragover {
 			.thumbimg:nth-child(1),
 			.thumbimg:nth-child(2) {
 				opacity: 1;

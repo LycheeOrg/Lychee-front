@@ -74,7 +74,7 @@ NO_COLOR="\033[0m"
 GREEN="\033[38;5;010m"
 YELLOW="\033[38;5;011m"
 
-echo "\n${GREEN}pre commit hook start${NO_COLOR}\n"
+printf "\n${GREEN}pre commit hook start${NO_COLOR}\n"
 
 PRETTIER="./node_modules/prettier/bin-prettier.js"
 
@@ -85,13 +85,13 @@ if [ -x "$PRETTIER" ]; then
     done
 else
     echo ""
-    echo "${YELLOW}Please install prettier, e.g.:${NO_COLOR}"
+    printf "${YELLOW}Please install prettier, e.g.:${NO_COLOR}"
     echo ""
     echo "  npm install"
     echo ""
 fi
 
-echo "\n${GREEN}pre commit hook finish${NO_COLOR}\n"
+printf "\n${GREEN}pre commit hook finish${NO_COLOR}\n"
 ```
 
 This can easily be installed by doing:

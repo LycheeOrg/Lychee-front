@@ -2,23 +2,26 @@
  * @description This module is used for the context menu.
  */
 
-let contextMenu = {};
+const contextMenu = {};
 
+/**
+ * @param {jQuery.Event} e
+ */
 contextMenu.add = function (e) {
 	let items = [
 		{ title: build.iconic("image") + lychee.locale["UPLOAD_PHOTO"], fn: () => $("#upload_files").click() },
 		{},
-		{ title: build.iconic("link-intact") + lychee.locale["IMPORT_LINK"], fn: upload.start.url },
-		{ title: build.iconic("dropbox", "ionicons") + lychee.locale["IMPORT_DROPBOX"], fn: upload.start.dropbox },
-		{ title: build.iconic("terminal") + lychee.locale["IMPORT_SERVER"], fn: upload.start.server },
+		{ title: build.iconic("link-intact") + lychee.locale["IMPORT_LINK"], fn: () => upload.start.url() },
+		{ title: build.iconic("dropbox", "ionicons") + lychee.locale["IMPORT_DROPBOX"], fn: () => upload.start.dropbox() },
+		{ title: build.iconic("terminal") + lychee.locale["IMPORT_SERVER"], fn: () => upload.start.server() },
 		{},
-		{ title: build.iconic("folder") + lychee.locale["NEW_ALBUM"], fn: album.add },
+		{ title: build.iconic("folder") + lychee.locale["NEW_ALBUM"], fn: () => album.add() },
 	];
 
 	if (visible.albums()) {
-		items.push({ title: build.iconic("tags") + lychee.locale["NEW_TAG_ALBUM"], fn: album.addByTags });
-	} else if (album.isSmartID(album.getID())) {
-		// remove Import and New album if smart album
+		items.push({ title: build.iconic("tags") + lychee.locale["NEW_TAG_ALBUM"], fn: () => album.addByTags() });
+	} else if (album.isSmartID(album.getID()) || album.isSearchID(album.getID())) {
+		// remove Import and New album if smart album or search results
 		items.splice(1);
 	}
 
@@ -37,14 +40,14 @@ contextMenu.add = function (e) {
 			// For tag albums the context menu is normally not used.
 			items = [];
 		}
-		if (albumID.length === 24 || albumID === "unsorted") {
-			if (albumID !== "unsorted") {
+		if (albumID.length === 24 || albumID === SmartAlbumID.UNSORTED) {
+			if (albumID !== SmartAlbumID.UNSORTED) {
 				let button_visibility_album = $("#button_visibility_album");
 				if (button_visibility_album && button_visibility_album.css("display") === "none") {
 					items.unshift({
 						title: build.iconic("eye") + lychee.locale["VISIBILITY_ALBUM"],
 						visible: lychee.enable_button_visibility,
-						fn: (event) => album.setPublic(albumID, event),
+						fn: () => album.setProtectionPolicy(albumID),
 					});
 				}
 			}
@@ -56,7 +59,7 @@ contextMenu.add = function (e) {
 					fn: () => album.delete([albumID]),
 				});
 			}
-			if (albumID !== "unsorted") {
+			if (albumID !== SmartAlbumID.UNSORTED) {
 				if (!album.isTagAlbum()) {
 					let button_move_album = $("#button_move_album");
 					if (button_move_album && button_move_album.css("display") === "none") {
@@ -72,8 +75,15 @@ contextMenu.add = function (e) {
 					items.unshift({
 						title: build.iconic("warning") + lychee.locale["ALBUM_MARK_NSFW"],
 						visible: true,
-						fn: () => album.setNSFW(albumID),
+						fn: () => album.toggleNSFW(),
 					});
+				}
+			}
+			if (!album.isSmartID(albumID) && lychee.map_display) {
+				// display track add button if it's a regular album
+				items.push({}, { title: build.iconic("location") + lychee.locale["UPLOAD_TRACK"], fn: () => $("#upload_track_file").click() });
+				if (album.json.track_url) {
+					items.push({ title: build.iconic("trash") + lychee.locale["DELETE_TRACK"], fn: album.deleteTrack });
 				}
 			}
 		}
@@ -84,23 +94,26 @@ contextMenu.add = function (e) {
 	upload.notify();
 };
 
+/**
+ * @param {string} albumID
+ * @param {jQuery.Event} e
+ *
+ * @returns {void}
+ */
 contextMenu.album = function (albumID, e) {
 	// Notice for 'Merge':
 	// fn must call basicContext.close() first,
 	// in order to keep the selection
 
-	if (album.isSmartID(albumID)) return false;
+	if (album.isSmartID(albumID) || album.isSearchID(albumID)) return;
 
-	// Show merge-item when there's more than one album
-	// Commented out because it doesn't consider subalbums or shared albums.
-	// let showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1);
-	let showMerge = true;
+	const showMergeMove = !albums.isTagAlbum(albumID);
 
-	let items = [
+	const items = [
 		{ title: build.iconic("pencil") + lychee.locale["RENAME"], fn: () => album.setTitle([albumID]) },
 		{
 			title: build.iconic("collapse-left") + lychee.locale["MERGE"],
-			visible: showMerge,
+			visible: showMergeMove,
 			fn: () => {
 				basicContext.close();
 				contextMenu.move([albumID], e, album.merge, "ROOT", false);
@@ -108,7 +121,7 @@ contextMenu.album = function (albumID, e) {
 		},
 		{
 			title: build.iconic("folder") + lychee.locale["MOVE"],
-			visible: lychee.sub_albums,
+			visible: showMergeMove,
 			fn: () => {
 				basicContext.close();
 				contextMenu.move([albumID], e, album.setAlbum, "ROOT");
@@ -120,7 +133,7 @@ contextMenu.album = function (albumID, e) {
 
 	if (visible.album()) {
 		// not top level
-		let myalbum = album.getSubByID(albumID);
+		const myalbum = album.getSubByID(albumID);
 		if (myalbum.thumb.id) {
 			let coverActive = myalbum.thumb.id === album.json.cover_id;
 			// prepend context menu item
@@ -136,23 +149,56 @@ contextMenu.album = function (albumID, e) {
 	basicContext.show(items, e.originalEvent, contextMenu.close);
 };
 
+/**
+ * Handles drop event of an album onto an album and shows context menu to let the user pick the actions.
+ *
+ * @param {string} sourceAlbumID source album (which is being dragged)
+ * @param {string} targetAlbumID target album (where it is dropped)
+ * @param {DragEvent} e
+ *
+ * @returns {void}
+ */
+contextMenu.albumDrop = function (sourceAlbumID, targetAlbumID, e) {
+	const items = [
+		{
+			title: build.iconic("collapse-left") + lychee.locale["MERGE"],
+			fn: () => {
+				album.merge([sourceAlbumID], targetAlbumID);
+			},
+		},
+		{
+			title: build.iconic("folder") + lychee.locale["MOVE"],
+			visible: true,
+			fn: () => {
+				basicContext.close();
+				album.setAlbum([sourceAlbumID], targetAlbumID);
+			},
+		},
+	];
+
+	basicContext.show(items, e, contextMenu.close);
+};
+
+/**
+ * @param {string[]} albumIDs
+ * @param {jQuery.Event} e
+ *
+ * @returns {void}
+ */
 contextMenu.albumMulti = function (albumIDs, e) {
 	multiselect.stopResize();
 
 	// Automatically merge selected albums when albumIDs contains more than one album
 	// Show list of albums otherwise
-	let autoMerge = albumIDs.length > 1;
+	const autoMerge = albumIDs.length > 1;
 
-	// Show merge-item when there's more than one album
-	// Commented out because it doesn't consider subalbums or shared albums.
-	// let showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1);
-	let showMerge = true;
+	const showMergeMove = albumIDs.every((albumID) => !albums.isTagAlbum(albumID));
 
 	let items = [
 		{ title: build.iconic("pencil") + lychee.locale["RENAME_ALL"], fn: () => album.setTitle(albumIDs) },
 		{
 			title: build.iconic("collapse-left") + lychee.locale["MERGE_ALL"],
-			visible: showMerge && autoMerge,
+			visible: showMergeMove && autoMerge,
 			fn: () => {
 				let albumID = albumIDs.shift();
 				album.merge(albumIDs, albumID);
@@ -160,7 +206,7 @@ contextMenu.albumMulti = function (albumIDs, e) {
 		},
 		{
 			title: build.iconic("collapse-left") + lychee.locale["MERGE"],
-			visible: showMerge && !autoMerge,
+			visible: showMergeMove && !autoMerge,
 			fn: () => {
 				basicContext.close();
 				contextMenu.move(albumIDs, e, album.merge, "ROOT", false);
@@ -168,7 +214,7 @@ contextMenu.albumMulti = function (albumIDs, e) {
 		},
 		{
 			title: build.iconic("folder") + lychee.locale["MOVE_ALL"],
-			visible: lychee.sub_albums,
+			visible: showMergeMove,
 			fn: () => {
 				basicContext.close();
 				contextMenu.move(albumIDs, e, album.setAlbum, "ROOT");
@@ -181,88 +227,104 @@ contextMenu.albumMulti = function (albumIDs, e) {
 	basicContext.show(items, e.originalEvent, contextMenu.close);
 };
 
-contextMenu.buildList = function (lists, exclude, action, parent = 0, layer = 0) {
-	const find = function (excl, id) {
-		for (let i = 0; i < excl.length; i++) {
-			if (excl[i] === id) return true;
-		}
-		return false;
-	};
+/**
+ * @callback ContextMenuActionCB
+ *
+ * @param {(Photo|Album)} entity
+ */
 
+/**
+ * @callback ContextMenuEventCB
+ *
+ * @param {jQuery.Event} [e]
+ * @returns {void}
+ */
+
+/**
+ * @param {(Photo|Album)[]} lists
+ * @param {string[]} exclude list of IDs to exclude
+ * @param {ContextMenuActionCB} action
+ * @param {?string} [parentID=null] parentID
+ * @param {number} [layer=0]
+ *
+ * @returns {{title: string, disabled: boolean, fn: ContextMenuEventCB}[]}
+ */
+contextMenu.buildList = function (lists, exclude, action, parentID = null, layer = 0) {
 	let items = [];
 
-	let i = 0;
-	while (i < lists.length) {
-		if ((layer === 0 && !lists[i].parent_id) || lists[i].parent_id === parent) {
-			let item = lists[i];
+	lists.forEach(function (item) {
+		if ((layer !== 0 || item.parent_id) && item.parent_id !== parentID) return;
 
-			let thumb = "img/no_cover.svg";
-			if (item.thumb && item.thumb.thumb) {
-				if (item.thumb.thumb === "uploads/thumb/") {
-					if (item.thumb.type && item.thumb.type.indexOf("video") > -1) {
-						thumb = "img/play-icon.png";
-					}
-				} else {
-					thumb = item.thumb.thumb;
+		let thumb = "img/no_cover.svg";
+		if (item.thumb && item.thumb.thumb) {
+			if (item.thumb.thumb === "uploads/thumb/") {
+				if (item.thumb.type && item.thumb.type.indexOf("video") > -1) {
+					thumb = "img/play-icon.png";
 				}
-			} else if (item.size_variants) {
-				if (item.size_variants.thumb === null) {
-					if (item.type && item.type.indexOf("video") > -1) {
-						thumb = "img/play-icon.png";
-					}
-				} else {
-					thumb = item.size_variants.thumb.url;
-				}
+			} else {
+				thumb = item.thumb.thumb;
 			}
+		} else if (item.size_variants) {
+			if (item.size_variants.thumb === null) {
+				if (item.type && item.type.indexOf("video") > -1) {
+					thumb = "img/play-icon.png";
+				}
+			} else {
+				thumb = item.size_variants.thumb.url;
+			}
+		}
 
-			if (item.title === "") item.title = lychee.locale["UNTITLED"];
+		if (!item.title) item.title = lychee.locale["UNTITLED"];
 
-			let prefix = layer > 0 ? "&nbsp;&nbsp;".repeat(layer - 1) + "└ " : "";
+		let prefix = layer > 0 ? "&nbsp;&nbsp;".repeat(layer - 1) + "└ " : "";
 
-			let html = lychee.html`
+		let html = lychee.html`
 			           ${prefix}
-			           <img class='cover' width='16' height='16' src='${thumb}'>
+			           <img class='cover' width='16' height='16' src='${thumb}' alt="thumbnail">
 			           <div class='title'>$${item.title}</div>
 			           `;
 
-			items.push({
-				title: html,
-				disabled: find(exclude, item.id),
-				fn: () => action(item),
-			});
+		items.push({
+			title: html,
+			disabled: exclude.findIndex((id) => id === item.id) !== -1,
+			fn: () => action(item),
+		});
 
-			if (item.albums && item.albums.length > 0) {
-				items = items.concat(contextMenu.buildList(item.albums, exclude, action, item.id, layer + 1));
-			} else {
-				// Fallback for flat tree representation.  Should not be
-				// needed anymore but shouldn't hurt either.
-				items = items.concat(contextMenu.buildList(lists, exclude, action, item.id, layer + 1));
-			}
+		if (item.albums && item.albums.length > 0) {
+			items = items.concat(contextMenu.buildList(item.albums, exclude, action, item.id, layer + 1));
+		} else {
+			// Fallback for flat tree representation.  Should not be
+			// needed anymore but shouldn't hurt either.
+			items = items.concat(contextMenu.buildList(lists, exclude, action, item.id, layer + 1));
 		}
-
-		i++;
-	}
+	});
 
 	return items;
 };
 
+/**
+ * @param {?string} albumID
+ * @param {jQuery.Event} e
+ *
+ * @returns {void}
+ */
 contextMenu.albumTitle = function (albumID, e) {
 	api.post("Albums::tree", {}, function (data) {
 		let items = [];
 
-		items = items.concat({ title: lychee.locale["ROOT"], disabled: albumID === false, fn: () => lychee.goto() });
+		items = items.concat({ title: lychee.locale["ROOT"], disabled: albumID === null, fn: () => lychee.goto() });
 
 		if (data.albums && data.albums.length > 0) {
 			items = items.concat({});
-			items = items.concat(contextMenu.buildList(data.albums, albumID !== false ? [parseInt(albumID, 10)] : [], (a) => lychee.goto(a.id)));
+			items = items.concat(contextMenu.buildList(data.albums, albumID !== null ? [albumID] : [], (a) => lychee.goto(a.id)));
 		}
 
 		if (data.shared_albums && data.shared_albums.length > 0) {
 			items = items.concat({});
-			items = items.concat(contextMenu.buildList(data.shared_albums, albumID !== false ? [albumID] : [], (a) => lychee.goto(a.id)));
+			items = items.concat(contextMenu.buildList(data.shared_albums, albumID !== null ? [albumID] : [], (a) => lychee.goto(a.id)));
 		}
 
-		if (albumID !== false && !album.isSmartID(albumID) && album.isUploadable()) {
+		if (albumID !== null && !album.isSmartID(albumID) && !album.isSearchID(albumID) && album.isUploadable()) {
 			if (items.length > 0) {
 				items.unshift({});
 			}
@@ -274,11 +336,22 @@ contextMenu.albumTitle = function (albumID, e) {
 	});
 };
 
+/**
+ * @param {string} photoID
+ * @param {jQuery.Event} e
+ *
+ * @returns {void}
+ */
 contextMenu.photo = function (photoID, e) {
-	let coverActive = photoID === album.json.cover_id;
+	const coverActive = photoID === album.json.cover_id;
 
-	let items = [
-		{ title: build.iconic("star") + lychee.locale["STAR"], fn: () => photo.setStar([photoID]) },
+	const isPhotoStarred = album.getByID(photoID).is_starred;
+
+	const items = [
+		{
+			title: build.iconic("star") + (isPhotoStarred ? lychee.locale["UNSTAR"] : lychee.locale["STAR"]),
+			fn: () => photo.setStar([photoID], !isPhotoStarred),
+		},
 		{ title: build.iconic("tag") + lychee.locale["TAGS"], fn: () => photo.editTags([photoID]) },
 		// for future work, use a list of all the ancestors.
 		{
@@ -307,8 +380,8 @@ contextMenu.photo = function (photoID, e) {
 		{ title: build.iconic("trash") + lychee.locale["DELETE"], fn: () => photo.delete([photoID]) },
 		{ title: build.iconic("cloud-download") + lychee.locale["DOWNLOAD"], fn: () => photo.getArchive([photoID]) },
 	];
-	if (album.isSmartID(album.getID()) || album.isTagAlbum()) {
-		// Cover setting not supported for smart or tag albums.
+	if (album.isSmartID(album.getID()) || album.isSearchID(album.getID) || album.isTagAlbum()) {
+		// Cover setting not supported for smart or tag albums and search results.
 		items.splice(2, 1);
 	}
 
@@ -317,47 +390,53 @@ contextMenu.photo = function (photoID, e) {
 	basicContext.show(items, e.originalEvent, contextMenu.close);
 };
 
-contextMenu.countSubAlbums = function (photoIDs) {
-	let count = 0;
+/**
+ * @param {string} photoID
+ * @param {string} albumID
+ * @param {DragEvent} e
+ *
+ * @returns {void}
+ */
+contextMenu.photoDrop = function (photoID, albumID, e) {
+	const items = [
+		{
+			title: build.iconic("folder") + lychee.locale["MOVE"],
+			fn: () => {
+				photo.setAlbum([photoID], albumID);
+			},
+		},
+	];
 
-	let i, j;
+	$('.photo[data-id="' + photoID + '"]').addClass("active");
 
-	if (album.albums) {
-		for (i = 0; i < photoIDs.length; i++) {
-			for (j = 0; j < album.albums.length; j++) {
-				if (album.albums[j].id === photoIDs[i]) {
-					count++;
-					break;
-				}
-			}
-		}
-	}
-
-	return count;
+	basicContext.show(items, e, contextMenu.close);
 };
 
+/**
+ * @param {string[]} photoIDs
+ * @param {jQuery.Event} e
+ */
 contextMenu.photoMulti = function (photoIDs, e) {
-	// Notice for 'Move All':
-	// fn must call basicContext.close() first,
-	// in order to keep the selection and multiselect
-	let subcount = contextMenu.countSubAlbums(photoIDs);
-	let photocount = photoIDs.length - subcount;
-
-	if (subcount && photocount) {
-		multiselect.deselect(".photo.active, .album.active");
-		multiselect.close();
-		lychee.error("Please select either albums or photos!");
-		return;
-	}
-	if (subcount) {
-		contextMenu.albumMulti(photoIDs, e);
-		return;
-	}
-
 	multiselect.stopResize();
 
+	let arePhotosStarred = false;
+	let arePhotosNotStarred = false;
+	photoIDs.forEach(function (id) {
+		if (album.getByID(id).is_starred) {
+			arePhotosStarred = true;
+		} else {
+			arePhotosNotStarred = true;
+		}
+	});
+
 	let items = [
-		{ title: build.iconic("star") + lychee.locale["STAR_ALL"], fn: () => photo.setStar(photoIDs) },
+		// Only show the star/unstar menu item when the selected photos are
+		// consistently either all starred or all not starred.
+		{
+			title: build.iconic("star") + (arePhotosNotStarred ? lychee.locale["STAR_ALL"] : lychee.locale["UNSTAR_ALL"]),
+			visible: !(arePhotosStarred && arePhotosNotStarred),
+			fn: () => photo.setStar(photoIDs, arePhotosNotStarred),
+		},
 		{ title: build.iconic("tag") + lychee.locale["TAGS_ALL"], fn: () => photo.editTags(photoIDs) },
 		{},
 		{ title: build.iconic("pencil") + lychee.locale["RENAME_ALL"], fn: () => photo.setTitle(photoIDs) },
@@ -382,15 +461,22 @@ contextMenu.photoMulti = function (photoIDs, e) {
 	basicContext.show(items, e.originalEvent, contextMenu.close);
 };
 
+/**
+ * @param {string} albumID
+ * @param {string} photoID
+ * @param {jQuery.Event} e
+ */
 contextMenu.photoTitle = function (albumID, photoID, e) {
 	let items = [{ title: build.iconic("pencil") + lychee.locale["RENAME"], fn: () => photo.setTitle([photoID]) }];
 
-	let data = album.json;
+	// Note: We can also have a photo without its parent album being loaded
+	// if the photo is a public photo within a private album
+	const photos = album.json ? album.json.photos : [];
 
-	if (data.photos !== false && data.photos.length > 0) {
+	if (photos.length > 0) {
 		items.push({});
 
-		items = items.concat(contextMenu.buildList(data.photos, [photoID], (a) => lychee.goto(albumID + "/" + a.id)));
+		items = items.concat(contextMenu.buildList(photos, [photoID], (a) => lychee.goto(albumID + "/" + a.id)));
 	}
 
 	if (!album.isUploadable()) {
@@ -401,33 +487,34 @@ contextMenu.photoTitle = function (albumID, photoID, e) {
 	basicContext.show(items, e.originalEvent, contextMenu.close);
 };
 
+/**
+ * @param {string} photoID
+ * @param {jQuery.Event} e
+ */
 contextMenu.photoMore = function (photoID, e) {
 	// Show download-item when
 	// a) We are allowed to upload to the album
 	// b) the photo is explicitly marked as downloadable (v4-only)
 	// c) or, the album is explicitly marked as downloadable
-	let showDownload =
-		album.isUploadable() ||
-		(photo.json.hasOwnProperty("is_downloadable")
-			? photo.json.is_downloadable
-			: album.json && album.json.is_downloadable && album.json.is_downloadable);
-	let showFull = photo.json.size_variants.original.url && photo.json.size_variants.original.url !== "";
 
-	let items = [
-		{ title: build.iconic("fullscreen-enter") + lychee.locale["FULL_PHOTO"], visible: !!showFull, fn: () => window.open(photo.getDirectLink()) },
-		{ title: build.iconic("cloud-download") + lychee.locale["DOWNLOAD"], visible: !!showDownload, fn: () => photo.getArchive([photoID]) },
+	const showDownload = album.isUploadable() || photo.json.is_downloadable;
+	const showFull = !!(photo.json.size_variants.original.url && photo.json.size_variants.original.url !== "");
+
+	const items = [
+		{ title: build.iconic("fullscreen-enter") + lychee.locale["FULL_PHOTO"], visible: showFull, fn: () => window.open(photo.getDirectLink()) },
+		{ title: build.iconic("cloud-download") + lychee.locale["DOWNLOAD"], visible: showDownload, fn: () => photo.getArchive([photoID]) },
 	];
 	if (album.isUploadable()) {
 		// prepend further buttons if menu bar is reduced on small screens
-		let button_visibility = $("#button_visibility");
+		const button_visibility = $("#button_visibility");
 		if (button_visibility && button_visibility.css("display") === "none") {
 			items.unshift({
 				title: build.iconic("eye") + lychee.locale["VISIBILITY_PHOTO"],
 				visible: lychee.enable_button_visibility,
-				fn: (event) => photo.setPublic(photo.getID(), event),
+				fn: () => photo.setProtectionPolicy(photo.getID()),
 			});
 		}
-		let button_trash = $("#button_trash");
+		const button_trash = $("#button_trash");
 		if (button_trash && button_trash.css("display") === "none") {
 			items.unshift({
 				title: build.iconic("trash") + lychee.locale["DELETE"],
@@ -435,7 +522,7 @@ contextMenu.photoMore = function (photoID, e) {
 				fn: () => photo.delete([photo.getID()]),
 			});
 		}
-		let button_move = $("#button_move");
+		const button_move = $("#button_move");
 		if (button_move && button_move.css("display") === "none") {
 			items.unshift({
 				title: build.iconic("folder") + lychee.locale["MOVE"],
@@ -450,7 +537,7 @@ contextMenu.photoMore = function (photoID, e) {
 				(photo.json.live_photo_url !== "" && photo.json.live_photo_url !== null)
 			)
 		) {
-			let button_rotate_cwise = $("#button_rotate_cwise");
+			const button_rotate_cwise = $("#button_rotate_cwise");
 			if (button_rotate_cwise && button_rotate_cwise.css("display") === "none") {
 				items.unshift({
 					title: build.iconic("clockwise") + lychee.locale["PHOTO_EDIT_ROTATECWISE"],
@@ -458,7 +545,7 @@ contextMenu.photoMore = function (photoID, e) {
 					fn: () => photoeditor.rotate(photo.getID(), 1),
 				});
 			}
-			let button_rotate_ccwise = $("#button_rotate_ccwise");
+			const button_rotate_ccwise = $("#button_rotate_ccwise");
 			if (button_rotate_ccwise && button_rotate_ccwise.css("display") === "none") {
 				items.unshift({
 					title: build.iconic("counterclockwise") + lychee.locale["PHOTO_EDIT_ROTATECCWISE"],
@@ -472,23 +559,90 @@ contextMenu.photoMore = function (photoID, e) {
 	basicContext.show(items, e.originalEvent);
 };
 
+/**
+ * @param {Album[]} albums
+ * @param {string} albumID
+ *
+ * @returns {string[]}
+ */
 contextMenu.getSubIDs = function (albums, albumID) {
 	let ids = [albumID];
-	let a;
 
-	for (a = 0; a < albums.length; a++) {
-		if (albums[a].parent_id === albumID) {
-			ids = ids.concat(contextMenu.getSubIDs(albums, albums[a].id));
+	albums.forEach(function (album) {
+		if (album.parent_id === albumID) {
+			ids = ids.concat(contextMenu.getSubIDs(albums, album.id));
 		}
 
-		if (albums[a].albums && albums[a].albums.length > 0) {
-			ids = ids.concat(contextMenu.getSubIDs(albums[a].albums, albumID));
+		if (album.albums && album.albums.length > 0) {
+			ids = ids.concat(contextMenu.getSubIDs(album.albums, albumID));
 		}
-	}
+	});
 
 	return ids;
 };
 
+/**
+ * @callback TargetAlbumSelectedCB
+ *
+ * Called by {@link contextMenu.move} after the user has selected a target ID.
+ * In most cases, {@link album.setAlbum} or {@link photo.setAlbum} are
+ * directly used as the callback.
+ * This design decision is the only reason, why this callback gets more
+ * parameters than the selected target ID.
+ * The parameter signature of this callback matches {@link album.setAlbum}.
+ *
+ * However, the callback should actually enclose all other parameters it
+ * needs and only receive the target ID.
+ *
+ * TODO: Re-factor callbacks.
+ *
+ * @param {string[]} IDs      the source IDs
+ * @param {?string} targetID  the ID of the target album
+ * @param {boolean} [confirm] indicates whether the callback shall show a
+ *                            confirmation dialog to the user for whatever to
+ *                            callback is going to do
+ * @returns {void}
+ */
+
+/**
+ * Shows the context menu with the album tree and allows the user to select a target album.
+ *
+ * **ATTENTION:** The name `move` of this method is very badly chosen.
+ * The method does not move anything, but only shows the menu and reports
+ * the selected album.
+ * In particular, the method is used by any operation which needs a target
+ * album (i.e. merge, copy-to, etc.)
+ *
+ * TODO: Find a better name for this function.
+ *
+ * The method calls the provided callback after the user has selected a
+ * target album and passes the ID of the target album together with the
+ * source `IDs` and the event `e` to the callback.
+ *
+ * TODO: Actually the callbacks should enclose all additional parameters (e.g., `IDs`) they need. Refactor the callbacks.
+ *
+ * The name of the root node in the context menu may be provided by the caller
+ * depending on the use-case.
+ * Keep in mind, that the root album is not visible to the user during normal
+ * browsing.
+ * Photos on the root level are stashed away into a virtual album called
+ * "Unsorted".
+ * Albums on the root level are shown as siblings, but the root node itself
+ * is invisible.
+ * So the user actually sees a forest.
+ * Hence, the root node should be named differently to meet the user's
+ * expectations.
+ * When the user moves/copies/merges photos, then the root node should be
+ * called "Unsorted".
+ * When the user moves/copies/merges albums, then the root node should be
+ * called "Root".
+ *
+ * @param {string[]} IDs - IDs of source objects (either album or photo IDs)
+ * @param {jQuery.Event} e - Some (?) event
+ * @param {TargetAlbumSelectedCB} callback - to be called after the user has selected a target ID
+ * @param {string} [kind=UNSORTED] - Name of root album; either "UNSORTED" or "ROOT"
+ * @param {boolean} [display_root=true] - Whether the root (aka unsorted) album shall be shown
+ */
 contextMenu.move = function (IDs, e, callback, kind = "UNSORTED", display_root = true) {
 	let items = [];
 
@@ -506,14 +660,14 @@ contextMenu.move = function (IDs, e, callback, kind = "UNSORTED", display_root =
 				// For merging, don't exclude the parent.
 				// For photo copy, don't exclude the current album.
 				if (callback !== album.merge && callback !== photo.copyTo) {
-					exclude.push(album.getID().toString());
+					exclude.push(album.getID());
 				}
 				if (IDs.length === 1 && IDs[0] === album.getID() && album.getParentID() && callback === album.setAlbum) {
 					// If moving the current album, exclude its parent.
-					exclude.push(album.getParentID().toString());
+					exclude.push(album.getParentID());
 				}
 			} else if (visible.photo()) {
-				exclude.push(photo.json.album.toString());
+				exclude.push(photo.json.album_id);
 			}
 			items = items.concat(contextMenu.buildList(albums, exclude.concat(IDs), (a) => callback(IDs, a.id)));
 		};
@@ -546,34 +700,45 @@ contextMenu.move = function (IDs, e, callback, kind = "UNSORTED", display_root =
 	});
 };
 
+/**
+ * @param {string} photoID
+ * @param {jQuery.Event} e
+ *
+ * @returns {void}
+ */
 contextMenu.sharePhoto = function (photoID, e) {
-	// v4+ only
-	if (photo.json.hasOwnProperty("is_share_button_visible") && !photo.json.is_share_button_visible) {
+	if (!photo.json.is_share_button_visible) {
 		return;
 	}
 
-	let iconClass = "ionicons";
+	const iconClass = "ionicons";
 
-	let items = [
+	const items = [
 		{ title: build.iconic("twitter", iconClass) + "Twitter", fn: () => photo.share(photoID, "twitter") },
 		{ title: build.iconic("facebook", iconClass) + "Facebook", fn: () => photo.share(photoID, "facebook") },
 		{ title: build.iconic("envelope-closed") + "Mail", fn: () => photo.share(photoID, "mail") },
 		{ title: build.iconic("dropbox", iconClass) + "Dropbox", visible: lychee.admin === true, fn: () => photo.share(photoID, "dropbox") },
 		{ title: build.iconic("link-intact") + lychee.locale["DIRECT_LINKS"], fn: () => photo.showDirectLinks(photoID) },
+		{ title: build.iconic("grid-two-up") + lychee.locale["QR_CODE"], fn: () => photo.qrCode(photoID) },
 	];
 
 	basicContext.show(items, e.originalEvent);
 };
 
+/**
+ * @param {string} albumID
+ * @param {jQuery.Event} e
+ *
+ * @returns {void}
+ */
 contextMenu.shareAlbum = function (albumID, e) {
-	// v4+ only
-	if (album.json.hasOwnProperty("is_share_button_visible") && !album.json.is_share_button_visible) {
+	if (!album.json.is_share_button_visible) {
 		return;
 	}
 
-	let iconClass = "ionicons";
+	const iconClass = "ionicons";
 
-	let items = [
+	const items = [
 		{ title: build.iconic("twitter", iconClass) + "Twitter", fn: () => album.share("twitter") },
 		{ title: build.iconic("facebook", iconClass) + "Facebook", fn: () => album.share("facebook") },
 		{ title: build.iconic("envelope-closed") + "Mail", fn: () => album.share("mail") },
@@ -585,18 +750,20 @@ contextMenu.shareAlbum = function (albumID, e) {
 					// Copy the url with prefilled password param
 					url += "?password=";
 				}
-				if (lychee.clipboardCopy(url)) {
-					loadingBar.show("success", lychee.locale["URL_COPIED_TO_CLIPBOARD"]);
-				}
+				navigator.clipboard.writeText(url).then(() => loadingBar.show("success", lychee.locale["URL_COPIED_TO_CLIPBOARD"]));
 			},
 		},
+		{ title: build.iconic("grid-two-up") + lychee.locale["QR_CODE"], fn: () => album.qrCode() },
 	];
 
 	basicContext.show(items, e.originalEvent);
 };
 
+/**
+ * @returns {void}
+ */
 contextMenu.close = function () {
-	if (!visible.contextMenu()) return false;
+	if (!visible.contextMenu()) return;
 
 	basicContext.close();
 
@@ -606,6 +773,10 @@ contextMenu.close = function () {
 	}
 };
 
+/**
+ * @param {jQuery.Event} e
+ * @returns {void}
+ */
 contextMenu.config = function (e) {
 	let items = [{ title: build.iconic("cog") + lychee.locale["SETTINGS"], fn: settings.open }];
 	if (lychee.new_photos_notification) {
