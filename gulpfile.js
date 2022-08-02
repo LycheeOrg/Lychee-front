@@ -30,7 +30,12 @@ paths.view = {
 		"./scripts/3rd-party/backend.js",
 		"./deps/basiccontext/scripts/basicContext.js",
 	],
-	scripts: ["node_modules/jquery/dist/jquery.min.js", "node_modules/lazysizes/lazysizes.min.js", "../dist/_view--javascript.js"],
+	scripts: [
+		"node_modules/jquery/dist/jquery.min.js",
+		"node_modules/lazysizes/lazysizes.min.js",
+		"node_modules/sprintf-js/dist/sprintf.min.js",
+		"../dist/_view--javascript.js",
+	],
 	svg: ["./images/iconic.svg", "./images/ionicons.svg"],
 };
 
