@@ -18,22 +18,30 @@ const lychee = {
 	public_photos_hidden: true,
 	share_button_visible: false,
 	/**
-	 * Enable admin mode (multi-user)
-	 * @type boolean
+	 * The authenticated user or `null` if unauthenticated
+	 * @type {?User}
 	 */
-	admin: false,
+	user: null,
 	/**
-	 * Enable possibility to upload (multi-user)
-	 * @type boolean
+	 * The rights granted by the backend
 	 */
-	may_upload: false,
-	/**
-	 * Locked user (multi-user)
-	 * @type boolean
-	 */
-	is_locked: false,
-	/** @type {?string} */
-	username: null,
+	rights: {
+		/**
+		 * Backend grants admin rights
+		 * @type boolean
+		 */
+		is_admin: false,
+		/**
+		 * Backend grants upload rights
+		 * @type boolean
+		 */
+		may_upload: false,
+		/**
+		 * Backend considers the user to be locked
+		 * @type boolean
+		 */
+		is_locked: false,
+	},
 	/**
 	 * Values:
 	 *
@@ -242,23 +250,21 @@ lychee.init = function (isFirstInitialization = true) {
 		function (data) {
 			lychee.parseInitializationData(data);
 
-			if (data.status === 2) {
-				// Logged in
+			if (data.user !== null || data.rights.is_admin) {
+				// Authenticated or no admin is registered
 				leftMenu.build();
 				leftMenu.bind();
 				lychee.setMode("logged_in");
 
-				// Show dialog when there is no username and password
-				// TODO: Refactor this. At least rename the flag `login` to something more understandable like `isAdminUserConfigured`, but rather re-factor the whole logic, i.e. the initial user should be created as part of the installation routine.
+				// Show dialog to create admin account, if no user is
+				// authenticated but admin rights are granted.
+				// TODO: Refactor the whole logic, i.e. the initial user should be created as part of the installation routine.
 				// In particular it is completely insane to build the UI as if the admin user was successfully authenticated.
 				// This might leak confidential photos to anybody if the DB is filled
 				// with photos and the admin password reset to `null`.
-				if (data.config.login === false) settings.createLogin();
-			} else if (data.status === 1) {
-				lychee.setMode("public");
+				if (data.user === null && data.rights.is_admin) settings.createLogin();
 			} else {
-				loadingBar.show("error", "Error: Unexpected status");
-				return;
+				lychee.setMode("public");
 			}
 
 			if (isFirstInitialization) {
@@ -277,6 +283,8 @@ lychee.init = function (isFirstInitialization = true) {
  * @returns {void}
  */
 lychee.parseInitializationData = function (data) {
+	lychee.user = data.user;
+	lychee.rights = data.rights;
 	lychee.update_json = data.update_json;
 	lychee.update_available = data.update_available;
 
@@ -295,23 +303,9 @@ lychee.parseInitializationData = function (data) {
 		lychee.locale[key] = data.locale[key];
 	}
 
-	// Check status
-	// 0 = No configuration
-	// 1 = Logged out
-	// 2 = Logged in
-	if (data.status === 2) {
-		// Logged in
-		lychee.parsePublicInitializationData(data);
+	lychee.parsePublicInitializationData(data);
+	if (lychee.user !== null || lychee.rights.is_admin) {
 		lychee.parseProtectedInitializationData(data);
-
-		lychee.may_upload = data.admin || data.may_upload;
-		lychee.admin = data.admin;
-		lychee.is_locked = data.is_locked;
-		lychee.username = data.username;
-	} else if (data.status === 1) {
-		lychee.parsePublicInitializationData(data);
-	} else {
-		// should not happen.
 	}
 };
 
@@ -833,10 +827,10 @@ lychee.setTitle = function (title = "", editable = false) {
  * @param {string} mode - one out of: `public`, `view`, `logged_in`
  */
 lychee.setMode = function (mode) {
-	if (lychee.is_locked) {
+	if (lychee.rights.is_locked) {
 		$("#button_settings_open").remove();
 	}
-	if (!lychee.may_upload) {
+	if (!lychee.rights.may_upload) {
 		$("#button_sharing").remove();
 
 		$(document)
@@ -855,7 +849,7 @@ lychee.setMode = function (mode) {
 			.unbind(["command+backspace", "ctrl+backspace"])
 			.unbind(["command+a", "ctrl+a"]);
 	}
-	if (!lychee.admin) {
+	if (!lychee.rights.is_admin) {
 		$("#button_users, #button_logs, #button_diagnostics").remove();
 	}
 
