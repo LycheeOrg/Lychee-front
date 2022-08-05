@@ -490,7 +490,7 @@ settings.save_enter = function (e) {
 };
 
 settings.viewToken = function () {
-	api.post("User::getCurrent", {}, function (data) {
+	api.post("User::getAuthenticatedUser", {}, function (data) {
 		let bodyHtml = "";
 		let enableReset = "";
 		if (data.token === "") {
@@ -526,7 +526,7 @@ settings.viewToken = function () {
 			navigator.clipboard.writeText(data.token);
 		});
 		$("#button_disable_token").on(lychee.getEventName(), function () {
-			api.post("User::disableToken", {}, function () {
+			api.post("User::unsetToken", {}, function () {
 				$("#apiToken").html("disabled");
 			});
 		});
