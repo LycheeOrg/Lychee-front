@@ -489,13 +489,16 @@ settings.save_enter = function (e) {
 	});
 };
 
+/**
+ * @returns {void}
+ */
 settings.viewToken = function () {
 	api.post("User::getAuthenticatedUser", {}, function (data) {
 		let bodyHtml = "";
-		let enableReset = "";
+		let enableResetButtonText = "";
 		if (data.token === "") {
 			bodyHtml = `<div class='directLinks'><p>${lychee.locale["DISABLED"]}</p></div>`;
-			enableReset = lychee.locale["ENABLE"];
+			enableResetButtonText = lychee.locale["ENABLE"];
 		} else {
 			bodyHtml = lychee.html`<div class='directLinks'><p><span id="apiToken">${
 				data.token
@@ -503,13 +506,13 @@ settings.viewToken = function () {
 				"copy",
 				"ionicons"
 			)}</a> <a id="button_disable_token" class='basicModal__button' title='${lychee.locale["DISABLE"]}'>${build.iconic("ban")}</a></p></div>`;
-			enableReset = lychee.locale["RESET"];
+			enableResetButtonText = lychee.locale["RESET"];
 		}
 		basicModal.show({
 			body: bodyHtml,
 			buttons: {
 				action: {
-					title: enableReset,
+					title: enableResetButtonText,
 					fn: function () {
 						api.post("User::resetToken", {});
 						basicModal.close();
