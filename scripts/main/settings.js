@@ -493,38 +493,45 @@ settings.save_enter = function (e) {
  * @returns {void}
  */
 settings.resetToken = function () {
-	api.post("User::resetToken", {}, function (data) {
-		let bodyHtml = lychee.html`<div class='directLinks'><p><span id="apiToken">${
-			data.token
-		}</span> <a id="button_copy_token" class='basicModal__button' title='${lychee.locale["URL_COPY_TO_CLIPBOARD"]}'>${build.iconic(
-			"copy",
-			"ionicons"
-		)}</a> <a id="button_disable_token" class='basicModal__button' title='${lychee.locale["DISABLE"]}'>${build.iconic("ban")}</a></p></div>`;
-		enableResetButtonText = lychee.locale["RESET"];
-		basicModal.show({
-			body: bodyHtml,
-			buttons: {
-				action: {
-					title: lychee.locale["RESET"],
-					fn: function () {
-						basicModal.close();
-						settings.resetToken();
+	api.post(
+		"User::resetToken",
+		{},
+		/**
+		 *
+		 * @param {User} data
+		 */
+		function (data) {
+			let bodyHtml = lychee.html`<div class='directLinks'><p><span id="apiToken">${
+				data.token
+			}</span> <a id="button_copy_token" class='basicModal__button' title='${lychee.locale["URL_COPY_TO_CLIPBOARD"]}'>${build.iconic(
+				"copy",
+				"ionicons"
+			)}</a> <a id="button_disable_token" class='basicModal__button' title='${lychee.locale["DISABLE"]}'>${build.iconic("ban")}</a></p></div>`;
+			basicModal.show({
+				body: bodyHtml,
+				buttons: {
+					action: {
+						title: lychee.locale["RESET"],
+						fn: function () {
+							basicModal.close();
+							settings.resetToken();
+						},
+						class: "red",
 					},
-					class: "red",
+					cancel: {
+						title: lychee.locale["CLOSE"],
+						fn: basicModal.close,
+					},
 				},
-				cancel: {
-					title: lychee.locale["CLOSE"],
-					fn: basicModal.close,
-				},
-			},
-		});
-		$("#button_copy_token").on(lychee.getEventName(), function () {
-			navigator.clipboard.writeText(data.token);
-		});
-		$("#button_disable_token").on(lychee.getEventName(), function () {
-			api.post("User::unsetToken", {}, function () {
-				$("#apiToken").html("disabled");
 			});
-		});
-	});
+			$("#button_copy_token").on(lychee.getEventName(), function () {
+				navigator.clipboard.writeText(data.token);
+			});
+			$("#button_disable_token").on(lychee.getEventName(), function () {
+				api.post("User::unsetToken", {}, function () {
+					$("#apiToken").html("disabled");
+				});
+			});
+		}
+	);
 };
