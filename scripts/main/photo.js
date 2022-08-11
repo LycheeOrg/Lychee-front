@@ -42,7 +42,7 @@ photo.load = function (photoID, albumID, autoplay) {
 		// TODO: Why do we overwrite the true album ID of a photo, by the externally provided one? I guess we need it, because the album which the user came from might also be a smart album or a tag album. However, in this case I would prefer to leave the `album_id  untouched (don't rename it to `original_album_id`) and call this one `effective_album_id` instead.
 		photo.json.album_id = albumID;
 
-		if (!visible.photo()) view.photo.show();
+		view.photo.show();
 		view.photo.init(autoplay);
 		lychee.imageview.show();
 
