@@ -521,6 +521,10 @@ photo.setAlbum = function (photoIDs, albumID) {
 photo.toggleStar = function () {
 	photo.json.is_starred = !photo.json.is_starred;
 	view.photo.star();
+
+	album.getByID(photo.json.id).is_starred = photo.json.is_starred;
+	view.album.content.star(photo.json.id);
+
 	albums.refresh();
 
 	api.post("Photo::setStar", {
