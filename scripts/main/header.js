@@ -482,11 +482,11 @@ header.setMode = function (mode) {
 			}
 
 			if (album.isUploadable()) {
-				const e = $("#button_trash, #button_move, #button_visibility, #button_star");
+				const e = $("#button_trash, #button_move, #button_visibility, #button_star, #button_rotate_cwise, #button_rotate_ccwise");
 				e.show();
 				tabindex.makeFocusable(e);
 			} else {
-				const e = $("#button_trash, #button_move, #button_visibility, #button_star");
+				const e = $("#button_trash, #button_move, #button_visibility, #button_star, #button_rotate_cwise, #button_rotate_ccwise");
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}

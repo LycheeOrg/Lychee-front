@@ -707,31 +707,33 @@ view.photo = {
 		lychee.content.addClass("view");
 		header.setMode("photo");
 
-		// Make body not scrollable
-		// use bodyScrollLock package to enable locking on iOS
-		// Simple overflow: hidden not working on iOS Safari
-		// Only the info pane needs scrolling
-		// Touch event for swiping of photo still work
+		if (!visible.photo()) {
+			// Make body not scrollable
+			// use bodyScrollLock package to enable locking on iOS
+			// Simple overflow: hidden not working on iOS Safari
+			// Only the info pane needs scrolling
+			// Touch event for swiping of photo still work
 
-		scrollLock.disablePageScroll($(".sidebar__wrapper").get());
+			scrollLock.disablePageScroll($(".sidebar__wrapper").get());
 
-		// Fullscreen
-		let timeout = null;
-		$(document).bind("mousemove", function () {
-			clearTimeout(timeout);
-			// For live Photos: header animation only if LivePhoto is not playing
-			if (!photo.isLivePhotoPlaying() && lychee.header_auto_hide) {
-				header.show();
-				timeout = setTimeout(header.hideIfLivePhotoNotPlaying, 2500);
+			// Fullscreen
+			let timeout = null;
+			$(document).bind("mousemove", function () {
+				clearTimeout(timeout);
+				// For live Photos: header animation only if LivePhoto is not playing
+				if (!photo.isLivePhotoPlaying() && lychee.header_auto_hide) {
+					header.show();
+					timeout = setTimeout(header.hideIfLivePhotoNotPlaying, 2500);
+				}
+			});
+
+			// we also put this timeout to enable it by default when you directly click on a picture.
+			if (lychee.header_auto_hide) {
+				setTimeout(header.hideIfLivePhotoNotPlaying, 2500);
 			}
-		});
 
-		// we also put this timeout to enable it by default when you directly click on a picture.
-		if (lychee.header_auto_hide) {
-			setTimeout(header.hideIfLivePhotoNotPlaying, 2500);
+			lychee.animate(lychee.imageview, "fadeIn");
 		}
-
-		lychee.animate(lychee.imageview, "fadeIn");
 	},
 
 	/**
@@ -970,8 +972,6 @@ view.photo = {
 			(photo.json.live_photo_url !== "" && photo.json.live_photo_url !== null)
 		) {
 			$("#button_rotate_cwise, #button_rotate_ccwise").hide();
-		} else {
-			$("#button_rotate_cwise, #button_rotate_ccwise").show();
 		}
 	},
 
