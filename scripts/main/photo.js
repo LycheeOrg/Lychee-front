@@ -328,9 +328,9 @@ photo.delete = function (photoIDs) {
 		// Show album otherwise.
 		if (visible.photo()) {
 			if (nextPhotoID !== null && nextPhotoID !== photo.getID()) {
-				lychee.goto(album.getID() + "/" + nextPhotoID);
+				lychee.goto(album.getID() + "/" + nextPhotoID, false);
 			} else if (previousPhotoID !== null && previousPhotoID !== photo.getID()) {
-				lychee.goto(album.getID() + "/" + previousPhotoID);
+				lychee.goto(album.getID() + "/" + previousPhotoID, false);
 			} else {
 				lychee.goto(album.getID());
 			}
