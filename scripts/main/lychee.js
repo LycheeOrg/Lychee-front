@@ -583,6 +583,21 @@ lychee.reloadIfLegacyIDs = function (albumID, photoID, autoplay) {
 };
 
 /**
+ * This is a "God method" that is used to load pretty much anything, based
+ * on what's in the web browser's URL bar after the '#' character:
+ *
+ * (nothing) --> load root album, assign null to albumID and photoID
+ * {albumID} --> load the album; albumID equals the given ID, photoID is null
+ * {albumID}/{photoID} --> load album (if not already loaded) and then the
+ *   corresponding photo, assign the respective values to albumID and photoID
+ * map --> load the map of all albums
+ * map/{albumID} --> load the map of the respective album
+ * search/{term} --> load or go back to "search" album for the given term,
+ *   assign 'search/{term}' as fictitious albumID and assign null to photoID
+ * search/{term}/{photoID} --> load photo within fictitious search album,
+ *   assign 'search/{term}' as fictitious albumID and assign the given ID to
+ *   photoID
+ *
  * @param {boolean} [autoplay=true]
  * @returns {void}
  */
