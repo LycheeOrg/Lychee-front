@@ -267,7 +267,7 @@ album.load = function (albumID, albumLoadedCB = null) {
 			});
 			return true;
 		} else if (lycheeException.exception.endsWith("UnauthenticatedException") && !albumLoadedCB) {
-			// If no password is required, but we still get an 401 error
+			// If no password is required, but we still get a 401 error
 			// try to properly log in as a user
 			// We only try this, if `albumLoadedCB` is not set.
 			// This is not optimal, but the best we can do without too much
