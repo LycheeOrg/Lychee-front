@@ -266,6 +266,21 @@ album.load = function (albumID, albumLoadedCB = null) {
 				album.load(albumID, albumLoadedCB);
 			});
 			return true;
+		} else if (lycheeException.exception.endsWith("UnauthenticatedException") && !albumLoadedCB) {
+			// If no password is required, but we still get an 401 error
+			// try to properly log in as a user
+			// We only try this, if `albumLoadedCB` is not set.
+			// This is not optimal, but the best we can do without too much
+			// refactoring for now.
+			// `albumLoadedCB` is set, if the user directly jumps to a photo
+			// in an album via a direct link.
+			// Even though the album might be private, the photo could still
+			// be visible.
+			// If we caught users for a direct link to a public photo
+			// within a private album, we would "trap" the users in a login
+			// dialog which they cannot pass by.
+			lychee.loginDialog();
+			return true;
 		} else if (albumLoadedCB) {
 			// In case we could not successfully load and unlock the album,
 			// but we have a callback, we call that and consider the error
