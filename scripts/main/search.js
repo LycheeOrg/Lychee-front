@@ -46,8 +46,10 @@ search.find = function (term) {
 
 	/** @param {SearchResult} data */
 	const successHandler = function (data) {
-		// Do nothing, if search result is identical to previous result
 		if (search.json && search.json.checksum === data.checksum) {
+			// If search result is identical to previous result, just
+			// update the album id with the new search term and bail out.
+			album.json.id = SearchAlbumIDPrefix + "/" + term;
 			return;
 		}
 
