@@ -20,7 +20,7 @@ album.isSmartID = function (id) {
  * @returns {boolean}
  */
 album.isSearchID = function (id) {
-	return id === SearchAlbumIDPrefix || id.startsWith(SearchAlbumIDPrefix + "/");
+	return id !== null && id.startsWith(SearchAlbumIDPrefix);
 };
 
 /**
