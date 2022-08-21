@@ -266,8 +266,8 @@ view.album = {
 		 * @returns {void}
 		 */
 		titleSub: function (albumID) {
-			const album = album.getSubByID(albumID);
-			const title = album.title ? album.title : lychee.locale["UNTITLED"];
+			const subalbum = album.getSubByID(albumID);
+			const title = subalbum.title ? subalbum.title : lychee.locale["UNTITLED"];
 
 			$('.album[data-id="' + albumID + '"] .overlay h1')
 				.text(title)
