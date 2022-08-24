@@ -57,9 +57,18 @@ album.getID = function () {
 	else if (album.json) id = album.json.id;
 	else if (mapview.albumID) id = mapview.albumID;
 
-	// Search
-	if (isID(id) === false) id = $(".album:hover, .album.active").attr("data-id");
-	if (isID(id) === false) id = $(".photo:hover, .photo.active").attr("data-album-id");
+	if (isID(id) === false) {
+		let active = $(".album:hover, .album.active");
+		if (active.length > 0) {
+			id = active.attr("data-id");
+		}
+	}
+	if (isID(id) === false) {
+		let active = $(".photo:hover, .photo.active");
+		if (active.length > 0) {
+			id = active.attr("data-album-id");
+		}
+	}
 
 	if (isID(id) === true) return id;
 	else return null;
