@@ -48,8 +48,8 @@ album.getID = function () {
 	/** @type {?string} */
 	let id = null;
 
-	// this is a Lambda
-	let isID = (_id) => {
+	/** @param {?string} _id */
+	const isID = (_id) => {
 		return album.isSmartID(_id) || album.isSearchID(_id) || album.isModelID(_id);
 	};
 
@@ -57,9 +57,18 @@ album.getID = function () {
 	else if (album.json) id = album.json.id;
 	else if (mapview.albumID) id = mapview.albumID;
 
-	// Search
-	if (isID(id) === false) id = $(".album:hover, .album.active").attr("data-id");
-	if (isID(id) === false) id = $(".photo:hover, .photo.active").attr("data-album-id");
+	if (isID(id) === false) {
+		const active = $(".album:hover, .album.active");
+		if (active.length === 1) {
+			id = active.attr("data-id") || null;
+		}
+	}
+	if (isID(id) === false) {
+		const active = $(".photo:hover, .photo.active");
+		if (active.length === 1) {
+			id = active.attr("data-album-id") || null;
+		}
+	}
 
 	if (isID(id) === true) return id;
 	else return null;
