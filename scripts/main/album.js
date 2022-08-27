@@ -342,7 +342,7 @@ album.add = function (IDs = null, callback = null) {
 	 */
 	const action = function (data) {
 		if (!data.title.trim()) {
-			basicModal.error("title");
+			basicModal.focusError("title");
 			return;
 		}
 
@@ -417,11 +417,11 @@ album.addByTags = function () {
 	/** @param {{title: string, tags: string}} data */
 	const action = function (data) {
 		if (!data.title.trim()) {
-			basicModal.error("title");
+			basicModal.focusError("title");
 			return;
 		}
 		if (!data.tags.trim()) {
-			basicModal.error("tags");
+			basicModal.focusError("tags");
 			return;
 		}
 
@@ -441,11 +441,28 @@ album.addByTags = function () {
 		);
 	};
 
+	const addTagAlbumDialogBody = `
+		<p></p>
+		<form>
+			<div class="input-group stacked"><input class='text' name='title' type='text' maxlength='100'></div>
+			<div class="input-group stacked"><input class='text' name='tags' type='text' minlength='1'></div>
+		</form>`;
+
+	/**
+	 * @param {ModelDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initTagAlbumDialog = function (formElements, dialog) {
+		dialog.querySelector('p').textContent = lychee.locale["TITLE_NEW_ALBUM"];
+		formElements.title.placeholder = 'Title';
+		formElements.title.value = lychee.locale["UNTITLED"];
+		formElements.tags.placeholder = 'Tags';
+	}
+
 	basicModal.show({
-		body: lychee.html`<p>${lychee.locale["TITLE_NEW_ALBUM"]}
-							<input class='text' name='title' type='text' maxlength='100' placeholder='Title' value='${lychee.locale["UNTITLED"]}'>
-							<input class='text' name='tags' type='text' minlength='1' placeholder='Tags' value=''>
-						</p>`,
+		body: addTagAlbumDialogBody,
+		readyCB: initTagAlbumDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["CREATE_TAG_ALBUM"],
