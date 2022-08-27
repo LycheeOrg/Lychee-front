@@ -484,7 +484,7 @@ album.setShowTags = function (albumID) {
 	/** @param {{show_tags: string}} data */
 	const action = function (data) {
 		if (!data.show_tags.trim()) {
-			basicModal.error("show_tags");
+			basicModal.focusError("show_tags");
 			return;
 		}
 		const new_show_tags = data.show_tags
@@ -510,18 +510,26 @@ album.setShowTags = function (albumID) {
 		);
 	};
 
+	const setShowTagDialogBody = `
+		<p></p>
+		<form>
+			<div class="input-group stacked"><input class='text' name='show_tags' type='text' minlength='1'></div>
+		</form>`;
+
+	/**
+	 * @param {ModelDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initTagAlbumDialog = function (formElements, dialog) {
+		dialog.querySelector('p').textContent = lychee.locale["ALBUM_NEW_SHOWTAGS"];
+		formElements.show_tags.placeholder = 'Tags';
+		formElements.show_tags.value = album.json.show_tags.sort().join(", ");
+	}
+
 	basicModal.show({
-		body: lychee.html`
-			<p>${lychee.locale["ALBUM_NEW_SHOWTAGS"]}
-				<input
-					class='text'
-					name='show_tags'
-					type='text'
-					minlength='1'
-					placeholder='Tags'
-					value='$${album.json.show_tags.sort().join(", ")}'
-				>
-			</p>`,
+		body: setShowTagDialogBody,
+		readyCB: initTagAlbumDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["ALBUM_SET_SHOWTAGS"],
