@@ -341,8 +341,6 @@ album.add = function (IDs = null, callback = null) {
 	 * @returns {void}
 	 */
 	const action = function (data) {
-		// let title = data.title;
-
 		if (!data.title.trim()) {
 			basicModal.error("title");
 			return;
@@ -378,8 +376,27 @@ album.add = function (IDs = null, callback = null) {
 		);
 	};
 
+	/**
+	 * @param {ModelDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initAddAlbumDialog = function (formElements, dialog) {
+		dialog.querySelector('p').textContent = lychee.locale["TITLE_NEW_ALBUM"];
+		formElements.title.placeholder = 'Title';
+		formElements.title.value = lychee.locale["UNTITLED"];
+	}
+
+	const addAlbumDialogBody = `
+		<p></p>
+		<form>
+			<div class="input-group stacked"><input class='text' name='title' type='text' maxlength='100'/></div>
+		</form>
+	`;
+
 	basicModal.show({
-		body: lychee.html`<p>${lychee.locale["TITLE_NEW_ALBUM"]} <input class='text' name='title' type='text' maxlength='100' placeholder='Title' value='${lychee.locale["UNTITLED"]}'></p>`,
+		body: addAlbumDialogBody,
+		readyCB: initAddAlbumDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["CREATE_ALBUM"],
