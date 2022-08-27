@@ -668,8 +668,26 @@ album.setDescription = function (albumID) {
 		});
 	};
 
+	const setAlbumDescriptionDialogBody = `
+		<p></p>
+		<form>
+			<div class="input-group stacked"><input class='text' name='description' type='text' maxlength='800'></div>
+		</form>`;
+
+	/**
+	 * @param {ModelDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initSetDescriptionDialog = function (formElements, dialog) {
+		dialog.querySelector('p').textContent = lychee.locale["ALBUM_NEW_DESCRIPTION"];
+		formElements.description.placeholder = lychee.locale["ALBUM_DESCRIPTION"];
+		formElements.description.value = oldDescription;
+	}
+
 	basicModal.show({
-		body: lychee.html`<p>${lychee.locale["ALBUM_NEW_DESCRIPTION"]}<input class='text' name='description' type='text' maxlength='800' placeholder='$${lychee.locale["ALBUM_DESCRIPTION"]}' value='$${oldDescription}'></p>`,
+		body: setAlbumDescriptionDialogBody,
+		readyCB: initSetDescriptionDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["ALBUM_SET_DESCRIPTION"],
