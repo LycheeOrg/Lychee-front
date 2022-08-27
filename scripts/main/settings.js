@@ -19,10 +19,14 @@ settings.createLogin = function () {
 	 * @returns {boolean}
 	 */
 	const errorHandler = function (jqXHR, params, lycheeException) {
-		let htmlBody = "<p>" + lychee.locale["ERROR_LOGIN"] + "</p>";
-		htmlBody += lycheeException ? "<p>" + lycheeException.message + "</p>" : "";
 		basicModal.show({
-			body: htmlBody,
+			body: '<p></p><p></p>',
+			readyCB: (formElement, dialog) => {
+				/** @type {NodeList<HTMLParagraphElement>} */
+				const paragraphs = dialog.querySelectorAll('p');
+				paragraphs.item(0).textContent = lychee.locale["ERROR_LOGIN"];
+				paragraphs.item(1).textContent = lycheeException ? "<p>" + lycheeException.message + "</p>" : "";
+			},
 			buttons: {
 				action: {
 					title: lychee.locale["RETRY"],
@@ -42,57 +46,64 @@ settings.createLogin = function () {
 	};
 
 	/**
-	 * @typedef SetLoginDialogResult
-	 *
-	 * @property {string} username
-	 * @property {string} password
-	 * @property {string} confirm
-	 */
-
-	/**
-	 * @param {SetLoginDialogResult} data
+	 * @param {ModalDialogResult} data
 	 * @returns {void}
 	 */
 	const action = function (data) {
-		const username = data.username;
-		const password = data.password;
-		const confirm = data.confirm;
-
-		if (!username.trim()) {
-			basicModal.error("username");
+		if (!data.username.trim()) {
+			basicModal.focusError("username");
 			return;
 		}
 
-		if (!password.trim()) {
-			basicModal.error("password");
+		if (!data.password.trim()) {
+			basicModal.focusError("password");
 			return;
 		}
 
-		if (password !== confirm) {
-			basicModal.error("confirm");
+		if (data.password !== data.confirm) {
+			basicModal.focusError("confirm");
 			return;
 		}
 
 		basicModal.close();
 
-		let params = {
-			username,
-			password,
+		const params = {
+			username: data.username,
+			password: data.password,
 		};
 
 		api.post("Settings::setLogin", params, successHandler, null, errorHandler);
 	};
 
-	const msg = `
-		<p>
-			${lychee.locale["LOGIN_TITLE"]}
-			<input name='username' class='text' type='text' placeholder='${lychee.locale["LOGIN_USERNAME"]}' value=''>
-			<input name='password' class='text' type='password' placeholder='${lychee.locale["LOGIN_PASSWORD"]}' value=''>
-			<input name='confirm' class='text' type='password' placeholder='${lychee.locale["LOGIN_PASSWORD_CONFIRM"]}' value=''>
-		</p>`;
+	const createLoginDialogBody = `
+		<p></p>
+		<form>
+			<div class="input-group stacked">
+				<input name='username' class='text' type='text' autocapitalize='off'>
+			</div>
+			<div class="input-group stacked">
+				<input name='password' class='text' type='password'>
+			</div>
+			<div class="input-group stacked">
+				<input name='confirm' class='text' type='password'>
+			</div>
+		</form>`;
+
+	/**
+	 * @param {ModalDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initDialog = function (formElements, dialog) {
+		dialog.querySelector('p').textContent = lychee.locale["LOGIN_TITLE"];
+		formElements.username.placeholder = lychee.locale["LOGIN_USERNAME"];
+		formElements.password.placeholder = lychee.locale["LOGIN_PASSWORD"];
+		formElements.confirm.placeholder = lychee.locale["LOGIN_PASSWORD_CONFIRM"];
+	}
 
 	basicModal.show({
-		body: msg,
+		body: createLoginDialogBody,
+		readyCB: initDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["LOGIN_CREATE"],
