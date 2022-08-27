@@ -567,7 +567,7 @@ album.setTitle = function (albumIDs) {
 	/** @param {{title: string}} data */
 	const action = function (data) {
 		if (!data.title.trim()) {
-			basicModal.error("title");
+			basicModal.focusError("title");
 			return;
 		}
 
@@ -609,15 +609,28 @@ album.setTitle = function (albumIDs) {
 		});
 	};
 
-	const inputHTML = lychee.html`<input class='text' name='title' type='text' maxlength='100' placeholder='$${lychee.locale["ALBUM_TITLE"]}' value='$${oldTitle}'>`;
+	const setTitleDialogBody = `
+		<p></p>
+		<form>
+			<div class="input-group stacked"><input class='text' name='title' type='text' maxlength='100'></div>
+		</form>`;
 
-	const dialogHTML =
-		albumIDs.length === 1
-			? lychee.html`<p>${lychee.locale["ALBUM_NEW_TITLE"]} ${inputHTML}</p>`
-			: lychee.html`<p>${sprintf(lychee.locale["ALBUMS_NEW_TITLE"], albumIDs.length)} ${inputHTML}</p>`;
+	/**
+	 * @param {ModelDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initSetTitleDialog = function (formElements, dialog) {
+		dialog.querySelector('p').textContent = albumIDs.length === 1 ?
+			lychee.locale["ALBUM_NEW_TITLE"] :
+			sprintf(lychee.locale["ALBUMS_NEW_TITLE"], albumIDs.length);
+		formElements.title.placeholder = lychee.locale["ALBUM_TITLE"];
+		formElements.title.value = oldTitle;
+	}
 
 	basicModal.show({
-		body: dialogHTML,
+		body: setTitleDialogBody,
+		readyCB: initSetTitleDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["ALBUM_SET_TITLE"],
