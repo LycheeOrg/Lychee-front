@@ -726,10 +726,6 @@ album.toggleCover = function (photoID) {
  * @returns {void}
  */
 album.setLicense = function (albumID) {
-	const callback = function () {
-		$("select#license").val(album.json.license === "" ? "none" : album.json.license);
-	};
-
 	/** @param {{license: string}} data */
 	const action = function (data) {
 		basicModal.close();
@@ -749,54 +745,64 @@ album.setLicense = function (albumID) {
 		);
 	};
 
-	let msg = lychee.html`
-	<div>
-		<p>${lychee.locale["ALBUM_LICENSE"]}
-		<span class="select" style="width:270px">
-			<select name="license" id="license">
-				<option value="none">${lychee.locale["ALBUM_LICENSE_NONE"]}</option>
-				<option value="reserved">${lychee.locale["ALBUM_RESERVED"]}</option>
-				<option value="CC0">CC0 - Public Domain</option>
-				<option value="CC-BY-1.0">CC Attribution 1.0</option>
-				<option value="CC-BY-2.0">CC Attribution 2.0</option>
-				<option value="CC-BY-2.5">CC Attribution 2.5</option>
-				<option value="CC-BY-3.0">CC Attribution 3.0</option>
-				<option value="CC-BY-4.0">CC Attribution 4.0</option>
-				<option value="CC-BY-ND-1.0">CC Attribution-NoDerivatives 1.0</option>
-				<option value="CC-BY-ND-2.0">CC Attribution-NoDerivatives 2.0</option>
-				<option value="CC-BY-ND-2.5">CC Attribution-NoDerivatives 2.5</option>
-				<option value="CC-BY-ND-3.0">CC Attribution-NoDerivatives 3.0</option>
-				<option value="CC-BY-ND-4.0">CC Attribution-NoDerivatives 4.0</option>
-				<option value="CC-BY-SA-1.0">CC Attribution-ShareAlike 1.0</option>
-				<option value="CC-BY-SA-2.0">CC Attribution-ShareAlike 2.0</option>
-				<option value="CC-BY-SA-2.5">CC Attribution-ShareAlike 2.5</option>
-				<option value="CC-BY-SA-3.0">CC Attribution-ShareAlike 3.0</option>
-				<option value="CC-BY-SA-4.0">CC Attribution-ShareAlike 4.0</option>
-				<option value="CC-BY-NC-1.0">CC Attribution-NonCommercial 1.0</option>
-				<option value="CC-BY-NC-2.0">CC Attribution-NonCommercial 2.0</option>
-				<option value="CC-BY-NC-2.5">CC Attribution-NonCommercial 2.5</option>
-				<option value="CC-BY-NC-3.0">CC Attribution-NonCommercial 3.0</option>
-				<option value="CC-BY-NC-4.0">CC Attribution-NonCommercial 4.0</option>
-				<option value="CC-BY-NC-ND-1.0">CC Attribution-NonCommercial-NoDerivatives 1.0</option>
-				<option value="CC-BY-NC-ND-2.0">CC Attribution-NonCommercial-NoDerivatives 2.0</option>
-				<option value="CC-BY-NC-ND-2.5">CC Attribution-NonCommercial-NoDerivatives 2.5</option>
-				<option value="CC-BY-NC-ND-3.0">CC Attribution-NonCommercial-NoDerivatives 3.0</option>
-				<option value="CC-BY-NC-ND-4.0">CC Attribution-NonCommercial-NoDerivatives 4.0</option>
-				<option value="CC-BY-NC-SA-1.0">CC Attribution-NonCommercial-ShareAlike 1.0</option>
-				<option value="CC-BY-NC-SA-2.0">CC Attribution-NonCommercial-ShareAlike 2.0</option>
-				<option value="CC-BY-NC-SA-2.5">CC Attribution-NonCommercial-ShareAlike 2.5</option>
-				<option value="CC-BY-NC-SA-3.0">CC Attribution-NonCommercial-ShareAlike 3.0</option>
-				<option value="CC-BY-NC-SA-4.0">CC Attribution-NonCommercial-ShareAlike 4.0</option>
-			</select>
-		</span>
-		<br />
-		<a href="https://creativecommons.org/choose/" target="_blank">${lychee.locale["ALBUM_LICENSE_HELP"]}</a>
-		</p>
-	</div>`;
+	const setAlbumLicenseDialogBody = `
+		<form>
+			<div class="input-group compact">
+				<label for="license_dialog_license_select">License</label>
+				<div class="select"><select name="license" id="license_dialog_license_select">
+					<option value="none"></option>
+					<option value="reserved"></option>
+					<option value="CC0">CC0 - Public Domain</option>
+					<option value="CC-BY-1.0">CC Attribution 1.0</option>
+					<option value="CC-BY-2.0">CC Attribution 2.0</option>
+					<option value="CC-BY-2.5">CC Attribution 2.5</option>
+					<option value="CC-BY-3.0">CC Attribution 3.0</option>
+					<option value="CC-BY-4.0">CC Attribution 4.0</option>
+					<option value="CC-BY-ND-1.0">CC Attribution-NoDerivatives 1.0</option>
+					<option value="CC-BY-ND-2.0">CC Attribution-NoDerivatives 2.0</option>
+					<option value="CC-BY-ND-2.5">CC Attribution-NoDerivatives 2.5</option>
+					<option value="CC-BY-ND-3.0">CC Attribution-NoDerivatives 3.0</option>
+					<option value="CC-BY-ND-4.0">CC Attribution-NoDerivatives 4.0</option>
+					<option value="CC-BY-SA-1.0">CC Attribution-ShareAlike 1.0</option>
+					<option value="CC-BY-SA-2.0">CC Attribution-ShareAlike 2.0</option>
+					<option value="CC-BY-SA-2.5">CC Attribution-ShareAlike 2.5</option>
+					<option value="CC-BY-SA-3.0">CC Attribution-ShareAlike 3.0</option>
+					<option value="CC-BY-SA-4.0">CC Attribution-ShareAlike 4.0</option>
+					<option value="CC-BY-NC-1.0">CC Attribution-NonCommercial 1.0</option>
+					<option value="CC-BY-NC-2.0">CC Attribution-NonCommercial 2.0</option>
+					<option value="CC-BY-NC-2.5">CC Attribution-NonCommercial 2.5</option>
+					<option value="CC-BY-NC-3.0">CC Attribution-NonCommercial 3.0</option>
+					<option value="CC-BY-NC-4.0">CC Attribution-NonCommercial 4.0</option>
+					<option value="CC-BY-NC-ND-1.0">CC Attribution-NonCommercial-NoDerivatives 1.0</option>
+					<option value="CC-BY-NC-ND-2.0">CC Attribution-NonCommercial-NoDerivatives 2.0</option>
+					<option value="CC-BY-NC-ND-2.5">CC Attribution-NonCommercial-NoDerivatives 2.5</option>
+					<option value="CC-BY-NC-ND-3.0">CC Attribution-NonCommercial-NoDerivatives 3.0</option>
+					<option value="CC-BY-NC-ND-4.0">CC Attribution-NonCommercial-NoDerivatives 4.0</option>
+					<option value="CC-BY-NC-SA-1.0">CC Attribution-NonCommercial-ShareAlike 1.0</option>
+					<option value="CC-BY-NC-SA-2.0">CC Attribution-NonCommercial-ShareAlike 2.0</option>
+					<option value="CC-BY-NC-SA-2.5">CC Attribution-NonCommercial-ShareAlike 2.5</option>
+					<option value="CC-BY-NC-SA-3.0">CC Attribution-NonCommercial-ShareAlike 3.0</option>
+					<option value="CC-BY-NC-SA-4.0">CC Attribution-NonCommercial-ShareAlike 4.0</option>
+				</select></div>
+				<p><a href="https://creativecommons.org/choose/" target="_blank"></a></p>
+			</div>
+		</form>`;
+
+	/**
+	 * @param {ModelDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initSetDescriptionDialog = function (formElements, dialog) {
+		formElements.license.item(0).textContent = lychee.locale["ALBUM_LICENSE_NONE"];
+		formElements.license.item(1).textContent = lychee.locale["ALBUM_RESERVED"];
+		formElements.license.value = album.json.license === "" ? "none" : album.json.license;
+		dialog.querySelector('p a').textContent = lychee.locale["ALBUM_LICENSE_HELP"];
+	}
 
 	basicModal.show({
-		body: msg,
-		callback: callback,
+		body: setAlbumLicenseDialogBody,
+		readyCB: initSetDescriptionDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["ALBUM_SET_LICENSE"],
