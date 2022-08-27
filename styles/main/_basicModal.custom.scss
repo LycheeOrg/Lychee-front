@@ -1,45 +1,133 @@
-.basicModal .select select option {
-	background: #333333 !important;
-	color: #ffffff !important;
-}
+div.basicModalContainer {
+	background-color: $colorDialogContainerBg;
 
-.basicModal .switch:last-child {
-	padding-bottom: 42px;
-}
-
-.basicModal .hr {
-	padding: 0 30px 15px;
-	width: 100%;
-
-	hr {
-		border: none;
-		border-top: 1px solid rgba(0, 0, 0, 0.2);
+	&--error {
+		transform: translateY(40px);
 	}
 }
 
-// responsive web design for smaller screens
-@media only screen and (max-width: 567px), only screen and (max-width: 640px) and (orientation: portrait) {
-	.basicModal {
-		max-width: 90%;
+div.basicModal {
+	background: $colorDialogBg;
+	box-shadow: 0 1px 4px black(0.2), inset 0 1px 0 white(0.05);
 
-		.basicModal__content,
-		.basicModal__content .choice,
-		.basicModal__content .switch {
-			h1,
-			p {
-				padding-left: 20px;
-				padding-right: 20px;
-			}
+	font-size: 14px;
+	// Most browser use a default line height roughly about 120%.
+	// This yields 1.2 * 14px = 16.8px and makes it difficult to align
+	// certain elements (e.g. checkboxes) "pixel-perfect" due to annoying
+	// rounding issue.
+	// So we enforce an integer line height here.
+	line-height: 17px;
 
-			p {
-				font-size: 12px;
-				line-height: 14px;
-			}
+	&--error {
+		transform: translateY(-40px);
+	}
+}
 
-			h1 {
-				font-size: 14px;
-				line-height: 16px;
-			}
+div.basicModal__buttons {
+	box-shadow: none;
+}
+
+.basicModal__button {
+	padding: 13px 0 15px;
+	background: transparent;
+	color: $colorDialogMainButtonFont;
+	border-top: 1px solid black(0.2);
+	box-shadow: inset 0 1px 0 white(0.02);
+	cursor: default;
+
+	&:active,
+	&--active {
+		transition: none;
+		background: black(0.1);
+	}
+
+	&#basicModal__action {
+		color: $colorDialogMainActionButtonFont;
+		box-shadow: inset 0 1px 0 white(0.02), inset 1px 0 0 black(0.2);
+	}
+
+	&#basicModal__action.red,
+	&#basicModal__cancel.red {
+		color: $colorDialogMainButtonWarningFont;
+	}
+
+	&.hidden {
+		display: none;
+	}
+
+	&.busy {
+		cursor: wait;
+	}
+}
+
+// restrict hover features to devices that support it
+@media (hover: hover) {
+	.basicModal__button:hover {
+		background: white(0.02);
+	}
+}
+
+div.basicModal__content {
+	padding: 36px;
+	color: $colorDialogDefaultFg;
+	text-align: left;
+
+	// the expected elements of a modal dialog are either: p, hr, form
+	> * {
+		display: block;
+		width: 100%;
+		margin: 24px 0;
+		padding: 0;
+
+		&:first-child, &.force-first-child {
+			margin-top: 0;
+		}
+
+		&:last-child, &.force-last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	b {
+		font-weight: bold;
+		color: $colorDialogEmphasizedFg;
+	}
+
+	a {
+		color: inherit;
+		text-decoration: none;
+		border-bottom: 1px dashed $colorDialogDefaultFg;
+	}
+
+	a.button {
+		display: inline-block;
+		margin: 0 6px;
+		padding: 3px 12px;
+		color: $colorFormElementAccent;
+		text-align: center;
+		border-radius: 5px;
+		border: none;
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02), inset 1px 0 0 rgba(0, 0, 0, 0.2);
+
+		.iconic {
+			fill: $colorFormElementAccent;
+		}
+	}
+
+	> hr {
+		border: none;
+		border-top: 1px solid black(0.3);
+	}
+}
+
+// restrict hover features to devices that support it
+@media (hover: hover) {
+	div.basicModal__content a.button:hover {
+		color: $colorDialogEmphasizedFg;
+		background: $colorFormElementAccent;
+
+		.iconic {
+			fill: $colorDialogEmphasizedFg;
 		}
 	}
 }

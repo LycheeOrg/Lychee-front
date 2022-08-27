@@ -1,0 +1,44 @@
+div.basicModal.login div.basicModal__content {
+  a.button#signInKeyLess {
+    position: absolute;
+    display: block;
+    color: $colorDialogMainButtonFont;
+    top: 8px;
+    left: 8px;
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    padding: 2px;
+    cursor: pointer;
+
+    .iconic {
+      width: 100%;
+      height: 100%;
+      fill: $colorDialogMainButtonFont;
+    }
+  }
+
+  p.version {
+    font-size: 12px;
+    text-align: right;
+
+    span.update-available {
+      display: none;
+    }
+  }
+}
+
+// restrict hover features to devices that support it
+// for some unknown reason the button for keyless sign-in of the login dialog
+// uses another color-scheme then all other buttons
+// in particular, it does not use the blue accent color
+@media (hover: hover) {
+  div.basicModal.login div.basicModal__content a.button#signInKeyLess:hover {
+    color: $colorDialogEmphasizedFg;
+    background: inherit;
+
+    .iconic {
+      fill: $colorDialogEmphasizedFg;
+    }
+  }
+}
