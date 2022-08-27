@@ -19,7 +19,7 @@
 		"node": ">= 10"
 	},
 	"dependencies": {
-		"basicmodal": "https://github.com/LycheeOrg/basicModal/archive/refs/tags/v3.3.9.tar.gz",
+		"basicmodal": "LycheeOrg/basicModal#d1185e7",
 		"jquery": "^3.4.0",
 		"justified-layout": "^2.1.1",
 		"lazysizes": "^5.3.0",
