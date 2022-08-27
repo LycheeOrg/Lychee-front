@@ -748,7 +748,7 @@ album.setLicense = function (albumID) {
 	const setAlbumLicenseDialogBody = `
 		<form>
 			<div class="input-group compact">
-				<label for="license_dialog_license_select">License</label>
+				<label for="license_dialog_license_select"></label>
 				<div class="select"><select name="license" id="license_dialog_license_select">
 					<option value="none"></option>
 					<option value="reserved"></option>
@@ -793,7 +793,8 @@ album.setLicense = function (albumID) {
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */
-	const initSetDescriptionDialog = function (formElements, dialog) {
+	const initSetAlbumLicenseDialog = function (formElements, dialog) {
+		formElements.license.labels[0].textContent = lychee.locale["ALBUM_LICENSE"];
 		formElements.license.item(0).textContent = lychee.locale["ALBUM_LICENSE_NONE"];
 		formElements.license.item(1).textContent = lychee.locale["ALBUM_RESERVED"];
 		formElements.license.value = album.json.license === "" ? "none" : album.json.license;
@@ -802,7 +803,7 @@ album.setLicense = function (albumID) {
 
 	basicModal.show({
 		body: setAlbumLicenseDialogBody,
-		readyCB: initSetDescriptionDialog,
+		readyCB: initSetAlbumLicenseDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["ALBUM_SET_LICENSE"],
@@ -821,17 +822,7 @@ album.setLicense = function (albumID) {
  * @returns {void}
  */
 album.setSorting = function (albumID) {
-	const callback = function () {
-		if (album.json.sorting) {
-			$("select#sortingCol").val(album.json.sorting.column);
-			$("select#sortingOrder").val(album.json.sorting.order);
-		} else {
-			$("select#sortingCol").val("");
-			$("select#sortingOrder").val("");
-		}
-	};
-
-	/** @param {{sortingCol: string, sortingOrder: string}} data */
+	/** @param {{sorting_col: string, sorting_order: string}} data */
 	const action = function (data) {
 		basicModal.close();
 
@@ -839,8 +830,8 @@ album.setSorting = function (albumID) {
 			"Album::setSorting",
 			{
 				albumID: albumID,
-				sorting_column: data.sortingCol,
-				sorting_order: data.sortingOrder,
+				sorting_column: data.sorting_col,
+				sorting_order: data.sorting_order,
 			},
 			function () {
 				if (visible.album()) {
@@ -850,35 +841,62 @@ album.setSorting = function (albumID) {
 		);
 	};
 
-	let msg = lychee.html`
-		<div><p>
-			${sprintf(
-				lychee.locale["SORT_PHOTO_BY"],
-				`<span class="select">
-				<select id="sortingCol" name="sortingCol">
-					<option value=''>-</option>
-					<option value='created_at'>${lychee.locale["SORT_PHOTO_SELECT_1"]}</option>
-					<option value='taken_at'>${lychee.locale["SORT_PHOTO_SELECT_2"]}</option>
-					<option value='title'>${lychee.locale["SORT_PHOTO_SELECT_3"]}</option>
-					<option value='description'>${lychee.locale["SORT_PHOTO_SELECT_4"]}</option>
-					<option value='is_public'>${lychee.locale["SORT_PHOTO_SELECT_5"]}</option>
-					<option value='is_starred'>${lychee.locale["SORT_PHOTO_SELECT_6"]}</option>
-					<option value='type'>${lychee.locale["SORT_PHOTO_SELECT_7"]}</option>
-				</select>
-			</span>`,
-				`<span class="select">
-				<select id="sortingOrder" name="sortingOrder">
-					<option value=''>-</option>
-					<option value='ASC'>${lychee.locale["SORT_ASCENDING"]}</option>
-					<option value='DESC'>${lychee.locale["SORT_DESCENDING"]}</option>
-				</select>
-			</span>`
-			)}
-		</p></div>`;
+	const setAlbumSortingDialogBody = `
+		<form>
+			<div class="input-group compact">
+				<label for="sorting_dialog_column_select"></label>
+				<div class="select"><select name="sorting_col" id="sorting_dialog_column_select">
+					<option value=''>&mdash;</option>
+					<option value='created_at'/>
+					<option value='taken_at'/>
+					<option value='title'/>
+					<option value='description'/>
+					<option value='is_public'/>
+					<option value='is_starred'/>
+					<option value='type'/>
+				</select></div>
+			</div>
+			<div class="input-group compact">
+				<label for="sorting_dialog_order_select"></label>
+				<div class="select"><select name="sorting_order" id="sorting_dialog_order_select">
+					<option value=''>&mdash;</option>
+					<option value='ASC'/>
+					<option value='DESC'/>
+				</select></div>
+			</div>
+		</form>`;
+
+	/**
+	 * @param {ModelDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initSetAlbumSortingDialog = function (formElements, dialog) {
+		formElements.sorting_col.labels[0].textContent = 'Attribute';
+		formElements.sorting_col.item(1).textContent = lychee.locale["SORT_PHOTO_SELECT_1"];
+		formElements.sorting_col.item(2).textContent = lychee.locale["SORT_PHOTO_SELECT_2"];
+		formElements.sorting_col.item(3).textContent = lychee.locale["SORT_PHOTO_SELECT_3"];
+		formElements.sorting_col.item(4).textContent = lychee.locale["SORT_PHOTO_SELECT_4"];
+		formElements.sorting_col.item(5).textContent = lychee.locale["SORT_PHOTO_SELECT_5"];
+		formElements.sorting_col.item(6).textContent = lychee.locale["SORT_PHOTO_SELECT_6"];
+		formElements.sorting_col.item(7).textContent = lychee.locale["SORT_PHOTO_SELECT_7"];
+
+		formElements.sorting_order.labels[0].textContent = 'Order';
+		formElements.sorting_order.item(1).textContent = lychee.locale["SORT_ASCENDING"];
+		formElements.sorting_order.item(2).textContent = lychee.locale["SORT_DESCENDING"];
+
+		if (album.json.sorting) {
+			formElements.sorting_col.value = album.json.sorting.column;
+			formElements.sorting_order.value = album.json.sorting.order;
+		} else {
+			formElements.sorting_col.value = '';
+			formElements.sorting_order.value = '';
+		}
+	}
 
 	basicModal.show({
-		body: msg,
-		callback: callback,
+		body: setAlbumSortingDialogBody,
+		readyCB: initSetAlbumSortingDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["ALBUM_SET_ORDER"],
