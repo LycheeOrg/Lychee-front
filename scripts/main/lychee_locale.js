@@ -67,7 +67,7 @@ lychee.locale = {
 
 	DELETE_ALBUM_QUESTION: "Delete Album and Photos",
 	KEEP_ALBUM: "Keep Album",
-	DELETE_ALBUM_CONFIRMATION_1: "Are you sure you want to delete the album '%s' and all of the photos it contains? This action can't be undone!",
+	DELETE_ALBUM_CONFIRMATION: "Are you sure you want to delete the album '%s' and all of the photos it contains? This action can't be undone!",
 
 	DELETE_TAG_ALBUM_QUESTION: "Delete Album",
 	DELETE_TAG_ALBUM_CONFIRMATION:
@@ -78,7 +78,7 @@ lychee.locale = {
 	DELETE_ALBUMS_CONFIRMATION:
 		"Are you sure you want to delete all %d selected albums and all of the photos they contain? This action can't be undone!",
 
-	DELETE_UNSORTED_CONFIRM: "Are you sure you want to delete all photos from 'Unsorted'?<br>This action can't be undone!",
+	DELETE_UNSORTED_CONFIRM: "Are you sure you want to delete all photos from 'Unsorted'? This action can't be undone!",
 	CLEAR_UNSORTED: "Clear Unsorted",
 	KEEP_UNSORTED: "Keep Unsorted",
 
@@ -312,8 +312,7 @@ lychee.locale = {
 
 	NEW_PHOTOS_NOTIFICATION: "Send new photos notification emails.",
 	SETTINGS_SUCCESS_NEW_PHOTOS_NOTIFICATION: "New photos notification updated",
-	USER_EMAIL_INSTRUCTION:
-		"Add your email below to enable receiving email notifications.<br />To stop receiving emails, simply remove your email below.",
+	USER_EMAIL_INSTRUCTION: "Add your email below to enable receiving email notifications. To stop receiving emails, simply remove your email below.",
 
 	SETTINGS_SUCCESS_CSS: "CSS updated",
 	SETTINGS_SUCCESS_UPDATE: "Settings updated with success",
