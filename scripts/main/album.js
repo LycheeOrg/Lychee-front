@@ -917,21 +917,20 @@ album.setSorting = function (albumID) {
  * @returns {void}
  */
 album.setProtectionPolicy = function (albumID) {
+	/**
+	 * @param {ModalDialogResult} data
+	 */
 	const action = function (data) {
+		basicModal.close();
 		albums.refresh();
 
-		// TODO: If the modal dialog would provide us with proper boolean values for the checkboxes as part of `data` the same way as it does for text inputs, then we would not need these slow and awkward jQeury selectors
-		album.json.is_nsfw = $('.basicModal .switch input[name="is_nsfw"]:checked').length === 1;
-		album.json.is_public = $('.basicModal .switch input[name="is_public"]:checked').length === 1;
-		album.json.grants_full_photo = $('.basicModal .choice input[name="grants_full_photo"]:checked').length === 1;
-		album.json.requires_link = $('.basicModal .choice input[name="requires_link"]:checked').length === 1;
-		album.json.is_downloadable = $('.basicModal .choice input[name="is_downloadable"]:checked').length === 1;
-		album.json.is_share_button_visible = $('.basicModal .choice input[name="is_share_button_visible"]:checked').length === 1;
-		album.json.has_password = $('.basicModal .choice input[name="has_password"]:checked').length === 1;
-		const newPassword = $('.basicModal .choice input[name="passwordtext"]').val() || null;
-
-		// Modal input has been processed, now it can be closed
-		basicModal.close();
+		album.json.is_nsfw = data.is_nsfw;
+		album.json.is_public = data.is_public;
+		album.json.grants_full_photo = data.grants_full_photo;
+		album.json.requires_link = data.requires_link;
+		album.json.is_downloadable = data.is_downloadable;
+		album.json.is_share_button_visible = data.is_share_button_visible;
+		album.json.has_password = data.has_password;
 
 		// Set data and refresh view
 		if (visible.album()) {
@@ -953,10 +952,10 @@ album.setProtectionPolicy = function (albumID) {
 			is_share_button_visible: album.json.is_share_button_visible,
 		};
 		if (album.json.has_password) {
-			if (newPassword) {
+			if (data.password) {
 				// We send the password only if there's been a change; that way the
 				// server will keep the current password if it wasn't changed.
-				params.password = newPassword;
+				params.password = data.password;
 			}
 		} else {
 			params.password = null;
@@ -965,111 +964,150 @@ album.setProtectionPolicy = function (albumID) {
 		api.post("Album::setProtectionPolicy", params);
 	};
 
-	const msg = lychee.html`
+	const setAlbumProtectionPolicyBody = `
 		<form>
-			<div class='switch'>
-				<label>
-					${lychee.locale["ALBUM_PUBLIC"]}:&nbsp;
-					<input type='checkbox' name='is_public'>
-					<span class='slider round'></span>
-				</label>
-				<p>${lychee.locale["ALBUM_PUBLIC_EXPL"]}</p>
+			<div class='input-group compact-no-indent'>
+				<label for="pp_dialog_public_check"></label>
+				<input type='checkbox' class="slider" id='pp_dialog_public_check' name='is_public' />
+				<p></p>
 			</div>
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='grants_full_photo'>
-					<span class='checkbox'>${build.iconic("check")}</span>
-					<span class='label'>${lychee.locale["ALBUM_FULL"]}</span>
-				</label>
-				<p>${lychee.locale["ALBUM_FULL_EXPL"]}</p>
+			<div class='input-group compact-inverse'>
+				<label for="pp_dialog_full_photo_check"></label>
+				<input type='checkbox' id='pp_dialog_full_photo_check' name='grants_full_photo' />
+				<p></p>
 			</div>
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='requires_link'>
-					<span class='checkbox'>${build.iconic("check")}</span>
-					<span class='label'>${lychee.locale["ALBUM_HIDDEN"]}</span>
-				</label>
-				<p>${lychee.locale["ALBUM_HIDDEN_EXPL"]}</p>
+			<div class='input-group compact-inverse'>
+				<label for="pp_dialog_link_check"></label>
+				<input type='checkbox' id='pp_dialog_link_check' name='requires_link' />
+				<p></p>
 			</div>
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='is_downloadable'>
-					<span class='checkbox'>${build.iconic("check")}</span>
-					<span class='label'>${lychee.locale["ALBUM_DOWNLOADABLE"]}</span>
-				</label>
-				<p>${lychee.locale["ALBUM_DOWNLOADABLE_EXPL"]}</p>
+			<div class='input-group compact-inverse'>
+				<label for="pp_dialog_downloadable_check"></label>
+				<input type='checkbox' id='pp_dialog_downloadable_check' name='is_downloadable' />
+				<p></p>
 			</div>
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='is_share_button_visible'>
-					<span class='checkbox'>${build.iconic("check")}</span>
-					<span class='label'>${lychee.locale["ALBUM_SHARE_BUTTON_VISIBLE"]}</span>
-				</label>
-				<p>${lychee.locale["ALBUM_SHARE_BUTTON_VISIBLE_EXPL"]}</p>
+			<div class='input-group compact-inverse'>
+				<label for="pp_dialog_share_check"></label>
+				<input type='checkbox' id='pp_dialog_share_check' name='is_share_button_visible' />
+				<p></p>
 			</div>
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='has_password'>
-					<span class='checkbox'>${build.iconic("check")}</span>
-					<span class='label'>${lychee.locale["ALBUM_PASSWORD_PROT"]}</span>
-				</label>
-				<p>${lychee.locale["ALBUM_PASSWORD_PROT_EXPL"]}</p>
-				<input class='text' name='passwordtext' type='text' placeholder='${lychee.locale["PASSWORD"]}' value=''>
-			</div>
-			<div class='hr'><hr></div>
-			<div class='switch'>
-				<label>
-					${lychee.locale["ALBUM_NSFW"]}:&nbsp;
-					<input type='checkbox' name='is_nsfw'>
-					<span class='slider round'></span>
-				</label>
-				<p>${lychee.locale["ALBUM_NSFW_EXPL"]}</p>
+			<div class='input-group compact-inverse'>
+				<label for="pp_dialog_password_check"></label>
+				<input type='checkbox' id='pp_dialog_password_check' name='has_password'>
+				<p></p>
+				<div class="input-group stacked">
+					<input class='text' id='pp_dialog_password_input' name='password' type='text'>
+				</div>
 			</div>
 		</form>
-	`;
+		<hr/>
+		<form>
+			<div class='input-group compact-no-indent'>
+				<label for='pp_dialog_nsfw_check'></label>
+				<input type='checkbox' class="slider" id='pp_dialog_nsfw_check' name='is_nsfw'>
+				<p></p>
+			</div>
+		</form>`;
 
-	const dialogSetupCB = function () {
-		// TODO: If the modal dialog would provide this callback with proper jQuery objects for all input/select/choice elements, then we would not need these jQuery selectors
-		$('.basicModal .switch input[name="is_public"]').prop("checked", album.json.is_public);
-		$('.basicModal .switch input[name="is_nsfw"]').prop("checked", album.json.is_nsfw);
+	/**
+	 * @typedef ProtectionPolicyDialogFormElements
+	 * @property {HTMLInputElement} is_public
+	 * @property {HTMLInputElement} grants_full_photo
+	 * @property {HTMLInputElement} requires_link
+	 * @property {HTMLInputElement} is_downloadable
+	 * @property {HTMLInputElement} is_share_button_visible
+	 * @property {HTMLInputElement} has_password
+	 * @property {HTMLInputElement} password
+	 * @property {HTMLInputElement} is_nsfw
+	 */
+
+	/**
+	 * @param {ProtectionPolicyDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initAlbumProtectionPolicyDialog = function (formElements, dialog) {
+		formElements.is_public.previousElementSibling.textContent = lychee.locale["ALBUM_PUBLIC"];
+		formElements.is_public.nextElementSibling.textContent = lychee.locale["ALBUM_PUBLIC_EXPL"];
+		formElements.grants_full_photo.previousElementSibling.textContent = lychee.locale["ALBUM_FULL"];
+		formElements.grants_full_photo.nextElementSibling.textContent = lychee.locale["ALBUM_FULL_EXPL"];
+		formElements.requires_link.previousElementSibling.textContent = lychee.locale["ALBUM_HIDDEN"];
+		formElements.requires_link.nextElementSibling.textContent = lychee.locale["ALBUM_HIDDEN_EXPL"];
+		formElements.is_downloadable.previousElementSibling.textContent = lychee.locale["ALBUM_DOWNLOADABLE"];
+		formElements.is_downloadable.nextElementSibling.textContent = lychee.locale["ALBUM_DOWNLOADABLE_EXPL"];
+		formElements.is_share_button_visible.previousElementSibling.textContent = lychee.locale["ALBUM_SHARE_BUTTON_VISIBLE"];
+		formElements.is_share_button_visible.nextElementSibling.textContent = lychee.locale["ALBUM_SHARE_BUTTON_VISIBLE_EXPL"];
+		formElements.has_password.previousElementSibling.textContent = lychee.locale["ALBUM_PASSWORD_PROT"];
+		formElements.has_password.nextElementSibling.textContent = lychee.locale["ALBUM_PASSWORD_PROT_EXPL"];
+		formElements.password.placeholder = lychee.locale["PASSWORD"];
+		formElements.is_nsfw.previousElementSibling.textContent = lychee.locale["ALBUM_NSFW"];
+		formElements.is_nsfw.nextElementSibling.textContent = lychee.locale["ALBUM_NSFW_EXPL"];
+
+		formElements.is_public.checked = album.json.is_public;
+		formElements.is_nsfw.checked = album.json.is_nsfw;
+
+		/**
+		 * Array of checkboxes which are enable/disabled wrt. the state of `is_public`
+		 * @type {HTMLInputElement[]}
+		 */
+		const tristateCheckboxes = [
+			formElements.grants_full_photo,
+			formElements.requires_link,
+			formElements.is_downloadable,
+			formElements.is_share_button_visible,
+			formElements.has_password
+		];
+
 		if (album.json.is_public) {
-			$(".basicModal .choice input").attr("disabled", false);
-			// Initialize options based on album settings.
-			$('.basicModal .choice input[name="grants_full_photo"]').prop("checked", album.json.grants_full_photo);
-			$('.basicModal .choice input[name="requires_link"]').prop("checked", album.json.requires_link);
-			$('.basicModal .choice input[name="is_downloadable"]').prop("checked", album.json.is_downloadable);
-			$('.basicModal .choice input[name="is_share_button_visible"]').prop("checked", album.json.is_share_button_visible);
-			$('.basicModal .choice input[name="has_password"]').prop("checked", album.json.has_password);
+			tristateCheckboxes.forEach(function(checkbox) {
+				checkbox.parentElement.classList.remove('disabled');
+				checkbox.disabled = false;
+			});
+			// Initialize options based on global settings.
+			formElements.grants_full_photo.checked = album.json.grants_full_photo;
+			formElements.requires_link.checked = album.json.requires_link;
+			formElements.is_downloadable.checked = album.json.is_downloadable;
+			formElements.is_share_button_visible.checked = album.json.is_share_button_visible;
+			formElements.has_password.checked = album.json.has_password;
 			if (album.json.has_password) {
-				$('.basicModal .choice input[name="passwordtext"]').show();
+				formElements.password.parentElement.classList.remove('hidden');
+			} else {
+				formElements.password.parentElement.classList.add('hidden');
 			}
 		} else {
-			$(".basicModal .choice input").attr("disabled", true);
+			tristateCheckboxes.forEach(function(checkbox) {
+				checkbox.parentElement.classList.add('disabled');
+				checkbox.disabled = true;
+			});
 			// Initialize options based on global settings.
-			$('.basicModal .choice input[name="grants_full_photo"]').prop("checked", lychee.grants_full_photo);
-			$('.basicModal .choice input[name="requires_link"]').prop("checked", false);
-			$('.basicModal .choice input[name="is_downloadable"]').prop("checked", lychee.is_downloadable);
-			$('.basicModal .choice input[name="is_share_button_visible"]').prop("checked", lychee.is_share_button_visible);
-			$('.basicModal .choice input[name="has_password"]').prop("checked", false);
-			$('.basicModal .choice input[name="passwordtext"]').hide();
+			formElements.grants_full_photo.checked = lychee.grants_full_photo;
+			formElements.requires_link.checked = false;
+			formElements.is_downloadable.checked = lychee.is_downloadable;
+			formElements.is_share_button_visible.checked = lychee.is_share_button_visible;
+			formElements.has_password.checked = false;
+			formElements.password.parentElement.classList.add('hidden');
 		}
 
-		$('.basicModal .switch input[name="is_public"]').on("change", function () {
-			$(".basicModal .choice input").attr("disabled", $(this).prop("checked") !== true);
-		});
+		formElements.is_public.addEventListener('change', function () {
+			tristateCheckboxes.forEach(function(checkbox) {
+				checkbox.parentElement.classList.toggle('disabled');
+				checkbox.disabled = !formElements.is_public.checked;
+			});
+		})
 
-		$('.basicModal .choice input[name="has_password"]').on("change", function () {
-			if ($(this).prop("checked") === true) {
-				$('.basicModal .choice input[name="passwordtext"]').show().focus();
+		formElements.has_password.addEventListener('change', function () {
+			if (formElements.has_password.checked) {
+				formElements.password.parentElement.classList.remove('hidden');
+				formElements.password.focus();
 			} else {
-				$('.basicModal .choice input[name="passwordtext"]').hide();
+				formElements.password.parentElement.classList.add('hidden');
 			}
 		});
 	};
 
 	basicModal.show({
-		body: msg,
-		callback: dialogSetupCB,
+		body: setAlbumProtectionPolicyBody,
+		readyCB: initAlbumProtectionPolicyDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["SAVE"],

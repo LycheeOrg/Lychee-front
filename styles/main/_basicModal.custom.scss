@@ -88,6 +88,10 @@ div.basicModal__content {
 		}
 	}
 
+	.disabled {
+		color: $colorDialogDisabledFg;
+	}
+
 	b {
 		font-weight: bold;
 		color: $colorDialogEmphasizedFg;

@@ -239,6 +239,10 @@ form div.input-group {
     margin-bottom: 0;
   }
 
+  &.hidden {
+	  display: none;
+  }
+
   label {
     font-weight: bold;
   }
