@@ -453,7 +453,7 @@ album.addByTags = function () {
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */
-	const initTagAlbumDialog = function (formElements, dialog) {
+	const initAddTagAlbumDialog = function (formElements, dialog) {
 		dialog.querySelector('p').textContent = lychee.locale["TITLE_NEW_ALBUM"];
 		formElements.title.placeholder = 'Title';
 		formElements.title.value = lychee.locale["UNTITLED"];
@@ -462,7 +462,7 @@ album.addByTags = function () {
 
 	basicModal.show({
 		body: addTagAlbumDialogBody,
-		readyCB: initTagAlbumDialog,
+		readyCB: initAddTagAlbumDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["CREATE_TAG_ALBUM"],
@@ -521,7 +521,7 @@ album.setShowTags = function (albumID) {
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */
-	const initTagAlbumDialog = function (formElements, dialog) {
+	const initShowTagAlbumDialog = function (formElements, dialog) {
 		dialog.querySelector('p').textContent = lychee.locale["ALBUM_NEW_SHOWTAGS"];
 		formElements.show_tags.placeholder = 'Tags';
 		formElements.show_tags.value = album.json.show_tags.sort().join(", ");
@@ -529,7 +529,7 @@ album.setShowTags = function (albumID) {
 
 	basicModal.show({
 		body: setShowTagDialogBody,
-		readyCB: initTagAlbumDialog,
+		readyCB: initShowTagAlbumDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["ALBUM_SET_SHOWTAGS"],
@@ -609,7 +609,7 @@ album.setTitle = function (albumIDs) {
 		});
 	};
 
-	const setTitleDialogBody = `
+	const setAlbumTitleDialogBody = `
 		<p></p>
 		<form>
 			<div class="input-group stacked"><input class='text' name='title' type='text' maxlength='100'></div>
@@ -620,7 +620,7 @@ album.setTitle = function (albumIDs) {
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */
-	const initSetTitleDialog = function (formElements, dialog) {
+	const initSetAlbumTitleDialog = function (formElements, dialog) {
 		dialog.querySelector('p').textContent = albumIDs.length === 1 ?
 			lychee.locale["ALBUM_NEW_TITLE"] :
 			sprintf(lychee.locale["ALBUMS_NEW_TITLE"], albumIDs.length);
@@ -629,8 +629,8 @@ album.setTitle = function (albumIDs) {
 	}
 
 	basicModal.show({
-		body: setTitleDialogBody,
-		readyCB: initSetTitleDialog,
+		body: setAlbumTitleDialogBody,
+		readyCB: initSetAlbumTitleDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["ALBUM_SET_TITLE"],
@@ -679,7 +679,7 @@ album.setDescription = function (albumID) {
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */
-	const initSetDescriptionDialog = function (formElements, dialog) {
+	const initSetAlbumDescriptionDialog = function (formElements, dialog) {
 		dialog.querySelector('p').textContent = lychee.locale["ALBUM_NEW_DESCRIPTION"];
 		formElements.description.placeholder = lychee.locale["ALBUM_DESCRIPTION"];
 		formElements.description.value = oldDescription;
@@ -687,7 +687,7 @@ album.setDescription = function (albumID) {
 
 	basicModal.show({
 		body: setAlbumDescriptionDialogBody,
-		readyCB: initSetDescriptionDialog,
+		readyCB: initSetAlbumDescriptionDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["ALBUM_SET_DESCRIPTION"],
