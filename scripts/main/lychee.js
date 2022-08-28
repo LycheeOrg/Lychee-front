@@ -238,26 +238,26 @@ lychee.aboutDialog = function () {
 	 * @returns {void}
 	 */
 	const initAboutDialog = function (formElements, dialog) {
-		dialog.querySelector('span.version-number').textContent = lychee.version;
-		const updClassList = dialog.querySelector('p.update-status').classList;
+		dialog.querySelector("span.version-number").textContent = lychee.version;
+		const updClassList = dialog.querySelector("p.update-status").classList;
 		if (lychee.update_available) {
-			updClassList.remove('up-to-date');
+			updClassList.remove("up-to-date");
 		} else {
-			updClassList.add('up-to-date');
+			updClassList.add("up-to-date");
 		}
-		dialog.querySelector('p a').textContent = lychee.locale["UPDATE_AVAILABLE"];
-		dialog.querySelector('h2').textContent = lychee.locale["ABOUT_SUBTITLE"];
+		dialog.querySelector("p a").textContent = lychee.locale["UPDATE_AVAILABLE"];
+		dialog.querySelector("h2").textContent = lychee.locale["ABOUT_SUBTITLE"];
 		// We should not use `innerHTML`, but either hard-code HTML or build it
 		// programmatically.
 		// Also, localized strings should not contain HTML tags.
 		// TODO: Find a better solution for this.
-		dialog.querySelector('p.about-desc').innerHTML = sprintf(lychee.locale["ABOUT_DESCRIPTION"], lychee.website);
-	}
+		dialog.querySelector("p.about-desc").innerHTML = sprintf(lychee.locale["ABOUT_DESCRIPTION"], lychee.website);
+	};
 
 	basicModal.show({
 		body: aboutDialogBody,
 		readyCB: initAboutDialog,
-		classList: ['about-dialog'],
+		classList: ["about-dialog"],
 		buttons: {
 			cancel: {
 				title: lychee.locale["CLOSE"],
@@ -477,7 +477,9 @@ lychee.loginDialog = function () {
 				<input class='text' name='password' autocomplete='current-password' type='password' data-tabindex='${tabindex.get_next_tab_index()}'>
 			</div>
 		</form>
-		<p class='version'>Lychee <span class='version-number'></span><span class="update-status up-to-date"> &#8211; <a target='_blank' href='${lychee.updateURL}' data-tabindex='-1'></a></span></p>
+		<p class='version'>Lychee <span class='version-number'></span><span class="update-status up-to-date"> &#8211; <a target='_blank' href='${
+			lychee.updateURL
+		}' data-tabindex='-1'></a></span></p>
 		`;
 
 	/**
@@ -485,7 +487,7 @@ lychee.loginDialog = function () {
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */
-	const initLoginDialog = function(formElements, dialog) {
+	const initLoginDialog = function (formElements, dialog) {
 		tabindex.makeUnfocusable(header.dom());
 		tabindex.makeUnfocusable(lychee.content);
 		tabindex.makeUnfocusable(lychee.imageview);
@@ -493,14 +495,14 @@ lychee.loginDialog = function () {
 
 		formElements.username.placeholder = lychee.locale["USERNAME"];
 		formElements.password.placeholder = lychee.locale["PASSWORD"];
-		dialog.querySelector('span.version-number').textContent = lychee.version;
-		const updClassList = dialog.querySelector('span.update-status').classList;
+		dialog.querySelector("span.version-number").textContent = lychee.version;
+		const updClassList = dialog.querySelector("span.update-status").classList;
 		if (lychee.update_available) {
-			updClassList.remove('up-to-date');
+			updClassList.remove("up-to-date");
 		} else {
-			updClassList.add('up-to-date');
+			updClassList.add("up-to-date");
 		}
-		dialog.querySelector('span.update-status a').textContent = lychee.locale["UPDATE_AVAILABLE"];
+		dialog.querySelector("span.update-status a").textContent = lychee.locale["UPDATE_AVAILABLE"];
 
 		// This feels awkward, because this hooks into the modal dialog in some
 		// unpredictable way.
@@ -508,23 +510,23 @@ lychee.loginDialog = function () {
 		// dialog and then let the action handler of the modal dialog, i.e.
 		// `lychee.login` handle both cases.
 		// TODO: Refactor this.
-		dialog.querySelector('#signInKeyLess').addEventListener('click', u2f.login);
-	}
+		dialog.querySelector("#signInKeyLess").addEventListener("click", u2f.login);
+	};
 
 	basicModal.show({
 		body: loginDialogBody,
 		readyCB: initLoginDialog,
-		classList: ['login'],
+		classList: ["login"],
 		buttons: {
 			action: {
 				title: lychee.locale["SIGN_IN"],
 				fn: lychee.login,
-				attributes: {'data-tabindex': tabindex.get_next_tab_index()},
+				attributes: { "data-tabindex": tabindex.get_next_tab_index() },
 			},
 			cancel: {
 				title: lychee.locale["CANCEL"],
 				fn: basicModal.close,
-				attributes: {'data-tabindex': tabindex.get_next_tab_index()},
+				attributes: { "data-tabindex": tabindex.get_next_tab_index() },
 			},
 		},
 	});

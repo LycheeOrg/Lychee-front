@@ -20,10 +20,10 @@ settings.createLogin = function () {
 	 */
 	const errorHandler = function (jqXHR, params, lycheeException) {
 		basicModal.show({
-			body: '<p></p><p></p>',
+			body: "<p></p><p></p>",
 			readyCB: (formElement, dialog) => {
 				/** @type {NodeList<HTMLParagraphElement>} */
-				const paragraphs = dialog.querySelectorAll('p');
+				const paragraphs = dialog.querySelectorAll("p");
 				paragraphs.item(0).textContent = lychee.locale["ERROR_LOGIN"];
 				paragraphs.item(1).textContent = lycheeException ? "<p>" + lycheeException.message + "</p>" : "";
 			},
@@ -95,11 +95,11 @@ settings.createLogin = function () {
 	 * @returns {void}
 	 */
 	const initDialog = function (formElements, dialog) {
-		dialog.querySelector('p').textContent = lychee.locale["LOGIN_TITLE"];
+		dialog.querySelector("p").textContent = lychee.locale["LOGIN_TITLE"];
 		formElements.username.placeholder = lychee.locale["LOGIN_USERNAME"];
 		formElements.password.placeholder = lychee.locale["LOGIN_PASSWORD"];
 		formElements.confirm.placeholder = lychee.locale["LOGIN_PASSWORD_CONFIRM"];
-	}
+	};
 
 	basicModal.show({
 		body: createLoginDialogBody,

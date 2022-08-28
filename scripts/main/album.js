@@ -382,10 +382,10 @@ album.add = function (IDs = null, callback = null) {
 	 * @returns {void}
 	 */
 	const initAddAlbumDialog = function (formElements, dialog) {
-		dialog.querySelector('p').textContent = lychee.locale["TITLE_NEW_ALBUM"];
-		formElements.title.placeholder = 'Title';
+		dialog.querySelector("p").textContent = lychee.locale["TITLE_NEW_ALBUM"];
+		formElements.title.placeholder = "Title";
 		formElements.title.value = lychee.locale["UNTITLED"];
-	}
+	};
 
 	const addAlbumDialogBody = `
 		<p></p>
@@ -454,11 +454,11 @@ album.addByTags = function () {
 	 * @returns {void}
 	 */
 	const initAddTagAlbumDialog = function (formElements, dialog) {
-		dialog.querySelector('p').textContent = lychee.locale["TITLE_NEW_ALBUM"];
-		formElements.title.placeholder = 'Title';
+		dialog.querySelector("p").textContent = lychee.locale["TITLE_NEW_ALBUM"];
+		formElements.title.placeholder = "Title";
 		formElements.title.value = lychee.locale["UNTITLED"];
-		formElements.tags.placeholder = 'Tags';
-	}
+		formElements.tags.placeholder = "Tags";
+	};
 
 	basicModal.show({
 		body: addTagAlbumDialogBody,
@@ -522,10 +522,10 @@ album.setShowTags = function (albumID) {
 	 * @returns {void}
 	 */
 	const initShowTagAlbumDialog = function (formElements, dialog) {
-		dialog.querySelector('p').textContent = lychee.locale["ALBUM_NEW_SHOWTAGS"];
-		formElements.show_tags.placeholder = 'Tags';
+		dialog.querySelector("p").textContent = lychee.locale["ALBUM_NEW_SHOWTAGS"];
+		formElements.show_tags.placeholder = "Tags";
 		formElements.show_tags.value = album.json.show_tags.sort().join(", ");
-	}
+	};
 
 	basicModal.show({
 		body: setShowTagDialogBody,
@@ -621,12 +621,11 @@ album.setTitle = function (albumIDs) {
 	 * @returns {void}
 	 */
 	const initSetAlbumTitleDialog = function (formElements, dialog) {
-		dialog.querySelector('p').textContent = albumIDs.length === 1 ?
-			lychee.locale["ALBUM_NEW_TITLE"] :
-			sprintf(lychee.locale["ALBUMS_NEW_TITLE"], albumIDs.length);
+		dialog.querySelector("p").textContent =
+			albumIDs.length === 1 ? lychee.locale["ALBUM_NEW_TITLE"] : sprintf(lychee.locale["ALBUMS_NEW_TITLE"], albumIDs.length);
 		formElements.title.placeholder = lychee.locale["ALBUM_TITLE"];
 		formElements.title.value = oldTitle;
-	}
+	};
 
 	basicModal.show({
 		body: setAlbumTitleDialogBody,
@@ -680,10 +679,10 @@ album.setDescription = function (albumID) {
 	 * @returns {void}
 	 */
 	const initSetAlbumDescriptionDialog = function (formElements, dialog) {
-		dialog.querySelector('p').textContent = lychee.locale["ALBUM_NEW_DESCRIPTION"];
+		dialog.querySelector("p").textContent = lychee.locale["ALBUM_NEW_DESCRIPTION"];
 		formElements.description.placeholder = lychee.locale["ALBUM_DESCRIPTION"];
 		formElements.description.value = oldDescription;
-	}
+	};
 
 	basicModal.show({
 		body: setAlbumDescriptionDialogBody,
@@ -798,8 +797,8 @@ album.setLicense = function (albumID) {
 		formElements.license.item(0).textContent = lychee.locale["ALBUM_LICENSE_NONE"];
 		formElements.license.item(1).textContent = lychee.locale["ALBUM_RESERVED"];
 		formElements.license.value = album.json.license === "" ? "none" : album.json.license;
-		dialog.querySelector('p a').textContent = lychee.locale["ALBUM_LICENSE_HELP"];
-	}
+		dialog.querySelector("p a").textContent = lychee.locale["ALBUM_LICENSE_HELP"];
+	};
 
 	basicModal.show({
 		body: setAlbumLicenseDialogBody,
@@ -872,7 +871,7 @@ album.setSorting = function (albumID) {
 	 * @returns {void}
 	 */
 	const initSetAlbumSortingDialog = function (formElements, dialog) {
-		formElements.sorting_col.labels[0].textContent = 'Attribute';
+		formElements.sorting_col.labels[0].textContent = "Attribute";
 		formElements.sorting_col.item(1).textContent = lychee.locale["SORT_PHOTO_SELECT_1"];
 		formElements.sorting_col.item(2).textContent = lychee.locale["SORT_PHOTO_SELECT_2"];
 		formElements.sorting_col.item(3).textContent = lychee.locale["SORT_PHOTO_SELECT_3"];
@@ -881,7 +880,7 @@ album.setSorting = function (albumID) {
 		formElements.sorting_col.item(6).textContent = lychee.locale["SORT_PHOTO_SELECT_6"];
 		formElements.sorting_col.item(7).textContent = lychee.locale["SORT_PHOTO_SELECT_7"];
 
-		formElements.sorting_order.labels[0].textContent = 'Order';
+		formElements.sorting_order.labels[0].textContent = "Order";
 		formElements.sorting_order.item(1).textContent = lychee.locale["SORT_ASCENDING"];
 		formElements.sorting_order.item(2).textContent = lychee.locale["SORT_DESCENDING"];
 
@@ -889,10 +888,10 @@ album.setSorting = function (albumID) {
 			formElements.sorting_col.value = album.json.sorting.column;
 			formElements.sorting_order.value = album.json.sorting.order;
 		} else {
-			formElements.sorting_col.value = '';
-			formElements.sorting_order.value = '';
+			formElements.sorting_col.value = "";
+			formElements.sorting_order.value = "";
 		}
-	}
+	};
 
 	basicModal.show({
 		body: setAlbumSortingDialogBody,
@@ -1055,12 +1054,12 @@ album.setProtectionPolicy = function (albumID) {
 			formElements.requires_link,
 			formElements.is_downloadable,
 			formElements.is_share_button_visible,
-			formElements.has_password
+			formElements.has_password,
 		];
 
 		if (album.json.is_public) {
-			tristateCheckboxes.forEach(function(checkbox) {
-				checkbox.parentElement.classList.remove('disabled');
+			tristateCheckboxes.forEach(function (checkbox) {
+				checkbox.parentElement.classList.remove("disabled");
 				checkbox.disabled = false;
 			});
 			// Initialize options based on global settings.
@@ -1070,13 +1069,13 @@ album.setProtectionPolicy = function (albumID) {
 			formElements.is_share_button_visible.checked = album.json.is_share_button_visible;
 			formElements.has_password.checked = album.json.has_password;
 			if (album.json.has_password) {
-				formElements.password.parentElement.classList.remove('hidden');
+				formElements.password.parentElement.classList.remove("hidden");
 			} else {
-				formElements.password.parentElement.classList.add('hidden');
+				formElements.password.parentElement.classList.add("hidden");
 			}
 		} else {
-			tristateCheckboxes.forEach(function(checkbox) {
-				checkbox.parentElement.classList.add('disabled');
+			tristateCheckboxes.forEach(function (checkbox) {
+				checkbox.parentElement.classList.add("disabled");
 				checkbox.disabled = true;
 			});
 			// Initialize options based on global settings.
@@ -1085,22 +1084,22 @@ album.setProtectionPolicy = function (albumID) {
 			formElements.is_downloadable.checked = lychee.is_downloadable;
 			formElements.is_share_button_visible.checked = lychee.is_share_button_visible;
 			formElements.has_password.checked = false;
-			formElements.password.parentElement.classList.add('hidden');
+			formElements.password.parentElement.classList.add("hidden");
 		}
 
-		formElements.is_public.addEventListener('change', function () {
-			tristateCheckboxes.forEach(function(checkbox) {
-				checkbox.parentElement.classList.toggle('disabled');
+		formElements.is_public.addEventListener("change", function () {
+			tristateCheckboxes.forEach(function (checkbox) {
+				checkbox.parentElement.classList.toggle("disabled");
 				checkbox.disabled = !formElements.is_public.checked;
 			});
-		})
+		});
 
-		formElements.has_password.addEventListener('change', function () {
+		formElements.has_password.addEventListener("change", function () {
 			if (formElements.has_password.checked) {
-				formElements.password.parentElement.classList.remove('hidden');
+				formElements.password.parentElement.classList.remove("hidden");
 				formElements.password.focus();
 			} else {
-				formElements.password.parentElement.classList.add('hidden');
+				formElements.password.parentElement.classList.add("hidden");
 			}
 		});
 	};

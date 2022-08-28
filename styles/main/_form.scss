@@ -11,171 +11,181 @@
 // Second, this file defines the different input groups and adjusts some
 // form elements acc. to the class of input group.
 
-
 // 1. Form elements (general styling, independent of input group)
 
-input, div.select, select, textarea, output {
-  display: inline-block;
-  /* we must position this element so that it becomes the nearest
+input,
+div.select,
+select,
+textarea,
+output {
+	display: inline-block;
+	/* we must position this element so that it becomes the nearest
    * positioned ancestor for ::before, ::after and :checked::before */
-  position: relative;
+	position: relative;
 }
 
 div.select > select {
-  // The element `<select>` is hard to style with CSS, because most browser
-  // treat it as a replaced element and use the OS default style.
-  // Hence, `<select>` needs to be wrapped into an additional `<div>` and
-  // most styles are applied to this `<div>`.
-  // As the `<select>` is the only child of this outer `<div>`, the select
-  // must fill out its outer div completely.
-  // See: https://developer.mozilla.org/en-US/docs/Learn/Forms/Advanced_form_styling
-  display: block;
-  width: 100%;
+	// The element `<select>` is hard to style with CSS, because most browser
+	// treat it as a replaced element and use the OS default style.
+	// Hence, `<select>` needs to be wrapped into an additional `<div>` and
+	// most styles are applied to this `<div>`.
+	// As the `<select>` is the only child of this outer `<div>`, the select
+	// must fill out its outer div completely.
+	// See: https://developer.mozilla.org/en-US/docs/Learn/Forms/Advanced_form_styling
+	display: block;
+	width: 100%;
 }
 
-input, div.select, select, textarea, output, select option {
-  color: $colorFormElementFg;
-  background-color: $colorFormElementBg;
-  // input elements always have zero margin:
-  // - if they are the first/last child, they need a zero-margin
-  //   anyway
-  // - if they are preceded by a label or followed by a paragraph,
-  //   then the label has a bottom or the paragraph a top margin
-  margin: 0;
-  // Form elements are always special, because browser are very
-  // peculiar about form element and even apply built-in style
-  // if everything has been reset by the wildcard selector `*`.
-  font-size: inherit;
-  line-height: inherit;
-  padding: 0;
-  border: none;
-  box-shadow: none;
-  outline: none;
+input,
+div.select,
+select,
+textarea,
+output,
+select option {
+	color: $colorFormElementFg;
+	background-color: $colorFormElementBg;
+	// input elements always have zero margin:
+	// - if they are the first/last child, they need a zero-margin
+	//   anyway
+	// - if they are preceded by a label or followed by a paragraph,
+	//   then the label has a bottom or the paragraph a top margin
+	margin: 0;
+	// Form elements are always special, because browser are very
+	// peculiar about form element and even apply built-in style
+	// if everything has been reset by the wildcard selector `*`.
+	font-size: inherit;
+	line-height: inherit;
+	padding: 0;
+	border: none;
+	box-shadow: none;
+	outline: none;
 }
 
 // Form elements with text content need a little bit more vertical padding
 // Note: The padding must be kept in sync with
 //   - the displacement of the label element in an input group
 //   - the top position of `div.select::after`
-input[type=text], input[type=password], select {
-  padding-top: 3px;
-  padding-bottom: 3px;
+input[type="text"],
+input[type="password"],
+select {
+	padding-top: 3px;
+	padding-bottom: 3px;
 }
 
-input[type=text], input[type=password] {
-  padding-left: 2px;
-  padding-right: 2px;
-  background-color: transparent;
-  // Do not use rgba() for border-bottom
-  // to avoid a blurry line in Safari on non-retina screens
-  border-bottom: 1px solid #222;
-  border-radius: 0;
-  box-shadow: 0 1px 0 white(0.05);
+input[type="text"],
+input[type="password"] {
+	padding-left: 2px;
+	padding-right: 2px;
+	background-color: transparent;
+	// Do not use rgba() for border-bottom
+	// to avoid a blurry line in Safari on non-retina screens
+	border-bottom: 1px solid #222;
+	border-radius: 0;
+	box-shadow: 0 1px 0 white(0.05);
 
-  &:focus {
-    border-bottom-color: $colorFormElementAccent;
-  }
+	&:focus {
+		border-bottom-color: $colorFormElementAccent;
+	}
 
-  &.error {
-    border-bottom-color: $colorFormElementError;
-  }
+	&.error {
+		border-bottom-color: $colorFormElementError;
+	}
 }
 
-input[type=checkbox] {
-  top: 2px;
-  height: 16px;
-  width: 16px;
-  appearance: none;
-  color: $colorFormElementAccent;
-  border: none;
-  border-radius: 3px;
-  box-shadow: 0 0 0 1px black(0.7);
+input[type="checkbox"] {
+	top: 2px;
+	height: 16px;
+	width: 16px;
+	appearance: none;
+	color: $colorFormElementAccent;
+	border: none;
+	border-radius: 3px;
+	box-shadow: 0 0 0 1px black(0.7);
 
-  &::before {
-    content: "✔";
-    position: absolute;
-    text-align: center;
-    font-size: 16px;
-    line-height: 16px;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: auto;
-    height: auto;
-    // Use `visibility` instead of `display` to avoid layout recalculation
-    visibility: hidden;
-  }
+	&::before {
+		content: "✔";
+		position: absolute;
+		text-align: center;
+		font-size: 16px;
+		line-height: 16px;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		width: auto;
+		height: auto;
+		// Use `visibility` instead of `display` to avoid layout recalculation
+		visibility: hidden;
+	}
 
-  &:checked::before {
-    // Use `visibility` instead of `display` to avoid layout recalculation
-    visibility: visible;
-  }
+	&:checked::before {
+		// Use `visibility` instead of `display` to avoid layout recalculation
+		visibility: visible;
+	}
 }
 
-input[type=checkbox].slider {
-  top: 5px;
-  height: 22px;
-  width: 42px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
-  border-radius: 11px;
-  background: $colorFormElementBg;
+input[type="checkbox"].slider {
+	top: 5px;
+	height: 22px;
+	width: 42px;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
+	border-radius: 11px;
+	background: $colorFormElementBg;
 
-  &::before {
-    content: "";
-    background-color: $colorFormElementAccent;
-    height: 14px;
-    width: 14px;
-    left: 3px;
-    top: 3px;
-    border: none;
-    border-radius: 7px;
-    visibility: visible;
-  }
+	&::before {
+		content: "";
+		background-color: $colorFormElementAccent;
+		height: 14px;
+		width: 14px;
+		left: 3px;
+		top: 3px;
+		border: none;
+		border-radius: 7px;
+		visibility: visible;
+	}
 
-  &:checked {
-    background-color: $colorFormElementAccent;
-  }
+	&:checked {
+		background-color: $colorFormElementAccent;
+	}
 
-  &:checked::before {
-    left: auto;
-    right: 3px;
-    background-color: $colorFormElementFg;
-  }
+	&:checked::before {
+		left: auto;
+		right: 3px;
+		background-color: $colorFormElementFg;
+	}
 }
 
 div.select {
-  font-size: 12px;
-  background: $colorFormElementBg;
-  border-radius: 3px;
-  border: 1px solid black(0.2);
-  box-shadow: 0 1px 0 white(0.02);
+	font-size: 12px;
+	background: $colorFormElementBg;
+	border-radius: 3px;
+	border: 1px solid black(0.2);
+	box-shadow: 0 1px 0 white(0.02);
 
-  &::after {
-    position: absolute;
-    content: "≡";
-    right: 8px; // must match the right padding of the `<select>` element
-    top: 3px; // must match the top padding of the `<select>` element
-    color: $colorFormElementAccent;
-    font-size: 16px;
-    font-weight: bold;
-    pointer-events: none;
-  }
+	&::after {
+		position: absolute;
+		content: "≡";
+		right: 8px; // must match the right padding of the `<select>` element
+		top: 3px; // must match the top padding of the `<select>` element
+		color: $colorFormElementAccent;
+		font-size: 16px;
+		font-weight: bold;
+		pointer-events: none;
+	}
 }
 
 select {
-  padding-left: 8px;
-  padding-right: 8px; // must match the right position of the `div.select::after`
-  appearance: none;
-  background: none;
+	padding-left: 8px;
+	padding-right: 8px; // must match the right position of the `div.select::after`
+	appearance: none;
+	background: none;
 }
 
 select option {
-  padding: 2px 0;
-  transition: none;
+	padding: 2px 0;
+	transition: none;
 }
-
 
 // 2. Input groups
 //
@@ -224,127 +234,140 @@ select option {
 // one of the indented layouts.
 //
 form div.input-group {
-  // The div for the input group requires relative positioning,
-  // although we do not move the div compared to static positioning.
-  // We only need the div to become the nearest positioned ancestor
-  // for its children.
-  position: relative;
-  margin: 18px 0;
+	// The div for the input group requires relative positioning,
+	// although we do not move the div compared to static positioning.
+	// We only need the div to become the nearest positioned ancestor
+	// for its children.
+	position: relative;
+	margin: 18px 0;
 
-  &:first-child {
-    margin-top: 0;
-  }
+	&:first-child {
+		margin-top: 0;
+	}
 
-  &:last-child {
-    margin-bottom: 0;
-  }
+	&:last-child {
+		margin-bottom: 0;
+	}
 
-  &.hidden {
-	  display: none;
-  }
+	&.hidden {
+		display: none;
+	}
 
-  label {
-    font-weight: bold;
-  }
+	label {
+		font-weight: bold;
+	}
 
-  p {
-    display: block;
-    margin: 6px 0;
-    font-size: 13px;
-    line-height: 16px;
-  }
+	p {
+		display: block;
+		margin: 6px 0;
+		font-size: 13px;
+		line-height: 16px;
+	}
 
-  p:last-child {
-    // an explaining paragraph is never the first child, either
-    // it is preceded by the mandatory input element or another
-    // explaining paragraph.
-    // so we only need a rule for being the last child.
-    margin-bottom: 0;
-  }
+	p:last-child {
+		// an explaining paragraph is never the first child, either
+		// it is preceded by the mandatory input element or another
+		// explaining paragraph.
+		// so we only need a rule for being the last child.
+		margin-bottom: 0;
+	}
 
-  &.stacked {
-    > label {
-      display: block;
-      // if a label exists, then it is always the first child,
-      // so we only need a bottom margin, no top margin
-      margin-bottom: 6px;
-    }
+	&.stacked {
+		> label {
+			display: block;
+			// if a label exists, then it is always the first child,
+			// so we only need a bottom margin, no top margin
+			margin-bottom: 6px;
+		}
 
-    > label + > input[type=text], > label + > input[type=password] {
-      // in stacked layout, text input needs a little bit more space,
-      // if preceded by a label, otherwise it looks to crowded
-      margin-top: 12px;
-    }
+		> label > input[type="text"],
+		> label > input[type="password"] {
+			// in stacked layout, text input needs a little bit more space,
+			// if preceded by a label, otherwise it looks to crowded
+			margin-top: 12px;
+		}
 
-    > input, > div.select, > textarea, > output {
-      width: 100%;
-      display: block;
-    }
-  }
+		> input,
+		> div.select,
+		> textarea,
+		> output {
+			width: 100%;
+			display: block;
+		}
+	}
 
-  &.compact {
-    // for a compact input group, we achieve an indented "hanging"
-    // by a left padding and moving the label into the padding
-    padding-left: 120px;
+	&.compact {
+		// for a compact input group, we achieve an indented "hanging"
+		// by a left padding and moving the label into the padding
+		padding-left: 120px;
 
-    > label {
-      display: block;
-      position: absolute;
-      margin: 0;
-      left: 0;
-      width: 108px; // 120px of padding - 12px normal "gap"
-      height: auto;
-      top: 3px; // adjustment for padding of text input and select
-      bottom: 0; // height should take the whole left padding
-      overflow-y: hidden; // truncate over-sized labels so that the do not spill into other areas
-    }
+		> label {
+			display: block;
+			position: absolute;
+			margin: 0;
+			left: 0;
+			width: 108px; // 120px of padding - 12px normal "gap"
+			height: auto;
+			top: 3px; // adjustment for padding of text input and select
+			bottom: 0; // height should take the whole left padding
+			overflow-y: hidden; // truncate over-sized labels so that the do not spill into other areas
+		}
 
-    > input, > div.select, > textarea, > output {
-      display: block;
-      width: 100%;
-    }
-  }
+		> input,
+		> div.select,
+		> textarea,
+		> output {
+			display: block;
+			width: 100%;
+		}
+	}
 
-  &.compact-inverse {
-    // for a compact input group, we achieve an indented "hanging"
-    // by a left padding and moving the input field into the padding
-    // Note: this is mostly only useful for checkboxes as no other
-    // type of input field is small enough
-    padding-left: 36px;
+	&.compact-inverse {
+		// for a compact input group, we achieve an indented "hanging"
+		// by a left padding and moving the input field into the padding
+		// Note: this is mostly only useful for checkboxes as no other
+		// type of input field is small enough
+		padding-left: 36px;
 
-    label {
-      display: block;
-    }
+		label {
+			display: block;
+		}
 
-    // although the layout "compact-inverse" is only usable for
-    // checkboxes, i.e. `input[type=checkbox]`, because no other
-    // form element will be usable at a size so small, we format
-    // all form elements just for the sake of safety
-    > input, > div.select, > textarea, > output {
-      display: block;
-      position: absolute;
-      width: 16px; // should be consistent with the width of a checkbox
-      height: 16px; // should be consistent with the height of a checkbox
-      top: 2px;
-      left: 0;
-    }
-  }
+		// although the layout "compact-inverse" is only usable for
+		// checkboxes, i.e. `input[type=checkbox]`, because no other
+		// form element will be usable at a size so small, we format
+		// all form elements just for the sake of safety
+		> input,
+		> div.select,
+		> textarea,
+		> output {
+			display: block;
+			position: absolute;
+			width: 16px; // should be consistent with the width of a checkbox
+			height: 16px; // should be consistent with the height of a checkbox
+			top: 2px;
+			left: 0;
+		}
+	}
 
-  &.compact-no-indent {
-    > label {
-      display: inline;
-      // an inline element must not have a top/bottom margin,
-      // because vertical margins of inline elements to not
-      // collapse with vertical margins of block elements
-    }
+	&.compact-no-indent {
+		> label {
+			display: inline;
+			// an inline element must not have a top/bottom margin,
+			// because vertical margins of inline elements to not
+			// collapse with vertical margins of block elements
+		}
 
-    > input, > div.select, > textarea, > output {
-      display: inline-block;
-      margin-left: 0.3em;
-      margin-right: 0.3em;
-      // an inline element must not have a top/bottom margin,
-      // because vertical margins of inline elements to not
-      // collapse with vertical margins of block elements
-    }
-  }
+		> input,
+		> div.select,
+		> textarea,
+		> output {
+			display: inline-block;
+			margin-left: 0.3em;
+			margin-right: 0.3em;
+			// an inline element must not have a top/bottom margin,
+			// because vertical margins of inline elements to not
+			// collapse with vertical margins of block elements
+		}
+	}
 }
