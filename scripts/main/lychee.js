@@ -4,8 +4,16 @@
 
 const lychee = {
 	title: document.title,
+	/**
+	 * The version of the backend in human-readable, printable form, e.g. `'4.6.3'`.
+	 *
+	 * TODO: Make format of this attribute and {@link lychee.update_json} consistent.
+	 *
+	 * TODO: Let the backend report the version as a proper object with properties for major, minor and patch level
+	 *
+	 * @type {string}
+	 */
 	version: "",
-	versionCode: "", // not really needed anymore
 
 	updatePath: "https://LycheeOrg.github.io/update.json",
 	updateURL: "https://github.com/LycheeOrg/Lychee/releases",
@@ -54,7 +62,7 @@ const lychee = {
 	layout: 1,
 	/**
 	 * Display search in public mode.
-	 * @type boolean
+	 * @type {boolean}
 	 */
 	public_search: false,
 	/**
@@ -69,17 +77,17 @@ const lychee = {
 	image_overlay_type_default: "exif",
 	/**
 	 * Display photo coordinates on map
-	 * @type boolean
+	 * @type {boolean}
 	 */
 	map_display: false,
 	/**
 	 * Display photos of public album on map (user not logged in)
-	 * @type boolean
+	 * @type {boolean}
 	 */
 	map_display_public: false,
 	/**
 	 * Use the GPS direction data on displayed maps
-	 * @type boolean
+	 * @type {boolean}
 	 */
 	map_display_direction: true,
 	/**
@@ -89,12 +97,12 @@ const lychee = {
 	map_provider: "Wikimedia",
 	/**
 	 * Include photos of subalbums on map
-	 * @type boolean
+	 * @type {boolean}
 	 */
 	map_include_subalbums: false,
 	/**
 	 * Retrieve location name from GPS data
-	 * @type boolean
+	 * @type {boolean}
 	 */
 	location_decoding: false,
 	/**
@@ -104,12 +112,12 @@ const lychee = {
 	location_decoding_caching_type: "Harddisk",
 	/**
 	 * Show location name
-	 * @type boolean
+	 * @type {boolean}
 	 */
 	location_show: false,
 	/**
 	 * Show location name for public albums
-	 * @type boolean
+	 * @type {boolean}
 	 */
 	location_show_public: false,
 	/**
@@ -125,7 +133,7 @@ const lychee = {
 
 	/**
 	 * Is landing page enabled?
-	 * @type boolean
+	 * @type {boolean}
 	 */
 	landing_page_enabled: false,
 	delete_imported: false,
@@ -162,7 +170,12 @@ const lychee = {
 
 	checkForUpdates: true,
 	/**
-	 * The most recent, available Lychee version encoded as an integer, e.g. 040506
+	 * The most recent, available Lychee version encoded as an integer, e.g. 040506.
+	 *
+	 * TODO: Make format of this attribute and {@link lychee.version} consistent.
+	 *
+	 * TODO: Let the backend report the version as a proper object with properties for major, minor and patch level
+	 *
 	 * @type {number}
 	 */
 	update_json: 0,
@@ -213,15 +226,38 @@ lychee.logs = function () {
  * @returns {void}
  */
 lychee.aboutDialog = function () {
-	const msg = lychee.html`
-				<h1>Lychee ${lychee.version}</h1>
-				<div class='version'><span><a target='_blank' href='${lychee.updateURL}'>${lychee.locale["UPDATE_AVAILABLE"]}</a></span></div>
-				<h1>${lychee.locale["ABOUT_SUBTITLE"]}</h1>
-				<p>${sprintf(lychee.locale["ABOUT_DESCRIPTION"], lychee.website)}</p>
-			  `;
+	const aboutDialogBody = `
+		<h1>Lychee <span class="version-number"></span></h1>
+		<p class="update-status up-to-date"><a target='_blank' href='${lychee.updateURL}'></a></p>
+		<h2></h2>
+		<p class="about-desc"></p>`;
+
+	/**
+	 * @param {ModelDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initAboutDialog = function (formElements, dialog) {
+		dialog.querySelector('span.version-number').textContent = lychee.version;
+		const updClassList = dialog.querySelector('p.update-status').classList;
+		if (lychee.update_available) {
+			updClassList.remove('up-to-date');
+		} else {
+			updClassList.add('up-to-date');
+		}
+		dialog.querySelector('p a').textContent = lychee.locale["UPDATE_AVAILABLE"];
+		dialog.querySelector('h2').textContent = lychee.locale["ABOUT_SUBTITLE"];
+		// We should not use `innerHTML`, but either hard-code HTML or build it
+		// programmatically.
+		// Also, localized strings should not contain HTML tags.
+		// TODO: Find a better solution for this.
+		dialog.querySelector('p.about-desc').innerHTML = sprintf(lychee.locale["ABOUT_DESCRIPTION"], lychee.website);
+	}
 
 	basicModal.show({
-		body: msg,
+		body: aboutDialogBody,
+		readyCB: initAboutDialog,
+		classList: ['about-dialog'],
 		buttons: {
 			cancel: {
 				title: lychee.locale["CLOSE"],
@@ -229,8 +265,6 @@ lychee.aboutDialog = function () {
 			},
 		},
 	});
-
-	if (lychee.checkForUpdates) lychee.getUpdate();
 };
 
 /**
@@ -288,10 +322,18 @@ lychee.parseInitializationData = function (data) {
 	lychee.update_json = data.update_json;
 	lychee.update_available = data.update_available;
 
+	// Here we convert a version string with six digits but without dots
+	// as reported by the backend, e.g. `'040603'`, into a dot-separated,
+	// human-readable version string `'4.6.3'`.
+	// It is ridiculous how many variants we have to represent a version
+	// number.
+	// At least there are the following three:
+	//  - a string in human-readable format with dots: `'4.6.3'`
+	//  - a string with six digits, zero-padded, without dots: `'040603'`
+	//  - an integer: `40603`
 	// TODO: Let the backend report the version as a proper object with properties for major, minor and patch level
-	lychee.versionCode = data.config.version;
-	if (lychee.versionCode !== "") {
-		const digits = lychee.versionCode.match(/.{1,2}/g);
+	if (data.config.version !== "") {
+		const digits = data.config.version.match(/.{1,2}/g);
 		lychee.version = parseInt(digits[0]).toString() + "." + parseInt(digits[1]).toString() + "." + parseInt(digits[2]).toString();
 	}
 
@@ -425,55 +467,67 @@ lychee.login = function (data) {
  * @returns {void}
  */
 lychee.loginDialog = function () {
-	// Make background unfocusable
-	tabindex.makeUnfocusable(header.dom());
-	tabindex.makeUnfocusable(lychee.content);
-	tabindex.makeUnfocusable(lychee.imageview);
+	const loginDialogBody = `
+		<a id='signInKeyLess' class="button"><svg class='iconic'><use xlink:href='#key'/></svg></a>
+		<form class="force-first-child">
+			<div class="input-group stacked">
+				<input class='text' name='username' autocomplete='username' type='text' autocapitalize='off' data-tabindex='${tabindex.get_next_tab_index()}'>
+			</div>
+			<div class="input-group stacked">
+				<input class='text' name='password' autocomplete='current-password' type='password' data-tabindex='${tabindex.get_next_tab_index()}'>
+			</div>
+		</form>
+		<p class='version'>Lychee <span class='version-number'></span><span class="update-status up-to-date"> &#8211; <a target='_blank' href='${lychee.updateURL}' data-tabindex='-1'></a></span></p>
+		`;
 
-	const msg = lychee.html`
-			<a class='signInKeyLess' id='signInKeyLess'>${build.iconic("key")}</a>
-			<form>
-				<p class='signIn'>
-					<input class='text' name='username' autocomplete='on' type='text' placeholder='$${
-						lychee.locale["USERNAME"]
-					}' autocapitalize='off' data-tabindex='${tabindex.get_next_tab_index()}'>
-					<input class='text' name='password' autocomplete='current-password' type='password' placeholder='$${
-						lychee.locale["PASSWORD"]
-					}' data-tabindex='${tabindex.get_next_tab_index()}'>
-				</p>
-				<p class='version'>Lychee ${lychee.version}<span> &#8211; <a target='_blank' href='${lychee.updateURL}' data-tabindex='-1'>${
-		lychee.locale["UPDATE_AVAILABLE"]
-	}</a><span></p>
-			</form>
-			`;
+	/**
+	 * @param {ModelDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initLoginDialog = function(formElements, dialog) {
+		tabindex.makeUnfocusable(header.dom());
+		tabindex.makeUnfocusable(lychee.content);
+		tabindex.makeUnfocusable(lychee.imageview);
+		tabindex.makeFocusable($(dialog));
+
+		formElements.username.placeholder = lychee.locale["USERNAME"];
+		formElements.password.placeholder = lychee.locale["PASSWORD"];
+		dialog.querySelector('span.version-number').textContent = lychee.version;
+		const updClassList = dialog.querySelector('span.update-status').classList;
+		if (lychee.update_available) {
+			updClassList.remove('up-to-date');
+		} else {
+			updClassList.add('up-to-date');
+		}
+		dialog.querySelector('span.update-status a').textContent = lychee.locale["UPDATE_AVAILABLE"];
+
+		// This feels awkward, because this hooks into the modal dialog in some
+		// unpredictable way.
+		// It would be better to have a checkbox for password-less login in the
+		// dialog and then let the action handler of the modal dialog, i.e.
+		// `lychee.login` handle both cases.
+		// TODO: Refactor this.
+		dialog.querySelector('#signInKeyLess').addEventListener('click', u2f.login);
+	}
 
 	basicModal.show({
-		body: msg,
+		body: loginDialogBody,
+		readyCB: initLoginDialog,
+		classList: ['login'],
 		buttons: {
 			action: {
 				title: lychee.locale["SIGN_IN"],
 				fn: lychee.login,
-				attributes: [["data-tabindex", tabindex.get_next_tab_index()]],
+				attributes: {'data-tabindex': tabindex.get_next_tab_index()},
 			},
 			cancel: {
 				title: lychee.locale["CANCEL"],
 				fn: basicModal.close,
-				attributes: [["data-tabindex", tabindex.get_next_tab_index()]],
+				attributes: {'data-tabindex': tabindex.get_next_tab_index()},
 			},
 		},
 	});
-
-	// This feels awkward, because this hooks into the modal dialog in some
-	// unpredictable way.
-	// It would be better to have a checkbox for password-less login in the
-	// dialog and then let the action handler of the modal dialog, i.e.
-	// `lychee.login` handle both cases.
-	// TODO: Refactor this.
-	$("#signInKeyLess").on("click", u2f.login);
-
-	if (lychee.checkForUpdates) lychee.getUpdate();
-
-	tabindex.makeFocusable($(".basicModal"));
 };
 
 /**
@@ -776,32 +830,6 @@ lychee.load = function (autoplay = true) {
 		lychee.content.show();
 		lychee.footer_show();
 		albums.load();
-	}
-};
-
-/**
- * @returns {void}
- */
-lychee.getUpdate = function () {
-	// console.log(lychee.update_available);
-	// console.log(lychee.update_json);
-
-	if (lychee.update_json !== 0) {
-		if (lychee.update_available) {
-			$(".version span").show();
-		}
-	} else {
-		/**
-		 * @param {{lychee: {version: number}}} data
-		 */
-		const success = function (data) {
-			if (data.lychee.version > parseInt(lychee.versionCode)) $(".version span").show();
-		};
-
-		$.ajax({
-			url: lychee.updatePath,
-			success: success,
-		});
 	}
 };
 

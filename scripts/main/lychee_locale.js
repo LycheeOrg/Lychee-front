@@ -6,8 +6,8 @@
  */
 
 lychee.locale = {
-	USERNAME: "username",
-	PASSWORD: "password",
+	USERNAME: "Username",
+	PASSWORD: "Password",
 	ENTER: "Enter",
 	CANCEL: "Cancel",
 	SIGN_IN: "Sign In",

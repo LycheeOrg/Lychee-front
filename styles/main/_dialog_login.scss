@@ -22,8 +22,10 @@ div.basicModal.login div.basicModal__content {
     font-size: 12px;
     text-align: right;
 
-    span.update-available {
-      display: none;
+    span.update-status {
+		&.up-to-date {
+			display: none;
+		}
     }
   }
 }
