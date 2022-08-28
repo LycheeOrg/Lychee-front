@@ -451,7 +451,7 @@ settings.save_enter = function (e) {
 	let cancel = {};
 
 	action.title = lychee.locale["ENTER"];
-	action.msg = lychee.html`<p style="color: #d92c34; font-size: 1.3em; font-weight: bold; text-transform: capitalize; text-align: center;">${lychee.locale["SAVE_RISK"]}</p>`;
+	action.msg = lychee.html`<p style="color: #d92c34; font-size: 1.3em; font-weight: bold; text-transform: capitalize; text-align: center;">${lychee.locale["SETTINGS_ADVANCED_SAVE"]}</p>`;
 
 	cancel.title = lychee.locale["CANCEL"];
 

@@ -352,7 +352,7 @@ contextMenu.photo = function (photoID, e) {
 			title: build.iconic("star") + (isPhotoStarred ? lychee.locale["UNSTAR"] : lychee.locale["STAR"]),
 			fn: () => photo.setStar([photoID], !isPhotoStarred),
 		},
-		{ title: build.iconic("tag") + lychee.locale["TAGS"], fn: () => photo.editTags([photoID]) },
+		{ title: build.iconic("tag") + lychee.locale["TAG"], fn: () => photo.editTags([photoID]) },
 		// for future work, use a list of all the ancestors.
 		{
 			title: build.iconic("folder-cover", coverActive ? "active" : "") + lychee.locale[coverActive ? "REMOVE_COVER" : "SET_COVER"],
@@ -437,7 +437,7 @@ contextMenu.photoMulti = function (photoIDs, e) {
 			visible: !(arePhotosStarred && arePhotosNotStarred),
 			fn: () => photo.setStar(photoIDs, arePhotosNotStarred),
 		},
-		{ title: build.iconic("tag") + lychee.locale["TAGS_ALL"], fn: () => photo.editTags(photoIDs) },
+		{ title: build.iconic("tag") + lychee.locale["TAG_ALL"], fn: () => photo.editTags(photoIDs) },
 		{},
 		{ title: build.iconic("pencil") + lychee.locale["RENAME_ALL"], fn: () => photo.setTitle(photoIDs) },
 		{
