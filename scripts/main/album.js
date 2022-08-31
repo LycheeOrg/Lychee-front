@@ -1258,14 +1258,11 @@ album.qrCode = function () {
 		return;
 	}
 
-	let msg = lychee.html`
-		<div id='qr-code' class='downloads'></div>
-	`;
-
 	basicModal.show({
-		body: msg,
-		callback: function () {
-			let qrcode = $("#qr-code");
+		body: '<div class=\'qr-code-canvas\'></div>',
+		classList: ['qr-code'],
+		readyCB: function (formElements, dialog) {
+			const qrcode = dialog.querySelector('div.qr-code-canvas');
 			QrCreator.render(
 				{
 					text: location.href,
@@ -1273,9 +1270,9 @@ album.qrCode = function () {
 					ecLevel: "H",
 					fill: "#000000",
 					background: "#FFFFFF",
-					size: qrcode.width(),
+					size: qrcode.clientWidth
 				},
-				qrcode[0]
+				qrcode
 			);
 		},
 		buttons: {
