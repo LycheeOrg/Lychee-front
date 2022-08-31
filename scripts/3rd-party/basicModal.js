@@ -92,6 +92,26 @@
  */
 
 /**
+ * Scans the dialog for any named form element and caches them in an internal
+ * dictionary to avoid repeated DOM queries with CSS selectors for efficiency
+ * reasons.
+ *
+ * The found form elements are those which are included into the dialog result
+ * set and are enabled/disabled automatically.
+ *
+ * Normally, it is not necessary to call this method manually from outside the
+ * modal dialog as this method is automatically called as part of the dialog
+ * building process inside `show`.
+ * However, if the dialog is dynamically modified after `show` has been called
+ * (e.g. if form elements are removed or added on the fly), then this method
+ * must be called.
+ *
+ * @function cacheFormElements
+ * @memberOf basicModal
+ * @returns {void}
+ */
+
+/**
  * Removes (potentially) old error indicators and highlights the indicated
  * input element.
  *

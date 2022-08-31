@@ -1127,81 +1127,72 @@ album.setProtectionPolicy = function (albumID) {
  * @returns {void}
  */
 album.shareUsers = function (albumID) {
+	/**
+	 * @param {ModalDialogResult} data
+	 */
 	const action = function (data) {
 		basicModal.close();
 
 		/** @type {number[]} */
-		const sharingToAdd = [];
-		/** @type {number[]} */
-		const sharingToDelete = [];
-		$(".basicModal .choice input").each((_, input) => {
-			const $input = $(input);
-			if ($input.is(":checked")) {
-				if ($input.data("sharingId") === undefined) {
-					// Input is checked but has no sharing id => new share to create
-					sharingToAdd.push(Number.parseInt(input.name));
-				}
-			} else {
-				const sharingId = $input.data("sharingId");
-				if (sharingId !== undefined) {
-					// Input is not checked but has a sharing id => existing share to remove
-					sharingToDelete.push(Number.parseInt(sharingId));
-				}
-			}
-		});
+		const selectedUserIds = Object.entries(data)
+			.filter(([userId, isChecked]) => isChecked)
+			.map(([userId, isChecked]) => parseInt(userId, 10));
 
-		if (sharingToDelete.length > 0) {
-			api.post("Sharing::delete", {
-				shareIDs: sharingToDelete,
-			});
-		}
-		if (sharingToAdd.length > 0) {
-			api.post("Sharing::add", {
-				albumIDs: [albumID],
-				userIDs: sharingToAdd,
-			});
-		}
+		api.post("Sharing::setByAlbum", {
+			albumID: albumID,
+			userIDs: selectedUserIds,
+		});
 	};
 
-	const msg = `<form id="sharing_people_form"><p>${lychee.locale["WAIT_FETCH_DATA"]}</p></form>`;
+	/**
+	 * @param {ModelDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initSharingDialog = function (formElements, dialog) {
+		/** @type {HTMLParagraphElement} */
+		const p = dialog.querySelector("p");
+		p.textContent = lychee.locale["WAIT_FETCH_DATA"];
 
-	const dialogSetupCB = function () {
 		/** @param {SharingInfo} data */
 		const successCallback = function (data) {
-			const sharingForm = $("#sharing_people_form");
-			sharingForm.empty();
-			if (data.users.length !== 0) {
-				sharingForm.append(`<p>${lychee.locale["SHARING_ALBUM_USERS_LONG_MESSAGE"]}</p>`);
-				// Fill with the list of users
-				data.users.forEach((user) => {
-					sharingForm.append(lychee.html`<div class='choice'>
-						<label>
-							<input type='checkbox' name='${user.id}'>
-							<span class='checkbox'>${build.iconic("check")}</span>
-							<span class='label'>${user.username}</span>
-						</label>
-						<p></p>
-					</div>`);
-				});
-				data.shared
-					.filter((val) => val.album_id === albumID)
-					.forEach((sharing) => {
-						// Check all the shares that already exist, and store their sharing id on the element
-						const elem = $(`.basicModal .choice input[name="${sharing.user_id}"]`);
-						elem.prop("checked", true);
-						elem.data("sharingId", sharing.id);
-					});
-			} else {
-				sharingForm.append(`<p>${lychee.locale["SHARING_ALBUM_USERS_NO_USERS"]}</p>`);
+			if (data.users.length === 0) {
+				p.textContent = lychee.locale["SHARING_ALBUM_USERS_NO_USERS"];
+				return;
 			}
+
+			p.textContent = lychee.locale["SHARING_ALBUM_USERS_LONG_MESSAGE"];
+
+			/** @type {HTMLFormElement} */
+			const form = document.createElement("form");
+
+			const existingShares = new Set(data.shared.map((value) => value.user_id));
+
+			// Create a list with one checkbox per user
+			data.users.forEach((user) => {
+				const div = form.appendChild(document.createElement("div"));
+				div.classList.add("input-group", "compact-inverse");
+				const label = div.appendChild(document.createElement("label"));
+				label.htmlFor = "share_dialog_user_" + user.id;
+				label.textContent = user.username;
+				const input = div.appendChild(document.createElement("input"));
+				input.type = "checkbox";
+				input.id = label.htmlFor;
+				input.name = user.id.toString();
+				input.checked = existingShares.has(user.id);
+			});
+
+			// Append the pre-constructed form to the dialog after the paragraph
+			p.parentElement.appendChild(form);
+			basicModal.cacheFormElements();
 		};
 
-		api.post("Sharing::list", {}, successCallback);
+		api.post("Sharing::list", { albumID: albumID }, successCallback);
 	};
 
 	basicModal.show({
-		body: msg,
-		callback: dialogSetupCB,
+		body: `<p></p>`,
+		readyCB: initSharingDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["SAVE"],
