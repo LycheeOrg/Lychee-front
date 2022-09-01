@@ -1259,10 +1259,10 @@ album.qrCode = function () {
 	}
 
 	basicModal.show({
-		body: '<div class=\'qr-code-canvas\'></div>',
-		classList: ['qr-code'],
+		body: "<div class='qr-code-canvas'></div>",
+		classList: ["qr-code"],
 		readyCB: function (formElements, dialog) {
-			const qrcode = dialog.querySelector('div.qr-code-canvas');
+			const qrcode = dialog.querySelector("div.qr-code-canvas");
 			QrCreator.render(
 				{
 					text: location.href,
@@ -1270,7 +1270,7 @@ album.qrCode = function () {
 					ecLevel: "H",
 					fill: "#000000",
 					background: "#FFFFFF",
-					size: qrcode.clientWidth
+					size: qrcode.clientWidth,
 				},
 				qrcode
 			);
@@ -1334,83 +1334,93 @@ album.buildMessage = function (albumIDs, albumID, op1, ops) {
  * @returns {void}
  */
 album.delete = function (albumIDs) {
-	let action = {};
-	let cancel = {};
-	let msg = "";
+	const isTagAlbum = albumIDs.length === 1 && albums.isTagAlbum(albumIDs[0]);
 
-	action.fn = function () {
-		basicModal.close();
-
-		api.post(
-			"Album::delete",
-			{
-				albumIDs: albumIDs,
-			},
-			function () {
-				if (visible.albums()) {
-					albumIDs.forEach(function (id) {
-						view.albums.content.delete(id);
-						albums.deleteByID(id);
-					});
-				} else if (visible.album()) {
-					albums.refresh();
-					if (albumIDs.length === 1 && album.getID() === albumIDs[0]) {
-						lychee.goto(album.getParentID());
-					} else {
-						albumIDs.forEach(function (id) {
-							album.deleteSubByID(id);
-							view.album.content.deleteSub(id);
-						});
-					}
-				}
+	const handleSuccessfulDeletion = function () {
+		if (visible.albums()) {
+			albumIDs.forEach(function (id) {
+				view.albums.content.delete(id);
+				albums.deleteByID(id);
+			});
+		} else if (visible.album()) {
+			albums.refresh();
+			if (albumIDs.length === 1 && album.getID() === albumIDs[0]) {
+				lychee.goto(album.getParentID());
+			} else {
+				albumIDs.forEach(function (id) {
+					album.deleteSubByID(id);
+					view.album.content.deleteSub(id);
+				});
 			}
-		);
+		}
 	};
 
-	if (albumIDs.length === 1 && albumIDs[0] === "unsorted") {
-		action.title = lychee.locale["CLEAR_UNSORTED"];
-		cancel.title = lychee.locale["KEEP_UNSORTED"];
+	const action = function () {
+		basicModal.close();
+		api.post("Album::delete", { albumIDs: albumIDs }, handleSuccessfulDeletion);
+	};
 
-		msg = `<p>` + lychee.locale["DELETE_UNSORTED_CONFIRM"] + `</p>`;
-	} else if (albumIDs.length === 1) {
-		let albumTitle = "";
-		const isTagAlbum = albums.isTagAlbum(albumIDs[0]);
+	/**
+	 * @param {ModelDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 */
+	const initConfirmDeletionDialog = function (formElements, dialog) {
+		/** @type {HTMLParagraphElement} */
+		const p = dialog.querySelector("p");
+		if (albumIDs.length === 1 && albumIDs[0] === SmartAlbumID.UNSORTED) {
+			p.textContent = lychee.locale["DELETE_UNSORTED_CONFIRM"];
+		} else if (albumIDs.length === 1) {
+			let albumTitle = "";
 
-		action.title = lychee.locale[isTagAlbum ? "DELETE_TAG_ALBUM_QUESTION" : "DELETE_ALBUM_QUESTION"];
-		cancel.title = lychee.locale["KEEP_ALBUM"];
+			// Get title
+			if (album.json) {
+				if (album.getID() === albumIDs[0]) {
+					albumTitle = album.json.title;
+				} else albumTitle = album.getSubByID(albumIDs[0]).title;
+			}
+			if (!albumTitle) {
+				let a = albums.getByID(albumIDs[0]);
+				if (a) albumTitle = a.title;
+			}
 
-		// Get title
-		if (album.json) {
-			if (album.getID() === albumIDs[0]) {
-				albumTitle = album.json.title;
-			} else albumTitle = album.getSubByID(albumIDs[0]).title;
+			// Fallback for album without a title
+			if (!albumTitle) albumTitle = lychee.locale["UNTITLED"];
+
+			p.textContent = isTagAlbum
+				? sprintf(lychee.locale["DELETE_TAG_ALBUM_CONFIRMATION"], albumTitle)
+				: sprintf(lychee.locale["DELETE_ALBUM_CONFIRMATION"], albumTitle);
+		} else {
+			p.textContent = sprintf(lychee.locale["DELETE_ALBUMS_CONFIRMATION"], albumIDs.length);
 		}
-		if (!albumTitle) {
-			let a = albums.getByID(albumIDs[0]);
-			if (a) albumTitle = a.title;
-		}
+	};
 
-		// Fallback for album without a title
-		if (!albumTitle) albumTitle = lychee.locale["UNTITLED"];
+	const actionButtonLabel =
+		albumIDs.length === 1
+			? albumIDs[0] === SmartAlbumID.UNSORTED
+				? lychee.locale["CLEAR_UNSORTED"]
+				: isTagAlbum
+				? lychee.locale["DELETE_TAG_ALBUM_QUESTION"]
+				: lychee.locale["DELETE_ALBUM_QUESTION"]
+			: lychee.locale["DELETE_ALBUMS_QUESTION"];
 
-		msg = lychee.html`<p>${sprintf(lychee.locale[isTagAlbum ? "DELETE_TAG_ALBUM_CONFIRMATION" : "DELETE_ALBUM_CONFIRMATION"], albumTitle)}</p>`;
-	} else {
-		action.title = lychee.locale["DELETE_ALBUMS_QUESTION"];
-		cancel.title = lychee.locale["KEEP_ALBUMS"];
-
-		msg = lychee.html`<p>${sprintf(lychee.locale["DELETE_ALBUMS_CONFIRMATION"], albumIDs.length)}</p>`;
-	}
+	const cancelButtonLabel =
+		albumIDs.length === 1
+			? albumIDs[0] === SmartAlbumID.UNSORTED
+				? lychee.locale["KEEP_UNSORTED"]
+				: lychee.locale["KEEP_ALBUM"]
+			: lychee.locale["KEEP_ALBUMS"];
 
 	basicModal.show({
-		body: msg,
+		body: "<p></p>",
+		readyCB: initConfirmDeletionDialog,
 		buttons: {
 			action: {
-				title: action.title,
-				fn: action.fn,
-				class: "red",
+				title: actionButtonLabel,
+				fn: action,
+				classList: ["red"],
 			},
 			cancel: {
-				title: cancel.title,
+				title: cancelButtonLabel,
 				fn: basicModal.close,
 			},
 		},
