@@ -1297,7 +1297,7 @@ album.getArchive = function (albumIDs) {
  * @param {?string} albumID
  * @param {string} op1
  * @param {string} ops
- * @returns {string} the HTML content of the dialog
+ * @returns {string} the message
  */
 album.buildMessage = function (albumIDs, albumID, op1, ops) {
 	let targetTitle = lychee.locale["UNTITLED"];
@@ -1321,9 +1321,9 @@ album.buildMessage = function (albumIDs, albumID, op1, ops) {
 			sourceTitle = sourceAlbum.title;
 		}
 
-		msg = lychee.html`<p>${sprintf(lychee.locale[op1], sourceTitle, targetTitle)}'</p>`;
+		msg = sprintf(lychee.locale[op1], sourceTitle, targetTitle);
 	} else {
-		msg = lychee.html`<p>${sprintf(lychee.locale[ops], targetTitle)}</p>`;
+		msg = sprintf(lychee.locale[ops], targetTitle);
 	}
 
 	return msg;
@@ -1448,12 +1448,14 @@ album.merge = function (albumIDs, albumID, confirm = true) {
 
 	if (confirm) {
 		basicModal.show({
-			body: album.buildMessage(albumIDs, albumID, "ALBUM_MERGE", "ALBUMS_MERGE"),
+			body: "<p></p>",
+			readyCB: (formElements, dialog) =>
+				(dialog.querySelector("p").textContent = album.buildMessage(albumIDs, albumID, "ALBUM_MERGE", "ALBUMS_MERGE")),
 			buttons: {
 				action: {
 					title: lychee.locale["MERGE_ALBUM"],
 					fn: action,
-					class: "red",
+					classList: ["red"],
 				},
 				cancel: {
 					title: lychee.locale["DONT_MERGE"],
@@ -1487,12 +1489,14 @@ album.setAlbum = function (albumIDs, albumID, confirm = true) {
 
 	if (confirm) {
 		basicModal.show({
-			body: album.buildMessage(albumIDs, albumID, "ALBUM_MOVE", "ALBUMS_MOVE"),
+			body: "<p></p>",
+			readyCB: (formElements, dialog) =>
+				(dialog.querySelector("p").textContent = album.buildMessage(albumIDs, albumID, "ALBUM_MOVE", "ALBUMS_MOVE")),
 			buttons: {
 				action: {
 					title: lychee.locale["MOVE_ALBUMS"],
 					fn: action,
-					class: "red",
+					classList: ["red"],
 				},
 				cancel: {
 					title: lychee.locale["NOT_MOVE_ALBUMS"],
