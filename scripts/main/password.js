@@ -17,12 +17,7 @@ const password = {};
  * @param {UnlockSuccessCB} callback - called in case of success
  */
 password.getDialog = function (albumID, callback) {
-	/**
-	 * @typedef UnlockDialogResult
-	 * @property {string} password
-	 */
-
-	/** @param {UnlockDialogResult} data */
+	/** @param {{password: string}} data */
 	const action = (data) => {
 		const params = {
 			albumID: albumID,
@@ -39,7 +34,7 @@ password.getDialog = function (albumID, callback) {
 			null,
 			function (jqXHR, params2, lycheeException) {
 				if ((jqXHR.status === 401 || jqXHR.status === 403) && lycheeException.message.includes("Password is invalid")) {
-					basicModal.error("password");
+					basicModal.focusError("password");
 					return true;
 				}
 				basicModal.close();
@@ -53,20 +48,25 @@ password.getDialog = function (albumID, callback) {
 		if (!visible.albums() && !visible.album()) lychee.goto();
 	};
 
-	const msg =
-		`
-			  <p>
-				  ` +
-		lychee.locale["ALBUM_PASSWORD_REQUIRED"] +
-		`
-				  <input name='password' class='text' type='password' placeholder='` +
-		lychee.locale["PASSWORD"] +
-		`' value=''>
-			  </p>
-			  `;
+	const enterPasswordDialogBody =	`
+		  <p></p>
+		  <form>
+		  	<div class="input-group stacked"><input name='password' class='text' type='password'></div>
+		  </form>`;
+
+	/**
+	 * @param {ModelDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initEnterPasswordDialog = function (formElements, dialog) {
+		dialog.querySelector("p").textContent = lychee.locale["ALBUM_PASSWORD_REQUIRED"];
+		formElements.password.placeholder = lychee.locale["PASSWORD"];
+	}
 
 	basicModal.show({
-		body: msg,
+		body: enterPasswordDialogBody,
+		readyCB: initEnterPasswordDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["ENTER"],
