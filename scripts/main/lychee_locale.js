@@ -274,10 +274,6 @@ lychee.locale = {
 	LOADING: "Loading",
 	ERROR: "Error",
 	ERROR_TEXT: "Whoops, it looks like something went wrong. Please reload the site and try again!",
-	ERROR_DB_1:
-		"Unable to connect to host database because access was denied. Double-check your host, username and password and ensure that access from your current location is permitted.",
-	ERROR_DB_2:
-		"Unable to create the database. Double-check your host, username and password and ensure that the specified user has the rights to modify and add content to the database.",
 	ERROR_UNKNOWN:
 		"Something unexpected happened. Please try again and check your installation and server. Take a look at the readme for more information.",
 	ERROR_LOGIN: "Unable to save login. Please try again with another username and password!",
@@ -320,15 +316,6 @@ lychee.locale = {
 
 	SETTINGS_SUCCESS_CSS: "CSS updated",
 	SETTINGS_SUCCESS_UPDATE: "Settings updated successfully",
-
-	DB_INFO_TITLE: "Enter your database connection details below:",
-	DB_INFO_HOST: "Database Host (optional)",
-	DB_INFO_USER: "Database Username",
-	DB_INFO_PASSWORD: "Database Password",
-	DB_INFO_TEXT: "Lychee will create its own database. If required, you can enter the name of an existing database instead:",
-	DB_NAME: "Database Name (optional)",
-	DB_PREFIX: "Table prefix (optional)",
-	DB_CONNECT: "Connect",
 
 	LOGIN_TITLE: "Enter a username and password for your installation:",
 	LOGIN_USERNAME: "New Username",
