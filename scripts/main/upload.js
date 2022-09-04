@@ -2,7 +2,7 @@
  * @description Takes care of every action an album can handle and execute.
  */
 
-let upload = {};
+const upload = {};
 
 const choiceDeleteSelector = '.basicModal .choice input[name="delete_imported"]';
 const choiceSymlinkSelector = '.basicModal .choice input[name="import_via_symlink"]';
@@ -13,11 +13,11 @@ const cancelSelector = ".basicModal #basicModal__cancel";
 const firstRowStatusSelector = ".basicModal .rows .row .status";
 const firstRowNoticeSelector = ".basicModal .rows .row p.notice";
 
-let nRowStatusSelector = function (row) {
+const nRowStatusSelector = function (row) {
 	return ".basicModal .rows .row:nth-child(" + row + ") .status";
 };
 
-let showCloseButton = function () {
+const showCloseButton = function () {
 	$(actionSelector).show();
 	// re-activate cancel button to close modal panel if needed
 	$(cancelSelector).removeClass("basicModal__button--active").hide();
@@ -35,14 +35,14 @@ upload.show = function (title, files, run_callback, cancel_callback = null) {
 		buttons: {
 			action: {
 				title: lychee.locale["CLOSE"],
-				class: "hidden",
+				classList: ["hidden"],
 				fn: function () {
 					if ($(actionSelector).is(":visible")) basicModal.close();
 				},
 			},
 			cancel: {
 				title: lychee.locale["CANCEL"],
-				class: "red hidden",
+				classList: ["red", "hidden"],
 				fn: function () {
 					// close modal if close button is displayed
 					if ($(actionSelector).is(":visible")) basicModal.close();
@@ -57,10 +57,15 @@ upload.show = function (title, files, run_callback, cancel_callback = null) {
 	});
 };
 
-upload.notify = function (title, text) {
-	if (text == null || text === "") text = lychee.locale["UPLOAD_MANAGE_NEW_PHOTOS"];
+/**
+ * @param {string} title
+ * @param {string} [text=""]
+ * @returns {void}
+ */
+upload.notify = function (title, text= "") {
+	if (text === "") text = lychee.locale["UPLOAD_MANAGE_NEW_PHOTOS"];
 
-	if (!window.webkitNotifications) return false;
+	if (!window.webkitNotifications) return;
 
 	if (window.webkitNotifications.checkPermission() !== 0) window.webkitNotifications.requestPermission();
 
@@ -379,12 +384,7 @@ upload.start = {
 	url: function (preselectedUrl = "") {
 		const albumID = album.getID();
 
-		/**
-		 * @typedef UrlDialogResult
-		 * @property {string} url
-		 */
-
-		/** @param {UrlDialogResult} data */
+		/** @param {{url: string}} data */
 		const action = function (data) {
 			const runImport = function () {
 				$(firstRowStatusSelector).html(lychee.locale["UPLOAD_IMPORTING"]);
@@ -462,14 +462,24 @@ upload.start = {
 			if (data.url && data.url.trim().length > 3) {
 				basicModal.close();
 				upload.show(lychee.locale["UPLOAD_IMPORTING_URL"], [{ name: data.url }], runImport);
-			} else basicModal.error("link");
+			} else basicModal.focusError("url");
 		};
 
+		const importFromUrlDialogBody = `
+			<p></p>
+			<form>
+				<div class="input-group stacked"><input class='text' name='url' type='text'></div>
+			</form>`;
+
+		const initImportFormUrlDialog = function(formElements, dialog) {
+			dialog.querySelector("p").textContent = lychee.locale["UPLOAD_IMPORT_INSTR"];
+			formElements.url.placeholder = 'https://';
+			formElements.url.value = preselectedUrl;
+		}
+
 		basicModal.show({
-			body:
-				lychee.html`<p>` +
-				lychee.locale["UPLOAD_IMPORT_INSTR"] +
-				` <input class='text' name='url' type='text' placeholder='https://' value='${preselectedUrl}'></p>`,
+			body: importFromUrlDialogBody,
+			readyCB: initImportFormUrlDialog,
 			buttons: {
 				action: {
 					title: lychee.locale["UPLOAD_IMPORT"],
