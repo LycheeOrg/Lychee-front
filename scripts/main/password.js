@@ -28,8 +28,7 @@ password.getDialog = function (albumID, callback) {
 			"Album::unlock",
 			params,
 			function () {
-				basicModal.close();
-				callback();
+				basicModal.close(false, callback);
 			},
 			null,
 			function (jqXHR, params2, lycheeException) {
@@ -44,11 +43,12 @@ password.getDialog = function (albumID, callback) {
 	};
 
 	const cancel = function () {
-		basicModal.close();
-		if (!visible.albums() && !visible.album()) lychee.goto();
+		basicModal.close(false, function () {
+			if (!visible.albums() && !visible.album()) lychee.goto();
+		});
 	};
 
-	const enterPasswordDialogBody =	`
+	const enterPasswordDialogBody = `
 		  <p></p>
 		  <form>
 		  	<div class="input-group stacked"><input name='password' class='text' type='password'></div>
@@ -62,7 +62,7 @@ password.getDialog = function (albumID, callback) {
 	const initEnterPasswordDialog = function (formElements, dialog) {
 		dialog.querySelector("p").textContent = lychee.locale["ALBUM_PASSWORD_REQUIRED"];
 		formElements.password.placeholder = lychee.locale["PASSWORD"];
-	}
+	};
 
 	basicModal.show({
 		body: enterPasswordDialogBody,

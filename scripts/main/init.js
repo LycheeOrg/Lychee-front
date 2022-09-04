@@ -302,12 +302,10 @@ $(document).ready(function () {
 		)
 		// Upload
 		.on("change", "#upload_files", function () {
-			basicModal.close();
-			upload.start.local(this.files);
+			basicModal.close(false, () => upload.start.local(this.files));
 		})
 		.on("change", "#upload_track_file", function () {
-			basicModal.close();
-			upload.uploadTrack(this.files);
+			basicModal.close(false, () => upload.uploadTrack(this.files));
 		})
 		// Drag and Drop upload
 		.on(
