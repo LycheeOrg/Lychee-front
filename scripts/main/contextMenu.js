@@ -380,7 +380,7 @@ contextMenu.photo = function (photoID, e) {
 		{ title: build.iconic("trash") + lychee.locale["DELETE"], fn: () => photo.delete([photoID]) },
 		{ title: build.iconic("cloud-download") + lychee.locale["DOWNLOAD"], fn: () => photo.getArchive([photoID]) },
 	];
-	if (album.isSmartID(album.getID()) || album.isSearchID(album.getID) || album.isTagAlbum()) {
+	if (album.isSmartID(album.getID()) || album.isSearchID(album.getID()) || album.isTagAlbum()) {
 		// Cover setting not supported for smart or tag albums and search results.
 		items.splice(2, 1);
 	}

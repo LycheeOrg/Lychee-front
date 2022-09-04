@@ -11,6 +11,37 @@ const albums = {
  * @returns {void}
  */
 albums.load = function () {
+	const showRootAlbum = function () {
+		header.setMode("albums");
+		view.albums.init();
+		lychee.animate(lychee.content, "contentZoomIn");
+
+		tabindex.makeFocusable(lychee.content);
+
+		if (lychee.active_focus_on_page_load) {
+			// Put focus on first element - either album or photo
+			let first_album = $(".album:first");
+			if (first_album.length !== 0) {
+				first_album.focus();
+			} else {
+				let first_photo = $(".photo:first");
+				if (first_photo.length !== 0) {
+					first_photo.focus();
+				}
+			}
+		}
+
+		setTimeout(() => {
+			lychee.footer_show();
+		}, 300);
+
+		// If no user is authenticated and there is nothing to see in the
+		// root album, we automatically show the login dialog
+		if (lychee.publicMode === true && lychee.viewMode === false && albums.isEmpty()) {
+			lychee.loginDialog();
+		}
+	};
+
 	let startTime = new Date().getTime();
 
 	lychee.animate(lychee.content, "contentZoomOut");
@@ -31,28 +62,7 @@ albums.load = function () {
 		const waitTime = durationTime > 300 || skipDelay ? 0 : 300 - durationTime;
 
 		setTimeout(() => {
-			header.setMode("albums");
-			view.albums.init();
-			lychee.animate(lychee.content, "contentZoomIn");
-
-			tabindex.makeFocusable(lychee.content);
-
-			if (lychee.active_focus_on_page_load) {
-				// Put focus on first element - either album or photo
-				let first_album = $(".album:first");
-				if (first_album.length !== 0) {
-					first_album.focus();
-				} else {
-					let first_photo = $(".photo:first");
-					if (first_photo.length !== 0) {
-						first_photo.focus();
-					}
-				}
-			}
-
-			setTimeout(() => {
-				lychee.footer_show();
-			}, 300);
+			showRootAlbum();
 		}, waitTime);
 	};
 
@@ -60,24 +70,7 @@ albums.load = function () {
 		api.post("Albums::get", {}, successCallback);
 	} else {
 		setTimeout(() => {
-			header.setMode("albums");
-			view.albums.init();
-			lychee.animate(lychee.content, "contentZoomIn");
-
-			tabindex.makeFocusable(lychee.content);
-
-			if (lychee.active_focus_on_page_load) {
-				// Put focus on first element - either album or photo
-				const first_album = $(".album:first");
-				if (first_album.length !== 0) {
-					first_album.focus();
-				} else {
-					const first_photo = $(".photo:first");
-					if (first_photo.length !== 0) {
-						first_photo.focus();
-					}
-				}
-			}
+			showRootAlbum();
 		}, 300);
 	}
 };
@@ -226,4 +219,31 @@ albums.refresh = function () {
  */
 albums.isTagAlbum = function (albumID) {
 	return albums.json && albums.json.tag_albums.find((tagAlbum) => tagAlbum.id === albumID);
+};
+
+/**
+ * Returns true if the root album is empty in the sense that there is no
+ * visible user content.
+ *
+ * @returns {boolean}
+ */
+albums.isEmpty = function () {
+	return (
+		albums.json === null ||
+		(albums.isSmartAlbumEmpty(albums.json.smart_albums.public) &&
+			albums.isSmartAlbumEmpty(albums.json.smart_albums.recent) &&
+			albums.isSmartAlbumEmpty(albums.json.smart_albums.starred) &&
+			albums.isSmartAlbumEmpty(albums.json.smart_albums.unsorted) &&
+			albums.json.albums.length === 0 &&
+			albums.json.shared_albums.length === 0 &&
+			albums.json.tag_albums.length === 0)
+	);
+};
+
+/**
+ * @param {?SmartAlbum} smartAlbum
+ * @returns {boolean}
+ */
+albums.isSmartAlbumEmpty = function (smartAlbum) {
+	return smartAlbum === null || !smartAlbum.photos || smartAlbum.photos.length === 0;
 };

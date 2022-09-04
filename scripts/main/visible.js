@@ -34,7 +34,7 @@ visible.config = function () {
 
 /** @returns {boolean} */
 visible.search = function () {
-	return search.json !== null;
+	return visible.albums() && album.json !== null && album.isSearchID(album.json.id);
 };
 
 /** @returns {boolean} */

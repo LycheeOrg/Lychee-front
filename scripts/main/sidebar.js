@@ -115,7 +115,7 @@ sidebar.triggerSearch = function (search_string) {
 
 	search.json = null;
 	// We're either logged in or public search is allowed
-	lychee.goto("search/" + encodeURIComponent(search_string));
+	lychee.goto(SearchAlbumIDPrefix + "/" + encodeURIComponent(search_string));
 };
 
 /**

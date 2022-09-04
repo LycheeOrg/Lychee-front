@@ -178,14 +178,6 @@ settings.bind = function (inputSelector, formSelector, settingClickCB) {
  * @returns {void}
  */
 settings.changeLogin = function (params) {
-	if (params.username.length < 1) {
-		loadingBar.show("error", lychee.locale["ERROR_EMPTY_USERNAME"]);
-		$("input[name=username]").addClass("error");
-		return;
-	} else {
-		$("input[name=username]").removeClass("error");
-	}
-
 	if (params.password.length < 1) {
 		loadingBar.show("error", lychee.locale["ERROR_EMPTY_PASSWORD"]);
 		$("input[name=password]").addClass("error");
@@ -202,7 +194,7 @@ settings.changeLogin = function (params) {
 		$("input[name=confirm]").removeClass("error");
 	}
 
-	api.post("Settings::setLogin", params, function () {
+	api.post("Settings::updateLogin", params, function () {
 		$("input[name]").removeClass("error");
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_LOGIN"]);
 		view.settings.content.clearLogin();

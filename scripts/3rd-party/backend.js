@@ -134,7 +134,7 @@
  *
  * @property {string}  id
  * @property {string}  title
- * @property {Photo[]} photos
+ * @property {Photo[]} [photos]
  * @property {?Thumb}  thumb
  * @property {boolean} is_public
  * @property {boolean} is_downloadable

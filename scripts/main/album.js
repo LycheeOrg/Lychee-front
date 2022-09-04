@@ -20,7 +20,7 @@ album.isSmartID = function (id) {
  * @returns {boolean}
  */
 album.isSearchID = function (id) {
-	return id === SearchAlbumID;
+	return id !== null && (id === SearchAlbumIDPrefix || id.startsWith(SearchAlbumIDPrefix + "/"));
 };
 
 /**
@@ -48,18 +48,27 @@ album.getID = function () {
 	/** @type {?string} */
 	let id = null;
 
-	// this is a Lambda
-	let isID = (_id) => {
-		return album.isSmartID(_id) || /*album.isSearchID(_id) || */ album.isModelID(_id);
+	/** @param {?string} _id */
+	const isID = (_id) => {
+		return album.isSmartID(_id) || album.isSearchID(_id) || album.isModelID(_id);
 	};
 
 	if (photo.json) id = photo.json.album_id;
 	else if (album.json) id = album.json.id;
 	else if (mapview.albumID) id = mapview.albumID;
 
-	// Search
-	if (isID(id) === false) id = $(".album:hover, .album.active").attr("data-id");
-	if (isID(id) === false) id = $(".photo:hover, .photo.active").attr("data-album-id");
+	if (isID(id) === false) {
+		const active = $(".album:hover, .album.active");
+		if (active.length === 1) {
+			id = active.attr("data-id") || null;
+		}
+	}
+	if (isID(id) === false) {
+		const active = $(".photo:hover, .photo.active");
+		if (active.length === 1) {
+			id = active.attr("data-album-id") || null;
+		}
+	}
 
 	if (isID(id) === true) return id;
 	else return null;
@@ -176,15 +185,23 @@ album.deleteSubByID = function (albumID) {
 /**
  * @param {string} albumID
  * @param {?AlbumLoadedCB} [albumLoadedCB=null]
+ * @param {?string} parentID
  *
  * @returns {void}
  */
-album.load = function (albumID, albumLoadedCB = null) {
+album.load = function (albumID, albumLoadedCB = null, parentID = null) {
 	/**
 	 * @param {Album} data
 	 */
 	const processAlbum = function (data) {
 		album.json = data;
+
+		if (parentID !== null) {
+			// Used with search so that the back button sends back to the
+			// search results.
+			album.json.original_parent_id = album.json.parent_id;
+			album.json.parent_id = parentID;
+		}
 
 		if (albumLoadedCB === null) {
 			lychee.animate(lychee.content, "contentZoomOut");
@@ -265,6 +282,21 @@ album.load = function (albumID, albumLoadedCB = null) {
 				albums.refresh();
 				album.load(albumID, albumLoadedCB);
 			});
+			return true;
+		} else if (lycheeException.exception.endsWith("UnauthenticatedException") && !albumLoadedCB) {
+			// If no password is required, but we still get a 401 error
+			// try to properly log in as a user
+			// We only try this, if `albumLoadedCB` is not set.
+			// This is not optimal, but the best we can do without too much
+			// refactoring for now.
+			// `albumLoadedCB` is set, if the user directly jumps to a photo
+			// in an album via a direct link.
+			// Even though the album might be private, the photo could still
+			// be visible.
+			// If we caught users for a direct link to a public photo
+			// within a private album, we would "trap" the users in a login
+			// dialog which they cannot pass by.
+			lychee.loginDialog();
 			return true;
 		} else if (albumLoadedCB) {
 			// In case we could not successfully load and unlock the album,

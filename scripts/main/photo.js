@@ -42,7 +42,7 @@ photo.load = function (photoID, albumID, autoplay) {
 		// TODO: Why do we overwrite the true album ID of a photo, by the externally provided one? I guess we need it, because the album which the user came from might also be a smart album or a tag album. However, in this case I would prefer to leave the `album_id  untouched (don't rename it to `original_album_id`) and call this one `effective_album_id` instead.
 		photo.json.album_id = albumID;
 
-		if (!visible.photo()) view.photo.show();
+		view.photo.show();
 		view.photo.init(autoplay);
 		lychee.imageview.show();
 
@@ -328,9 +328,9 @@ photo.delete = function (photoIDs) {
 		// Show album otherwise.
 		if (visible.photo()) {
 			if (nextPhotoID !== null && nextPhotoID !== photo.getID()) {
-				lychee.goto(album.getID() + "/" + nextPhotoID);
+				lychee.goto(album.getID() + "/" + nextPhotoID, false);
 			} else if (previousPhotoID !== null && previousPhotoID !== photo.getID()) {
-				lychee.goto(album.getID() + "/" + previousPhotoID);
+				lychee.goto(album.getID() + "/" + previousPhotoID, false);
 			} else {
 				lychee.goto(album.getID());
 			}
@@ -521,6 +521,10 @@ photo.setAlbum = function (photoIDs, albumID) {
 photo.toggleStar = function () {
 	photo.json.is_starred = !photo.json.is_starred;
 	view.photo.star();
+
+	album.getByID(photo.json.id).is_starred = photo.json.is_starred;
+	view.album.content.star(photo.json.id);
+
 	albums.refresh();
 
 	api.post("Photo::setStar", {
