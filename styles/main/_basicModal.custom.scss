@@ -36,9 +36,10 @@ div.basicModal__buttons {
 	cursor: default;
 
 	&:active,
-	&--active {
+	&--busy {
 		transition: none;
 		background: black(0.1);
+		cursor: wait;
 	}
 
 	&#basicModal__action {
@@ -53,10 +54,6 @@ div.basicModal__buttons {
 
 	&.hidden {
 		display: none;
-	}
-
-	&.busy {
-		cursor: wait;
 	}
 }
 

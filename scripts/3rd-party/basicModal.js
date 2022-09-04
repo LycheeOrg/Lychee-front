@@ -28,6 +28,11 @@
  */
 
 /**
+ * @callback ModalDialogClosedCB
+ * @returns {void}
+ */
+
+/**
  * @typedef ModelDialogFormElements
  *
  * A dictionary of names of form elements to those form elements.
@@ -169,5 +174,140 @@
  * @function close
  * @memberOf basicModal
  * @param {boolean} [force=false]
+ * @param {ModalDialogClosedCB} [onClosedCB]
+ * @returns {void}
+ */
+
+/**
+ * @function isActionButtonBusy
+ * @memberOf basicModal
+ * @returns {boolean}
+ */
+
+/**
+ * @function markActionButtonAsBusy
+ * @memberOf basicModal
+ * @returns {void}
+ */
+
+/**
+ * @function markActionButtonAsIdle
+ * @memberOf basicModal
+ * @returns {void}
+ */
+
+/**
+ * Returns `true`, if the Action button is visible.
+ *
+ * @function isActionButtonVisible
+ * @memberOf basicModal
+ * @returns {boolean}
+ */
+
+/**
+ * Returns `true`, if the Action button is hidden.
+ *
+ * Note, this method is not exactly the opposite of
+ * {@link basicModal#isActionButtonVisible}.
+ * This method only returns `true` if the dialog own an Action button which
+ * can be hidden.
+ * In other words, both {@link basicModal#isActionButtonVisible} and this method may
+ * return `false` simultaneously, if there is no Action button at all.
+ *
+ * @function isActionButtonHidden
+ * @memberOf basicModal
+ * @returns {boolean}
+ */
+
+/**
+ * Hides the Action button
+ *
+ * Note: This does not hide the button by setting the `display` property to
+ * `none`, but completely removes the button from the DOM.
+ * This is necessary, as an element which is not displayed is still considered
+ * when it comes to calculating the first or last child and hence rounding
+ * of the first/last button does not work as expected, if the button is still
+ * part of the DOM.
+ *
+ * @function hideActionButton
+ * @memberOf basicModal
+ * @returns {void}
+ */
+
+/**
+ * Shows the Action button, if one has been defined
+ *
+ * Note: This re-inserts the Action button into the DOM, but only if an Action
+ * button has previously been defined during the dialog construction.
+ *
+ * @function showActionButton
+ * @memberOf basicModal
+ * @returns {void}
+ */
+
+/**
+ * @function isCancelButtonBusy
+ * @memberOf basicModal
+ * @returns {boolean}
+ */
+
+/**
+ * @function markCancelButtonAsBusy
+ * @memberOf basicModal
+ * @returns {void}
+ */
+
+/**
+ * @function markCancelButtonAsIdle
+ * @memberOf basicModal
+ * @returns {void}
+ */
+
+/**
+ * Returns `true`, if the Cancel button is visible.
+ *
+ * @function isCancelButtonVisible
+ * @memberOf basicModal
+ * @returns {boolean}
+ */
+
+/**
+ * Returns `true`, if the Cancel button is hidden.
+ *
+ * Note, this method is not exactly the opposite of
+ * {@link basicModal#isCancelButtonVisible}.
+ * This method only returns `true` if the dialog own a Cancel button which
+ * can be hidden.
+ * In other words, both {@link basicModal#isCancelButtonVisible} and this method may
+ * return `false` simultaneously, if there is no Cancel button at all.
+ *
+ * @function isCancelButtonHidden
+ * @memberOf basicModal
+ * @returns {boolean}
+ */
+
+/**
+ * Hides the Cancel button
+ *
+ * Note: This does not hide the button by setting the `display` property to
+ * `none`, but completely removes the button from the DOM.
+ * This is necessary, as an element which is not displayed is still considered
+ * when it comes to calculating the first or last child and hence rounding
+ * of the first/last button does not work as expected, if the button is still
+ * part of the DOM.
+ *
+ * @function hideCancelButton
+ * @memberOf basicModal
+ * @returns {void}
+ */
+
+/**
+ * Shows the Cancel button, if one has been defined
+ *
+ * Note: This re-inserts the Cancel button into the DOM, but only if a Cancel
+ * button has previously been defined during the dialog construction.
+ *
+ * @function showCancelButton
+ * @memberOf basicModal
  * @returns {void}
  */
