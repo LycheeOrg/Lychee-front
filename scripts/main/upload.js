@@ -4,10 +4,6 @@
 
 const upload = {};
 
-const choiceDeleteSelector = '.basicModal .choice input[name="delete_imported"]';
-const choiceSymlinkSelector = '.basicModal .choice input[name="import_via_symlink"]';
-const choiceDuplicateSelector = '.basicModal .choice input[name="skip_duplicates"]';
-const choiceResyncSelector = '.basicModal .choice input[name="resync_metadata"]';
 const actionSelector = ".basicModal #basicModal__action";
 const cancelSelector = ".basicModal #basicModal__cancel";
 const firstRowStatusSelector = ".basicModal .rows .row .status";
@@ -471,6 +467,11 @@ upload.start = {
 				<div class="input-group stacked"><input class='text' name='url' type='text'></div>
 			</form>`;
 
+		/**
+		 * @param {ModelDialogFormElements} formElements
+		 * @param {HTMLDivElement} dialog
+		 * @returns {void}
+		 */
 		const initImportFormUrlDialog = function(formElements, dialog) {
 			dialog.querySelector("p").textContent = lychee.locale["UPLOAD_IMPORT_INSTR"];
 			formElements.url.placeholder = 'https://';
@@ -496,27 +497,93 @@ upload.start = {
 	server: function () {
 		const albumID = album.getID();
 
-		const importDialogSetupCB = function () {
-			const $delete = $(choiceDeleteSelector);
-			const $symlinks = $(choiceSymlinkSelector);
-			const $duplicates = $(choiceDuplicateSelector);
-			const $resync = $(choiceResyncSelector);
+		/**
+		 * @typedef ImportFromServerDialogFormElements
+		 *
+		 * @property {HTMLInputElement} path
+		 * @property {HTMLInputElement} delete_imported
+		 * @property {HTMLInputElement} import_via_symlink
+		 * @property {HTMLInputElement} skip_duplicates
+		 * @property {HTMLInputElement} resync_metadata
+		 */
 
+		/**
+		 * @param {ImportFromServerDialogFormElements} formElements
+		 * @param {HTMLDivElement} dialog
+		 * @returns {void}
+		 */
+		const initImportFromServerDialog = function (formElements, dialog) {
+			dialog.querySelector("p").textContent = lychee.locale["UPLOAD_IMPORT_SERVER_INSTR"];
+			formElements.path.placeholder = lychee.locale["UPLOAD_ABSOLUTE_PATH"];
+			formElements.path.value = lychee.location + 'uploads/import/';
+			formElements.delete_imported.previousElementSibling.textContent = lychee.locale["UPLOAD_IMPORT_DELETE_ORIGINALS"];
+			formElements.delete_imported.nextElementSibling.textContent = lychee.locale["UPLOAD_IMPORT_DELETE_ORIGINALS_EXPL"];
+			formElements.import_via_symlink.previousElementSibling.textContent = lychee.locale["UPLOAD_IMPORT_VIA_SYMLINK"];
+			formElements.import_via_symlink.nextElementSibling.textContent = lychee.locale["UPLOAD_IMPORT_VIA_SYMLINK_EXPL"];
+			formElements.skip_duplicates.previousElementSibling.textContent = lychee.locale["UPLOAD_IMPORT_SKIP_DUPLICATES"];
+			formElements.skip_duplicates.nextElementSibling.textContent = lychee.locale["UPLOAD_IMPORT_SKIP_DUPLICATES_EXPL"];
+			formElements.resync_metadata.previousElementSibling.textContent = lychee.locale["UPLOAD_IMPORT_RESYNC_METADATA"];
+			formElements.resync_metadata.nextElementSibling.textContent = lychee.locale["UPLOAD_IMPORT_RESYNC_METADATA_EXPL"];
+
+			// Initialize form elements (and dependent form elements) based on
+			// global configuration settings.
 			if (lychee.delete_imported) {
-				$delete.prop("checked", true);
-				$symlinks.prop("checked", false).prop("disabled", true);
+				formElements.delete_imported.checked = true;
+				formElements.import_via_symlink.checked = false;
+				formElements.import_via_symlink.disabled = true;
+				formElements.import_via_symlink.parentElement.classList.add("disabled");
 			} else {
 				if (lychee.import_via_symlink) {
-					$symlinks.prop("checked", true);
-					$delete.prop("checked", false).prop("disabled", true);
+					formElements.delete_imported.checked = false;
+					formElements.delete_imported.disabled = true;
+					formElements.delete_imported.parentElement.classList.add("disabled");
+					formElements.import_via_symlink.checked = true;
 				}
 			}
+
 			if (lychee.skip_duplicates) {
-				$duplicates.prop("checked", true);
-				if (lychee.resync_metadata) $resync.prop("checked", true);
+				formElements.skip_duplicates.checked = true;
+				formElements.resync_metadata.checked = lychee.resync_metadata;
 			} else {
-				$resync.prop("disabled", true);
+				formElements.skip_duplicates.checked = false;
+				formElements.resync_metadata.checked = false;
+				formElements.resync_metadata.disabled = true;
+				formElements.resync_metadata.parentElement.classList.add('disabled');
 			}
+
+			// Checkbox action handler to visualize contradictory settings
+			formElements.delete_imported.addEventListener("change", function() {
+				if (formElements.delete_imported.checked) {
+					formElements.import_via_symlink.checked = false;
+					formElements.import_via_symlink.disabled = true;
+					formElements.import_via_symlink.parentElement.classList.add("disabled");
+				} else {
+					formElements.import_via_symlink.disabled = false;
+					formElements.import_via_symlink.parentElement.classList.remove("disabled");
+				}
+			});
+
+			formElements.import_via_symlink.addEventListener("change", function() {
+				if (formElements.import_via_symlink.checked) {
+					formElements.delete_imported.checked = false;
+					formElements.delete_imported.disabled = true;
+					formElements.delete_imported.parentElement.classList.add("disabled");
+				} else {
+					formElements.delete_imported.disabled = false;
+					formElements.delete_imported.parentElement.classList.remove("disabled");
+				}
+			});
+
+			formElements.skip_duplicates.addEventListener("change", function() {
+				if (formElements.skip_duplicates.checked) {
+					formElements.resync_metadata.disabled = false;
+					formElements.resync_metadata.parentElement.classList.remove("disabled");
+				} else {
+					formElements.resync_metadata.checked = false;
+					formElements.resync_metadata.disabled = true;
+					formElements.resync_metadata.parentElement.classList.add("disabled");
+				}
+			});
 		};
 
 		/**
@@ -531,18 +598,18 @@ upload.start = {
 		/** @param {ServerImportDialogResult} data */
 		const action = function (data) {
 			if (!data.paths.trim()) {
-				basicModal.error("paths");
+				basicModal.focusError("path");
 				return;
-			} else {
-				// Consolidate `data` before we close the modal dialog
-				// TODO: We should fix the modal dialog to properly return the values of all input fields, incl. check boxes
-				data.paths = data.paths.match(/(?:\\.|\S)+/g);
-				data.delete_imported = !!$(choiceDeleteSelector).prop("checked");
-				data.import_via_symlink = !!$(choiceSymlinkSelector).prop("checked");
-				data.skip_duplicates = !!$(choiceDuplicateSelector).prop("checked");
-				data.resync_metadata = !!$(choiceResyncSelector).prop("checked");
-				basicModal.close();
 			}
+
+			// Consolidate `data` before we close the modal dialog
+			// TODO: We should fix the modal dialog to properly return the values of all input fields, incl. check boxes
+			data.paths = data.paths.match(/(?:\\.|\S)+/g);
+			data.delete_imported = !!$(choiceDeleteSelector).prop("checked");
+			data.import_via_symlink = !!$(choiceSymlinkSelector).prop("checked");
+			data.skip_duplicates = !!$(choiceDuplicateSelector).prop("checked");
+			data.resync_metadata = !!$(choiceResyncSelector).prop("checked");
+			basicModal.close();
 
 			let isUploadCancelled = false;
 
@@ -758,56 +825,37 @@ upload.start = {
 			upload.show(lychee.locale["UPLOAD_IMPORT_SERVER"], [], runUpload, cancelUpload);
 		}; // action
 
-		const msg = lychee.html`
-			<p class='importServer'>
-				${lychee.locale["UPLOAD_IMPORT_SERVER_INSTR"]}
-				<input class='text' name='paths' type='text' placeholder='${lychee.locale["UPLOAD_ABSOLUTE_PATH"]}' value='${lychee.location}uploads/import/'>
-			</p>
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='delete_imported' onchange='upload.check()'>
-					<span class='checkbox'>${build.iconic("check")}</span>
-					<span class='label'>${lychee.locale["UPLOAD_IMPORT_DELETE_ORIGINALS"]}</span>
-				</label>
-				<p>
-					${lychee.locale["UPLOAD_IMPORT_DELETE_ORIGINALS_EXPL"]}
-				</p>
-			</div>
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='import_via_symlink' onchange='upload.check()'>
-					<span class='checkbox'>${build.iconic("check")}</span>
-					<span class='label'>${lychee.locale["UPLOAD_IMPORT_VIA_SYMLINK"]}</span>
-				</label>
-				<p>
-					${lychee.locale["UPLOAD_IMPORT_VIA_SYMLINK_EXPL"]}
-				</p>
-			</div>
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='skip_duplicates' onchange='upload.check()'>
-					<span class='checkbox'>${build.iconic("check")}</span>
-					<span class='label'>${lychee.locale["UPLOAD_IMPORT_SKIP_DUPLICATES"]}</span>
-				</label>
-				<p>
-					${lychee.locale["UPLOAD_IMPORT_SKIP_DUPLICATES_EXPL"]}
-				</p>
-			</div>
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='resync_metadata' onchange='upload.check()'>
-					<span class='checkbox'>${build.iconic("check")}</span>
-					<span class='label'>${lychee.locale["UPLOAD_IMPORT_RESYNC_METADATA"]}</span>
-				</label>
-				<p>
-					${lychee.locale["UPLOAD_IMPORT_RESYNC_METADATA_EXPL"]}
-				</p>
-			</div>
-		`;
+		const importFromServerDialogBody = `
+			<p></p>
+			<form>
+				<div class="input-group stacked">
+					<input class='text' id="server_import_dialog_path_input" name='paths' type='text' />
+				</div>
+				<div class='input-group compact-inverse'>
+					<label for="server_import_dialog_delete_imported_check"></label>
+					<input type='checkbox' id="server_import_dialog_delete_imported_check" name='delete_imported' />
+					<p></p>
+				</div>
+				<div class='input-group compact-inverse'>
+					<label for="server_import_dialog_symlink_check"></label>
+					<input type='checkbox' id="server_import_dialog_symlink_check" name='import_via_symlink' />
+					<p></p>
+				</div>
+				<div class='input-group compact-inverse'>
+					<label for="server_import_dialog_skip_check"></label>
+					<input type='checkbox' id="server_import_dialog_skip_check" name='skip_duplicates' />
+					<p></p>
+				</div>
+				<div class='input-group compact-inverse'>
+					<label for="server_import_dialog_resync_check"></label>
+					<input type='checkbox' id="server_import_dialog_resync_check" name='resync_metadata' />
+					<p></p>
+				</div>
+			</form>`;
 
 		basicModal.show({
-			body: msg,
-			callback: importDialogSetupCB,
+			body: importFromServerDialogBody,
+			readyCB: initImportFromServerDialog,
 			buttons: {
 				action: {
 					title: lychee.locale["UPLOAD_IMPORT"],
@@ -897,31 +945,6 @@ upload.start = {
 			});
 		});
 	},
-};
-
-upload.check = function () {
-	let $delete = $(choiceDeleteSelector);
-	let $symlinks = $(choiceSymlinkSelector);
-
-	if ($delete.prop("checked")) {
-		$symlinks.prop("checked", false).prop("disabled", true);
-	} else {
-		$symlinks.prop("disabled", false);
-		if ($symlinks.prop("checked")) {
-			$delete.prop("checked", false).prop("disabled", true);
-		} else {
-			$delete.prop("disabled", false);
-		}
-	}
-
-	let $duplicates = $(choiceDuplicateSelector);
-	let $resync = $(choiceResyncSelector);
-
-	if ($duplicates.prop("checked")) {
-		$resync.prop("disabled", false);
-	} else {
-		$resync.prop("checked", false).prop("disabled", true);
-	}
 };
 
 /**
