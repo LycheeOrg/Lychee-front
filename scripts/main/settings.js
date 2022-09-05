@@ -34,6 +34,14 @@ settings.createLogin = function () {
 	};
 
 	/**
+	 * @param {User} updatedAdminUser
+	 * @returns {void}
+	 */
+	const successHandler = function (updatedAdminUser) {
+		lychee.user = updatedAdminUser;
+	};
+
+	/**
 	 * @typedef SetLoginDialogResult
 	 *
 	 * @property {string} username
@@ -72,7 +80,7 @@ settings.createLogin = function () {
 			password,
 		};
 
-		api.post("Settings::setLogin", params, null, null, errorHandler);
+		api.post("Settings::setLogin", params, successHandler, null, errorHandler);
 	};
 
 	const msg = `
@@ -194,11 +202,16 @@ settings.changeLogin = function (params) {
 		$("input[name=confirm]").removeClass("error");
 	}
 
-	api.post("Settings::updateLogin", params, function () {
-		$("input[name]").removeClass("error");
-		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_LOGIN"]);
-		view.settings.content.clearLogin();
-	});
+	api.post(
+		"Settings::updateLogin",
+		params,
+		/** @param {User} updatedUser */ function (updatedUser) {
+			$("input[name]").removeClass("error");
+			loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_LOGIN"]);
+			view.settings.content.clearLogin();
+			lychee.user = updatedUser;
+		}
+	);
 };
 
 /**

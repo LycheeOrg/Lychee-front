@@ -79,7 +79,7 @@ view.albums = {
 					html += build.divider(album.owner_name);
 					current_owner = album.owner_name;
 				}
-				return html + build.album(album, !lychee.admin);
+				return html + build.album(album, !lychee.rights.is_admin);
 			}, "");
 
 			if (smartData === "" && tagAlbumsData === "" && albumsData === "" && sharedData === "") {
@@ -491,7 +491,7 @@ view.album = {
 					// },
 					targetRowHeight: parseFloat($(".photo").css("--lychee-default-height")),
 				});
-				// if (lychee.admin) console.log(layoutGeometry);
+				// if (lychee.rights.is_admin) console.log(layoutGeometry);
 				$(".justified-layout").css("height", layoutGeometry.containerHeight + "px");
 				$(".justified-layout > div").each(function (i) {
 					if (!layoutGeometry.boxes[i]) {
@@ -1034,7 +1034,7 @@ view.settings = {
 		init: function () {
 			view.settings.clearContent();
 			view.settings.content.setLogin();
-			if (lychee.admin) {
+			if (lychee.rights.is_admin) {
 				view.settings.content.setSorting();
 				view.settings.content.setDropboxKey();
 				view.settings.content.setLang();
