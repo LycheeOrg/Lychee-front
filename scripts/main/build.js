@@ -616,7 +616,7 @@ build.user = function (user) {
 build.u2f = function (credential) {
 	return lychee.html`<div class="u2f_view_line">
 			<p id="CredentialData${credential.id}">
-			<input name="id" type="hidden" inputmode="numeric" value="${credential.id}" />
+			<input name="id" type="hidden" inputmode="string" value="${credential.id}" />
 			<span class="text">${credential.id.slice(0, 30)}</span>
 			<!--- <span class="choice" title="Allow uploads">
 			<label>
