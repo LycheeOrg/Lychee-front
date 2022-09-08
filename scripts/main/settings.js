@@ -529,7 +529,7 @@ settings.resetToken = function () {
 			});
 			$("#button_disable_token").on(lychee.getEventName(), function () {
 				api.post("User::unsetToken", {}, function () {
-					$("#apiToken").html("disabled");
+					$("#apiToken").html(lychee.locale["DISABLED"]);
 				});
 			});
 		}
