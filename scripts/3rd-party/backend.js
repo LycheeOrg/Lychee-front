@@ -212,6 +212,7 @@ const SmartAlbumID = Object.freeze({
  * @property {boolean} may_upload
  * @property {boolean} is_locked
  * @property {string} token
+ * @property {boolean} has_token
  */
 
 /**

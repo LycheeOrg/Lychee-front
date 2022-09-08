@@ -1054,8 +1054,7 @@ view.settings = {
 		 * @returns {void}
 		 */
 		setLogin: function () {
-			const hasToken = true;
-			const tokenBtnText = lychee.locale[hasToken ? "RESET_TOKEN" : "ENABLE_TOKEN"];
+			const tokenBtnText = lychee.locale[lychee.user.has_token ? "RESET_TOKEN" : "ENABLE_TOKEN"];
 
 			const msg = lychee.html`
 			<div class="setLogin">
