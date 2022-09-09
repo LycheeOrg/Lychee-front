@@ -532,11 +532,13 @@ settings.openTokenDialog = function () {
 	};
 
 	let bodyHtml = lychee.html`<div class='directLinks'><p><span id="apiToken">${
-		lychee.user.has_token ? lychee.locale["TOKEN_NOT_AVAILABLE"] : lychee.locale["DISABLED"]
+		lychee.user.has_token ? lychee.locale["TOKEN_NOT_AVAILABLE"] : lychee.locale["DISABLED_TOKEN_STATUS_MSG"]
 	}</span> <a id="button_copy_token" class='basicModal__button' title='${lychee.locale["URL_COPY_TO_CLIPBOARD"]}'>${build.iconic(
 		"copy",
 		"ionicons"
-	)}</a> <a id="button_disable_token" class='basicModal__button' title='${lychee.locale["DISABLE"]}'>${build.iconic("ban")}</a></p></div>`;
+	)}</a> <a id="button_disable_token" class='basicModal__button' title='${lychee.locale["DISABLE_TOKEN_TOOLTIP"]}'>${build.iconic(
+		"ban"
+	)}</a></p></div>`;
 
 	basicModal.show({
 		body: bodyHtml,
