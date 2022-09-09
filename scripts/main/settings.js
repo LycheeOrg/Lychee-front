@@ -514,7 +514,35 @@ settings.openTokenDialog = function () {
 		}
 	};
 
-	const reset = function () {
+	let bodyHtml = lychee.html`<div class='directLinks'><p><span id="apiToken">${
+		lychee.user.has_token ? lychee.locale["TOKEN_NOT_AVAILABLE"] : lychee.locale["DISABLED_TOKEN_STATUS_MSG"]
+	}</span> <a id="button_reset_token" class='basicModal__button' title='${lychee.locale["RESET"]}'>${build.iconic(
+		"reload",
+		"ionicons"
+	)}</a> <a id="button_copy_token" class='basicModal__button' title='${lychee.locale["URL_COPY_TO_CLIPBOARD"]}'>${build.iconic(
+		"copy",
+		"ionicons"
+	)}</a> <a id="button_disable_token" class='basicModal__button' title='${lychee.locale["DISABLE_TOKEN_TOOLTIP"]}'>${build.iconic(
+		"ban"
+	)}</a></p></div>`;
+
+	basicModal.show({
+		body: bodyHtml,
+		buttons: {
+			cancel: {
+				title: lychee.locale["CLOSE"],
+				fn: basicModal.close,
+			},
+		},
+	});
+
+	updateBtnVisibility(lychee.user.has_token, false);
+
+	$("#button_copy_token").on(lychee.getEventName(), function () {
+		navigator.clipboard.writeText(token);
+	});
+
+	$("#button_reset_token").on(lychee.getEventName(), function () {
 		api.post(
 			"User::resetToken",
 			{},
@@ -529,38 +557,6 @@ settings.openTokenDialog = function () {
 				updateBtnVisibility(true, true);
 			}
 		);
-	};
-
-	let bodyHtml = lychee.html`<div class='directLinks'><p><span id="apiToken">${
-		lychee.user.has_token ? lychee.locale["TOKEN_NOT_AVAILABLE"] : lychee.locale["DISABLED_TOKEN_STATUS_MSG"]
-	}</span> <a id="button_copy_token" class='basicModal__button' title='${lychee.locale["URL_COPY_TO_CLIPBOARD"]}'>${build.iconic(
-		"copy",
-		"ionicons"
-	)}</a> <a id="button_disable_token" class='basicModal__button' title='${lychee.locale["DISABLE_TOKEN_TOOLTIP"]}'>${build.iconic(
-		"ban"
-	)}</a></p></div>`;
-
-	basicModal.show({
-		body: bodyHtml,
-		buttons: {
-			action: {
-				title: lychee.locale["RESET"],
-				fn: function () {
-					reset();
-				},
-				class: "red",
-			},
-			cancel: {
-				title: lychee.locale["CLOSE"],
-				fn: basicModal.close,
-			},
-		},
-	});
-
-	updateBtnVisibility(lychee.user.has_token, false);
-
-	$("#button_copy_token").on(lychee.getEventName(), function () {
-		navigator.clipboard.writeText(token);
 	});
 
 	$("#button_disable_token").on(lychee.getEventName(), function () {
