@@ -42,9 +42,10 @@ lychee.locale = {
 	RESET: "Reset",
 	DISABLE_TOKEN_TOOLTIP: "Disable",
 	ENABLE_TOKEN: "Enable API key",
-	DISABLED_TOKEN_STATUS_MSG: "disabled",
-	TOKEN_BUTTON: "API token ...",
-	TOKEN_NOT_AVAILABLE: "You already viewed this token.",
+	DISABLED_TOKEN_STATUS_MSG: "Disabled",
+	TOKEN_BUTTON: "API Token ...",
+	TOKEN_NOT_AVAILABLE: "You have already viewed this token.",
+	TOKEN_WAIT: "Wait ...",
 
 	SMART_ALBUMS: "Smart albums",
 	SHARED_ALBUMS: "Shared albums",
