@@ -492,46 +492,81 @@ settings.save_enter = function (e) {
 /**
  * @returns {void}
  */
-settings.resetToken = function () {
-	api.post(
-		"User::resetToken",
-		{},
-		/**
-		 *
-		 * @param {User} data
-		 */
-		function (data) {
-			let bodyHtml = lychee.html`<div class='directLinks'><p><span id="apiToken">${
-				data.token
-			}</span> <a id="button_copy_token" class='basicModal__button' title='${lychee.locale["URL_COPY_TO_CLIPBOARD"]}'>${build.iconic(
-				"copy",
-				"ionicons"
-			)}</a> <a id="button_disable_token" class='basicModal__button' title='${lychee.locale["DISABLE"]}'>${build.iconic("ban")}</a></p></div>`;
-			basicModal.show({
-				body: bodyHtml,
-				buttons: {
-					action: {
-						title: lychee.locale["RESET"],
-						fn: function () {
-							basicModal.close();
-							settings.resetToken();
-						},
-						class: "red",
-					},
-					cancel: {
-						title: lychee.locale["CLOSE"],
-						fn: basicModal.close,
-					},
-				},
-			});
-			$("#button_copy_token").on(lychee.getEventName(), function () {
-				navigator.clipboard.writeText(data.token);
-			});
-			$("#button_disable_token").on(lychee.getEventName(), function () {
-				api.post("User::unsetToken", {}, function () {
-					$("#apiToken").html(lychee.locale["DISABLED"]);
-				});
-			});
+settings.openTokenDialog = function () {
+	let token = "";
+
+	/**
+	 * @param {boolean} has
+	 * @param {boolean} canBeViewed
+	 */
+	const updateBtnVisibility = function (has, canBeViewed) {
+		if (!has) {
+			$("#button_copy_token").hide();
+			$("#button_disable_token").hide();
+		} else {
+			$("#button_disable_token").show();
+
+			if (!canBeViewed) {
+				$("#button_copy_token").hide();
+			} else {
+				$("#button_copy_token").show();
+			}
 		}
-	);
+	};
+
+	const reset = function () {
+		api.post(
+			"User::resetToken",
+			{},
+			/**
+			 *
+			 * @param {User} data
+			 */
+			function (data) {
+				token = data.token;
+				$("#apiToken").text(data.token);
+				lychee.user.has_token = true;
+				updateBtnVisibility(true, true);
+			}
+		);
+	};
+
+	let bodyHtml = lychee.html`<div class='directLinks'><p><span id="apiToken">${
+		lychee.user.has_token ? lychee.locale["TOKEN_NOT_AVAILABLE"] : lychee.locale["DISABLED"]
+	}</span> <a id="button_copy_token" class='basicModal__button' title='${lychee.locale["URL_COPY_TO_CLIPBOARD"]}'>${build.iconic(
+		"copy",
+		"ionicons"
+	)}</a> <a id="button_disable_token" class='basicModal__button' title='${lychee.locale["DISABLE"]}'>${build.iconic("ban")}</a></p></div>`;
+
+	basicModal.show({
+		body: bodyHtml,
+		buttons: {
+			action: {
+				title: lychee.locale["RESET"],
+				fn: function () {
+					reset();
+				},
+				class: "red",
+			},
+			cancel: {
+				title: lychee.locale["CLOSE"],
+				fn: basicModal.close,
+			},
+		},
+	});
+
+	updateBtnVisibility(lychee.user.has_token, false);
+
+	$("#button_copy_token").on(lychee.getEventName(), function () {
+		navigator.clipboard.writeText(token);
+	});
+
+	$("#button_disable_token").on(lychee.getEventName(), function () {
+		api.post("User::unsetToken", {}, function () {
+			$("#button_copy_token").hide();
+			$("#button_disable_token").hide();
+			$("#apiToken").html(lychee.locale["DISABLED"]);
+			lychee.user.has_token = false;
+		});
+	});
 };
