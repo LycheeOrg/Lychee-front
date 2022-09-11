@@ -806,15 +806,27 @@ photo.editTags = function (photoIDs) {
 		photo.setTags(photoIDs, newTags);
 	};
 
-	const input = lychee.html`<input class='text' name='tags' type='text' maxlength='800' placeholder='Tags' value='$${oldTags.join(", ")}'>`;
+	const setTagDialogBody = `
+		<p></p>
+		<form>
+			<div class="input-group stacked"><input class='text' name='tags' type='text' minlength='1'></div>
+		</form>`;
 
-	const msg =
-		photoIDs.length === 1
-			? lychee.html`<p>${lychee.locale["PHOTO_NEW_TAGS"]} ${input}</p>`
-			: lychee.html`<p>${sprintf(lychee.locale["PHOTOS_NEW_TAGS"], photoIDs.length)} ${input}</p>`;
+	/**
+	 * @param {ModelDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initSetTagAlbumDialog = function (formElements, dialog) {
+		dialog.querySelector("p").textContent =
+			photoIDs.length === 1 ? lychee.locale["PHOTO_NEW_TAGS"] : sprintf(lychee.locale["PHOTOS_NEW_TAGS"], photoIDs.length);
+		formElements.tags.placeholder = "Tags";
+		formElements.tags.value = oldTags.join(", ");
+	};
 
 	basicModal.show({
-		body: msg,
+		body: setTagDialogBody,
+		readyCB: initSetTagAlbumDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["PHOTO_SET_TAGS"],
