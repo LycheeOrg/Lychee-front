@@ -282,21 +282,7 @@ photo.next = function (animate) {
  * @returns {boolean}
  */
 photo.delete = function (photoIDs) {
-	let action = {};
-	let cancel = {};
-	let msg = "";
-	let photoTitle = "";
-
-	if (photoIDs.length === 1) {
-		// Get title if only one photo is selected
-		if (visible.photo()) photoTitle = photo.json.title;
-		else photoTitle = album.getByID(photoIDs[0]).title;
-
-		// Fallback for photos without a title
-		if (!photoTitle) photoTitle = lychee.locale["UNTITLED"];
-	}
-
-	action.fn = function () {
+	const deletePhotos = function () {
 		let nextPhotoID = null;
 		let previousPhotoID = null;
 
@@ -341,28 +327,31 @@ photo.delete = function (photoIDs) {
 		api.post("Photo::delete", { photoIDs: photoIDs });
 	};
 
-	if (photoIDs.length === 1) {
-		action.title = lychee.locale["PHOTO_DELETE"];
-		cancel.title = lychee.locale["PHOTO_KEEP"];
-
-		msg = lychee.html`<p>${sprintf(lychee.locale["PHOTO_DELETE_CONFIRMATION"], photoTitle)}</p>`;
-	} else {
-		action.title = lychee.locale["PHOTO_DELETE"];
-		cancel.title = lychee.locale["PHOTO_KEEP"];
-
-		msg = lychee.html`<p>${sprintf(lychee.locale["PHOTO_DELETE_ALL"], photoIDs.length)}</p>`;
-	}
+	/**
+	 * @param {ModelDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initDeletePhotoDialog = function (formElements, dialog) {
+		if (photoIDs.length === 1) {
+			const photoTitle = (visible.photo() ? photo.json.title : album.getByID(photoIDs[0]).title) || lychee.locale["UNTITLED"];
+			dialog.querySelector("p").textContent = sprintf(lychee.locale["PHOTO_DELETE_CONFIRMATION"], photoTitle);
+		} else {
+			dialog.querySelector("p").textContent = sprintf(lychee.locale["PHOTO_DELETE_ALL"], photoIDs.length);
+		}
+	};
 
 	basicModal.show({
-		body: msg,
+		body: "<p></p>",
+		readyCB: initDeletePhotoDialog,
 		buttons: {
 			action: {
-				title: action.title,
-				fn: action.fn,
-				class: "red",
+				title: lychee.locale["PHOTO_DELETE"],
+				fn: deletePhotos,
+				classList: ["red"],
 			},
 			cancel: {
-				title: cancel.title,
+				title: lychee.locale["PHOTO_KEEP"],
 				fn: basicModal.close,
 			},
 		},
@@ -375,22 +364,13 @@ photo.delete = function (photoIDs) {
  * @returns {void}
  */
 photo.setTitle = function (photoIDs) {
-	let oldTitle = "";
-	let msg = "";
-
-	if (photoIDs.length === 1) {
-		// Get old title if only one photo is selected
-		if (photo.json) oldTitle = photo.json.title;
-		else if (album.json) oldTitle = album.getByID(photoIDs[0]).title;
-	}
-
 	/**
 	 * @param {{title: string}} data
 	 * @returns {void}
 	 */
 	const action = function (data) {
 		if (!data.title.trim()) {
-			basicModal.error("title");
+			basicModal.focusError("title");
 			return;
 		}
 
@@ -415,13 +395,28 @@ photo.setTitle = function (photoIDs) {
 		});
 	};
 
-	const input = lychee.html`<input class='text' name='title' type='text' maxlength='100' placeholder='Title' value='$${oldTitle}'>`;
+	const setPhotoTitleDialogBody = `
+		<p></p>
+		<form>
+			<div class="input-group stacked"><input class='text' name='title' type='text' maxlength='100'></div>
+		</form>`;
 
-	if (photoIDs.length === 1) msg = lychee.html`<p>${lychee.locale["PHOTO_NEW_TITLE"]} ${input}</p>`;
-	else msg = lychee.html`<p>${sprintf(lychee.locale["PHOTOS_NEW_TITLE"], photoIDs.length)} ${input}</p>`;
+	/**
+	 * @param {ModelDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initSetPhotoTitleDialog = function (formElements, dialog) {
+		const oldTitle = photoIDs.length === 1 ? (photo.json ? photo.json.title : album.getByID(photoIDs[0]).title) : "";
+		dialog.querySelector("p").textContent =
+			photoIDs.length === 1 ? lychee.locale["PHOTO_NEW_TITLE"] : sprintf(lychee.locale["PHOTOS_NEW_TITLE"], photoIDs.length);
+		formElements.title.placeholder = "Title";
+		formElements.title.value = oldTitle;
+	};
 
 	basicModal.show({
-		body: msg,
+		body: setPhotoTitleDialogBody,
+		readyCB: initSetPhotoTitleDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["PHOTO_SET_TITLE"],
