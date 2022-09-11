@@ -14,7 +14,7 @@ const upload = {
 	SCROLL_OPTIONS: {
 		inline: "nearest",
 		block: "nearest",
-		behavior: "smooth"
+		behavior: "smooth",
 	},
 
 	_dom: {

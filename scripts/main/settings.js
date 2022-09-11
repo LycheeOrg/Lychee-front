@@ -468,32 +468,25 @@ settings.save_enter = function (e) {
 	// We only handle "enter"
 	if (e.which !== 13) return;
 
-	// show confirmation box
-	$(":focus").blur();
-
-	let action = {};
-	let cancel = {};
-
-	action.title = lychee.locale["ENTER"];
-	action.msg = lychee.html`<p style="color: #d92c34; font-size: 1.3em; font-weight: bold; text-transform: capitalize; text-align: center;">${lychee.locale["SAVE_RISK"]}</p>`;
-
-	cancel.title = lychee.locale["CANCEL"];
-
-	action.fn = function () {
-		settings.save(settings.getValues("#fullSettings"));
-		basicModal.close();
-	};
+	const saveSettingsConfirmationDialogBody =
+		'<p style="color: #d92c34; font-size: 1.3em; font-weight: bold; text-transform: capitalize; text-align: center;"></p>';
 
 	basicModal.show({
-		body: action.msg,
+		body: saveSettingsConfirmationDialogBody,
+		readyCB: function (formElements, dialog) {
+			dialog.querySelector("p").textContent = lychee.locale["SAVE_RISK"];
+		},
 		buttons: {
 			action: {
-				title: action.title,
-				fn: action.fn,
-				class: "red",
+				title: lychee.locale["ENTER"],
+				fn: function () {
+					settings.save(settings.getValues("#fullSettings"));
+					basicModal.close();
+				},
+				classList: ["red"],
 			},
 			cancel: {
-				title: cancel.title,
+				title: lychee.locale["CANCEL"],
 				fn: basicModal.close,
 			},
 		},

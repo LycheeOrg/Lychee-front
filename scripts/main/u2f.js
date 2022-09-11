@@ -9,9 +9,9 @@ const u2f = {
 u2f.is_available = function () {
 	if (!window.isSecureContext && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
 		basicModal.show({
-			body: '<p></p>',
+			body: "<p></p>",
 			readyCB: function (formElements, dialog) {
-				dialog.querySelector('p').textContent = lychee.locale["U2F_NOT_SECURE"];
+				dialog.querySelector("p").textContent = lychee.locale["U2F_NOT_SECURE"];
 			},
 			buttons: {
 				cancel: {
