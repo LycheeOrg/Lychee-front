@@ -559,173 +559,151 @@ photo.setStar = function (photoIDs, isStarred) {
  * @returns {void}
  */
 photo.setProtectionPolicy = function (photoID) {
-	const msg_switch = lychee.html`
-		<div class='switch'>
-			<label>
-				<span class='label'>${lychee.locale["PHOTO_PUBLIC"]}:</span>
-				<input type='checkbox' name='is_public'>
-				<span class='slider round'></span>
-			</label>
-			<p>${lychee.locale["PHOTO_PUBLIC_EXPL"]}</p>
-		</div>
-	`;
+	/**
+	 * @param {{is_public: boolean}} data
+	 */
+	const action = function (data) {
+		/**
+		 * Note: `newIsPublic` must be `0` or `1` and no boolean, because
+		 * `photo.is_public` is an integer between `0` and `2`.
+		 */
+		const newIsPublic = data.is_public ? 1 : 0;
 
-	const msg_choices = lychee.html`
-		<div class='choice'>
-			<label>
-				<input type='checkbox' name='grants_full_photo' disabled>
-				<span class='checkbox'>${build.iconic("check")}</span>
-				<span class='label'>${lychee.locale["PHOTO_FULL"]}</span>
-			</label>
-			<p>${lychee.locale["PHOTO_FULL_EXPL"]}</p>
-		</div>
-		<div class='choice'>
-			<label>
-				<input type='checkbox' name='requires_link' disabled>
-				<span class='checkbox'>${build.iconic("check")}</span>
-				<span class='label'>${lychee.locale["PHOTO_HIDDEN"]}</span>
-			</label>
-			<p>${lychee.locale["PHOTO_HIDDEN_EXPL"]}</p>
-		</div>
-		<div class='choice'>
-			<label>
-				<input type='checkbox' name='is_downloadable' disabled>
-				<span class='checkbox'>${build.iconic("check")}</span>
-				<span class='label'>${lychee.locale["PHOTO_DOWNLOADABLE"]}</span>
-			</label>
-			<p>${lychee.locale["PHOTO_DOWNLOADABLE_EXPL"]}</p>
-		</div>
-		<div class='choice'>
-			<label>
-				<input type='checkbox' name='is_share_button_visible' disabled>
-				<span class='checkbox'>${build.iconic("check")}</span>
-				<span class='label'>${lychee.locale["PHOTO_SHARE_BUTTON_VISIBLE"]}</span>
-			</label>
-			<p>${lychee.locale["PHOTO_SHARE_BUTTON_VISIBLE_EXPL"]}</p>
-		</div>
-		<div class='choice'>
-			<label>
-				<input type='checkbox' name='has_password' disabled>
-				<span class='checkbox'>${build.iconic("check")}</span>
-				<span class='label'>${lychee.locale["PHOTO_PASSWORD_PROT"]}</span>
-			</label>
-			<p>${lychee.locale["PHOTO_PASSWORD_PROT_EXPL"]}</p>
-		</div>
-	`;
-
-	if (photo.json.is_public === 2) {
-		// Public album. We can't actually change anything, but we will
-		// display the current settings.
-
-		const msg = lychee.html`
-			<p class='less'>${lychee.locale["PHOTO_NO_EDIT_SHARING_TEXT"]}</p>
-			${msg_switch}
-			${msg_choices}
-		`;
-
-		basicModal.show({
-			body: msg,
-			buttons: {
-				cancel: {
-					title: lychee.locale["CLOSE"],
-					fn: basicModal.close,
-				},
-			},
-		});
-
-		$('.basicModal .switch input[name="is_public"]').prop("checked", true);
-		if (album.json) {
-			if (album.json.grants_full_photo) {
-				$('.basicModal .choice input[name="grants_full_photo"]').prop("checked", true);
+		if (newIsPublic !== photo.json.is_public) {
+			if (visible.photo()) {
+				photo.json.is_public = newIsPublic;
+				view.photo.public();
 			}
-			// Photos in public albums are never hidden as such.  It's the
-			// album that's hidden.  Or is that distinction irrelevant to end
-			// users?
-			if (album.json.is_downloadable) {
-				$('.basicModal .choice input[name="is_downloadable"]').prop("checked", true);
-			}
-			if (album.json.has_password) {
-				$('.basicModal .choice input[name="has_password"]').prop("checked", true);
-			}
+
+			album.getByID(photoID).is_public = newIsPublic;
+			view.album.content.public(photoID);
+
+			albums.refresh();
+
+			api.post("Photo::setPublic", {
+				photoID: photoID,
+				is_public: newIsPublic !== 0,
+			});
 		}
 
-		$(".basicModal .switch input").attr("disabled", true);
-		$(".basicModal .switch .label").addClass("label--disabled");
-	} else {
-		// Private album -- each photo can be shared individually.
+		basicModal.close();
+	};
 
-		const msg = lychee.html`
-			${msg_switch}
-			<p class='photoPublic'>${lychee.locale["PHOTO_EDIT_GLOBAL_SHARING_TEXT"]}</p>
-			${msg_choices}
-		`;
+	const setPhotoProtectionPolicyBody = `
+		<p id="ppp_dialog_no_edit_expl"></p>
+		<form>
+			<div class='input-group compact-no-indent'>
+				<label for="ppp_dialog_public_check"></label>
+				<input type='checkbox' class="slider" id='ppp_dialog_public_check' name='is_public' />
+				<p></p>
+			</div>
+			<p id="ppp_dialog_global_expl"></p>
+			<div class='input-group compact-inverse disabled'>
+				<label for="ppp_dialog_full_photo_check"></label>
+				<input type='checkbox' id='ppp_dialog_full_photo_check' name='grants_full_photo' disabled="disabled" />
+				<p></p>
+			</div>
+			<div class='input-group compact-inverse disabled'>
+				<label for="ppp_dialog_link_check"></label>
+				<input type='checkbox' id='ppp_dialog_link_check' name='requires_link' disabled="disabled" />
+				<p></p>
+			</div>
+			<div class='input-group compact-inverse disabled'>
+				<label for="ppp_dialog_downloadable_check"></label>
+				<input type='checkbox' id='ppp_dialog_downloadable_check' name='is_downloadable' disabled="disabled" />
+				<p></p>
+			</div>
+			<div class='input-group compact-inverse disabled'>
+				<label for="ppp_dialog_share_check"></label>
+				<input type='checkbox' id='ppp_dialog_share_check' name='is_share_button_visible' disabled="disabled" />
+				<p></p>
+			</div>
+			<div class='input-group compact-inverse disabled'>
+				<label for="ppp_dialog_password_check"></label>
+				<input type='checkbox' id='ppp_dialog_password_check' name='has_password' disabled="disabled">
+				<p></p>
+			</div>
+		</form>`;
 
-		// TODO: Actually, the action handler receives an object with values of all input fields. There is no need to run use a jQuery-selector
-		const action = function () {
-			/**
-			 * Note: `newIsPublic` must be of type `number`, because `photo.is_public` is a number, too
-			 * @type {number}
-			 */
-			const newIsPublic = $('.basicModal .switch input[name="is_public"]:checked').length;
+	/**
+	 * @typedef PhotoProtectionPolicyDialogFormElements
+	 * @property {HTMLInputElement} is_public
+	 * @property {HTMLInputElement} grants_full_photo
+	 * @property {HTMLInputElement} requires_link
+	 * @property {HTMLInputElement} is_downloadable
+	 * @property {HTMLInputElement} is_share_button_visible
+	 * @property {HTMLInputElement} has_password
+	 */
 
-			if (newIsPublic !== photo.json.is_public) {
-				if (visible.photo()) {
-					photo.json.is_public = newIsPublic;
-					view.photo.public();
-				}
+	/**
+	 * @param {PhotoProtectionPolicyDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initPhotoProtectionPolicyDialog = function (formElements, dialog) {
+		formElements.is_public.previousElementSibling.textContent = lychee.locale["PHOTO_PUBLIC"];
+		formElements.is_public.nextElementSibling.textContent = lychee.locale["PHOTO_PUBLIC_EXPL"];
+		formElements.grants_full_photo.previousElementSibling.textContent = lychee.locale["PHOTO_FULL"];
+		formElements.grants_full_photo.nextElementSibling.textContent = lychee.locale["PHOTO_FULL_EXPL"];
+		formElements.requires_link.previousElementSibling.textContent = lychee.locale["PHOTO_HIDDEN"];
+		formElements.requires_link.nextElementSibling.textContent = lychee.locale["PHOTO_HIDDEN_EXPL"];
+		formElements.is_downloadable.previousElementSibling.textContent = lychee.locale["PHOTO_DOWNLOADABLE"];
+		formElements.is_downloadable.nextElementSibling.textContent = lychee.locale["PHOTO_DOWNLOADABLE_EXPL"];
+		formElements.is_share_button_visible.previousElementSibling.textContent = lychee.locale["PHOTO_SHARE_BUTTON_VISIBLE"];
+		formElements.is_share_button_visible.nextElementSibling.textContent = lychee.locale["PHOTO_SHARE_BUTTON_VISIBLE_EXPL"];
+		formElements.has_password.previousElementSibling.textContent = lychee.locale["PHOTO_PASSWORD_PROT"];
+		formElements.has_password.nextElementSibling.textContent = lychee.locale["PHOTO_PASSWORD_PROT_EXPL"];
 
-				album.getByID(photoID).is_public = newIsPublic;
-				view.album.content.public(photoID);
-
-				albums.refresh();
-
-				api.post("Photo::setPublic", {
-					photoID: photoID,
-					is_public: newIsPublic !== 0,
-				});
+		if (photo.json.is_public === 2) {
+			// Public album.
+			dialog.querySelector("p#ppp_dialog_no_edit_expl").textContent = lychee.locale["PHOTO_NO_EDIT_SHARING_TEXT"];
+			dialog.querySelector("p#ppp_dialog_global_expl").remove();
+			// Initialize values of detailed settings according to album
+			// settings and hide action button as we can't actually change
+			// anything.
+			formElements.is_public.checked = true;
+			formElements.is_public.disabled = true;
+			formElements.is_public.parentElement.classList.add("disabled");
+			if (album.json) {
+				formElements.grants_full_photo.checked = album.json.grants_full_photo;
+				// Photos in public albums are never hidden as such.  It's the
+				// album that's hidden.  Or is that distinction irrelevant to end
+				// users?
+				formElements.requires_link.checked = false;
+				formElements.is_downloadable.checked = album.json.is_downloadable;
+				formElements.is_share_button_visible = album.json.is_share_button_visible;
+				formElements.has_password.checked = album.json.has_password;
 			}
-
-			basicModal.close();
-		};
-
-		basicModal.show({
-			body: msg,
-			buttons: {
-				action: {
-					title: lychee.locale["SAVE"],
-					fn: action,
-				},
-				cancel: {
-					title: lychee.locale["CANCEL"],
-					fn: basicModal.close,
-				},
-			},
-		});
-
-		$('.basicModal .switch input[name="is_public"]').on("click", function () {
-			if ($(this).prop("checked") === true) {
-				if (lychee.full_photo) {
-					$('.basicModal .choice input[name="grants_full_photo"]').prop("checked", true);
-				}
-				if (lychee.public_photos_hidden) {
-					$('.basicModal .choice input[name="requires_link"]').prop("checked", true);
-				}
-				if (lychee.downloadable) {
-					$('.basicModal .choice input[name="is_downloadable"]').prop("checked", true);
-				}
-				if (lychee.share_button_visible) {
-					$('.basicModal .choice input[name="is_share_button_visible"]').prop("checked", true);
-				}
-				// Photos shared individually can't be password-protected.
-			} else {
-				$(".basicModal .choice input").prop("checked", false);
-			}
-		});
-
-		if (photo.json.is_public === 1) {
-			$('.basicModal .switch input[name="is_public"]').click();
+			basicModal.hideActionButton();
+		} else {
+			// Private album
+			dialog.querySelector("p#ppp_dialog_no_edit_expl").remove();
+			dialog.querySelector("p#ppp_dialog_global_expl").textContent = lychee.locale["PHOTO_EDIT_GLOBAL_SHARING_TEXT"];
+			// Initialize values of detailed settings according to global
+			// configuration.
+			formElements.is_public.checked = photo.json.is_public !== 0;
+			formElements.grants_full_photo.checked = lychee.full_photo;
+			formElements.requires_link.checked = lychee.public_photos_hidden;
+			formElements.is_downloadable.checked = !!album.downloadable;
+			formElements.is_share_button_visible = lychee.share_button_visible;
+			formElements.has_password.checked = false;
 		}
-	}
+	};
+
+	basicModal.show({
+		body: setPhotoProtectionPolicyBody,
+		readyCB: initPhotoProtectionPolicyDialog,
+		buttons: {
+			action: {
+				title: lychee.locale["SAVE"],
+				fn: action,
+			},
+			cancel: {
+				title: lychee.locale["CANCEL"],
+				fn: basicModal.close,
+			},
+		},
+	});
 };
 
 /**
