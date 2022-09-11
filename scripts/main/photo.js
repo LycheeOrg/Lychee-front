@@ -715,8 +715,6 @@ photo.setProtectionPolicy = function (photoID) {
  * @returns {void}
  */
 photo.setDescription = function (photoID) {
-	const oldDescription = photo.json.description ? photo.json.description : "";
-
 	/**
 	 * @param {{description: string}} data
 	 */
@@ -736,8 +734,26 @@ photo.setDescription = function (photoID) {
 		});
 	};
 
+	const setPhotoDescriptionDialogBody = `
+		<p></p>
+		<form>
+			<div class="input-group stacked"><input class='text' name='description' type='text' maxlength='800'></div>
+		</form>`;
+
+	/**
+	 * @param {ModelDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initSetPhotoDescriptionDialog = function (formElements, dialog) {
+		dialog.querySelector("p").textContent = lychee.locale["PHOTO_NEW_DESCRIPTION"];
+		formElements.description.placeholder = lychee.locale["PHOTO_DESCRIPTION"];
+		formElements.description.value = photo.json.description ? photo.json.description : "";
+	};
+
 	basicModal.show({
-		body: lychee.html`<p>${lychee.locale["PHOTO_NEW_DESCRIPTION"]} <input class='text' name='description' type='text' maxlength='800' placeholder='${lychee.locale["PHOTO_DESCRIPTION"]}' value='$${oldDescription}'></p>`,
+		body: setPhotoDescriptionDialogBody,
+		readyCB: initSetPhotoDescriptionDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["PHOTO_SET_DESCRIPTION"],
