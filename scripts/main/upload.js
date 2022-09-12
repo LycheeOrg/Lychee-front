@@ -128,7 +128,7 @@ upload.showProgressReportDialog = function (title, files, run_callback, cancel_c
 		const caption = dialog.querySelector("h1");
 		caption.textContent = title;
 		upload.buildReportList(files);
-		caption.parentElement.appendChild(upload._dom.reportList);
+		dialog.appendChild(upload._dom.reportList);
 
 		setTimeout(() => run_callback(formElements, dialog), 0);
 	};

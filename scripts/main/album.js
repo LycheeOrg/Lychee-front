@@ -648,8 +648,6 @@ album.setTitle = function (albumIDs) {
  * @returns {void}
  */
 album.setDescription = function (albumID) {
-	const oldDescription = album.json.description ? album.json.description : "";
-
 	/** @param {{description: string}} data */
 	const action = function (data) {
 		const description = data.description ? data.description : null;
@@ -681,7 +679,7 @@ album.setDescription = function (albumID) {
 	const initSetAlbumDescriptionDialog = function (formElements, dialog) {
 		dialog.querySelector("p").textContent = lychee.locale["ALBUM_NEW_DESCRIPTION"];
 		formElements.description.placeholder = lychee.locale["ALBUM_DESCRIPTION"];
-		formElements.description.value = oldDescription;
+		formElements.description.value = album.json.description ? album.json.description : "";
 	};
 
 	basicModal.show({
@@ -1183,7 +1181,7 @@ album.shareUsers = function (albumID) {
 			});
 
 			// Append the pre-constructed form to the dialog after the paragraph
-			p.parentElement.appendChild(form);
+			dialog.appendChild(form);
 			basicModal.cacheFormElements();
 		};
 
