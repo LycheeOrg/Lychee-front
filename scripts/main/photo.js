@@ -1184,85 +1184,84 @@ photo.showDirectLinks = function (photoID) {
 	}
 
 	/**
-	 * @param {string} label
-	 * @param {string} url
+	 * @param {string} name - name of the HTML input element
 	 * @returns {string} - HTML
 	 */
-	const buildLine = function (label, url) {
-		return lychee.html`
-			<p>
-				${label}
-				<br />
-				<input class='text' readonly value='${url}'>
-				<a class='basicModal__button' title='${lychee.locale["URL_COPY_TO_CLIPBOARD"]}'>
-					${build.iconic("copy", "ionicons")}
-				</a>
-			</p>
-		`;
+	const buildLine = function (name) {
+		return `
+			<div class="input-group stacked">
+				<label for="${"dialog-direct-links-input-" + name}"></label>
+				<input id="${"dialog-direct-links-input-" + name}" name="${name}" type='text' readonly />
+				<a class='button'><svg class='iconic ionicons'><use xlink:href='#copy' /></svg></a>
+			</div>`;
 	};
 
-	let msg = lychee.html`
-		<div class='directLinks'>
-			${buildLine(lychee.locale["PHOTO_VIEW"], photo.getViewLink(photoID))}
-			<p class='less'>
-				${lychee.locale["PHOTO_DIRECT_LINKS_TO_IMAGES"]}
-			</p>
-			<div class='imageLinks'>
-	`;
+	const localizations = {
+		original: lychee.locale["PHOTO_FULL"],
+		medium2x: lychee.locale["PHOTO_MEDIUM_HIDPI"],
+		medium: lychee.locale["PHOTO_MEDIUM"],
+		small2x: lychee.locale["PHOTO_SMALL_HIDPI"],
+		small: lychee.locale["PHOTO_SMALL"],
+		thumb2x: lychee.locale["PHOTO_THUMB_HIDPI"],
+		thumb: lychee.locale["PHOTO_THUMB"],
+	};
 
-	if (photo.json.size_variants.original.url) {
-		msg += buildLine(
-			`${lychee.locale["PHOTO_FULL"]} (${photo.json.size_variants.original.width}x${photo.json.size_variants.original.height})`,
-			lychee.getBaseUrl() + photo.json.size_variants.original.url
-		);
-	}
-	if (photo.json.size_variants.medium2x !== null) {
-		msg += buildLine(
-			`${lychee.locale["PHOTO_MEDIUM_HIDPI"]} (${photo.json.size_variants.medium2x.width}x${photo.json.size_variants.medium2x.height})`,
-			lychee.getBaseUrl() + photo.json.size_variants.medium2x.url
-		);
-	}
-	if (photo.json.size_variants.medium !== null) {
-		msg += buildLine(
-			`${lychee.locale["PHOTO_MEDIUM"]} (${photo.json.size_variants.medium.width}x${photo.json.size_variants.medium.height})`,
-			lychee.getBaseUrl() + photo.json.size_variants.medium.url
-		);
-	}
-	if (photo.json.size_variants.small2x !== null) {
-		msg += buildLine(
-			`${lychee.locale["PHOTO_SMALL_HIDPI"]} (${photo.json.size_variants.small2x.width}x${photo.json.size_variants.small2x.height})`,
-			lychee.getBaseUrl() + photo.json.size_variants.small2x.url
-		);
-	}
-	if (photo.json.size_variants.small !== null) {
-		msg += buildLine(
-			`${lychee.locale["PHOTO_SMALL"]} (${photo.json.size_variants.small.width}x${photo.json.size_variants.small.height})`,
-			lychee.getBaseUrl() + photo.json.size_variants.small.url
-		);
-	}
-	if (photo.json.size_variants.thumb2x !== null) {
-		msg += buildLine(
-			`${lychee.locale["PHOTO_THUMB_HIDPI"]} (${photo.json.size_variants.thumb2x.width}x${photo.json.size_variants.thumb2x.height})`,
-			lychee.getBaseUrl() + photo.json.size_variants.thumb2x.url
-		);
-	}
-	if (photo.json.size_variants.thumb !== null) {
-		msg += buildLine(
-			`${lychee.locale["PHOTO_THUMB"]} (${photo.json.size_variants.thumb.width}x${photo.json.size_variants.thumb.height})`,
-			lychee.getBaseUrl() + photo.json.size_variants.thumb.url
-		);
-	}
-	if (photo.json.live_photo_url) {
-		msg += buildLine(` ${lychee.locale["PHOTO_LIVE_VIDEO"]} `, lychee.getBaseUrl() + photo.json.live_photo_url);
-	}
+	const showDirectLinksDialogBody =
+		'<form class="photo-links">' +
+		buildLine("view") +
+		"<p></p>" +
+		Object.entries(localizations).reduce((html, [type]) => html + buildLine(type), "") +
+		buildLine("live") +
+		"</form>";
 
-	msg += lychee.html`
-		</div>
-		</div>
-	`;
+	/**
+	 * @param {ModelDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 */
+	const initShowDirectLinksDialog = function (formElements, dialog) {
+		formElements.view.value = photo.getViewLink(photoID);
+		formElements.view.previousElementSibling.textContent = lychee.locale["PHOTO_VIEW"];
+		formElements.view.nextElementSibling.title = "Copy to clipboard";
+		dialog.querySelector("p").textContent = lychee.locale["PHOTO_DIRECT_LINKS_TO_IMAGES"];
+
+		for (const type in localizations) {
+			if (photo.json.size_variants[type] !== null) {
+				formElements[type].value = lychee.getBaseUrl() + photo.json.size_variants[type].url;
+				formElements[type].previousElementSibling.textContent =
+					localizations[type] + " (" + photo.json.size_variants[type].width + "×" + photo.json.size_variants[type].height + ")";
+				formElements[type].nextElementSibling.title = "Copy to clipboard";
+			} else {
+				// The form element is the `<input>` element, the parent
+				// element is the `<div>` which binds the label, the input
+				// and the button together.
+				// We remove that `<div>` for non-existing variants.
+				formElements[type].parentElement.remove();
+			}
+		}
+
+		if (photo.json.live_photo_url !== null) {
+			formElements.live.value = lychee.getBaseUrl() + photo.json.live_photo_url;
+			formElements.live.previousElementSibling.textContent = lychee.locale["PHOTO_LIVE_VIDEO"];
+			formElements.live.nextElementSibling.title = "Copy to clipboard";
+		} else {
+			formElements.live.parentElement.remove();
+		}
+
+		/** @param {TouchEvent|MouseEvent} ev */
+		const onClickOrTouch = function (ev) {
+			navigator.clipboard
+				.writeText(ev.currentTarget.previousElementSibling.value)
+				.then(() => loadingBar.show("success", lychee.locale["URL_COPIED_TO_CLIPBOARD"]));
+			ev.stopPropagation();
+		};
+		dialog.querySelectorAll("a.button").forEach(function (a) {
+			a.addEventListener(lychee.getEventName(), onClickOrTouch);
+		});
+	};
 
 	basicModal.show({
-		body: msg,
+		body: showDirectLinksDialogBody,
+		readyCB: initShowDirectLinksDialog,
 		buttons: {
 			cancel: {
 				title: lychee.locale["CLOSE"],
@@ -1270,9 +1269,6 @@ photo.showDirectLinks = function (photoID) {
 			},
 		},
 	});
-
-	// Ensure that no input line is selected on opening.
-	$(".basicModal input:focus").blur();
 
 	$(".directLinks .basicModal__button").on(lychee.getEventName(), function () {
 		navigator.clipboard.writeText($(this).prev().val()).then(() => loadingBar.show("success", lychee.locale["URL_COPIED_TO_CLIPBOARD"]));
