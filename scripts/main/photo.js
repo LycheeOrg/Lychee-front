@@ -1008,109 +1008,92 @@ photo.setLicense = function (photoID) {
  * @returns {void}
  */
 photo.getArchive = function (photoIDs, kind = null) {
-	if (photoIDs.length === 1 && kind === null) {
-		// For a single photo, allow to pick the kind via a dialog box.
+	if (photoIDs.length !== 1 || kind !== null) {
+		location.href = "api/Photo::getArchive?photoIDs=" + photoIDs.join() + "&kind=" + kind;
+		return;
+	}
 
-		let myPhoto;
+	// For a single photo without a specified kind, allow to pick the kind
+	// via a dialog box and re-call this method later on.
 
-		if (photo.json && photo.json.id === photoIDs[0]) {
-			myPhoto = photo.json;
-		} else {
-			myPhoto = album.getByID(photoIDs[0]);
-		}
+	const myPhoto = photo.json && photo.json.id === photoIDs[0] ? photo.json : album.getByID(photoIDs[0]);
 
-		/**
-		 * @param {string} id - the ID of the button, same semantics as "kind"
-		 * @param {string} label - the caption on the button
-		 * @returns {string} - HTML
-		 */
-		const buildButton = function (id, label) {
-			return lychee.html`
-				<a class='basicModal__button' id='${id}' title='${lychee.locale["DOWNLOAD"]}'>
-					${build.iconic("cloud-download")}${label}
+	const kind2VariantAndLocalizedLabel = {
+		FULL: ["original", lychee.locale["PHOTO_FULL"]],
+		LIVEPHOTOVIDEO: ["live", lychee.locale["PHOTO_LIVE_VIDEO"]],
+		MEDIUM2X: ["medium2x", lychee.locale["PHOTO_MEDIUM_HIDPI"]],
+		MEDIUM: ["medium", lychee.locale["PHOTO_MEDIUM"]],
+		SMALL2X: ["small2x", lychee.locale["PHOTO_SMALL_HIDPI"]],
+		SMALL: ["small", lychee.locale["PHOTO_SMALL"]],
+		THUMB2X: ["thumb2x", lychee.locale["PHOTO_THUMB_HIDPI"]],
+		THUMB: ["thumb", lychee.locale["PHOTO_THUMB"]],
+	};
+
+	/**
+	 * @param {string} kind - the kind this button is for, used to construct the ID
+	 * @returns {string} - HTML
+	 */
+	const buildButton = function (kind) {
+		return `
+				<a class='button' data-photo-kind="${kind}">
+					<svg class='iconic ionicons'><use xlink:href='#cloud-download' /></svg>
+					<span></span>
 				</a>
 			`;
-		};
+	};
 
-		let msg = lychee.html`
-			<div class='downloads'>
-		`;
+	const getPhotoArchiveDialogBody = Object.entries(kind2VariantAndLocalizedLabel).reduce((html, [kind]) => html + buildButton(kind), "");
 
-		if (myPhoto.size_variants.original.url) {
-			msg += buildButton(
-				"FULL",
-				`${lychee.locale["PHOTO_FULL"]} (${myPhoto.size_variants.original.width}x${myPhoto.size_variants.original.height},
-				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.original.filesize)})`
-			);
-		}
-		if (myPhoto.live_photo_url !== null) {
-			msg += buildButton("LIVEPHOTOVIDEO", `${lychee.locale["PHOTO_LIVE_VIDEO"]}`);
-		}
-		if (myPhoto.size_variants.medium2x !== null) {
-			msg += buildButton(
-				"MEDIUM2X",
-				`${lychee.locale["PHOTO_MEDIUM_HIDPI"]} (${myPhoto.size_variants.medium2x.width}x${myPhoto.size_variants.medium2x.height},
-				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.medium2x.filesize)})`
-			);
-		}
-		if (myPhoto.size_variants.medium !== null) {
-			msg += buildButton(
-				"MEDIUM",
-				`${lychee.locale["PHOTO_MEDIUM"]} (${myPhoto.size_variants.medium.width}x${myPhoto.size_variants.medium.height},
-				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.medium.filesize)})`
-			);
-		}
-		if (myPhoto.size_variants.small2x !== null) {
-			msg += buildButton(
-				"SMALL2X",
-				`${lychee.locale["PHOTO_SMALL_HIDPI"]} (${myPhoto.size_variants.small2x.width}x${myPhoto.size_variants.small2x.height},
-				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.small2x.filesize)})`
-			);
-		}
-		if (myPhoto.size_variants.small !== null) {
-			msg += buildButton(
-				"SMALL",
-				`${lychee.locale["PHOTO_SMALL"]} (${myPhoto.size_variants.small.width}x${myPhoto.size_variants.small.height},
-				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.small.filesize)})`
-			);
-		}
-		if (myPhoto.size_variants.thumb2x !== null) {
-			msg += buildButton(
-				"THUMB2X",
-				`${lychee.locale["PHOTO_THUMB_HIDPI"]} (${myPhoto.size_variants.thumb2x.width}x${myPhoto.size_variants.thumb2x.height},
-				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.thumb2x.filesize)})`
-			);
-		}
-		if (myPhoto.size_variants.thumb !== null) {
-			msg += buildButton(
-				"THUMB",
-				`${lychee.locale["PHOTO_THUMB"]} (${myPhoto.size_variants.thumb.width}x${myPhoto.size_variants.thumb.height},
-				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.thumb.filesize)})`
-			);
-		}
-
-		msg += lychee.html`
-			</div>
-		`;
-
-		basicModal.show({
-			body: msg,
-			buttons: {
-				cancel: {
-					title: lychee.locale["CLOSE"],
-					fn: basicModal.close,
-				},
-			},
-		});
-
-		$(".downloads .basicModal__button").on(lychee.getEventName(), function () {
-			const kind = this.id;
+	/** @param {TouchEvent|MouseEvent} ev */
+	const onClickOrTouch = function (ev) {
+		if (ev.currentTarget instanceof HTMLAnchorElement) {
 			basicModal.close();
-			photo.getArchive(photoIDs, kind);
+			photo.getArchive(photoIDs, ev.currentTarget.dataset.photoKind);
+			ev.stopPropagation();
+		}
+	};
+
+	/**
+	 * @param {ModelDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 */
+	const initGetPhotoArchiveDialog = function (formElements, dialog) {
+		Object.entries(kind2VariantAndLocalizedLabel).forEach(function ([kind, [variant, lLabel]]) {
+			/** @type {HTMLAnchorElement} */
+			const button = dialog.querySelector('a[data-photo-kind="' + kind + '"]');
+			/** @type {?SizeVariant} */
+			const sv = myPhoto.size_variants[variant];
+			if (!!sv) {
+				button.title = lychee.locale["DOWNLOAD"];
+				button.addEventListener(lychee.getEventName(), onClickOrTouch);
+				button.lastElementChild.textContent =
+					lLabel + "(" + sv.width + "×" + sv.height + ", " + lychee.locale.printFilesizeLocalized(sv.filesize) + ")";
+			} else {
+				button.remove();
+			}
 		});
-	} else {
-		location.href = "api/Photo::getArchive?photoIDs=" + photoIDs.join() + "&kind=" + kind;
-	}
+		/** @type {HTMLAnchorElement} */
+		const liveButton = dialog.querySelector('a[data-photo-kind="LIVEPHOTOVIDEO"]');
+		if (myPhoto.live_photo_url !== null) {
+			liveButton.title = lychee.locale["DOWNLOAD"];
+			liveButton.addEventListener(lychee.getEventName(), onClickOrTouch);
+			liveButton.lastElementChild.textContent = kind2VariantAndLocalizedLabel["LIVEPHOTOVIDEO"][1];
+		} else {
+			liveButton.remove();
+		}
+	};
+
+	basicModal.show({
+		body: getPhotoArchiveDialogBody,
+		readyCB: initGetPhotoArchiveDialog,
+		classList: ["downloads"],
+		buttons: {
+			cancel: {
+				title: lychee.locale["CLOSE"],
+				fn: basicModal.close,
+			},
+		},
+	});
 };
 
 /**
@@ -1222,10 +1205,11 @@ photo.showDirectLinks = function (photoID) {
 		dialog.querySelector("p").textContent = lychee.locale["PHOTO_DIRECT_LINKS_TO_IMAGES"];
 
 		for (const type in localizations) {
-			if (photo.json.size_variants[type] !== null) {
-				formElements[type].value = lychee.getBaseUrl() + photo.json.size_variants[type].url;
-				formElements[type].previousElementSibling.textContent =
-					localizations[type] + " (" + photo.json.size_variants[type].width + "×" + photo.json.size_variants[type].height + ")";
+			/** @type {?SizeVariant} */
+			const sv = photo.json.size_variants[type];
+			if (sv !== null) {
+				formElements[type].value = lychee.getBaseUrl() + sv.url;
+				formElements[type].previousElementSibling.textContent = localizations[type] + " (" + sv.width + "×" + sv.height + ")";
 				formElements[type].nextElementSibling.title = "Copy to clipboard";
 			} else {
 				// The form element is the `<input>` element, the parent
