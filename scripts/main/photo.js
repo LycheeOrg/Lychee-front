@@ -1020,7 +1020,6 @@ photo.getArchive = function (photoIDs, kind = null) {
 
 	const kind2VariantAndLocalizedLabel = {
 		FULL: ["original", lychee.locale["PHOTO_FULL"]],
-		LIVEPHOTOVIDEO: ["live", lychee.locale["PHOTO_LIVE_VIDEO"]],
 		MEDIUM2X: ["medium2x", lychee.locale["PHOTO_MEDIUM_HIDPI"]],
 		MEDIUM: ["medium", lychee.locale["PHOTO_MEDIUM"]],
 		SMALL2X: ["small2x", lychee.locale["PHOTO_SMALL_HIDPI"]],
@@ -1042,7 +1041,8 @@ photo.getArchive = function (photoIDs, kind = null) {
 			`;
 	};
 
-	const getPhotoArchiveDialogBody = Object.entries(kind2VariantAndLocalizedLabel).reduce((html, [kind]) => html + buildButton(kind), "");
+	const getPhotoArchiveDialogBody =
+		Object.entries(kind2VariantAndLocalizedLabel).reduce((html, [kind]) => html + buildButton(kind), "") + buildButton("LIVEPHOTOVIDEO");
 
 	/** @param {TouchEvent|MouseEvent} ev */
 	const onClickOrTouch = function (ev) {
@@ -1077,7 +1077,7 @@ photo.getArchive = function (photoIDs, kind = null) {
 		if (myPhoto.live_photo_url !== null) {
 			liveButton.title = lychee.locale["DOWNLOAD"];
 			liveButton.addEventListener(lychee.getEventName(), onClickOrTouch);
-			liveButton.lastElementChild.textContent = kind2VariantAndLocalizedLabel["LIVEPHOTOVIDEO"][1];
+			liveButton.lastElementChild.textContent = lychee.locale["PHOTO_LIVE_VIDEO"];
 		} else {
 			liveButton.remove();
 		}
@@ -1189,7 +1189,7 @@ photo.showDirectLinks = function (photoID) {
 	const showDirectLinksDialogBody =
 		'<form class="photo-links">' +
 		buildLine("view") +
-		"<p></p>" +
+		'</form><p></p><form class="photo-links">' +
 		Object.entries(localizations).reduce((html, [type]) => html + buildLine(type), "") +
 		buildLine("live") +
 		"</form>";
