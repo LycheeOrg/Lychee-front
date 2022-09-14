@@ -922,27 +922,27 @@ photo.setLicense = function (photoID) {
 	 */
 	const action = function (data) {
 		basicModal.close();
-		let license = data.license;
 
-		let params = {
-			photoID,
-			license,
-		};
-
-		api.post("Photo::setLicense", params, function () {
-			// update the photo JSON and reload the license in the sidebar
-			photo.json.license = params.license;
-			view.photo.license();
-		});
+		api.post(
+			"Photo::setLicense",
+			{
+				photoID: photoID,
+				license: data.license,
+			},
+			function () {
+				// update the photo JSON and reload the license in the sidebar
+				photo.json.license = data.license;
+				view.photo.license();
+			}
+		);
 	};
 
-	const msg = lychee.html`
-	<div>
-		<p>${lychee.locale["PHOTO_LICENSE"]}
-		<span class="select" style="width:270px">
-			<select name="license" id="license">
-				<option value="none">${lychee.locale["PHOTO_LICENSE_NONE"]}</option>
-				<option value="reserved">${lychee.locale["PHOTO_RESERVED"]}</option>
+	const setPhotoLicenseDialogBody = `
+		<form><div class="input-group compact">
+			<label for="photo_license_dialog_license_select"></label>
+			<div class="select"><select name="license" id="photo_license_dialog_license_select">
+				<option value="none"></option>
+				<option value="reserved"></option>
 				<option value="CC0">CC0 - Public Domain</option>
 				<option value="CC-BY-1.0">CC Attribution 1.0</option>
 				<option value="CC-BY-2.0">CC Attribution 2.0</option>
@@ -974,18 +974,26 @@ photo.setLicense = function (photoID) {
 				<option value="CC-BY-NC-SA-2.5">CC Attribution-NonCommercial-ShareAlike 2.5</option>
 				<option value="CC-BY-NC-SA-3.0">CC Attribution-NonCommercial-ShareAlike 3.0</option>
 				<option value="CC-BY-NC-SA-4.0">CC Attribution-NonCommercial-ShareAlike 4.0</option>
-			</select>
-		</span>
-		<br />
-		<a href="https://creativecommons.org/choose/" target="_blank">${lychee.locale["PHOTO_LICENSE_HELP"]}</a>
-		</p>
-	</div>`;
+			</select></div>
+			<p><a href="https://creativecommons.org/choose/" target="_blank"></a></p>
+		</div></form>`;
+
+	/**
+	 * @param {ModelDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initSetPhotoLicenseDialog = function (formElements, dialog) {
+		formElements.license.labels[0].textContent = lychee.locale["PHOTO_LICENSE"];
+		formElements.license.item(0).textContent = lychee.locale["PHOTO_LICENSE_NONE"];
+		formElements.license.item(1).textContent = lychee.locale["PHOTO_RESERVED"];
+		formElements.license.value = photo.json.license === "" ? "none" : photo.json.license;
+		dialog.querySelector("p a").textContent = lychee.locale["PHOTO_LICENSE_HELP"];
+	};
 
 	basicModal.show({
-		body: msg,
-		callback: function () {
-			$("select#license").val(photo.json.license === "" ? "none" : photo.json.license);
-		},
+		body: setPhotoLicenseDialogBody,
+		readyCB: initSetPhotoLicenseDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["PHOTO_SET_LICENSE"],
