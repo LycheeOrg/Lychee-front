@@ -1068,6 +1068,7 @@ view.settings = {
 			<div class="basicModal__buttons">
 				<!--<a id="basicModal__cancel" class="basicModal__button ">Cancel</a>-->
 				<a id="basicModal__action_password_change" class="basicModal__button ">$${lychee.locale["PASSWORD_CHANGE"]}</a>
+				<a id="basicModal__action_token" class="basicModal__button ">$${lychee.locale["TOKEN_BUTTON"]}</a>
 			</div>
 			</form>
 			</div>`;
@@ -1075,6 +1076,7 @@ view.settings = {
 			$(".settings_view").append(msg);
 
 			settings.bind("#basicModal__action_password_change", ".setLogin", settings.changeLogin);
+			settings.bind("#basicModal__action_token", ".setLogin", settings.openTokenDialog);
 		},
 
 		/**

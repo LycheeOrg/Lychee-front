@@ -488,3 +488,87 @@ settings.save_enter = function (e) {
 		},
 	});
 };
+
+/**
+ * @returns {void}
+ */
+settings.openTokenDialog = function () {
+	let token = "";
+
+	/**
+	 * @returns {void}
+	 */
+	const updateTokenDialog = function () {
+		if (lychee.user.has_token) {
+			$("#button_disable_token").show();
+
+			if (!!token) {
+				$("#apiToken").text(token);
+				$("#button_copy_token").show();
+			} else {
+				$("#apiToken").text(lychee.locale["TOKEN_NOT_AVAILABLE"]);
+				$("#button_copy_token").hide();
+			}
+		} else {
+			$("#apiToken").text(lychee.locale["DISABLED_TOKEN_STATUS_MSG"]);
+			$("#button_copy_token").hide();
+			$("#button_disable_token").hide();
+		}
+	};
+
+	const bodyHtml = lychee.html`<div class='directLinks'><p><span id="apiToken">
+	</span> <a id="button_reset_token" class='basicModal__button' title='${lychee.locale["RESET"]}'>${build.iconic(
+		"reload",
+		"ionicons"
+	)}</a> <a id="button_copy_token" class='basicModal__button' title='${lychee.locale["URL_COPY_TO_CLIPBOARD"]}'>${build.iconic(
+		"copy",
+		"ionicons"
+	)}</a> <a id="button_disable_token" class='basicModal__button' title='${lychee.locale["DISABLE_TOKEN_TOOLTIP"]}'>${build.iconic(
+		"ban"
+	)}</a></p></div>`;
+
+	const initTokenDialog = function () {
+		updateTokenDialog();
+
+		$("#button_copy_token").on(lychee.getEventName(), function () {
+			navigator.clipboard.writeText(token);
+		});
+
+		$("#button_reset_token").on(lychee.getEventName(), function () {
+			$("#apiToken").text(lychee.locale["TOKEN_WAIT"]);
+			api.post(
+				"User::resetToken",
+				{},
+				/**
+				 *
+				 * @param {{token: string}} data
+				 */
+				function (data) {
+					token = data.token;
+					lychee.user.has_token = true;
+					updateTokenDialog();
+				}
+			);
+		});
+
+		$("#button_disable_token").on(lychee.getEventName(), function () {
+			$("#apiToken").text(lychee.locale["TOKEN_WAIT"]);
+			api.post("User::unsetToken", {}, function () {
+				token = "";
+				lychee.user.has_token = false;
+				updateTokenDialog();
+			});
+		});
+	};
+
+	basicModal.show({
+		body: bodyHtml,
+		callback: initTokenDialog,
+		buttons: {
+			cancel: {
+				title: lychee.locale["CLOSE"],
+				fn: basicModal.close,
+			},
+		},
+	});
+};
