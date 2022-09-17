@@ -497,77 +497,122 @@ settings.save_enter = function (e) {
  * @returns {void}
  */
 settings.openTokenDialog = function () {
-	let token = "";
+	/** @type {string} */
+	let tokenValue = "";
+	/** @type {?HTMLAnchorElement} */
+	let resetTokenButton = null;
+	/** @type {?HTMLAnchorElement} */
+	let copyTokenButton = null;
+	/** @type {?HTMLAnchorElement} */
+	let disableTokenButton = null;
+	/** @type {?HTMLInputElement} */
+	let tokenInputElement = null;
+
+	const bodyHtml = `
+		<form class="token">
+			<div class="input-group stacked">
+				<label for="token-dialog-token"></label>
+				<input id="token-dialog-token" name="token" type="text" readonly="readonly" />
+				<div class="button-group">
+					<a id="button_reset_token" class='button'><svg class='iconic ionicons'><use xlink:href='#reload' /></svg></a>
+					<a id="button_copy_token" class='button'><svg class='iconic ionicons'><use xlink:href='#copy' /></svg></a>
+					<a id="button_disable_token" class='button'><svg class='iconic ionicons'><use xlink:href='#ban' /></svg></a>
+				</div>
+			</div>
+		</form>`;
 
 	/**
 	 * @returns {void}
 	 */
 	const updateTokenDialog = function () {
 		if (lychee.user.has_token) {
-			$("#button_disable_token").show();
+			disableTokenButton.style.display = null;
 
-			if (!!token) {
-				$("#apiToken").text(token);
-				$("#button_copy_token").show();
+			if (!!tokenValue) {
+				tokenInputElement.value = tokenValue;
+				tokenInputElement.disabled = false;
+				copyTokenButton.style.display = null;
 			} else {
-				$("#apiToken").text(lychee.locale["TOKEN_NOT_AVAILABLE"]);
-				$("#button_copy_token").hide();
+				tokenInputElement.value = lychee.locale["TOKEN_NOT_AVAILABLE"];
+				tokenInputElement.disabled = true;
+				copyTokenButton.style.display = "none";
 			}
 		} else {
-			$("#apiToken").text(lychee.locale["DISABLED_TOKEN_STATUS_MSG"]);
-			$("#button_copy_token").hide();
-			$("#button_disable_token").hide();
+			tokenInputElement.value = lychee.locale["DISABLED_TOKEN_STATUS_MSG"];
+			tokenInputElement.disabled = true;
+			copyTokenButton.style.display = "none";
+			disableTokenButton.style.display = "none";
 		}
 	};
 
-	const bodyHtml = lychee.html`<div class='directLinks'><p><span id="apiToken">
-	</span> <a id="button_reset_token" class='basicModal__button' title='${lychee.locale["RESET"]}'>${build.iconic(
-		"reload",
-		"ionicons"
-	)}</a> <a id="button_copy_token" class='basicModal__button' title='${lychee.locale["URL_COPY_TO_CLIPBOARD"]}'>${build.iconic(
-		"copy",
-		"ionicons"
-	)}</a> <a id="button_disable_token" class='basicModal__button' title='${lychee.locale["DISABLE_TOKEN_TOOLTIP"]}'>${build.iconic(
-		"ban"
-	)}</a></p></div>`;
+	/**
+	 * @param {MouseEvent|TouchEvent} ev
+	 */
+	const onCopyToken = function (ev) {
+		navigator.clipboard.writeText(tokenValue);
+		ev.stopPropagation();
+	};
 
-	const initTokenDialog = function () {
+	/**
+	 * @param {MouseEvent|TouchEvent} ev
+	 */
+	const onResetToken = function (ev) {
+		tokenInputElement.value = "";
+		ev.stopPropagation();
+		api.post(
+			"User::resetToken",
+			{},
+			/**
+			 * @param {{token: string}} data
+			 */
+			function (data) {
+				tokenValue = data.token;
+				lychee.user.has_token = true;
+				updateTokenDialog();
+			}
+		);
+	};
+
+	/**
+	 * @param {MouseEvent|TouchEvent} ev
+	 */
+	const onDisableToken = function (ev) {
+		tokenInputElement.value = "";
+		ev.stopPropagation();
+		api.post("User::unsetToken", {}, function () {
+			tokenValue = "";
+			lychee.user.has_token = false;
+			updateTokenDialog();
+		});
+	};
+
+	/**
+	 * @param {ModelDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initTokenDialog = function (formElements, dialog) {
+		resetTokenButton = dialog.querySelector("a#button_reset_token");
+		resetTokenButton.title = lychee.locale["RESET"];
+		copyTokenButton = dialog.querySelector("a#button_copy_token");
+		copyTokenButton.title = lychee.locale["URL_COPY_TO_CLIPBOARD"];
+		disableTokenButton = dialog.querySelector("a#button_disable_token");
+		disableTokenButton.title = lychee.locale["DISABLE_TOKEN_TOOLTIP"];
+		tokenInputElement = formElements.token;
+		tokenInputElement.placeholder = lychee.locale["TOKEN_WAIT"];
+		tokenInputElement.labels[0].textContent = "Token";
+		tokenInputElement.blur();
+
 		updateTokenDialog();
 
-		$("#button_copy_token").on(lychee.getEventName(), function () {
-			navigator.clipboard.writeText(token);
-		});
-
-		$("#button_reset_token").on(lychee.getEventName(), function () {
-			$("#apiToken").text(lychee.locale["TOKEN_WAIT"]);
-			api.post(
-				"User::resetToken",
-				{},
-				/**
-				 *
-				 * @param {{token: string}} data
-				 */
-				function (data) {
-					token = data.token;
-					lychee.user.has_token = true;
-					updateTokenDialog();
-				}
-			);
-		});
-
-		$("#button_disable_token").on(lychee.getEventName(), function () {
-			$("#apiToken").text(lychee.locale["TOKEN_WAIT"]);
-			api.post("User::unsetToken", {}, function () {
-				token = "";
-				lychee.user.has_token = false;
-				updateTokenDialog();
-			});
-		});
+		copyTokenButton.addEventListener(lychee.getEventName(), onCopyToken);
+		resetTokenButton.addEventListener(lychee.getEventName(), onResetToken);
+		disableTokenButton.addEventListener(lychee.getEventName(), onDisableToken);
 	};
 
 	basicModal.show({
 		body: bodyHtml,
-		callback: initTokenDialog,
+		readyCB: initTokenDialog,
 		buttons: {
 			cancel: {
 				title: lychee.locale["CLOSE"],
