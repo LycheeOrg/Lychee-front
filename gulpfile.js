@@ -221,6 +221,89 @@ gulp.task(
 	})
 );
 
+
+
+/* Unified ----------------------------------------- */
+
+paths.unified = {
+	js: ["./scripts/*.js", "./scripts/main/*.js", "./scripts/3rd-party/backend.js", "./deps/basiccontext/scripts/basicContext.js"],
+	scripts: [
+		"node_modules/jquery/dist/jquery.min.js",
+		"node_modules/lazysizes/lazysizes.min.js",
+		"node_modules/mousetrap/mousetrap.min.js",
+		"node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js",
+		"node_modules/basicmodal/dist/basicModal.min.js",
+		"node_modules/scroll-lock/dist/scroll-lock.min.js",
+		"node_modules/multiselect-two-sides/dist/js/multiselect.min.js",
+		"node_modules/justified-layout/dist/justified-layout.min.js",
+		"node_modules/leaflet/dist/leaflet.js",
+		"node_modules/leaflet-rotatedmarker/leaflet.rotatedMarker.js",
+		"node_modules/spin.js/spin.min.js",
+		"node_modules/leaflet-gpx/gpx.js",
+		"node_modules/leaflet-spin/leaflet.spin.min.js",
+		"node_modules/leaflet.markercluster/dist/leaflet.markercluster.js",
+		"node_modules/livephotoskit/livephotoskit.js",
+		"node_modules/qr-creator/dist/qr-creator.min.js",
+		"node_modules/sprintf-js/dist/sprintf.min.js",
+		"modules/Leaflet.Photo-gh-pages/Leaflet.Photo.js",
+		"../dist/_unified--javascript.js",
+	],
+	scss: ["./styles/main/*.scss"],
+	styles: [
+		"node_modules/basicmodal/src/styles/main.scss",
+		"./deps/basiccontext/styles/main.scss",
+		"./deps/basiccontext/styles/addons/popin.scss",
+		"./styles/main/main.scss",
+		"node_modules/leaflet/dist/leaflet.css",
+		"node_modules/leaflet.markercluster/dist/MarkerCluster.css",
+		"modules/Leaflet.Photo-gh-pages/Leaflet.Photo.css",
+	],
+	html: ["./html/unified.html"]
+};
+
+gulp.task("unified--js", function () {
+	const babel = plugins.babel({
+		presets: ["env"],
+	});
+
+	return gulp
+		.src(paths.unified.js)
+		.pipe(plugins.concat("_unified--javascript.js", { newLine: "\n" }))
+		.pipe(babel)
+		.on("error", catchError)
+		.pipe(gulp.dest("../dist/"));
+});
+
+gulp.task(
+	"unified--scripts",
+	gulp.series("unified--js", function () {
+		return (
+			gulp
+				.src(paths.unified.scripts)
+				.pipe(plugins.concat("unified.js", { newLine: "\n" }))
+				.on("error", catchError)
+				.pipe(gulp.dest("../dist/"))
+		);
+	})
+);
+
+gulp.task("unified--styles", function () {
+	return gulp
+		.src(paths.unified.styles)
+		.pipe(sass().on("error", catchError))
+		.pipe(plugins.concat("unified.css", { newLine: "\n" }))
+		.pipe(plugins.autoprefixer("last 4 versions", "> 5%"))
+		.pipe(cleanCSS({ level: 2 }))
+		.pipe(gulp.dest("../dist/"));
+});
+
+gulp.task("unified--html", function () {
+	return gulp
+		.src(paths.unified.html)
+		.pipe(plugins.concat("frontend.html", { newLine: "\n" }))
+		.on("error", catchError).pipe(gulp.dest(".."));
+});
+
 /* Landing -----------------------------------------  */
 
 paths.landing = {
@@ -356,6 +439,9 @@ gulp.task(
 			"main--styles",
 			"frame--scripts",
 			"frame--styles",
+			"unified--scripts",
+			"unified--styles",
+			"unified--html",
 			"landing--scripts",
 			"landing--styles",
 			"page--styles",
