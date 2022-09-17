@@ -1,7 +1,8 @@
 form.token div.input-group {
 	padding-right: 82px;
 
-	input[disabled], input.disabled {
+	input[disabled],
+	input.disabled {
 		color: $colorDialogDisabledFg;
 	}
 
