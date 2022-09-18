@@ -238,13 +238,7 @@ gulp.task("unified--html", function () {
 paths.landing = {
 	js: ["./scripts/landing/*.js"],
 	scripts: ["node_modules/jquery/dist/jquery.min.js", "node_modules/lazysizes/lazysizes.min.js", "../dist/_landing--javascript.js"],
-	scss: [
-		"./styles/landing/*.scss",
-		"./styles/page/fonts.scss",
-		"./styles/page/menu.scss",
-		"./styles/page/social.scss",
-		"./styles/page/animate.scss",
-	],
+	scss: ["./styles/landing/*.scss"],
 	styles: ["./styles/landing/landing.scss"],
 };
 
@@ -287,26 +281,7 @@ gulp.task("landing--styles", function () {
 	);
 });
 
-/* Page -----------------------------------------  */
-
-paths.page = {
-	scss: ["./styles/page/*.scss", "./styles/page/*.scss"],
-	styles: ["./styles/page/page.scss"],
-};
-
-gulp.task("page--styles", function () {
-	return (
-		gulp
-			.src(paths.page.styles)
-			.pipe(sass().on("error", catchError))
-			.pipe(plugins.concat("page.css", { newLine: "\n" }))
-			.pipe(plugins.autoprefixer("last 4 versions", "> 5%"))
-			// .pipe(cleanCSS({level: 2}))
-			.pipe(gulp.dest("../dist/"))
-	);
-});
-
-/* Page -----------------------------------------  */
+/* TVCSS -----------------------------------------  */
 
 paths.TVCSS = {
 	src: ["./styles/devices/TV.scss"],
@@ -371,7 +346,6 @@ gulp.task(
 			"unified--html",
 			"landing--scripts",
 			"landing--styles",
-			"page--styles",
 			"TVCSS--styles",
 			"images--copy",
 			"leafletMarkerclusterMapFile--copy",
