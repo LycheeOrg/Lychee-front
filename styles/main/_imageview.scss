@@ -5,16 +5,12 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(10, 10, 10, 0.98);
+	background-color: #0f0f0f;
 	transition: background-color 0.3s;
 
 	// Modes -------------------------------------------------------------- //
-	&.view {
-		background-color: inherit;
-	}
 
 	&.full {
-		background-color: black(1);
 		cursor: none;
 	}
 
