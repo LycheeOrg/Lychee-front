@@ -186,7 +186,8 @@ paths.unified = {
 		"node_modules/leaflet.markercluster/dist/MarkerCluster.css",
 		"modules/Leaflet.Photo-gh-pages/Leaflet.Photo.css",
 	],
-	html: ["./html/unified.html"],
+	html: "./html/frontend.html",
+	svg: ["./images/iconic.svg", "./images/ionicons.svg"],
 };
 
 gulp.task("unified--js", function () {
@@ -226,7 +227,14 @@ gulp.task("unified--styles", function () {
 gulp.task("unified--html", function () {
 	return gulp
 		.src(paths.unified.html)
-		.pipe(plugins.concat("frontend.html", { newLine: "\n" }))
+		.pipe(plugins.inject(
+			gulp.src(paths.unified.svg), {
+				starttag: "<!-- inject:svg -->",
+				transform: function (filePath, _file) {
+					return _file.contents.toString("utf8");
+				},
+			}
+		))
 		.on("error", catchError)
 		.pipe(gulp.dest(".."));
 });
