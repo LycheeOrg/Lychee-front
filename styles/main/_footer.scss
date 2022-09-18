@@ -27,6 +27,11 @@
 	p.home_copyright {
 		text-transform: uppercase;
 	}
+
+	p:empty,
+	#home_socials a[href=""] {
+		display: none;
+	}
 }
 
 .hide_footer {

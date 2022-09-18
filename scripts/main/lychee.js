@@ -3,7 +3,6 @@
  */
 
 const lychee = {
-	title: document.title,
 	/**
 	 * The version of the backend in human-readable, printable form, e.g. `'4.6.3'`.
 	 *
@@ -148,6 +147,68 @@ const lychee = {
 	album_subtitle_type: "oldstyle",
 
 	upload_processing_limit: 4,
+
+	/**
+	 * The URL to the Facebook page related to this site
+	 * @type {string}
+	 */
+	sm_facebook_url: "",
+	/**
+	 * The URL to the Flickr page related to this site
+	 * @type {string}
+	 */
+	sm_flickr_url: "",
+	/**
+	 * The URL to the Instagram page related to this site
+	 * @type {string}
+	 */
+	sm_instagram_url: "",
+	/**
+	 * The URL to the Twitter page related to this site
+	 * @type {string}
+	 */
+	sm_twitter_url: "",
+	/**
+	 * The URL to the YouTube channel related to this site
+	 * @type {string}
+	 */
+	sm_youtube_url: "",
+	/**
+	 * The site title.
+	 * @type {string}
+	 */
+	site_title: "",
+	/**
+	 * The name of the site owner.
+	 * @type {string}
+	 */
+	site_owner: "",
+	/**
+	 * Begin of copyright.
+	 * @type {string}
+	 */
+	site_copyright_begin: "",
+	/**
+	 * End of copyright.
+	 * @type {string}
+	 */
+	site_copyright_end: "",
+
+	/**
+	 * Determines if social media links are shown in footer.
+	 * @type {boolean}
+	 */
+	footer_show_social_media: false,
+	/**
+	 * Determines if copyright notice is shown in footer.
+	 * @type {boolean}
+	 */
+	footer_show_copyright: false,
+	/**
+	 * An optional line of text to be shown in the footer.
+	 * @type {string}
+	 */
+	footer_additional_text: "",
 
 	// this is device specific config, in this case default is Desktop.
 	header_auto_hide: true,
@@ -342,23 +403,111 @@ lychee.parseInitializationData = function (data) {
 	for (let key in data.locale) {
 		lychee.locale[key] = data.locale[key];
 	}
-	lychee.localizeStaticGuiElements();
 
 	lychee.parsePublicInitializationData(data);
 	if (lychee.user !== null || lychee.rights.is_admin) {
 		lychee.parseProtectedInitializationData(data);
 	}
+
+	lychee.localizeStaticGuiElements();
 };
 
 /**
  * Applies the current `lychee.locale` to those GUI elements which are
  * static part of the HTML.
  *
+ * Note, `lychee.setMode` removes some elements (e.g. the input element
+ * for search) depending on the mode.
+ * Hence, we must take some precautions as some elements might be `null`.
+ * TODO: Fix that.
+ *
  * @return {void}
  */
-lychee.localizeStaticGuiElements = function() {
-	document.querySelector('div.sidebar__header h1').textContent = lychee.locale["PHOTO_ABOUT"];
-}
+lychee.localizeStaticGuiElements = function () {
+	// Toolbars in the header
+	const tbPublic = document.querySelector("div.header__toolbar--public");
+	tbPublic.querySelector("a#button_signin").title = lychee.locale["SIGN_IN"];
+	const tbPublicSearch = tbPublic.querySelector("input.header__search");
+	if (tbPublicSearch instanceof HTMLInputElement) {
+		// See remark about `lychee.setMode` in the jsDoc comment of this method.
+		tbPublicSearch.placeholder = lychee.locale["SEARCH"];
+	}
+	tbPublic.querySelector("a.button--map-albums").title = lychee.locale["DISPLAY_FULL_MAP"];
+
+	const tbAlbums = document.querySelector("div.header__toolbar--albums");
+	tbAlbums.querySelector("a#button_settings").title = lychee.locale["SETTINGS"];
+	const tbAlbumsSearch = tbAlbums.querySelector("input.header__search");
+	if (tbAlbumsSearch instanceof HTMLInputElement) {
+		// See remark about `lychee.setMode` in the jsDoc comment of this method.
+		tbAlbumsSearch.placeholder = lychee.locale["SEARCH"];
+	}
+	tbAlbums.querySelector("a.button--map-albums").title = lychee.locale["DISPLAY_FULL_MAP"];
+	tbAlbums.querySelector("a.button_add").title = lychee.locale["ADD"];
+
+	const tbAlbum = document.querySelector("div.header__toolbar--album");
+	tbAlbum.querySelector("a#button_back_home").title = lychee.locale["CLOSE_ALBUM"];
+	tbAlbum.querySelector("a#button_visibility_album").title = lychee.locale["VISIBILITY_ALBUM"];
+	tbAlbum.querySelector("a#button_sharing_album_users").title = lychee.locale["SHARING_ALBUM_USERS"];
+	tbAlbum.querySelector("a#button_nsfw_album").title = lychee.locale["ALBUM_MARK_NSFW"];
+	tbAlbum.querySelector("a#button_share_album").title = lychee.locale["SHARE_ALBUM"];
+	tbAlbum.querySelector("a#button_archive").title = lychee.locale["DOWNLOAD_ALBUM"];
+	tbAlbum.querySelector("a#button_info_album").title = lychee.locale["ABOUT_ALBUM"];
+	tbAlbum.querySelector("a#button_map_album").title = lychee.locale["DISPLAY_FULL_MAP"];
+	tbAlbum.querySelector("a#button_move_album").title = lychee.locale["MOVE_ALBUM"];
+	tbAlbum.querySelector("a#button_trash_album").title = lychee.locale["DELETE_ALBUM"];
+	tbAlbum.querySelector("a#button_fs_album_enter").title = lychee.locale["FULLSCREEN_ENTER"];
+	tbAlbum.querySelector("a#button_fs_album_exit").title = lychee.locale["FULLSCREEN_EXIT"];
+	tbAlbum.querySelector("a.button_add").title = lychee.locale["ADD"];
+
+	const tbPhoto = document.querySelector("div.header__toolbar--photo");
+	tbPhoto.querySelector("a#button_back").title = lychee.locale["CLOSE_PHOTO"];
+	tbPhoto.querySelector("a#button_star").title = lychee.locale["STAR_PHOTO"];
+	tbPhoto.querySelector("a#button_visibility").title = lychee.locale["VISIBILITY_PHOTO"];
+	tbPhoto.querySelector("a#button_rotate_ccwise").title = lychee.locale["PHOTO_EDIT_ROTATECCWISE"];
+	tbPhoto.querySelector("a#button_rotate_cwise").title = lychee.locale["PHOTO_EDIT_ROTATECWISE"];
+	tbPhoto.querySelector("a#button_share").title = lychee.locale["SHARE_PHOTO"];
+	tbPhoto.querySelector("a#button_info").title = lychee.locale["ABOUT_PHOTO"];
+	tbPhoto.querySelector("a#button_map").title = lychee.locale["DISPLAY_FULL_MAP"];
+	tbPhoto.querySelector("a#button_move").title = lychee.locale["MOVE"];
+	tbPhoto.querySelector("a#button_trash").title = lychee.locale["DELETE"];
+	tbPhoto.querySelector("a#button_fs_enter").title = lychee.locale["FULLSCREEN_ENTER"];
+	tbPhoto.querySelector("a#button_fs_exit").title = lychee.locale["FULLSCREEN_EXIT"];
+	tbPhoto.querySelector("a#button_more").title = lychee.locale["MORE"];
+
+	const tbMap = document.querySelector("div.header__toolbar--map");
+	tbMap.querySelector("a#button_back_map").title = lychee.locale["CLOSE_MAP"];
+
+	const tbConfig = document.querySelector("div.header__toolbar--config");
+	tbConfig.querySelector("a#button_close_config").title = lychee.locale["CLOSE"];
+
+	// Sidebar
+	document.querySelector("div.sidebar__header h1").textContent = lychee.locale["PHOTO_ABOUT"];
+
+	// Footer
+	const footer = document.querySelector("div#footer");
+	footer.querySelector("p.home_copyright").textContent = lychee.footer_show_copyright
+		? sprintf(
+				lychee.locale["FOOTER_COPYRIGHT"],
+				lychee.site_owner,
+				lychee.site_copyright_begin === lychee.site_copyright_end
+					? lychee.site_copyright_begin
+					: lychee.site_copyright_begin + "–" + lychee.site_copyright_begin
+		  )
+		: "";
+	footer.querySelector("p.personal_text").textContent = lychee.footer_additional_text;
+	footer.querySelector("p.hosted_by a").textContent = lychee.locale["HOSTED_WITH_LYCHEE"];
+	/** @type {HTMLDivElement} */
+	const footerSocialMedia = footer.querySelector("div#home_socials");
+	if (lychee.footer_show_social_media) {
+		footerSocialMedia.querySelector("a#facebook").href = lychee.sm_facebook_url;
+		footerSocialMedia.querySelector("a#flickr").href = lychee.sm_flickr_url;
+		footerSocialMedia.querySelector("a#instagram").href = lychee.sm_instagram_url;
+		footerSocialMedia.querySelector("a#twitter").href = lychee.sm_twitter_url;
+		footerSocialMedia.querySelector("a#youtube").href = lychee.sm_youtube_url;
+	} else {
+		footerSocialMedia.style.display = "none";
+	}
+};
 
 /**
  * Parses the configuration settings which are always available.
@@ -393,6 +542,21 @@ lychee.parsePublicInitializationData = function (data) {
 	lychee.nsfw_visible_saved = lychee.nsfw_visible;
 	lychee.nsfw_blur = data.config.nsfw_blur === "1";
 	lychee.nsfw_warning = data.config.nsfw_warning === "1";
+
+	lychee.sm_facebook_url = data.config.sm_facebook_url;
+	lychee.sm_flickr_url = data.config.sm_flickr_url;
+	lychee.sm_instagram_url = data.config.sm_instagram_url;
+	lychee.sm_twitter_url = data.config.sm_twitter_url;
+	lychee.sm_youtube_url = data.config.sm_youtube_url;
+
+	lychee.site_title = data.config.site_title;
+	lychee.site_owner = data.config.site_owner;
+	lychee.site_copyright_begin = data.config.site_copyright_begin;
+	lychee.site_copyright_end = data.config.site_copyright_end;
+
+	lychee.footer_show_social_media = data.config.footer_show_social_media === "1";
+	lychee.footer_show_copyright = data.config.footer_show_copyright === "1";
+	lychee.footer_additional_text = data.config.footer_additional_text;
 
 	lychee.header_auto_hide = data.config_device.header_auto_hide;
 	lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
@@ -862,16 +1026,16 @@ lychee.load = function (autoplay = true) {
  * Sets the title of the browser window and the title shown in the header bar.
  *
  * The window title is prefixed by the value of the configuration setting
- * `lychee.title`.
+ * `lychee.site_title`.
  *
- * If both, the prefix `lychee.title` and the given title, are not empty,
+ * If both, the prefix `lychee.site_title` and the given title, are not empty,
  * they are seperated by an en-dash.
  *
  * @param {string} [title=""]
  * @param {boolean} [editable=false]
  */
 lychee.setTitle = function (title = "", editable = false) {
-	document.title = lychee.title + (lychee.title && title ? " – " : "") + title;
+	document.title = lychee.site_title + (lychee.site_title && title ? " – " : "") + title;
 	header.setEditable(editable);
 	header.setTitle(title);
 };

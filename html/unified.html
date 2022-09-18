@@ -255,7 +255,7 @@
 	<!-- DIV for the loading indicator -->
 	<div id="loading"></div>
 
-	<!-- Header is invisible for "frame" mode, but visible for "view" and "gallery" -->
+	<!-- TODO: Header is invisible for "frame" mode, but visible for "view" and "gallery" -->
 	<!-- TODO: In "view" mode the header has the additional CSS class "header--view" -->
 	<header class="header">
 		<div class="header__toolbar header__toolbar--public">
@@ -295,7 +295,6 @@
 			<a class="header__divider"></a>
 			<a class="button button_add"><svg class="iconic"><use xlink:href="#plus" /></svg></a>
 		</div>
-		<!-- TODO: In "view" mode this DIV is visible, but has the classes "header__toolbar--public" as well as "header__toolbar--visible" and only "header__title", "button--share" and "button--info" are visible -->
 		<div class="header__toolbar header__toolbar--photo">
 			<a class="button" id="button_back"><svg class="iconic"><use xlink:href="#chevron-left" /></svg></a>
 			<a class="header__title"></a>
@@ -358,22 +357,16 @@
 		</div>
 	</div>
 
-	<!-- TODO: Footer is only visible in gallery mode -->
-	<!-- TODO: Fill href via JSON -->
-	<!-- TODO: Links with empty href should be invisible -->
 	<div id="footer" class="animate animate-up hide_footer">
 		<div id="home_socials" class="animate animate-up">
-			<a href="https://facebook" class="socialicons" id="facebook" target="_blank" rel="noopener"></a>
-			<a href="https://flickr" class="socialicons" id="flickr" target="_blank" rel="noopener"></a>
-			<a href="https://twitter" class="socialicons" id="twitter" target="_blank" rel="noopener"></a>
-			<a href="https://instagram" class="socialicons" id="instagram" target="_blank" rel="noopener"></a>
-			<a href="https://youtube" class="socialicons" id="youtube" target="_blank" rel="noopener"></a>
+			<a class="socialicons" id="facebook" target="_blank" rel="noopener"></a>
+			<a class="socialicons" id="flickr" target="_blank" rel="noopener"></a>
+			<a class="socialicons" id="twitter" target="_blank" rel="noopener"></a>
+			<a class="socialicons" id="instagram" target="_blank" rel="noopener"></a>
+			<a class="socialicons" id="youtube" target="_blank" rel="noopener"></a>
 		</div>
-		<!-- TODO: Only visible if `copyright_enable` and p.textContent equals sprintf(Lang::get('FOOTER_COPYRIGHT'), $infos['owner'], $infos['copyright_year']) -->
 		<p class="home_copyright"></p>
-		<!-- TODO: Only visible if `additional_footer_text` is set and p.textContent equals `additional_footer_text` -->
 		<p class="personal_text"></p>
-		<!-- TODO: Only visible if `show_hosted_by` is true and a.textContent equals `locale[HOSTED_WITH_LYCHEE]` -->
 		<p class="hosted_by"><a rel="noopener noreferrer" target="_blank" href="https://LycheeOrg.github.io" tabindex="-1"></a></p>
 	</div>
 
