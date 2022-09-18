@@ -342,12 +342,23 @@ lychee.parseInitializationData = function (data) {
 	for (let key in data.locale) {
 		lychee.locale[key] = data.locale[key];
 	}
+	lychee.localizeStaticGuiElements();
 
 	lychee.parsePublicInitializationData(data);
 	if (lychee.user !== null || lychee.rights.is_admin) {
 		lychee.parseProtectedInitializationData(data);
 	}
 };
+
+/**
+ * Applies the current `lychee.locale` to those GUI elements which are
+ * static part of the HTML.
+ *
+ * @return {void}
+ */
+lychee.localizeStaticGuiElements = function() {
+	document.querySelector('div.sidebar__header h1').textContent = lychee.locale["PHOTO_ABOUT"];
+}
 
 /**
  * Parses the configuration settings which are always available.
