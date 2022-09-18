@@ -483,6 +483,13 @@ lychee.localizeStaticGuiElements = function () {
 	// Sidebar
 	document.querySelector("div.sidebar__header h1").textContent = lychee.locale["PHOTO_ABOUT"];
 
+	// NSFW Warning Banner
+	/** @type {HTMLDivElement} */
+	const nsfwBanner = document.querySelector("div#sensitive_warning");
+	nsfwBanner.children.item(0).textContent = lychee.locale["NSFW_BANNER_HEADER"];
+	nsfwBanner.children.item(1).textContent = lychee.locale["NSFW_BANNER_EXPL"];
+	nsfwBanner.children.item(2).textContent = lychee.locale["NSFW_BANNER_CONSENT_TAP"];
+
 	// Footer
 	const footer = document.querySelector("div#footer");
 	footer.querySelector("p.home_copyright").textContent = lychee.footer_show_copyright
@@ -499,6 +506,7 @@ lychee.localizeStaticGuiElements = function () {
 	/** @type {HTMLDivElement} */
 	const footerSocialMedia = footer.querySelector("div#home_socials");
 	if (lychee.footer_show_social_media) {
+		footerSocialMedia.style.display = null;
 		footerSocialMedia.querySelector("a#facebook").href = lychee.sm_facebook_url;
 		footerSocialMedia.querySelector("a#flickr").href = lychee.sm_flickr_url;
 		footerSocialMedia.querySelector("a#instagram").href = lychee.sm_instagram_url;
