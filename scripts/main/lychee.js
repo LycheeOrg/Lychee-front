@@ -632,17 +632,23 @@ lychee.reloadIfLegacyIDs = function (albumID, photoID, autoplay) {
  * This is a "God method" that is used to load pretty much anything, based
  * on what's in the web browser's URL bar after the '#' character:
  *
- * (nothing) --> load root album, assign null to albumID and photoID
- * {albumID} --> load the album; albumID equals the given ID, photoID is null
- * {albumID}/{photoID} --> load album (if not already loaded) and then the
- *   corresponding photo, assign the respective values to albumID and photoID
- * map --> load the map of all albums
- * map/{albumID} --> load the map of the respective album
- * search/{term} --> load or go back to "search" album for the given term,
- *   assign 'search/{term}' as fictitious albumID and assign null to photoID
- * search/{term}/{photoID} --> load photo within fictitious search album,
- *   assign 'search/{term}' as fictitious albumID and assign the given ID to
- *   photoID
+ *  - (nothing): load root album, assign `null` to `albumID` and `photoID`
+ *  - `{albumID}`: load the album; `albumID` equals the given ID, `photoID` is
+ *    null
+ *  - `{albumID}/{photoID}`: load album (if not already loaded) and then the
+ *    corresponding photo, assign the respective values to `albumID` and
+ *    `photoID`
+ *  - `map`: load the map of all albums
+ *  - `map/{albumID}`: load the map of the respective album
+ *  - `search/{term}`: load or go back to "search" album for the given term,
+ *     assign `search/{term}` as fictitious `albumID` and assign `null` to
+ *     `photoID`
+ *  - `search/{term}/{photoID}`: load photo within fictitious search album,
+ *     assign `search/{term}` as fictitious `albumID` and assign the given ID
+ *     to `photoID`
+ *  - `view/{photoID}`: load the photo in "view" mode, i.e. a special photo
+ *    view which displays the photo as standalone (not in an album carousel)
+ *    which assumes that the user is always unauthenticated.
  *
  * @param {boolean} [autoplay=true]
  * @returns {void}
@@ -670,6 +676,7 @@ lychee.load = function (autoplay = true) {
 			// show map
 			// albumID has been stored in photoID due to URL format #map/albumID
 			albumID = photoID;
+			photoID = null;
 
 			// Trash data
 			photo.json = null;
@@ -716,10 +723,19 @@ lychee.load = function (autoplay = true) {
 			};
 
 			// Load Photo
-			// If we don't have an album or the wrong album load the album
-			// first and let the album loader load the photo afterwards or
-			// load the photo directly.
-			if (lychee.content.html() === "" || album.json === null || album.json.id !== albumID) {
+			if (albumID === "view") {
+				// If the photo shall be displayed in "view" mode, delete
+				// any album which we possibly have and load the photo as
+				// if the parent album was inaccessible (even if a user is
+				// authenticated).
+				albumID = null;
+				album.refresh();
+				lychee.content.empty();
+				loadPhoto(false);
+			} else if (lychee.content.html() === "" || album.json === null || album.json.id !== albumID) {
+				// If we don't have an album or the wrong album load the album
+				// first and let the album loader load the photo afterwards or
+				// load the photo directly.
 				lychee.content.hide();
 				album.load(albumID, loadPhoto);
 			} else {
