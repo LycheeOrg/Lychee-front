@@ -12,74 +12,6 @@ const catchError = function (err) {
 	this.emit("end");
 };
 
-/* View ----------------------------------------- */
-
-paths.view = {
-	php: ["../view.php"],
-	js: [
-		"./scripts/api.js",
-		"./scripts/csrf_protection.js",
-		"./scripts/view/main.js",
-		"./scripts/main/build.js",
-		"./scripts/main/header.js",
-		"./scripts/main/visible.js",
-		"./scripts/main/sidebar.js",
-		"./scripts/main/mapview.js",
-		"./scripts/main/lychee_locale.js",
-		"./scripts/main/tabindex.js",
-		"./scripts/3rd-party/backend.js",
-		"./deps/basiccontext/scripts/basicContext.js",
-	],
-	scripts: [
-		"node_modules/jquery/dist/jquery.min.js",
-		"node_modules/lazysizes/lazysizes.min.js",
-		"node_modules/sprintf-js/dist/sprintf.min.js",
-		"../dist/_view--javascript.js",
-	],
-	svg: ["./images/iconic.svg", "./images/ionicons.svg"],
-};
-
-gulp.task("view--js", function () {
-	const babel = plugins.babel({
-		presets: ["env"],
-	});
-
-	return gulp
-		.src(paths.view.js)
-		.pipe(plugins.concat("_view--javascript.js", { newLine: "\n" }))
-		.pipe(babel)
-		.on("error", catchError)
-		.pipe(gulp.dest("../dist/"));
-});
-
-gulp.task(
-	"view--scripts",
-	gulp.series("view--js", function () {
-		return (
-			gulp
-				.src(paths.view.scripts)
-				.pipe(plugins.concat("view.js", { newLine: "\n" }))
-				// .pipe(plugins.uglify())
-				.on("error", catchError)
-				.pipe(gulp.dest("../dist/"))
-		);
-	})
-);
-
-gulp.task("view--svg", function () {
-	return gulp
-		.src(paths.view.php, { allowEmpty: true })
-		.pipe(
-			plugins.inject(gulp.src(paths.view.svg), {
-				starttag: "<!-- inject:svg -->",
-				transform: function (filePath, _file) {
-					return _file.contents.toString("utf8");
-				},
-			})
-		)
-		.pipe(gulp.dest("../"));
-});
-
 /* Main ----------------------------------------- */
 
 paths.main = {
@@ -221,8 +153,6 @@ gulp.task(
 	})
 );
 
-
-
 /* Unified ----------------------------------------- */
 
 paths.unified = {
@@ -258,7 +188,7 @@ paths.unified = {
 		"node_modules/leaflet.markercluster/dist/MarkerCluster.css",
 		"modules/Leaflet.Photo-gh-pages/Leaflet.Photo.css",
 	],
-	html: ["./html/unified.html"]
+	html: ["./html/unified.html"],
 };
 
 gulp.task("unified--js", function () {
@@ -277,13 +207,11 @@ gulp.task("unified--js", function () {
 gulp.task(
 	"unified--scripts",
 	gulp.series("unified--js", function () {
-		return (
-			gulp
-				.src(paths.unified.scripts)
-				.pipe(plugins.concat("unified.js", { newLine: "\n" }))
-				.on("error", catchError)
-				.pipe(gulp.dest("../dist/"))
-		);
+		return gulp
+			.src(paths.unified.scripts)
+			.pipe(plugins.concat("unified.js", { newLine: "\n" }))
+			.on("error", catchError)
+			.pipe(gulp.dest("../dist/"));
 	})
 );
 
@@ -301,7 +229,8 @@ gulp.task("unified--html", function () {
 	return gulp
 		.src(paths.unified.html)
 		.pipe(plugins.concat("frontend.html", { newLine: "\n" }))
-		.on("error", catchError).pipe(gulp.dest(".."));
+		.on("error", catchError)
+		.pipe(gulp.dest(".."));
 });
 
 /* Landing -----------------------------------------  */
@@ -432,8 +361,6 @@ gulp.task(
 	"default",
 	gulp.series(
 		gulp.parallel(
-			"view--svg",
-			"view--scripts",
 			"main--svg",
 			"main--scripts",
 			"main--styles",
@@ -458,7 +385,6 @@ gulp.task(
 	"watch",
 	gulp.series("default", function () {
 		gulp.watch(paths.frame.js, gulp.series("frame--scripts"));
-		gulp.watch(paths.view.js, gulp.series("view--scripts"));
 		gulp.watch(paths.main.js, gulp.series("main--scripts"));
 		gulp.watch(paths.main.scss, gulp.series("main--styles"));
 	})
