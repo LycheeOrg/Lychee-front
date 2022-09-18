@@ -1,3 +1,9 @@
+body.mode-frame, body.mode-none {
+	.header {
+		display: none;
+	}
+}
+
 .header {
 	position: fixed;
 	height: 49px;

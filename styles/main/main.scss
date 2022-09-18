@@ -68,6 +68,12 @@ div#container {
 	position: relative;
 }
 
+body.mode-frame, body.mode-none {
+	div#container {
+		display: none;
+	}
+}
+
 input,
 textarea {
 	-webkit-user-select: text !important;
@@ -92,6 +98,7 @@ textarea {
 // Files ------------------------------------------------------------------- //
 @import "animations";
 @import "content";
+@import "frame";
 @import "leftMenu";
 @import "basicContext.custom";
 @import "basicContext.extended";

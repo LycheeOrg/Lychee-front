@@ -832,6 +832,7 @@ lychee.reloadIfLegacyIDs = function (albumID, photoID, autoplay) {
  *  - `view/{photoID}`: load the photo in "view" mode, i.e. a special photo
  *    view which displays the photo as standalone (not in an album carousel)
  *    which assumes that the user is always unauthenticated.
+ *  - `frame`: shows random, starred photos in a kiosk mode
  *
  * @param {boolean} [autoplay=true]
  * @returns {void}
@@ -943,6 +944,8 @@ lychee.load = function (autoplay = true) {
 			if (visible.sidebar()) sidebar.toggle(false);
 			mapview.open();
 			lychee.footer_hide();
+		} else if (albumID === "frame") {
+			lychee.setMode("frame");
 		} else {
 			if (lychee.reloadIfLegacyIDs(albumID, photoID, autoplay)) {
 				return;
@@ -1049,14 +1052,14 @@ lychee.setTitle = function (title = "", editable = false) {
 };
 
 /**
- * @param {string} mode - one out of: `public`, `view`, `logged_in`
+ * @param {string} mode - one out of: `public`, `view`, `logged_in`, `frame`
  */
 lychee.setMode = function (mode) {
-	if (lychee.rights.is_locked) {
-		$("#button_settings_open").remove();
+	if (lychee.rights.is_locked || mode === "view" || mode === "frame") {
+		$("#button_settings_open").hide();
 	}
-	if (!lychee.rights.may_upload) {
-		$("#button_sharing").remove();
+	if (!lychee.rights.may_upload || mode === "view" || mode === "frame") {
+		$("#button_sharing").hide();
 
 		$(document)
 			.off("click", ".header__title--editable")
@@ -1074,38 +1077,68 @@ lychee.setMode = function (mode) {
 			.unbind(["command+backspace", "ctrl+backspace"])
 			.unbind(["command+a", "ctrl+a"]);
 	}
-	if (!lychee.rights.is_admin) {
-		$("#button_users, #button_logs, #button_diagnostics").remove();
+	if (!lychee.rights.is_admin || mode === "view" || mode === "frame") {
+		$("#button_users, #button_logs, #button_diagnostics").hide();
 	}
 
+	const bodyClasses = document.querySelector('body').classList;
+
 	if (mode === "logged_in") {
+		if( !bodyClasses.contains('mode-gallery') ) {
+			bodyClasses.replace('mode-none', 'mode-gallery');
+			bodyClasses.replace('mode-frame', 'mode-gallery');
+			bodyClasses.replace('mode-view', 'mode-gallery');
+		}
 		// After login the keyboard short-cuts to login by password (l) and
 		// by key (k) are not required anymore, so we unbind them.
 		Mousetrap.unbind(["l"]).unbind(["k"]);
 
 		// The code searches by class, so remove the other instance.
-		$(".header__search, .header__clear", ".header__toolbar--public").remove();
+		$(".header__search, .header__clear", ".header__toolbar--public").hide();
 
 		if (!lychee.editor_enabled) {
-			$("#button_rotate_cwise").remove();
-			$("#button_rotate_ccwise").remove();
+			$("#button_rotate_cwise").hide();
+			$("#button_rotate_ccwise").hide();
 		}
 		return;
 	} else {
-		$(".header__search, .header__clear", ".header__toolbar--albums").remove();
-		$("#button_rotate_cwise").remove();
-		$("#button_rotate_ccwise").remove();
+		$(".header__search, .header__clear", ".header__toolbar--albums").hide();
+		$("#button_rotate_cwise").hide();
+		$("#button_rotate_ccwise").hide();
 	}
 
-	$("#button_settings, .header__divider, .leftMenu").remove();
+	$("#button_settings, .header__divider, .leftMenu").hide();
 
 	if (mode === "public") {
+		if( !bodyClasses.contains('mode-gallery') ) {
+			bodyClasses.replace('mode-none', 'mode-gallery');
+			bodyClasses.replace('mode-frame', 'mode-gallery');
+			bodyClasses.replace('mode-view', 'mode-gallery');
+		}
 		lychee.publicMode = true;
 	} else if (mode === "view") {
+		if( !bodyClasses.contains('mode-view') ) {
+			bodyClasses.replace('mode-none', 'mode-view');
+			bodyClasses.replace('mode-frame', 'mode-view');
+			bodyClasses.replace('mode-gallery', 'mode-view');
+		}
 		Mousetrap.unbind(["esc", "command+up"]);
 
-		$("#button_back, a#next, a#previous").remove();
-		$(".no_content").remove();
+		$("#button_back, a#next, a#previous").hide();
+		$(".no_content").hide();
+
+		lychee.publicMode = true;
+		lychee.viewMode = true;
+	} else if (mode === "frame") {
+		if (!bodyClasses.contains('mode-frame')) {
+			bodyClasses.replace('mode-none', 'mode-frame');
+			bodyClasses.replace('mode-view', 'mode-frame');
+			bodyClasses.replace('mode-gallery', 'mode-frame');
+		}
+		Mousetrap.unbind(["esc", "command+up"]);
+
+		$("#button_back, a#next, a#previous").hide();
+		$(".no_content").hide();
 
 		lychee.publicMode = true;
 		lychee.viewMode = true;

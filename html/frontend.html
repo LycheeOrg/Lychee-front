@@ -14,7 +14,7 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 </head>
-<body>
+<body class="mode-none">
 <!-- inject:svg -->
 <!-- endinject -->
 
@@ -116,6 +116,12 @@
 			<input id="upload_files" type="file" name="fileElem[]" multiple accept="image/*,video/*,.mov">
 			<input id="upload_track_file" type="file" name="fileElem" accept="application/x-gpx+xml">
 		</div>
+	</div>
+
+	<div id="frame">
+		<canvas id="background_canvas"></canvas>
+		<div id="noise"></div>
+		<div class="image_container"><img id="picture" alt="image contained" src=""/></div>
 	</div>
 
 	<div id="footer" class="animate animate-up hide_footer">
