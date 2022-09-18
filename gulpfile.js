@@ -106,7 +106,6 @@ gulp.task("main--svg", function () {
 
 paths.frame = {
 	js: ["./scripts/api.js", "./scripts/csrf_protection.js", "./scripts/frame/main.js", "./scripts/3rd-party/backend.js"],
-	scss: ["./styles/frame/*.scss"],
 	styles: ["./styles/frame/frame.scss"],
 	scripts: [
 		"node_modules/jquery/dist/jquery.min.js",
@@ -178,7 +177,6 @@ paths.unified = {
 		"modules/Leaflet.Photo-gh-pages/Leaflet.Photo.js",
 		"../dist/_unified--javascript.js",
 	],
-	scss: ["./styles/main/*.scss"],
 	styles: [
 		"node_modules/basicmodal/src/styles/main.scss",
 		"./deps/basiccontext/styles/main.scss",
@@ -238,7 +236,6 @@ gulp.task("unified--html", function () {
 paths.landing = {
 	js: ["./scripts/landing/*.js"],
 	scripts: ["node_modules/jquery/dist/jquery.min.js", "node_modules/lazysizes/lazysizes.min.js", "../dist/_landing--javascript.js"],
-	scss: ["./styles/landing/*.scss"],
 	styles: ["./styles/landing/landing.scss"],
 };
 
