@@ -3,8 +3,6 @@
  */
 
 $(document).ready(function () {
-	$("#sensitive_warning").hide();
-
 	// Event Name
 	const eventName = lychee.getEventName();
 
@@ -417,6 +415,7 @@ $(document).ready(function () {
 			if (visible.album()) view.album.content.justify(album.json ? album.json.photos : []);
 			if (visible.search()) view.album.content.justify(search.json.photos);
 			if (visible.photo()) view.photo.onresize();
+			frame.resize();
 		})
 		// remember scroll positions
 		.on("scroll", function () {

@@ -68,7 +68,8 @@ div#container {
 	position: relative;
 }
 
-body.mode-frame, body.mode-none {
+body.mode-frame,
+body.mode-none {
 	div#container {
 		display: none;
 	}

@@ -210,6 +210,12 @@ const lychee = {
 	 */
 	footer_additional_text: "",
 
+	/**
+	 * Refresh rate in seconds for the frame mode.
+	 * @type {number}
+	 */
+	mod_frame_refresh: 30,
+
 	// this is device specific config, in this case default is Desktop.
 	header_auto_hide: true,
 	active_focus_on_page_load: false,
@@ -565,6 +571,8 @@ lychee.parsePublicInitializationData = function (data) {
 	lychee.footer_show_social_media = data.config.footer_show_social_media === "1";
 	lychee.footer_show_copyright = data.config.footer_show_copyright === "1";
 	lychee.footer_additional_text = data.config.footer_additional_text;
+
+	lychee.mod_frame_refresh = Number.parseInt(data.config.mod_frame_refresh, 10) || 30;
 
 	lychee.header_auto_hide = data.config_device.header_auto_hide;
 	lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
@@ -945,7 +953,7 @@ lychee.load = function (autoplay = true) {
 			mapview.open();
 			lychee.footer_hide();
 		} else if (albumID === "frame") {
-			lychee.setMode("frame");
+			frame.initAndStart();
 		} else {
 			if (lychee.reloadIfLegacyIDs(albumID, photoID, autoplay)) {
 				return;
@@ -1081,13 +1089,13 @@ lychee.setMode = function (mode) {
 		$("#button_users, #button_logs, #button_diagnostics").hide();
 	}
 
-	const bodyClasses = document.querySelector('body').classList;
+	const bodyClasses = document.querySelector("body").classList;
 
 	if (mode === "logged_in") {
-		if( !bodyClasses.contains('mode-gallery') ) {
-			bodyClasses.replace('mode-none', 'mode-gallery');
-			bodyClasses.replace('mode-frame', 'mode-gallery');
-			bodyClasses.replace('mode-view', 'mode-gallery');
+		if (!bodyClasses.contains("mode-gallery")) {
+			bodyClasses.replace("mode-none", "mode-gallery");
+			bodyClasses.replace("mode-frame", "mode-gallery");
+			bodyClasses.replace("mode-view", "mode-gallery");
 		}
 		// After login the keyboard short-cuts to login by password (l) and
 		// by key (k) are not required anymore, so we unbind them.
@@ -1110,17 +1118,17 @@ lychee.setMode = function (mode) {
 	$("#button_settings, .header__divider, .leftMenu").hide();
 
 	if (mode === "public") {
-		if( !bodyClasses.contains('mode-gallery') ) {
-			bodyClasses.replace('mode-none', 'mode-gallery');
-			bodyClasses.replace('mode-frame', 'mode-gallery');
-			bodyClasses.replace('mode-view', 'mode-gallery');
+		if (!bodyClasses.contains("mode-gallery")) {
+			bodyClasses.replace("mode-none", "mode-gallery");
+			bodyClasses.replace("mode-frame", "mode-gallery");
+			bodyClasses.replace("mode-view", "mode-gallery");
 		}
 		lychee.publicMode = true;
 	} else if (mode === "view") {
-		if( !bodyClasses.contains('mode-view') ) {
-			bodyClasses.replace('mode-none', 'mode-view');
-			bodyClasses.replace('mode-frame', 'mode-view');
-			bodyClasses.replace('mode-gallery', 'mode-view');
+		if (!bodyClasses.contains("mode-view")) {
+			bodyClasses.replace("mode-none", "mode-view");
+			bodyClasses.replace("mode-frame", "mode-view");
+			bodyClasses.replace("mode-gallery", "mode-view");
 		}
 		Mousetrap.unbind(["esc", "command+up"]);
 
@@ -1130,10 +1138,10 @@ lychee.setMode = function (mode) {
 		lychee.publicMode = true;
 		lychee.viewMode = true;
 	} else if (mode === "frame") {
-		if (!bodyClasses.contains('mode-frame')) {
-			bodyClasses.replace('mode-none', 'mode-frame');
-			bodyClasses.replace('mode-view', 'mode-frame');
-			bodyClasses.replace('mode-gallery', 'mode-frame');
+		if (!bodyClasses.contains("mode-frame")) {
+			bodyClasses.replace("mode-none", "mode-frame");
+			bodyClasses.replace("mode-view", "mode-frame");
+			bodyClasses.replace("mode-gallery", "mode-frame");
 		}
 		Mousetrap.unbind(["esc", "command+up"]);
 

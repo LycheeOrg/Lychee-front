@@ -102,56 +102,6 @@ gulp.task("main--svg", function () {
 		.pipe(gulp.dest("../"));
 });
 
-/* Frame -----------------------------------------  */
-
-paths.frame = {
-	js: ["./scripts/api.js", "./scripts/csrf_protection.js", "./scripts/frame/main.js", "./scripts/3rd-party/backend.js"],
-	styles: ["./styles/frame/frame.scss"],
-	scripts: [
-		"node_modules/jquery/dist/jquery.min.js",
-		"node_modules/lazysizes/lazysizes.min.js",
-		"./scripts/frame/stackblur.min.js",
-		"../dist/_frame--javascript.js",
-	],
-};
-
-gulp.task("frame--js", function () {
-	const babel = plugins.babel({
-		presets: ["env"],
-	});
-
-	return gulp
-		.src(paths.frame.js)
-		.pipe(plugins.concat("_frame--javascript.js", { newLine: "\n" }))
-		.pipe(babel)
-		.on("error", catchError)
-		.pipe(gulp.dest("../dist/"));
-});
-
-gulp.task("frame--styles", function () {
-	return gulp
-		.src(paths.frame.styles)
-		.pipe(sass().on("error", catchError))
-		.pipe(plugins.concat("frame.css", { newLine: "\n" }))
-		.pipe(plugins.autoprefixer("last 4 versions", "> 5%"))
-		.pipe(cleanCSS({ level: 2 }))
-		.pipe(gulp.dest("../dist/"));
-});
-
-gulp.task(
-	"frame--scripts",
-	gulp.series("frame--js", function () {
-		return (
-			gulp
-				.src(paths.frame.scripts)
-				.pipe(plugins.concat("frame.js", { newLine: "\n" }))
-				// .pipe(plugins.uglify())
-				.on("error", catchError)
-				.pipe(gulp.dest("../dist/"))
-		);
-	})
-);
-
 /* Unified ----------------------------------------- */
 
 paths.unified = {
@@ -175,6 +125,7 @@ paths.unified = {
 		"node_modules/qr-creator/dist/qr-creator.min.js",
 		"node_modules/sprintf-js/dist/sprintf.min.js",
 		"modules/Leaflet.Photo-gh-pages/Leaflet.Photo.js",
+		"./deps/stackblur.min.js",
 		"../dist/_unified--javascript.js",
 	],
 	styles: [
@@ -344,8 +295,6 @@ gulp.task(
 			"main--svg",
 			"main--scripts",
 			"main--styles",
-			"frame--scripts",
-			"frame--styles",
 			"unified--scripts",
 			"unified--styles",
 			"unified--html",
@@ -363,7 +312,6 @@ gulp.task(
 gulp.task(
 	"watch",
 	gulp.series("default", function () {
-		gulp.watch(paths.frame.js, gulp.series("frame--scripts"));
 		gulp.watch(paths.main.js, gulp.series("main--scripts"));
 		gulp.watch(paths.main.scss, gulp.series("main--styles"));
 	})
