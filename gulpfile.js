@@ -12,99 +12,9 @@ const catchError = function (err) {
 	this.emit("end");
 };
 
-/* Main ----------------------------------------- */
+/* Frontend ----------------------------------------- */
 
-paths.main = {
-	html: ["../index.html"],
-	js: ["./scripts/*.js", "./scripts/main/*.js", "./scripts/3rd-party/backend.js", "./deps/basiccontext/scripts/basicContext.js"],
-	scripts: [
-		"node_modules/jquery/dist/jquery.min.js",
-		"node_modules/lazysizes/lazysizes.min.js",
-		"node_modules/mousetrap/mousetrap.min.js",
-		"node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js",
-		"node_modules/basicmodal/dist/basicModal.min.js",
-		"node_modules/scroll-lock/dist/scroll-lock.min.js",
-		"node_modules/multiselect-two-sides/dist/js/multiselect.min.js",
-		"node_modules/justified-layout/dist/justified-layout.min.js",
-		"node_modules/leaflet/dist/leaflet.js",
-		"node_modules/leaflet-rotatedmarker/leaflet.rotatedMarker.js",
-		"node_modules/spin.js/spin.min.js",
-		"node_modules/leaflet-gpx/gpx.js",
-		"node_modules/leaflet-spin/leaflet.spin.min.js",
-		"node_modules/leaflet.markercluster/dist/leaflet.markercluster.js",
-		"node_modules/livephotoskit/livephotoskit.js",
-		"node_modules/qr-creator/dist/qr-creator.min.js",
-		"node_modules/sprintf-js/dist/sprintf.min.js",
-		"modules/Leaflet.Photo-gh-pages/Leaflet.Photo.js",
-		"../dist/_main--javascript.js",
-	],
-	scss: ["./styles/main/*.scss"],
-	styles: [
-		"node_modules/basicmodal/src/styles/main.scss",
-		"./deps/basiccontext/styles/main.scss",
-		"./deps/basiccontext/styles/addons/popin.scss",
-		"./styles/main/main.scss",
-		"node_modules/leaflet/dist/leaflet.css",
-		"node_modules/leaflet.markercluster/dist/MarkerCluster.css",
-		"modules/Leaflet.Photo-gh-pages/Leaflet.Photo.css",
-	],
-	svg: ["./images/iconic.svg", "./images/ionicons.svg"],
-};
-
-gulp.task("main--js", function () {
-	const babel = plugins.babel({
-		presets: ["env"],
-	});
-
-	return gulp
-		.src(paths.main.js)
-		.pipe(plugins.concat("_main--javascript.js", { newLine: "\n" }))
-		.pipe(babel)
-		.on("error", catchError)
-		.pipe(gulp.dest("../dist/"));
-});
-
-gulp.task(
-	"main--scripts",
-	gulp.series("main--js", function () {
-		return (
-			gulp
-				.src(paths.main.scripts)
-				.pipe(plugins.concat("main.js", { newLine: "\n" }))
-				// .pipe(plugins.uglify())
-				.on("error", catchError)
-				.pipe(gulp.dest("../dist/"))
-		);
-	})
-);
-
-gulp.task("main--styles", function () {
-	return gulp
-		.src(paths.main.styles)
-		.pipe(sass().on("error", catchError))
-		.pipe(plugins.concat("main.css", { newLine: "\n" }))
-		.pipe(plugins.autoprefixer("last 4 versions", "> 5%"))
-		.pipe(cleanCSS({ level: 2 }))
-		.pipe(gulp.dest("../dist/"));
-});
-
-gulp.task("main--svg", function () {
-	return gulp
-		.src(paths.main.html, { allowEmpty: true })
-		.pipe(
-			plugins.inject(gulp.src(paths.main.svg), {
-				starttag: "<!-- inject:svg -->",
-				transform: function (filePath, _file) {
-					return _file.contents.toString("utf8");
-				},
-			})
-		)
-		.pipe(gulp.dest("../"));
-});
-
-/* Unified ----------------------------------------- */
-
-paths.unified = {
+paths.frontend = {
 	js: ["./scripts/*.js", "./scripts/main/*.js", "./scripts/3rd-party/backend.js", "./deps/basiccontext/scripts/basicContext.js"],
 	scripts: [
 		"node_modules/jquery/dist/jquery.min.js",
@@ -126,8 +36,9 @@ paths.unified = {
 		"node_modules/sprintf-js/dist/sprintf.min.js",
 		"modules/Leaflet.Photo-gh-pages/Leaflet.Photo.js",
 		"./deps/stackblur.min.js",
-		"../dist/_unified--javascript.js",
+		"../dist/_frontend--javascript.js",
 	],
+	scss: ["./styles/main/*.scss"],
 	styles: [
 		"node_modules/basicmodal/src/styles/main.scss",
 		"./deps/basiccontext/styles/main.scss",
@@ -141,45 +52,45 @@ paths.unified = {
 	svg: ["./images/iconic.svg", "./images/ionicons.svg"],
 };
 
-gulp.task("unified--js", function () {
+gulp.task("frontend--js", function () {
 	const babel = plugins.babel({
 		presets: ["env"],
 	});
 
 	return gulp
-		.src(paths.unified.js)
-		.pipe(plugins.concat("_unified--javascript.js", { newLine: "\n" }))
+		.src(paths.frontend.js)
+		.pipe(plugins.concat("_frontend--javascript.js", { newLine: "\n" }))
 		.pipe(babel)
 		.on("error", catchError)
 		.pipe(gulp.dest("../dist/"));
 });
 
 gulp.task(
-	"unified--scripts",
-	gulp.series("unified--js", function () {
+	"frontend--scripts",
+	gulp.series("frontend--js", function () {
 		return gulp
-			.src(paths.unified.scripts)
-			.pipe(plugins.concat("unified.js", { newLine: "\n" }))
+			.src(paths.frontend.scripts)
+			.pipe(plugins.concat("frontend.js", { newLine: "\n" }))
 			.on("error", catchError)
 			.pipe(gulp.dest("../dist/"));
 	})
 );
 
-gulp.task("unified--styles", function () {
+gulp.task("frontend--styles", function () {
 	return gulp
-		.src(paths.unified.styles)
+		.src(paths.frontend.styles)
 		.pipe(sass().on("error", catchError))
-		.pipe(plugins.concat("unified.css", { newLine: "\n" }))
+		.pipe(plugins.concat("frontend.css", { newLine: "\n" }))
 		.pipe(plugins.autoprefixer("last 4 versions", "> 5%"))
 		.pipe(cleanCSS({ level: 2 }))
 		.pipe(gulp.dest("../dist/"));
 });
 
-gulp.task("unified--html", function () {
+gulp.task("frontend--html", function () {
 	return gulp
-		.src(paths.unified.html)
+		.src(paths.frontend.html)
 		.pipe(plugins.inject(
-			gulp.src(paths.unified.svg), {
+			gulp.src(paths.frontend.svg), {
 				starttag: "<!-- inject:svg -->",
 				transform: function (filePath, _file) {
 					return _file.contents.toString("utf8");
@@ -292,12 +203,9 @@ gulp.task(
 	"default",
 	gulp.series(
 		gulp.parallel(
-			"main--svg",
-			"main--scripts",
-			"main--styles",
-			"unified--scripts",
-			"unified--styles",
-			"unified--html",
+			"frontend--scripts",
+			"frontend--styles",
+			"frontend--html",
 			"landing--scripts",
 			"landing--styles",
 			"TVCSS--styles",
@@ -312,7 +220,8 @@ gulp.task(
 gulp.task(
 	"watch",
 	gulp.series("default", function () {
-		gulp.watch(paths.main.js, gulp.series("main--scripts"));
-		gulp.watch(paths.main.scss, gulp.series("main--styles"));
+		gulp.watch(paths.frontend.js, gulp.series("frontend--scripts"));
+		gulp.watch(paths.frontend.scss, gulp.series("frontend--styles"));
+		gulp.watch(paths.frontend.html, gulp.series("frontend--html"))
 	})
 );
