@@ -211,6 +211,11 @@ const lychee = {
 	footer_additional_text: "",
 
 	/**
+	 * Determines whether frame mode is enabled or not
+	 * @type {boolean}
+	 */
+	mod_frame_enabled: false,
+	/**
 	 * Refresh rate in seconds for the frame mode.
 	 * @type {number}
 	 */
@@ -572,6 +577,7 @@ lychee.parsePublicInitializationData = function (data) {
 	lychee.footer_show_copyright = data.config.footer_show_copyright === "1";
 	lychee.footer_additional_text = data.config.footer_additional_text;
 
+	lychee.mod_frame_enabled = data.config.mod_frame_enabled === "1";
 	lychee.mod_frame_refresh = Number.parseInt(data.config.mod_frame_refresh, 10) || 30;
 
 	lychee.header_auto_hide = data.config_device.header_auto_hide;
@@ -967,7 +973,11 @@ lychee.load = function (autoplay = true) {
 			mapview.open();
 			lychee.footer_hide();
 		} else if (albumID === "frame") {
-			frame.initAndStart();
+			if (lychee.mod_frame_enabled) {
+				frame.initAndStart();
+			} else {
+				loadingBar.show("error", "Frame mode disabled");
+			}
 		} else {
 			if (lychee.reloadIfLegacyIDs(albumID, photoID, autoplay)) {
 				return;
