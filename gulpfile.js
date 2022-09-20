@@ -1,6 +1,7 @@
 let gulp = require("gulp"),
 	plugins = require("gulp-load-plugins")(),
 	cleanCSS = require("gulp-clean-css"),
+	chmod = require("gulp-chmod"),
 	del = require("del"),
 	sass = require("gulp-sass")(require("sass")),
 	paths = {};
@@ -61,6 +62,7 @@ gulp.task("frontend--js", function () {
 		.src(paths.frontend.js)
 		.pipe(plugins.concat("_frontend--javascript.js", { newLine: "\n" }))
 		.pipe(babel)
+		.pipe(chmod({execute: false}))
 		.on("error", catchError)
 		.pipe(gulp.dest("../dist/"));
 });
@@ -71,6 +73,7 @@ gulp.task(
 		return gulp
 			.src(paths.frontend.scripts)
 			.pipe(plugins.concat("frontend.js", { newLine: "\n" }))
+			.pipe(chmod({execute: false}))
 			.on("error", catchError)
 			.pipe(gulp.dest("../dist/"));
 	})
@@ -83,6 +86,7 @@ gulp.task("frontend--styles", function () {
 		.pipe(plugins.concat("frontend.css", { newLine: "\n" }))
 		.pipe(plugins.autoprefixer("last 4 versions", "> 5%"))
 		.pipe(cleanCSS({ level: 2 }))
+		.pipe(chmod({execute: false}))
 		.pipe(gulp.dest("../dist/"));
 });
 
@@ -97,6 +101,7 @@ gulp.task("frontend--html", function () {
 				},
 			}
 		))
+		.pipe(chmod({execute: false}))
 		.on("error", catchError)
 		.pipe(gulp.dest(".."));
 });
@@ -118,6 +123,7 @@ gulp.task("landing--js", function () {
 		.src(paths.landing.js)
 		.pipe(plugins.concat("_landing--javascript.js", { newLine: "\n" }))
 		.pipe(babel)
+		.pipe(chmod({execute: false}))
 		.on("error", catchError)
 		.pipe(gulp.dest("../dist/"));
 });
@@ -130,6 +136,7 @@ gulp.task(
 				.src(paths.landing.scripts)
 				.pipe(plugins.concat("landing.js", { newLine: "\n" }))
 				// .pipe(plugins.uglify())
+				.pipe(chmod({execute: false}))
 				.on("error", catchError)
 				.pipe(gulp.dest("../dist/"))
 		);
@@ -144,6 +151,7 @@ gulp.task("landing--styles", function () {
 			.pipe(plugins.concat("landing.css", { newLine: "\n" }))
 			.pipe(plugins.autoprefixer("last 4 versions", "> 5%"))
 			// .pipe(cleanCSS({level: 2}))
+			.pipe(chmod({execute: false}))
 			.pipe(gulp.dest("../dist/"))
 	);
 });
@@ -160,6 +168,7 @@ gulp.task("TVCSS--styles", function () {
 		.on("error", catchError)
 		.pipe(plugins.concat("TV.css", { newLine: "\n" }))
 		.pipe(plugins.autoprefixer("last 4 versions", "> 5%"))
+		.pipe(chmod({execute: false}))
 		.pipe(gulp.dest("../dist/"));
 });
 
