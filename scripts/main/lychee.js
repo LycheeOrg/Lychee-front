@@ -857,6 +857,20 @@ lychee.load = function (autoplay = true) {
 	multiselect.close();
 	tabindex.reset();
 
+	// If Lychee is currently in frame or view mode, we need to re-initialized.
+	// Note, this is a temporary nasty hack.
+	// In an optimal world, we would simply call `lychee.setMode` to leave
+	// view or frame mode and to enter gallery or public mode.
+	// However, `lychee.setMode` does not support that direction (see comment
+	// here).
+	// Hence, in order to get back to a "full" mode, we need to re-initialize
+	// completely.
+	const bodyClasses = document.querySelector("body").classList;
+	if (bodyClasses.contains('mode-frame') || bodyClasses.contains('mode-view')) {
+		lychee.init(false);
+		return;
+	}
+
 	if (albumID && photoID) {
 		if (albumID === "map") {
 			// If map functionality is disabled -> do nothing
@@ -1060,6 +1074,17 @@ lychee.setTitle = function (title = "", editable = false) {
 };
 
 /**
+ * Sets the "view mode" of the application.
+ *
+ * Note, this method is asymmetric and therewith causes a major problem.
+ * It assumes that it is only called once and that the new mode is always
+ * more restrictive than the previous mode.
+ * This method only hides elements and unbinds events, but does not support
+ * to show elements and bind events.
+ * This method relies on {@link lychee.init} to have bound particular events
+ * which can unbound here.
+ * TODO: Refactor this. There should be one (or several) methods to change modes, but each of the methods should be symmetric.
+ *
  * @param {string} mode - one out of: `public`, `view`, `logged_in`, `frame`
  */
 lychee.setMode = function (mode) {
