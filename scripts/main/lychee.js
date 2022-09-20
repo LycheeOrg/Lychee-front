@@ -872,7 +872,7 @@ lychee.load = function (autoplay = true) {
 	// Hence, in order to get back to a "full" mode, we need to re-initialize
 	// completely.
 	const bodyClasses = document.querySelector("body").classList;
-	if (bodyClasses.contains('mode-frame') || bodyClasses.contains('mode-view')) {
+	if (bodyClasses.contains("mode-frame") || bodyClasses.contains("mode-view")) {
 		lychee.init(false);
 		return;
 	}
