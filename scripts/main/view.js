@@ -1972,23 +1972,25 @@ view.logs = {
 						" UTC"
 					);
 				};
-				const html =
-					logEntries.reduce(function (acc, logEntry) {
-						return (
-							acc +
-							formatDateTime(new Date(logEntry.created_at)) +
-							" -- " +
-							logEntry.type.padEnd(7) +
-							" -- " +
-							logEntry.function +
-							" -- " +
-							logEntry.line +
-							" -- " +
-							logEntry.text +
-							"\n"
-						);
-					}, "<pre>") + "</pre>";
-				$(".logs_diagnostics_view").html(html);
+				const preformattedLog = logEntries.reduce(function (acc, logEntry) {
+					return (
+						acc +
+						formatDateTime(new Date(logEntry.created_at)) +
+						" -- " +
+						logEntry.type.padEnd(7) +
+						" -- " +
+						logEntry.function +
+						" -- " +
+						logEntry.line +
+						" -- " +
+						logEntry.text +
+						"\n"
+					);
+				}, "");
+				/** @type {HTMLDivElement} */
+				const logView = document.querySelector(".logs_diagnostics_view");
+				logView.replaceChildren();
+				logView.appendChild(document.createElement("pre")).textContent = preformattedLog;
 			};
 
 			view.logs.clearContent();
