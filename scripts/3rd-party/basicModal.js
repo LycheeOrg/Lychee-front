@@ -97,7 +97,7 @@
  */
 
 /**
- * Scans the dialog for any named form element and caches them in an internal
+ * Scans the dialog for any named form elements and caches them in an internal
  * dictionary to avoid repeated DOM queries with CSS selectors for efficiency
  * reasons.
  *
@@ -209,7 +209,7 @@
  *
  * Note, this method is not exactly the opposite of
  * {@link basicModal#isActionButtonVisible}.
- * This method only returns `true` if the dialog own an Action button which
+ * This method only returns `true` if the dialog owns an Action button which
  * can be hidden.
  * In other words, both {@link basicModal#isActionButtonVisible} and this method may
  * return `false` simultaneously, if there is no Action button at all.
@@ -276,7 +276,7 @@
  *
  * Note, this method is not exactly the opposite of
  * {@link basicModal#isCancelButtonVisible}.
- * This method only returns `true` if the dialog own a Cancel button which
+ * This method only returns `true` if the dialog owns a Cancel button which
  * can be hidden.
  * In other words, both {@link basicModal#isCancelButtonVisible} and this method may
  * return `false` simultaneously, if there is no Cancel button at all.
