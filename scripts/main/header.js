@@ -24,7 +24,7 @@ header.dom = function (selector) {
  */
 header.bind = function () {
 	// Event Name
-	let eventName = lychee.getEventName();
+	const eventName = "click touchend";
 
 	header.dom(".header__title").on(eventName, function (e) {
 		if ($(this).hasClass("header__title--editable") === false) return false;
@@ -154,10 +154,7 @@ header.bind = function () {
  * @returns {void}
  */
 header.bind_back = function () {
-	// Event Name
-	const eventName = lychee.getEventName();
-
-	header.dom(".header__title").on(eventName, function () {
+	header.dom(".header__title").on("click touchend", function () {
 		if (lychee.landing_page_enable && visible.albums()) {
 			window.location.href = ".";
 		} else {

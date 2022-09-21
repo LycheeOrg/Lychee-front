@@ -329,28 +329,6 @@ const SmartAlbumID = Object.freeze({
  */
 
 /**
- * @typedef DeviceConfiguration
- *
- * @property {string}  device_type
- * @property {boolean} header_auto_hide
- * @property {boolean} active_focus_on_page_load
- * @property {boolean} enable_button_visibility
- * @property {boolean} enable_button_share
- * @property {boolean} enable_button_archive
- * @property {boolean} enable_button_move
- * @property {boolean} enable_button_trash
- * @property {boolean} enable_button_fullscreen
- * @property {boolean} enable_button_download
- * @property {boolean} enable_button_add
- * @property {boolean} enable_button_more
- * @property {boolean} enable_button_rotate
- * @property {boolean} enable_close_tab_on_esc
- * @property {boolean} enable_contextmenu_header
- * @property {boolean} hide_content_during_imgview
- * @property {boolean} enable_tabindex
- */
-
-/**
  * The JSON object for incremental reports sent by the
  * back-end within a streamed response.
  *

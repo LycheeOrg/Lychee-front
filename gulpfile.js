@@ -156,22 +156,6 @@ gulp.task("landing--styles", function () {
 	);
 });
 
-/* TVCSS -----------------------------------------  */
-
-paths.TVCSS = {
-	src: ["./styles/devices/TV.scss"],
-};
-
-gulp.task("TVCSS--styles", function () {
-	return gulp
-		.src(paths.TVCSS.src)
-		.on("error", catchError)
-		.pipe(plugins.concat("TV.css", { newLine: "\n" }))
-		.pipe(plugins.autoprefixer("last 4 versions", "> 5%"))
-		.pipe(chmod({execute: false}))
-		.pipe(gulp.dest("../dist/"));
-});
-
 /* Images ----------------------------------------- */
 
 paths.images = {
@@ -217,7 +201,6 @@ gulp.task(
 			"frontend--html",
 			"landing--scripts",
 			"landing--styles",
-			"TVCSS--styles",
 			"images--copy",
 			"leafletMarkerclusterMapFile--copy",
 			"leafletMarkerclusterSourceFiles--copy"

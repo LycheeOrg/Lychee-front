@@ -238,7 +238,6 @@ const lychee = {
 	enable_tabindex: false,
 	enable_contextmenu_header: true,
 	hide_content_during_imgview: false,
-	device_type: "desktop",
 
 	checkForUpdates: true,
 	/**
@@ -580,23 +579,24 @@ lychee.parsePublicInitializationData = function (data) {
 	lychee.mod_frame_enabled = data.config.mod_frame_enabled === "1";
 	lychee.mod_frame_refresh = Number.parseInt(data.config.mod_frame_refresh, 10) || 30;
 
-	lychee.header_auto_hide = data.config_device.header_auto_hide;
-	lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
-	lychee.enable_button_visibility = data.config_device.enable_button_visibility;
-	lychee.enable_button_share = data.config_device.enable_button_share;
-	lychee.enable_button_archive = data.config_device.enable_button_archive;
-	lychee.enable_button_move = data.config_device.enable_button_move;
-	lychee.enable_button_trash = data.config_device.enable_button_trash;
-	lychee.enable_button_fullscreen = data.config_device.enable_button_fullscreen;
-	lychee.enable_button_download = data.config_device.enable_button_download;
-	lychee.enable_button_add = data.config_device.enable_button_add;
-	lychee.enable_button_more = data.config_device.enable_button_more;
-	lychee.enable_button_rotate = data.config_device.enable_button_rotate;
-	lychee.enable_close_tab_on_esc = data.config_device.enable_close_tab_on_esc;
-	lychee.enable_tabindex = data.config_device.enable_tabindex;
-	lychee.enable_contextmenu_header = data.config_device.enable_contextmenu_header;
-	lychee.hide_content_during_imgview = data.config_device.hide_content_during_imgview;
-	lychee.device_type = data.config_device.device_type || "desktop"; // we set default as Desktop
+	const isTv = window.matchMedia("tv").matches;
+
+	lychee.header_auto_hide = !isTv;
+	lychee.active_focus_on_page_load = isTv;
+	lychee.enable_button_visibility = !isTv;
+	lychee.enable_button_share = !isTv;
+	lychee.enable_button_archive = !isTv;
+	lychee.enable_button_move = !isTv;
+	lychee.enable_button_trash = !isTv;
+	lychee.enable_button_fullscreen = !isTv;
+	lychee.enable_button_download = !isTv;
+	lychee.enable_button_add = !isTv;
+	lychee.enable_button_more = !isTv;
+	lychee.enable_button_rotate = !isTv;
+	lychee.enable_close_tab_on_esc = isTv;
+	lychee.enable_tabindex = isTv;
+	lychee.enable_contextmenu_header = !isTv;
+	lychee.hide_content_during_imgview = isTv;
 };
 
 /**
@@ -1257,16 +1257,6 @@ lychee.loadDropbox = function (callback) {
 		};
 		s.parentNode.insertBefore(g, s);
 	}
-};
-
-/**
- * @returns {string}
- */
-lychee.getEventName = function () {
-	if (lychee.device_type === "mobile") {
-		return "touchend";
-	}
-	return "click";
 };
 
 /**

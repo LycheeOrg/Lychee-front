@@ -98,7 +98,7 @@ leftMenu.close = function () {
  */
 leftMenu.bind = function () {
 	// Event Name
-	let eventName = lychee.getEventName();
+	const eventName = "click touchend";
 
 	leftMenu.dom("#button_settings_close").on(eventName, leftMenu.close);
 	leftMenu.dom("#text_settings_close").on(eventName, leftMenu.close);

@@ -33,7 +33,7 @@ sidebar.dom = function (selector) {
  * @returns {void}
  */
 sidebar.bind = function () {
-	const eventName = lychee.getEventName();
+	const eventName = "click touchend";
 
 	sidebar
 		.dom("#edit_title")

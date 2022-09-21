@@ -4,7 +4,7 @@
 
 $(document).ready(function () {
 	// Event Name
-	const eventName = lychee.getEventName();
+	const eventName = "click touchend";
 
 	// Set API error handler
 	api.onError = lychee.handleAPIError;

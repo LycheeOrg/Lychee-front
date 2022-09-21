@@ -1073,7 +1073,8 @@ photo.getArchive = function (photoIDs, kind = null) {
 			const sv = myPhoto.size_variants[variant];
 			if (sv) {
 				button.title = lychee.locale["DOWNLOAD"];
-				button.addEventListener(lychee.getEventName(), onClickOrTouch);
+				button.addEventListener("click", onClickOrTouch);
+				button.addEventListener("touchend", onClickOrTouch);
 				button.lastElementChild.textContent =
 					lLabel + " (" + sv.width + "×" + sv.height + ", " + lychee.locale.printFilesizeLocalized(sv.filesize) + ")";
 			} else {
@@ -1084,7 +1085,8 @@ photo.getArchive = function (photoIDs, kind = null) {
 		const liveButton = dialog.querySelector('a[data-photo-kind="LIVEPHOTOVIDEO"]');
 		if (myPhoto.live_photo_url !== null) {
 			liveButton.title = lychee.locale["DOWNLOAD"];
-			liveButton.addEventListener(lychee.getEventName(), onClickOrTouch);
+			liveButton.addEventListener("click", onClickOrTouch);
+			liveButton.addEventListener("touchend", onClickOrTouch);
 			liveButton.lastElementChild.textContent = lychee.locale["PHOTO_LIVE_VIDEO"];
 		} else {
 			liveButton.remove();
@@ -1244,7 +1246,8 @@ photo.showDirectLinks = function (photoID) {
 			ev.stopPropagation();
 		};
 		dialog.querySelectorAll("a.button").forEach(function (a) {
-			a.addEventListener(lychee.getEventName(), onClickOrTouch);
+			a.addEventListener("click", onClickOrTouch);
+			a.addEventListener("touchend", onClickOrTouch);
 		});
 	};
 
