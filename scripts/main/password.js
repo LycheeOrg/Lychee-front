@@ -55,7 +55,7 @@ password.getDialog = function (albumID, callback) {
 		  </form>`;
 
 	/**
-	 * @param {ModelDialogFormElements} formElements
+	 * @param {ModalDialogFormElements} formElements
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */

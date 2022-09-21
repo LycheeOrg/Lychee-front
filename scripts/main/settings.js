@@ -587,7 +587,7 @@ settings.openTokenDialog = function () {
 	};
 
 	/**
-	 * @param {ModelDialogFormElements} formElements
+	 * @param {ModalDialogFormElements} formElements
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */

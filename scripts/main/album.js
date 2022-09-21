@@ -377,7 +377,7 @@ album.add = function (IDs = null, callback = null) {
 	};
 
 	/**
-	 * @param {ModelDialogFormElements} formElements
+	 * @param {ModalDialogFormElements} formElements
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */
@@ -449,7 +449,7 @@ album.addByTags = function () {
 		</form>`;
 
 	/**
-	 * @param {ModelDialogFormElements} formElements
+	 * @param {ModalDialogFormElements} formElements
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */
@@ -517,7 +517,7 @@ album.setShowTags = function (albumID) {
 		</form>`;
 
 	/**
-	 * @param {ModelDialogFormElements} formElements
+	 * @param {ModalDialogFormElements} formElements
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */
@@ -616,7 +616,7 @@ album.setTitle = function (albumIDs) {
 		</form>`;
 
 	/**
-	 * @param {ModelDialogFormElements} formElements
+	 * @param {ModalDialogFormElements} formElements
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */
@@ -672,7 +672,7 @@ album.setDescription = function (albumID) {
 		</form>`;
 
 	/**
-	 * @param {ModelDialogFormElements} formElements
+	 * @param {ModalDialogFormElements} formElements
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */
@@ -786,7 +786,7 @@ album.setLicense = function (albumID) {
 		</form>`;
 
 	/**
-	 * @param {ModelDialogFormElements} formElements
+	 * @param {ModalDialogFormElements} formElements
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */
@@ -864,7 +864,7 @@ album.setSorting = function (albumID) {
 		</form>`;
 
 	/**
-	 * @param {ModelDialogFormElements} formElements
+	 * @param {ModalDialogFormElements} formElements
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */
@@ -1143,7 +1143,7 @@ album.shareUsers = function (albumID) {
 	};
 
 	/**
-	 * @param {ModelDialogFormElements} formElements
+	 * @param {ModalDialogFormElements} formElements
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */
@@ -1359,7 +1359,7 @@ album.delete = function (albumIDs) {
 	};
 
 	/**
-	 * @param {ModelDialogFormElements} formElements
+	 * @param {ModalDialogFormElements} formElements
 	 * @param {HTMLDivElement} dialog
 	 */
 	const initConfirmDeletionDialog = function (formElements, dialog) {

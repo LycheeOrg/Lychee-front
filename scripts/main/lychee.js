@@ -233,7 +233,7 @@ lychee.aboutDialog = function () {
 		<p class="about-desc"></p>`;
 
 	/**
-	 * @param {ModelDialogFormElements} formElements
+	 * @param {ModalDialogFormElements} formElements
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */
@@ -483,7 +483,7 @@ lychee.loginDialog = function () {
 		`;
 
 	/**
-	 * @param {ModelDialogFormElements} formElements
+	 * @param {ModalDialogFormElements} formElements
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */

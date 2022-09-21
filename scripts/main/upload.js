@@ -113,7 +113,7 @@ upload.buildReportList = function (files) {
  */
 upload.showProgressReportDialog = function (title, files, run_callback, cancel_callback = null) {
 	/**
-	 * @param {ModelDialogFormElements} formElements
+	 * @param {ModalDialogFormElements} formElements
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */
@@ -562,7 +562,7 @@ upload.start = {
 			</form>`;
 
 		/**
-		 * @param {ModelDialogFormElements} formElements
+		 * @param {ModalDialogFormElements} formElements
 		 * @param {HTMLDivElement} dialog
 		 * @returns {void}
 		 */

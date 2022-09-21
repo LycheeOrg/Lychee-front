@@ -328,7 +328,7 @@ photo.delete = function (photoIDs) {
 	};
 
 	/**
-	 * @param {ModelDialogFormElements} formElements
+	 * @param {ModalDialogFormElements} formElements
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */
@@ -402,7 +402,7 @@ photo.setTitle = function (photoIDs) {
 		</form>`;
 
 	/**
-	 * @param {ModelDialogFormElements} formElements
+	 * @param {ModalDialogFormElements} formElements
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */
@@ -741,7 +741,7 @@ photo.setDescription = function (photoID) {
 		</form>`;
 
 	/**
-	 * @param {ModelDialogFormElements} formElements
+	 * @param {ModalDialogFormElements} formElements
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */
@@ -813,7 +813,7 @@ photo.editTags = function (photoIDs) {
 		</form>`;
 
 	/**
-	 * @param {ModelDialogFormElements} formElements
+	 * @param {ModalDialogFormElements} formElements
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */
@@ -979,7 +979,7 @@ photo.setLicense = function (photoID) {
 		</div></form>`;
 
 	/**
-	 * @param {ModelDialogFormElements} formElements
+	 * @param {ModalDialogFormElements} formElements
 	 * @param {HTMLDivElement} dialog
 	 * @returns {void}
 	 */
@@ -1062,7 +1062,7 @@ photo.getArchive = function (photoIDs, kind = null) {
 	};
 
 	/**
-	 * @param {ModelDialogFormElements} formElements
+	 * @param {ModalDialogFormElements} formElements
 	 * @param {HTMLDivElement} dialog
 	 */
 	const initGetPhotoArchiveDialog = function (formElements, dialog) {
@@ -1203,7 +1203,7 @@ photo.showDirectLinks = function (photoID) {
 		"</form>";
 
 	/**
-	 * @param {ModelDialogFormElements} formElements
+	 * @param {ModalDialogFormElements} formElements
 	 * @param {HTMLDivElement} dialog
 	 */
 	const initShowDirectLinksDialog = function (formElements, dialog) {

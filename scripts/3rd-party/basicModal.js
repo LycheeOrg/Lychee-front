@@ -22,7 +22,7 @@
 
 /**
  * @callback ModalDialogReadyCB
- * @param {ModelDialogFormElements} htmlElements a dictionary that maps names to form elements
+ * @param {ModalDialogFormElements} htmlElements a dictionary that maps names to form elements
  * @param {HTMLDivElement}          dialog       the DIV element that represents the content area of the dialog
  * @returns {void}
  */
@@ -33,7 +33,7 @@
  */
 
 /**
- * @typedef ModelDialogFormElements
+ * @typedef ModalDialogFormElements
  *
  * A dictionary of names of form elements to those form elements.
  *
