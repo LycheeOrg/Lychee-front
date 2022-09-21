@@ -62,7 +62,7 @@
  */
 
 /**
- * A dictionary that maps name of form elements to their value.
+ * A dictionary that maps names of form elements to their values.
  *
  * @typedef ModalDialogResult
  * @type {Object.<string,(number|string|boolean|FileList)>}
