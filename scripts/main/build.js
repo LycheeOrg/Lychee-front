@@ -21,7 +21,7 @@ build.iconic = function (icon, classes = "") {
  * @returns {string}
  */
 build.divider = function (title) {
-	return lychee.html`<div class='divider'><h1>${title}</h1></div>`;
+	return lychee.html`<div class='divider'><h1>$${title}</h1></div>`;
 };
 
 /**
@@ -92,7 +92,7 @@ build.album = function (data, disabled = false) {
 			if (formattedMinTs !== "" || formattedMaxTs !== "") {
 				// either min_taken_at or max_taken_at is set
 				subtitle = formattedMinTs === formattedMaxTs ? formattedMaxTs : formattedMinTs + " - " + formattedMaxTs;
-				subtitle = `<span title='${lychee.locale["CAMERA_DATE"]}'>${build.iconic("camera-slr")}</span>${subtitle}`;
+				subtitle = lychee.html`<span title='${lychee.locale["CAMERA_DATE"]}'>${build.iconic("camera-slr")}</span>$${subtitle}`;
 				break;
 			}
 		// fall through
@@ -133,7 +133,7 @@ build.album = function (data, disabled = false) {
 				  ${build.getAlbumThumb(data)}
 				<div class='overlay'>
 					<h1 title='$${data.title}'>$${data.title}</h1>
-					<a>${subtitle}</a>
+					<a>$${subtitle}</a>
 				</div>
 			`;
 
@@ -337,7 +337,7 @@ build.overlay_image = function (data) {
 	let overlay = "";
 	switch (build.check_overlay_type(data, lychee.image_overlay_type)) {
 		case "desc":
-			overlay = data.description;
+			overlay = lychee.escapeHTML(data.description);
 			break;
 		case "date":
 			if (data.taken_at != null)
@@ -517,7 +517,7 @@ build.uploadModal = function (title, files) {
 
 		html += lychee.html`
 				<div class='row'>
-					<a class='name'>${file.name}</a>
+					<a class='name'>$${file.name}</a>
 					<a class='status'></a>
 					<p class='notice'></p>
 				</div>
@@ -544,7 +544,7 @@ build.uploadNewFile = function (name) {
 
 	return lychee.html`
 		<div class='row'>
-			<a class='name'>${name}</a>
+			<a class='name'>$${name}</a>
 			<a class='status'></a>
 			<p class='notice'></p>
 		</div>

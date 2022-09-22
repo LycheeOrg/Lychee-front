@@ -546,9 +546,9 @@ sidebar.render = function (structure) {
 	 * @returns {string}
 	 */
 	const renderDefault = function (section) {
-		let _html = `
+		let _html = lychee.html`
 				 <div class='sidebar__divider'>
-					 <h1>${section.title}</h1>
+					 <h1>$${section.title}</h1>
 				 </div>
 				 <table>
 				 `;
@@ -599,8 +599,8 @@ sidebar.render = function (structure) {
 
 				_html += lychee.html`
 						 <tr>
-							 <td>${row.title}</td>
-							 <td>${value}</td>
+							 <td>$${row.title}</td>
+							 <td>$${value}</td>
 						 </tr>
 						 `;
 			}
@@ -627,11 +627,11 @@ sidebar.render = function (structure) {
 
 		_html += lychee.html`
 				 <div class='sidebar__divider'>
-					 <h1>${section.title}</h1>
+					 <h1>$${section.title}</h1>
 				 </div>
 				 <div id='tags'>
-					 <div class='attr_${section.title.toLowerCase()}'>${section.value}</div>
-					 ${editable}
+					 <div class='attr_${section.title.toLowerCase()}'>$${section.value}</div>
+					 $${editable}
 				 </div>
 				 `;
 
