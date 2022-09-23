@@ -25,7 +25,7 @@ contextMenu.add = function (e) {
 		items.splice(1);
 	}
 
-	if (!lychee.admin) {
+	if (!lychee.rights.is_admin) {
 		// remove import from dropbox and server if not admin
 		items.splice(3, 2);
 	} else if (!lychee.dropboxKey || lychee.dropboxKey === "") {
@@ -678,7 +678,7 @@ contextMenu.move = function (IDs, e, callback, kind = "UNSORTED", display_root =
 			addItems(data.albums);
 		}
 
-		if (data.shared_albums && data.shared_albums.length > 0 && lychee.admin) {
+		if (data.shared_albums && data.shared_albums.length > 0 && lychee.rights.is_admin) {
 			items = items.concat({});
 			addItems(data.shared_albums);
 		}
@@ -717,7 +717,11 @@ contextMenu.sharePhoto = function (photoID, e) {
 		{ title: build.iconic("twitter", iconClass) + "Twitter", fn: () => photo.share(photoID, "twitter") },
 		{ title: build.iconic("facebook", iconClass) + "Facebook", fn: () => photo.share(photoID, "facebook") },
 		{ title: build.iconic("envelope-closed") + "Mail", fn: () => photo.share(photoID, "mail") },
-		{ title: build.iconic("dropbox", iconClass) + "Dropbox", visible: lychee.admin === true, fn: () => photo.share(photoID, "dropbox") },
+		{
+			title: build.iconic("dropbox", iconClass) + "Dropbox",
+			visible: lychee.rights.is_admin === true,
+			fn: () => photo.share(photoID, "dropbox"),
+		},
 		{ title: build.iconic("link-intact") + lychee.locale["DIRECT_LINKS"], fn: () => photo.showDirectLinks(photoID) },
 		{ title: build.iconic("grid-two-up") + lychee.locale["QR_CODE"], fn: () => photo.qrCode(photoID) },
 	];
@@ -782,12 +786,12 @@ contextMenu.config = function (e) {
 	if (lychee.new_photos_notification) {
 		items.push({ title: build.iconic("bell") + lychee.locale["NOTIFICATIONS"], fn: notifications.load });
 	}
-	if (lychee.admin) {
+	if (lychee.rights.is_admin) {
 		items.push({ title: build.iconic("person") + lychee.locale["USERS"], fn: users.list });
 	}
 	items.push({ title: build.iconic("key") + lychee.locale["U2F"], fn: u2f.list });
 	items.push({ title: build.iconic("cloud") + lychee.locale["SHARING"], fn: sharing.list });
-	if (lychee.admin) {
+	if (lychee.rights.is_admin) {
 		items.push({
 			title: build.iconic("align-left") + lychee.locale["LOGS"],
 			fn: function () {

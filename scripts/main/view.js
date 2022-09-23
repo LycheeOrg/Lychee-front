@@ -79,7 +79,7 @@ view.albums = {
 					html += build.divider(album.owner_name);
 					current_owner = album.owner_name;
 				}
-				return html + build.album(album, !lychee.admin);
+				return html + build.album(album, !lychee.rights.is_admin);
 			}, "");
 
 			if (smartData === "" && tagAlbumsData === "" && albumsData === "" && sharedData === "") {
@@ -491,7 +491,7 @@ view.album = {
 					// },
 					targetRowHeight: parseFloat($(".photo").css("--lychee-default-height")),
 				});
-				// if (lychee.admin) console.log(layoutGeometry);
+				// if (lychee.rights.is_admin) console.log(layoutGeometry);
 				$(".justified-layout").css("height", layoutGeometry.containerHeight + "px");
 				$(".justified-layout > div").each(function (i) {
 					if (!layoutGeometry.boxes[i]) {
@@ -1034,7 +1034,7 @@ view.settings = {
 		init: function () {
 			view.settings.clearContent();
 			view.settings.content.setLogin();
-			if (lychee.admin) {
+			if (lychee.rights.is_admin) {
 				view.settings.content.setSorting();
 				view.settings.content.setDropboxKey();
 				view.settings.content.setLang();
@@ -1068,6 +1068,7 @@ view.settings = {
 			<div class="basicModal__buttons">
 				<!--<a id="basicModal__cancel" class="basicModal__button ">Cancel</a>-->
 				<a id="basicModal__action_password_change" class="basicModal__button ">$${lychee.locale["PASSWORD_CHANGE"]}</a>
+				<a id="basicModal__action_token" class="basicModal__button ">$${lychee.locale["TOKEN_BUTTON"]}</a>
 			</div>
 			</form>
 			</div>`;
@@ -1075,6 +1076,7 @@ view.settings = {
 			$(".settings_view").append(msg);
 
 			settings.bind("#basicModal__action_password_change", ".setLogin", settings.changeLogin);
+			settings.bind("#basicModal__action_token", ".setLogin", settings.openTokenDialog);
 		},
 
 		/**
@@ -1970,23 +1972,25 @@ view.logs = {
 						" UTC"
 					);
 				};
-				const html =
-					logEntries.reduce(function (acc, logEntry) {
-						return (
-							acc +
-							formatDateTime(new Date(logEntry.created_at)) +
-							" -- " +
-							logEntry.type.padEnd(7) +
-							" -- " +
-							logEntry.function +
-							" -- " +
-							logEntry.line +
-							" -- " +
-							logEntry.text +
-							"\n"
-						);
-					}, "<pre>") + "</pre>";
-				$(".logs_diagnostics_view").html(html);
+				const preformattedLog = logEntries.reduce(function (acc, logEntry) {
+					return (
+						acc +
+						formatDateTime(new Date(logEntry.created_at)) +
+						" -- " +
+						logEntry.type.padEnd(7) +
+						" -- " +
+						logEntry.function +
+						" -- " +
+						logEntry.line +
+						" -- " +
+						logEntry.text +
+						"\n"
+					);
+				}, "");
+				/** @type {HTMLDivElement} */
+				const logView = document.querySelector(".logs_diagnostics_view");
+				logView.replaceChildren();
+				logView.appendChild(document.createElement("pre")).textContent = preformattedLog;
 			};
 
 			view.logs.clearContent();

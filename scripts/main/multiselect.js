@@ -80,7 +80,7 @@ multiselect.toggleItem = function (object, id) {
  */
 multiselect.addItem = function (object, id) {
 	if (album.isSmartID(id) || album.isSearchID(id)) return;
-	if (!lychee.admin && albums.isShared(id)) return;
+	if (!lychee.rights.is_admin && albums.isShared(id)) return;
 	if (multiselect.isSelected(id).selected === true) return;
 
 	let isAlbum = object.hasClass("album");
