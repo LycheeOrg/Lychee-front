@@ -684,7 +684,7 @@ photo.setProtectionPolicy = function (photoID) {
 			formElements.is_public.checked = photo.json.is_public !== 0;
 			formElements.grants_full_photo.checked = lychee.full_photo;
 			formElements.requires_link.checked = lychee.public_photos_hidden;
-			formElements.is_downloadable.checked = !!album.downloadable;
+			formElements.is_downloadable.checked = lychee.downloadable;
 			formElements.is_share_button_visible = lychee.share_button_visible;
 			formElements.has_password.checked = false;
 		}
