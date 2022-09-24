@@ -1071,7 +1071,7 @@ photo.getArchive = function (photoIDs, kind = null) {
 			const button = dialog.querySelector('a[data-photo-kind="' + kind + '"]');
 			/** @type {?SizeVariant} */
 			const sv = myPhoto.size_variants[variant];
-			if (!!sv) {
+			if (sv) {
 				button.title = lychee.locale["DOWNLOAD"];
 				button.addEventListener(lychee.getEventName(), onClickOrTouch);
 				button.lastElementChild.textContent =
