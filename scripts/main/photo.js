@@ -1258,8 +1258,4 @@ photo.showDirectLinks = function (photoID) {
 			},
 		},
 	});
-
-	$(".directLinks .basicModal__button").on(lychee.getEventName(), function () {
-		navigator.clipboard.writeText($(this).prev().val()).then(() => loadingBar.show("success", lychee.locale["URL_COPIED_TO_CLIPBOARD"]));
-	});
 };
