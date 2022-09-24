@@ -869,7 +869,7 @@ album.setSorting = function (albumID) {
 	 * @returns {void}
 	 */
 	const initSetAlbumSortingDialog = function (formElements, dialog) {
-		formElements.sorting_col.labels[0].textContent = "Attribute";
+		formElements.sorting_col.labels[0].textContent = lychee.locale["SORT_DIALOG_ATTRIBUTE_LABEL"];
 		formElements.sorting_col.item(1).textContent = lychee.locale["SORT_PHOTO_SELECT_1"];
 		formElements.sorting_col.item(2).textContent = lychee.locale["SORT_PHOTO_SELECT_2"];
 		formElements.sorting_col.item(3).textContent = lychee.locale["SORT_PHOTO_SELECT_3"];
@@ -878,7 +878,7 @@ album.setSorting = function (albumID) {
 		formElements.sorting_col.item(6).textContent = lychee.locale["SORT_PHOTO_SELECT_6"];
 		formElements.sorting_col.item(7).textContent = lychee.locale["SORT_PHOTO_SELECT_7"];
 
-		formElements.sorting_order.labels[0].textContent = "Order";
+		formElements.sorting_order.labels[0].textContent = lychee.locale["SORT_DIALOG_ORDER_LABEL"];
 		formElements.sorting_order.item(1).textContent = lychee.locale["SORT_ASCENDING"];
 		formElements.sorting_order.item(2).textContent = lychee.locale["SORT_DESCENDING"];
 
