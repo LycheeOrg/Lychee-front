@@ -1209,7 +1209,7 @@ photo.showDirectLinks = function (photoID) {
 	const initShowDirectLinksDialog = function (formElements, dialog) {
 		formElements.view.value = photo.getViewLink(photoID);
 		formElements.view.previousElementSibling.textContent = lychee.locale["PHOTO_VIEW"];
-		formElements.view.nextElementSibling.title = "Copy to clipboard";
+		formElements.view.nextElementSibling.title = lychee.locale["URL_COPY_TO_CLIPBOARD"];
 		dialog.querySelector("p").textContent = lychee.locale["PHOTO_DIRECT_LINKS_TO_IMAGES"];
 
 		for (const type in localizations) {
@@ -1218,7 +1218,7 @@ photo.showDirectLinks = function (photoID) {
 			if (sv !== null) {
 				formElements[type].value = lychee.getBaseUrl() + sv.url;
 				formElements[type].previousElementSibling.textContent = localizations[type] + " (" + sv.width + "×" + sv.height + ")";
-				formElements[type].nextElementSibling.title = "Copy to clipboard";
+				formElements[type].nextElementSibling.title = lychee.locale["URL_COPY_TO_CLIPBOARD"];
 			} else {
 				// The form element is the `<input>` element, the parent
 				// element is the `<div>` which binds the label, the input
@@ -1231,7 +1231,7 @@ photo.showDirectLinks = function (photoID) {
 		if (photo.json.live_photo_url !== null) {
 			formElements.live.value = lychee.getBaseUrl() + photo.json.live_photo_url;
 			formElements.live.previousElementSibling.textContent = lychee.locale["PHOTO_LIVE_VIDEO"];
-			formElements.live.nextElementSibling.title = "Copy to clipboard";
+			formElements.live.nextElementSibling.title = lychee.locale["URL_COPY_TO_CLIPBOARD"];
 		} else {
 			formElements.live.parentElement.remove();
 		}
