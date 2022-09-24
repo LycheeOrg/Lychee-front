@@ -1796,20 +1796,20 @@ view.sharing = {
 			}
 
 			const albumOptions = sharing.json.albums.reduce(function (acc, _album) {
-				return acc + `<option value="${_album.id}">${_album.title}</option>`;
+				return acc + lychee.html`<option value="${_album.id}">$${_album.title}</option>`;
 			}, "");
 
 			const userOptions = sharing.json.users.reduce(function (acc, _user) {
-				return acc + `<option value="${_user.id}">${_user.username}</option>`;
+				return acc + lychee.html`<option value="${_user.id}">$${_user.username}</option>`;
 			}, "");
 
 			const sharingOptions = sharing.json.shared.reduce(function (acc, _shareInfo) {
 				return (
 					acc +
-					`
+					lychee.html`
 						<p>
-							<span class="text">${_shareInfo.title}</span>
-							<span class="text">${_shareInfo.username}</span>
+							<span class="text">$${_shareInfo.title}</span>
+							<span class="text">$${_shareInfo.username}</span>
 							<span class="choice">
 								<label>
 									<input type="checkbox" name="remove_id" value="${_shareInfo.id}"/>

@@ -546,9 +546,9 @@ sidebar.render = function (structure) {
 	 * @returns {string}
 	 */
 	const renderDefault = function (section) {
-		let _html = `
+		let _html = lychee.html`
 				 <div class='sidebar__divider'>
-					 <h1>${section.title}</h1>
+					 <h1>$${section.title}</h1>
 				 </div>
 				 <table>
 				 `;
@@ -570,45 +570,42 @@ sidebar.render = function (structure) {
 		}
 
 		section.rows.forEach(function (row) {
-			let value = row.value;
+			const rawValue = row.value;
 
-			// show only rows which have a value or are editable
-			if (!(value === "" || value == null) || row.editable === true) {
-				// Wrap span-element around value for easier selecting on change
-				if (Array.isArray(row.value)) {
-					value = row.value.reduce(
-						/**
-						 * @param {string} prev
-						 * @param {string} cur
-						 */
-						function (prev, cur) {
-							// Add separator if needed
-							if (prev !== "") {
-								prev += lychee.html`<span class='attr_${row.kind}_separator'>, </span>`;
-							}
-							return prev + lychee.html`<span class='attr_${row.kind} search'>$${cur}</span>`;
-						},
-						""
-					);
-				} else {
-					value = lychee.html`<span class='attr_${row.kind}'>$${value}</span>`;
-				}
-
-				// Add edit-icon to the value when editable
-				if (row.editable === true) value += " " + build.editIcon("edit_" + row.kind);
-
-				_html += lychee.html`
-						 <tr>
-							 <td>${row.title}</td>
-							 <td>${value}</td>
-						 </tr>
-						 `;
+			// don't show rows which are empty and cannot be edited
+			if ((rawValue === "" || rawValue == null) && row.editable === false) {
+				return;
 			}
+
+			/** @type {string} */
+			let htmlValue;
+			// Wrap span-element around value for easier selecting on change
+			if (Array.isArray(rawValue)) {
+				htmlValue = rawValue.reduce(
+					/**
+					 * @param {string} prev
+					 * @param {string} cur
+					 */
+					function (prev, cur) {
+						// Add separator if needed
+						if (prev !== "") {
+							prev += lychee.html`<span class='attr_${row.kind}_separator'>, </span>`;
+						}
+						return prev + lychee.html`<span class='attr_${row.kind} search'>$${cur}</span>`;
+					},
+					""
+				);
+			} else {
+				htmlValue = lychee.html`<span class='attr_${row.kind}'>$${rawValue}</span>`;
+			}
+
+			// Add edit-icon to the value when editable
+			if (row.editable === true) htmlValue += " " + build.editIcon("edit_" + row.kind);
+
+			_html += lychee.html`<tr><td>$${row.title}</td><td>${htmlValue}</td></tr>`;
 		});
 
-		_html += `
-				 </table>
-				 `;
+		_html += "</table>";
 
 		return _html;
 	};
@@ -618,24 +615,22 @@ sidebar.render = function (structure) {
 	 * @returns {string}
 	 */
 	const renderTags = function (section) {
-		let _html = "";
-		let editable = "";
-
 		// TODO: IDE warns me that the `Section` has no properties `editable` nor `value`; cause of the problem is that the section `tags` is built differently, see above
 		// Add edit-icon to the value when editable
-		if (section.editable === true) editable = build.editIcon("edit_tags");
+		const htmlEditable = section.editable === true ? build.editIcon("edit_tags") : "";
 
-		_html += lychee.html`
+		// Note: In case of tags `section.value` already contains proper
+		// HTML (with each tag wrapped into a `<span>`-element), because
+		// `section.value` is the result of `build.renderTags`.
+		return lychee.html`
 				 <div class='sidebar__divider'>
-					 <h1>${section.title}</h1>
+					 <h1>$${section.title}</h1>
 				 </div>
 				 <div id='tags'>
 					 <div class='attr_${section.title.toLowerCase()}'>${section.value}</div>
-					 ${editable}
+					 ${htmlEditable}
 				 </div>
 				 `;
-
-		return _html;
 	};
 
 	let html = "";
