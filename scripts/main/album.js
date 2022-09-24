@@ -1060,7 +1060,7 @@ album.setProtectionPolicy = function (albumID) {
 				checkbox.parentElement.classList.remove("disabled");
 				checkbox.disabled = false;
 			});
-			// Initialize options based on global settings.
+			// Initialize options based on album settings.
 			formElements.grants_full_photo.checked = album.json.grants_full_photo;
 			formElements.requires_link.checked = album.json.requires_link;
 			formElements.is_downloadable.checked = album.json.is_downloadable;
@@ -1077,10 +1077,10 @@ album.setProtectionPolicy = function (albumID) {
 				checkbox.disabled = true;
 			});
 			// Initialize options based on global settings.
-			formElements.grants_full_photo.checked = lychee.grants_full_photo;
+			formElements.grants_full_photo.checked = lychee.full_photo;
 			formElements.requires_link.checked = false;
-			formElements.is_downloadable.checked = lychee.is_downloadable;
-			formElements.is_share_button_visible.checked = lychee.is_share_button_visible;
+			formElements.is_downloadable.checked = lychee.downloadable;
+			formElements.is_share_button_visible.checked = lychee.share_button_visible;
 			formElements.has_password.checked = false;
 			formElements.password.parentElement.classList.add("hidden");
 		}

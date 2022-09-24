@@ -469,6 +469,7 @@ settings.save_enter = function (e) {
 	if (e.which !== 13) return;
 
 	const saveSettingsConfirmationDialogBody =
+		// TODO: move the style to the style file, where it belongs.
 		'<p style="color: #d92c34; font-size: 1.3em; font-weight: bold; text-transform: capitalize; text-align: center;"></p>';
 
 	basicModal.show({
