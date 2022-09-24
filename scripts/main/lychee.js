@@ -242,8 +242,6 @@ lychee.aboutDialog = function () {
 		const updClassList = dialog.querySelector("p.update-status").classList;
 		if (lychee.update_available) {
 			updClassList.remove("up-to-date");
-		} else {
-			updClassList.add("up-to-date");
 		}
 		dialog.querySelector("p a").textContent = lychee.locale["UPDATE_AVAILABLE"];
 		dialog.querySelector("h2").textContent = lychee.locale["ABOUT_SUBTITLE"];
@@ -499,8 +497,6 @@ lychee.loginDialog = function () {
 		const updClassList = dialog.querySelector("span.update-status").classList;
 		if (lychee.update_available) {
 			updClassList.remove("up-to-date");
-		} else {
-			updClassList.add("up-to-date");
 		}
 		dialog.querySelector("span.update-status a").textContent = lychee.locale["UPDATE_AVAILABLE"];
 
