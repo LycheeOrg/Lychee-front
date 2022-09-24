@@ -553,7 +553,7 @@ build.uploadNewFile = function (name) {
 
 /**
  * @param {string[]} tags
- * @returns {string}
+ * @returns {string} return safe HTMl code
  */
 build.tags = function (tags) {
 	let html = "";
