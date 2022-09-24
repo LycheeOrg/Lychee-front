@@ -1796,20 +1796,20 @@ view.sharing = {
 			}
 
 			const albumOptions = sharing.json.albums.reduce(function (acc, _album) {
-				return acc + `<option value="${_album.id}">${_album.title}</option>`;
+				return acc + lychee.html`<option value="${_album.id}">$${_album.title}</option>`;
 			}, "");
 
 			const userOptions = sharing.json.users.reduce(function (acc, _user) {
-				return acc + `<option value="${_user.id}">${_user.username}</option>`;
+				return acc + lychee.html`<option value="${_user.id}">$${_user.username}</option>`;
 			}, "");
 
 			const sharingOptions = sharing.json.shared.reduce(function (acc, _shareInfo) {
 				return (
 					acc +
-					`
+					lychee.html`
 						<p>
-							<span class="text">${_shareInfo.title}</span>
-							<span class="text">${_shareInfo.username}</span>
+							<span class="text">$${_shareInfo.title}</span>
+							<span class="text">$${_shareInfo.username}</span>
 							<span class="choice">
 								<label>
 									<input type="checkbox" name="remove_id" value="${_shareInfo.id}"/>
@@ -1972,23 +1972,25 @@ view.logs = {
 						" UTC"
 					);
 				};
-				const html =
-					logEntries.reduce(function (acc, logEntry) {
-						return (
-							acc +
-							formatDateTime(new Date(logEntry.created_at)) +
-							" -- " +
-							logEntry.type.padEnd(7) +
-							" -- " +
-							logEntry.function +
-							" -- " +
-							logEntry.line +
-							" -- " +
-							logEntry.text +
-							"\n"
-						);
-					}, "<pre>") + "</pre>";
-				$(".logs_diagnostics_view").html(html);
+				const preformattedLog = logEntries.reduce(function (acc, logEntry) {
+					return (
+						acc +
+						formatDateTime(new Date(logEntry.created_at)) +
+						" -- " +
+						logEntry.type.padEnd(7) +
+						" -- " +
+						logEntry.function +
+						" -- " +
+						logEntry.line +
+						" -- " +
+						logEntry.text +
+						"\n"
+					);
+				}, "");
+				/** @type {HTMLDivElement} */
+				const logView = document.querySelector(".logs_diagnostics_view");
+				logView.replaceChildren();
+				logView.appendChild(document.createElement("pre")).textContent = preformattedLog;
 			};
 
 			view.logs.clearContent();
