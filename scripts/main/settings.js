@@ -25,7 +25,7 @@ settings.createLogin = function () {
 				/** @type {NodeList<HTMLParagraphElement>} */
 				const paragraphs = dialog.querySelectorAll("p");
 				paragraphs.item(0).textContent = lychee.locale["ERROR_LOGIN"];
-				paragraphs.item(1).textContent = lycheeException ? "<p>" + lycheeException.message + "</p>" : "";
+				paragraphs.item(1).textContent = lycheeException ? lycheeException.message : "";
 			},
 			buttons: {
 				action: {
