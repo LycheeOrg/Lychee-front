@@ -1044,7 +1044,7 @@ album.shareUsers = function (albumID) {
 						<label>
 							<input type='checkbox' name='${user.id}'>
 							<span class='checkbox'>${build.iconic("check")}</span>
-							<span class='label'>${user.username}</span>
+							<span class='label'>$${user.username}</span>
 						</label>
 						<p></p>
 					</div>`);
@@ -1199,9 +1199,9 @@ album.buildMessage = function (albumIDs, albumID, op1, ops) {
 			sourceTitle = sourceAlbum.title;
 		}
 
-		msg = lychee.html`<p>${sprintf(lychee.locale[op1], sourceTitle, targetTitle)}'</p>`;
+		msg = lychee.html`<p>${sprintf(lychee.locale[op1], lychee.escapeHTML(sourceTitle), lychee.escapeHTML(targetTitle))}'</p>`;
 	} else {
-		msg = lychee.html`<p>${sprintf(lychee.locale[ops], targetTitle)}</p>`;
+		msg = lychee.html`<p>${sprintf(lychee.locale[ops], lychee.escapeHTML(targetTitle))}</p>`;
 	}
 
 	return msg;
@@ -1271,7 +1271,10 @@ album.delete = function (albumIDs) {
 		// Fallback for album without a title
 		if (!albumTitle) albumTitle = lychee.locale["UNTITLED"];
 
-		msg = lychee.html`<p>${sprintf(lychee.locale[isTagAlbum ? "DELETE_TAG_ALBUM_CONFIRMATION" : "DELETE_ALBUM_CONFIRMATION"], albumTitle)}</p>`;
+		msg = lychee.html`<p>${sprintf(
+			lychee.locale[isTagAlbum ? "DELETE_TAG_ALBUM_CONFIRMATION" : "DELETE_ALBUM_CONFIRMATION"],
+			lychee.escapeHTML(albumTitle)
+		)}</p>`;
 	} else {
 		action.title = lychee.locale["DELETE_ALBUMS_QUESTION"];
 		cancel.title = lychee.locale["KEEP_ALBUMS"];

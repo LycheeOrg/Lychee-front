@@ -345,7 +345,7 @@ photo.delete = function (photoIDs) {
 		action.title = lychee.locale["PHOTO_DELETE"];
 		cancel.title = lychee.locale["PHOTO_KEEP"];
 
-		msg = lychee.html`<p>${sprintf(lychee.locale["PHOTO_DELETE_CONFIRMATION"], photoTitle)}</p>`;
+		msg = lychee.html`<p>${sprintf(lychee.locale["PHOTO_DELETE_CONFIRMATION"], lychee.escapeHTML(photoTitle))}</p>`;
 	} else {
 		action.title = lychee.locale["PHOTO_DELETE"];
 		cancel.title = lychee.locale["PHOTO_KEEP"];
