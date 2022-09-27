@@ -1,4 +1,4 @@
-// A HTML `<form>` is expected to consists of a sequence of one ore more
+// A HTML `<form>` is expected to consist of a sequence of one or more
 // `<div>` elements.
 // Each of this `<div>` binds together a label, an input element and some
 // explanatory text.
@@ -20,12 +20,12 @@ textarea,
 output {
 	display: inline-block;
 	/* we must position this element so that it becomes the nearest
-   * positioned ancestor for ::before, ::after and :checked::before */
+	 * positioned ancestor for ::before, ::after and :checked::before */
 	position: relative;
 }
 
 div.select > select {
-	// The element `<select>` is hard to style with CSS, because most browser
+	// The element `<select>` is hard to style with CSS, because most browsers
 	// treat it as a replaced element and use the OS default style.
 	// Hence, `<select>` needs to be wrapped into an additional `<div>` and
 	// most styles are applied to this `<div>`.
@@ -50,7 +50,7 @@ select option {
 	// - if they are preceded by a label or followed by a paragraph,
 	//   then the label has a bottom or the paragraph a top margin
 	margin: 0;
-	// Form elements are always special, because browser are very
+	// Form elements are always special, because browsers are very
 	// peculiar about form element and even apply built-in style
 	// if everything has been reset by the wildcard selector `*`.
 	font-size: inherit;
@@ -283,7 +283,7 @@ form div.input-group {
 		> label > input[type="text"],
 		> label > input[type="password"] {
 			// in stacked layout, text input needs a little bit more space,
-			// if preceded by a label, otherwise it looks to crowded
+			// if preceded by a label, otherwise it looks too crowded
 			margin-top: 12px;
 		}
 
@@ -310,7 +310,7 @@ form div.input-group {
 			height: auto;
 			top: 3px; // adjustment for padding of text input and select
 			bottom: 0; // height should take the whole left padding
-			overflow-y: hidden; // truncate over-sized labels so that the do not spill into other areas
+			overflow-y: hidden; // truncate over-sized labels so that they do not spill into other areas
 		}
 
 		> input,

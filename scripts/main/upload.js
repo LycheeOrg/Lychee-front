@@ -122,7 +122,7 @@ upload.showProgressReportDialog = function (title, files, run_callback, cancel_c
 		// remains hidden as long as an import is running.
 		// Users must use the Cancel button to interrupt an ongoing import.
 		// The Action button becomes visible after the import has been
-		// terminated (eiter successfully, with error or due to interruption).
+		// terminated (either successfully, with error or due to interruption).
 		basicModal.hideActionButton();
 
 		const caption = dialog.querySelector("h1");
@@ -766,8 +766,8 @@ upload.start = {
 							} else {
 								// The event report does not refer to a
 								// specific directory.
-								// We insert the event row _before_ the row
-								// before the last row, so that the latest
+								// We insert the event row _before_ the last
+								// row, so that the latest
 								// progress report stays in sight.
 								row = upload.buildReportRow("General");
 								upload._dom.reportList.insertBefore(row.listEntry, upload._dom.reportList.lastElementChild);
