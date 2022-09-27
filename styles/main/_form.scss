@@ -217,14 +217,20 @@ select option {
 //      All elements are vertically stacked above each other.
 //
 //  2. `compact`
-//      The label and the form element are on the same horizontal line.
-//      The other elements follow below with a hanging indention and
-//      are aligned to the form element
+//      The label and the form element are on the same horizontal line
+//      in that order with the label being first and the form element being
+//      second.
+//      The other elements follow below with a hanging indentation and
+//      are aligned to the form element.
 //
 //  3. `compact-inverse`
-//      The form element and the label are on the same horizontal line.
-//      The other elements follow below with a hanging indention and are
-//      aligned to the form element
+//      The form element and the label are on the same horizontal line
+//      in that order with the form element being first and the label
+//      being second.
+//      The other elements follow below with a hanging indentation and are
+//      aligned to the label.
+//      This layout is actually only useful, if the form element on the left
+//      is a check box.
 //
 //  4. `compact-no-indent`
 //      The label and the form element are on the same horizontal line.
