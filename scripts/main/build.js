@@ -86,7 +86,7 @@ build.album = function (data, disabled = false) {
 	// default: any other type defaults to old style setting subtitles based of album sorting
 	switch (lychee.album_subtitle_type) {
 		case "description":
-			subtitle = data.description ? data.description : "";
+			subtitle = data.description ? lychee.escapeHTML(data.description) : "";
 			break;
 		case "takedate":
 			if (formattedMinTs !== "" || formattedMaxTs !== "") {
@@ -133,7 +133,7 @@ build.album = function (data, disabled = false) {
 				  ${build.getAlbumThumb(data)}
 				<div class='overlay'>
 					<h1 title='$${data.title}'>$${data.title}</h1>
-					<a>$${subtitle}</a>
+					<a>${subtitle}</a>
 				</div>
 			`;
 
