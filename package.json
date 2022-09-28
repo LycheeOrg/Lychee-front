@@ -2,12 +2,15 @@
 	"name": "lychee",
 	"version": "4.0.10",
 	"description": "Self-hosted photo-management done right.",
-	"authors": "Tobias Reich <tobias@electerious.com>",
+	"authors": [
+		"Tobias Reich <tobias@electerious.com>",
+		"The Lychee Organization"
+	],
 	"license": "MIT",
 	"private": true,
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/LycheeOrg/Lychee.git"
+		"url": "https://github.com/LycheeOrg/Lychee-front.git"
 	},
 	"scripts": {
 		"start": "gulp watch",
@@ -19,7 +22,7 @@
 		"node": ">= 10"
 	},
 	"dependencies": {
-		"basicmodal": "LycheeOrg/basicModal#d1185e7",
+		"basicmodal": "LycheeOrg/basicModal#v4.0.0",
 		"jquery": "^3.4.0",
 		"justified-layout": "^2.1.1",
 		"lazysizes": "^5.3.0",
