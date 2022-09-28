@@ -690,21 +690,7 @@ upload.start = {
 		 */
 
 		/** @param {ServerImportDialogResult} data */
-		const action = function (data) {
-			if (!data.paths.trim()) {
-				basicModal.error("paths");
-				return;
-			} else {
-				// Consolidate `data` before we close the modal dialog
-				// TODO: We should fix the modal dialog to properly return the values of all input fields, incl. check boxes
-				data.paths = data.paths.match(/(?:\\.|\S)+/g);
-				data.delete_imported = !!$(choiceDeleteSelector).prop("checked");
-				data.import_via_symlink = !!$(choiceSymlinkSelector).prop("checked");
-				data.skip_duplicates = !!$(choiceDuplicateSelector).prop("checked");
-				data.resync_metadata = !!$(choiceResyncSelector).prop("checked");
-				basicModal.close();
-			}
-
+		const importFromServer = function (data) {
 			let isUploadCancelled = false;
 
 			const cancelUpload = function () {
