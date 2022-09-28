@@ -594,7 +594,7 @@ upload.start = {
 		/**
 		 * @typedef ImportFromServerDialogFormElements
 		 *
-		 * @property {HTMLInputElement} path
+		 * @property {HTMLInputElement} paths
 		 * @property {HTMLInputElement} delete_imported
 		 * @property {HTMLInputElement} import_via_symlink
 		 * @property {HTMLInputElement} skip_duplicates
@@ -608,8 +608,8 @@ upload.start = {
 		 */
 		const initImportFromServerDialog = function (formElements, dialog) {
 			dialog.querySelector("p").textContent = lychee.locale["UPLOAD_IMPORT_SERVER_INSTR"];
-			formElements.path.placeholder = lychee.locale["UPLOAD_ABSOLUTE_PATH"];
-			formElements.path.value = lychee.location + "uploads/import/";
+			formElements.paths.placeholder = lychee.locale["UPLOAD_ABSOLUTE_PATH"];
+			formElements.paths.value = lychee.location + "uploads/import/";
 			formElements.delete_imported.previousElementSibling.textContent = lychee.locale["UPLOAD_IMPORT_DELETE_ORIGINALS"];
 			formElements.delete_imported.nextElementSibling.textContent = lychee.locale["UPLOAD_IMPORT_DELETE_ORIGINALS_EXPL"];
 			formElements.import_via_symlink.previousElementSibling.textContent = lychee.locale["UPLOAD_IMPORT_VIA_SYMLINK"];
@@ -920,7 +920,7 @@ upload.start = {
 
 		/** @param {ServerImportDialogResult} data */
 		const processImportFromServerDialog = function (data) {
-			if (!data.path.trim()) {
+			if (!data.paths.trim()) {
 				basicModal.focusError("paths");
 				return;
 			}
