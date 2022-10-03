@@ -49,7 +49,7 @@ First you have to install the following dependencies:
 
 After [installing Node.js](http://nodejs.org) you can use the included `npm` package manager to download all dependencies:
 
-```
+```sh
 npm install
 ```
 
@@ -62,13 +62,13 @@ The generated files will placed into `../dist/` or `<path to lychee>/dist/`.
 
 Before submitting a pull request, please apply our formatting rules by executing:
 
-```
+```sh
 npm run format
 ```
 
 You can also just incorporate a git hook: `.git/hooks/pre-commit`
 
-```
+```sh
 #!/bin/sh
 NO_COLOR="\033[0m"
 GREEN="\033[38;5;010m"
@@ -96,7 +96,7 @@ printf "\n${GREEN}pre commit hook finish${NO_COLOR}\n"
 
 This can easily be installed by doing:
 
-```
+```sh
 cp pre-commit ../../.git/modules/public/Lychee-front/hooks
 chmod 755 ../../.git/modules/public/Lychee-front/hooks/pre-commit
 ```
@@ -105,6 +105,6 @@ chmod 755 ../../.git/modules/public/Lychee-front/hooks/pre-commit
 
 While developing, you might want to use the following command to automatically build Lychee everytime you save a file:
 
-```
+```sh
 npm start
 ```
