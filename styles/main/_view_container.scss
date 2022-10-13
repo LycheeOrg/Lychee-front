@@ -1,0 +1,18 @@
+/**
+ * The view container is a child of the workbench and shares the vertical
+ * space of workbench with the footer.
+ * The workbench uses `dispay: flex` thus making the view container a flex item.
+ * The view container holds the actual views.
+ */
+#lychee_view_container {
+	/**
+	 * The height of the view container shall be the natural height of its
+	 * children.
+	 * The view container can stretch, such that the footer remains on bottom,
+	 * but the view container cannot shrink below its base height.
+	 * Note, a vertical scroll bar is provided by the workbench to scroll the
+	 * view container and the footer together.
+	 */
+	height: auto;
+	flex: 1 0 auto;
+}

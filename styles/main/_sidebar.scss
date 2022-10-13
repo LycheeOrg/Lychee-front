@@ -1,62 +1,62 @@
-.sidebar {
-	position: fixed;
-	top: 49px;
-	right: -360px;
+/*
+ * The sidebar container.
+ * The right sidebar container shares the horizontal space with the workbench.
+ * The outer container uses `dispay: flex` thus making the sidebar container
+ * a flex item.
+ * The sidebar container is responsible for showing/hiding the actual sidebar.
+ */
+#lychee_sidebar_container {
+	width: 0; // per default the sidebar is closed and hence has a zero width
+	transition: width 0.3s $timing;
+}
+
+/**
+ * The width of actual sidebar must be the same as the width of the sidebar
+ * container if activated.
+ * The width of the actual sidebar must be constant all the time to avoid
+ * relayouting and re-wrapping of the child elements of the sidebar even
+ * if the container shrinks and grows.
+ */
+#lychee_sidebar_container.active,
+#lychee_sidebar {
 	width: 350px;
-	height: calc(100% - 49px);
+}
+
+/**
+ * The sidebar is a flex container which layouts the sidebar header and
+ * the sidebar content in a column.
+ */
+#lychee_sidebar {
+	height: 100%;
 	background-color: rgba(25, 25, 25, 0.98);
 	border-left: 1px solid black(0.2);
-	transform: translateX(0);
-	transition: transform 0.3s $timing;
-	z-index: 4;
+}
 
-	&.active {
-		transform: translateX(-360px);
-	}
+// Header -------------------------------------------------------------- //
+#lychee_sidebar_header {
+	height: 49px;
+	background: linear-gradient(to bottom, white(0.02), black(0));
+	border-top: 1px solid $colorBlue;
+}
 
-	//	Doesn't seem to be needed when user-select is globally disabled in main.scss.
-	//	&.notSelectable {
-	//		-webkit-user-select: none !important;
-	//		-moz-user-select: none !important;
-	//		-ms-user-select: none !important;
-	//		user-select: none !important;
-	//	}
+#lychee_sidebar_header h1 {
+	margin: 15px 0 15px 0;
+	color: #fff;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+	-webkit-user-select: text;
+	-moz-user-select: text;
+	-ms-user-select: text;
+	user-select: text;
+}
 
-	// Header -------------------------------------------------------------- //
-	&__header {
-		float: left;
-		height: 49px;
-		width: 100%;
-		background: linear-gradient(to bottom, white(0.02), black(0));
-		border-top: 1px solid $colorBlue;
-	}
-
-	&__header h1 {
-		position: absolute;
-		margin: 15px 0 15px 0;
-		width: 100%;
-		color: #fff;
-		font-size: 16px;
-		font-weight: bold;
-		text-align: center;
-		-webkit-user-select: text;
-		-moz-user-select: text;
-		-ms-user-select: text;
-		user-select: text;
-	}
-
-	// Wrapper -------------------------------------------------------------- //
-	&__wrapper {
-		float: left;
-		height: calc(100% - 49px);
-		width: 350px;
-		overflow: auto;
-		-webkit-overflow-scrolling: touch;
-	}
+#lychee_sidebar_content {
+	overflow: clip auto;
+	-webkit-overflow-scrolling: touch;
 
 	// Divider -------------------------------------------------------------- //
-	&__divider {
-		float: left;
+	.sidebar__divider {
 		padding: 12px 0 8px;
 		width: 100%;
 		border-top: 1px solid white(0.02);
@@ -100,13 +100,12 @@
 
 	// Table -------------------------------------------------------------- //
 	table {
-		float: left;
 		margin: 10px 0 15px 20px;
 		width: calc(100% - 20px);
 	}
 
 	table tr td {
-		padding: 5px 0px;
+		padding: 5px 0;
 		color: #fff;
 		font-size: 14px;
 		line-height: 19px;
@@ -176,7 +175,6 @@
 	}
 
 	#tags .tag span {
-		float: right;
 		padding: 0;
 		margin: 0 0 -2px 0;
 		width: 0;
@@ -197,10 +195,9 @@
 	}
 
 	#leaflet_map_single_photo {
-		margin: 10px 0px 0px 20px;
+		margin: 10px 0 0 20px;
 		height: 180px;
 		width: calc(100% - 40px);
-		float: left;
 	}
 
 	.attr_location {
@@ -212,7 +209,7 @@
 
 // restrict hover features to devices that support it
 @media (hover: hover) {
-	.sidebar {
+	#lychee_sidebar {
 		.edit:hover .iconic {
 			fill: white(1);
 		}
@@ -242,25 +239,28 @@
 // responsive web design for smaller screens
 @media only screen and (max-width: 567px), only screen and (max-width: 640px) and (orientation: portrait) {
 	// sidebar as overlay, small size
-	.sidebar {
-		width: 240px;
-		height: unset;
+	#lychee_sidebar {
 		background-color: rgba(0, 0, 0, 0.6);
+	}
 
-		&__wrapper {
-			padding-bottom: 10px;
-		}
+	#lychee_sidebar_container.active,
+	#lychee_sidebar {
+		width: 240px;
+	}
 
-		&__header {
-			height: 22px;
+	#lychee_sidebar_header {
+		height: 22px;
+	}
 
-			h1 {
-				margin: 6px 0;
-				font-size: 13px;
-			}
-		}
+	#lychee_sidebar_header h1 {
+		margin: 6px 0;
+		font-size: 13px;
+	}
 
-		&__divider {
+	#lychee_sidebar_content {
+		padding-bottom: 10px;
+
+		.sidebar__divider {
 			padding: 6px 0 2px;
 
 			h1 {
@@ -296,26 +296,27 @@
 	}
 }
 
+// sidebar on side, medium size
 @media only screen and (min-width: 568px) and (max-width: 768px),
 	only screen and (min-width: 568px) and (max-width: 640px) and (orientation: landscape) {
-	// sidebar on side, medium size
-	.sidebar {
+	#lychee_sidebar_container.active,
+	#lychee_sidebar {
 		width: 280px;
+	}
 
-		&__wrapper {
-			padding-bottom: 10px;
-		}
+	#lychee_sidebar_header {
+		height: 28px;
+	}
 
-		&__header {
-			height: 28px;
+	#lychee_sidebar_header h1 {
+		margin: 8px 0;
+		font-size: 15px;
+	}
 
-			h1 {
-				margin: 8px 0;
-				font-size: 15px;
-			}
-		}
+	#lychee_sidebar_content {
+		padding-bottom: 10px;
 
-		&__divider {
+		.sidebar__divider {
 			padding: 8px 0 4px;
 
 			h1 {

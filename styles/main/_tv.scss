@@ -20,7 +20,7 @@
 		outline-width: 0;
 	}
 
-	.header .button:focus {
+	.toolbar .button:focus {
 		outline-width: 0;
 		background-color: #ffffff;
 	}
@@ -31,7 +31,7 @@
 		color: #000000;
 	}
 
-	.header .button:focus .iconic {
+	.toolbar .button:focus .iconic {
 		fill: #000000;
 	}
 

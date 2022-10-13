@@ -1,66 +1,53 @@
-body.mode-frame,
-body.mode-none {
-	.header {
-		display: none;
+/*
+ * The toolbar container.
+ * The toolbar container holds the actual toolbars and is reponsible
+ * for showing/hiding them.
+ */
+#lychee_toolbar_container {
+	transition: height 0.3s ease-out;
+	&.hidden {
+		height: 0;
 	}
 }
 
-.header {
-	position: fixed;
+/**
+ * The height of each actual toolbar must be the same as the height of the
+ * toolbar container.
+ * The width of the actual toolbars must be constant all the time to avoid
+ * relayouting and re-wrapping of the child elements of the toolbars even
+ * if the toolbar container shrinks and grows.
+ */
+#lychee_toolbar_container,
+.toolbar {
 	height: 49px;
-	width: 100%;
+}
+
+// Toolbars -------------------------------------------------------------- //
+.toolbar {
 	background: linear-gradient(to bottom, #222222, #1a1a1a);
 	border-bottom: 1px solid #0f0f0f;
-	z-index: 1;
-	transition: transform 0.3s ease-out;
+	display: none;
+	align-items: center;
+	position: relative;
+	box-sizing: border-box;
+	width: 100%;
 
-	// Modes -------------------------------------------------------------- //
-	&--hidden {
-		transform: translateY(-60px);
+	&.visible {
+		display: flex;
 	}
 
-	&--loading {
-		transform: translateY(2px);
-	}
-
-	&--error {
-		transform: translateY(40px);
-	}
-
-	&--view {
-		border-bottom: none;
-
-		&.header--error {
-			background-color: $colorAppBg;
-		}
-	}
-
-	// Toolbars -------------------------------------------------------------- //
-	&__toolbar {
-		display: none;
-		align-items: center;
-		position: relative;
-		box-sizing: border-box;
-		width: 100%;
-		height: 100%;
-
-		&--visible {
-			display: flex;
+	#lychee_toolbar_config & {
+		.button .iconic {
+			transform: rotate(45deg);
 		}
 
-		&--config {
-			.button .iconic {
-				transform: rotate(45deg);
-			}
-
-			.header__title {
-				padding-right: 80px;
-			}
+		.header__title {
+			padding-right: 80px;
 		}
 	}
 
 	// Title -------------------------------------------------------------- //
-	&__title {
+	.header__title {
 		width: 100%;
 		padding: 16px 0;
 		color: #fff;
@@ -157,7 +144,7 @@ body.mode-none {
 	}
 
 	// Divider -------------------------------------------------------------- //
-	&__divider {
+	.header__divider {
 		flex-shrink: 0;
 		width: 14px;
 	}
@@ -197,7 +184,7 @@ body.mode-none {
 		}
 	}
 
-	&__clear {
+	.header__clear {
 		position: absolute;
 		top: 50%;
 		-ms-transform: translateY(-50%);
@@ -211,12 +198,12 @@ body.mode-none {
 		cursor: default;
 	}
 
-	&__clear_nomap {
+	.header__clear_nomap {
 		right: 60px;
 	}
 
 	// Hosted with -------------------------------------------------------------- //
-	&__hostedwith {
+	.header__hostedwith {
 		flex-shrink: 0;
 		padding: 5px 10px;
 		margin: 11px 0;
@@ -225,27 +212,23 @@ body.mode-none {
 		border-radius: 100px;
 		cursor: default;
 	}
-
-	.leftMenu__open {
-		margin-left: 250px;
-	}
 }
 
 // restrict hover features to devices that support it
 @media (hover: hover) {
-	.header {
-		&__title,
+	.toolbar {
+		.header__title,
 		.button {
 			&:hover .iconic {
 				fill: white(1);
 			}
 		}
 
-		&__clear:hover {
+		.header__clear:hover {
 			color: white(1);
 		}
 
-		&__hostedwith:hover {
+		.header__hostedwith:hover {
 			background-color: black(0.3);
 		}
 	}

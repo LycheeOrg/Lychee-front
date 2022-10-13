@@ -2,25 +2,8 @@
 	display: flex;
 	flex-wrap: wrap;
 	align-content: flex-start;
-	padding: 50px 30px 33px 0;
-	width: calc(100% - 30px);
-	// We will set min-height from JavaScript, accounting for the
-	// height of the footer, which can vary.
-	//min-height: calc(100vh - 50px - 33px - <height of the footer>);
 	transition: margin-left 0.5s;
 	-webkit-overflow-scrolling: touch;
-	max-width: calc(100vw - 10px);
-	&::before {
-		content: "";
-		position: absolute;
-		left: 0;
-		width: 100%;
-		height: 1px;
-		background: white(0.02);
-	}
-	&--sidebar {
-		width: calc(100% - 380px);
-	}
 	// Animations -------------------------------------------------------------- //
 	&.contentZoomIn .album,
 	&.contentZoomIn .photo {
@@ -291,10 +274,6 @@
 // responsive web design for smaller screens
 @media only screen and (min-width: 320px) and (max-width: 567px) {
 	.content {
-		padding: 50px 0 33px 0;
-		width: 100%;
-		max-width: 100%;
-
 		.album,
 		.photo {
 			// 3 thumbnails per row
@@ -349,10 +328,6 @@
 
 @media only screen and (min-width: 568px) and (max-width: 639px) {
 	.content {
-		padding: 50px 0 33px 0;
-		width: 100%;
-		max-width: 100%;
-
 		.album,
 		.photo {
 			// 4 thumbnails per row
@@ -406,10 +381,6 @@
 
 @media only screen and (min-width: 640px) and (max-width: 768px) {
 	.content {
-		padding: 50px 0 33px 0;
-		width: 100%;
-		max-width: 100%;
-
 		.album,
 		.photo {
 			// 5 thumbnails per row
@@ -480,11 +451,6 @@
 		font-size: 16px;
 		font-weight: bold;
 	}
-}
-
-.leftMenu__open {
-	margin-left: 250px;
-	width: calc(100% - 280px);
 }
 
 // restrict hover features to devices that support it

@@ -283,7 +283,7 @@ const lychee = {
 
 	content: $(".content"),
 	imageview: $("#imageview"),
-	footer: $("#footer"),
+	footer: $("#lychee_footer"),
 
 	/** @type {Locale} */
 	locale: {},
@@ -356,8 +356,6 @@ lychee.aboutDialog = function () {
  * @returns {void}
  */
 lychee.init = function (isFirstInitialization = true) {
-	lychee.adjustContentHeight();
-
 	api.post(
 		"Session::init",
 		{},
@@ -474,7 +472,7 @@ lychee.initHtmlHeader = function () {
  */
 lychee.localizeStaticGuiElements = function () {
 	// Toolbars in the header
-	const tbPublic = document.querySelector("div.header__toolbar--public");
+	const tbPublic = document.querySelector("div#lychee_toolbar_public");
 	tbPublic.querySelector("a#button_signin").title = lychee.locale["SIGN_IN"];
 	const tbPublicSearch = tbPublic.querySelector("input.header__search");
 	if (tbPublicSearch instanceof HTMLInputElement) {
@@ -483,7 +481,7 @@ lychee.localizeStaticGuiElements = function () {
 	}
 	tbPublic.querySelector("a.button--map-albums").title = lychee.locale["DISPLAY_FULL_MAP"];
 
-	const tbAlbums = document.querySelector("div.header__toolbar--albums");
+	const tbAlbums = document.querySelector("div#lychee_toolbar_albums");
 	tbAlbums.querySelector("a#button_settings").title = lychee.locale["SETTINGS"];
 	const tbAlbumsSearch = tbAlbums.querySelector("input.header__search");
 	if (tbAlbumsSearch instanceof HTMLInputElement) {
@@ -493,7 +491,7 @@ lychee.localizeStaticGuiElements = function () {
 	tbAlbums.querySelector("a.button--map-albums").title = lychee.locale["DISPLAY_FULL_MAP"];
 	tbAlbums.querySelector("a.button_add").title = lychee.locale["ADD"];
 
-	const tbAlbum = document.querySelector("div.header__toolbar--album");
+	const tbAlbum = document.querySelector("div#lychee_toolbar_album");
 	tbAlbum.querySelector("a#button_back_home").title = lychee.locale["CLOSE_ALBUM"];
 	tbAlbum.querySelector("a#button_visibility_album").title = lychee.locale["VISIBILITY_ALBUM"];
 	tbAlbum.querySelector("a#button_sharing_album_users").title = lychee.locale["SHARING_ALBUM_USERS"];
@@ -508,7 +506,7 @@ lychee.localizeStaticGuiElements = function () {
 	tbAlbum.querySelector("a#button_fs_album_exit").title = lychee.locale["FULLSCREEN_EXIT"];
 	tbAlbum.querySelector("a.button_add").title = lychee.locale["ADD"];
 
-	const tbPhoto = document.querySelector("div.header__toolbar--photo");
+	const tbPhoto = document.querySelector("div#lychee_toolbar_photo");
 	tbPhoto.querySelector("a#button_back").title = lychee.locale["CLOSE_PHOTO"];
 	tbPhoto.querySelector("a#button_star").title = lychee.locale["STAR_PHOTO"];
 	tbPhoto.querySelector("a#button_visibility").title = lychee.locale["VISIBILITY_PHOTO"];
@@ -523,14 +521,14 @@ lychee.localizeStaticGuiElements = function () {
 	tbPhoto.querySelector("a#button_fs_exit").title = lychee.locale["FULLSCREEN_EXIT"];
 	tbPhoto.querySelector("a#button_more").title = lychee.locale["MORE"];
 
-	const tbMap = document.querySelector("div.header__toolbar--map");
+	const tbMap = document.querySelector("div#lychee_toolbar_map");
 	tbMap.querySelector("a#button_back_map").title = lychee.locale["CLOSE_MAP"];
 
-	const tbConfig = document.querySelector("div.header__toolbar--config");
+	const tbConfig = document.querySelector("div#lychee_toolbar_config");
 	tbConfig.querySelector("a#button_close_config").title = lychee.locale["CLOSE"];
 
 	// Sidebar
-	document.querySelector("div.sidebar__header h1").textContent = lychee.locale["PHOTO_ABOUT"];
+	document.querySelector("#lychee_sidebar_header h1").textContent = lychee.locale["PHOTO_ABOUT"];
 
 	// NSFW Warning Banner
 	/** @type {HTMLDivElement} */
@@ -538,7 +536,7 @@ lychee.localizeStaticGuiElements = function () {
 	nsfwBanner.innerHTML = lychee.nsfw_banner_override ? lychee.nsfw_banner_override : lychee.locale["NSFW_BANNER"];
 
 	// Footer
-	const footer = document.querySelector("div#footer");
+	const footer = document.querySelector("#lychee_footer");
 	footer.querySelector("p.home_copyright").textContent = lychee.footer_show_copyright
 		? sprintf(
 				lychee.locale["FOOTER_COPYRIGHT"],
@@ -1222,7 +1220,7 @@ lychee.setMode = function (mode) {
 		Mousetrap.unbind(["l"]).unbind(["k"]);
 
 		// The code searches by class, so remove the other instance.
-		$(".header__search, .header__clear", ".header__toolbar--public").hide();
+		$(".header__search, .header__clear", "#lychee_toolbar_public").hide();
 
 		if (!lychee.editor_enabled) {
 			$("#button_rotate_cwise").hide();
@@ -1230,11 +1228,11 @@ lychee.setMode = function (mode) {
 		}
 		return;
 	}
-	$(".header__search, .header__clear", ".header__toolbar--albums").hide();
+	$(".header__search, .header__clear", "#lychee_toolbar_albums").hide();
 	$("#button_rotate_cwise").hide();
 	$("#button_rotate_ccwise").hide();
 
-	$("#button_settings, .header__divider, .leftMenu").hide();
+	$("#button_settings, .header__divider, #lychee_left_menu_container").hide();
 
 	if (mode === "public") {
 		if (!bodyClasses.contains("mode-gallery")) {
@@ -1530,32 +1528,6 @@ lychee.footer_show = function () {
  */
 lychee.footer_hide = function () {
 	lychee.footer.addClass("hide_footer");
-};
-
-/**
- * Sets the height of the content area.
- *
- * Because the height of the footer can vary, we need to set some
- * dimensions dynamically, at startup.
- *
- * @returns {void}
- */
-lychee.adjustContentHeight = function () {
-	if (lychee.footer.length > 0) {
-		lychee.content.css(
-			"min-height",
-			"calc(100vh - " +
-				lychee.content.css("padding-top") +
-				" - " +
-				lychee.content.css("padding-bottom") +
-				" - " +
-				lychee.footer.outerHeight() +
-				"px)"
-		);
-		$("#container").css("padding-bottom", lychee.footer.outerHeight());
-	} else {
-		lychee.content.css("min-height", "calc(100vh - " + lychee.content.css("padding-top") + " - " + lychee.content.css("padding-bottom") + ")");
-	}
 };
 
 /**

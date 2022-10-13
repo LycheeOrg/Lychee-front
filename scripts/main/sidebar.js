@@ -7,7 +7,7 @@
  */
 let sidebar = {
 	/** @type {jQuery} */
-	_dom: $(".sidebar"),
+	_dom: $("#lychee_sidebar_container"),
 	types: {
 		DEFAULT: 0,
 		TAGS: 1,
@@ -135,7 +135,6 @@ sidebar.keepSidebarVisible = function () {
 sidebar.toggle = function (is_user_initiated) {
 	if (visible.sidebar() || visible.sidebarbutton()) {
 		header.dom(".button--info").toggleClass("active");
-		lychee.content.toggleClass("content--sidebar");
 		lychee.imageview.toggleClass("image--sidebar");
 		setTimeout(() => view.album.content.justify(), 0);
 		sidebar.dom().toggleClass("active");

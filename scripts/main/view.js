@@ -750,7 +750,7 @@ view.album = {
 			const structure = sidebar.createStructure.album(album.json);
 			const html = sidebar.render(structure);
 
-			sidebar.dom(".sidebar__wrapper").html(html);
+			sidebar.dom("#lychee_sidebar_content").html(html);
 			sidebar.bind();
 		}
 	},
@@ -784,14 +784,6 @@ view.photo = {
 		header.setMode("photo");
 
 		if (!visible.photo()) {
-			// Make body not scrollable
-			// use bodyScrollLock package to enable locking on iOS
-			// Simple overflow: hidden not working on iOS Safari
-			// Only the info pane needs scrolling
-			// Touch event for swiping of photo still work
-
-			scrollLock.disablePageScroll($(".sidebar__wrapper").get());
-
 			// Fullscreen
 			let timeout = null;
 			$(document).bind("mousemove", function () {
@@ -820,9 +812,6 @@ view.photo = {
 
 		lychee.content.removeClass("view");
 		header.setMode("album");
-
-		// Make body scrollable
-		scrollLock.enablePageScroll($(".sidebar__wrapper").get());
 
 		// Disable Fullscreen
 		$(document).unbind("mousemove");
@@ -1003,7 +992,7 @@ view.photo = {
 		const html = sidebar.render(structure);
 		const has_location = !!(photo.json.latitude && photo.json.longitude);
 
-		sidebar.dom(".sidebar__wrapper").html(html);
+		sidebar.dom("#lychee_sidebar_content").html(html);
 		sidebar.bind();
 
 		if (has_location && lychee.map_display) {

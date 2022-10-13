@@ -32,10 +32,7 @@ loadingBar.show = function (status, errorText) {
 		if (errorText) errorText = errorText.replace("<br>", "");
 		if (!errorText) errorText = lychee.locale["ERROR_TEXT"];
 
-		// Move header down
-		if (visible.header()) header.dom().addClass("header--error");
-
-		// Also move down the dark background
+		// Move down the dark background
 		if (basicModal.isVisible()) {
 			$(".basicModalContainer").addClass("basicModalContainer--error");
 			$(".basicModal").addClass("basicModal--error");
@@ -44,10 +41,9 @@ loadingBar.show = function (status, errorText) {
 		// Modify loading
 		loadingBar
 			.dom()
-			.removeClass("loading uploading error success")
+			.removeClass()
 			.html(`<h1>` + lychee.locale["ERROR"] + `: <span>${errorText}</span></h1>`)
-			.addClass(status)
-			.show();
+			.addClass(status);
 
 		// Set timeout
 		clearTimeout(loadingBar._timeout);
@@ -64,10 +60,7 @@ loadingBar.show = function (status, errorText) {
 		if (errorText) errorText = errorText.replace("<br>", "");
 		if (!errorText) errorText = lychee.locale["ERROR_TEXT"];
 
-		// Move header down
-		if (visible.header()) header.dom().addClass("header--error");
-
-		// Also move down the dark background
+		// Move down the dark background
 		if (basicModal.isVisible()) {
 			$(".basicModalContainer").addClass("basicModalContainer--error");
 			$(".basicModal").addClass("basicModal--error");
@@ -76,10 +69,9 @@ loadingBar.show = function (status, errorText) {
 		// Modify loading
 		loadingBar
 			.dom()
-			.removeClass("loading uploading error success")
+			.removeClass()
 			.html(`<h1>` + lychee.locale["SUCCESS"] + `: <span>${errorText}</span></h1>`)
-			.addClass(status)
-			.show();
+			.addClass(status);
 
 		// Set timeout
 		clearTimeout(loadingBar._timeout);
@@ -95,11 +87,8 @@ loadingBar.show = function (status, errorText) {
 		// Set timeout
 		clearTimeout(loadingBar._timeout);
 		loadingBar._timeout = setTimeout(() => {
-			// Move header down
-			if (visible.header()) header.dom().addClass("header--loading");
-
 			// Modify loading
-			loadingBar.dom().removeClass("loading uploading error").html("").addClass("loading").show();
+			loadingBar.dom().removeClass().html("").addClass("loading");
 		}, 1000);
 	}
 };
@@ -113,14 +102,12 @@ loadingBar.hide = function (force) {
 		// Remove status
 		loadingBar.status = null;
 
-		// Move header up
-		header.dom().removeClass("header--error header--loading");
 		// Also move up the dark background
 		$(".basicModalContainer").removeClass("basicModalContainer--error");
 		$(".basicModal").removeClass("basicModal--error");
 
 		// Set timeout
 		clearTimeout(loadingBar._timeout);
-		setTimeout(() => loadingBar.dom().hide(), 300);
+		setTimeout(() => loadingBar.dom().removeClass(), 300);
 	}
 };

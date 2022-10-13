@@ -1,5 +1,5 @@
 #imageview {
-	position: fixed;
+	position: absolute;
 	display: none;
 	top: 0;
 	left: 0;
@@ -84,7 +84,7 @@
 
 	// Previous/Next Buttons -------------------------------------------------------------- //
 	.arrow_wrapper {
-		position: fixed;
+		position: absolute;
 		width: 15%;
 		height: calc(100% - 60px);
 		top: 60px;
@@ -98,7 +98,7 @@
 		}
 
 		a {
-			position: fixed;
+			position: absolute;
 			top: 50%;
 			margin: -19px 0 0;
 			padding: 8px 12px;

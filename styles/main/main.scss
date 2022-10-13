@@ -53,8 +53,10 @@ $timingBounce: cubic-bezier(0.51, 0.92, 0.24, 1.15);
 
 html,
 body {
-	min-height: 100vh;
+	width: 100%;
+	height: 100%;
 	position: relative;
+	overflow: clip;
 }
 
 body {
@@ -64,19 +66,6 @@ body {
 	-webkit-font-smoothing: antialiased;
 	-moz-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-}
-
-div#container {
-	// If there is a footer, we will set padding-bottom to its height
-	// using JavaScript since the height of the footer can vary.
-	position: relative;
-}
-
-body.mode-frame,
-body.mode-none {
-	div#container {
-		display: none;
-	}
 }
 
 input,
@@ -102,6 +91,8 @@ textarea {
 
 // Files ------------------------------------------------------------------- //
 @import "animations";
+@import "application_container";
+@import "container";
 @import "content";
 @import "frame";
 @import "leftMenu";
@@ -131,3 +122,5 @@ textarea {
 @import "footer";
 @import "social-footer";
 @import "tv";
+@import "view_container";
+@import "workbench_container";

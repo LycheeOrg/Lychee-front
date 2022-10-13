@@ -1,11 +1,13 @@
-#footer {
-	z-index: 3;
-	left: 0;
-	right: 0;
-	bottom: 0;
+/*
+ * The footer.
+ * The footer is a child of the workbench and shares the vertical space of the
+ * workbench with the view container.
+ * The workbench uses `dispay: flex` thus making the footer a flex item.
+ * The footer always has its natural height.
+ */
+#lychee_footer {
 	text-align: center;
 	padding: 5px 0 5px 0;
-	position: absolute;
 	background: $colorAppBg;
 	transition: color 0.3s, opacity 0.3s ease-out, transform 0.3s ease-out, box-shadow 0.3s, margin-left 0.5s;
 
@@ -40,7 +42,7 @@
 
 body.mode-frame,
 body.mode-none {
-	div#footer {
+	div#lychee_footer {
 		display: none;
 	}
 }
