@@ -135,4 +135,8 @@
 	&.full {
 		cursor: none;
 	}
+
+	&.active {
+		display: unset;
+	}
 }

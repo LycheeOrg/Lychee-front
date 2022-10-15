@@ -123,8 +123,9 @@ mapview.open = function (albumID = null) {
 		return;
 	}
 
-	lychee.animate($("#mapview"), "fadeIn");
-	$("#mapview").show();
+	const mapContainer = $("#lychee_map_container");
+	lychee.animate(mapContainer, "fadeIn");
+	mapContainer.addClass("active");
 	header.setMode("map");
 
 	mapview.albumID = albumID;
@@ -141,7 +142,7 @@ mapview.open = function (albumID = null) {
 		});
 
 		// Set initial view to (0,0)
-		mapview.map = L.map("leaflet_map_full").setView([0.0, 0.0], 13);
+		mapview.map = L.map("lychee_map_container").setView([0.0, 0.0], 13);
 
 		L.tileLayer(map_provider_layer_attribution[lychee.map_provider].layer, {
 			attribution: map_provider_layer_attribution[lychee.map_provider].attribution,
@@ -367,8 +368,18 @@ mapview.close = function () {
 	// If map functionality is disabled -> do nothing
 	if (!lychee.map_display) return;
 
-	lychee.animate($("#mapview"), "fadeOut");
-	$("#mapview").hide();
+	const mapContainer = $("#lychee_map_container");
+	lychee.animate(mapContainer, "fadeOut");
+	// TODO: Reconsider the line below
+	// The line below is inconsistent to the corresponding code for
+	// the photo view (cp. `view.photo.hide()`).
+	// Here, we remove the `active` class immediately, in `view.photo.hide()`
+	// we remove that class after the animation has ended.
+	mapContainer.removeClass("active");
+	// TODO: Fix the line below
+	// The map view can also be opened from a single photo and probably a
+	// users expect to go back to the photo if they close the photo.
+	// Currently, Lychee jumps back to the album of that photo.
 	header.setMode("album");
 
 	// Make album focusable

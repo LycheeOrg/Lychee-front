@@ -24,7 +24,7 @@ visible.photo = function () {
 
 /** @returns {boolean} */
 visible.mapview = function () {
-	return $("#mapview.fadeIn").length > 0;
+	return $("#lychee_map_container.fadeIn").length > 0;
 };
 
 /** @returns {boolean} */
