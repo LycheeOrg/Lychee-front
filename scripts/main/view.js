@@ -827,6 +827,7 @@ view.photo = {
 			}
 
 			lychee.animate(lychee.imageview, "fadeIn");
+			lychee.imageview.addClass("active");
 		}
 	},
 
@@ -847,8 +848,13 @@ view.photo = {
 
 		// Hide Photo
 		lychee.animate(lychee.imageview, "fadeOut");
+		// TODO: Reconsider the lines below
+		// The lines below are inconsistent to the corresponding code for
+		// the mapview (cp. `mapview.close()`).
+		// Here, we remove the `active` class after the animation has ended,
+		// in `mapview.close()` we remove that class immediately.
 		setTimeout(() => {
-			lychee.imageview.hide();
+			lychee.imageview.removeClass("active");
 			view.album.sidebar();
 		}, 300);
 	},

@@ -10,13 +10,13 @@
 		color: #ffffff;
 	}
 
-	.content .photo:focus {
+	#lychee_view_content .photo:focus {
 		outline-style: solid;
 		outline-color: #ffffff;
 		outline-width: 10px;
 	}
 
-	.content .album:focus {
+	#lychee_view_content .album:focus {
 		outline-width: 0;
 	}
 

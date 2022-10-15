@@ -113,7 +113,7 @@ search.find = function (term) {
 				: build.divider(albums_divider) + albumsData + build.divider(photos_divider) + photosData;
 
 		$(".no_content").remove();
-		lychee.animate($(".content"), "contentZoomOut");
+		lychee.animate(lychee.content, "contentZoomOut");
 
 		setTimeout(() => {
 			if (visible.photo()) view.photo.hide();

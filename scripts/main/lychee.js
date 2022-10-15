@@ -281,7 +281,7 @@ const lychee = {
 	dropbox: false,
 	dropboxKey: "",
 
-	content: $(".content"),
+	content: $("#lychee_view_content"),
 	imageview: $("#imageview"),
 	footer: $("#lychee_footer"),
 

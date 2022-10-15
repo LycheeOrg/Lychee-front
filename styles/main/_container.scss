@@ -117,3 +117,22 @@
 	width: 100%;
 	height: auto;
 }
+
+/**
+ * An overlay container does not participate in the layout, but is absolutely
+ * positioned and covers its entire parent.
+ */
+.overlay-container {
+	position: absolute;
+	display: none;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: $colorAppBgFullMode;
+	transition: background-color 0.3s;
+
+	&.full {
+		cursor: none;
+	}
+}

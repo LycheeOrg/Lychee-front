@@ -44,7 +44,6 @@ photo.load = function (photoID, albumID, autoplay) {
 
 		view.photo.show();
 		view.photo.init(autoplay);
-		lychee.imageview.show();
 
 		if (!lychee.hide_content_during_imgview) {
 			setTimeout(() => {

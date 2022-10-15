@@ -1,24 +1,8 @@
-#mapview {
-	position: absolute;
-	display: none;
-	top: 0;
-	left: 0;
-	width: 100%;
+#leaflet_map_full {
+	top: 50px;
 	height: 100%;
-	background-color: $colorAppBg;
-	transition: background-color 0.3s;
-
-	// Modes -------------------------------------------------------------- //
-
-	&.full {
-		cursor: none;
-	}
-	#leaflet_map_full {
-		top: 50px;
-		height: 100%;
-		width: 100%;
-		float: left;
-	}
+	width: 100%;
+	float: left;
 }
 
 .leaflet-marker-photo img {
@@ -46,9 +30,9 @@
 }
 
 .leaflet-popup-content h1 {
-	top: 0px;
+	top: 0;
 	position: relative;
-	margin: 12px 0px 5px 15px;
+	margin: 12px 0 5px 15px;
 	font-size: 16px;
 	font-weight: 700;
 	text-shadow: 0 1px 3px rgba(255, 255, 255, 0.4);
