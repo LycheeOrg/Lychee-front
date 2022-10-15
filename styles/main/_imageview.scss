@@ -19,13 +19,13 @@
 	#image,
 	#livephoto {
 		position: absolute;
-		top: 60px;
+		top: 30px;
 		right: 30px;
 		bottom: 30px;
 		left: 30px;
 		margin: auto;
 		max-width: calc(100% - 60px);
-		max-height: calc(100% - 90px);
+		max-height: calc(100% - 60px);
 		width: auto;
 		height: auto;
 		transition: top 0.3s, right 0.3s, bottom 0.3s, left 0.3s, max-width 0.3s, max-height 0.3s;
@@ -46,12 +46,6 @@
 		left: 0;
 		max-width: 100%;
 		max-height: 100%;
-	}
-
-	&.image--sidebar #image,
-	&.image--sidebar #livephoto {
-		right: 380px;
-		max-width: calc(100% - 410px);
 	}
 
 	#image_overlay {
@@ -129,18 +123,6 @@
 		}
 	}
 
-	&.image--sidebar .arrow_wrapper {
-		&--next {
-			right: 350px;
-		}
-
-		a {
-			&#next {
-				right: 349px;
-			}
-		}
-	}
-
 	// We must not allow the wide next/prev arrow wrappers to cover the
 	// on-screen buttons in videos.  This is imperfect as now the video
 	// covers part of the background image.
@@ -177,24 +159,6 @@
 			max-height: 100%;
 		}
 
-		&.image--sidebar {
-			#image,
-			#livephoto {
-				right: 0;
-				max-width: 100%;
-			}
-
-			.arrow_wrapper {
-				&--next {
-					right: 0;
-				}
-
-				a#next {
-					right: -1px;
-				}
-			}
-		}
-
 		#image_overlay {
 			h1 {
 				font-size: 14px;
@@ -226,26 +190,6 @@
 			left: 0;
 			max-width: 100%;
 			max-height: 100%;
-		}
-
-		&.image--sidebar {
-			#image,
-			#livephoto {
-				top: 50px;
-				right: 280px;
-				max-width: calc(100% - 280px);
-				max-height: calc(100% - 50px);
-			}
-
-			.arrow_wrapper {
-				&--next {
-					right: 280px;
-				}
-
-				a#next {
-					right: 279px;
-				}
-			}
 		}
 
 		#image_overlay {
