@@ -2,7 +2,41 @@
  * @description Responsible to reflect data changes to the UI.
  */
 
-const view = {};
+const view = {
+	/** @type {ResizeObserver} */
+	resizeObserver: (function () {
+		/**
+		 * @type {HTMLDivElement}
+		 */
+		const viewContainer = document.getElementById("lychee_view_container");
+
+		const resizeHandler = (function () {
+			let viewContainerWidth = 0;
+
+			return function () {
+				// Avoid infinite loops
+				// The layout method `view.album.content.justify()` below will
+				// change the height of the container as the height depends on
+				// the amount of content.
+				// Hence, `view.album.content.justify()` re-triggers the
+				// event handler.
+				// However, we are only interested into changes of the width,
+				// which is independent of content but solely depends on
+				// window size.
+				// We bail out early if the width has not changed since last
+				// time.
+				if (viewContainer.clientWidth === viewContainerWidth) return;
+				viewContainerWidth = viewContainer.clientWidth;
+				view.album.content.justify();
+			};
+		})();
+
+		const observer = new ResizeObserver(resizeHandler);
+		observer.observe(viewContainer);
+
+		return observer;
+	})(),
+};
 
 view.albums = {
 	/** @returns {void} */
@@ -510,11 +544,7 @@ view.album = {
 					// is always visible and always has the correct width
 					// even for opened sidebars.
 					// TODO: Unconditionally use the width of the view container and remove this alternative width calculation after https://github.com/LycheeOrg/Lychee-front/pull/335 has been merged
-					containerWidth =
-						$(window).width() -
-						parseFloat(jqJustifiedLayout.css("margin-left")) -
-						parseFloat(jqJustifiedLayout.css("margin-right")) -
-						parseFloat($(".content").css("padding-right"));
+					containerWidth = $(window).width() - 2 * parseFloat(jqJustifiedLayout.css("margin"));
 				}
 				/** @type {number[]} */
 				const ratio = photos.map(function (_photo) {
@@ -580,11 +610,7 @@ view.album = {
 				let containerWidth = parseFloat(jqUnjustifiedLayout.width());
 				if (containerWidth === 0) {
 					// Triggered on Reload in photo view.
-					containerWidth =
-						$(window).width() -
-						parseFloat(jqUnjustifiedLayout.css("margin-left")) -
-						parseFloat(jqUnjustifiedLayout.css("margin-right")) -
-						parseFloat($(".content").css("padding-right"));
+					containerWidth = $(window).width() - 2 * parseFloat(jqUnjustifiedLayout.css("margin"));
 				}
 				/**
 				 * An album listing has potentially hundreds of photos, hence

@@ -2,7 +2,6 @@
 	display: flex;
 	flex-wrap: wrap;
 	align-content: flex-start;
-	transition: margin-left 0.5s;
 	-webkit-overflow-scrolling: touch;
 	// Animations -------------------------------------------------------------- //
 	&.contentZoomIn .album,

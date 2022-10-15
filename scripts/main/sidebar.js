@@ -136,11 +136,9 @@ sidebar.toggle = function (is_user_initiated) {
 	if (visible.sidebar() || visible.sidebarbutton()) {
 		header.dom(".button--info").toggleClass("active");
 		lychee.imageview.toggleClass("image--sidebar");
-		setTimeout(() => view.album.content.justify(), 0);
 		sidebar.dom().toggleClass("active");
-		if (photo.updateSizeLivePhotoDuringAnimation) photo.updateSizeLivePhotoDuringAnimation();
-
 		if (is_user_initiated) sessionStorage.setItem("keepSidebarVisible", visible.sidebar() ? "true" : "false");
+		if (photo.updateSizeLivePhotoDuringAnimation) photo.updateSizeLivePhotoDuringAnimation();
 	}
 };
 

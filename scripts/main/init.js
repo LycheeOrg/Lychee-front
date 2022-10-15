@@ -434,7 +434,6 @@ $(document).ready(function () {
 	$(window)
 		// resize
 		.on("resize", function () {
-			view.album.content.justify();
 			if (visible.photo()) view.photo.onresize();
 			frame.resize();
 		})
