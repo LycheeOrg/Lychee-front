@@ -121,7 +121,7 @@ view.albums = {
 
 			if (smartData === "" && tagAlbumsData === "" && albumsData === "" && sharedData === "") {
 				lychee.content.html("");
-				$("body").append(build.no_content("eye"));
+				lychee.content.append(build.no_content("eye"));
 			} else {
 				lychee.content.html(smartData + tagAlbumsData + albumsData + sharedData);
 			}

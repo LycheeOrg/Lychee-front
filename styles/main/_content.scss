@@ -449,7 +449,7 @@
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	padding-top: 20px;
+	padding-top: 20px; // TODO: Why 20px?
 	color: white(0.35);
 	text-align: center;
 	transform: translateX(-50%) translateY(-50%);

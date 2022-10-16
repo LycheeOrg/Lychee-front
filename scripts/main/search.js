@@ -124,7 +124,7 @@ search.find = function (term) {
 
 			if (html === "") {
 				lychee.content.html("");
-				$("body").append(build.no_content("magnifying-glass"));
+				lychee.content.append(build.no_content("magnifying-glass"));
 			} else {
 				lychee.content.html(html);
 				// Here we exploit the layout method of an album although
