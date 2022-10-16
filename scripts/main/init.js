@@ -408,18 +408,17 @@ $(document).ready(function () {
 	$("#sensitive_warning").on("click", view.album.nsfw_warning.next);
 
 	/**
-	 * @param {number} scrollPos
 	 * @returns {void}
 	 */
-	const rememberScrollPage = function (scrollPos) {
+	const rememberScrollPage = function () {
 		if ((visible.albums() && !visible.search()) || visible.album()) {
 			let urls = JSON.parse(localStorage.getItem("scroll"));
 			if (urls == null || urls.length < 1) {
 				urls = {};
 			}
 
-			let urlWindow = window.location.href;
-			let urlScroll = scrollPos;
+			const urlWindow = window.location.href;
+			const urlScroll = $("#lychee_view_container").scrollTop();
 
 			urls[urlWindow] = urlScroll;
 
@@ -431,17 +430,14 @@ $(document).ready(function () {
 		}
 	};
 
-	$(window)
-		// resize
-		.on("resize", function () {
-			if (visible.photo()) view.photo.onresize();
-			frame.resize();
-		})
-		// remember scroll positions
-		.on("scroll", function () {
-			let topScroll = $(window).scrollTop();
-			rememberScrollPage(topScroll);
-		});
+	$(window).on("resize", function () {
+		if (visible.photo()) view.photo.onresize();
+		frame.resize();
+	});
+
+	$("#lychee_view_container").on("scroll", function () {
+		rememberScrollPage();
+	});
 
 	// Init
 	lychee.init();

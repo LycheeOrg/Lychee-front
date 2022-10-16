@@ -127,11 +127,7 @@ view.albums = {
 			}
 
 			album.apply_nsfw_filter();
-
-			// Restore scroll position
-			const urls = JSON.parse(localStorage.getItem("scroll"));
-			const urlWindow = window.location.href;
-			$(window).scrollTop(urls != null && urls[urlWindow] ? urls[urlWindow] : 0);
+			view.album.content.restoreScroll();
 		},
 
 		/**
@@ -285,7 +281,6 @@ view.album = {
 
 			setTimeout(function () {
 				view.album.content.justify();
-				view.album.content.restoreScroll();
 			}, 0);
 		},
 
@@ -294,7 +289,7 @@ view.album = {
 			// Restore scroll position
 			const urls = JSON.parse(localStorage.getItem("scroll"));
 			const urlWindow = window.location.href;
-			$(window).scrollTop(urls != null && urls[urlWindow] ? urls[urlWindow] : 0);
+			$("#lychee_view_container").scrollTop(urls != null && urls[urlWindow] ? urls[urlWindow] : 0);
 		},
 
 		/**
@@ -666,6 +661,7 @@ view.album = {
 				// Show updated layout
 				jqUnjustifiedLayout.removeClass("laying-out");
 			}
+			view.album.content.restoreScroll();
 		},
 	},
 

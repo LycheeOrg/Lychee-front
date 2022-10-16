@@ -136,7 +136,7 @@ search.find = function (term) {
 				setTimeout(function () {
 					view.album.content.justify();
 					lychee.animate(lychee.content, "contentZoomIn");
-					$(window).scrollTop(0);
+					$("#lychee_view_container").scrollTop(0);
 				}, 0);
 			}
 			lychee.setMetaData(lychee.locale["SEARCH_RESULTS"]);
