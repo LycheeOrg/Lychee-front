@@ -221,9 +221,14 @@ view.album = {
 
 			if (photosData !== "") {
 				if (lychee.layout === 1) {
-					photosData = '<div class="justified-layout">' + photosData + "</div>";
+					// The CSS class 'relayouting' prevents the DIV from being
+					// rendered.
+					// The CSS class will eventually be removed by the
+					// layout routine `view.album.content.justify` after all
+					// child nodes have been arranged.
+					photosData = '<div class="justified-layout relayouting">' + photosData + "</div>";
 				} else if (lychee.layout === 2) {
-					photosData = '<div class="unjustified-layout">' + photosData + "</div>";
+					photosData = '<div class="unjustified-layout relayouting">' + photosData + "</div>";
 				}
 			}
 
@@ -364,7 +369,7 @@ view.album = {
 				.attr("data-srcset", srcset)
 				.addClass("lazyload");
 
-			view.album.content.justify();
+			setTimeout(() => view.album.content.justify(), 0);
 		},
 
 		/**
@@ -407,7 +412,7 @@ view.album = {
 								lychee.content.find(".divider").remove();
 							}
 							if (justify) {
-								view.album.content.justify();
+								setTimeout(() => view.album.content.justify(), 0);
 							}
 						}
 					}
@@ -462,7 +467,7 @@ view.album = {
 		 */
 		setPhotoDataSource: function (photoDataSource) {
 			view.album.content.photoDataSource = photoDataSource;
-			view.album.content.justify();
+			setTimeout(() => view.album.content.justify(), 0);
 		},
 
 		/**
@@ -526,6 +531,12 @@ view.album = {
 					containerPadding: 0,
 					targetRowHeight: photoDefaultHeight,
 				});
+				// Temporarily hide the container such that not each
+				// modification of every photo triggers a UI update.
+				jqJustifiedLayout.addClass("relayouting");
+				// We must give the UI worker a chance to apply the class
+				// above, hence the remaining part of this method must be
+				// done asynchronously.
 				// We must set the height of the `justified-layout` box
 				// explicitly, because all photos inside are positioned
 				// absolutely and hence do not contribute to the height of the
@@ -551,6 +562,8 @@ view.album = {
 						imgs[0].setAttribute("sizes", layoutGeometry.boxes[i].width + "px");
 					}
 				});
+				// Show updated layout
+				jqJustifiedLayout.removeClass("relayouting");
 			} else if (lychee.layout === 2) {
 				/** @type {jQuery} */
 				const jqUnjustifiedLayout = $(".unjustified-layout");
@@ -571,6 +584,9 @@ view.album = {
 				const jqPhotoElements = $(".unjustified-layout > div.photo");
 				const photoMaxHeight = parseFloat(jqPhotoElements.css("max-height"));
 				const photoMargin = parseFloat(jqPhotoElements.css("margin-right"));
+				// Temporarily hide the container such that not each
+				// modification of every photo triggers a UI update.
+				jqUnjustifiedLayout.addClass("relayouting");
 				jqPhotoElements.each(function (i) {
 					if (!photos[i]) {
 						// Race condition in search.find -- window content
@@ -608,6 +624,8 @@ view.album = {
 						imgs[0].setAttribute("sizes", width + "px");
 					}
 				});
+				// Show updated layout
+				jqUnjustifiedLayout.removeClass("relayouting");
 			}
 		},
 	},
