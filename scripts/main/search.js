@@ -133,7 +133,7 @@ search.find = function (term) {
 				// `view.photos` (note the plural form) which takes care of
 				// all photo listings independent of the surrounding "thing"
 				// (i.e. regular album, tag album, search result)
-				view.album.content.justify(search.json.photos);
+				view.album.content.setPhotoDataSource(search);
 				lychee.animate(lychee.content, "contentZoomIn");
 			}
 			lychee.setTitle(lychee.locale["SEARCH_RESULTS"], false);

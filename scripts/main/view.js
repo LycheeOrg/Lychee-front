@@ -195,6 +195,11 @@ view.album = {
 	},
 
 	content: {
+		/**
+		 * @type {?{json: ?{photos: Photo[]}}}
+		 */
+		photoDataSource: null,
+
 		/** @returns {void} */
 		init: function () {
 			let photosData = "";
@@ -235,7 +240,7 @@ view.album = {
 			lychee.content.html(html);
 			album.apply_nsfw_filter();
 
-			view.album.content.justify(album.json ? album.json.photos : []);
+			view.album.content.setPhotoDataSource(album);
 
 			view.album.content.restoreScroll();
 		},
@@ -359,7 +364,7 @@ view.album = {
 				.attr("data-srcset", srcset)
 				.addClass("lazyload");
 
-			view.album.content.justify(album.json ? album.json.photos : []);
+			view.album.content.justify();
 		},
 
 		/**
@@ -402,7 +407,7 @@ view.album = {
 								lychee.content.find(".divider").remove();
 							}
 							if (justify) {
-								view.album.content.justify(album.json ? album.json.photos : []);
+								view.album.content.justify();
 							}
 						}
 					}
@@ -441,6 +446,26 @@ view.album = {
 		},
 
 		/**
+		 * Attaches a datasource to the photo view.
+		 *
+		 * This frees us from re-determining the current data source every
+		 * time the layout needs to be updated.
+		 * The data source is an object with an attribute `json` which in
+		 * turn may hold an array `photos` of `Photo`.
+		 * Currently, this can either be {@link album} or {@link search}.
+		 * Note, we deliberately do not take a direct reference to the JSON
+		 * object ot the array of photos such that we do not accidentally
+		 * keep a pointer on an outdated array of photos when {@link album} or
+		 * {@link search} gets cleared.
+		 *
+		 * @param {?{json: ?{photos: Photo[]}}} photoDataSource
+		 */
+		setPhotoDataSource: function (photoDataSource) {
+			view.album.content.photoDataSource = photoDataSource;
+			view.album.content.justify();
+		},
+
+		/**
 		 * Lays out the photos inside an album or a search result.
 		 *
 		 * This method is a misnomer, because it does not necessarily
@@ -451,12 +476,16 @@ view.album = {
 		 * Hence, this method would better not be part of `view.album.content`,
 		 * because it is not exclusively used for an album.
 		 *
-		 * @param {Photo[]} photos - the photos to be laid out
-		 *
 		 * @returns {void}
 		 */
-		justify: function (photos) {
-			if (photos.length === 0) return;
+		justify: function () {
+			const photoDS = view.album.content.photoDataSource;
+			if (photoDS === null || photoDS.json === null || photoDS.json.photos.length === 0) return;
+			/**
+			 * @type {Photo[]}
+			 */
+			const photos = photoDS.json.photos;
+
 			if (lychee.layout === 1) {
 				let containerWidth = parseFloat($(".justified-layout").width());
 				if (containerWidth === 0) {
@@ -491,7 +520,10 @@ view.album = {
 					// },
 					targetRowHeight: parseFloat($(".photo").css("--lychee-default-height")),
 				});
-				// if (lychee.rights.is_admin) console.log(layoutGeometry);
+				// We must set the height of the `justified-layout` box
+				// explicitly, because all photos inside are positioned
+				// absolutely and hence do not contribute to the height of the
+				// `justified-layout` box automatically.
 				$(".justified-layout").css("height", layoutGeometry.containerHeight + "px");
 				$(".justified-layout > div").each(function (i) {
 					if (!layoutGeometry.boxes[i]) {
