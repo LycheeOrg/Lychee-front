@@ -171,8 +171,6 @@ header.show = function () {
 	header.dom().removeClass("hidden");
 
 	tabindex.restoreSettings(header.dom());
-
-	photo.updateSizeLivePhotoDuringAnimation();
 };
 
 /**
@@ -193,8 +191,6 @@ header.hide = function () {
 
 		lychee.imageview.addClass("full");
 		header.dom().addClass("hidden");
-
-		photo.updateSizeLivePhotoDuringAnimation();
 	}
 };
 

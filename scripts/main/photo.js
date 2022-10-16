@@ -207,26 +207,6 @@ photo.preloadNextPrev = function (photoID) {
 };
 
 /**
- * @param {number} [animationDuration=300]
- * @param {number} [pauseBetweenUpdated=10]
- * @returns {void}
- */
-photo.updateSizeLivePhotoDuringAnimation = function (animationDuration = 300, pauseBetweenUpdated = 10) {
-	// For the LivePhotoKit, we need to call the updateSize manually
-	// during CSS animations
-	//
-	const interval = setInterval(function () {
-		if (photo.isLivePhotoInitialized()) {
-			photo.livePhotosObject.updateSize();
-		}
-	}, pauseBetweenUpdated);
-
-	setTimeout(function () {
-		clearInterval(interval);
-	}, animationDuration);
-};
-
-/**
  * @param {boolean} animate
  * @returns {void}
  */

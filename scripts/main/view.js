@@ -28,6 +28,9 @@ const view = {
 				if (viewContainer.clientWidth === viewContainerWidth) return;
 				viewContainerWidth = viewContainer.clientWidth;
 				view.album.content.justify();
+				if (photo.isLivePhotoInitialized()) {
+					photo.livePhotosObject.updateSize();
+				}
 			};
 		})();
 
