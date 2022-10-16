@@ -210,21 +210,21 @@ view.album = {
 		/** @returns {void} */
 		init: function () {
 			if (!lychee.nsfw_warning) {
-				$("#sensitive_warning").hide();
+				$("#sensitive_warning").removeClass("active");
 				return;
 			}
 
 			if (album.json.is_nsfw && !lychee.nsfw_unlocked_albums.includes(album.json.id)) {
-				$("#sensitive_warning").show();
+				$("#sensitive_warning").addClass("active");
 			} else {
-				$("#sensitive_warning").hide();
+				$("#sensitive_warning").removeClass("active");
 			}
 		},
 
 		/** @returns {void} */
 		next: function () {
 			lychee.nsfw_unlocked_albums.push(album.json.id);
-			$("#sensitive_warning").hide();
+			$("#sensitive_warning").removeClass("active");
 		},
 	},
 

@@ -532,7 +532,7 @@ lychee.localizeStaticGuiElements = function () {
 
 	// NSFW Warning Banner
 	/** @type {HTMLDivElement} */
-	const nsfwBanner = document.querySelector("div#sensitive_warning");
+	const nsfwBanner = document.querySelector("#sensitive_warning");
 	nsfwBanner.innerHTML = lychee.nsfw_banner_override ? lychee.nsfw_banner_override : lychee.locale["NSFW_BANNER"];
 
 	// Footer
@@ -1056,7 +1056,7 @@ lychee.load = function (autoplay = true) {
 			}
 			if (visible.mapview()) mapview.close();
 			if (visible.sidebar() && (album.isSmartID(albumID) || album.isSearchID(albumID))) sidebar.toggle(false);
-			$("#sensitive_warning").hide();
+			$("#sensitive_warning").removeClass("active");
 			if (album.json && albumID === album.json.id) {
 				if (album.isSearchID(albumID)) {
 					// We are probably coming back to the search results from
@@ -1120,7 +1120,7 @@ lychee.load = function (autoplay = true) {
 			tabindex.makeUnfocusable(lychee.imageview);
 		}
 		if (visible.mapview()) mapview.close();
-		$("#sensitive_warning").hide();
+		$("#sensitive_warning").removeClass("active");
 		lychee.content.show();
 		lychee.footer_show();
 		albums.load();
