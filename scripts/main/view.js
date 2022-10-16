@@ -487,13 +487,15 @@ view.album = {
 			const photos = photoDS.json.photos;
 
 			if (lychee.layout === 1) {
-				let containerWidth = parseFloat($(".justified-layout").width());
+				/** @type {jQuery} */
+				const jqJustifiedLayout = $(".justified-layout");
+				let containerWidth = parseFloat(jqJustifiedLayout.width());
 				if (containerWidth === 0) {
 					// Triggered on Reload in photo view.
 					containerWidth =
 						$(window).width() -
-						parseFloat($(".justified-layout").css("margin-left")) -
-						parseFloat($(".justified-layout").css("margin-right")) -
+						parseFloat(jqJustifiedLayout.css("margin-left")) -
+						parseFloat(jqJustifiedLayout.css("margin-right")) -
 						parseFloat($(".content").css("padding-right"));
 				}
 				/** @type {number[]} */
@@ -511,54 +513,65 @@ view.album = {
 						: ratio;
 				});
 
+				/**
+				 * An album listing has potentially hundreds of photos, hence
+				 * only query for them once.
+				 * @type {jQuery}
+				 */
+				const jqPhotoElements = $(".justified-layout > div.photo");
+				const photoDefaultHeight = parseFloat(jqPhotoElements.css("--lychee-default-height"));
+
 				const layoutGeometry = require("justified-layout")(ratio, {
 					containerWidth: containerWidth,
 					containerPadding: 0,
-					// boxSpacing: {
-					//     horizontal: 42,
-					//     vertical: 150
-					// },
-					targetRowHeight: parseFloat($(".photo").css("--lychee-default-height")),
+					targetRowHeight: photoDefaultHeight,
 				});
 				// We must set the height of the `justified-layout` box
 				// explicitly, because all photos inside are positioned
 				// absolutely and hence do not contribute to the height of the
 				// `justified-layout` box automatically.
-				$(".justified-layout").css("height", layoutGeometry.containerHeight + "px");
-				$(".justified-layout > div").each(function (i) {
+				jqJustifiedLayout.css("height", layoutGeometry.containerHeight + "px");
+				jqPhotoElements.each(function (i) {
 					if (!layoutGeometry.boxes[i]) {
 						// Race condition in search.find -- window content
 						// and `photos` can get out of sync as search
 						// query is being modified.
 						return false;
 					}
-					$(this).css("top", layoutGeometry.boxes[i].top);
-					$(this).css("width", layoutGeometry.boxes[i].width);
-					$(this).css("height", layoutGeometry.boxes[i].height);
-					$(this).css("left", layoutGeometry.boxes[i].left);
+					const imgs = $(this)
+						.css({
+							top: layoutGeometry.boxes[i].top + "px",
+							width: layoutGeometry.boxes[i].width + "px",
+							height: layoutGeometry.boxes[i].height + "px",
+							left: layoutGeometry.boxes[i].left + "px",
+						})
+						.find(".thumbimg > img");
 
-					let imgs = $(this).find(".thumbimg > img");
 					if (imgs.length > 0 && imgs[0].getAttribute("data-srcset")) {
 						imgs[0].setAttribute("sizes", layoutGeometry.boxes[i].width + "px");
 					}
 				});
 			} else if (lychee.layout === 2) {
-				let containerWidth = parseFloat($(".unjustified-layout").width());
+				/** @type {jQuery} */
+				const jqUnjustifiedLayout = $(".unjustified-layout");
+				let containerWidth = parseFloat(jqUnjustifiedLayout.width());
 				if (containerWidth === 0) {
 					// Triggered on Reload in photo view.
 					containerWidth =
 						$(window).width() -
-						parseFloat($(".unjustified-layout").css("margin-left")) -
-						parseFloat($(".unjustified-layout").css("margin-right")) -
+						parseFloat(jqUnjustifiedLayout.css("margin-left")) -
+						parseFloat(jqUnjustifiedLayout.css("margin-right")) -
 						parseFloat($(".content").css("padding-right"));
 				}
-				// For whatever reason, the calculation of margin is
-				// super-slow in Firefox (tested with 68), so we make sure to
-				// do it just once, outside the loop.  Height doesn't seem to
-				// be affected, but we do it the same way for consistency.
-				let margin = parseFloat($(".photo").css("margin-right"));
-				let origHeight = parseFloat($(".photo").css("max-height"));
-				$(".unjustified-layout > div").each(function (i) {
+				/**
+				 * An album listing has potentially hundreds of photos, hence
+				 * only query for them once.
+				 * @type {jQuery}
+				 */
+				const jqPhotoElements = $(".unjustified-layout > div.photo");
+				const photoMaxHeight = parseFloat(jqPhotoElements.css("max-height"));
+				const photoMargin = parseFloat(jqPhotoElements.css("margin-right"));
+				jqPhotoElements.each(function (i) {
 					if (!photos[i]) {
 						// Race condition in search.find -- window content
 						// and `photos` can get out of sync as search
@@ -577,17 +590,20 @@ view.album = {
 						}
 					}
 
-					let height = origHeight;
+					let height = photoMaxHeight;
 					let width = height * ratio;
-					let imgs = $(this).find(".thumbimg > img");
 
-					if (width > containerWidth - margin) {
-						width = containerWidth - margin;
+					if (width > containerWidth - photoMargin) {
+						width = containerWidth - photoMargin;
 						height = width / ratio;
 					}
 
-					$(this).css("width", width + "px");
-					$(this).css("height", height + "px");
+					const imgs = $(this)
+						.css({
+							width: width + "px",
+							height: height + "px",
+						})
+						.find(".thumbimg > img");
 					if (imgs.length > 0 && imgs[0].getAttribute("data-srcset")) {
 						imgs[0].setAttribute("sizes", width + "px");
 					}
