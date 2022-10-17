@@ -239,6 +239,11 @@
 // responsive web design for smaller screens
 @media only screen and (max-width: 567px), only screen and (max-width: 640px) and (orientation: portrait) {
 	// sidebar as overlay, small size
+	#lychee_sidebar_container {
+		position: absolute;
+		right: 0;
+	}
+
 	#lychee_sidebar {
 		background-color: rgba(0, 0, 0, 0.6);
 	}
