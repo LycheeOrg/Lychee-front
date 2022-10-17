@@ -285,161 +285,155 @@
 
 // responsive web design for smaller screens
 @media only screen and (min-width: 320px) and (max-width: 567px) {
-	#lychee_view_content {
-		.album,
-		.photo {
-			// 3 thumbnails per row
-			--size: calc((100vw - 3px) / 3);
-			width: calc(var(--size) - 3px);
-			height: calc(var(--size) - 3px);
-			margin: 3px 0 0 3px;
-			.thumbimg {
-				width: calc(var(--size) - 5px);
-				height: calc(var(--size) - 5px);
+	.album,
+	.photo {
+		// 3 thumbnails per row
+		--size: calc((100vw - 3px) / 3);
+		width: calc(var(--size) - 3px);
+		height: calc(var(--size) - 3px);
+		margin: 3px 0 0 3px;
+		.thumbimg {
+			width: calc(var(--size) - 5px);
+			height: calc(var(--size) - 5px);
+		}
+		.overlay {
+			width: calc(var(--size) - 5px);
+			h1 {
+				min-height: 14px;
+				width: calc(var(--size) - 19px);
+				margin: 8px 0 2px 6px;
+				font-size: 12px;
 			}
-			.overlay {
-				width: calc(var(--size) - 5px);
-				h1 {
-					min-height: 14px;
-					width: calc(var(--size) - 19px);
-					margin: 8px 0 2px 6px;
-					font-size: 12px;
-				}
-				a {
-					// suppress subtitles on small screens
-					display: none;
-				}
+			a {
+				// suppress subtitles on small screens
+				display: none;
 			}
-			.badge {
-				padding: 4px 3px 3px;
+		}
+		.badge {
+			padding: 4px 3px 3px;
+			width: 12px;
+			.iconic {
 				width: 12px;
+				height: 12px;
+			}
+			&--folder {
 				.iconic {
-					width: 12px;
-					height: 12px;
-				}
-				&--folder {
-					.iconic {
-						width: 8px;
-						height: 8px;
-					}
+					width: 8px;
+					height: 8px;
 				}
 			}
 		}
-		.divider {
-			margin: 20px 0 0;
-			&:first-child {
-				margin-top: 0;
-			}
-			h1 {
-				margin: 0 0 6px 8px;
-				font-size: 12px;
-			}
+	}
+	.divider {
+		margin: 20px 0 0;
+		&:first-child {
+			margin-top: 0;
+		}
+		h1 {
+			margin: 0 0 6px 8px;
+			font-size: 12px;
 		}
 	}
 }
 
 @media only screen and (min-width: 568px) and (max-width: 639px) {
-	#lychee_view_content {
-		.album,
-		.photo {
-			// 4 thumbnails per row
-			--size: calc((100vw - 3px) / 4);
-			width: calc(var(--size) - 3px);
-			height: calc(var(--size) - 3px);
-			margin: 3px 0 0 3px;
-			.thumbimg {
-				width: calc(var(--size) - 5px);
-				height: calc(var(--size) - 5px);
+	.album,
+	.photo {
+		// 4 thumbnails per row
+		--size: calc((100vw - 3px) / 4);
+		width: calc(var(--size) - 3px);
+		height: calc(var(--size) - 3px);
+		margin: 3px 0 0 3px;
+		.thumbimg {
+			width: calc(var(--size) - 5px);
+			height: calc(var(--size) - 5px);
+		}
+		.overlay {
+			width: calc(var(--size) - 5px);
+			h1 {
+				min-height: 14px;
+				width: calc(var(--size) - 19px);
+				margin: 8px 0 2px 6px;
+				font-size: 12px;
 			}
-			.overlay {
-				width: calc(var(--size) - 5px);
-				h1 {
-					min-height: 14px;
-					width: calc(var(--size) - 19px);
-					margin: 8px 0 2px 6px;
-					font-size: 12px;
-				}
-				a {
-					// suppress subtitles on small screens
-					display: none;
-				}
+			a {
+				// suppress subtitles on small screens
+				display: none;
 			}
-			.badge {
-				padding: 4px 3px 3px;
+		}
+		.badge {
+			padding: 4px 3px 3px;
+			width: 14px;
+			.iconic {
 				width: 14px;
+				height: 14px;
+			}
+			&--folder {
 				.iconic {
-					width: 14px;
-					height: 14px;
-				}
-				&--folder {
-					.iconic {
-						width: 9px;
-						height: 9px;
-					}
+					width: 9px;
+					height: 9px;
 				}
 			}
 		}
-		.divider {
-			margin: 24px 0 0;
-			&:first-child {
-				margin-top: 0;
-			}
-			h1 {
-				margin: 0 0 6px 10px;
-			}
+	}
+	.divider {
+		margin: 24px 0 0;
+		&:first-child {
+			margin-top: 0;
+		}
+		h1 {
+			margin: 0 0 6px 10px;
 		}
 	}
 }
 
 @media only screen and (min-width: 640px) and (max-width: 768px) {
-	#lychee_view_content {
-		.album,
-		.photo {
-			// 5 thumbnails per row
-			--size: calc((100vw - 5px) / 5);
-			width: calc(var(--size) - 5px);
-			height: calc(var(--size) - 5px);
-			margin: 5px 0 0 5px;
-			.thumbimg {
-				width: calc(var(--size) - 7px);
-				height: calc(var(--size) - 7px);
+	.album,
+	.photo {
+		// 5 thumbnails per row
+		--size: calc((100vw - 5px) / 5);
+		width: calc(var(--size) - 5px);
+		height: calc(var(--size) - 5px);
+		margin: 5px 0 0 5px;
+		.thumbimg {
+			width: calc(var(--size) - 7px);
+			height: calc(var(--size) - 7px);
+		}
+		.overlay {
+			width: calc(var(--size) - 7px);
+			h1 {
+				min-height: 14px;
+				width: calc(var(--size) - 21px);
+				margin: 10px 0 3px 8px;
+				font-size: 12px;
 			}
-			.overlay {
-				width: calc(var(--size) - 7px);
-				h1 {
-					min-height: 14px;
-					width: calc(var(--size) - 21px);
-					margin: 10px 0 3px 8px;
-					font-size: 12px;
-				}
-				a {
-					// suppress subtitles on small screens
-					display: none;
-				}
+			a {
+				// suppress subtitles on small screens
+				display: none;
 			}
-			.badge {
-				padding: 6px 4px 4px;
+		}
+		.badge {
+			padding: 6px 4px 4px;
+			width: 16px;
+			.iconic {
 				width: 16px;
+				height: 16px;
+			}
+			&--folder {
 				.iconic {
-					width: 16px;
-					height: 16px;
-				}
-				&--folder {
-					.iconic {
-						width: 10px;
-						height: 10px;
-					}
+					width: 10px;
+					height: 10px;
 				}
 			}
 		}
-		.divider {
-			margin: 28px 0 0;
-			&:first-child {
-				margin-top: 0;
-			}
-			h1 {
-				margin: 0 0 6px 10px;
-			}
+	}
+	.divider {
+		margin: 28px 0 0;
+		&:first-child {
+			margin-top: 0;
+		}
+		h1 {
+			margin: 0 0 6px 10px;
 		}
 	}
 }
@@ -467,41 +461,39 @@
 
 // restrict hover features to devices that support it
 @media (hover: hover) {
-	#lychee_view_content {
-		.album,
-		.photo {
-			&:hover .thumbimg {
-				border-color: $colorBlue;
-			}
-
-			.video,
-			.livephoto {
-				&:hover::before {
-					opacity: 0.75;
-				}
-			}
+	.album,
+	.photo {
+		&:hover .thumbimg {
+			border-color: $colorBlue;
 		}
 
-		.album:hover,
-		.album__dragover {
-			.thumbimg:nth-child(1),
-			.thumbimg:nth-child(2) {
-				opacity: 1;
-				// Keep the composited layer created by the browser during the animation.
-				// Makes the border of the transformed thumb look better.
-				// See https://github.com/electerious/Lychee/pull/626 for more.
-				will-change: transform;
-			}
-			.thumbimg:nth-child(1) {
-				transform: rotate(-2deg) translateY(10px) translateX(-12px);
-			}
-			.thumbimg:nth-child(2) {
-				transform: rotate(5deg) translateY(-8px) translateX(12px);
+		.video,
+		.livephoto {
+			&:hover::before {
+				opacity: 0.75;
 			}
 		}
+	}
 
-		.photo:hover .overlay {
+	.album:hover,
+	.album__dragover {
+		.thumbimg:nth-child(1),
+		.thumbimg:nth-child(2) {
 			opacity: 1;
+			// Keep the composited layer created by the browser during the animation.
+			// Makes the border of the transformed thumb look better.
+			// See https://github.com/electerious/Lychee/pull/626 for more.
+			will-change: transform;
 		}
+		.thumbimg:nth-child(1) {
+			transform: rotate(-2deg) translateY(10px) translateX(-12px);
+		}
+		.thumbimg:nth-child(2) {
+			transform: rotate(5deg) translateY(-8px) translateX(12px);
+		}
+	}
+
+	.photo:hover .overlay {
+		opacity: 1;
 	}
 }
