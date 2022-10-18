@@ -5,11 +5,13 @@ div.basicModal.login div.basicModal__content {
 		color: $colorDialogMainButtonFont;
 		top: 8px;
 		left: 8px;
-		width: 24px;
-		height: 24px;
+		width: 30px;
+		height: 30px;
 		margin: 0;
-		padding: 2px;
+		padding: 5px;
 		cursor: pointer;
+		box-shadow: inset 1px 1px 0 white(0.02);
+		border: solid 1px black(0.2);
 
 		.iconic {
 			width: 100%;

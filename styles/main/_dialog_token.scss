@@ -24,6 +24,8 @@ form.token div.input-group {
 			width: 26px;
 			height: 26px;
 			cursor: pointer;
+			box-shadow: inset 1px 1px 0 white(0.02);
+			border: solid 1px black(0.2);
 
 			.iconic {
 				width: 100%;

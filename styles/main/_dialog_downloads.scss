@@ -3,9 +3,8 @@ div.basicModal.downloads div.basicModal__content a.button {
 	margin: 12px 0;
 	padding: 12px;
 	font-weight: bold;
-	box-shadow: none;
+	box-shadow: inset 0 1px 0 white(0.02);
 	border: solid 1px black(0.2);
-	background-color: black(0.05);
 
 	.iconic {
 		width: 12px;
