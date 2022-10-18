@@ -6,7 +6,7 @@ const loadingBar = {
 	/** @type {?string} */
 	status: null,
 	/** @type {jQuery} */
-	_dom: $("#loading"),
+	_dom: $("#lychee_loading"),
 };
 
 /**
@@ -32,12 +32,6 @@ loadingBar.show = function (status, errorText) {
 		if (errorText) errorText = errorText.replace("<br>", "");
 		if (!errorText) errorText = lychee.locale["ERROR_TEXT"];
 
-		// Move down the dark background
-		if (basicModal.isVisible()) {
-			$(".basicModalContainer").addClass("basicModalContainer--error");
-			$(".basicModal").addClass("basicModal--error");
-		}
-
 		// Modify loading
 		loadingBar
 			.dom()
@@ -59,12 +53,6 @@ loadingBar.show = function (status, errorText) {
 		// Parse text
 		if (errorText) errorText = errorText.replace("<br>", "");
 		if (!errorText) errorText = lychee.locale["ERROR_TEXT"];
-
-		// Move down the dark background
-		if (basicModal.isVisible()) {
-			$(".basicModalContainer").addClass("basicModalContainer--error");
-			$(".basicModal").addClass("basicModal--error");
-		}
 
 		// Modify loading
 		loadingBar

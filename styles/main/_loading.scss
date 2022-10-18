@@ -6,19 +6,21 @@
  */
 #lychee_loading {
 	height: 0; /* per default, the loading indicator is "closed" */
+	transition: height 0.3s ease;
+
+	background-size: 100px 3px;
+	background-repeat: repeat-x;
+	border-bottom: 1px solid black(0.3);
+
+	animation-name: moveBackground;
+	animation-duration: 0.3s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
 
 	// Modes -------------------------------------------------------------- //
 	&.loading {
 		height: 3px;
 		background-image: linear-gradient(to right, #153674 0%, #153674 47%, #2651ae 53%, #2651ae 100%);
-		background-size: 100px 3px;
-		background-repeat: repeat-x;
-		border-bottom: 1px solid black(0.3);
-
-		animation-name: moveBackground;
-		animation-duration: 0.3s;
-		animation-iteration-count: infinite;
-		animation-timing-function: linear;
 	}
 
 	&.error {
