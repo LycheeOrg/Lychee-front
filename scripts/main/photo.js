@@ -1075,7 +1075,7 @@ photo.getArchive = function (photoIDs, kind = null) {
 				button.title = lychee.locale["DOWNLOAD"];
 				button.addEventListener(lychee.getEventName(), onClickOrTouch);
 				button.lastElementChild.textContent =
-					lLabel + "(" + sv.width + "×" + sv.height + ", " + lychee.locale.printFilesizeLocalized(sv.filesize) + ")";
+					lLabel + " (" + sv.width + "×" + sv.height + ", " + lychee.locale.printFilesizeLocalized(sv.filesize) + ")";
 			} else {
 				button.remove();
 			}
