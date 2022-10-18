@@ -1,8 +1,11 @@
 div.basicModal.downloads div.basicModal__content a.button {
 	display: block;
-	margin: 6px 0;
+	margin: 12px 0;
 	padding: 12px;
 	font-weight: bold;
+	box-shadow: none;
+	border: solid 1px black(0.2);
+	background-color: black(0.05);
 
 	.iconic {
 		width: 12px;
