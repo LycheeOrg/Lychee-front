@@ -6,8 +6,8 @@
  */
 
 lychee.locale = {
-	USERNAME: "username",
-	PASSWORD: "password",
+	USERNAME: "Username",
+	PASSWORD: "Password",
 	ENTER: "Enter",
 	CANCEL: "Cancel",
 	SIGN_IN: "Sign In",
@@ -74,7 +74,7 @@ lychee.locale = {
 
 	DELETE_ALBUM_QUESTION: "Delete Album and Photos",
 	KEEP_ALBUM: "Keep Album",
-	DELETE_ALBUM_CONFIRMATION_1: "Are you sure you want to delete the album '%s' and all of the photos it contains? This action can't be undone!",
+	DELETE_ALBUM_CONFIRMATION: "Are you sure you want to delete the album '%s' and all of the photos it contains? This action can't be undone!",
 
 	DELETE_TAG_ALBUM_QUESTION: "Delete Album",
 	DELETE_TAG_ALBUM_CONFIRMATION:
@@ -85,7 +85,7 @@ lychee.locale = {
 	DELETE_ALBUMS_CONFIRMATION:
 		"Are you sure you want to delete all %d selected albums and all of the photos they contain? This action can't be undone!",
 
-	DELETE_UNSORTED_CONFIRM: "Are you sure you want to delete all photos from 'Unsorted'?<br>This action can't be undone!",
+	DELETE_UNSORTED_CONFIRM: "Are you sure you want to delete all photos from 'Unsorted'? This action can't be undone!",
 	CLEAR_UNSORTED: "Clear Unsorted",
 	KEEP_UNSORTED: "Keep Unsorted",
 
@@ -319,8 +319,7 @@ lychee.locale = {
 
 	NEW_PHOTOS_NOTIFICATION: "Send new photos notification emails.",
 	SETTINGS_SUCCESS_NEW_PHOTOS_NOTIFICATION: "New photos notification updated",
-	USER_EMAIL_INSTRUCTION:
-		"Add your email below to enable receiving email notifications.<br />To stop receiving emails, simply remove your email below.",
+	USER_EMAIL_INSTRUCTION: "Add your email below to enable receiving email notifications. To stop receiving emails, simply remove your email below.",
 
 	SETTINGS_SUCCESS_CSS: "CSS updated",
 	SETTINGS_SUCCESS_UPDATE: "Settings updated with success",
@@ -348,6 +347,9 @@ lychee.locale = {
 	EDIT_SHARING_TITLE: "Edit Sharing",
 	EDIT_SHARING_TEXT: "The sharing-properties of this album will be changed to the following:",
 	SHARE_ALBUM_TEXT: "This album will be shared with the following properties:",
+
+	SORT_DIALOG_ATTRIBUTE_LABEL: "Attribute",
+	SORT_DIALOG_ORDER_LABEL: "Order",
 
 	SORT_ALBUM_BY: "Sort albums by %1$s in an %2$s order.",
 
@@ -436,6 +438,7 @@ lychee.locale = {
 	UPLOAD_FAILED_WARNING: "Upload failed. Server returned a warning!",
 	UPLOAD_SKIPPED: "Skipped",
 	UPLOAD_UPDATED: "Updated",
+	UPLOAD_GENERAL: "General",
 	UPLOAD_IMPORT_SKIPPED_DUPLICATE: "This photo has been skipped because it's already in your library.",
 	UPLOAD_IMPORT_RESYNCED_DUPLICATE: "This photo has been skipped because it's already in your library, but its metadata has been updated.",
 	UPLOAD_ERROR_CONSOLE: "Please take a look at the console of your browser for further details.",

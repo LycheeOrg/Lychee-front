@@ -8,10 +8,11 @@ const u2f = {
  */
 u2f.is_available = function () {
 	if (!window.isSecureContext && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
-		const msg = lychee.html`<h1>${lychee.locale["U2F_NOT_SECURE"]}</h1>`;
-
 		basicModal.show({
-			body: msg,
+			body: "<p></p>",
+			readyCB: function (formElements, dialog) {
+				dialog.querySelector("p").textContent = lychee.locale["U2F_NOT_SECURE"];
+			},
 			buttons: {
 				cancel: {
 					title: lychee.locale["CLOSE"],

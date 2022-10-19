@@ -1,0 +1,92 @@
+.basicModal.import div.basicModal__content {
+	padding: 12px 8px;
+
+	// Title -------------------------------------------------------------- //
+	h1 {
+		margin-bottom: 12px;
+		color: $colorDialogEmphasizedFg;
+		font-size: 16px;
+		line-height: 19px;
+		font-weight: bold;
+		text-align: center;
+	}
+
+	// Rows -------------------------------------------------------------- //
+	ol {
+		margin-top: 12px;
+		height: 300px;
+		background-color: $colorFormElementBg;
+		overflow: hidden;
+		overflow-y: auto;
+		border-radius: 3px;
+		box-shadow: inset 0 0 3px black(0.4);
+	}
+
+	// Row -------------------------------------------------------------- //
+	ol li {
+		float: left;
+		padding: 8px 0;
+		width: 100%;
+		background-color: white(0.02);
+
+		&:nth-child(2n) {
+			background-color: white(0);
+		}
+
+		h2 {
+			float: left;
+			padding: 5px 10px;
+			width: 70%;
+			color: $colorDialogEmphasizedFg;
+			font-size: 14px;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+
+		p.status {
+			float: left;
+			padding: 5px 10px;
+			width: 30%;
+			color: $colorDialogMainButtonFont;
+			font-size: 14px;
+			text-align: right;
+
+			animation-name: pulse;
+			animation-duration: 2s;
+			animation-timing-function: ease-in-out;
+			animation-iteration-count: infinite;
+
+			&.error,
+			&.warning,
+			&.success {
+				animation: none;
+			}
+
+			&.error {
+				color: $colorImportError;
+			}
+
+			&.warning {
+				color: $colorImportWarning;
+			}
+
+			&.success {
+				color: $colorImportSuccess;
+			}
+		}
+
+		p.notice {
+			float: left;
+			padding: 2px 10px 5px;
+			width: 100%;
+			color: $colorDialogMainButtonFont;
+			font-size: 12px;
+			overflow: hidden;
+			line-height: 16px;
+		}
+
+		p.notice:empty {
+			display: none;
+		}
+	}
+}

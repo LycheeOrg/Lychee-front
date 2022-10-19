@@ -1,0 +1,22 @@
+div.basicModal.downloads div.basicModal__content a.button {
+	display: block;
+	margin: 12px 0;
+	padding: 12px;
+	font-weight: bold;
+	box-shadow: inset 0 1px 0 white(0.02);
+	border: solid 1px black(0.2);
+
+	.iconic {
+		width: 12px;
+		height: 12px;
+		margin-right: 12px;
+	}
+}
+
+div.basicModal.qr-code {
+	width: 300px;
+
+	div.basicModal__content {
+		padding: 12px;
+	}
+}
