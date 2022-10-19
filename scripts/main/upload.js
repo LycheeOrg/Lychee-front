@@ -252,7 +252,7 @@ upload.start = {
 				// Error
 				upload.showProgressReportCloseButton();
 				if (shallCancelUpload) {
-					const row = upload.buildReportRow("General");
+					const row = upload.buildReportRow(lychee.locale["UPLOAD_GENERAL"]);
 					row.status.textContent = lychee.locale["UPLOAD_CANCELLED"];
 					row.status.classList.add("warning");
 					upload._dom.reportList.appendChild(row.listEntry);
@@ -779,7 +779,7 @@ upload.start = {
 							} else {
 								// The event report does not refer to a
 								// specific directory.
-								row = upload.buildReportRow("General");
+								row = upload.buildReportRow(lychee.locale["UPLOAD_GENERAL"]);
 								upload._dom.reportList.appendChild(row.listEntry);
 							}
 							row.listEntry.scrollIntoView(upload.SCROLL_OPTIONS);
