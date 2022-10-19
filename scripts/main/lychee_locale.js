@@ -509,7 +509,7 @@ lychee.locale = {
 	UPDATE: "Update",
 	SETTINGS_DROPBOX_KEY: "Dropbox-API-Schlüssel",
 
-	dateTimeFormatter: new Intl.DateTimeFormat('default', { dateStyle: "medium", timeStyle: "medium" }),
+	dateTimeFormatter: new Intl.DateTimeFormat("default", { dateStyle: "medium", timeStyle: "medium" }),
 
 	/**
 	 * Formats a number representing a filesize in bytes as a localized string
