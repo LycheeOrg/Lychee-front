@@ -341,10 +341,8 @@ album.add = function (IDs = null, callback = null) {
 	 * @returns {void}
 	 */
 	const action = function (data) {
-		// let title = data.title;
-
 		if (!data.title.trim()) {
-			basicModal.error("title");
+			basicModal.focusError("title");
 			return;
 		}
 
@@ -378,8 +376,27 @@ album.add = function (IDs = null, callback = null) {
 		);
 	};
 
+	/**
+	 * @param {ModalDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initAddAlbumDialog = function (formElements, dialog) {
+		dialog.querySelector("p").textContent = lychee.locale["TITLE_NEW_ALBUM"];
+		formElements.title.placeholder = "Title";
+		formElements.title.value = lychee.locale["UNTITLED"];
+	};
+
+	const addAlbumDialogBody = `
+		<p></p>
+		<form>
+			<div class="input-group stacked"><input class='text' name='title' type='text' maxlength='100'/></div>
+		</form>
+	`;
+
 	basicModal.show({
-		body: lychee.html`<p>${lychee.locale["TITLE_NEW_ALBUM"]} <input class='text' name='title' type='text' maxlength='100' placeholder='Title' value='${lychee.locale["UNTITLED"]}'></p>`,
+		body: addAlbumDialogBody,
+		readyCB: initAddAlbumDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["CREATE_ALBUM"],
@@ -400,11 +417,11 @@ album.addByTags = function () {
 	/** @param {{title: string, tags: string}} data */
 	const action = function (data) {
 		if (!data.title.trim()) {
-			basicModal.error("title");
+			basicModal.focusError("title");
 			return;
 		}
 		if (!data.tags.trim()) {
-			basicModal.error("tags");
+			basicModal.focusError("tags");
 			return;
 		}
 
@@ -424,11 +441,28 @@ album.addByTags = function () {
 		);
 	};
 
+	const addTagAlbumDialogBody = `
+		<p></p>
+		<form>
+			<div class="input-group stacked"><input class='text' name='title' type='text' maxlength='100'></div>
+			<div class="input-group stacked"><input class='text' name='tags' type='text' minlength='1'></div>
+		</form>`;
+
+	/**
+	 * @param {ModalDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initAddTagAlbumDialog = function (formElements, dialog) {
+		dialog.querySelector("p").textContent = lychee.locale["TITLE_NEW_ALBUM"];
+		formElements.title.placeholder = "Title";
+		formElements.title.value = lychee.locale["UNTITLED"];
+		formElements.tags.placeholder = "Tags";
+	};
+
 	basicModal.show({
-		body: lychee.html`<p>${lychee.locale["TITLE_NEW_ALBUM"]}
-							<input class='text' name='title' type='text' maxlength='100' placeholder='Title' value='${lychee.locale["UNTITLED"]}'>
-							<input class='text' name='tags' type='text' minlength='1' placeholder='Tags' value=''>
-						</p>`,
+		body: addTagAlbumDialogBody,
+		readyCB: initAddTagAlbumDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["CREATE_TAG_ALBUM"],
@@ -450,7 +484,7 @@ album.setShowTags = function (albumID) {
 	/** @param {{show_tags: string}} data */
 	const action = function (data) {
 		if (!data.show_tags.trim()) {
-			basicModal.error("show_tags");
+			basicModal.focusError("show_tags");
 			return;
 		}
 		const new_show_tags = data.show_tags
@@ -476,18 +510,26 @@ album.setShowTags = function (albumID) {
 		);
 	};
 
+	const setShowTagDialogBody = `
+		<p></p>
+		<form>
+			<div class="input-group stacked"><input class='text' name='show_tags' type='text' minlength='1'></div>
+		</form>`;
+
+	/**
+	 * @param {ModalDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initShowTagAlbumDialog = function (formElements, dialog) {
+		dialog.querySelector("p").textContent = lychee.locale["ALBUM_NEW_SHOWTAGS"];
+		formElements.show_tags.placeholder = "Tags";
+		formElements.show_tags.value = album.json.show_tags.sort().join(", ");
+	};
+
 	basicModal.show({
-		body: lychee.html`
-			<p>${lychee.locale["ALBUM_NEW_SHOWTAGS"]}
-				<input
-					class='text'
-					name='show_tags'
-					type='text'
-					minlength='1'
-					placeholder='Tags'
-					value='$${album.json.show_tags.sort().join(", ")}'
-				>
-			</p>`,
+		body: setShowTagDialogBody,
+		readyCB: initShowTagAlbumDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["ALBUM_SET_SHOWTAGS"],
@@ -525,7 +567,7 @@ album.setTitle = function (albumIDs) {
 	/** @param {{title: string}} data */
 	const action = function (data) {
 		if (!data.title.trim()) {
-			basicModal.error("title");
+			basicModal.focusError("title");
 			return;
 		}
 
@@ -567,15 +609,27 @@ album.setTitle = function (albumIDs) {
 		});
 	};
 
-	const inputHTML = lychee.html`<input class='text' name='title' type='text' maxlength='100' placeholder='$${lychee.locale["ALBUM_TITLE"]}' value='$${oldTitle}'>`;
+	const setAlbumTitleDialogBody = `
+		<p></p>
+		<form>
+			<div class="input-group stacked"><input class='text' name='title' type='text' maxlength='100'></div>
+		</form>`;
 
-	const dialogHTML =
-		albumIDs.length === 1
-			? lychee.html`<p>${lychee.locale["ALBUM_NEW_TITLE"]} ${inputHTML}</p>`
-			: lychee.html`<p>${sprintf(lychee.locale["ALBUMS_NEW_TITLE"], albumIDs.length)} ${inputHTML}</p>`;
+	/**
+	 * @param {ModalDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initSetAlbumTitleDialog = function (formElements, dialog) {
+		dialog.querySelector("p").textContent =
+			albumIDs.length === 1 ? lychee.locale["ALBUM_NEW_TITLE"] : sprintf(lychee.locale["ALBUMS_NEW_TITLE"], albumIDs.length);
+		formElements.title.placeholder = lychee.locale["ALBUM_TITLE"];
+		formElements.title.value = oldTitle;
+	};
 
 	basicModal.show({
-		body: dialogHTML,
+		body: setAlbumTitleDialogBody,
+		readyCB: initSetAlbumTitleDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["ALBUM_SET_TITLE"],
@@ -594,8 +648,6 @@ album.setTitle = function (albumIDs) {
  * @returns {void}
  */
 album.setDescription = function (albumID) {
-	const oldDescription = album.json.description ? album.json.description : "";
-
 	/** @param {{description: string}} data */
 	const action = function (data) {
 		const description = data.description ? data.description : null;
@@ -613,8 +665,26 @@ album.setDescription = function (albumID) {
 		});
 	};
 
+	const setAlbumDescriptionDialogBody = `
+		<p></p>
+		<form>
+			<div class="input-group stacked"><input class='text' name='description' type='text' maxlength='800'></div>
+		</form>`;
+
+	/**
+	 * @param {ModalDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initSetAlbumDescriptionDialog = function (formElements, dialog) {
+		dialog.querySelector("p").textContent = lychee.locale["ALBUM_NEW_DESCRIPTION"];
+		formElements.description.placeholder = lychee.locale["ALBUM_DESCRIPTION"];
+		formElements.description.value = album.json.description ? album.json.description : "";
+	};
+
 	basicModal.show({
-		body: lychee.html`<p>${lychee.locale["ALBUM_NEW_DESCRIPTION"]}<input class='text' name='description' type='text' maxlength='800' placeholder='$${lychee.locale["ALBUM_DESCRIPTION"]}' value='$${oldDescription}'></p>`,
+		body: setAlbumDescriptionDialogBody,
+		readyCB: initSetAlbumDescriptionDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["ALBUM_SET_DESCRIPTION"],
@@ -653,10 +723,6 @@ album.toggleCover = function (photoID) {
  * @returns {void}
  */
 album.setLicense = function (albumID) {
-	const callback = function () {
-		$("select#license").val(album.json.license === "" ? "none" : album.json.license);
-	};
-
 	/** @param {{license: string}} data */
 	const action = function (data) {
 		basicModal.close();
@@ -676,54 +742,65 @@ album.setLicense = function (albumID) {
 		);
 	};
 
-	let msg = lychee.html`
-	<div>
-		<p>${lychee.locale["ALBUM_LICENSE"]}
-		<span class="select" style="width:270px">
-			<select name="license" id="license">
-				<option value="none">${lychee.locale["ALBUM_LICENSE_NONE"]}</option>
-				<option value="reserved">${lychee.locale["ALBUM_RESERVED"]}</option>
-				<option value="CC0">CC0 - Public Domain</option>
-				<option value="CC-BY-1.0">CC Attribution 1.0</option>
-				<option value="CC-BY-2.0">CC Attribution 2.0</option>
-				<option value="CC-BY-2.5">CC Attribution 2.5</option>
-				<option value="CC-BY-3.0">CC Attribution 3.0</option>
-				<option value="CC-BY-4.0">CC Attribution 4.0</option>
-				<option value="CC-BY-ND-1.0">CC Attribution-NoDerivatives 1.0</option>
-				<option value="CC-BY-ND-2.0">CC Attribution-NoDerivatives 2.0</option>
-				<option value="CC-BY-ND-2.5">CC Attribution-NoDerivatives 2.5</option>
-				<option value="CC-BY-ND-3.0">CC Attribution-NoDerivatives 3.0</option>
-				<option value="CC-BY-ND-4.0">CC Attribution-NoDerivatives 4.0</option>
-				<option value="CC-BY-SA-1.0">CC Attribution-ShareAlike 1.0</option>
-				<option value="CC-BY-SA-2.0">CC Attribution-ShareAlike 2.0</option>
-				<option value="CC-BY-SA-2.5">CC Attribution-ShareAlike 2.5</option>
-				<option value="CC-BY-SA-3.0">CC Attribution-ShareAlike 3.0</option>
-				<option value="CC-BY-SA-4.0">CC Attribution-ShareAlike 4.0</option>
-				<option value="CC-BY-NC-1.0">CC Attribution-NonCommercial 1.0</option>
-				<option value="CC-BY-NC-2.0">CC Attribution-NonCommercial 2.0</option>
-				<option value="CC-BY-NC-2.5">CC Attribution-NonCommercial 2.5</option>
-				<option value="CC-BY-NC-3.0">CC Attribution-NonCommercial 3.0</option>
-				<option value="CC-BY-NC-4.0">CC Attribution-NonCommercial 4.0</option>
-				<option value="CC-BY-NC-ND-1.0">CC Attribution-NonCommercial-NoDerivatives 1.0</option>
-				<option value="CC-BY-NC-ND-2.0">CC Attribution-NonCommercial-NoDerivatives 2.0</option>
-				<option value="CC-BY-NC-ND-2.5">CC Attribution-NonCommercial-NoDerivatives 2.5</option>
-				<option value="CC-BY-NC-ND-3.0">CC Attribution-NonCommercial-NoDerivatives 3.0</option>
-				<option value="CC-BY-NC-ND-4.0">CC Attribution-NonCommercial-NoDerivatives 4.0</option>
-				<option value="CC-BY-NC-SA-1.0">CC Attribution-NonCommercial-ShareAlike 1.0</option>
-				<option value="CC-BY-NC-SA-2.0">CC Attribution-NonCommercial-ShareAlike 2.0</option>
-				<option value="CC-BY-NC-SA-2.5">CC Attribution-NonCommercial-ShareAlike 2.5</option>
-				<option value="CC-BY-NC-SA-3.0">CC Attribution-NonCommercial-ShareAlike 3.0</option>
-				<option value="CC-BY-NC-SA-4.0">CC Attribution-NonCommercial-ShareAlike 4.0</option>
-			</select>
-		</span>
-		<br />
-		<a href="https://creativecommons.org/choose/" target="_blank">${lychee.locale["ALBUM_LICENSE_HELP"]}</a>
-		</p>
-	</div>`;
+	const setAlbumLicenseDialogBody = `
+		<form>
+			<div class="input-group compact">
+				<label for="license_dialog_license_select"></label>
+				<div class="select"><select name="license" id="license_dialog_license_select">
+					<option value="none"></option>
+					<option value="reserved"></option>
+					<option value="CC0">CC0 - Public Domain</option>
+					<option value="CC-BY-1.0">CC Attribution 1.0</option>
+					<option value="CC-BY-2.0">CC Attribution 2.0</option>
+					<option value="CC-BY-2.5">CC Attribution 2.5</option>
+					<option value="CC-BY-3.0">CC Attribution 3.0</option>
+					<option value="CC-BY-4.0">CC Attribution 4.0</option>
+					<option value="CC-BY-ND-1.0">CC Attribution-NoDerivatives 1.0</option>
+					<option value="CC-BY-ND-2.0">CC Attribution-NoDerivatives 2.0</option>
+					<option value="CC-BY-ND-2.5">CC Attribution-NoDerivatives 2.5</option>
+					<option value="CC-BY-ND-3.0">CC Attribution-NoDerivatives 3.0</option>
+					<option value="CC-BY-ND-4.0">CC Attribution-NoDerivatives 4.0</option>
+					<option value="CC-BY-SA-1.0">CC Attribution-ShareAlike 1.0</option>
+					<option value="CC-BY-SA-2.0">CC Attribution-ShareAlike 2.0</option>
+					<option value="CC-BY-SA-2.5">CC Attribution-ShareAlike 2.5</option>
+					<option value="CC-BY-SA-3.0">CC Attribution-ShareAlike 3.0</option>
+					<option value="CC-BY-SA-4.0">CC Attribution-ShareAlike 4.0</option>
+					<option value="CC-BY-NC-1.0">CC Attribution-NonCommercial 1.0</option>
+					<option value="CC-BY-NC-2.0">CC Attribution-NonCommercial 2.0</option>
+					<option value="CC-BY-NC-2.5">CC Attribution-NonCommercial 2.5</option>
+					<option value="CC-BY-NC-3.0">CC Attribution-NonCommercial 3.0</option>
+					<option value="CC-BY-NC-4.0">CC Attribution-NonCommercial 4.0</option>
+					<option value="CC-BY-NC-ND-1.0">CC Attribution-NonCommercial-NoDerivatives 1.0</option>
+					<option value="CC-BY-NC-ND-2.0">CC Attribution-NonCommercial-NoDerivatives 2.0</option>
+					<option value="CC-BY-NC-ND-2.5">CC Attribution-NonCommercial-NoDerivatives 2.5</option>
+					<option value="CC-BY-NC-ND-3.0">CC Attribution-NonCommercial-NoDerivatives 3.0</option>
+					<option value="CC-BY-NC-ND-4.0">CC Attribution-NonCommercial-NoDerivatives 4.0</option>
+					<option value="CC-BY-NC-SA-1.0">CC Attribution-NonCommercial-ShareAlike 1.0</option>
+					<option value="CC-BY-NC-SA-2.0">CC Attribution-NonCommercial-ShareAlike 2.0</option>
+					<option value="CC-BY-NC-SA-2.5">CC Attribution-NonCommercial-ShareAlike 2.5</option>
+					<option value="CC-BY-NC-SA-3.0">CC Attribution-NonCommercial-ShareAlike 3.0</option>
+					<option value="CC-BY-NC-SA-4.0">CC Attribution-NonCommercial-ShareAlike 4.0</option>
+				</select></div>
+				<p><a href="https://creativecommons.org/choose/" target="_blank"></a></p>
+			</div>
+		</form>`;
+
+	/**
+	 * @param {ModalDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initSetAlbumLicenseDialog = function (formElements, dialog) {
+		formElements.license.labels[0].textContent = lychee.locale["ALBUM_LICENSE"];
+		formElements.license.item(0).textContent = lychee.locale["ALBUM_LICENSE_NONE"];
+		formElements.license.item(1).textContent = lychee.locale["ALBUM_RESERVED"];
+		formElements.license.value = album.json.license === "" ? "none" : album.json.license;
+		dialog.querySelector("p a").textContent = lychee.locale["ALBUM_LICENSE_HELP"];
+	};
 
 	basicModal.show({
-		body: msg,
-		callback: callback,
+		body: setAlbumLicenseDialogBody,
+		readyCB: initSetAlbumLicenseDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["ALBUM_SET_LICENSE"],
@@ -742,17 +819,7 @@ album.setLicense = function (albumID) {
  * @returns {void}
  */
 album.setSorting = function (albumID) {
-	const callback = function () {
-		if (album.json.sorting) {
-			$("select#sortingCol").val(album.json.sorting.column);
-			$("select#sortingOrder").val(album.json.sorting.order);
-		} else {
-			$("select#sortingCol").val("");
-			$("select#sortingOrder").val("");
-		}
-	};
-
-	/** @param {{sortingCol: string, sortingOrder: string}} data */
+	/** @param {{sorting_col: string, sorting_order: string}} data */
 	const action = function (data) {
 		basicModal.close();
 
@@ -760,8 +827,8 @@ album.setSorting = function (albumID) {
 			"Album::setSorting",
 			{
 				albumID: albumID,
-				sorting_column: data.sortingCol,
-				sorting_order: data.sortingOrder,
+				sorting_column: data.sorting_col,
+				sorting_order: data.sorting_order,
 			},
 			function () {
 				if (visible.album()) {
@@ -771,35 +838,62 @@ album.setSorting = function (albumID) {
 		);
 	};
 
-	let msg = lychee.html`
-		<div><p>
-			${sprintf(
-				lychee.locale["SORT_PHOTO_BY"],
-				`<span class="select">
-				<select id="sortingCol" name="sortingCol">
-					<option value=''>-</option>
-					<option value='created_at'>${lychee.locale["SORT_PHOTO_SELECT_1"]}</option>
-					<option value='taken_at'>${lychee.locale["SORT_PHOTO_SELECT_2"]}</option>
-					<option value='title'>${lychee.locale["SORT_PHOTO_SELECT_3"]}</option>
-					<option value='description'>${lychee.locale["SORT_PHOTO_SELECT_4"]}</option>
-					<option value='is_public'>${lychee.locale["SORT_PHOTO_SELECT_5"]}</option>
-					<option value='is_starred'>${lychee.locale["SORT_PHOTO_SELECT_6"]}</option>
-					<option value='type'>${lychee.locale["SORT_PHOTO_SELECT_7"]}</option>
-				</select>
-			</span>`,
-				`<span class="select">
-				<select id="sortingOrder" name="sortingOrder">
-					<option value=''>-</option>
-					<option value='ASC'>${lychee.locale["SORT_ASCENDING"]}</option>
-					<option value='DESC'>${lychee.locale["SORT_DESCENDING"]}</option>
-				</select>
-			</span>`
-			)}
-		</p></div>`;
+	const setAlbumSortingDialogBody = `
+		<form>
+			<div class="input-group compact">
+				<label for="sorting_dialog_column_select"></label>
+				<div class="select"><select name="sorting_col" id="sorting_dialog_column_select">
+					<option value=''>&mdash;</option>
+					<option value='created_at'/>
+					<option value='taken_at'/>
+					<option value='title'/>
+					<option value='description'/>
+					<option value='is_public'/>
+					<option value='is_starred'/>
+					<option value='type'/>
+				</select></div>
+			</div>
+			<div class="input-group compact">
+				<label for="sorting_dialog_order_select"></label>
+				<div class="select"><select name="sorting_order" id="sorting_dialog_order_select">
+					<option value=''>&mdash;</option>
+					<option value='ASC'/>
+					<option value='DESC'/>
+				</select></div>
+			</div>
+		</form>`;
+
+	/**
+	 * @param {ModalDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initSetAlbumSortingDialog = function (formElements, dialog) {
+		formElements.sorting_col.labels[0].textContent = lychee.locale["SORT_DIALOG_ATTRIBUTE_LABEL"];
+		formElements.sorting_col.item(1).textContent = lychee.locale["SORT_PHOTO_SELECT_1"];
+		formElements.sorting_col.item(2).textContent = lychee.locale["SORT_PHOTO_SELECT_2"];
+		formElements.sorting_col.item(3).textContent = lychee.locale["SORT_PHOTO_SELECT_3"];
+		formElements.sorting_col.item(4).textContent = lychee.locale["SORT_PHOTO_SELECT_4"];
+		formElements.sorting_col.item(5).textContent = lychee.locale["SORT_PHOTO_SELECT_5"];
+		formElements.sorting_col.item(6).textContent = lychee.locale["SORT_PHOTO_SELECT_6"];
+		formElements.sorting_col.item(7).textContent = lychee.locale["SORT_PHOTO_SELECT_7"];
+
+		formElements.sorting_order.labels[0].textContent = lychee.locale["SORT_DIALOG_ORDER_LABEL"];
+		formElements.sorting_order.item(1).textContent = lychee.locale["SORT_ASCENDING"];
+		formElements.sorting_order.item(2).textContent = lychee.locale["SORT_DESCENDING"];
+
+		if (album.json.sorting) {
+			formElements.sorting_col.value = album.json.sorting.column;
+			formElements.sorting_order.value = album.json.sorting.order;
+		} else {
+			formElements.sorting_col.value = "";
+			formElements.sorting_order.value = "";
+		}
+	};
 
 	basicModal.show({
-		body: msg,
-		callback: callback,
+		body: setAlbumSortingDialogBody,
+		readyCB: initSetAlbumSortingDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["ALBUM_SET_ORDER"],
@@ -820,21 +914,20 @@ album.setSorting = function (albumID) {
  * @returns {void}
  */
 album.setProtectionPolicy = function (albumID) {
+	/**
+	 * @param {ModalDialogResult} data
+	 */
 	const action = function (data) {
+		basicModal.close();
 		albums.refresh();
 
-		// TODO: If the modal dialog would provide us with proper boolean values for the checkboxes as part of `data` the same way as it does for text inputs, then we would not need these slow and awkward jQeury selectors
-		album.json.is_nsfw = $('.basicModal .switch input[name="is_nsfw"]:checked').length === 1;
-		album.json.is_public = $('.basicModal .switch input[name="is_public"]:checked').length === 1;
-		album.json.grants_full_photo = $('.basicModal .choice input[name="grants_full_photo"]:checked').length === 1;
-		album.json.requires_link = $('.basicModal .choice input[name="requires_link"]:checked').length === 1;
-		album.json.is_downloadable = $('.basicModal .choice input[name="is_downloadable"]:checked').length === 1;
-		album.json.is_share_button_visible = $('.basicModal .choice input[name="is_share_button_visible"]:checked').length === 1;
-		album.json.has_password = $('.basicModal .choice input[name="has_password"]:checked').length === 1;
-		const newPassword = $('.basicModal .choice input[name="passwordtext"]').val() || null;
-
-		// Modal input has been processed, now it can be closed
-		basicModal.close();
+		album.json.is_nsfw = data.is_nsfw;
+		album.json.is_public = data.is_public;
+		album.json.grants_full_photo = data.grants_full_photo;
+		album.json.requires_link = data.requires_link;
+		album.json.is_downloadable = data.is_downloadable;
+		album.json.is_share_button_visible = data.is_share_button_visible;
+		album.json.has_password = data.has_password;
 
 		// Set data and refresh view
 		if (visible.album()) {
@@ -856,10 +949,10 @@ album.setProtectionPolicy = function (albumID) {
 			is_share_button_visible: album.json.is_share_button_visible,
 		};
 		if (album.json.has_password) {
-			if (newPassword) {
+			if (data.password) {
 				// We send the password only if there's been a change; that way the
 				// server will keep the current password if it wasn't changed.
-				params.password = newPassword;
+				params.password = data.password;
 			}
 		} else {
 			params.password = null;
@@ -868,111 +961,150 @@ album.setProtectionPolicy = function (albumID) {
 		api.post("Album::setProtectionPolicy", params);
 	};
 
-	const msg = lychee.html`
+	const setAlbumProtectionPolicyBody = `
 		<form>
-			<div class='switch'>
-				<label>
-					${lychee.locale["ALBUM_PUBLIC"]}:&nbsp;
-					<input type='checkbox' name='is_public'>
-					<span class='slider round'></span>
-				</label>
-				<p>${lychee.locale["ALBUM_PUBLIC_EXPL"]}</p>
+			<div class='input-group compact-no-indent'>
+				<label for="pp_dialog_public_check"></label>
+				<input type='checkbox' class="slider" id='pp_dialog_public_check' name='is_public' />
+				<p></p>
 			</div>
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='grants_full_photo'>
-					<span class='checkbox'>${build.iconic("check")}</span>
-					<span class='label'>${lychee.locale["ALBUM_FULL"]}</span>
-				</label>
-				<p>${lychee.locale["ALBUM_FULL_EXPL"]}</p>
+			<div class='input-group compact-inverse'>
+				<label for="pp_dialog_full_photo_check"></label>
+				<input type='checkbox' id='pp_dialog_full_photo_check' name='grants_full_photo' />
+				<p></p>
 			</div>
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='requires_link'>
-					<span class='checkbox'>${build.iconic("check")}</span>
-					<span class='label'>${lychee.locale["ALBUM_HIDDEN"]}</span>
-				</label>
-				<p>${lychee.locale["ALBUM_HIDDEN_EXPL"]}</p>
+			<div class='input-group compact-inverse'>
+				<label for="pp_dialog_link_check"></label>
+				<input type='checkbox' id='pp_dialog_link_check' name='requires_link' />
+				<p></p>
 			</div>
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='is_downloadable'>
-					<span class='checkbox'>${build.iconic("check")}</span>
-					<span class='label'>${lychee.locale["ALBUM_DOWNLOADABLE"]}</span>
-				</label>
-				<p>${lychee.locale["ALBUM_DOWNLOADABLE_EXPL"]}</p>
+			<div class='input-group compact-inverse'>
+				<label for="pp_dialog_downloadable_check"></label>
+				<input type='checkbox' id='pp_dialog_downloadable_check' name='is_downloadable' />
+				<p></p>
 			</div>
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='is_share_button_visible'>
-					<span class='checkbox'>${build.iconic("check")}</span>
-					<span class='label'>${lychee.locale["ALBUM_SHARE_BUTTON_VISIBLE"]}</span>
-				</label>
-				<p>${lychee.locale["ALBUM_SHARE_BUTTON_VISIBLE_EXPL"]}</p>
+			<div class='input-group compact-inverse'>
+				<label for="pp_dialog_share_check"></label>
+				<input type='checkbox' id='pp_dialog_share_check' name='is_share_button_visible' />
+				<p></p>
 			</div>
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='has_password'>
-					<span class='checkbox'>${build.iconic("check")}</span>
-					<span class='label'>${lychee.locale["ALBUM_PASSWORD_PROT"]}</span>
-				</label>
-				<p>${lychee.locale["ALBUM_PASSWORD_PROT_EXPL"]}</p>
-				<input class='text' name='passwordtext' type='text' placeholder='${lychee.locale["PASSWORD"]}' value=''>
-			</div>
-			<div class='hr'><hr></div>
-			<div class='switch'>
-				<label>
-					${lychee.locale["ALBUM_NSFW"]}:&nbsp;
-					<input type='checkbox' name='is_nsfw'>
-					<span class='slider round'></span>
-				</label>
-				<p>${lychee.locale["ALBUM_NSFW_EXPL"]}</p>
+			<div class='input-group compact-inverse'>
+				<label for="pp_dialog_password_check"></label>
+				<input type='checkbox' id='pp_dialog_password_check' name='has_password'>
+				<p></p>
+				<div class="input-group stacked">
+					<input class='text' id='pp_dialog_password_input' name='password' type='text'>
+				</div>
 			</div>
 		</form>
-	`;
+		<hr/>
+		<form>
+			<div class='input-group compact-no-indent'>
+				<label for='pp_dialog_nsfw_check'></label>
+				<input type='checkbox' class="slider" id='pp_dialog_nsfw_check' name='is_nsfw'>
+				<p></p>
+			</div>
+		</form>`;
 
-	const dialogSetupCB = function () {
-		// TODO: If the modal dialog would provide this callback with proper jQuery objects for all input/select/choice elements, then we would not need these jQuery selectors
-		$('.basicModal .switch input[name="is_public"]').prop("checked", album.json.is_public);
-		$('.basicModal .switch input[name="is_nsfw"]').prop("checked", album.json.is_nsfw);
+	/**
+	 * @typedef ProtectionPolicyDialogFormElements
+	 * @property {HTMLInputElement} is_public
+	 * @property {HTMLInputElement} grants_full_photo
+	 * @property {HTMLInputElement} requires_link
+	 * @property {HTMLInputElement} is_downloadable
+	 * @property {HTMLInputElement} is_share_button_visible
+	 * @property {HTMLInputElement} has_password
+	 * @property {HTMLInputElement} password
+	 * @property {HTMLInputElement} is_nsfw
+	 */
+
+	/**
+	 * @param {ProtectionPolicyDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initAlbumProtectionPolicyDialog = function (formElements, dialog) {
+		formElements.is_public.previousElementSibling.textContent = lychee.locale["ALBUM_PUBLIC"];
+		formElements.is_public.nextElementSibling.textContent = lychee.locale["ALBUM_PUBLIC_EXPL"];
+		formElements.grants_full_photo.previousElementSibling.textContent = lychee.locale["ALBUM_FULL"];
+		formElements.grants_full_photo.nextElementSibling.textContent = lychee.locale["ALBUM_FULL_EXPL"];
+		formElements.requires_link.previousElementSibling.textContent = lychee.locale["ALBUM_HIDDEN"];
+		formElements.requires_link.nextElementSibling.textContent = lychee.locale["ALBUM_HIDDEN_EXPL"];
+		formElements.is_downloadable.previousElementSibling.textContent = lychee.locale["ALBUM_DOWNLOADABLE"];
+		formElements.is_downloadable.nextElementSibling.textContent = lychee.locale["ALBUM_DOWNLOADABLE_EXPL"];
+		formElements.is_share_button_visible.previousElementSibling.textContent = lychee.locale["ALBUM_SHARE_BUTTON_VISIBLE"];
+		formElements.is_share_button_visible.nextElementSibling.textContent = lychee.locale["ALBUM_SHARE_BUTTON_VISIBLE_EXPL"];
+		formElements.has_password.previousElementSibling.textContent = lychee.locale["ALBUM_PASSWORD_PROT"];
+		formElements.has_password.nextElementSibling.textContent = lychee.locale["ALBUM_PASSWORD_PROT_EXPL"];
+		formElements.password.placeholder = lychee.locale["PASSWORD"];
+		formElements.is_nsfw.previousElementSibling.textContent = lychee.locale["ALBUM_NSFW"];
+		formElements.is_nsfw.nextElementSibling.textContent = lychee.locale["ALBUM_NSFW_EXPL"];
+
+		formElements.is_public.checked = album.json.is_public;
+		formElements.is_nsfw.checked = album.json.is_nsfw;
+
+		/**
+		 * Array of checkboxes which are enable/disabled wrt. the state of `is_public`
+		 * @type {HTMLInputElement[]}
+		 */
+		const tristateCheckboxes = [
+			formElements.grants_full_photo,
+			formElements.requires_link,
+			formElements.is_downloadable,
+			formElements.is_share_button_visible,
+			formElements.has_password,
+		];
+
 		if (album.json.is_public) {
-			$(".basicModal .choice input").attr("disabled", false);
+			tristateCheckboxes.forEach(function (checkbox) {
+				checkbox.parentElement.classList.remove("disabled");
+				checkbox.disabled = false;
+			});
 			// Initialize options based on album settings.
-			$('.basicModal .choice input[name="grants_full_photo"]').prop("checked", album.json.grants_full_photo);
-			$('.basicModal .choice input[name="requires_link"]').prop("checked", album.json.requires_link);
-			$('.basicModal .choice input[name="is_downloadable"]').prop("checked", album.json.is_downloadable);
-			$('.basicModal .choice input[name="is_share_button_visible"]').prop("checked", album.json.is_share_button_visible);
-			$('.basicModal .choice input[name="has_password"]').prop("checked", album.json.has_password);
+			formElements.grants_full_photo.checked = album.json.grants_full_photo;
+			formElements.requires_link.checked = album.json.requires_link;
+			formElements.is_downloadable.checked = album.json.is_downloadable;
+			formElements.is_share_button_visible.checked = album.json.is_share_button_visible;
+			formElements.has_password.checked = album.json.has_password;
 			if (album.json.has_password) {
-				$('.basicModal .choice input[name="passwordtext"]').show();
+				formElements.password.parentElement.classList.remove("hidden");
+			} else {
+				formElements.password.parentElement.classList.add("hidden");
 			}
 		} else {
-			$(".basicModal .choice input").attr("disabled", true);
+			tristateCheckboxes.forEach(function (checkbox) {
+				checkbox.parentElement.classList.add("disabled");
+				checkbox.disabled = true;
+			});
 			// Initialize options based on global settings.
-			$('.basicModal .choice input[name="grants_full_photo"]').prop("checked", lychee.grants_full_photo);
-			$('.basicModal .choice input[name="requires_link"]').prop("checked", false);
-			$('.basicModal .choice input[name="is_downloadable"]').prop("checked", lychee.is_downloadable);
-			$('.basicModal .choice input[name="is_share_button_visible"]').prop("checked", lychee.is_share_button_visible);
-			$('.basicModal .choice input[name="has_password"]').prop("checked", false);
-			$('.basicModal .choice input[name="passwordtext"]').hide();
+			formElements.grants_full_photo.checked = lychee.full_photo;
+			formElements.requires_link.checked = false;
+			formElements.is_downloadable.checked = lychee.downloadable;
+			formElements.is_share_button_visible.checked = lychee.share_button_visible;
+			formElements.has_password.checked = false;
+			formElements.password.parentElement.classList.add("hidden");
 		}
 
-		$('.basicModal .switch input[name="is_public"]').on("change", function () {
-			$(".basicModal .choice input").attr("disabled", $(this).prop("checked") !== true);
+		formElements.is_public.addEventListener("change", function () {
+			tristateCheckboxes.forEach(function (checkbox) {
+				checkbox.parentElement.classList.toggle("disabled");
+				checkbox.disabled = !formElements.is_public.checked;
+			});
 		});
 
-		$('.basicModal .choice input[name="has_password"]').on("change", function () {
-			if ($(this).prop("checked") === true) {
-				$('.basicModal .choice input[name="passwordtext"]').show().focus();
+		formElements.has_password.addEventListener("change", function () {
+			if (formElements.has_password.checked) {
+				formElements.password.parentElement.classList.remove("hidden");
+				formElements.password.focus();
 			} else {
-				$('.basicModal .choice input[name="passwordtext"]').hide();
+				formElements.password.parentElement.classList.add("hidden");
 			}
 		});
 	};
 
 	basicModal.show({
-		body: msg,
-		callback: dialogSetupCB,
+		body: setAlbumProtectionPolicyBody,
+		readyCB: initAlbumProtectionPolicyDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["SAVE"],
@@ -993,81 +1125,72 @@ album.setProtectionPolicy = function (albumID) {
  * @returns {void}
  */
 album.shareUsers = function (albumID) {
+	/**
+	 * @param {ModalDialogResult} data
+	 */
 	const action = function (data) {
 		basicModal.close();
 
 		/** @type {number[]} */
-		const sharingToAdd = [];
-		/** @type {number[]} */
-		const sharingToDelete = [];
-		$(".basicModal .choice input").each((_, input) => {
-			const $input = $(input);
-			if ($input.is(":checked")) {
-				if ($input.data("sharingId") === undefined) {
-					// Input is checked but has no sharing id => new share to create
-					sharingToAdd.push(Number.parseInt(input.name));
-				}
-			} else {
-				const sharingId = $input.data("sharingId");
-				if (sharingId !== undefined) {
-					// Input is not checked but has a sharing id => existing share to remove
-					sharingToDelete.push(Number.parseInt(sharingId));
-				}
-			}
-		});
+		const selectedUserIds = Object.entries(data)
+			.filter(([userId, isChecked]) => isChecked)
+			.map(([userId, isChecked]) => parseInt(userId, 10));
 
-		if (sharingToDelete.length > 0) {
-			api.post("Sharing::delete", {
-				shareIDs: sharingToDelete,
-			});
-		}
-		if (sharingToAdd.length > 0) {
-			api.post("Sharing::add", {
-				albumIDs: [albumID],
-				userIDs: sharingToAdd,
-			});
-		}
+		api.post("Sharing::setByAlbum", {
+			albumID: albumID,
+			userIDs: selectedUserIds,
+		});
 	};
 
-	const msg = `<form id="sharing_people_form"><p>${lychee.locale["WAIT_FETCH_DATA"]}</p></form>`;
+	/**
+	 * @param {ModalDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initSharingDialog = function (formElements, dialog) {
+		/** @type {HTMLParagraphElement} */
+		const p = dialog.querySelector("p");
+		p.textContent = lychee.locale["WAIT_FETCH_DATA"];
 
-	const dialogSetupCB = function () {
 		/** @param {SharingInfo} data */
 		const successCallback = function (data) {
-			const sharingForm = $("#sharing_people_form");
-			sharingForm.empty();
-			if (data.users.length !== 0) {
-				sharingForm.append(`<p>${lychee.locale["SHARING_ALBUM_USERS_LONG_MESSAGE"]}</p>`);
-				// Fill with the list of users
-				data.users.forEach((user) => {
-					sharingForm.append(lychee.html`<div class='choice'>
-						<label>
-							<input type='checkbox' name='${user.id}'>
-							<span class='checkbox'>${build.iconic("check")}</span>
-							<span class='label'>$${user.username}</span>
-						</label>
-						<p></p>
-					</div>`);
-				});
-				data.shared
-					.filter((val) => val.album_id === albumID)
-					.forEach((sharing) => {
-						// Check all the shares that already exist, and store their sharing id on the element
-						const elem = $(`.basicModal .choice input[name="${sharing.user_id}"]`);
-						elem.prop("checked", true);
-						elem.data("sharingId", sharing.id);
-					});
-			} else {
-				sharingForm.append(`<p>${lychee.locale["SHARING_ALBUM_USERS_NO_USERS"]}</p>`);
+			if (data.users.length === 0) {
+				p.textContent = lychee.locale["SHARING_ALBUM_USERS_NO_USERS"];
+				return;
 			}
+
+			p.textContent = lychee.locale["SHARING_ALBUM_USERS_LONG_MESSAGE"];
+
+			/** @type {HTMLFormElement} */
+			const form = document.createElement("form");
+
+			const existingShares = new Set(data.shared.map((value) => value.user_id));
+
+			// Create a list with one checkbox per user
+			data.users.forEach((user) => {
+				const div = form.appendChild(document.createElement("div"));
+				div.classList.add("input-group", "compact-inverse");
+				const label = div.appendChild(document.createElement("label"));
+				label.htmlFor = "share_dialog_user_" + user.id;
+				label.textContent = user.username;
+				const input = div.appendChild(document.createElement("input"));
+				input.type = "checkbox";
+				input.id = label.htmlFor;
+				input.name = user.id.toString();
+				input.checked = existingShares.has(user.id);
+			});
+
+			// Append the pre-constructed form to the dialog after the paragraph
+			dialog.appendChild(form);
+			basicModal.cacheFormElements();
 		};
 
-		api.post("Sharing::list", {}, successCallback);
+		api.post("Sharing::list", { albumID: albumID }, successCallback);
 	};
 
 	basicModal.show({
-		body: msg,
-		callback: dialogSetupCB,
+		body: `<p></p>`,
+		readyCB: initSharingDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["SAVE"],
@@ -1133,14 +1256,11 @@ album.qrCode = function () {
 		return;
 	}
 
-	let msg = lychee.html`
-		<div id='qr-code' class='downloads'></div>
-	`;
-
 	basicModal.show({
-		body: msg,
-		callback: function () {
-			let qrcode = $("#qr-code");
+		body: "<div class='qr-code-canvas'></div>",
+		classList: ["qr-code"],
+		readyCB: function (formElements, dialog) {
+			const qrcode = dialog.querySelector("div.qr-code-canvas");
 			QrCreator.render(
 				{
 					text: location.href,
@@ -1148,9 +1268,9 @@ album.qrCode = function () {
 					ecLevel: "H",
 					fill: "#000000",
 					background: "#FFFFFF",
-					size: qrcode.width(),
+					size: qrcode.clientWidth,
 				},
-				qrcode[0]
+				qrcode
 			);
 		},
 		buttons: {
@@ -1175,7 +1295,7 @@ album.getArchive = function (albumIDs) {
  * @param {?string} albumID
  * @param {string} op1
  * @param {string} ops
- * @returns {string} the HTML content of the dialog
+ * @returns {string} the message
  */
 album.buildMessage = function (albumIDs, albumID, op1, ops) {
 	let targetTitle = lychee.locale["UNTITLED"];
@@ -1199,9 +1319,9 @@ album.buildMessage = function (albumIDs, albumID, op1, ops) {
 			sourceTitle = sourceAlbum.title;
 		}
 
-		msg = lychee.html`<p>${sprintf(lychee.locale[op1], lychee.escapeHTML(sourceTitle), lychee.escapeHTML(targetTitle))}'</p>`;
+		msg = sprintf(lychee.locale[op1], sourceTitle, targetTitle);
 	} else {
-		msg = lychee.html`<p>${sprintf(lychee.locale[ops], lychee.escapeHTML(targetTitle))}</p>`;
+		msg = sprintf(lychee.locale[ops], targetTitle);
 	}
 
 	return msg;
@@ -1212,86 +1332,93 @@ album.buildMessage = function (albumIDs, albumID, op1, ops) {
  * @returns {void}
  */
 album.delete = function (albumIDs) {
-	let action = {};
-	let cancel = {};
-	let msg = "";
+	const isTagAlbum = albumIDs.length === 1 && albums.isTagAlbum(albumIDs[0]);
 
-	action.fn = function () {
-		basicModal.close();
-
-		api.post(
-			"Album::delete",
-			{
-				albumIDs: albumIDs,
-			},
-			function () {
-				if (visible.albums()) {
-					albumIDs.forEach(function (id) {
-						view.albums.content.delete(id);
-						albums.deleteByID(id);
-					});
-				} else if (visible.album()) {
-					albums.refresh();
-					if (albumIDs.length === 1 && album.getID() === albumIDs[0]) {
-						lychee.goto(album.getParentID());
-					} else {
-						albumIDs.forEach(function (id) {
-							album.deleteSubByID(id);
-							view.album.content.deleteSub(id);
-						});
-					}
-				}
+	const handleSuccessfulDeletion = function () {
+		if (visible.albums()) {
+			albumIDs.forEach(function (id) {
+				view.albums.content.delete(id);
+				albums.deleteByID(id);
+			});
+		} else if (visible.album()) {
+			albums.refresh();
+			if (albumIDs.length === 1 && album.getID() === albumIDs[0]) {
+				lychee.goto(album.getParentID());
+			} else {
+				albumIDs.forEach(function (id) {
+					album.deleteSubByID(id);
+					view.album.content.deleteSub(id);
+				});
 			}
-		);
+		}
 	};
 
-	if (albumIDs.length === 1 && albumIDs[0] === "unsorted") {
-		action.title = lychee.locale["CLEAR_UNSORTED"];
-		cancel.title = lychee.locale["KEEP_UNSORTED"];
+	const action = function () {
+		basicModal.close();
+		api.post("Album::delete", { albumIDs: albumIDs }, handleSuccessfulDeletion);
+	};
 
-		msg = `<p>` + lychee.locale["DELETE_UNSORTED_CONFIRM"] + `</p>`;
-	} else if (albumIDs.length === 1) {
-		let albumTitle = "";
-		const isTagAlbum = albums.isTagAlbum(albumIDs[0]);
+	/**
+	 * @param {ModalDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 */
+	const initConfirmDeletionDialog = function (formElements, dialog) {
+		/** @type {HTMLParagraphElement} */
+		const p = dialog.querySelector("p");
+		if (albumIDs.length === 1 && albumIDs[0] === SmartAlbumID.UNSORTED) {
+			p.textContent = lychee.locale["DELETE_UNSORTED_CONFIRM"];
+		} else if (albumIDs.length === 1) {
+			let albumTitle = "";
 
-		action.title = lychee.locale[isTagAlbum ? "DELETE_TAG_ALBUM_QUESTION" : "DELETE_ALBUM_QUESTION"];
-		cancel.title = lychee.locale["KEEP_ALBUM"];
+			// Get title
+			if (album.json) {
+				if (album.getID() === albumIDs[0]) {
+					albumTitle = album.json.title;
+				} else albumTitle = album.getSubByID(albumIDs[0]).title;
+			}
+			if (!albumTitle) {
+				let a = albums.getByID(albumIDs[0]);
+				if (a) albumTitle = a.title;
+			}
 
-		// Get title
-		if (album.json) {
-			if (album.getID() === albumIDs[0]) {
-				albumTitle = album.json.title;
-			} else albumTitle = album.getSubByID(albumIDs[0]).title;
+			// Fallback for album without a title
+			if (!albumTitle) albumTitle = lychee.locale["UNTITLED"];
+
+			p.textContent = isTagAlbum
+				? sprintf(lychee.locale["DELETE_TAG_ALBUM_CONFIRMATION"], albumTitle)
+				: sprintf(lychee.locale["DELETE_ALBUM_CONFIRMATION"], albumTitle);
+		} else {
+			p.textContent = sprintf(lychee.locale["DELETE_ALBUMS_CONFIRMATION"], albumIDs.length);
 		}
-		if (!albumTitle) {
-			let a = albums.getByID(albumIDs[0]);
-			if (a) albumTitle = a.title;
-		}
+	};
 
-		// Fallback for album without a title
-		if (!albumTitle) albumTitle = lychee.locale["UNTITLED"];
+	const actionButtonLabel =
+		albumIDs.length === 1
+			? albumIDs[0] === SmartAlbumID.UNSORTED
+				? lychee.locale["CLEAR_UNSORTED"]
+				: isTagAlbum
+				? lychee.locale["DELETE_TAG_ALBUM_QUESTION"]
+				: lychee.locale["DELETE_ALBUM_QUESTION"]
+			: lychee.locale["DELETE_ALBUMS_QUESTION"];
 
-		msg = lychee.html`<p>${sprintf(
-			lychee.locale[isTagAlbum ? "DELETE_TAG_ALBUM_CONFIRMATION" : "DELETE_ALBUM_CONFIRMATION"],
-			lychee.escapeHTML(albumTitle)
-		)}</p>`;
-	} else {
-		action.title = lychee.locale["DELETE_ALBUMS_QUESTION"];
-		cancel.title = lychee.locale["KEEP_ALBUMS"];
-
-		msg = lychee.html`<p>${sprintf(lychee.locale["DELETE_ALBUMS_CONFIRMATION"], albumIDs.length)}</p>`;
-	}
+	const cancelButtonLabel =
+		albumIDs.length === 1
+			? albumIDs[0] === SmartAlbumID.UNSORTED
+				? lychee.locale["KEEP_UNSORTED"]
+				: lychee.locale["KEEP_ALBUM"]
+			: lychee.locale["KEEP_ALBUMS"];
 
 	basicModal.show({
-		body: msg,
+		body: "<p></p>",
+		readyCB: initConfirmDeletionDialog,
 		buttons: {
 			action: {
-				title: action.title,
-				fn: action.fn,
-				class: "red",
+				title: actionButtonLabel,
+				fn: action,
+				classList: ["red"],
 			},
 			cancel: {
-				title: cancel.title,
+				title: cancelButtonLabel,
 				fn: basicModal.close,
 			},
 		},
@@ -1319,12 +1446,14 @@ album.merge = function (albumIDs, albumID, confirm = true) {
 
 	if (confirm) {
 		basicModal.show({
-			body: album.buildMessage(albumIDs, albumID, "ALBUM_MERGE", "ALBUMS_MERGE"),
+			body: "<p></p>",
+			readyCB: (formElements, dialog) =>
+				(dialog.querySelector("p").textContent = album.buildMessage(albumIDs, albumID, "ALBUM_MERGE", "ALBUMS_MERGE")),
 			buttons: {
 				action: {
 					title: lychee.locale["MERGE_ALBUM"],
 					fn: action,
-					class: "red",
+					classList: ["red"],
 				},
 				cancel: {
 					title: lychee.locale["DONT_MERGE"],
@@ -1358,12 +1487,14 @@ album.setAlbum = function (albumIDs, albumID, confirm = true) {
 
 	if (confirm) {
 		basicModal.show({
-			body: album.buildMessage(albumIDs, albumID, "ALBUM_MOVE", "ALBUMS_MOVE"),
+			body: "<p></p>",
+			readyCB: (formElements, dialog) =>
+				(dialog.querySelector("p").textContent = album.buildMessage(albumIDs, albumID, "ALBUM_MOVE", "ALBUMS_MOVE")),
 			buttons: {
 				action: {
 					title: lychee.locale["MOVE_ALBUMS"],
 					fn: action,
-					class: "red",
+					classList: ["red"],
 				},
 				cancel: {
 					title: lychee.locale["NOT_MOVE_ALBUMS"],

@@ -190,7 +190,7 @@ header.hideIfLivePhotoNotPlaying = function () {
  * @returns {void}
  */
 header.hide = function () {
-	if (visible.photo() && !visible.sidebar() && !visible.contextMenu() && basicModal.visible() === false) {
+	if (visible.photo() && !visible.sidebar() && !visible.contextMenu() && basicModal.isVisible() === false) {
 		tabindex.saveSettings(header.dom());
 		tabindex.makeUnfocusable(header.dom());
 

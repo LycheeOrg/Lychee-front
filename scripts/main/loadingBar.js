@@ -36,7 +36,7 @@ loadingBar.show = function (status, errorText) {
 		if (visible.header()) header.dom().addClass("header--error");
 
 		// Also move down the dark background
-		if (basicModal.visible()) {
+		if (basicModal.isVisible()) {
 			$(".basicModalContainer").addClass("basicModalContainer--error");
 			$(".basicModal").addClass("basicModal--error");
 		}
@@ -68,7 +68,7 @@ loadingBar.show = function (status, errorText) {
 		if (visible.header()) header.dom().addClass("header--error");
 
 		// Also move down the dark background
-		if (basicModal.visible()) {
+		if (basicModal.isVisible()) {
 			$(".basicModalContainer").addClass("basicModalContainer--error");
 			$(".basicModal").addClass("basicModal--error");
 		}

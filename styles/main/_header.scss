@@ -156,7 +156,11 @@
 	}
 
 	// Search -------------------------------------------------------------- //
-	&__search {
+	.header__search__field {
+		position: relative;
+	}
+
+	input[type="text"].header__search {
 		flex-shrink: 0;
 		width: 80px;
 		margin: 0;
@@ -183,10 +187,6 @@
 
 		&::-ms-clear {
 			display: none;
-		}
-
-		&__field {
-			position: relative;
 		}
 	}
 

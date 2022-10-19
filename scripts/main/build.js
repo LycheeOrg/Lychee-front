@@ -86,7 +86,7 @@ build.album = function (data, disabled = false) {
 	// default: any other type defaults to old style setting subtitles based of album sorting
 	switch (lychee.album_subtitle_type) {
 		case "description":
-			subtitle = data.description ? data.description : "";
+			subtitle = data.description ? lychee.escapeHTML(data.description) : "";
 			break;
 		case "takedate":
 			if (formattedMinTs !== "" || formattedMaxTs !== "") {
@@ -133,7 +133,7 @@ build.album = function (data, disabled = false) {
 				  ${build.getAlbumThumb(data)}
 				<div class='overlay'>
 					<h1 title='$${data.title}'>$${data.title}</h1>
-					<a>$${subtitle}</a>
+					<a>${subtitle}</a>
 				</div>
 			`;
 
@@ -493,62 +493,6 @@ build.no_content = function (type) {
 	html += `</div>`;
 
 	return html;
-};
-
-/**
- * @param {string}                                           title the title of the dialog
- * @param {(FileList|File[]|DropboxFile[]|{name: string}[])} files a list of file entries to be shown in the dialog
- * @returns {string}                                                the HTML fragment for the dialog
- */
-build.uploadModal = function (title, files) {
-	let html = "";
-
-	html += lychee.html`
-			<h1>$${title}</h1>
-			<div class='rows'>
-			`;
-
-	let i = 0;
-
-	while (i < files.length) {
-		let file = files[i];
-
-		if (file.name.length > 40) file.name = file.name.substr(0, 17) + "..." + file.name.substr(file.name.length - 20, 20);
-
-		html += lychee.html`
-				<div class='row'>
-					<a class='name'>$${file.name}</a>
-					<a class='status'></a>
-					<p class='notice'></p>
-				</div>
-				`;
-
-		i++;
-	}
-
-	html += `</div>`;
-
-	return html;
-};
-
-/**
- * Builds the HTML snippet for a row in the upload dialog.
- *
- * @param {string} name
- * @returns {string}
- */
-build.uploadNewFile = function (name) {
-	if (name.length > 40) {
-		name = name.substring(0, 17) + "..." + name.substring(name.length - 20, name.length);
-	}
-
-	return lychee.html`
-		<div class='row'>
-			<a class='name'>$${name}</a>
-			<a class='status'></a>
-			<p class='notice'></p>
-		</div>
-		`;
 };
 
 /**

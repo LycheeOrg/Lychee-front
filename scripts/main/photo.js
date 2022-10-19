@@ -282,21 +282,7 @@ photo.next = function (animate) {
  * @returns {boolean}
  */
 photo.delete = function (photoIDs) {
-	let action = {};
-	let cancel = {};
-	let msg = "";
-	let photoTitle = "";
-
-	if (photoIDs.length === 1) {
-		// Get title if only one photo is selected
-		if (visible.photo()) photoTitle = photo.json.title;
-		else photoTitle = album.getByID(photoIDs[0]).title;
-
-		// Fallback for photos without a title
-		if (!photoTitle) photoTitle = lychee.locale["UNTITLED"];
-	}
-
-	action.fn = function () {
+	const deletePhotos = function () {
 		let nextPhotoID = null;
 		let previousPhotoID = null;
 
@@ -341,28 +327,31 @@ photo.delete = function (photoIDs) {
 		api.post("Photo::delete", { photoIDs: photoIDs });
 	};
 
-	if (photoIDs.length === 1) {
-		action.title = lychee.locale["PHOTO_DELETE"];
-		cancel.title = lychee.locale["PHOTO_KEEP"];
-
-		msg = lychee.html`<p>${sprintf(lychee.locale["PHOTO_DELETE_CONFIRMATION"], lychee.escapeHTML(photoTitle))}</p>`;
-	} else {
-		action.title = lychee.locale["PHOTO_DELETE"];
-		cancel.title = lychee.locale["PHOTO_KEEP"];
-
-		msg = lychee.html`<p>${sprintf(lychee.locale["PHOTO_DELETE_ALL"], photoIDs.length)}</p>`;
-	}
+	/**
+	 * @param {ModalDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initDeletePhotoDialog = function (formElements, dialog) {
+		if (photoIDs.length === 1) {
+			const photoTitle = (visible.photo() ? photo.json.title : album.getByID(photoIDs[0]).title) || lychee.locale["UNTITLED"];
+			dialog.querySelector("p").textContent = sprintf(lychee.locale["PHOTO_DELETE_CONFIRMATION"], photoTitle);
+		} else {
+			dialog.querySelector("p").textContent = sprintf(lychee.locale["PHOTO_DELETE_ALL"], photoIDs.length);
+		}
+	};
 
 	basicModal.show({
-		body: msg,
+		body: "<p></p>",
+		readyCB: initDeletePhotoDialog,
 		buttons: {
 			action: {
-				title: action.title,
-				fn: action.fn,
-				class: "red",
+				title: lychee.locale["PHOTO_DELETE"],
+				fn: deletePhotos,
+				classList: ["red"],
 			},
 			cancel: {
-				title: cancel.title,
+				title: lychee.locale["PHOTO_KEEP"],
 				fn: basicModal.close,
 			},
 		},
@@ -375,22 +364,13 @@ photo.delete = function (photoIDs) {
  * @returns {void}
  */
 photo.setTitle = function (photoIDs) {
-	let oldTitle = "";
-	let msg = "";
-
-	if (photoIDs.length === 1) {
-		// Get old title if only one photo is selected
-		if (photo.json) oldTitle = photo.json.title;
-		else if (album.json) oldTitle = album.getByID(photoIDs[0]).title;
-	}
-
 	/**
 	 * @param {{title: string}} data
 	 * @returns {void}
 	 */
 	const action = function (data) {
 		if (!data.title.trim()) {
-			basicModal.error("title");
+			basicModal.focusError("title");
 			return;
 		}
 
@@ -415,13 +395,28 @@ photo.setTitle = function (photoIDs) {
 		});
 	};
 
-	const input = lychee.html`<input class='text' name='title' type='text' maxlength='100' placeholder='Title' value='$${oldTitle}'>`;
+	const setPhotoTitleDialogBody = `
+		<p></p>
+		<form>
+			<div class="input-group stacked"><input class='text' name='title' type='text' maxlength='100'></div>
+		</form>`;
 
-	if (photoIDs.length === 1) msg = lychee.html`<p>${lychee.locale["PHOTO_NEW_TITLE"]} ${input}</p>`;
-	else msg = lychee.html`<p>${sprintf(lychee.locale["PHOTOS_NEW_TITLE"], photoIDs.length)} ${input}</p>`;
+	/**
+	 * @param {ModalDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initSetPhotoTitleDialog = function (formElements, dialog) {
+		const oldTitle = photoIDs.length === 1 ? (photo.json ? photo.json.title : album.getByID(photoIDs[0]).title) : "";
+		dialog.querySelector("p").textContent =
+			photoIDs.length === 1 ? lychee.locale["PHOTO_NEW_TITLE"] : sprintf(lychee.locale["PHOTOS_NEW_TITLE"], photoIDs.length);
+		formElements.title.placeholder = "Title";
+		formElements.title.value = oldTitle;
+	};
 
 	basicModal.show({
-		body: msg,
+		body: setPhotoTitleDialogBody,
+		readyCB: initSetPhotoTitleDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["PHOTO_SET_TITLE"],
@@ -564,173 +559,151 @@ photo.setStar = function (photoIDs, isStarred) {
  * @returns {void}
  */
 photo.setProtectionPolicy = function (photoID) {
-	const msg_switch = lychee.html`
-		<div class='switch'>
-			<label>
-				<span class='label'>${lychee.locale["PHOTO_PUBLIC"]}:</span>
-				<input type='checkbox' name='is_public'>
-				<span class='slider round'></span>
-			</label>
-			<p>${lychee.locale["PHOTO_PUBLIC_EXPL"]}</p>
-		</div>
-	`;
+	/**
+	 * @param {{is_public: boolean}} data
+	 */
+	const action = function (data) {
+		/**
+		 * Note: `newIsPublic` must be `0` or `1` and no boolean, because
+		 * `photo.is_public` is an integer between `0` and `2`.
+		 */
+		const newIsPublic = data.is_public ? 1 : 0;
 
-	const msg_choices = lychee.html`
-		<div class='choice'>
-			<label>
-				<input type='checkbox' name='grants_full_photo' disabled>
-				<span class='checkbox'>${build.iconic("check")}</span>
-				<span class='label'>${lychee.locale["PHOTO_FULL"]}</span>
-			</label>
-			<p>${lychee.locale["PHOTO_FULL_EXPL"]}</p>
-		</div>
-		<div class='choice'>
-			<label>
-				<input type='checkbox' name='requires_link' disabled>
-				<span class='checkbox'>${build.iconic("check")}</span>
-				<span class='label'>${lychee.locale["PHOTO_HIDDEN"]}</span>
-			</label>
-			<p>${lychee.locale["PHOTO_HIDDEN_EXPL"]}</p>
-		</div>
-		<div class='choice'>
-			<label>
-				<input type='checkbox' name='is_downloadable' disabled>
-				<span class='checkbox'>${build.iconic("check")}</span>
-				<span class='label'>${lychee.locale["PHOTO_DOWNLOADABLE"]}</span>
-			</label>
-			<p>${lychee.locale["PHOTO_DOWNLOADABLE_EXPL"]}</p>
-		</div>
-		<div class='choice'>
-			<label>
-				<input type='checkbox' name='is_share_button_visible' disabled>
-				<span class='checkbox'>${build.iconic("check")}</span>
-				<span class='label'>${lychee.locale["PHOTO_SHARE_BUTTON_VISIBLE"]}</span>
-			</label>
-			<p>${lychee.locale["PHOTO_SHARE_BUTTON_VISIBLE_EXPL"]}</p>
-		</div>
-		<div class='choice'>
-			<label>
-				<input type='checkbox' name='has_password' disabled>
-				<span class='checkbox'>${build.iconic("check")}</span>
-				<span class='label'>${lychee.locale["PHOTO_PASSWORD_PROT"]}</span>
-			</label>
-			<p>${lychee.locale["PHOTO_PASSWORD_PROT_EXPL"]}</p>
-		</div>
-	`;
-
-	if (photo.json.is_public === 2) {
-		// Public album. We can't actually change anything, but we will
-		// display the current settings.
-
-		const msg = lychee.html`
-			<p class='less'>${lychee.locale["PHOTO_NO_EDIT_SHARING_TEXT"]}</p>
-			${msg_switch}
-			${msg_choices}
-		`;
-
-		basicModal.show({
-			body: msg,
-			buttons: {
-				cancel: {
-					title: lychee.locale["CLOSE"],
-					fn: basicModal.close,
-				},
-			},
-		});
-
-		$('.basicModal .switch input[name="is_public"]').prop("checked", true);
-		if (album.json) {
-			if (album.json.grants_full_photo) {
-				$('.basicModal .choice input[name="grants_full_photo"]').prop("checked", true);
+		if (newIsPublic !== photo.json.is_public) {
+			if (visible.photo()) {
+				photo.json.is_public = newIsPublic;
+				view.photo.public();
 			}
-			// Photos in public albums are never hidden as such.  It's the
-			// album that's hidden.  Or is that distinction irrelevant to end
-			// users?
-			if (album.json.is_downloadable) {
-				$('.basicModal .choice input[name="is_downloadable"]').prop("checked", true);
-			}
-			if (album.json.has_password) {
-				$('.basicModal .choice input[name="has_password"]').prop("checked", true);
-			}
+
+			album.getByID(photoID).is_public = newIsPublic;
+			view.album.content.public(photoID);
+
+			albums.refresh();
+
+			api.post("Photo::setPublic", {
+				photoID: photoID,
+				is_public: newIsPublic !== 0,
+			});
 		}
 
-		$(".basicModal .switch input").attr("disabled", true);
-		$(".basicModal .switch .label").addClass("label--disabled");
-	} else {
-		// Private album -- each photo can be shared individually.
+		basicModal.close();
+	};
 
-		const msg = lychee.html`
-			${msg_switch}
-			<p class='photoPublic'>${lychee.locale["PHOTO_EDIT_GLOBAL_SHARING_TEXT"]}</p>
-			${msg_choices}
-		`;
+	const setPhotoProtectionPolicyBody = `
+		<p id="ppp_dialog_no_edit_expl"></p>
+		<form>
+			<div class='input-group compact-no-indent'>
+				<label for="ppp_dialog_public_check"></label>
+				<input type='checkbox' class="slider" id='ppp_dialog_public_check' name='is_public' />
+				<p></p>
+			</div>
+			<p id="ppp_dialog_global_expl"></p>
+			<div class='input-group compact-inverse disabled'>
+				<label for="ppp_dialog_full_photo_check"></label>
+				<input type='checkbox' id='ppp_dialog_full_photo_check' name='grants_full_photo' disabled="disabled" />
+				<p></p>
+			</div>
+			<div class='input-group compact-inverse disabled'>
+				<label for="ppp_dialog_link_check"></label>
+				<input type='checkbox' id='ppp_dialog_link_check' name='requires_link' disabled="disabled" />
+				<p></p>
+			</div>
+			<div class='input-group compact-inverse disabled'>
+				<label for="ppp_dialog_downloadable_check"></label>
+				<input type='checkbox' id='ppp_dialog_downloadable_check' name='is_downloadable' disabled="disabled" />
+				<p></p>
+			</div>
+			<div class='input-group compact-inverse disabled'>
+				<label for="ppp_dialog_share_check"></label>
+				<input type='checkbox' id='ppp_dialog_share_check' name='is_share_button_visible' disabled="disabled" />
+				<p></p>
+			</div>
+			<div class='input-group compact-inverse disabled'>
+				<label for="ppp_dialog_password_check"></label>
+				<input type='checkbox' id='ppp_dialog_password_check' name='has_password' disabled="disabled">
+				<p></p>
+			</div>
+		</form>`;
 
-		// TODO: Actually, the action handler receives an object with values of all input fields. There is no need to run use a jQuery-selector
-		const action = function () {
-			/**
-			 * Note: `newIsPublic` must be of type `number`, because `photo.is_public` is a number, too
-			 * @type {number}
-			 */
-			const newIsPublic = $('.basicModal .switch input[name="is_public"]:checked').length;
+	/**
+	 * @typedef PhotoProtectionPolicyDialogFormElements
+	 * @property {HTMLInputElement} is_public
+	 * @property {HTMLInputElement} grants_full_photo
+	 * @property {HTMLInputElement} requires_link
+	 * @property {HTMLInputElement} is_downloadable
+	 * @property {HTMLInputElement} is_share_button_visible
+	 * @property {HTMLInputElement} has_password
+	 */
 
-			if (newIsPublic !== photo.json.is_public) {
-				if (visible.photo()) {
-					photo.json.is_public = newIsPublic;
-					view.photo.public();
-				}
+	/**
+	 * @param {PhotoProtectionPolicyDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initPhotoProtectionPolicyDialog = function (formElements, dialog) {
+		formElements.is_public.previousElementSibling.textContent = lychee.locale["PHOTO_PUBLIC"];
+		formElements.is_public.nextElementSibling.textContent = lychee.locale["PHOTO_PUBLIC_EXPL"];
+		formElements.grants_full_photo.previousElementSibling.textContent = lychee.locale["PHOTO_FULL"];
+		formElements.grants_full_photo.nextElementSibling.textContent = lychee.locale["PHOTO_FULL_EXPL"];
+		formElements.requires_link.previousElementSibling.textContent = lychee.locale["PHOTO_HIDDEN"];
+		formElements.requires_link.nextElementSibling.textContent = lychee.locale["PHOTO_HIDDEN_EXPL"];
+		formElements.is_downloadable.previousElementSibling.textContent = lychee.locale["PHOTO_DOWNLOADABLE"];
+		formElements.is_downloadable.nextElementSibling.textContent = lychee.locale["PHOTO_DOWNLOADABLE_EXPL"];
+		formElements.is_share_button_visible.previousElementSibling.textContent = lychee.locale["PHOTO_SHARE_BUTTON_VISIBLE"];
+		formElements.is_share_button_visible.nextElementSibling.textContent = lychee.locale["PHOTO_SHARE_BUTTON_VISIBLE_EXPL"];
+		formElements.has_password.previousElementSibling.textContent = lychee.locale["PHOTO_PASSWORD_PROT"];
+		formElements.has_password.nextElementSibling.textContent = lychee.locale["PHOTO_PASSWORD_PROT_EXPL"];
 
-				album.getByID(photoID).is_public = newIsPublic;
-				view.album.content.public(photoID);
-
-				albums.refresh();
-
-				api.post("Photo::setPublic", {
-					photoID: photoID,
-					is_public: newIsPublic !== 0,
-				});
+		if (photo.json.is_public === 2) {
+			// Public album.
+			dialog.querySelector("p#ppp_dialog_no_edit_expl").textContent = lychee.locale["PHOTO_NO_EDIT_SHARING_TEXT"];
+			dialog.querySelector("p#ppp_dialog_global_expl").remove();
+			// Initialize values of detailed settings according to album
+			// settings and hide action button as we can't actually change
+			// anything.
+			formElements.is_public.checked = true;
+			formElements.is_public.disabled = true;
+			formElements.is_public.parentElement.classList.add("disabled");
+			if (album.json) {
+				formElements.grants_full_photo.checked = album.json.grants_full_photo;
+				// Photos in public albums are never hidden as such.  It's the
+				// album that's hidden.  Or is that distinction irrelevant to end
+				// users?
+				formElements.requires_link.checked = false;
+				formElements.is_downloadable.checked = album.json.is_downloadable;
+				formElements.is_share_button_visible = album.json.is_share_button_visible;
+				formElements.has_password.checked = album.json.has_password;
 			}
-
-			basicModal.close();
-		};
-
-		basicModal.show({
-			body: msg,
-			buttons: {
-				action: {
-					title: lychee.locale["SAVE"],
-					fn: action,
-				},
-				cancel: {
-					title: lychee.locale["CANCEL"],
-					fn: basicModal.close,
-				},
-			},
-		});
-
-		$('.basicModal .switch input[name="is_public"]').on("click", function () {
-			if ($(this).prop("checked") === true) {
-				if (lychee.full_photo) {
-					$('.basicModal .choice input[name="grants_full_photo"]').prop("checked", true);
-				}
-				if (lychee.public_photos_hidden) {
-					$('.basicModal .choice input[name="requires_link"]').prop("checked", true);
-				}
-				if (lychee.downloadable) {
-					$('.basicModal .choice input[name="is_downloadable"]').prop("checked", true);
-				}
-				if (lychee.share_button_visible) {
-					$('.basicModal .choice input[name="is_share_button_visible"]').prop("checked", true);
-				}
-				// Photos shared individually can't be password-protected.
-			} else {
-				$(".basicModal .choice input").prop("checked", false);
-			}
-		});
-
-		if (photo.json.is_public === 1) {
-			$('.basicModal .switch input[name="is_public"]').click();
+			basicModal.hideActionButton();
+		} else {
+			// Private album
+			dialog.querySelector("p#ppp_dialog_no_edit_expl").remove();
+			dialog.querySelector("p#ppp_dialog_global_expl").textContent = lychee.locale["PHOTO_EDIT_GLOBAL_SHARING_TEXT"];
+			// Initialize values of detailed settings according to global
+			// configuration.
+			formElements.is_public.checked = photo.json.is_public !== 0;
+			formElements.grants_full_photo.checked = lychee.full_photo;
+			formElements.requires_link.checked = lychee.public_photos_hidden;
+			formElements.is_downloadable.checked = lychee.downloadable;
+			formElements.is_share_button_visible = lychee.share_button_visible;
+			formElements.has_password.checked = false;
 		}
-	}
+	};
+
+	basicModal.show({
+		body: setPhotoProtectionPolicyBody,
+		readyCB: initPhotoProtectionPolicyDialog,
+		buttons: {
+			action: {
+				title: lychee.locale["SAVE"],
+				fn: action,
+			},
+			cancel: {
+				title: lychee.locale["CANCEL"],
+				fn: basicModal.close,
+			},
+		},
+	});
 };
 
 /**
@@ -742,8 +715,6 @@ photo.setProtectionPolicy = function (photoID) {
  * @returns {void}
  */
 photo.setDescription = function (photoID) {
-	const oldDescription = photo.json.description ? photo.json.description : "";
-
 	/**
 	 * @param {{description: string}} data
 	 */
@@ -763,8 +734,26 @@ photo.setDescription = function (photoID) {
 		});
 	};
 
+	const setPhotoDescriptionDialogBody = `
+		<p></p>
+		<form>
+			<div class="input-group stacked"><input class='text' name='description' type='text' maxlength='800'></div>
+		</form>`;
+
+	/**
+	 * @param {ModalDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initSetPhotoDescriptionDialog = function (formElements, dialog) {
+		dialog.querySelector("p").textContent = lychee.locale["PHOTO_NEW_DESCRIPTION"];
+		formElements.description.placeholder = lychee.locale["PHOTO_DESCRIPTION"];
+		formElements.description.value = photo.json.description ? photo.json.description : "";
+	};
+
 	basicModal.show({
-		body: lychee.html`<p>${lychee.locale["PHOTO_NEW_DESCRIPTION"]} <input class='text' name='description' type='text' maxlength='800' placeholder='${lychee.locale["PHOTO_DESCRIPTION"]}' value='$${oldDescription}'></p>`,
+		body: setPhotoDescriptionDialogBody,
+		readyCB: initSetPhotoDescriptionDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["PHOTO_SET_DESCRIPTION"],
@@ -817,15 +806,27 @@ photo.editTags = function (photoIDs) {
 		photo.setTags(photoIDs, newTags);
 	};
 
-	const input = lychee.html`<input class='text' name='tags' type='text' maxlength='800' placeholder='Tags' value='$${oldTags.join(", ")}'>`;
+	const setTagDialogBody = `
+		<p></p>
+		<form>
+			<div class="input-group stacked"><input class='text' name='tags' type='text' minlength='1'></div>
+		</form>`;
 
-	const msg =
-		photoIDs.length === 1
-			? lychee.html`<p>${lychee.locale["PHOTO_NEW_TAGS"]} ${input}</p>`
-			: lychee.html`<p>${sprintf(lychee.locale["PHOTOS_NEW_TAGS"], photoIDs.length)} ${input}</p>`;
+	/**
+	 * @param {ModalDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initSetTagAlbumDialog = function (formElements, dialog) {
+		dialog.querySelector("p").textContent =
+			photoIDs.length === 1 ? lychee.locale["PHOTO_NEW_TAGS"] : sprintf(lychee.locale["PHOTOS_NEW_TAGS"], photoIDs.length);
+		formElements.tags.placeholder = "Tags";
+		formElements.tags.value = oldTags.join(", ");
+	};
 
 	basicModal.show({
-		body: msg,
+		body: setTagDialogBody,
+		readyCB: initSetTagAlbumDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["PHOTO_SET_TAGS"],
@@ -921,27 +922,27 @@ photo.setLicense = function (photoID) {
 	 */
 	const action = function (data) {
 		basicModal.close();
-		let license = data.license;
 
-		let params = {
-			photoID,
-			license,
-		};
-
-		api.post("Photo::setLicense", params, function () {
-			// update the photo JSON and reload the license in the sidebar
-			photo.json.license = params.license;
-			view.photo.license();
-		});
+		api.post(
+			"Photo::setLicense",
+			{
+				photoID: photoID,
+				license: data.license,
+			},
+			function () {
+				// update the photo JSON and reload the license in the sidebar
+				photo.json.license = data.license;
+				view.photo.license();
+			}
+		);
 	};
 
-	const msg = lychee.html`
-	<div>
-		<p>${lychee.locale["PHOTO_LICENSE"]}
-		<span class="select" style="width:270px">
-			<select name="license" id="license">
-				<option value="none">${lychee.locale["PHOTO_LICENSE_NONE"]}</option>
-				<option value="reserved">${lychee.locale["PHOTO_RESERVED"]}</option>
+	const setPhotoLicenseDialogBody = `
+		<form><div class="input-group compact">
+			<label for="photo_license_dialog_license_select"></label>
+			<div class="select"><select name="license" id="photo_license_dialog_license_select">
+				<option value="none"></option>
+				<option value="reserved"></option>
 				<option value="CC0">CC0 - Public Domain</option>
 				<option value="CC-BY-1.0">CC Attribution 1.0</option>
 				<option value="CC-BY-2.0">CC Attribution 2.0</option>
@@ -973,18 +974,26 @@ photo.setLicense = function (photoID) {
 				<option value="CC-BY-NC-SA-2.5">CC Attribution-NonCommercial-ShareAlike 2.5</option>
 				<option value="CC-BY-NC-SA-3.0">CC Attribution-NonCommercial-ShareAlike 3.0</option>
 				<option value="CC-BY-NC-SA-4.0">CC Attribution-NonCommercial-ShareAlike 4.0</option>
-			</select>
-		</span>
-		<br />
-		<a href="https://creativecommons.org/choose/" target="_blank">${lychee.locale["PHOTO_LICENSE_HELP"]}</a>
-		</p>
-	</div>`;
+			</select></div>
+			<p><a href="https://creativecommons.org/choose/" target="_blank"></a></p>
+		</div></form>`;
+
+	/**
+	 * @param {ModalDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initSetPhotoLicenseDialog = function (formElements, dialog) {
+		formElements.license.labels[0].textContent = lychee.locale["PHOTO_LICENSE"];
+		formElements.license.item(0).textContent = lychee.locale["PHOTO_LICENSE_NONE"];
+		formElements.license.item(1).textContent = lychee.locale["PHOTO_RESERVED"];
+		formElements.license.value = photo.json.license === "" ? "none" : photo.json.license;
+		dialog.querySelector("p a").textContent = lychee.locale["PHOTO_LICENSE_HELP"];
+	};
 
 	basicModal.show({
-		body: msg,
-		callback: function () {
-			$("select#license").val(photo.json.license === "" ? "none" : photo.json.license);
-		},
+		body: setPhotoLicenseDialogBody,
+		readyCB: initSetPhotoLicenseDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["PHOTO_SET_LICENSE"],
@@ -1007,109 +1016,92 @@ photo.setLicense = function (photoID) {
  * @returns {void}
  */
 photo.getArchive = function (photoIDs, kind = null) {
-	if (photoIDs.length === 1 && kind === null) {
-		// For a single photo, allow to pick the kind via a dialog box.
+	if (photoIDs.length !== 1 || kind !== null) {
+		location.href = "api/Photo::getArchive?photoIDs=" + photoIDs.join() + "&kind=" + kind;
+		return;
+	}
 
-		let myPhoto;
+	// For a single photo without a specified kind, allow to pick the kind
+	// via a dialog box and re-call this method later on.
 
-		if (photo.json && photo.json.id === photoIDs[0]) {
-			myPhoto = photo.json;
-		} else {
-			myPhoto = album.getByID(photoIDs[0]);
-		}
+	const myPhoto = photo.json && photo.json.id === photoIDs[0] ? photo.json : album.getByID(photoIDs[0]);
 
-		/**
-		 * @param {string} id - the ID of the button, same semantics as "kind"
-		 * @param {string} label - the caption on the button
-		 * @returns {string} - HTML
-		 */
-		const buildButton = function (id, label) {
-			return lychee.html`
-				<a class='basicModal__button' id='${id}' title='${lychee.locale["DOWNLOAD"]}'>
-					${build.iconic("cloud-download")}${label}
+	const kind2VariantAndLocalizedLabel = {
+		FULL: ["original", lychee.locale["PHOTO_FULL"]],
+		MEDIUM2X: ["medium2x", lychee.locale["PHOTO_MEDIUM_HIDPI"]],
+		MEDIUM: ["medium", lychee.locale["PHOTO_MEDIUM"]],
+		SMALL2X: ["small2x", lychee.locale["PHOTO_SMALL_HIDPI"]],
+		SMALL: ["small", lychee.locale["PHOTO_SMALL"]],
+		THUMB2X: ["thumb2x", lychee.locale["PHOTO_THUMB_HIDPI"]],
+		THUMB: ["thumb", lychee.locale["PHOTO_THUMB"]],
+	};
+
+	/**
+	 * @param {string} kind - the kind this button is for, used to construct the ID
+	 * @returns {string} - HTML
+	 */
+	const buildButton = function (kind) {
+		return `
+				<a class='button' data-photo-kind="${kind}">
+					<svg class='iconic ionicons'><use xlink:href='#cloud-download' /></svg>
+					<span></span>
 				</a>
 			`;
-		};
+	};
 
-		let msg = lychee.html`
-			<div class='downloads'>
-		`;
+	const getPhotoArchiveDialogBody =
+		Object.entries(kind2VariantAndLocalizedLabel).reduce((html, [kind]) => html + buildButton(kind), "") + buildButton("LIVEPHOTOVIDEO");
 
-		if (myPhoto.size_variants.original.url) {
-			msg += buildButton(
-				"FULL",
-				`${lychee.locale["PHOTO_FULL"]} (${myPhoto.size_variants.original.width}x${myPhoto.size_variants.original.height},
-				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.original.filesize)})`
-			);
-		}
-		if (myPhoto.live_photo_url !== null) {
-			msg += buildButton("LIVEPHOTOVIDEO", `${lychee.locale["PHOTO_LIVE_VIDEO"]}`);
-		}
-		if (myPhoto.size_variants.medium2x !== null) {
-			msg += buildButton(
-				"MEDIUM2X",
-				`${lychee.locale["PHOTO_MEDIUM_HIDPI"]} (${myPhoto.size_variants.medium2x.width}x${myPhoto.size_variants.medium2x.height},
-				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.medium2x.filesize)})`
-			);
-		}
-		if (myPhoto.size_variants.medium !== null) {
-			msg += buildButton(
-				"MEDIUM",
-				`${lychee.locale["PHOTO_MEDIUM"]} (${myPhoto.size_variants.medium.width}x${myPhoto.size_variants.medium.height},
-				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.medium.filesize)})`
-			);
-		}
-		if (myPhoto.size_variants.small2x !== null) {
-			msg += buildButton(
-				"SMALL2X",
-				`${lychee.locale["PHOTO_SMALL_HIDPI"]} (${myPhoto.size_variants.small2x.width}x${myPhoto.size_variants.small2x.height},
-				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.small2x.filesize)})`
-			);
-		}
-		if (myPhoto.size_variants.small !== null) {
-			msg += buildButton(
-				"SMALL",
-				`${lychee.locale["PHOTO_SMALL"]} (${myPhoto.size_variants.small.width}x${myPhoto.size_variants.small.height},
-				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.small.filesize)})`
-			);
-		}
-		if (myPhoto.size_variants.thumb2x !== null) {
-			msg += buildButton(
-				"THUMB2X",
-				`${lychee.locale["PHOTO_THUMB_HIDPI"]} (${myPhoto.size_variants.thumb2x.width}x${myPhoto.size_variants.thumb2x.height},
-				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.thumb2x.filesize)})`
-			);
-		}
-		if (myPhoto.size_variants.thumb !== null) {
-			msg += buildButton(
-				"THUMB",
-				`${lychee.locale["PHOTO_THUMB"]} (${myPhoto.size_variants.thumb.width}x${myPhoto.size_variants.thumb.height},
-				${lychee.locale.printFilesizeLocalized(myPhoto.size_variants.thumb.filesize)})`
-			);
-		}
-
-		msg += lychee.html`
-			</div>
-		`;
-
-		basicModal.show({
-			body: msg,
-			buttons: {
-				cancel: {
-					title: lychee.locale["CLOSE"],
-					fn: basicModal.close,
-				},
-			},
-		});
-
-		$(".downloads .basicModal__button").on(lychee.getEventName(), function () {
-			const kind = this.id;
+	/** @param {TouchEvent|MouseEvent} ev */
+	const onClickOrTouch = function (ev) {
+		if (ev.currentTarget instanceof HTMLAnchorElement) {
 			basicModal.close();
-			photo.getArchive(photoIDs, kind);
+			photo.getArchive(photoIDs, ev.currentTarget.dataset.photoKind);
+			ev.stopPropagation();
+		}
+	};
+
+	/**
+	 * @param {ModalDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 */
+	const initGetPhotoArchiveDialog = function (formElements, dialog) {
+		Object.entries(kind2VariantAndLocalizedLabel).forEach(function ([kind, [variant, lLabel]]) {
+			/** @type {HTMLAnchorElement} */
+			const button = dialog.querySelector('a[data-photo-kind="' + kind + '"]');
+			/** @type {?SizeVariant} */
+			const sv = myPhoto.size_variants[variant];
+			if (sv) {
+				button.title = lychee.locale["DOWNLOAD"];
+				button.addEventListener(lychee.getEventName(), onClickOrTouch);
+				button.lastElementChild.textContent =
+					lLabel + " (" + sv.width + "×" + sv.height + ", " + lychee.locale.printFilesizeLocalized(sv.filesize) + ")";
+			} else {
+				button.remove();
+			}
 		});
-	} else {
-		location.href = "api/Photo::getArchive?photoIDs=" + photoIDs.join() + "&kind=" + kind;
-	}
+		/** @type {HTMLAnchorElement} */
+		const liveButton = dialog.querySelector('a[data-photo-kind="LIVEPHOTOVIDEO"]');
+		if (myPhoto.live_photo_url !== null) {
+			liveButton.title = lychee.locale["DOWNLOAD"];
+			liveButton.addEventListener(lychee.getEventName(), onClickOrTouch);
+			liveButton.lastElementChild.textContent = lychee.locale["PHOTO_LIVE_VIDEO"];
+		} else {
+			liveButton.remove();
+		}
+	};
+
+	basicModal.show({
+		body: getPhotoArchiveDialogBody,
+		readyCB: initGetPhotoArchiveDialog,
+		classList: ["downloads"],
+		buttons: {
+			cancel: {
+				title: lychee.locale["CLOSE"],
+				fn: basicModal.close,
+			},
+		},
+	});
 };
 
 /**
@@ -1127,14 +1119,11 @@ photo.qrCode = function (photoID) {
 		return;
 	}
 
-	let msg = lychee.html`
-		<div id='qr-code' class='downloads'></div>
-	`;
-
 	basicModal.show({
-		body: msg,
-		callback: function () {
-			qrcode = $("#qr-code");
+		body: "<div class='qr-code-canvas'></div>",
+		classList: ["qr-code"],
+		readyCB: function (formElements, dialog) {
+			const qrcode = dialog.querySelector("div.qr-code-canvas");
 			QrCreator.render(
 				{
 					text: photo.getViewLink(myPhoto.id),
@@ -1142,9 +1131,9 @@ photo.qrCode = function (photoID) {
 					ecLevel: "H",
 					fill: "#000000",
 					background: "#FFFFFF",
-					size: qrcode.width(),
+					size: qrcode.clientWidth,
 				},
-				qrcode[0]
+				qrcode
 			);
 		},
 		buttons: {
@@ -1183,97 +1172,90 @@ photo.showDirectLinks = function (photoID) {
 	}
 
 	/**
-	 * @param {string} label
-	 * @param {string} url
+	 * @param {string} name - name of the HTML input element
 	 * @returns {string} - HTML
 	 */
-	const buildLine = function (label, url) {
-		return lychee.html`
-			<p>
-				${label}
-				<br />
-				<input class='text' readonly value='${url}'>
-				<a class='basicModal__button' title='${lychee.locale["URL_COPY_TO_CLIPBOARD"]}'>
-					${build.iconic("copy", "ionicons")}
-				</a>
-			</p>
-		`;
+	const buildLine = function (name) {
+		return `
+			<div class="input-group stacked">
+				<label for="${"dialog-direct-links-input-" + name}"></label>
+				<input id="${"dialog-direct-links-input-" + name}" name="${name}" type='text' readonly />
+				<a class='button'><svg class='iconic ionicons'><use xlink:href='#copy' /></svg></a>
+			</div>`;
 	};
 
-	let msg = lychee.html`
-		<div class='directLinks'>
-			${buildLine(lychee.locale["PHOTO_VIEW"], photo.getViewLink(photoID))}
-			<p class='less'>
-				${lychee.locale["PHOTO_DIRECT_LINKS_TO_IMAGES"]}
-			</p>
-			<div class='imageLinks'>
-	`;
+	const localizations = {
+		original: lychee.locale["PHOTO_FULL"],
+		medium2x: lychee.locale["PHOTO_MEDIUM_HIDPI"],
+		medium: lychee.locale["PHOTO_MEDIUM"],
+		small2x: lychee.locale["PHOTO_SMALL_HIDPI"],
+		small: lychee.locale["PHOTO_SMALL"],
+		thumb2x: lychee.locale["PHOTO_THUMB_HIDPI"],
+		thumb: lychee.locale["PHOTO_THUMB"],
+	};
 
-	if (photo.json.size_variants.original.url) {
-		msg += buildLine(
-			`${lychee.locale["PHOTO_FULL"]} (${photo.json.size_variants.original.width}x${photo.json.size_variants.original.height})`,
-			lychee.getBaseUrl() + photo.json.size_variants.original.url
-		);
-	}
-	if (photo.json.size_variants.medium2x !== null) {
-		msg += buildLine(
-			`${lychee.locale["PHOTO_MEDIUM_HIDPI"]} (${photo.json.size_variants.medium2x.width}x${photo.json.size_variants.medium2x.height})`,
-			lychee.getBaseUrl() + photo.json.size_variants.medium2x.url
-		);
-	}
-	if (photo.json.size_variants.medium !== null) {
-		msg += buildLine(
-			`${lychee.locale["PHOTO_MEDIUM"]} (${photo.json.size_variants.medium.width}x${photo.json.size_variants.medium.height})`,
-			lychee.getBaseUrl() + photo.json.size_variants.medium.url
-		);
-	}
-	if (photo.json.size_variants.small2x !== null) {
-		msg += buildLine(
-			`${lychee.locale["PHOTO_SMALL_HIDPI"]} (${photo.json.size_variants.small2x.width}x${photo.json.size_variants.small2x.height})`,
-			lychee.getBaseUrl() + photo.json.size_variants.small2x.url
-		);
-	}
-	if (photo.json.size_variants.small !== null) {
-		msg += buildLine(
-			`${lychee.locale["PHOTO_SMALL"]} (${photo.json.size_variants.small.width}x${photo.json.size_variants.small.height})`,
-			lychee.getBaseUrl() + photo.json.size_variants.small.url
-		);
-	}
-	if (photo.json.size_variants.thumb2x !== null) {
-		msg += buildLine(
-			`${lychee.locale["PHOTO_THUMB_HIDPI"]} (${photo.json.size_variants.thumb2x.width}x${photo.json.size_variants.thumb2x.height})`,
-			lychee.getBaseUrl() + photo.json.size_variants.thumb2x.url
-		);
-	}
-	if (photo.json.size_variants.thumb !== null) {
-		msg += buildLine(
-			`${lychee.locale["PHOTO_THUMB"]} (${photo.json.size_variants.thumb.width}x${photo.json.size_variants.thumb.height})`,
-			lychee.getBaseUrl() + photo.json.size_variants.thumb.url
-		);
-	}
-	if (photo.json.live_photo_url) {
-		msg += buildLine(` ${lychee.locale["PHOTO_LIVE_VIDEO"]} `, lychee.getBaseUrl() + photo.json.live_photo_url);
-	}
+	const showDirectLinksDialogBody =
+		'<form class="photo-links">' +
+		buildLine("view") +
+		'</form><p></p><form class="photo-links">' +
+		Object.entries(localizations).reduce((html, [type]) => html + buildLine(type), "") +
+		buildLine("live") +
+		"</form>";
 
-	msg += lychee.html`
-		</div>
-		</div>
-	`;
+	/**
+	 * @param {ModalDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 */
+	const initShowDirectLinksDialog = function (formElements, dialog) {
+		formElements.view.value = photo.getViewLink(photoID);
+		formElements.view.previousElementSibling.textContent = lychee.locale["PHOTO_VIEW"];
+		formElements.view.nextElementSibling.title = lychee.locale["URL_COPY_TO_CLIPBOARD"];
+		dialog.querySelector("p").textContent = lychee.locale["PHOTO_DIRECT_LINKS_TO_IMAGES"];
+
+		for (const type in localizations) {
+			/** @type {?SizeVariant} */
+			const sv = photo.json.size_variants[type];
+			if (sv !== null) {
+				formElements[type].value = lychee.getBaseUrl() + sv.url;
+				formElements[type].previousElementSibling.textContent = localizations[type] + " (" + sv.width + "×" + sv.height + ")";
+				formElements[type].nextElementSibling.title = lychee.locale["URL_COPY_TO_CLIPBOARD"];
+			} else {
+				// The form element is the `<input>` element, the parent
+				// element is the `<div>` which binds the label, the input
+				// and the button together.
+				// We remove that `<div>` for non-existing variants.
+				formElements[type].parentElement.remove();
+			}
+		}
+
+		if (photo.json.live_photo_url !== null) {
+			formElements.live.value = lychee.getBaseUrl() + photo.json.live_photo_url;
+			formElements.live.previousElementSibling.textContent = lychee.locale["PHOTO_LIVE_VIDEO"];
+			formElements.live.nextElementSibling.title = lychee.locale["URL_COPY_TO_CLIPBOARD"];
+		} else {
+			formElements.live.parentElement.remove();
+		}
+
+		/** @param {TouchEvent|MouseEvent} ev */
+		const onClickOrTouch = function (ev) {
+			navigator.clipboard
+				.writeText(ev.currentTarget.previousElementSibling.value)
+				.then(() => loadingBar.show("success", lychee.locale["URL_COPIED_TO_CLIPBOARD"]));
+			ev.stopPropagation();
+		};
+		dialog.querySelectorAll("a.button").forEach(function (a) {
+			a.addEventListener(lychee.getEventName(), onClickOrTouch);
+		});
+	};
 
 	basicModal.show({
-		body: msg,
+		body: showDirectLinksDialogBody,
+		readyCB: initShowDirectLinksDialog,
 		buttons: {
 			cancel: {
 				title: lychee.locale["CLOSE"],
 				fn: basicModal.close,
 			},
 		},
-	});
-
-	// Ensure that no input line is selected on opening.
-	$(".basicModal input:focus").blur();
-
-	$(".directLinks .basicModal__button").on(lychee.getEventName(), function () {
-		navigator.clipboard.writeText($(this).prev().val()).then(() => loadingBar.show("success", lychee.locale["URL_COPIED_TO_CLIPBOARD"]));
 	});
 };
