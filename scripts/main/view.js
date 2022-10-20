@@ -534,9 +534,6 @@ view.album = {
 				// Temporarily hide the container such that not each
 				// modification of every photo triggers a UI update.
 				jqJustifiedLayout.addClass("laying-out");
-				// We must give the UI worker a chance to apply the class
-				// above, hence the remaining part of this method must be
-				// done asynchronously.
 				// We must set the height of the `justified-layout` box
 				// explicitly, because all photos inside are positioned
 				// absolutely and hence do not contribute to the height of the
