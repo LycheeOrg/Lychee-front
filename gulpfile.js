@@ -179,7 +179,7 @@ paths.frame = {
 	scripts: [
 		"node_modules/jquery/dist/jquery.min.js",
 		"node_modules/lazysizes/lazysizes.min.js",
-		"./scripts/frame/stackblur.min.js",
+		"node_modules/stackblur-canvas/dist/stackblur.min.js",
 		"../dist/_frame--javascript.js",
 	],
 };
