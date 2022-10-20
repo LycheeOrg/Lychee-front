@@ -221,14 +221,14 @@ view.album = {
 
 			if (photosData !== "") {
 				if (lychee.layout === 1) {
-					// The CSS class 'relayouting' prevents the DIV from being
+					// The CSS class 'laying-out' prevents the DIV from being
 					// rendered.
 					// The CSS class will eventually be removed by the
 					// layout routine `view.album.content.justify` after all
 					// child nodes have been arranged.
-					photosData = '<div class="justified-layout relayouting">' + photosData + "</div>";
+					photosData = '<div class="justified-layout laying-out">' + photosData + "</div>";
 				} else if (lychee.layout === 2) {
-					photosData = '<div class="unjustified-layout relayouting">' + photosData + "</div>";
+					photosData = '<div class="unjustified-layout laying-out">' + photosData + "</div>";
 				}
 			}
 
@@ -533,7 +533,7 @@ view.album = {
 				});
 				// Temporarily hide the container such that not each
 				// modification of every photo triggers a UI update.
-				jqJustifiedLayout.addClass("relayouting");
+				jqJustifiedLayout.addClass("laying-out");
 				// We must give the UI worker a chance to apply the class
 				// above, hence the remaining part of this method must be
 				// done asynchronously.
@@ -563,7 +563,7 @@ view.album = {
 					}
 				});
 				// Show updated layout
-				jqJustifiedLayout.removeClass("relayouting");
+				jqJustifiedLayout.removeClass("laying-out");
 			} else if (lychee.layout === 2) {
 				/** @type {jQuery} */
 				const jqUnjustifiedLayout = $(".unjustified-layout");
@@ -586,7 +586,7 @@ view.album = {
 				const photoMargin = parseFloat(jqPhotoElements.css("margin-right"));
 				// Temporarily hide the container such that not each
 				// modification of every photo triggers a UI update.
-				jqUnjustifiedLayout.addClass("relayouting");
+				jqUnjustifiedLayout.addClass("laying-out");
 				jqPhotoElements.each(function (i) {
 					if (!photos[i]) {
 						// Race condition in search.find -- window content
@@ -625,7 +625,7 @@ view.album = {
 					}
 				});
 				// Show updated layout
-				jqUnjustifiedLayout.removeClass("relayouting");
+				jqUnjustifiedLayout.removeClass("laying-out");
 			}
 		},
 	},
