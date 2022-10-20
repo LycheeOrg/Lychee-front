@@ -16,6 +16,24 @@ $colorPink: #ff82ee;
 $colorGreen: #00aa00;
 $colorYellow: #ffcc00;
 $colorOrange: #ff9900;
+
+$colorDialogContainerBg: black(0.85);
+$colorDialogBg: linear-gradient(to bottom, #444, #333);
+$colorDialogMainButtonFont: #999999;
+$colorDialogMainActionButtonFont: $colorBlue;
+$colorDialogMainButtonWarningFont: $colorRed;
+$colorDialogDisabledFg: #999999;
+$colorDialogDefaultFg: #ececec;
+$colorDialogEmphasizedFg: #ffffff;
+$colorFormElementFg: #ffffff;
+$colorFormElementBg: #2c2c2c;
+$colorFormElementAccent: $colorBlue;
+$colorFormElementError: $colorRed;
+
+$colorImportError: $colorRed;
+$colorImportWarning: $colorYellow;
+$colorImportSuccess: $colorGreen;
+
 // Animations -------------------------------------------------------------- //
 $timing: cubic-bezier(0.51, 0.92, 0.24, 1);
 $timingBounce: cubic-bezier(0.51, 0.92, 0.24, 1.15);
@@ -86,7 +104,13 @@ textarea {
 @import "mapview";
 @import "sidebar";
 @import "loading";
-@import "message";
+@import "form";
+@import "dialog_about";
+@import "dialog_downloads";
+@import "dialog_import";
+@import "dialog_login";
+@import "dialog_photo_links";
+@import "dialog_token";
 @import "warning";
 @import "settings";
 @import "users";
@@ -98,4 +122,3 @@ textarea {
 @import "../page/footer";
 @import "footer";
 @import "social-footer";
-@import "photo-links";

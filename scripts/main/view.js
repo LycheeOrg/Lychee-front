@@ -1587,7 +1587,7 @@ view.full_settings = {
 						<div id="fullSettings">
 						<div class="setting_line">
 						<p class="warning">
-						${lychee.locale["SETTINGS_WARNING"]}
+						${lychee.locale["SETTINGS_ADVANCED_WARNING_EXPL"]}
 						</p>
 						</div>
 						`;
@@ -1613,7 +1613,7 @@ view.full_settings = {
 					});
 
 					msg += lychee.html`
-						<a id="FullSettingsSave_button"  class="basicModal__button basicModal__button_SAVE">${lychee.locale["SAVE_RISK"]}</a>
+						<a id="FullSettingsSave_button"  class="basicModal__button basicModal__button_SAVE">${lychee.locale["SETTINGS_ADVANCED_SAVE"]}</a>
 						</div>`;
 
 					$(".settings_view").append(msg);

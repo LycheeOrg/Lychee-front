@@ -1,0 +1,20 @@
+div.basicModal.about-dialog div.basicModal__content {
+	h1 {
+		font-size: 120%;
+		font-weight: bold;
+		text-align: center;
+		color: $colorDialogEmphasizedFg;
+	}
+	h2 {
+		font-weight: bold;
+		color: $colorDialogEmphasizedFg;
+	}
+	p.update-status {
+		&.up-to-date {
+			display: none;
+		}
+	}
+	p.about-desc {
+		line-height: 1.4em;
+	}
+}

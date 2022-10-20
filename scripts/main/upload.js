@@ -2,25 +2,107 @@
  * @description Takes care of every action an album can handle and execute.
  */
 
-let upload = {};
+/**
+ * @typedef ProgressReportDialogRow
+ * @property {HTMLLIElement} listEntry
+ * @property {HTMLHeadingElement} header
+ * @property {HTMLParagraphElement} status
+ * @property {HTMLParagraphElement} notice
+ */
 
-const choiceDeleteSelector = '.basicModal .choice input[name="delete_imported"]';
-const choiceSymlinkSelector = '.basicModal .choice input[name="import_via_symlink"]';
-const choiceDuplicateSelector = '.basicModal .choice input[name="skip_duplicates"]';
-const choiceResyncSelector = '.basicModal .choice input[name="resync_metadata"]';
-const actionSelector = ".basicModal #basicModal__action";
-const cancelSelector = ".basicModal #basicModal__cancel";
-const firstRowStatusSelector = ".basicModal .rows .row .status";
-const firstRowNoticeSelector = ".basicModal .rows .row p.notice";
+const upload = {
+	SCROLL_OPTIONS: {
+		inline: "nearest",
+		block: "nearest",
+		behavior: "smooth",
+	},
 
-let nRowStatusSelector = function (row) {
-	return ".basicModal .rows .row:nth-child(" + row + ") .status";
+	_dom: {
+		/**
+		 * Holds the ordered list (`<ol>`) with the individual reports
+		 * of a Progress Report dialog.
+		 *
+		 * @type {HTMLOListElement|null}
+		 */
+		reportList: null,
+
+		/**
+		 * Maps a path (as the unique identifier) to a tuple of UI elements
+		 * which visualize the report row for that path.
+		 *
+		 * Note, rows for event reports which are not associated to a
+		 * particular file or directory are not kept in this map, but
+		 * of course they are visualized inside the list of reports.
+		 *
+		 * This map allows fast access to the rows without running
+		 * (inefficient) CSS selector queries and/or relying on a specific
+		 * order (i.e. no need for `nth-child`-selector).
+		 *
+		 * @type {Map<string, ProgressReportDialogRow>|null}
+		 */
+		progressRowsByPath: null,
+	},
 };
 
-let showCloseButton = function () {
-	$(actionSelector).show();
-	// re-activate cancel button to close modal panel if needed
-	$(cancelSelector).removeClass("basicModal__button--active").hide();
+upload.showProgressReportCloseButton = function () {
+	basicModal.showActionButton();
+	basicModal.hideCancelButton();
+	// Re-activate cancel button to close modal panel if needed
+	basicModal.markActionButtonAsIdle();
+};
+
+upload.closeProgressReportDialog = function () {
+	basicModal.close();
+	upload._dom.reportList = null;
+	upload._dom.progressRowsByPath = null;
+};
+
+/**
+ * Builds the HTML snippet for a single entry in the Progress Report dialog.
+ *
+ * Constructs an entry for the list of reports made up of a caption,
+ * a status and a notice.
+ *
+ * @param {string} caption the caption of the list entry; for reports about
+ *                         files this is typically the filename
+ * @returns {ProgressReportDialogRow}
+ */
+upload.buildReportRow = function (caption) {
+	const listEntry = document.createElement("li");
+
+	const header = listEntry.appendChild(document.createElement("h2"));
+	header.textContent = caption.length <= 40 ? caption : caption.substring(0, 19) + "…" + caption.substring(caption.length - 20, caption.length);
+	const status = listEntry.appendChild(document.createElement("p"));
+	status.classList.add("status");
+	const notice = listEntry.appendChild(document.createElement("p"));
+	notice.classList.add("notice");
+
+	return { listEntry, header, status, notice };
+};
+
+/**
+ * Builds the HTML snippet for the list of reports in the Progress Report dialog.
+ *
+ * The list is initially filled with the given list of files.
+ * More items to this list may be added on-the-fly during an ongoing import.
+ *
+ * Note: This is used for downloading files from a remote URL, importing from
+ * Dropbox or uploading, i.e. whenever the list is known in advance.
+ * For importing from server, the list initially only contains the selected
+ * server directory and more items are added while the backend scans the
+ * directory on the server.
+ *
+ * @param {(FileList|File[]|DropboxFile[]|{name: string}[])} files
+ * @returns {void}
+ */
+upload.buildReportList = function (files) {
+	upload._dom.reportList = document.createElement("ol");
+	upload._dom.progressRowsByPath = new Map();
+	for (let idx = 0; idx !== files.length; idx++) {
+		const row = upload.buildReportRow(files[idx].name);
+		upload._dom.progressRowsByPath.set(files[idx].name, row);
+		upload._dom.reportList.appendChild(row.listEntry);
+	}
 };
 
 /**
@@ -29,38 +111,66 @@ let showCloseButton = function () {
  * @param {ModalDialogReadyCB} run_callback
  * @param {?ModalDialogButtonCB} cancel_callback
  */
-upload.show = function (title, files, run_callback, cancel_callback = null) {
+upload.showProgressReportDialog = function (title, files, run_callback, cancel_callback = null) {
+	/**
+	 * @param {ModalDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initImportProgressReportDialog = function (formElements, dialog) {
+		// Initially, the normal Action (aka "Close") button is hidden and
+		// remains hidden as long as an import is running.
+		// Users must use the Cancel button to interrupt an ongoing import.
+		// The Action button becomes visible after the import has been
+		// terminated (either successfully, with error or due to interruption).
+		basicModal.hideActionButton();
+
+		const caption = dialog.querySelector("h1");
+		caption.textContent = title;
+		upload.buildReportList(files);
+		dialog.appendChild(upload._dom.reportList);
+
+		setTimeout(() => run_callback(formElements, dialog), 0);
+	};
+
 	basicModal.show({
-		body: build.uploadModal(title, files),
+		body: "<h1></h1>",
+		classList: ["import"],
+		readyCB: initImportProgressReportDialog,
 		buttons: {
 			action: {
 				title: lychee.locale["CLOSE"],
-				class: "hidden",
-				fn: function () {
-					if ($(actionSelector).is(":visible")) basicModal.close();
-				},
+				fn: () => upload.closeProgressReportDialog(),
 			},
 			cancel: {
 				title: lychee.locale["CANCEL"],
-				class: "red hidden",
-				fn: function () {
-					// close modal if close button is displayed
-					if ($(actionSelector).is(":visible")) basicModal.close();
-					if (cancel_callback) {
-						$(cancelSelector).addClass("busy");
-						cancel_callback();
+				classList: ["red"],
+				fn: function (resultData) {
+					// If Action button is visible, the Cancel button behaves
+					// like the Close button; otherwise the button only calls
+					// the callback to cancel the import
+					if (basicModal.isActionButtonVisible()) {
+						upload.closeProgressReportDialog();
+					} else {
+						if (cancel_callback) {
+							cancel_callback(resultData);
+						}
 					}
 				},
 			},
 		},
-		callback: run_callback,
 	});
 };
 
-upload.notify = function (title, text) {
-	if (text == null || text === "") text = lychee.locale["UPLOAD_MANAGE_NEW_PHOTOS"];
+/**
+ * @param {string} title
+ * @param {string} [text=""]
+ * @returns {void}
+ */
+upload.notify = function (title, text = "") {
+	if (text === "") text = lychee.locale["UPLOAD_MANAGE_NEW_PHOTOS"];
 
-	if (!window.webkitNotifications) return false;
+	if (!window.webkitNotifications) return;
 
 	if (window.webkitNotifications.checkPermission() !== 0) window.webkitNotifications.requestPermission();
 
@@ -132,19 +242,20 @@ upload.start = {
 
 			if (!hasErrorOccurred && !hasWarningOccurred) {
 				// Success
-				basicModal.close();
+				upload.closeProgressReportDialog();
 				upload.notify(lychee.locale["UPLOAD_COMPLETE"]);
 			} else if (!hasErrorOccurred && hasWarningOccurred) {
 				// Warning
-				showCloseButton();
+				upload.showProgressReportCloseButton();
 				upload.notify(lychee.locale["UPLOAD_COMPLETE"]);
 			} else {
 				// Error
-				showCloseButton();
+				upload.showProgressReportCloseButton();
 				if (shallCancelUpload) {
-					$(".basicModal .rows .row:nth-child(n+" + (latestFileIdx + 2).toString() + ") .status")
-						.html(lychee.locale["UPLOAD_CANCELLED"])
-						.addClass("warning");
+					const row = upload.buildReportRow(lychee.locale["UPLOAD_GENERAL"]);
+					row.status.textContent = lychee.locale["UPLOAD_CANCELLED"];
+					row.status.classList.add("warning");
+					upload._dom.reportList.appendChild(row.listEntry);
 				}
 				upload.notify(lychee.locale["UPLOAD_COMPLETE"], lychee.locale["UPLOAD_COMPLETE_FAILED"]);
 			}
@@ -202,16 +313,13 @@ upload.start = {
 				// Set progress when progress has changed
 				if (progress > uploadProgress) {
 					uploadProgress = progress;
-					/** @type {?jQuery} */
-					const jqStatusMsg = $(nRowStatusSelector(fileIdx + 1));
-					jqStatusMsg.html(uploadProgress + "%");
+					const row = upload._dom.progressRowsByPath.get(files[fileIdx].name);
+					row.listEntry.scrollIntoView(upload.SCROLL_OPTIONS);
+					row.status.textContent = "" + uploadProgress + "%";
 
 					if (progress >= 100) {
-						jqStatusMsg.html(lychee.locale["UPLOAD_PROCESSING"]);
+						row.status.textContent = lychee.locale["UPLOAD_PROCESSING"];
 						isUploadRunning = false;
-						let scrollPos = 0;
-						if (fileIdx + 1 > 4) scrollPos = (fileIdx + 1 - 4) * 40;
-						$(".basicModal .rows").scrollTop(scrollPos);
 
 						// Start a new upload, if there are still pending
 						// files
@@ -236,51 +344,37 @@ upload.start = {
 			 * @this XMLHttpRequest
 			 */
 			const onLoaded = function () {
+				const row = upload._dom.progressRowsByPath.get(files[fileIdx].name);
 				/** @type {?LycheeException} */
 				const lycheeException = this.status >= 400 ? this.response : null;
-				let errorText = "";
-				let statusText;
-				let statusClass;
 
 				switch (this.status) {
 					case 200:
 					case 201:
 					case 204:
-						statusText = lychee.locale["UPLOAD_FINISHED"];
-						statusClass = "success";
+						row.status.textContent = lychee.locale["UPLOAD_FINISHED"];
+						row.status.classList.add("success");
 						break;
 					case 409:
-						statusText = lychee.locale["UPLOAD_SKIPPED"];
-						errorText = lycheeException ? lycheeException.message : lychee.locale["UPLOAD_ERROR_UNKNOWN"];
+						row.status.textContent = lychee.locale["UPLOAD_SKIPPED"];
+						row.status.classList.add("warning");
+						row.notice.textContent = lycheeException ? lycheeException.message : lychee.locale["UPLOAD_ERROR_UNKNOWN"];
 						hasWarningOccurred = true;
-						statusClass = "warning";
 						break;
 					case 413:
-						statusText = lychee.locale["UPLOAD_FAILED"];
-						errorText = lychee.locale["UPLOAD_ERROR_POSTSIZE"];
+						row.status.textContent = lychee.locale["UPLOAD_FAILED"];
+						row.status.classList.add("error");
+						row.notice.textContent = lychee.locale["UPLOAD_ERROR_POSTSIZE"];
 						hasErrorOccurred = true;
-						statusClass = "error";
+						api.onError(this, { albumID: albumID }, lycheeException);
 						break;
 					default:
-						statusText = lychee.locale["UPLOAD_FAILED"];
-						errorText = lycheeException ? lycheeException.message : lychee.locale["UPLOAD_ERROR_UNKNOWN"];
+						row.status.textContent = lychee.locale["UPLOAD_FAILED"];
+						row.status.classList.add("error");
+						row.notice.textContent = lycheeException ? lycheeException.message : lychee.locale["UPLOAD_ERROR_UNKNOWN"];
 						hasErrorOccurred = true;
-						statusClass = "error";
+						api.onError(this, { albumID: albumID }, lycheeException);
 						break;
-				}
-
-				$(nRowStatusSelector(fileIdx + 1))
-					.html(statusText)
-					.addClass(statusClass);
-
-				if (statusClass === "error") {
-					api.onError(this, { albumID: albumID }, lycheeException);
-				}
-
-				if (errorText !== "") {
-					$(".basicModal .rows .row:nth-child(" + (fileIdx + 1) + ") p.notice")
-						.html(errorText)
-						.show();
 				}
 			};
 
@@ -358,12 +452,12 @@ upload.start = {
 			return lychee.locale["UPLOAD_IN_PROGRESS"];
 		};
 
-		upload.show(
+		upload.showProgressReportDialog(
 			lychee.locale["UPLOAD_UPLOADING"],
 			files,
 			function () {
 				// Upload first file
-				$(cancelSelector).show();
+				basicModal.showCancelButton();
 				process(0);
 			},
 			function () {
@@ -379,19 +473,12 @@ upload.start = {
 	url: function (preselectedUrl = "") {
 		const albumID = album.getID();
 
-		/**
-		 * @typedef UrlDialogResult
-		 * @property {string} url
-		 */
-
-		/** @param {UrlDialogResult} data */
-		const action = function (data) {
+		/** @param {{url: string}} data */
+		const importFromUrl = function (data) {
 			const runImport = function () {
-				$(firstRowStatusSelector).html(lychee.locale["UPLOAD_IMPORTING"]);
-
 				const successHandler = function () {
 					// Same code as in import.dropbox()
-					basicModal.close();
+					upload.closeProgressReportDialog();
 					upload.notify(lychee.locale["UPLOAD_IMPORT_COMPLETE"]);
 					album.reload();
 				};
@@ -404,31 +491,30 @@ upload.start = {
 				 */
 				const errorHandler = function (jqXHR, params, lycheeException) {
 					// Same code as in import.dropbox()
-					let errorText;
-					let statusText;
-					let statusClass;
+					/** @type {ProgressReportDialogRow} */
+					const row = upload._dom.progressRowsByPath.get(data.url);
 
 					switch (jqXHR.status) {
 						case 409:
-							statusText = lychee.locale["UPLOAD_SKIPPED"];
-							errorText = lycheeException ? lycheeException.message : lychee.locale["UPLOAD_IMPORT_WARN_ERR"];
-							statusClass = "warning";
+							row.status.textContent = lychee.locale["UPLOAD_SKIPPED"];
+							row.status.classList.add("warning");
+							row.notice.textContent = lycheeException ? lycheeException.message : lychee.locale["UPLOAD_IMPORT_WARN_ERR"];
 							break;
 						default:
-							statusText = lychee.locale["UPLOAD_FAILED"];
-							errorText = lycheeException ? lycheeException.message : lychee.locale["UPLOAD_IMPORT_WARN_ERR"];
-							statusClass = "error";
+							row.status.textContent = lychee.locale["UPLOAD_FAILED"];
+							row.status.classList.add("error");
+							row.notice.textContent = lycheeException ? lycheeException.message : lychee.locale["UPLOAD_IMPORT_WARN_ERR"];
 							break;
 					}
 
-					$(firstRowNoticeSelector).html(errorText).show();
-					$(firstRowStatusSelector).html(statusText).addClass(statusClass);
 					// Show close button
-					$(".basicModal #basicModal__action.hidden").show();
+					basicModal.showActionButton();
 					upload.notify(lychee.locale["UPLOAD_IMPORT_WARN_ERR"]);
 					album.reload();
 					return true;
 				};
+
+				upload._dom.progressRowsByPath.get(data.url).status.textContent = lychee.locale["UPLOAD_IMPORTING"];
 
 				// In theory, the backend is prepared to download a list of
 				// URLs (note that `data.url`) is wrapped into an array.
@@ -459,21 +545,40 @@ upload.start = {
 				);
 			};
 
+			upload.showProgressReportDialog(lychee.locale["UPLOAD_IMPORTING_URL"], [{ name: data.url }], runImport);
+		};
+
+		/** @param {{url: string}} data */
+		const processImportFromUrlDialog = function (data) {
 			if (data.url && data.url.trim().length > 3) {
-				basicModal.close();
-				upload.show(lychee.locale["UPLOAD_IMPORTING_URL"], [{ name: data.url }], runImport);
-			} else basicModal.error("link");
+				basicModal.close(false, () => importFromUrl(data));
+			} else basicModal.focusError("url");
+		};
+
+		const importFromUrlDialogBody = `
+			<p></p>
+			<form>
+				<div class="input-group stacked"><input class='text' name='url' type='text'></div>
+			</form>`;
+
+		/**
+		 * @param {ModalDialogFormElements} formElements
+		 * @param {HTMLDivElement} dialog
+		 * @returns {void}
+		 */
+		const initImportFromUrlDialog = function (formElements, dialog) {
+			dialog.querySelector("p").textContent = lychee.locale["UPLOAD_IMPORT_INSTR"];
+			formElements.url.placeholder = "https://";
+			formElements.url.value = preselectedUrl;
 		};
 
 		basicModal.show({
-			body:
-				lychee.html`<p>` +
-				lychee.locale["UPLOAD_IMPORT_INSTR"] +
-				` <input class='text' name='url' type='text' placeholder='https://' value='${preselectedUrl}'></p>`,
+			body: importFromUrlDialogBody,
+			readyCB: initImportFromUrlDialog,
 			buttons: {
 				action: {
 					title: lychee.locale["UPLOAD_IMPORT"],
-					fn: action,
+					fn: processImportFromUrlDialog,
 				},
 				cancel: {
 					title: lychee.locale["CANCEL"],
@@ -486,27 +591,93 @@ upload.start = {
 	server: function () {
 		const albumID = album.getID();
 
-		const importDialogSetupCB = function () {
-			const $delete = $(choiceDeleteSelector);
-			const $symlinks = $(choiceSymlinkSelector);
-			const $duplicates = $(choiceDuplicateSelector);
-			const $resync = $(choiceResyncSelector);
+		/**
+		 * @typedef ImportFromServerDialogFormElements
+		 *
+		 * @property {HTMLInputElement} paths
+		 * @property {HTMLInputElement} delete_imported
+		 * @property {HTMLInputElement} import_via_symlink
+		 * @property {HTMLInputElement} skip_duplicates
+		 * @property {HTMLInputElement} resync_metadata
+		 */
 
+		/**
+		 * @param {ImportFromServerDialogFormElements} formElements
+		 * @param {HTMLDivElement} dialog
+		 * @returns {void}
+		 */
+		const initImportFromServerDialog = function (formElements, dialog) {
+			dialog.querySelector("p").textContent = lychee.locale["UPLOAD_IMPORT_SERVER_INSTR"];
+			formElements.paths.placeholder = lychee.locale["UPLOAD_ABSOLUTE_PATH"];
+			formElements.paths.value = lychee.location + "uploads/import/";
+			formElements.delete_imported.previousElementSibling.textContent = lychee.locale["UPLOAD_IMPORT_DELETE_ORIGINALS"];
+			formElements.delete_imported.nextElementSibling.textContent = lychee.locale["UPLOAD_IMPORT_DELETE_ORIGINALS_EXPL"];
+			formElements.import_via_symlink.previousElementSibling.textContent = lychee.locale["UPLOAD_IMPORT_VIA_SYMLINK"];
+			formElements.import_via_symlink.nextElementSibling.textContent = lychee.locale["UPLOAD_IMPORT_VIA_SYMLINK_EXPL"];
+			formElements.skip_duplicates.previousElementSibling.textContent = lychee.locale["UPLOAD_IMPORT_SKIP_DUPLICATES"];
+			formElements.skip_duplicates.nextElementSibling.textContent = lychee.locale["UPLOAD_IMPORT_SKIP_DUPLICATES_EXPL"];
+			formElements.resync_metadata.previousElementSibling.textContent = lychee.locale["UPLOAD_IMPORT_RESYNC_METADATA"];
+			formElements.resync_metadata.nextElementSibling.textContent = lychee.locale["UPLOAD_IMPORT_RESYNC_METADATA_EXPL"];
+
+			// Initialize form elements (and dependent form elements) based on
+			// global configuration settings.
 			if (lychee.delete_imported) {
-				$delete.prop("checked", true);
-				$symlinks.prop("checked", false).prop("disabled", true);
+				formElements.delete_imported.checked = true;
+				formElements.import_via_symlink.checked = false;
+				formElements.import_via_symlink.disabled = true;
+				formElements.import_via_symlink.parentElement.classList.add("disabled");
 			} else {
 				if (lychee.import_via_symlink) {
-					$symlinks.prop("checked", true);
-					$delete.prop("checked", false).prop("disabled", true);
+					formElements.delete_imported.checked = false;
+					formElements.delete_imported.disabled = true;
+					formElements.delete_imported.parentElement.classList.add("disabled");
+					formElements.import_via_symlink.checked = true;
 				}
 			}
+
 			if (lychee.skip_duplicates) {
-				$duplicates.prop("checked", true);
-				if (lychee.resync_metadata) $resync.prop("checked", true);
+				formElements.skip_duplicates.checked = true;
+				formElements.resync_metadata.checked = lychee.resync_metadata;
 			} else {
-				$resync.prop("disabled", true);
+				formElements.skip_duplicates.checked = false;
+				formElements.resync_metadata.checked = false;
+				formElements.resync_metadata.disabled = true;
+				formElements.resync_metadata.parentElement.classList.add("disabled");
 			}
+
+			// Checkbox action handler to visualize contradictory settings
+			formElements.delete_imported.addEventListener("change", function () {
+				if (formElements.delete_imported.checked) {
+					formElements.import_via_symlink.checked = false;
+					formElements.import_via_symlink.disabled = true;
+					formElements.import_via_symlink.parentElement.classList.add("disabled");
+				} else {
+					formElements.import_via_symlink.disabled = false;
+					formElements.import_via_symlink.parentElement.classList.remove("disabled");
+				}
+			});
+
+			formElements.import_via_symlink.addEventListener("change", function () {
+				if (formElements.import_via_symlink.checked) {
+					formElements.delete_imported.checked = false;
+					formElements.delete_imported.disabled = true;
+					formElements.delete_imported.parentElement.classList.add("disabled");
+				} else {
+					formElements.delete_imported.disabled = false;
+					formElements.delete_imported.parentElement.classList.remove("disabled");
+				}
+			});
+
+			formElements.skip_duplicates.addEventListener("change", function () {
+				if (formElements.skip_duplicates.checked) {
+					formElements.resync_metadata.disabled = false;
+					formElements.resync_metadata.parentElement.classList.remove("disabled");
+				} else {
+					formElements.resync_metadata.checked = false;
+					formElements.resync_metadata.disabled = true;
+					formElements.resync_metadata.parentElement.classList.add("disabled");
+				}
+			});
 		};
 
 		/**
@@ -519,27 +690,7 @@ upload.start = {
 		 */
 
 		/** @param {ServerImportDialogResult} data */
-		const action = function (data) {
-			if (!data.paths.trim()) {
-				basicModal.error("paths");
-				return;
-			} else {
-				// Consolidate `data` before we close the modal dialog
-				// TODO: We should fix the modal dialog to properly return the values of all input fields, incl. check boxes
-				// We split the given path string at unescaped spaces into an
-				// array or more precisely we create an array whose entries
-				// matches strings with non-space characters or escaped spaces.
-				// After splitting, the escaped spaces must be replaced by
-				// proper spaces as escaping of spaces is a GUI-only thing to
-				// allow input of several paths into a single input field.
-				data.paths = data.paths.match(/(?:\\ |\S)+/g).map((path) => path.replaceAll("\\ ", " "));
-				data.delete_imported = !!$(choiceDeleteSelector).prop("checked");
-				data.import_via_symlink = !!$(choiceSymlinkSelector).prop("checked");
-				data.skip_duplicates = !!$(choiceDuplicateSelector).prop("checked");
-				data.resync_metadata = !!$(choiceResyncSelector).prop("checked");
-				basicModal.close();
-			}
-
+		const importFromServer = function (data) {
 			let isUploadCancelled = false;
 
 			const cancelUpload = function () {
@@ -551,16 +702,12 @@ upload.start = {
 			};
 
 			const runUpload = function () {
-				$(cancelSelector).show();
+				basicModal.showCancelButton();
 
 				// Variables holding state across the invocations of
 				// processIncremental().
-				const jqRows = $(".basicModal .rows");
 				let lastReadIdx = 0;
-				let currentPath = null;
-				let jqCurrentRow = null; // the jQuery object of the current row
 				let encounteredProblems = false;
-				let topSkip = 0;
 
 				/**
 				 * Worker function invoked from both the response progress
@@ -571,44 +718,71 @@ upload.start = {
 				const processIncremental = function (reports) {
 					reports.slice(lastReadIdx).forEach(function (report) {
 						if (report.type === "progress") {
-							if (currentPath !== report.path) {
-								// New directory. Add a new line to the dialog box at the end
-								currentPath = report.path;
-								jqCurrentRow = $(build.uploadNewFile(currentPath)).appendTo(jqRows);
-								topSkip += jqCurrentRow.outerHeight();
-							}
+							// Gets existing row for the current path or creates a new one
+							/** @type {ProgressReportDialogRow} */
+							const row = upload._dom.progressRowsByPath.get(report.path) || upload.buildReportRow(report.path);
+							upload._dom.progressRowsByPath.set(report.path, row);
+							// Always unconditionally append the list entry to
+							// the end of the list even if the `reportList`
+							// already contains `listEntry`.
+							//  1. If `listEntry` is not yet an element of
+							//     `reportList` (e.g. this happens for
+							//     new directories), then appending the
+							//     element does the obvious thing
+							//  2. If `listEntry` is already an element
+							//     of `reportList` (e.g. this happens for
+							//     follow-up reports), then `appendChild`
+							//     *moves* `listEntry` the end of the list.
+							//     We don't need to take care of accidentally
+							//     duplicating the entry, the DOM tree is
+							//     clever enough.
+							//     Moving `listEntry` is an intended effect,
+							//     as we always want the most recent entry at
+							//     the end of the list.
+							upload._dom.reportList.appendChild(row.listEntry);
+							row.listEntry.scrollIntoView(upload.SCROLL_OPTIONS);
 
 							if (report.progress !== 100) {
-								$(".status", jqCurrentRow).text("" + report.progress + "%");
+								row.status.textContent = "" + report.progress + "%";
 							} else {
 								// Final status report for this directory.
-								$(".status", jqCurrentRow).text(lychee.locale["UPLOAD_FINISHED"]).addClass("success");
+								row.status.textContent = lychee.locale["UPLOAD_FINISHED"];
+								row.status.classList.add("success");
 							}
 						} else if (report.type === "event") {
-							let jqEventRow;
-							if (jqCurrentRow) {
-								if (currentPath !== report.path) {
-									// If we already have a current row (for
-									// progress reports) and the event does
-									// not refer to that directory, we
-									// insert the event row _before_ the
-									// current row, so that the progress
-									// report stays in sight.
-									jqEventRow = $(build.uploadNewFile(report.path || "General")).insertBefore(jqCurrentRow);
-									topSkip += jqEventRow.outerHeight();
-								} else {
-									// The problem is with the directory
-									// itself, so alter its existing line.
-									jqEventRow = jqCurrentRow;
-								}
+							let row;
+							if (!!report.path) {
+								// The event report refers to a specific path,
+								// hence get the existing row for that path
+								// or create a new one.
+								/** @type {ProgressReportDialogRow} */
+								row = upload._dom.progressRowsByPath.get(report.path) || upload.buildReportRow(report.path);
+								upload._dom.progressRowsByPath.set(report.path, row);
+								// Always unconditionally append the list entry to
+								// the end of the list even if the `reportList`
+								// already contains `listEntry`.
+								//  1. If `listEntry` is not yet an element of
+								//     `reportList` (e.g. this happens for
+								//     new directories), then appending the
+								//     element does the obvious thing
+								//  2. If `listEntry` is already an element
+								//     of `reportList` (e.g. this happens for
+								//     follow-up reports), then `appendChild`
+								//     *moves* `listEntry` the end of the list.
+								//     We don't need to take care of accidentally
+								//     duplicating the entry, the DOM tree is
+								//     clever enough.
+								//     Moving `listEntry` is an intended effect,
+								//     as we always want the most recent entry at
+								//     the end of the list.
+								upload._dom.reportList.appendChild(row.listEntry);
 							} else {
-								// If we do not have a current row yet, we
-								// simply append it to the list of rows
-								// (this might happen if the event occurs
-								// before the first progress report)
-								jqEventRow = $(build.uploadNewFile(report.path || "General")).appendTo(jqRows);
-								topSkip += jqEventRow.outerHeight();
+								// The event report does not refer to a
+								// specific directory.
+								row = upload.buildReportRow(lychee.locale["UPLOAD_GENERAL"]);
+								upload._dom.reportList.appendChild(row.listEntry);
 							}
+							row.listEntry.scrollIntoView(upload.SCROLL_OPTIONS);
 
 							let severityClass = "";
 							let statusText = "";
@@ -669,14 +843,14 @@ upload.start = {
 									break;
 							}
 
-							$(".status", jqEventRow).text(statusText).addClass(severityClass);
-							$(".notice", jqEventRow).text(noteText).show();
+							row.notice.textContent = noteText;
+							row.status.textContent = statusText;
+							row.status.classList.add(severityClass);
 
 							encounteredProblems = true;
 						}
 					}); // forEach (resp)
 					lastReadIdx = reports.length;
-					$(jqRows).scrollTop(topSkip);
 				}; // processIncremental
 
 				/**
@@ -690,8 +864,8 @@ upload.start = {
 
 					album.reload();
 
-					if (encounteredProblems) showCloseButton();
-					else basicModal.close();
+					if (encounteredProblems) upload.showProgressReportCloseButton();
+					else upload.closeProgressReportDialog();
 				};
 
 				/**
@@ -728,7 +902,7 @@ upload.start = {
 
 								album.reload();
 
-								showCloseButton();
+								upload.showProgressReportCloseButton();
 
 								return;
 							}
@@ -751,63 +925,62 @@ upload.start = {
 				api.post("Import::server", params, successHandler, progressHandler);
 			};
 
-			upload.show(lychee.locale["UPLOAD_IMPORT_SERVER"], [], runUpload, cancelUpload);
-		}; // action
+			upload.showProgressReportDialog(lychee.locale["UPLOAD_IMPORT_SERVER"], [], runUpload, cancelUpload);
+		}; // importFromServer
 
-		const msg = lychee.html`
-			<p class='importServer'>
-				${lychee.locale["UPLOAD_IMPORT_SERVER_INSTR"]}
-				<input class='text' name='paths' type='text' placeholder='${lychee.locale["UPLOAD_ABSOLUTE_PATH"]}' value='${lychee.location}uploads/import/'>
-			</p>
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='delete_imported' onchange='upload.check()'>
-					<span class='checkbox'>${build.iconic("check")}</span>
-					<span class='label'>${lychee.locale["UPLOAD_IMPORT_DELETE_ORIGINALS"]}</span>
-				</label>
-				<p>
-					${lychee.locale["UPLOAD_IMPORT_DELETE_ORIGINALS_EXPL"]}
-				</p>
-			</div>
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='import_via_symlink' onchange='upload.check()'>
-					<span class='checkbox'>${build.iconic("check")}</span>
-					<span class='label'>${lychee.locale["UPLOAD_IMPORT_VIA_SYMLINK"]}</span>
-				</label>
-				<p>
-					${lychee.locale["UPLOAD_IMPORT_VIA_SYMLINK_EXPL"]}
-				</p>
-			</div>
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='skip_duplicates' onchange='upload.check()'>
-					<span class='checkbox'>${build.iconic("check")}</span>
-					<span class='label'>${lychee.locale["UPLOAD_IMPORT_SKIP_DUPLICATES"]}</span>
-				</label>
-				<p>
-					${lychee.locale["UPLOAD_IMPORT_SKIP_DUPLICATES_EXPL"]}
-				</p>
-			</div>
-			<div class='choice'>
-				<label>
-					<input type='checkbox' name='resync_metadata' onchange='upload.check()'>
-					<span class='checkbox'>${build.iconic("check")}</span>
-					<span class='label'>${lychee.locale["UPLOAD_IMPORT_RESYNC_METADATA"]}</span>
-				</label>
-				<p>
-					${lychee.locale["UPLOAD_IMPORT_RESYNC_METADATA_EXPL"]}
-				</p>
-			</div>
-		`;
+		/** @param {ServerImportDialogResult} data */
+		const processImportFromServerDialog = function (data) {
+			if (!data.paths.trim()) {
+				basicModal.focusError("paths");
+				return;
+			}
+
+			// Consolidate `data` before we close the modal dialog
+			// We split the given path string at unescaped spaces into an
+			// array or more precisely we create an array whose entries
+			// match strings with non-space characters or escaped spaces.
+			// After splitting, the escaped spaces must be replaced by
+			// proper spaces as escaping of spaces is a GUI-only thing to
+			// allow input of several paths into a single input field.
+			data.paths = data.paths.match(/(?:\\ |\S)+/g).map((path) => path.replaceAll("\\ ", " "));
+			basicModal.close(false, () => importFromServer(data));
+		};
+
+		const importFromServerDialogBody = `
+			<p></p>
+			<form>
+				<div class="input-group stacked">
+					<input class='text' id="server_import_dialog_path_input" name='paths' type='text' />
+				</div>
+				<div class='input-group compact-inverse'>
+					<label for="server_import_dialog_delete_imported_check"></label>
+					<input type='checkbox' id="server_import_dialog_delete_imported_check" name='delete_imported' />
+					<p></p>
+				</div>
+				<div class='input-group compact-inverse'>
+					<label for="server_import_dialog_symlink_check"></label>
+					<input type='checkbox' id="server_import_dialog_symlink_check" name='import_via_symlink' />
+					<p></p>
+				</div>
+				<div class='input-group compact-inverse'>
+					<label for="server_import_dialog_skip_check"></label>
+					<input type='checkbox' id="server_import_dialog_skip_check" name='skip_duplicates' />
+					<p></p>
+				</div>
+				<div class='input-group compact-inverse'>
+					<label for="server_import_dialog_resync_check"></label>
+					<input type='checkbox' id="server_import_dialog_resync_check" name='resync_metadata' />
+					<p></p>
+				</div>
+			</form>`;
 
 		basicModal.show({
-			body: msg,
-			callback: importDialogSetupCB,
+			body: importFromServerDialogBody,
+			readyCB: initImportFromServerDialog,
 			buttons: {
 				action: {
 					title: lychee.locale["UPLOAD_IMPORT"],
-					fn: action,
+					fn: processImportFromServerDialog,
 				},
 				cancel: {
 					title: lychee.locale["CANCEL"],
@@ -827,7 +1000,7 @@ upload.start = {
 			const runImport = function () {
 				const successHandler = function () {
 					// Same code as in import.url()
-					basicModal.close();
+					upload.closeProgressReportDialog();
 					upload.notify(lychee.locale["UPLOAD_IMPORT_COMPLETE"]);
 					album.reload();
 				};
@@ -840,33 +1013,34 @@ upload.start = {
 				 */
 				const errorHandler = function (jqXHR, params, lycheeException) {
 					// Same code as in import.url()
-					let errorText;
-					let statusText;
-					let statusClass;
+					// Note, this is complete rubbish:
+					// Dropbox allows to import several photos at once, but
+					// here we assume that `files` has only a single entry.
+					// This seems to be a long-standing, open bug
+					/** @type {ProgressReportDialogRow} */
+					const row = upload._dom.progressRowsByPath.get(files[0].link);
 
 					switch (jqXHR.status) {
 						case 409:
-							statusText = lychee.locale["UPLOAD_SKIPPED"];
-							errorText = lycheeException ? lycheeException.message : lychee.locale["UPLOAD_IMPORT_WARN_ERR"];
-							statusClass = "warning";
+							row.status.textContent = lychee.locale["UPLOAD_SKIPPED"];
+							row.status.classList.add("warning");
+							row.notice.textContent = lycheeException ? lycheeException.message : lychee.locale["UPLOAD_IMPORT_WARN_ERR"];
 							break;
 						default:
-							statusText = lychee.locale["UPLOAD_FAILED"];
-							errorText = lycheeException ? lycheeException.message : lychee.locale["UPLOAD_IMPORT_WARN_ERR"];
-							statusClass = "error";
+							row.status.textContent = lychee.locale["UPLOAD_FAILED"];
+							row.status.classList.add("error");
+							row.notice.textContent = lycheeException ? lycheeException.message : lychee.locale["UPLOAD_IMPORT_WARN_ERR"];
 							break;
 					}
 
-					$(firstRowNoticeSelector).html(errorText).show();
-					$(firstRowStatusSelector).html(statusText).addClass(statusClass);
 					// Show close button
-					$(".basicModal #basicModal__action.hidden").show();
+					basicModal.showActionButton();
 					upload.notify(lychee.locale["UPLOAD_IMPORT_WARN_ERR"]);
 					album.reload();
 					return true;
 				};
 
-				$(firstRowStatusSelector).html(lychee.locale["UPLOAD_IMPORTING"]);
+				upload._dom.progressRowsByPath.get(files[0].link).status.textContent = lychee.locale["UPLOAD_IMPORTING"];
 
 				// TODO: Use a streamed response; see long comment in `import.url()` for the reasons
 				api.post(
@@ -882,7 +1056,7 @@ upload.start = {
 			};
 
 			files.forEach((file) => (file.name = file.link));
-			upload.show("Importing from Dropbox", files, runImport);
+			upload.showProgressReportDialog("Importing from Dropbox", files, runImport);
 		};
 
 		lychee.loadDropbox(function () {
@@ -895,31 +1069,6 @@ upload.start = {
 	},
 };
 
-upload.check = function () {
-	let $delete = $(choiceDeleteSelector);
-	let $symlinks = $(choiceSymlinkSelector);
-
-	if ($delete.prop("checked")) {
-		$symlinks.prop("checked", false).prop("disabled", true);
-	} else {
-		$symlinks.prop("disabled", false);
-		if ($symlinks.prop("checked")) {
-			$delete.prop("checked", false).prop("disabled", true);
-		} else {
-			$delete.prop("disabled", false);
-		}
-	}
-
-	let $duplicates = $(choiceDuplicateSelector);
-	let $resync = $(choiceResyncSelector);
-
-	if ($duplicates.prop("checked")) {
-		$resync.prop("disabled", false);
-	} else {
-		$resync.prop("checked", false).prop("disabled", true);
-	}
-};
-
 /**
  * @param {(FileList|File[])} files
  *
@@ -930,6 +1079,10 @@ upload.uploadTrack = function (files) {
 	if (files.length <= 0 || albumID === null) return;
 
 	const runUpload = function () {
+		// Only a single track can be uploaded at once, hence the only
+		// file is at position 0.
+		const row = upload._dom.progressRowsByPath.get(files[0].name);
+
 		/**
 		 * A function to be called when a response has been received.
 		 *
@@ -966,23 +1119,23 @@ upload.uploadTrack = function (files) {
 					break;
 			}
 
-			$(firstRowStatusSelector).html(statusText).addClass(statusClass);
+			row.status.textContent = statusText;
 
 			if (errorText !== "") {
-				$(firstRowNoticeSelector).html(errorText).show();
+				row.notice.textContent = errorText;
 
 				api.onError(this, { albumID: albumID }, lycheeException);
-				showCloseButton();
+				upload.showProgressReportCloseButton();
 				upload.notify(lychee.locale["UPLOAD_COMPLETE"], lychee.locale["UPLOAD_COMPLETE_FAILED"]);
 			} else {
-				basicModal.close();
+				upload.closeProgressReportDialog();
 				upload.notify(lychee.locale["UPLOAD_COMPLETE"]);
 			}
 
 			album.reload();
 		}; // finish
 
-		$(firstRowStatusSelector).html(lychee.locale["UPLOAD_UPLOADING"]);
+		row.status.textContent = lychee.locale["UPLOAD_UPLOADING"];
 
 		const formData = new FormData();
 		const xhr = new XMLHttpRequest();
@@ -999,5 +1152,5 @@ upload.uploadTrack = function (files) {
 		xhr.send(formData);
 	}; // runUpload
 
-	upload.show(lychee.locale["UPLOAD_UPLOADING"], files, runUpload);
+	upload.showProgressReportDialog(lychee.locale["UPLOAD_UPLOADING"], files, runUpload);
 };

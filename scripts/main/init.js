@@ -123,20 +123,20 @@ $(document).ready(function () {
 		})
 		.bind(["command+backspace", "ctrl+backspace"], function () {
 			if (album.isUploadable()) {
-				if (visible.photo() && basicModal.visible() === false) {
+				if (visible.photo() && basicModal.isVisible() === false) {
 					photo.delete([photo.getID()]);
 					return false;
-				} else if (visible.album() && basicModal.visible() === false) {
+				} else if (visible.album() && basicModal.isVisible() === false) {
 					album.delete([album.getID()]);
 					return false;
 				}
 			}
 		})
 		.bind(["command+a", "ctrl+a"], function () {
-			if (visible.album() && basicModal.visible() === false) {
+			if (visible.album() && basicModal.isVisible() === false) {
 				multiselect.selectAll();
 				return false;
-			} else if (visible.albums() && basicModal.visible() === false) {
+			} else if (visible.albums() && basicModal.isVisible() === false) {
 				multiselect.selectAll();
 				return false;
 			}
@@ -168,7 +168,7 @@ $(document).ready(function () {
 	});
 
 	Mousetrap.bindGlobal("enter", function () {
-		if (basicModal.visible() === true) {
+		if (basicModal.isVisible() === true) {
 			// check if any of the input fields is focussed
 			// apply action, other do nothing
 			if ($(".basicModal__content input").is(":focus")) {
@@ -210,7 +210,7 @@ $(document).ready(function () {
 	);
 
 	Mousetrap.bindGlobal(["esc", "command+up"], function () {
-		if (basicModal.visible() === true) basicModal.cancel();
+		if (basicModal.isVisible() === true) basicModal.cancel();
 		else if (visible.config() || visible.leftMenu()) leftMenu.close();
 		else if (visible.contextMenu()) contextMenu.close();
 		else if (visible.photo()) lychee.goto(album.getID());
@@ -302,12 +302,10 @@ $(document).ready(function () {
 		)
 		// Upload
 		.on("change", "#upload_files", function () {
-			basicModal.close();
-			upload.start.local(this.files);
+			basicModal.close(false, () => upload.start.local(this.files));
 		})
 		.on("change", "#upload_track_file", function () {
-			basicModal.close();
-			upload.uploadTrack(this.files);
+			basicModal.close(false, () => upload.uploadTrack(this.files));
 		})
 		// Drag and Drop upload
 		.on(
@@ -323,7 +321,7 @@ $(document).ready(function () {
 				if (
 					album.isUploadable() &&
 					!visible.contextMenu() &&
-					!basicModal.visible() &&
+					!basicModal.isVisible() &&
 					!visible.leftMenu() &&
 					!visible.config() &&
 					(visible.album() || visible.albums())
@@ -368,7 +366,7 @@ $(document).ready(function () {
 						filesToUpload.length > 0 &&
 						album.isUploadable() &&
 						!visible.contextMenu() &&
-						!basicModal.visible() &&
+						!basicModal.isVisible() &&
 						!visible.leftMenu() &&
 						!visible.config() &&
 						(visible.album() || visible.albums())
