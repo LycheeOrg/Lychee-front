@@ -133,12 +133,13 @@ search.find = function (term) {
 				// `view.photos` (note the plural form) which takes care of
 				// all photo listings independent of the surrounding "thing"
 				// (i.e. regular album, tag album, search result)
-				view.album.content.setPhotoDataSource(search);
-				lychee.animate(lychee.content, "contentZoomIn");
+				setTimeout(function () {
+					view.album.content.justify();
+					lychee.animate(lychee.content, "contentZoomIn");
+					$(window).scrollTop(0);
+				}, 0);
 			}
 			lychee.setTitle(lychee.locale["SEARCH_RESULTS"], false);
-
-			$(window).scrollTop(0);
 		}, 300);
 	};
 

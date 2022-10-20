@@ -195,11 +195,6 @@ view.album = {
 	},
 
 	content: {
-		/**
-		 * @type {?{json: ?{photos: Photo[]}}}
-		 */
-		photoDataSource: null,
-
 		/** @returns {void} */
 		init: function () {
 			let photosData = "";
@@ -245,9 +240,10 @@ view.album = {
 			lychee.content.html(html);
 			album.apply_nsfw_filter();
 
-			view.album.content.setPhotoDataSource(album);
-
-			view.album.content.restoreScroll();
+			setTimeout(function () {
+				view.album.content.justify();
+				view.album.content.restoreScroll();
+			}, 0);
 		},
 
 		/** @returns {void} */
@@ -451,26 +447,6 @@ view.album = {
 		},
 
 		/**
-		 * Attaches a datasource to the photo view.
-		 *
-		 * This frees us from re-determining the current data source every
-		 * time the layout needs to be updated.
-		 * The data source is an object with an attribute `json` which in
-		 * turn may hold an array `photos` of `Photo`.
-		 * Currently, this can either be {@link album} or {@link search}.
-		 * Note, we deliberately do not take a direct reference to the JSON
-		 * object ot the array of photos such that we do not accidentally
-		 * keep a pointer on an outdated array of photos when {@link album} or
-		 * {@link search} gets cleared.
-		 *
-		 * @param {?{json: ?{photos: Photo[]}}} photoDataSource
-		 */
-		setPhotoDataSource: function (photoDataSource) {
-			view.album.content.photoDataSource = photoDataSource;
-			setTimeout(() => view.album.content.justify(), 0);
-		},
-
-		/**
 		 * Lays out the photos inside an album or a search result.
 		 *
 		 * This method is a misnomer, because it does not necessarily
@@ -484,12 +460,13 @@ view.album = {
 		 * @returns {void}
 		 */
 		justify: function () {
-			const photoDS = view.album.content.photoDataSource;
-			if (photoDS === null || photoDS.json === null || photoDS.json.photos.length === 0) return;
+			// Note, this also works for search results as the search creates
+			// a virtual "search smart album" which fills `album.json`.
+			if (album.json === null || album.json.photos.length === 0) return;
 			/**
 			 * @type {Photo[]}
 			 */
-			const photos = photoDS.json.photos;
+			const photos = album.json.photos;
 
 			if (lychee.layout === 1) {
 				/** @type {jQuery} */

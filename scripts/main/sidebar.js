@@ -137,7 +137,7 @@ sidebar.toggle = function (is_user_initiated) {
 		header.dom(".button--info").toggleClass("active");
 		lychee.content.toggleClass("content--sidebar");
 		lychee.imageview.toggleClass("image--sidebar");
-		view.album.content.justify();
+		setTimeout(() => view.album.content.justify(), 0);
 		sidebar.dom().toggleClass("active");
 		if (photo.updateSizeLivePhotoDuringAnimation) photo.updateSizeLivePhotoDuringAnimation();
 
