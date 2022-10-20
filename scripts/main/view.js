@@ -221,9 +221,15 @@ view.album = {
 					// The CSS class will eventually be removed by the
 					// layout routine `view.album.content.justify` after all
 					// child nodes have been arranged.
-					photosData = '<div class="justified-layout laying-out">' + photosData + "</div>";
+					// ---- Update 2022-10-20, temporary fix ----
+					// However, the reported width of hidden elements is zero.
+					// Hence, using the CSS class `laying-out` currently
+					// prevent `view.album.content.justify` from calculating
+					// the correct width of the container.
+					// TODO: Re-add the CSS class `laying-out` here after https://github.com/LycheeOrg/Lychee-front/pull/335 has been merged.
+					photosData = '<div class="justified-layout">' + photosData + "</div>";
 				} else if (lychee.layout === 2) {
-					photosData = '<div class="unjustified-layout laying-out">' + photosData + "</div>";
+					photosData = '<div class="unjustified-layout">' + photosData + "</div>";
 				}
 			}
 
@@ -473,7 +479,37 @@ view.album = {
 				const jqJustifiedLayout = $(".justified-layout");
 				let containerWidth = parseFloat(jqJustifiedLayout.width());
 				if (containerWidth === 0) {
-					// Triggered on Reload in photo view.
+					// The reported width is zero, if `.justified-layout`
+					// or any parent element is hidden via `display: none`.
+					// Currently, this happens when a page reload is triggered
+					// in photo view due to dorky timing constraints.
+					// (In short: `lychee.load` initially hides the parent
+					// container `.content`, and the parent container only
+					// becomes visible _after_ the photo has been loaded which
+					// is too late for this method.)
+					// Also note, that this container and the parent
+					// container are normally always visible, even if a photo
+					// is shown as the photo view is drawn in the foreground
+					// and covers this container.
+					// Hence, this edge case here is really only a problem
+					// during a full page reload in combination with
+					// `lychee.load`.
+					// Also note that the code below is wrong and outdated.
+					// The alternative way to calculate the container width
+					// depends on the window width and (falsely) assumes that
+					// neither the left menu nor the right sidebar are open,
+					// but that the `.content` box covers the whole viewport.
+					// That was a correct assumption in the past, as the
+					// sidebar was always closed after a full page reload, but
+					// this assumption isn't true anymore since Lychee
+					// remembers the state of the sidebar.
+					// Luckily, this whole problem vanishes with the new
+					// box model after
+					// https://github.com/LycheeOrg/Lychee-front/pull/335 has been merged.
+					// Then, we can use the view of the view container which
+					// is always visible and always has the correct width
+					// even for opened sidebars.
+					// TODO: Unconditionally use the width of the view container and remove this alternative width calculation after https://github.com/LycheeOrg/Lychee-front/pull/335 has been merged
 					containerWidth =
 						$(window).width() -
 						parseFloat(jqJustifiedLayout.css("margin-left")) -
