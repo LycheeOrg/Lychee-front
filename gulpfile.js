@@ -103,7 +103,7 @@ paths.main = {
 		"node_modules/livephotoskit/livephotoskit.js",
 		"node_modules/qr-creator/dist/qr-creator.min.js",
 		"node_modules/sprintf-js/dist/sprintf.min.js",
-		"modules/Leaflet.Photo-gh-pages/Leaflet.Photo.js",
+		"deps/Leaflet.Photo/Leaflet.Photo.js",
 		"../dist/_main--javascript.js",
 	],
 	scss: ["./styles/main/*.scss"],
@@ -114,7 +114,7 @@ paths.main = {
 		"./styles/main/main.scss",
 		"node_modules/leaflet/dist/leaflet.css",
 		"node_modules/leaflet.markercluster/dist/MarkerCluster.css",
-		"modules/Leaflet.Photo-gh-pages/Leaflet.Photo.css",
+		"deps/Leaflet.Photo/Leaflet.Photo.css",
 	],
 	svg: ["./images/iconic.svg", "./images/ionicons.svg"],
 };
