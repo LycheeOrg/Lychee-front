@@ -52,7 +52,7 @@ frame.stop = function () {
 };
 
 /**
- * Initialized the DOM (if called for the very first time), sets the frontend
+ * Initializes the DOM (if called for the very first time), sets the frontend
  * into "frame mode" and enters the photo loading loop.
  *
  * @returns {void}
@@ -66,7 +66,7 @@ frame.initAndStart = function () {
 			// version on the canvas.
 			StackBlur.image(frame._dom.bgImage, frame._dom.canvas, 20);
 			// We must reset the canvas to its originally defined dimensions
-			// as StackBlur reset its.
+			// as StackBlur resets it.
 			frame._dom.canvas.style.width = null;
 			frame._dom.canvas.style.height = null;
 		});
