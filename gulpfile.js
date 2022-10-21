@@ -28,12 +28,12 @@ paths.view = {
 		"./scripts/main/lychee_locale.js",
 		"./scripts/main/tabindex.js",
 		"./scripts/3rd-party/backend.js",
-		"./deps/basiccontext/scripts/basicContext.js",
 	],
 	scripts: [
 		"node_modules/jquery/dist/jquery.min.js",
 		"node_modules/lazysizes/lazysizes.min.js",
 		"node_modules/sprintf-js/dist/sprintf.min.js",
+		"node_modules/basiccontext/dist/basicContext.min.js",
 		"../dist/_view--javascript.js",
 	],
 	svg: ["./images/iconic.svg", "./images/ionicons.svg"],
@@ -84,7 +84,7 @@ gulp.task("view--svg", function () {
 
 paths.main = {
 	html: ["../index.html"],
-	js: ["./scripts/*.js", "./scripts/main/*.js", "./scripts/3rd-party/backend.js", "./deps/basiccontext/scripts/basicContext.js"],
+	js: ["./scripts/*.js", "./scripts/main/*.js", "./scripts/3rd-party/backend.js"],
 	scripts: [
 		"node_modules/jquery/dist/jquery.min.js",
 		"node_modules/lazysizes/lazysizes.min.js",
@@ -103,18 +103,19 @@ paths.main = {
 		"node_modules/livephotoskit/livephotoskit.js",
 		"node_modules/qr-creator/dist/qr-creator.min.js",
 		"node_modules/sprintf-js/dist/sprintf.min.js",
-		"modules/Leaflet.Photo-gh-pages/Leaflet.Photo.js",
+		"node_modules/leaflet.photo/Leaflet.Photo.js",
+		"node_modules/basiccontext/dist/basicContext.min.js",
 		"../dist/_main--javascript.js",
 	],
 	scss: ["./styles/main/*.scss"],
 	styles: [
 		"node_modules/basicmodal/src/styles/main.scss",
-		"./deps/basiccontext/styles/main.scss",
-		"./deps/basiccontext/styles/addons/popin.scss",
+		"node_modules/basiccontext/dist/basicContext.min.css",
+		"node_modules/basiccontext/dist/addons/popin.min.css",
 		"./styles/main/main.scss",
 		"node_modules/leaflet/dist/leaflet.css",
 		"node_modules/leaflet.markercluster/dist/MarkerCluster.css",
-		"modules/Leaflet.Photo-gh-pages/Leaflet.Photo.css",
+		"node_modules/leaflet.photo/Leaflet.Photo.css",
 	],
 	svg: ["./images/iconic.svg", "./images/ionicons.svg"],
 };

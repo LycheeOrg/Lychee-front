@@ -22,6 +22,7 @@
 		"node": ">= 10"
 	},
 	"dependencies": {
+		"basiccontext": "LycheeOrg/basicContext#7db832b",
 		"basicmodal": "LycheeOrg/basicModal#v4.0.1",
 		"jquery": "^3.4.0",
 		"justified-layout": "^4.1.0",
@@ -31,6 +32,7 @@
 		"leaflet-rotatedmarker": "^0.2.0",
 		"leaflet-spin": "^1.1.0",
 		"leaflet.markercluster": "^1.4.1",
+		"leaflet.photo": "LycheeOrg/Leaflet.Photo#a8526fb",
 		"livephotoskit": "^1.5.6",
 		"mousetrap": "^1.6.0",
 		"multiselect-two-sides": "^2.5.5",
