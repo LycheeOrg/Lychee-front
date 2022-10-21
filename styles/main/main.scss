@@ -16,8 +16,12 @@ $colorPink: #ff82ee;
 $colorGreen: #00aa00;
 $colorYellow: #ffcc00;
 $colorOrange: #ff9900;
+$colorBlack: #000000;
+$colorDarkAnthracite: #1d1d1d;
 
 $colorDialogContainerBg: black(0.85);
+$colorAppBg: $colorDarkAnthracite;
+$colorAppBgFullMode: $colorBlack;
 $colorDialogBg: linear-gradient(to bottom, #444, #333);
 $colorDialogMainButtonFont: #999999;
 $colorDialogMainActionButtonFont: $colorBlue;
@@ -54,7 +58,7 @@ body {
 }
 
 body {
-	background-color: #1d1d1d;
+	background-color: $colorAppBg;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 12px;
 	-webkit-font-smoothing: antialiased;

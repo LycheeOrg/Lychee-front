@@ -31,7 +31,7 @@ body.mode-none {
 		border-bottom: none;
 
 		&.header--error {
-			background-color: rgba(10, 10, 10, 0.99);
+			background-color: $colorAppBg;
 		}
 	}
 
@@ -172,7 +172,7 @@ body.mode-none {
 		width: 80px;
 		margin: 0;
 		padding: 5px 12px 6px 12px;
-		background-color: #1d1d1d;
+		background-color: $colorAppBg;
 		color: #fff;
 		border: 1px solid black(0.9);
 		box-shadow: 0 1px 0 white(0.04);

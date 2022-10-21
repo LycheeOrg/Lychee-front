@@ -60,7 +60,7 @@ body.mode-none {
 	left: 0;
 	padding: 0;
 	margin: 0;
-	background-color: #1d1d1d; // same as body background
+	background-color: $colorAppBg;
 	opacity: 1;
 	transition: opacity 1s ease-in-out;
 

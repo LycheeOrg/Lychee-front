@@ -6,7 +6,7 @@
 	text-align: center;
 	padding: 5px 0 5px 0;
 	position: absolute;
-	background: #1d1d1d;
+	background: $colorAppBg;
 	transition: color 0.3s, opacity 0.3s ease-out, transform 0.3s ease-out, box-shadow 0.3s, margin-left 0.5s;
 
 	p {
