@@ -866,7 +866,7 @@ photo.setTags = function (photoIDs, tags, override) {
 		{
 			photoIDs: photoIDs,
 			tags: tags,
-			override: override,
+			shall_override: override,
 		},
 		function () {
 			// If we have any tag albums, force a refresh.
