@@ -1144,11 +1144,10 @@ lychee.setMode = function (mode) {
 			$("#button_rotate_ccwise").hide();
 		}
 		return;
-	} else {
-		$(".header__search, .header__clear", ".header__toolbar--albums").hide();
-		$("#button_rotate_cwise").hide();
-		$("#button_rotate_ccwise").hide();
 	}
+	$(".header__search, .header__clear", ".header__toolbar--albums").hide();
+	$("#button_rotate_cwise").hide();
+	$("#button_rotate_ccwise").hide();
 
 	$("#button_settings, .header__divider, .leftMenu").hide();
 
