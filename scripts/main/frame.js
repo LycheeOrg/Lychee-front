@@ -120,8 +120,17 @@ frame.runPhotoLoop = function () {
 	 *
 	 * This is the old error handler when the frame mode was independently
 	 * implemented of the remaining frontend.
-	 * For historic reasons, the error is shown in a browser-provided
-	 * alert box.
+	 * Historically, any error was shown in a browser-provided alert box,
+	 * because the native Lychee error was not available in frame mode.
+	 * Currently, no error is shown at all as it was decided that an
+	 * alert box which needs to be clicked away manually is not a good
+	 * solution for the frame mode.
+	 * When the box model will have been revamped, i.e. after
+	 * https://github.com/LycheeOrg/Lychee-front/pull/335
+	 * will have been merged, then this error handler will become irrelevant
+	 * as we can then use the normal Lychee error handler and error bar.
+	 * In other words, this whole method will become obsolete.
+	 * TODO: Remove this method after https://github.com/LycheeOrg/Lychee-front/pull/335
 	 *
 	 * @param {XMLHttpRequest} jqXHR
 	 * @param {Object} params
@@ -136,8 +145,6 @@ frame.runPhotoLoop = function () {
 			params: params,
 			response: lycheeException,
 		});
-		alert(msg);
-		frame.stop();
 		return true;
 	};
 
