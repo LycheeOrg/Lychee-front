@@ -793,7 +793,7 @@ photo.editTags = function (photoIDs) {
 	}
 
 	/**
-	 * @param {{tags: string,override: boolean}} data
+	 * @param {{tags: string, override: boolean}} data
 	 * @returns {void}
 	 */
 	const action = function (data) {
@@ -855,7 +855,7 @@ photo.editTags = function (photoIDs) {
  */
 photo.setTags = function (photoIDs, tags, shall_override) {
 	if (visible.photo()) {
-		photo.json.tags = override ? tags : photo.json.tags.concat(tags.filter((t) => !photo.json.tags.includes(t)));
+		photo.json.tags = shall_override ? tags : photo.json.tags.concat(tags.filter((t) => !photo.json.tags.includes(t)));
 		view.photo.tags();
 	}
 
