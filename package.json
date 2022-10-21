@@ -22,7 +22,7 @@
 		"node": ">= 10"
 	},
 	"dependencies": {
-		"basiccontext": "LycheeOrg/basicContext#7db832b",
+		"basiccontext": "LycheeOrg/basicContext#813d6b9",
 		"basicmodal": "LycheeOrg/basicModal#v4.0.1",
 		"jquery": "^3.4.0",
 		"justified-layout": "^4.1.0",
