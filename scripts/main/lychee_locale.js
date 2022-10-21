@@ -244,6 +244,7 @@ lychee.locale = {
 	PHOTOS_NEW_TAGS:
 		"Enter your tags for all %d selected photos. Existing tags will be overwritten. You can add multiple tags by separating them with a comma:",
 	PHOTO_SET_TAGS: "Set Tags",
+	TAGS_OVERRIDE_INFO: "If this is unchecked, the tags will be added to the existing tags of the photo.",
 	PHOTO_CAMERA: "Camera",
 	PHOTO_CAPTURED: "Captured",
 	PHOTO_MAKE: "Make",
@@ -294,6 +295,7 @@ lychee.locale = {
 	ERROR_SEARCH_DEACTIVATED: "Search functionality has been deactivated under settings.",
 	SUCCESS: "OK",
 	RETRY: "Retry",
+	OVERRIDE: "Override",
 
 	SETTINGS_SUCCESS_LOGIN: "Login Info updated.",
 	SETTINGS_SUCCESS_SORT: "Sorting order updated.",
