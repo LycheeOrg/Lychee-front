@@ -304,7 +304,7 @@ const loadPhotoInfo = function (photoID) {
 			document.title = "Lychee – " + _title;
 			header.dom(".header__title").text(_title);
 
-			if (photo.json.hasOwnProperty("is_share_button_visible") && !photo.json.is_share_button_visible) {
+			if (!lychee.share_button_visible) {
 				$("#button_share").hide();
 			}
 

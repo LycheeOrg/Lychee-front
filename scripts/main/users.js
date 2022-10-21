@@ -1,5 +1,5 @@
 const users = {
-	/** @type {?User[]} */
+	/** @type {?UserDTO[]} */
 	json: null,
 };
 
@@ -9,7 +9,7 @@ const users = {
  * The object `params` must be kept in sync with the HTML form constructed
  * by {@link build.user}.
  *
- * @param {{id: number, username: string, password: string, may_upload: boolean, is_locked: boolean}} params
+ * @param {{id: number, username: string, password: string, may_upload: boolean, may_edit_own_settings: boolean}} params
  * @returns {void}
  */
 users.update = function (params) {
@@ -38,7 +38,7 @@ users.update = function (params) {
  * The object `params` must be kept in sync with the HTML form constructed
  * by {@link view.users.content}.
  *
- * @param {{id: string, username: string, password: string, may_upload: boolean, is_locked: boolean}} params
+ * @param {{id: string, username: string, password: string, may_upload: boolean, may_edit_own_settings: boolean}} params
  * @returns {void}
  */
 users.create = function (params) {
@@ -80,7 +80,7 @@ users.list = function () {
 	api.post(
 		"User::list",
 		{},
-		/** @param {User[]} data */
+		/** @param {UserDTO[]} data */
 		function (data) {
 			users.json = data;
 			view.users.init();

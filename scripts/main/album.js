@@ -921,13 +921,12 @@ album.setProtectionPolicy = function (albumID) {
 		basicModal.close();
 		albums.refresh();
 
-		album.json.is_nsfw = data.is_nsfw;
-		album.json.is_public = data.is_public;
-		album.json.grants_full_photo = data.grants_full_photo;
-		album.json.requires_link = data.requires_link;
-		album.json.is_downloadable = data.is_downloadable;
-		album.json.is_share_button_visible = data.is_share_button_visible;
-		album.json.has_password = data.has_password;
+		album.json.policies.is_nsfw = data.is_nsfw;
+		album.json.policies.is_public = data.is_public;
+		album.json.policies.grants_access_full_photo = data.grants_access_full_photo;
+		album.json.policies.is_link_required = data.is_link_required;
+		album.json.policies.grants_download = data.grants_download;
+		album.json.policies.is_password_required = data.is_password_required;
 
 		// Set data and refresh view
 		if (visible.album()) {
@@ -935,20 +934,18 @@ album.setProtectionPolicy = function (albumID) {
 			view.album.public();
 			view.album.requiresLink();
 			view.album.downloadable();
-			view.album.shareButtonVisible();
 			view.album.password();
 		}
 
 		const params = {
 			albumID: albumID,
-			grants_full_photo: album.json.grants_full_photo,
-			is_public: album.json.is_public,
-			is_nsfw: album.json.is_nsfw,
-			requires_link: album.json.requires_link,
-			is_downloadable: album.json.is_downloadable,
-			is_share_button_visible: album.json.is_share_button_visible,
+			grants_access_full_photo: album.json.policies.grants_access_full_photo,
+			is_public: album.json.policies.is_public,
+			is_nsfw: album.json.policies.is_nsfw,
+			is_link_required: album.json.policies.is_link_required,
+			grants_download: album.json.policies.grants_download,
 		};
-		if (album.json.has_password) {
+		if (album.json.policies.is_password_required) {
 			if (data.password) {
 				// We send the password only if there's been a change; that way the
 				// server will keep the current password if it wasn't changed.
@@ -970,27 +967,22 @@ album.setProtectionPolicy = function (albumID) {
 			</div>
 			<div class='input-group compact-inverse'>
 				<label for="pp_dialog_full_photo_check"></label>
-				<input type='checkbox' id='pp_dialog_full_photo_check' name='grants_full_photo' />
+				<input type='checkbox' id='pp_dialog_full_photo_check' name='grants_access_full_photo' />
 				<p></p>
 			</div>
 			<div class='input-group compact-inverse'>
 				<label for="pp_dialog_link_check"></label>
-				<input type='checkbox' id='pp_dialog_link_check' name='requires_link' />
+				<input type='checkbox' id='pp_dialog_link_check' name='is_link_required' />
 				<p></p>
 			</div>
 			<div class='input-group compact-inverse'>
 				<label for="pp_dialog_downloadable_check"></label>
-				<input type='checkbox' id='pp_dialog_downloadable_check' name='is_downloadable' />
-				<p></p>
-			</div>
-			<div class='input-group compact-inverse'>
-				<label for="pp_dialog_share_check"></label>
-				<input type='checkbox' id='pp_dialog_share_check' name='is_share_button_visible' />
+				<input type='checkbox' id='pp_dialog_downloadable_check' name='grants_download' />
 				<p></p>
 			</div>
 			<div class='input-group compact-inverse'>
 				<label for="pp_dialog_password_check"></label>
-				<input type='checkbox' id='pp_dialog_password_check' name='has_password'>
+				<input type='checkbox' id='pp_dialog_password_check' name='is_password_required'>
 				<p></p>
 				<div class="input-group stacked">
 					<input class='text' id='pp_dialog_password_input' name='password' type='text'>
@@ -1009,11 +1001,10 @@ album.setProtectionPolicy = function (albumID) {
 	/**
 	 * @typedef ProtectionPolicyDialogFormElements
 	 * @property {HTMLInputElement} is_public
-	 * @property {HTMLInputElement} grants_full_photo
-	 * @property {HTMLInputElement} requires_link
-	 * @property {HTMLInputElement} is_downloadable
-	 * @property {HTMLInputElement} is_share_button_visible
-	 * @property {HTMLInputElement} has_password
+	 * @property {HTMLInputElement} grants_access_full_photo
+	 * @property {HTMLInputElement} is_link_required
+	 * @property {HTMLInputElement} grants_download
+	 * @property {HTMLInputElement} is_password_required
 	 * @property {HTMLInputElement} password
 	 * @property {HTMLInputElement} is_nsfw
 	 */
@@ -1026,16 +1017,14 @@ album.setProtectionPolicy = function (albumID) {
 	const initAlbumProtectionPolicyDialog = function (formElements, dialog) {
 		formElements.is_public.previousElementSibling.textContent = lychee.locale["ALBUM_PUBLIC"];
 		formElements.is_public.nextElementSibling.textContent = lychee.locale["ALBUM_PUBLIC_EXPL"];
-		formElements.grants_full_photo.previousElementSibling.textContent = lychee.locale["ALBUM_FULL"];
-		formElements.grants_full_photo.nextElementSibling.textContent = lychee.locale["ALBUM_FULL_EXPL"];
-		formElements.requires_link.previousElementSibling.textContent = lychee.locale["ALBUM_HIDDEN"];
-		formElements.requires_link.nextElementSibling.textContent = lychee.locale["ALBUM_HIDDEN_EXPL"];
-		formElements.is_downloadable.previousElementSibling.textContent = lychee.locale["ALBUM_DOWNLOADABLE"];
-		formElements.is_downloadable.nextElementSibling.textContent = lychee.locale["ALBUM_DOWNLOADABLE_EXPL"];
-		formElements.is_share_button_visible.previousElementSibling.textContent = lychee.locale["ALBUM_SHARE_BUTTON_VISIBLE"];
-		formElements.is_share_button_visible.nextElementSibling.textContent = lychee.locale["ALBUM_SHARE_BUTTON_VISIBLE_EXPL"];
-		formElements.has_password.previousElementSibling.textContent = lychee.locale["ALBUM_PASSWORD_PROT"];
-		formElements.has_password.nextElementSibling.textContent = lychee.locale["ALBUM_PASSWORD_PROT_EXPL"];
+		formElements.grants_access_full_photo.previousElementSibling.textContent = lychee.locale["ALBUM_FULL"];
+		formElements.grants_access_full_photo.nextElementSibling.textContent = lychee.locale["ALBUM_FULL_EXPL"];
+		formElements.is_link_required.previousElementSibling.textContent = lychee.locale["ALBUM_HIDDEN"];
+		formElements.is_link_required.nextElementSibling.textContent = lychee.locale["ALBUM_HIDDEN_EXPL"];
+		formElements.grants_download.previousElementSibling.textContent = lychee.locale["ALBUM_DOWNLOADABLE"];
+		formElements.grants_download.nextElementSibling.textContent = lychee.locale["ALBUM_DOWNLOADABLE_EXPL"];
+		formElements.is_password_required.previousElementSibling.textContent = lychee.locale["ALBUM_PASSWORD_PROT"];
+		formElements.is_password_required.nextElementSibling.textContent = lychee.locale["ALBUM_PASSWORD_PROT_EXPL"];
 		formElements.password.placeholder = lychee.locale["PASSWORD"];
 		formElements.is_nsfw.previousElementSibling.textContent = lychee.locale["ALBUM_NSFW"];
 		formElements.is_nsfw.nextElementSibling.textContent = lychee.locale["ALBUM_NSFW_EXPL"];
@@ -1055,18 +1044,17 @@ album.setProtectionPolicy = function (albumID) {
 			formElements.has_password,
 		];
 
-		if (album.json.is_public) {
+		if (album.json.policies.is_public) {
 			tristateCheckboxes.forEach(function (checkbox) {
 				checkbox.parentElement.classList.remove("disabled");
 				checkbox.disabled = false;
 			});
 			// Initialize options based on album settings.
-			formElements.grants_full_photo.checked = album.json.grants_full_photo;
-			formElements.requires_link.checked = album.json.requires_link;
-			formElements.is_downloadable.checked = album.json.is_downloadable;
-			formElements.is_share_button_visible.checked = album.json.is_share_button_visible;
-			formElements.has_password.checked = album.json.has_password;
-			if (album.json.has_password) {
+			formElements.grants_access_full_photo.checked = album.json.policies.grants_access_full_photo;
+			formElements.is_link_required.checked = album.json.policies.is_link_required;
+			formElements.grants_download.checked = album.json.policies.grants_download;
+			formElements.is_password_required.checked = album.json.policies.is_password_required;
+			if (album.json.policies.is_password_required) {
 				formElements.password.parentElement.classList.remove("hidden");
 			} else {
 				formElements.password.parentElement.classList.add("hidden");
@@ -1077,11 +1065,11 @@ album.setProtectionPolicy = function (albumID) {
 				checkbox.disabled = true;
 			});
 			// Initialize options based on global settings.
-			formElements.grants_full_photo.checked = lychee.full_photo;
-			formElements.requires_link.checked = false;
-			formElements.is_downloadable.checked = lychee.downloadable;
+			formElements.grants_access_full_photo.checked = lychee.grants_access_full_photo;
+			formElements.is_link_required.checked = false;
+			formElements.grants_download.checked = lychee.grants_download;
 			formElements.is_share_button_visible.checked = lychee.share_button_visible;
-			formElements.has_password.checked = false;
+			formElements.is_password_required.checked = false;
 			formElements.password.parentElement.classList.add("hidden");
 		}
 
@@ -1093,7 +1081,7 @@ album.setProtectionPolicy = function (albumID) {
 		});
 
 		formElements.has_password.addEventListener("change", function () {
-			if (formElements.has_password.checked) {
+			if (formElements.is_password_required.checked) {
 				formElements.password.parentElement.classList.remove("hidden");
 				formElements.password.focus();
 			} else {
@@ -1210,7 +1198,7 @@ album.shareUsers = function (albumID) {
  * @returns {void}
  */
 album.toggleNSFW = function () {
-	album.json.is_nsfw = !album.json.is_nsfw;
+	album.json.policies.is_nsfw = !album.json.policies.is_nsfw;
 
 	view.album.nsfw();
 
@@ -1218,7 +1206,7 @@ album.toggleNSFW = function () {
 		"Album::setNSFW",
 		{
 			albumID: album.json.id,
-			is_nsfw: album.json.is_nsfw,
+			is_nsfw: album.json.policies.is_nsfw,
 		},
 		() => albums.refresh()
 	);
@@ -1229,7 +1217,7 @@ album.toggleNSFW = function () {
  * @returns {void}
  */
 album.share = function (service) {
-	if (album.json.hasOwnProperty("is_share_button_visible") && !album.json.is_share_button_visible) {
+	if (!lychee.share_button_visible) {
 		return;
 	}
 
@@ -1252,7 +1240,7 @@ album.share = function (service) {
  * @returns {void}
  */
 album.qrCode = function () {
-	if (album.json.hasOwnProperty("is_share_button_visible") && !album.json.is_share_button_visible) {
+	if (!lychee.share_button_visible) {
 		return;
 	}
 
@@ -1527,15 +1515,15 @@ album.apply_nsfw_filter = function () {
  * @returns {boolean}
  */
 album.isUploadable = function () {
-	if (lychee.rights.is_admin) {
+	if (album.json !== null && album.json.rights.can_upload) {
 		return true;
 	}
-	if (lychee.publicMode || !lychee.rights.may_upload) {
-		return false;
+
+	if (album.json === null && lychee.rights.root_album.can_upload) {
+		return true;
 	}
 
-	// TODO: Comparison of numeric user IDs (instead of names) should be more robust
-	return album.json === null || (lychee.user !== null && album.json.owner_name === lychee.user.username);
+	return false;
 };
 
 /**

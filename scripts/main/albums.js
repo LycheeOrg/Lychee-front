@@ -83,6 +83,7 @@ albums.parse = function (album) {
 	if (!album.thumb) {
 		album.thumb = {
 			id: "",
+			// TODO: FIX ME we need to expose that a password is required
 			thumb: album.has_password ? "img/password.svg" : "img/no_images.svg",
 			type: "image/svg+xml",
 			thumb2x: null,
@@ -109,7 +110,7 @@ albums.localizeSmartAlbums = function (data) {
 		data.public.title = lychee.locale["PUBLIC"];
 		// TODO: Why do we need to set these two attributes? What component relies upon them, what happens if we don't set them? Is it legacy?
 		data.public.is_public = true;
-		data.public.requires_link = true;
+		data.public.is_link_required = true;
 	}
 
 	if (data.recent) {

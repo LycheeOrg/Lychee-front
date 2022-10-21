@@ -32,24 +32,9 @@ const lychee = {
 	user: null,
 	/**
 	 * The rights granted by the backend
+	 * @type {?InitRightsDTO}
 	 */
-	rights: {
-		/**
-		 * Backend grants admin rights
-		 * @type boolean
-		 */
-		is_admin: false,
-		/**
-		 * Backend grants upload rights
-		 * @type boolean
-		 */
-		may_upload: false,
-		/**
-		 * Backend considers the user to be locked
-		 * @type boolean
-		 */
-		is_locked: false,
-	},
+	rights: null,
 	/**
 	 * Values:
 	 *
@@ -282,7 +267,7 @@ lychee.init = function (isFirstInitialization = true) {
 		function (data) {
 			lychee.parseInitializationData(data);
 
-			if (data.user !== null || data.rights.is_admin) {
+			if (data.user !== null || data.rights.settings.can_edit) {
 				// Authenticated or no admin is registered
 				leftMenu.build();
 				leftMenu.bind();
@@ -294,7 +279,7 @@ lychee.init = function (isFirstInitialization = true) {
 				// In particular it is completely insane to build the UI as if the admin user was successfully authenticated.
 				// This might leak confidential photos to anybody if the DB is filled
 				// with photos and the admin password reset to `null`.
-				if (data.user === null && data.rights.is_admin) settings.createLogin();
+				if (data.user === null && data.rights.settings.can_edit) settings.createLogin();
 			} else {
 				lychee.setMode("public");
 			}
@@ -344,7 +329,7 @@ lychee.parseInitializationData = function (data) {
 	}
 
 	lychee.parsePublicInitializationData(data);
-	if (lychee.user !== null || lychee.rights.is_admin) {
+	if (lychee.user !== null || lychee.rights.settings.can_edit) {
 		lychee.parseProtectedInitializationData(data);
 	}
 };
@@ -385,6 +370,7 @@ lychee.parsePublicInitializationData = function (data) {
 
 	lychee.header_auto_hide = data.config_device.header_auto_hide;
 	lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
+	lychee.share_button_visible = data.config.share_button_visible === "1";
 	lychee.enable_button_visibility = data.config_device.enable_button_visibility;
 	lychee.enable_button_share = data.config_device.enable_button_share;
 	lychee.enable_button_archive = data.config_device.enable_button_archive;
@@ -422,7 +408,6 @@ lychee.parseProtectedInitializationData = function (data) {
 	lychee.full_photo = data.config.full_photo === "1";
 	lychee.downloadable = data.config.downloadable === "1";
 	lychee.public_photos_hidden = data.config.public_photos_hidden === "1";
-	lychee.share_button_visible = data.config.share_button_visible === "1";
 	lychee.delete_imported = data.config.delete_imported === "1";
 	lychee.import_via_symlink = data.config.import_via_symlink === "1";
 	lychee.skip_duplicates = data.config.skip_duplicates === "1";
@@ -853,11 +838,11 @@ lychee.setTitle = function (title = "", editable = false) {
  * @param {string} mode - one out of: `public`, `view`, `logged_in`
  */
 lychee.setMode = function (mode) {
-	if (lychee.rights.is_locked) {
-		$("#button_settings_open").remove();
-	}
-	if (!lychee.rights.may_upload) {
-		$("#button_sharing").remove();
+	// if (!lychee.rights.settings.can_edit || lychee.rights.users.can_edit_own_settings) {
+	// 	$("#button_settings_open").remove();
+	// }
+	if (!lychee.rights.root_album.can_upload) {
+		// $("#button_sharing").remove();
 
 		$(document)
 			.off("click", ".header__title--editable")
@@ -875,9 +860,9 @@ lychee.setMode = function (mode) {
 			.unbind(["command+backspace", "ctrl+backspace"])
 			.unbind(["command+a", "ctrl+a"]);
 	}
-	if (!lychee.rights.is_admin) {
-		$("#button_users, #button_logs, #button_diagnostics").remove();
-	}
+	// if (!lychee.rights.settings.can_edit) {
+	// 	$("#button_users, #button_logs, #button_diagnostics").remove();
+	// }
 
 	if (mode === "logged_in") {
 		// After login the keyboard short-cuts to login by password (l) and

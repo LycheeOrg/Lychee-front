@@ -141,14 +141,14 @@ build.album = function (data, disabled = false) {
 		let isCover = album.json && album.json.cover_id && data.thumb.id === album.json.cover_id;
 		html += lychee.html`
 				<div class='badges'>
-					<a class='badge ${data.is_nsfw ? "badge--nsfw" : ""} icn-warning'>${build.iconic("warning")}</a>
+					<a class='badge ${data.policies && data.policies.is_nsfw ? "badge--nsfw" : ""} icn-warning'>${build.iconic("warning")}</a>
 					<a class='badge ${data.id === SmartAlbumID.STARRED ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
 					<a class='badge ${data.id === SmartAlbumID.RECENT ? "badge--visible badge--list" : ""}'>${build.iconic("clock")}</a>
-					<a class='badge ${data.id === SmartAlbumID.PUBLIC || data.is_public ? "badge--visible" : ""} ${
-			data.requires_link ? "badge--hidden" : "badge--not--hidden"
+					<a class='badge ${data.id === SmartAlbumID.PUBLIC || (data.policies && data.policies.is_public) ? "badge--visible" : ""} ${
+			data.policies && data.policies.is_link_required ? "badge--hidden" : "badge--not--hidden"
 		} icn-share'>${build.iconic("eye")}</a>
 					<a class='badge ${data.id === SmartAlbumID.UNSORTED ? "badge--visible" : ""}'>${build.iconic("list")}</a>
-					<a class='badge ${data.has_password ? "badge--visible" : ""}'>${build.iconic("lock-locked")}</a>
+					<a class='badge ${data.policies && data.policies.is_password_required ? "badge--visible" : ""}'>${build.iconic("lock-unlocked")}</a>
 					<a class='badge ${data.is_tag_album ? "badge--tag" : ""}'>${build.iconic("tag")}</a>
 					<a class='badge ${isCover ? "badge--cover" : ""} icn-cover'>${build.iconic("folder-cover")}</a>
 				</div>
@@ -296,7 +296,9 @@ build.photo = function (data, disabled = false) {
 		html += lychee.html`
 				<div class='badges'>
 				<a class='badge ${data.is_starred ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
-				<a class='badge ${data.is_public && album.json && !album.json.is_public ? "badge--visible badge--hidden" : ""} icn-share'>${build.iconic("eye")}</a>
+				<a class='badge ${
+					data.is_public && album.json && album.json.policies && !album.json.policies.is_public ? "badge--visible badge--hidden" : ""
+				} icn-share'>${build.iconic("eye")}</a>
 				<a class='badge ${isCover ? "badge--cover" : ""} icn-cover'>${build.iconic("folder-cover")}</a>
 				</div>
 				`;
@@ -540,9 +542,9 @@ build.user = function (user) {
 			<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
 			</label>
 			</span>
-			<span class="choice" title="${lychee.locale["RESTRICTED_ACCOUNT"]}">
+			<span class="choice" title="${lychee.locale["ALLOW_USER_SELF_EDIT"]}">
 			<label>
-			<input type="checkbox" name="is_locked" />
+			<input type="checkbox" name="may_edit_own_settings" />
 			<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
 			</label>
 			</span>
@@ -562,18 +564,6 @@ build.u2f = function (credential) {
 			<p id="CredentialData${credential.id}">
 			<input name="id" type="hidden" inputmode="string" value="${credential.id}" />
 			<span class="text">${credential.id.slice(0, 30)}</span>
-			<!--- <span class="choice" title="Allow uploads">
-			<label>
-			<input type="checkbox" name="may_upload" />
-			<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
-			</label>
-			</span>
-			<span class="choice" title="Restricted account">
-			<label>
-			<input type="checkbox" name="is_locked" />
-			<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
-			</label>
-			</span>--->
 			</p>
 			<a id="CredentialDelete${credential.id}"  class="basicModal__button basicModal__button_DEL">Delete</a>
 		</div>

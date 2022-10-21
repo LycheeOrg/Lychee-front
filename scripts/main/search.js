@@ -25,8 +25,7 @@ const SearchAlbumIDPrefix = "search";
  * @property {TagAlbum[]} tag_albums            - the found tag albums
  * @property {?Thumb}  thumb                    - always `null`; just a dummy entry, because all other albums {@link Album}, {@link TagAlbum}, {@link SmartAlbum} have it
  * @property {boolean} is_public                - always `false`; just a dummy entry, because all other albums {@link Album}, {@link TagAlbum}, {@link SmartAlbum} have it
- * @property {boolean} is_downloadable          - always `false`; just a dummy entry, because all other albums {@link Album}, {@link TagAlbum}, {@link SmartAlbum} have it
- * @property {boolean} is_share_button_visible  - always `false`; just a dummy entry, because all other albums {@link Album}, {@link TagAlbum}, {@link SmartAlbum} have it
+ * @property {boolean} grant_download          - always `false`; just a dummy entry, because all other albums {@link Album}, {@link TagAlbum}, {@link SmartAlbum} have it
  */
 
 /**
@@ -64,8 +63,7 @@ search.find = function (term) {
 			tag_albums: search.json.tag_albums,
 			thumb: null,
 			is_public: false,
-			is_downloadable: false,
-			is_share_button_visible: false,
+			grant_download: false,
 		};
 
 		let albumsData = "";
