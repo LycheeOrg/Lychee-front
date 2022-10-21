@@ -812,7 +812,8 @@ photo.editTags = function (photoIDs) {
 			<div class="input-group stacked"><input class='text' name='tags' type='text' minlength='1'></div>
 			<div class='input-group compact-inverse'>
 				<label for="override">${lychee.locale["OVERRIDE"]}</label>
-				<input type='checkbox' id='override' name='override' />
+				<input type='checkbox' id='tag_dialog_override_input' name='override' />
+				<p>${lychee.locale["TAGS_OVERRIDE_INFO"]}</p>
 			</div>
 		</form>`;
 
@@ -848,10 +849,10 @@ photo.editTags = function (photoIDs) {
 /**
  * @param {string[]} photoIDs
  * @param {string[]} tags
- * @param {boolean} override
+ * @param {boolean} shall_override
  * @returns {void}
  */
-photo.setTags = function (photoIDs, tags, override) {
+photo.setTags = function (photoIDs, tags, shall_override) {
 	if (visible.photo()) {
 		photo.json.tags = override ? tags : photo.json.tags.concat(tags.filter((t) => !photo.json.tags.includes(t)));
 		view.photo.tags();
@@ -866,7 +867,7 @@ photo.setTags = function (photoIDs, tags, override) {
 		{
 			photoIDs: photoIDs,
 			tags: tags,
-			shall_override: override,
+			shall_override: shall_override,
 		},
 		function () {
 			// If we have any tag albums, force a refresh.
