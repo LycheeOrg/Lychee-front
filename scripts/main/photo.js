@@ -811,9 +811,9 @@ photo.editTags = function (photoIDs) {
 		<form>
 			<div class="input-group stacked"><input class='text' name='tags' type='text' minlength='1'></div>
 			<div class='input-group compact-inverse'>
-				<label for="override">${lychee.locale["OVERRIDE"]}</label>
+				<label for="override"></label>
 				<input type='checkbox' id='tag_dialog_override_input' name='override' />
-				<p>${lychee.locale["TAGS_OVERRIDE_INFO"]}</p>
+				<p></p>
 			</div>
 		</form>`;
 
@@ -827,7 +827,8 @@ photo.editTags = function (photoIDs) {
 			photoIDs.length === 1 ? lychee.locale["PHOTO_NEW_TAGS"] : sprintf(lychee.locale["PHOTOS_NEW_TAGS"], photoIDs.length);
 		formElements.tags.placeholder = "Tags";
 		formElements.tags.value = oldTags.join(", ");
-		formElements.override.checked = true;
+		formElements.override.previousElementSibling.textContent = lychee.locale["OVERRIDE"];
+		formElements.override.nextElementSibling.textContent = lychee.locale["TAGS_OVERRIDE_INFO"];
 	};
 
 	basicModal.show({
