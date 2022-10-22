@@ -484,11 +484,6 @@ lychee.locale = {
 	PHOTO_LIVE_VIDEO: "Video part of live-photo",
 	PHOTO_VIEW: "Lychee Photo View:",
 
-	NEW_PASSWORD: "new password",
-	ALLOW_UPLOADS: "Allow uploads",
-	ALLOW_USER_SELF_EDIT: "Allow self-management of user account",
-
-	OSM_CONTRIBUTORS: "OpenStreetMap contributors",
 	PHOTO_EDIT_ROTATECWISE: "Rotate clockwise",
 	PHOTO_EDIT_ROTATECCWISE: "Rotate counter-clockwise",
 
@@ -517,7 +512,7 @@ lychee.locale = {
 	CAMERA_DATE: "Camera date",
 	NEW_PASSWORD: "new password",
 	ALLOW_UPLOADS: "Allow uploads",
-	RESTRICTED_ACCOUNT: "Restricted account",
+	ALLOW_USER_SELF_EDIT: "Allow self-management of user account",
 	OSM_CONTRIBUTORS: "OpenStreetMap contributors",
 
 	dateTimeFormatter: new Intl.DateTimeFormat("default", { dateStyle: "medium", timeStyle: "medium" }),
