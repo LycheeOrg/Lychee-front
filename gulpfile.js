@@ -103,7 +103,7 @@ gulp.task("frontend--html", function () {
 		))
 		.pipe(chmod({execute: false}))
 		.on("error", catchError)
-		.pipe(gulp.dest(".."));
+		.pipe(gulp.dest("../dist/"));
 });
 
 /* Landing -----------------------------------------  */
