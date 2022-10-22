@@ -316,6 +316,7 @@ const SmartAlbumID = Object.freeze({
  * @property {string}   nsfw_visible            - actually a boolean
  * @property {string}   nsfw_warning            - actually a boolean
  * @property {string}   nsfw_warning_admin      - actually a boolean
+ * @property {string}   nsfw_banner_override    - custom HTML instead of the default NSFW banner
  * @property {string}   public_photos_hidden    - actually a boolean
  * @property {string}   public_search           - actually a boolean
  * @property {string}   share_button_visible    - actually a boolean
