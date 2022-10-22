@@ -1002,7 +1002,7 @@ lychee.load = function (autoplay = true) {
 					// regular album, it needs to be treated a little
 					// differently.
 					header.setMode("albums");
-					lychee.setTitle(lychee.locale["SEARCH_RESULTS"], false);
+					lychee.setMetaData(lychee.locale["SEARCH_RESULTS"]);
 				} else {
 					view.album.title();
 				}
@@ -1066,20 +1066,43 @@ lychee.load = function (autoplay = true) {
 };
 
 /**
- * Sets the title of the browser window and the title shown in the header bar.
+ * Sets the title and various other meta for the current page.
  *
+ * The title is shown in the browser window and in the header bar.
  * The window title is prefixed by the value of the configuration setting
  * `lychee.site_title`.
- *
  * If both, the prefix `lychee.site_title` and the given title, are not empty,
  * they are seperated by an en-dash.
  *
- * @param {string} [title=""]
- * @param {boolean} [editable=false]
+ * The description is postfixed with `" – via Lychee"` if not empty.
+ *
+ * @param {string=""} title
+ * @param {boolean=false} isTitleEditable
+ * @param {string=""} description
+ * @param {string=""} photoUrl
  */
-lychee.setTitle = function (title = "", editable = false) {
-	document.title = lychee.site_title + (lychee.site_title && title ? " – " : "") + title;
-	header.setEditable(editable);
+lychee.setMetaData = function (title = "", isTitleEditable = false, description = "", photoUrl = "") {
+	const pageTitle = lychee.site_title + (lychee.site_title && title ? " – " : "") + title;
+	const pageDescription = description ? description + " – via Lychee" : "";
+
+	// General Meta Data
+	document.title = pageTitle;
+	document.querySelector('meta[name="description"]').content = pageDescription;
+	document.querySelector('meta[name="author"]').content = lychee.site_owner;
+	document.querySelector('meta[name="publisher"]').content = lychee.site_owner;
+
+	// Twitter Meta Data
+	document.querySelector('meta[name="twitter:title"]').content = pageTitle;
+	document.querySelector('meta[name="twitter:description"]').content = pageDescription;
+	document.querySelector('meta[name="twitter:image"]').content = photoUrl;
+
+	// OpenGraph Meta Data (e.g. used by Facebook)
+	document.querySelector('meta[property="og:title"]').content = pageTitle;
+	document.querySelector('meta[property="og:description"]').content = pageDescription;
+	document.querySelector('meta[property="og:image"]').content = photoUrl;
+	document.querySelector('meta[property="og:url"]').content = window.location.href;
+
+	header.setEditable(isTitleEditable);
 	header.setTitle(title);
 };
 

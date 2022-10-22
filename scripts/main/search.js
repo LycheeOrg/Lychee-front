@@ -136,7 +136,7 @@ search.find = function (term) {
 				view.album.content.justify(search.json.photos);
 				lychee.animate(lychee.content, "contentZoomIn");
 			}
-			lychee.setTitle(lychee.locale["SEARCH_RESULTS"], false);
+			lychee.setMetaData(lychee.locale["SEARCH_RESULTS"]);
 
 			$(window).scrollTop(0);
 		}, 300);

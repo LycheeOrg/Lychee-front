@@ -16,9 +16,9 @@ view.albums = {
 	/** @returns {void} */
 	title: function () {
 		if (lychee.landing_page_enable) {
-			lychee.setTitle("", false);
+			lychee.setMetaData();
 		} else {
-			lychee.setTitle(lychee.locale["ALBUMS"], false);
+			lychee.setMetaData(lychee.locale["ALBUMS"]);
 		}
 	},
 
@@ -153,20 +153,20 @@ view.album = {
 		if ((visible.album() || !album.json.init) && !visible.photo()) {
 			switch (album.getID()) {
 				case SmartAlbumID.STARRED:
-					lychee.setTitle(lychee.locale["STARRED"], true);
+					lychee.setMetaData(lychee.locale["STARRED"]);
 					break;
 				case SmartAlbumID.PUBLIC:
-					lychee.setTitle(lychee.locale["PUBLIC"], true);
+					lychee.setMetaData(lychee.locale["PUBLIC"]);
 					break;
 				case SmartAlbumID.RECENT:
-					lychee.setTitle(lychee.locale["RECENT"], true);
+					lychee.setMetaData(lychee.locale["RECENT"]);
 					break;
 				case SmartAlbumID.UNSORTED:
-					lychee.setTitle(lychee.locale["UNSORTED"], true);
+					lychee.setMetaData(lychee.locale["UNSORTED"]);
 					break;
 				default:
 					if (album.json.init) sidebar.changeAttr("title", album.json.title);
-					lychee.setTitle(album.json.title, true);
+					lychee.setMetaData(album.json.title, true, album.json.description);
 					break;
 			}
 		}
@@ -767,7 +767,8 @@ view.photo = {
 	 */
 	title: function () {
 		if (photo.json.init) sidebar.changeAttr("title", photo.json.title ? photo.json.title : "");
-		lychee.setTitle(photo.json.title ? photo.json.title : lychee.locale["UNTITLED"], true);
+		const photoUrl = photo.json.size_variants.medium ? photo.json.size_variants.medium.url : photo.json.size_variants.original.url;
+		lychee.setMetaData(photo.json.title ? photo.json.title : lychee.locale["UNTITLED"], true, photo.json.description, photoUrl);
 	},
 
 	/**
@@ -1017,7 +1018,7 @@ view.settings = {
 	 * @returns {void}
 	 */
 	title: function () {
-		lychee.setTitle(lychee.locale["SETTINGS"], false);
+		lychee.setMetaData(lychee.locale["SETTINGS"]);
 	},
 
 	/**
@@ -1564,7 +1565,7 @@ view.full_settings = {
 	 * @returns {void}
 	 */
 	title: function () {
-		lychee.setTitle(lychee.locale["FULL_SETTINGS"], false);
+		lychee.setMetaData(lychee.locale["FULL_SETTINGS"]);
 	},
 
 	/**
@@ -1642,7 +1643,7 @@ view.notifications = {
 
 	/** @returns {void} */
 	title: function () {
-		lychee.setTitle(lychee.locale["NOTIFICATIONS"], false);
+		lychee.setMetaData(lychee.locale["NOTIFICATIONS"]);
 	},
 
 	/** @returns {void} */
@@ -1691,7 +1692,7 @@ view.users = {
 
 	/** @returns {void} */
 	title: function () {
-		lychee.setTitle(lychee.locale["USERS"], false);
+		lychee.setMetaData(lychee.locale["USERS"]);
 	},
 
 	/** @returns {void} */
@@ -1776,7 +1777,7 @@ view.sharing = {
 
 	/** @returns {void} */
 	title: function () {
-		lychee.setTitle(lychee.locale["SHARING"], false);
+		lychee.setMetaData(lychee.locale["SHARING"]);
 	},
 
 	/** @returns {void} */
@@ -1917,7 +1918,7 @@ view.logs = {
 
 	/** @returns {void} */
 	title: function () {
-		lychee.setTitle(lychee.locale["LOGS"], false);
+		lychee.setMetaData(lychee.locale["LOGS"]);
 	},
 
 	/** @returns {void} */
@@ -2012,7 +2013,7 @@ view.diagnostics = {
 
 	/** @returns {void} */
 	title: function () {
-		lychee.setTitle(lychee.locale["DIAGNOSTICS"], false);
+		lychee.setMetaData(lychee.locale["DIAGNOSTICS"]);
 	},
 
 	/**
@@ -2156,7 +2157,7 @@ view.update = {
 
 	/** @returns {void} */
 	title: function () {
-		lychee.setTitle(lychee.locale["UPDATE"], false);
+		lychee.setMetaData(lychee.locale["UPDATE"]);
 	},
 
 	/** @returns {void} */
@@ -2205,7 +2206,7 @@ view.u2f = {
 
 	/** @returns {void} */
 	title: function () {
-		lychee.setTitle(lychee.locale["U2F"], false);
+		lychee.setMetaData(lychee.locale["U2F"]);
 	},
 
 	/** @returns {void} */

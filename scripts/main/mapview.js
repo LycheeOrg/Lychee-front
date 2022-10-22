@@ -90,22 +90,22 @@ mapview.isInitialized = function () {
 mapview.title = function (_albumID, _albumTitle) {
 	switch (_albumID) {
 		case SmartAlbumID.STARRED:
-			lychee.setTitle(lychee.locale["STARRED"], false);
+			lychee.setMetaData(lychee.locale["STARRED"]);
 			break;
 		case SmartAlbumID.PUBLIC:
-			lychee.setTitle(lychee.locale["PUBLIC"], false);
+			lychee.setMetaData(lychee.locale["PUBLIC"]);
 			break;
 		case SmartAlbumID.RECENT:
-			lychee.setTitle(lychee.locale["RECENT"], false);
+			lychee.setMetaData(lychee.locale["RECENT"]);
 			break;
 		case SmartAlbumID.UNSORTED:
-			lychee.setTitle(lychee.locale["UNSORTED"], false);
+			lychee.setMetaData(lychee.locale["UNSORTED"]);
 			break;
 		case null:
-			lychee.setTitle(lychee.locale["ALBUMS"], false);
+			lychee.setMetaData(lychee.locale["ALBUMS"]);
 			break;
 		default:
-			lychee.setTitle(_albumTitle ? _albumTitle : lychee.locale["UNTITLED"], false);
+			lychee.setMetaData(_albumTitle ? _albumTitle : lychee.locale["UNTITLED"]);
 			break;
 	}
 };
