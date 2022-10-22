@@ -22,9 +22,9 @@
 		"node": ">= 10"
 	},
 	"dependencies": {
-		"@lychee-org/basicmodal": "^v4.0.1",
+		"@lychee-org/basiccontext": "^4.0.0",
+		"@lychee-org/basicmodal": "^4.0.1",
 		"@lychee-org/leaflet.photo": "^1.0.0",
-		"basiccontext": "LycheeOrg/basicContext#813d6b9",
 		"jquery": "^3.4.0",
 		"justified-layout": "^4.1.0",
 		"lazysizes": "^5.3.0",
