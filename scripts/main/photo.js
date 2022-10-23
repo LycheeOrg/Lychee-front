@@ -793,7 +793,7 @@ photo.editTags = function (photoIDs) {
 	}
 
 	/**
-	 * @param {{tags: string}} data
+	 * @param {{tags: string, override: boolean}} data
 	 * @returns {void}
 	 */
 	const action = function (data) {
@@ -803,13 +803,18 @@ photo.editTags = function (photoIDs) {
 			.map((tag) => tag.trim())
 			.filter((tag) => tag !== "" && tag.indexOf(",") === -1)
 			.sort();
-		photo.setTags(photoIDs, newTags);
+		photo.setTags(photoIDs, newTags, data.override);
 	};
 
 	const setTagDialogBody = `
 		<p></p>
 		<form>
 			<div class="input-group stacked"><input class='text' name='tags' type='text' minlength='1'></div>
+			<div class='input-group compact-inverse'>
+				<label for="override"></label>
+				<input type='checkbox' id='tag_dialog_override_input' name='override' />
+				<p></p>
+			</div>
 		</form>`;
 
 	/**
@@ -822,6 +827,8 @@ photo.editTags = function (photoIDs) {
 			photoIDs.length === 1 ? lychee.locale["PHOTO_NEW_TAGS"] : sprintf(lychee.locale["PHOTOS_NEW_TAGS"], photoIDs.length);
 		formElements.tags.placeholder = "Tags";
 		formElements.tags.value = oldTags.join(", ");
+		formElements.override.previousElementSibling.textContent = lychee.locale["OVERRIDE"];
+		formElements.override.nextElementSibling.textContent = lychee.locale["TAGS_OVERRIDE_INFO"];
 	};
 
 	basicModal.show({
@@ -843,11 +850,12 @@ photo.editTags = function (photoIDs) {
 /**
  * @param {string[]} photoIDs
  * @param {string[]} tags
+ * @param {boolean} shall_override
  * @returns {void}
  */
-photo.setTags = function (photoIDs, tags) {
+photo.setTags = function (photoIDs, tags, shall_override) {
 	if (visible.photo()) {
-		photo.json.tags = tags;
+		photo.json.tags = shall_override ? tags : photo.json.tags.concat(tags.filter((t) => !photo.json.tags.includes(t)));
 		view.photo.tags();
 	}
 
@@ -860,6 +868,7 @@ photo.setTags = function (photoIDs, tags) {
 		{
 			photoIDs: photoIDs,
 			tags: tags,
+			shall_override: shall_override,
 		},
 		function () {
 			// If we have any tag albums, force a refresh.
@@ -878,7 +887,7 @@ photo.setTags = function (photoIDs, tags) {
  */
 photo.deleteTag = function (photoID, index) {
 	photo.json.tags.splice(index, 1);
-	photo.setTags([photoID], photo.json.tags);
+	photo.setTags([photoID], photo.json.tags, true);
 };
 
 /**
