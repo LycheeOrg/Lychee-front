@@ -176,6 +176,16 @@ const lychee = {
 	 */
 	sm_youtube_url: "",
 	/**
+	 * Indicates whether RSS feeds are enabled or not
+	 * @type {boolean}
+	 */
+	rss_enable: false,
+	/**
+	 * An array of RSS feeds provided by the site
+	 * @type {Feed[]}
+	 */
+	rss_feeds: [],
+	/**
 	 * The site title.
 	 * @type {string}
 	 */
@@ -421,7 +431,34 @@ lychee.parseInitializationData = function (data) {
 		lychee.parseProtectedInitializationData(data);
 	}
 
+	lychee.initHtmlHeader();
 	lychee.localizeStaticGuiElements();
+};
+
+/**
+ * Initializes the HTML header of the page according to the loaded
+ * configuration.
+ *
+ * This method is comparable to {@link lychee.setMetaData} except that this
+ * method sets data in the HTML header which does not change for each page
+ * but is static for the entire site.
+ */
+lychee.initHtmlHeader = function () {
+	// General Meta Data
+	document.querySelector('meta[name="author"]').content = lychee.site_owner;
+	document.querySelector('meta[name="publisher"]').content = lychee.site_owner;
+	// RSS feeds
+	if (lychee.rss_enable) {
+		const head = document.querySelector("head");
+		lychee.rss_feeds.forEach(function (feed) {
+			const link = document.createElement("link");
+			link.rel = "alternate";
+			link.type = feed.mimetype;
+			link.href = feed.url;
+			link.title = feed.title;
+			head.appendChild(link);
+		});
+	}
 };
 
 /**
@@ -567,6 +604,9 @@ lychee.parsePublicInitializationData = function (data) {
 	lychee.sm_instagram_url = data.config.sm_instagram_url;
 	lychee.sm_twitter_url = data.config.sm_twitter_url;
 	lychee.sm_youtube_url = data.config.sm_youtube_url;
+
+	lychee.rss_enable = data.config.rss_enable === "1";
+	lychee.rss_feeds = data.config.rss_feeds;
 
 	lychee.site_title = data.config.site_title;
 	lychee.site_owner = data.config.site_owner;
@@ -1089,8 +1129,6 @@ lychee.setMetaData = function (title = "", isTitleEditable = false, description 
 	// General Meta Data
 	document.title = pageTitle;
 	document.querySelector('meta[name="description"]').content = pageDescription;
-	document.querySelector('meta[name="author"]').content = lychee.site_owner;
-	document.querySelector('meta[name="publisher"]').content = lychee.site_owner;
 
 	// Twitter Meta Data
 	document.querySelector('meta[name="twitter:title"]').content = pageTitle;

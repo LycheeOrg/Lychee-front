@@ -286,6 +286,14 @@ const SmartAlbumID = Object.freeze({
  */
 
 /**
+ * @typedef Feed
+ *
+ * @property {string} url
+ * @property {string} mimetype
+ * @property {string} title
+ */
+
+/**
  * @typedef ConfigurationData
  *
  * @property {string}   album_subtitle_type
@@ -295,6 +303,8 @@ const SmartAlbumID = Object.freeze({
  * @property {string}   downloadable            - actually a boolean
  * @property {string}   [dropbox_key]
  * @property {string}   editor_enabled          - actually a boolean
+ * @property {string}   rss_enable              - actually a boolean
+ * @property {Feed[]}   rss_feeds               - array of RSS feeds
  * @property {string}   full_photo              - actually a boolean
  * @property {string}   image_overlay_type
  * @property {string}   landing_page_enable     - actually a boolean
