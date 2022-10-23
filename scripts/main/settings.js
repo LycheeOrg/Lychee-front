@@ -475,7 +475,7 @@ settings.save_enter = function (e) {
 	basicModal.show({
 		body: saveSettingsConfirmationDialogBody,
 		readyCB: function (formElements, dialog) {
-			dialog.querySelector("p").textContent = lychee.locale["SAVE_RISK"];
+			dialog.querySelector("p").textContent = lychee.locale["SETTINGS_ADVANCED_SAVE"];
 		},
 		buttons: {
 			action: {

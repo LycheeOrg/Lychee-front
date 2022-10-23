@@ -22,23 +22,23 @@
 		"node": ">= 10"
 	},
 	"dependencies": {
-		"basicmodal": "LycheeOrg/basicModal#v4.0.1",
+		"@lychee-org/basiccontext": "^4.0.0",
+		"@lychee-org/basicmodal": "^4.0.1",
+		"@lychee-org/leaflet.photo": "^1.0.0",
 		"jquery": "^3.4.0",
 		"justified-layout": "^4.1.0",
 		"lazysizes": "^5.3.0",
 		"leaflet": "^1.7.1",
 		"leaflet-gpx": "^1.7.0",
 		"leaflet-rotatedmarker": "^0.2.0",
-		"leaflet-spin": "^1.1.0",
 		"leaflet.markercluster": "^1.4.1",
 		"livephotoskit": "^1.5.6",
 		"mousetrap": "^1.6.0",
 		"multiselect-two-sides": "^2.5.5",
 		"qr-creator": "^1.0.0",
-		"require": "^2.4.20",
 		"scroll-lock": "^2.1.2",
-		"spin.js": "^2.3.2",
-		"sprintf-js": "^1.1.2"
+		"sprintf-js": "^1.1.2",
+		"stackblur-canvas": "^2.5.0"
 	},
 	"devDependencies": {
 		"babel-preset-env": "^1.7.0",
