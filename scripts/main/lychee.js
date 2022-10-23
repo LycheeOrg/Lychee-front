@@ -868,7 +868,11 @@ lychee.reloadIfLegacyIDs = function (albumID, photoID, autoplay) {
 
 /**
  * This is a "God method" that is used to load pretty much anything, based
- * on what's in the web browser's URL bar after the '#' character:
+ * on what's in the web browser's URL.
+ *
+ * Traditionally, Lychee has been using client-side navigation based on
+ * URL fragments (i.e. based on the part after the '#' character)
+ * Fragments can match one of the following cases:
  *
  *  - (nothing): load root album, assign `null` to `albumID` and `photoID`
  *  - `{albumID}`: load the album; `albumID` equals the given ID, `photoID` is
@@ -889,16 +893,35 @@ lychee.reloadIfLegacyIDs = function (albumID, photoID, autoplay) {
  *    which assumes that the user is always unauthenticated.
  *  - `frame`: shows random, starred photos in a kiosk mode
  *
+ * Additionally, Lychee supports the following proper paths:
+ *
+ *  - `/view/{photoID}` and `/view?p={photoID}`: See `view/{photoID}` above
+ *    for the fragment-based approach
+ *  - `/frame`: See `frame` above for the fragment-based approach.
+ *
  * @param {boolean} [autoplay=true]
  * @returns {void}
  */
 lychee.load = function (autoplay = true) {
-	let hash = document.location.hash.replace("#", "").split("/");
-	let albumID = hash[0];
-	if (albumID === SearchAlbumIDPrefix && hash.length > 1) {
-		albumID += "/" + hash[1];
+	let albumID = "";
+	let photoID = "";
+
+	const viewMatch = document.location.href.match(/\/view(?:\/|(\?p=))(?<photoID>[-_0-9A-Za-z]+)$/);
+	const hashMatch = document.location.hash.replace("#", "").split("/");
+
+	if (/\/frame\/?$/.test(document.location.href)) {
+		albumID = "frame";
+		photoID = "";
+	} else if (viewMatch !== null && viewMatch.groups.photoID) {
+		albumID = "view";
+		photoID = viewMatch.groups.photoID;
+	} else {
+		albumID = hashMatch[0];
+		if (albumID === SearchAlbumIDPrefix && hashMatch.length > 1) {
+			albumID += "/" + hashMatch[1];
+		}
+		photoID = hashMatch[album.isSearchID(albumID) ? 2 : 1];
 	}
-	let photoID = hash[album.isSearchID(albumID) ? 2 : 1];
 
 	contextMenu.close();
 	multiselect.close();
@@ -1054,7 +1077,7 @@ lychee.load = function (autoplay = true) {
 				view.album.content.restoreScroll();
 			} else if (album.isSearchID(albumID)) {
 				// Search has been triggered
-				let search_string = decodeURIComponent(hash[1]).trim();
+				let search_string = decodeURIComponent(hashMatch[1]).trim();
 
 				if (search_string === "") {
 					// do nothing on "only space" search strings
