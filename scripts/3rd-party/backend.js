@@ -283,7 +283,6 @@ const SmartAlbumID = Object.freeze({
  * @property {boolean} update_available
  * @property {Object.<string, string>} locale
  * @property {ConfigurationData} config
- * @property {DeviceConfiguration} config_device
  */
 
 /**
