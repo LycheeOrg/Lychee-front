@@ -942,7 +942,7 @@ upload.start = {
 			// After splitting, the escaped spaces must be replaced by
 			// proper spaces as escaping of spaces is a GUI-only thing to
 			// allow input of several paths into a single input field.
-			data.paths = data.paths.match(/(?:\\ |\S)+/g).map((path) => path.replaceAll("\\ ", " "));
+			data.paths = data.paths.match(/(?:\\ |\S)+/g).map((path) => path.replace(/\\ /g, " "));
 			basicModal.close(false, () => importFromServer(data));
 		};
 
