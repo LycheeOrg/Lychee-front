@@ -623,6 +623,6 @@ header.setMode = function (mode) {
 header.setEditable = function (editable) {
 	const $title = header.dom(".header__title");
 
-	if (editable) $title.addClass("header__title--editable");
+	if (editable && !lychee.publicMode) $title.addClass("header__title--editable");
 	else $title.removeClass("header__title--editable");
 };
