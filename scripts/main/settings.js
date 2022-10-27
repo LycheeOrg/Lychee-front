@@ -606,12 +606,9 @@ settings.openTokenDialog = function () {
 
 		updateTokenDialog();
 
-		copyTokenButton.addEventListener("click", onCopyToken);
-		copyTokenButton.addEventListener("touchend", onCopyToken);
-		resetTokenButton.addEventListener("click", onResetToken);
-		resetTokenButton.addEventListener("touchend", onResetToken);
-		disableTokenButton.addEventListener("click", onDisableToken);
-		disableTokenButton.addEventListener("touchend", onDisableToken);
+		lychee.addClickOrTouchListener(copyTokenButton, onCopyToken);
+		lychee.addClickOrTouchListener(resetTokenButton, onResetToken);
+		lychee.addClickOrTouchListener(disableTokenButton, onDisableToken);
 	};
 
 	basicModal.show({

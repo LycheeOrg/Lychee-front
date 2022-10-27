@@ -1642,3 +1642,17 @@ lychee.leaveDrag = function (ev) {
 lychee.endDrag = function (ev) {
 	$("div.album").removeClass("album__dragover");
 };
+
+/**
+ * Adds the given event listener to the event target for both a `"click"` and
+ * `"touchend"` event.
+ *
+ * @param {Element} eventTarget
+ * @param {EventListenerOrEventListenerObject} listener
+ * @param {boolean|AddEventListenerOptions} [options]
+ * @return {void}
+ */
+lychee.addClickOrTouchListener = function (eventTarget, listener, options) {
+	eventTarget.addEventListener("click", listener, options);
+	eventTarget.addEventListener("touchend", listener, options);
+};
