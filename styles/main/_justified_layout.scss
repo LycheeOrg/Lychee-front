@@ -2,6 +2,9 @@
 	margin: 30px 0 0 30px;
 	width: 100%;
 	position: relative;
+	&.laying-out {
+		display: none;
+	}
 }
 
 .unjustified-layout {
@@ -9,6 +12,9 @@
 	width: 100%;
 	position: relative;
 	overflow: hidden;
+	&.laying-out {
+		display: none;
+	}
 }
 
 .justified-layout > .photo {

@@ -412,8 +412,7 @@ $(document).ready(function () {
 	$(window)
 		// resize
 		.on("resize", function () {
-			if (visible.album()) view.album.content.justify(album.json ? album.json.photos : []);
-			if (visible.search()) view.album.content.justify(search.json.photos);
+			view.album.content.justify();
 			if (visible.photo()) view.photo.onresize();
 			frame.resize();
 		})
