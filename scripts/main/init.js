@@ -9,8 +9,6 @@ $(document).ready(function () {
 	// Set API error handler
 	api.onError = lychee.handleAPIError;
 
-	$("html").css("visibility", "visible");
-
 	// Multiselect
 	multiselect.bind();
 
