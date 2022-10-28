@@ -19,11 +19,11 @@ loadingBar.dom = function (selector) {
 };
 
 /**
- * @param {?string} status the status, either `null`, `"error"` or `"success"`
- * @param {?string} errorText the error text to show
+ * @param {?string} [status=null] the status, either `null`, `"error"` or `"success"`
+ * @param {?string} [errorText=null] the error text to show
  * @returns {void}
  */
-loadingBar.show = function (status, errorText) {
+loadingBar.show = function (status = null, errorText = null) {
 	if (status === "error") {
 		// Set status
 		loadingBar.status = "error";

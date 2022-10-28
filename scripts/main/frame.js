@@ -6,7 +6,7 @@ const frame = {
 
 	_dom: {
 		/**
-		 * Hidden image element with thumb variant of current picture used
+		 * Hidden image element with thumb variant of current image used
 		 * as a source for blurring.
 		 * @type {?HTMLImageElement}
 		 */
@@ -60,7 +60,7 @@ frame.stop = function () {
 frame.initAndStart = function () {
 	lychee.setMode("frame");
 	if (frame._dom.bgImage === null) {
-		frame._dom.bgImage = document.getElementById("background");
+		frame._dom.bgImage = document.getElementById("lychee_frame_bg_image");
 		frame._dom.bgImage.addEventListener("load", function () {
 			// After a new background image has been loaded, draw a blurry
 			// version on the canvas.
@@ -72,17 +72,17 @@ frame.initAndStart = function () {
 		});
 	}
 	if (frame._dom.canvas === null) {
-		frame._dom.canvas = document.getElementById("background_canvas");
+		frame._dom.canvas = document.getElementById("lychee_frame_bg_canvas");
 	}
 	if (frame._dom.image === null) {
-		frame._dom.image = document.getElementById("picture");
+		frame._dom.image = document.getElementById("lychee_frame_image");
 		frame._dom.image.addEventListener("load", function () {
 			// After a new image has been loaded, open the shutter
 			frame._dom.shutter.classList.add("opened");
 		});
 	}
 	if (frame._dom.shutter === null) {
-		frame._dom.shutter = document.getElementById("frame-shutter");
+		frame._dom.shutter = document.getElementById("lychee_frame_shutter");
 	}
 
 	// We also must call the very first invocation of `runPhotoLoop`
@@ -93,59 +93,26 @@ frame.initAndStart = function () {
 };
 
 /**
- * Repeatedly loads random photos by calling {@link frame.loadRandomPhoto}
- * every {@link lychee.mod_frame_refresh} interval forever unless an error
- * occurs.
+ * Repeatedly loads random photos every {@link lychee.mod_frame_refresh}
+ * interval.
  *
- * The method stops loading photos upon an error or when {@link frame.stop}
- * is called.
+ * The method stops loading photos when {@link frame.stop} is called.
  *
  * @returns {void}
  */
 frame.runPhotoLoop = function () {
 	/**
-	 * Recalls this method after the refresh timeout unless the loop
-	 * hasn't been stopped in the meantime.
+	 * Forwards loaded photo to handler and recalls this method after the
+	 * refresh timeout unless the loop hasn't been stopped in the meantime.
 	 *
+	 * @param {Photo} data
 	 * @returns {void}
 	 */
-	const onSuccess = function () {
+	const onSuccess = function (data) {
+		frame.onRandomPhotoLoaded(data);
 		if (frame.nextTimeOutId !== 0) {
 			frame.nextTimeOutId = setTimeout(() => frame.runPhotoLoop(), 1000 * lychee.mod_frame_refresh);
 		}
-	};
-
-	/**
-	 * Shows the error prominently and stops the loop.
-	 *
-	 * This is the old error handler when the frame mode was independently
-	 * implemented of the remaining frontend.
-	 * Historically, any error was shown in a browser-provided alert box,
-	 * because the native Lychee error was not available in frame mode.
-	 * Currently, no error is shown at all as it was decided that an
-	 * alert box which needs to be clicked away manually is not a good
-	 * solution for the frame mode.
-	 * When the box model will have been revamped, i.e. after
-	 * https://github.com/LycheeOrg/Lychee-front/pull/335
-	 * will have been merged, then this error handler will become irrelevant
-	 * as we can then use the normal Lychee error handler and error bar.
-	 * In other words, this whole method will become obsolete.
-	 * TODO: Remove this method after https://github.com/LycheeOrg/Lychee-front/pull/335
-	 *
-	 * @param {XMLHttpRequest} jqXHR
-	 * @param {Object} params
-	 * @param {?LycheeException} lycheeException
-	 *
-	 * @returns {boolean}
-	 */
-	const onError = function (jqXHR, params, lycheeException) {
-		const msg = jqXHR.statusText + (lycheeException ? " - " + lycheeException.message : "");
-		console.error("The server returned an error response", {
-			description: msg,
-			params: params,
-			response: lycheeException,
-		});
-		return true;
 	};
 
 	// Closes the shutter and loads a new, random photo after that.
@@ -156,7 +123,7 @@ frame.runPhotoLoop = function () {
 	// Only set the timeout, if the loop hasn't been stopped in the
 	// meantime
 	if (frame.nextTimeOutId !== 0) {
-		frame.nextTimeOutId = setTimeout(() => frame.loadRandomPhoto(onSuccess, onError), 1000);
+		frame.nextTimeOutId = setTimeout(() => api.post("Photo::getRandom", {}, onSuccess), 1000);
 	}
 };
 
@@ -188,7 +155,8 @@ frame.loadRandomPhoto = function (successCallback, errorCallback) {
 /**
  * Displays the given photo in the central image area of the frame mode.
  *
- * This method is called by {@link frame.loadRandomPhoto} on success.
+ * This method is called by {@link frame.runPhotoLoop} for each successfully
+ * loaded, random photo.
  *
  * @param {Photo} photo
  *
@@ -217,7 +185,7 @@ frame.onRandomPhotoLoaded = function (photo) {
 frame.resize = function () {
 	if (frame.photo && frame._dom.image) {
 		const ratio =
-			this.photo.size_variants.original.height > 0 ? this.photo.size_variants.original.width / this.photo.size_variants.original.height : 1;
+			frame.photo.size_variants.original.height > 0 ? frame.photo.size_variants.original.width / frame.photo.size_variants.original.height : 1;
 		// Our math assumes that the image occupies the whole frame.  That's
 		// not quite the case (the default css sets it to 95%) but it's close
 		// enough.

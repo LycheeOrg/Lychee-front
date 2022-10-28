@@ -1,7 +1,7 @@
 /*
  * The loading indicator and error bag.
  * The loading indicator is a child of the body and shares the vertical
- * space of the body with the application container.
+ * space of the body with the application container and the frame container.
  * The body uses `dispay: flex` thus making the loading indicator a flex item.
  */
 #lychee_loading {
@@ -10,7 +10,6 @@
 
 	background-size: 100px 3px;
 	background-repeat: repeat-x;
-	border-bottom: 1px solid black(0.3);
 
 	animation-name: moveBackground;
 	animation-duration: 0.3s;

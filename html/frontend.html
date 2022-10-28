@@ -174,11 +174,15 @@ error message is not shaded.
 			</div>
 		</div>
 	</div>
-	<div id="frame">
-		<img id="background" alt="image background" src=""/>
-		<canvas id="background_canvas"></canvas>
-		<div id="noise"></div>
-		<div class="image_container"><img id="picture" alt="Random Image" src=""/></div>
-		<div id="frame-shutter"></div>
-	</div>
+</div>
+<!--
+The frame container vertically shares space with the loading indicator.
+If fills the remaining vertical space not taken by the loading indicator.
+-->
+<div id="lychee_frame_container" class="vflex-item-stretch">
+	<img id="lychee_frame_bg_image" alt="image background" src=""/>
+	<canvas id="lychee_frame_bg_canvas"></canvas>
+	<div id="lychee_frame_noise_layer"></div>
+	<div id="lychee_frame_image_container"><img id="lychee_frame_image" alt="Random Image" src=""/></div>
+	<div id="lychee_frame_shutter"></div>
 </div>
