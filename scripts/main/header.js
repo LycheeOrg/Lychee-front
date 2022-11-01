@@ -479,7 +479,61 @@ header.setMode = function (mode) {
 					".header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--map, .header__toolbar--config"
 				)
 			);
-			// If map is disabled, we should hide the icon
+
+			// Editorial notes:
+			//  a) Keep the order of buttons as defined in the HTML
+			//  b) Only manipulate each button at most once
+			// Otherwise, the code will become completely unmaintainable.
+
+			// These conditions are highly fragile.
+			// The code which stars/unstars a photo assumes that the album
+			// of the photo is loaded, because that code internally uses
+			// `album.getPhotoId`.
+			// (Note, this is surely an error of its own.)
+			// If one attempts to star/unstar a photo and the corresponding
+			// album is not loaded, the code throws an exception.
+			// "By accident" it is safe to assume that the corresponding album
+			// is always loaded if we are not in public mode and the album is
+			// uploadable.
+			// Hence, it is (fortunately) safe to show the button in this case.
+			if (album.isUploadable()) {
+				const e = $("#button_star");
+				e.show();
+			} else {
+				const e = $("#button_star");
+				e.hide();
+			}
+
+			if (lychee.enable_button_visibility && album.isUploadable()) {
+				const e = $("#button_visibility");
+				e.show();
+				tabindex.makeFocusable(e);
+			} else {
+				const e = $("#button_visibility");
+				e.hide();
+				tabindex.makeUnfocusable(e);
+			}
+
+			if (lychee.enable_button_rotate && album.isUploadable()) {
+				const e = $("#button_rotate_cwise, #button_rotate_ccwise");
+				e.show();
+				tabindex.makeFocusable(e);
+			} else {
+				const e = $("#button_rotate_cwise, #button_rotate_ccwise");
+				e.hide();
+				tabindex.makeUnfocusable(e);
+			}
+
+			if (lychee.enable_button_share && photo.json && photo.json.is_share_button_visible) {
+				const e = $("#button_share");
+				e.show();
+				tabindex.makeUnfocusable(e);
+			} else {
+				const e = $("#button_share");
+				e.hide();
+				tabindex.makeFocusable(e);
+			}
+
 			if (lychee.publicMode === true ? lychee.map_display_public : lychee.map_display) {
 				const e = $("#button_map");
 				e.show();
@@ -490,102 +544,52 @@ header.setMode = function (mode) {
 				tabindex.makeUnfocusable(e);
 			}
 
-			if (album.isUploadable()) {
-				const e = $("#button_trash, #button_move, #button_visibility, #button_star, #button_rotate_cwise, #button_rotate_ccwise");
+			if (lychee.enable_button_move && album.isUploadable()) {
+				const e = $("#button_move");
 				e.show();
 				tabindex.makeFocusable(e);
 			} else {
-				const e = $("#button_trash, #button_move, #button_visibility, #button_star, #button_rotate_cwise, #button_rotate_ccwise");
+				const e = $("#button_move");
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			}
 
-			if (photo.json && photo.json.hasOwnProperty("is_share_button_visible") && !photo.json.is_share_button_visible) {
-				const e = $("#button_share");
-				e.hide();
-				tabindex.makeUnfocusable(e);
-			} else {
-				const e = $("#button_share");
+			if (lychee.enable_button_trash && album.isUploadable()) {
+				const e = $("#button_trash");
 				e.show();
 				tabindex.makeFocusable(e);
+			} else {
+				const e = $("#button_trash");
+				e.hide();
+				tabindex.makeUnfocusable(e);
+			}
+
+			if (lychee.enable_button_fullscreen && lychee.fullscreenAvailable()) {
+				const e = $("#button_fs_enter");
+				e.show();
+			} else {
+				const e = $("#button_fs_enter");
+				e.hide();
 			}
 
 			// Hide More menu if
 			// - empty (see contextMenu.photoMore)
 			// - not enabled
-			// - in "public" mode
-			const buttonMore = $("#button_more");
 			if (
 				(!(
 					album.isUploadable() ||
 					(photo.json.hasOwnProperty("is_downloadable") ? photo.json.is_downloadable : album.json && album.json.is_downloadable)
 				) &&
 					!(photo.json.size_variants.original.url && photo.json.size_variants.original.url !== "")) ||
-				!lychee.enable_button_more ||
-				lychee.publicMode
+				!lychee.enable_button_more
 			) {
-				buttonMore.hide();
-				tabindex.makeUnfocusable(buttonMore);
-			} else {
-				buttonMore.show();
-				tabindex.makeFocusable(buttonMore);
-			}
-
-			// Hide buttons if needed
-			if (lychee.publicMode) {
-				const e = $("#button_star", ".header__toolbar--photo");
+				const e = $("#button_more");
 				e.hide();
+				tabindex.makeUnfocusable(e);
 			} else {
-				const e = $("#button_star", ".header__toolbar--photo");
+				const e = $("#button_more");
 				e.show();
-			}
-			if (!lychee.enable_button_visibility || lychee.publicMode) {
-				const e = $("#button_visibility", ".header__toolbar--photo");
-				e.hide();
-			} else {
-				const e = $("#button_visibility", ".header__toolbar--photo");
-				e.show();
-			}
-			if (!lychee.enable_button_share) {
-				const e = $("#button_share", ".header__toolbar--photo");
-				e.hide();
-			} else {
-				const e = $("#button_share", ".header__toolbar--photo");
-				e.show();
-			}
-			if (!lychee.enable_button_move || lychee.publicMode) {
-				const e = $("#button_move", ".header__toolbar--photo");
-				e.hide();
-			} else {
-				const e = $("#button_move", ".header__toolbar--photo");
-				e.show();
-			}
-			if (!lychee.enable_button_trash || lychee.publicMode) {
-				const e = $("#button_trash", ".header__toolbar--photo");
-				e.hide();
-			} else {
-				const e = $("#button_trash", ".header__toolbar--photo");
-				e.show();
-			}
-			if (!lychee.enable_button_fullscreen || !lychee.fullscreenAvailable() || lychee.publicMode) {
-				const e = $("#button_fs_enter", ".header__toolbar--photo");
-				e.hide();
-			} else {
-				const e = $("#button_fs_enter", ".header__toolbar--photo");
-				e.show();
-			}
-			if (!lychee.enable_button_rotate || lychee.publicMode) {
-				let e = $("#button_rotate_cwise", ".header__toolbar--photo");
-				e.hide();
-
-				e = $("#button_rotate_ccwise", ".header__toolbar--photo");
-				e.hide();
-			} else {
-				let e = $("#button_rotate_cwise", ".header__toolbar--photo");
-				e.show();
-
-				e = $("#button_rotate_ccwise", ".header__toolbar--photo");
-				e.show();
+				tabindex.makeFocusable(e);
 			}
 			return;
 		case "map":
