@@ -392,7 +392,7 @@ const SmartAlbumID = Object.freeze({
  * @property {boolean} is_public
  * @property {boolean} is_link_required
  * @property {boolean} is_password_required
- * @property {boolean} grants_access_full_photo
+ * @property {boolean} grants_full_photo_access
  * @property {boolean} grants_download
  */
 
