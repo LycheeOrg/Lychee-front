@@ -1527,6 +1527,26 @@ album.apply_nsfw_filter = function () {
  * @returns {boolean}
  */
 album.isUploadable = function () {
+	// If no album is loaded, nobody (not even the admin) can upload photos.
+	// We must check this first, before we test for the admin short-cut.
+	//
+	// Particular photo actions (such as starring/unstarring a photo) assume
+	// that the corresponding album is loaded, because their code use
+	// `album.getPhotoId` under the hood.
+	// (Note, this is a bug on its own.)
+	// In the special view mode for single photos no album is loaded, even if
+	// the currently authenticated user had the right to load (and see) the
+	// album.
+	// Hence, invoking those actions without a properly loaded album, results
+	// in exceptions.
+	// The method `header.setMode` relies on this method to decide whether
+	// particular action buttons shall be hidden in single photo view.
+	// If the admin is authenticated and opens the view mode, those "buggy"
+	// actions must be hidden.
+	if (album.json === null) {
+		return false;
+	}
+
 	if (lychee.rights.is_admin) {
 		return true;
 	}
@@ -1534,8 +1554,14 @@ album.isUploadable = function () {
 		return false;
 	}
 
+	// Smart albums are considered to be owned by everybody and hence get
+	// a pass
+	if (album.isSmartID(album.json.id)) {
+		return true;
+	}
+
 	// TODO: Comparison of numeric user IDs (instead of names) should be more robust
-	return album.json === null || (lychee.user !== null && album.json.owner_name === lychee.user.username);
+	return lychee.user !== null && album.json.owner_name === lychee.user.username;
 };
 
 /**
