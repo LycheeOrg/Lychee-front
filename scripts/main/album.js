@@ -1521,8 +1521,19 @@ album.apply_nsfw_filter = function () {
 /**
  * Determines whether the user can upload to the currently active album.
  *
- * For special cases of no album / smart album / etc. we return true.
- * It's only for regular, non-matching albums that we return false.
+ * It is safe to call this method even if no album is loaded at all.
+ * In this case, the method simply returns `false` (even for admin users).
+ *
+ * If no user is authenticated or the authenticated user has no upload
+ * capabilities, the method returns `false` (even for albums owned by the
+ * user).
+ * For admin users the method returns `true`.
+ *
+ * For non-admin, authenticated users with the upload capability
+ *
+ *  - the method returns `true` for smart albums
+ *  - the method returns `true` for regular albums if and only if the album is
+ *    owned by the currently authenticated user.
  *
  * @returns {boolean}
  */
@@ -1550,12 +1561,18 @@ album.isUploadable = function () {
 	if (lychee.rights.is_admin) {
 		return true;
 	}
-	if (lychee.publicMode || !lychee.rights.may_upload) {
+	if (lychee.user === null || lychee.publicMode || !lychee.rights.may_upload) {
 		return false;
 	}
 
+	// Smart albums are considered to be owned by everybody and hence get
+	// a pass
+	if (album.isSmartID(album.json.id)) {
+		return true;
+	}
+
 	// TODO: Comparison of numeric user IDs (instead of names) should be more robust
-	return lychee.user !== null && album.json.owner_name === lychee.user.username;
+	return album.json.owner_name === lychee.user.username;
 };
 
 /**
