@@ -1533,12 +1533,7 @@ album.isUploadable = function () {
 		return true;
 	}
 
-	if (lychee.user === null || lychee.publicMode || !lychee.rights.may_upload) {
-		return false;
-	}
-
-	// TODO: Comparison of numeric user IDs (instead of names) should be more robust
-	return album.json.owner_name === lychee.user.username;
+	return false;
 };
 
 /**
