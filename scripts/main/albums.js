@@ -12,6 +12,26 @@ const albums = {
  */
 albums.load = function () {
 	const showRootAlbum = function () {
+		// DO NOT change the order of `header.setMode` and `view.albums.init`.
+		// The latter relies on the header being set correctly.
+		//
+		// `view.albums.init` builds the HTML of the albums view (note the
+		// plural-s).
+		// Internally, this exploits code for regular albums which in
+		// turn calls `album.isUploadabe` (note the missing plural-s) to
+		// check whether the current album supports drag-&-drop.
+		// In order to return the correct value `album.isUploadabe` resorts
+		// to a hack: if no (regular) album is loaded `album.isUploadabe`
+		// normally returns `false` except the root album is visible.
+		// In that case `album.isUploadabe` returns a "fake" `true`.
+		// However, in order to do so `album.isUploadabe` needs to check
+		// whether the root album is visible which is determined by the
+		// visibility of the corresponding header.
+		// That is why the header needs to be set first.
+		//
+		// However, the actual bug is to call `album.isUploadable` for the
+		// root view.
+		// TODO: Fix the bug described above.
 		header.setMode("albums");
 		view.albums.init();
 		lychee.animate(lychee.content, "contentZoomIn");
