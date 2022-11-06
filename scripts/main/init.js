@@ -315,6 +315,24 @@ $(document).ready(function () {
 			},
 			false
 		)
+		// In the long run, the "drop" event should not be defined on the
+		// global document element, but on the `DIV` which corresponds to the
+		// view onto which something is dropped.
+		// This would also avoid this highly fragile condition below.
+		// For example, in order to avoid that a photo unintentionally ends
+		// up in the root album when someone drops a photo while the
+		// setting screen is opened, we check for `!visible.config()`.
+		// This would simply not be necessary, if the drop event was directly
+		// defined on the albums view where it belongs.
+		// The conditions whether a user is allowed to upload to the root
+		// album (cp. `visible.albums()` below) or to a regular album
+		// (cp. `visible.album()` below) are slightly different.
+		// Nonetheless, we only have a single method `album.isUploadable`
+		// which tries to cover both cases and is prone to fail in certain
+		// corner cases.
+		// If the drop event was defined on the DIV for the root view and on
+		// the DIV for an album view, the whole problem would not exist.
+		// TODO: Fix that
 		.on(
 			"drop",
 			/** @param {jQuery.Event} e */ function (e) {
