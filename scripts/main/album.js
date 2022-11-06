@@ -1522,6 +1522,16 @@ album.apply_nsfw_filter = function () {
  *  - the method returns `true` for regular albums if and only if the album is
  *    owned by the currently authenticated user.
  *
+ * Note, for the time being this method contains a work-around in case
+ * no album is loaded, but the root view is visible.
+ * Currently, this is necessary, because this method is (erroneously) called
+ * for the root view as well.
+ * In order to determine whether the work-around for the root view needs to
+ * be applied, this method checks if the root view is visible based on the
+ * visibility of the corresponding headers.
+ * Hence, the caller must ensure that the appropriate header is set first
+ * in order to obtain a correct result from this method.
+ *
  * @returns {boolean}
  */
 album.isUploadable = function () {

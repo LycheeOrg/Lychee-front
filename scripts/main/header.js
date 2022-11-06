@@ -330,7 +330,13 @@ header.setMode = function (mode) {
 				tabindex.makeFocusable(e);
 			}
 
-			if (!lychee.share_button_visible) {
+			if (!lychee.is_share_button_visible &&
+				// The owner of an album (or the admin) shall always see
+				// the share button and be unaffected by the settings of
+				// the album
+				(lychee.user === null || lychee.user.username !== album.json.owner_name) &&
+				!lychee.rights.is_admin)
+			{
 				const e = $("#button_share_album");
 				e.hide();
 				tabindex.makeUnfocusable(e);

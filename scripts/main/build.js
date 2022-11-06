@@ -76,6 +76,37 @@ build.album = function (data, disabled = false) {
 	const formattedCreationTs = lychee.locale.printMonthYear(data.created_at);
 	const formattedMinTs = lychee.locale.printMonthYear(data.min_taken_at);
 	const formattedMaxTs = lychee.locale.printMonthYear(data.max_taken_at);
+	// The condition below is faulty wrt. to two issues:
+	//
+	//  a) The condition only checks whether the owning/current album is
+	//     uploadable (aka "editable"), but it does not check whether the
+	//     album at hand whose icon is built is editable.
+	//     But this is of similar importance.
+	//     Currently, we only check whether the album at hand is a smart
+	//     album or tag album which are always considered non-editable.
+	//     But this is only half of the story.
+	//     For example, a regular album might still be non-editable, if the
+	//     current user is not the owner of that album.
+	//  b) This method is not only called if the owning/current album is a
+	//     proper album, but also for the root view.
+	//     However, `album.isUploadable` should not be called for the root
+	//     view.
+	//
+	// Moreover, we have to distinguish between "drag" and "drop".
+	// Doing so would also solve the problems above:
+	//
+	// - "Drag": If the current child album at hand can be dragged (away)
+	//   is mostly determined by the user's rights on the parent album.
+	//   Instead of (erroneously) using `album.isUploadable()` for that
+	//   (even for the root view), the "right to drag" should be passed to
+	//   this method as a parameter very much like `disabled` such that this
+	//   method can be used for both regular albums and the root view.
+	// - "Drop": If something (e.g. a photo) can be dropped onto the child
+	//   album at hand is independent of the user's rights on the containing
+	//   album.
+	//   Whether the child album supports the drop event depends on the type
+	//   of the album (i.e. it must not be a smart or tag album), but also
+	//   on the ownership of the album.
 	const disableDragDrop = !data.rights.can_edit || disabled || album.isSmartID(data.id) || data.is_tag_album;
 	let subtitle = formattedCreationTs;
 
