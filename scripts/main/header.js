@@ -535,11 +535,11 @@ header.setMode = function (mode) {
 			if (lychee.enable_button_share && photo.json && photo.json.is_share_button_visible) {
 				const e = $("#button_share");
 				e.show();
-				tabindex.makeUnfocusable(e);
+				tabindex.makeFocusable(e);
 			} else {
 				const e = $("#button_share");
 				e.hide();
-				tabindex.makeFocusable(e);
+				tabindex.makeUnfocusable(e);
 			}
 
 			if (lychee.publicMode === true ? lychee.map_display_public : lychee.map_display) {
