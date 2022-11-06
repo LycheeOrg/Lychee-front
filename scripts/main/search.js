@@ -62,8 +62,8 @@ search.find = function (term) {
 			albums: search.json.albums,
 			tag_albums: search.json.tag_albums,
 			thumb: null,
-			rights: {can_download: false},
-			policies: {is_public: false},
+			rights: { can_download: false },
+			policies: { is_public: false },
 		};
 
 		let albumsData = "";
