@@ -671,7 +671,7 @@ photo.setProtectionPolicy = function (photoID) {
 				// users?
 				formElements.requires_link.checked = false;
 				formElements.is_downloadable.checked = album.json.is_downloadable;
-				formElements.is_share_button_visible = album.json.is_share_button_visible;
+				formElements.is_share_button_visible.checked = album.json.is_share_button_visible;
 				formElements.has_password.checked = album.json.has_password;
 			}
 			basicModal.hideActionButton();
@@ -685,7 +685,7 @@ photo.setProtectionPolicy = function (photoID) {
 			formElements.grants_full_photo.checked = lychee.full_photo;
 			formElements.requires_link.checked = lychee.public_photos_hidden;
 			formElements.is_downloadable.checked = lychee.downloadable;
-			formElements.is_share_button_visible = lychee.share_button_visible;
+			formElements.is_share_button_visible.checked = lychee.share_button_visible;
 			formElements.has_password.checked = false;
 		}
 	};
