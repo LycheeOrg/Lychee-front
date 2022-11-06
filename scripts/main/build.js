@@ -76,7 +76,7 @@ build.album = function (data, disabled = false) {
 	const formattedCreationTs = lychee.locale.printMonthYear(data.created_at);
 	const formattedMinTs = lychee.locale.printMonthYear(data.min_taken_at);
 	const formattedMaxTs = lychee.locale.printMonthYear(data.max_taken_at);
-	const disableDragDrop = !album.isUploadable() || disabled || album.isSmartID(data.id) || data.is_tag_album;
+	const disableDragDrop = !data.rights.can_edit || disabled || album.isSmartID(data.id) || data.is_tag_album;
 	let subtitle = formattedCreationTs;
 
 	// check setting album_subtitle_type:
@@ -114,9 +114,9 @@ build.album = function (data, disabled = false) {
 	}
 
 	let html = lychee.html`
-			<div class='album ${disabled ? `disabled` : ``} ${data.is_nsfw && lychee.nsfw_blur ? `blurred` : ``}'
+			<div class='album ${disabled ? `disabled` : ``} ${data.policies.is_nsfw && lychee.nsfw_blur ? `blurred` : ``}'
 				data-id='${data.id}'
-				data-nsfw='${data.is_nsfw ? `1` : `0`}'
+				data-nsfw='${data.policies.is_nsfw ? `1` : `0`}'
 				data-tabindex='${tabindex.get_next_tab_index()}'
 				draggable='${disableDragDrop ? "false" : "true"}'
 				${
@@ -137,7 +137,7 @@ build.album = function (data, disabled = false) {
 				</div>
 			`;
 
-	if (album.isUploadable() && !disabled) {
+	if (data.rights.can_edit && !disabled) {
 		let isCover = album.json && album.json.cover_id && data.thumb.id === album.json.cover_id;
 		html += lychee.html`
 				<div class='badges'>

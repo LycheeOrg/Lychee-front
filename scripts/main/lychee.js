@@ -32,7 +32,7 @@ const lychee = {
 	user: null,
 	/**
 	 * The rights granted by the backend
-	 * @type {?InitRightsDTO}
+	 * @type {?GlobalRightsDTO}
 	 */
 	rights: null,
 	/**
@@ -279,7 +279,7 @@ lychee.init = function (isFirstInitialization = true) {
 				// In particular it is completely insane to build the UI as if the admin user was successfully authenticated.
 				// This might leak confidential photos to anybody if the DB is filled
 				// with photos and the admin password reset to `null`.
-				if (data.user === null && data.rights.settings.can_edit) settings.createLogin();
+				if (data.user === null && data.rights.user.can_edit) settings.createLogin();
 			} else {
 				lychee.setMode("public");
 			}
@@ -838,7 +838,7 @@ lychee.setTitle = function (title = "", editable = false) {
  * @param {string} mode - one out of: `public`, `view`, `logged_in`
  */
 lychee.setMode = function (mode) {
-	// if (!lychee.rights.settings.can_edit || lychee.rights.users.can_edit_own_settings) {
+	// if (!lychee.rights.settings.can_edit || lychee.rights.user_management.can_edit_own_settings) {
 	// 	$("#button_settings_open").remove();
 	// }
 	if (!lychee.rights.root_album.can_upload) {

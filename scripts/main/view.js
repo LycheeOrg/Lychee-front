@@ -43,32 +43,32 @@ view.albums = {
 			}
 			if (albums.json.smart_albums.unsorted) {
 				albums.parse(albums.json.smart_albums.unsorted);
-				smartData += build.album(albums.json.smart_albums.unsorted);
+				smartData += build.album(albums.json.smart_albums.unsorted, !lychee.rights.root_album.can_edit);
 			}
 			if (albums.json.smart_albums.public) {
 				albums.parse(albums.json.smart_albums.public);
-				smartData += build.album(albums.json.smart_albums.public);
+				smartData += build.album(albums.json.smart_albums.public, !lychee.rights.root_album.can_edit);
 			}
 			if (albums.json.smart_albums.starred) {
 				albums.parse(albums.json.smart_albums.starred);
-				smartData += build.album(albums.json.smart_albums.starred);
+				smartData += build.album(albums.json.smart_albums.starred, !lychee.rights.root_album.can_edit);
 			}
 			if (albums.json.smart_albums.recent) {
 				albums.parse(albums.json.smart_albums.recent);
-				smartData += build.album(albums.json.smart_albums.recent);
+				smartData += build.album(albums.json.smart_albums.recent, !lychee.rights.root_album.can_edit);
 			}
 
 			// Tag albums
 			tagAlbumsData += albums.json.tag_albums.reduce(function (html, tagAlbum) {
 				albums.parse(tagAlbum);
-				return html + build.album(tagAlbum);
+				return html + build.album(tagAlbum, !lychee.rights.root_album.can_edit);
 			}, "");
 
 			// Albums
 			if (lychee.publicMode === false && albums.json.albums.length > 0) albumsData = build.divider(lychee.locale["ALBUMS"]);
 			albumsData += albums.json.albums.reduce(function (html, album) {
 				albums.parse(album);
-				return html + build.album(album);
+				return html + build.album(album, !lychee.rights.root_album.can_edit);
 			}, "");
 
 			let current_owner = "";
@@ -180,7 +180,7 @@ view.album = {
 				return;
 			}
 
-			if (album.json.is_nsfw && !lychee.nsfw_unlocked_albums.includes(album.json.id)) {
+			if (album.json.policies.is_nsfw && !lychee.nsfw_unlocked_albums.includes(album.json.id)) {
 				$("#sensitive_warning").show();
 			} else {
 				$("#sensitive_warning").hide();
@@ -204,13 +204,13 @@ view.album = {
 			if (album.json.albums) {
 				album.json.albums.forEach(function (_album) {
 					albums.parse(_album);
-					albumsData += build.album(_album, !album.isUploadable());
+					albumsData += build.album(_album, !album.rights.can_edit);
 				});
 			}
 			if (album.json.photos) {
 				// Build photos
 				album.json.photos.forEach(function (_photo) {
-					photosData += build.photo(_photo, !album.isUploadable());
+					photosData += build.photo(_photo, !album.rights.can_edit);
 				});
 			}
 
@@ -463,6 +463,8 @@ view.album = {
 		 * Hence, this method would better not be part of `view.album.content`,
 		 * because it is not exclusively used for an album.
 		 *
+		 * TODO: Livewire front-end will make this a pure CSS solution.
+		 *
 		 * @returns {void}
 		 */
 		justify: function () {
@@ -676,7 +678,7 @@ view.album = {
 	public: function () {
 		$("#button_visibility_album, #button_sharing_album_users").removeClass("active--not-hidden active--hidden");
 
-		if (album.json.policies && album.json.policies.is_public) {
+		if (album.json.policies.is_public) {
 			if (album.json.policies.is_link_required) {
 				$("#button_visibility_album, #button_sharing_album_users").addClass("active--hidden");
 			} else {
@@ -703,7 +705,7 @@ view.album = {
 	 * @returns {void}
 	 */
 	nsfw: function () {
-		if (album.json.policies && album.json.policies.is_nsfw) {
+		if (album.json.policies.is_nsfw) {
 			// Sensitive
 			$("#button_nsfw_album").addClass("active").attr("title", lychee.locale["ALBUM_UNMARK_NSFW"]);
 		} else {
@@ -1095,7 +1097,9 @@ view.settings = {
 		 */
 		init: function () {
 			view.settings.clearContent();
-			view.settings.content.setLogin();
+			if (lychee.rights.user.can_edit) {
+				view.settings.content.setLogin();
+			}
 			if (lychee.rights.settings.can_edit) {
 				view.settings.content.setSorting();
 				view.settings.content.setDropboxKey();

@@ -30,7 +30,7 @@ leftMenu.build = function () {
 		<a id="text_settings_close" class="closetxt" data-tabindex="-1">${lychee.locale["CLOSE"]}</a>
 		<a id="button_settings_close" class="closebtn" data-tabindex="20">&times;</a>`;
 
-	if (lychee.rights.settings.can_edit_own_settings || lychee.rights.settings.can_edit) {
+	if (lychee.rights.settings.can_edit || lychee.rights.user.can_edit) {
 		html += lychee.html`
 		<a class="linkMenu" id="button_settings_open" data-tabindex="-1"><svg class="iconic"><use xlink:href="#cog"></use></svg>${lychee.locale["SETTINGS"]}</a>
 		`;
@@ -40,12 +40,12 @@ leftMenu.build = function () {
 		<a class="linkMenu" id="button_notifications" data-tabindex="-1">${build.iconic("bell")}${lychee.locale["NOTIFICATIONS"]} </a>
 		`;
 	}
-	if (lychee.rights.users.can_edit) {
+	if (lychee.rights.user_management.can_edit) {
 		html += lychee.html`
 		<a class="linkMenu" id="button_users" data-tabindex="-1">${build.iconic("person")}${lychee.locale["USERS"]} </a>
 		`;
 	}
-	if (lychee.rights.settings.can_use_2fa) {
+	if (lychee.rights.user.can_use_2fa) {
 		html += lychee.html`
 		<a class="linkMenu" id="button_u2f" data-tabindex="-1">${build.iconic("key")}${lychee.locale["U2F"]} </a>
 		`;

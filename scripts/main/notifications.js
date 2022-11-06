@@ -24,10 +24,10 @@ notifications.update = function (params) {
 
 notifications.load = function () {
 	api.post(
-		"User::getEmail",
+		"User::getAuthenticatedUser",
 		{},
 		/** @param {EMailData} data */ function (data) {
-			notifications.json = data;
+			notifications.json = data.email;
 			view.notifications.init();
 		}
 	);
