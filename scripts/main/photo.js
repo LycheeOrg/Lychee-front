@@ -896,10 +896,6 @@ photo.deleteTag = function (photoID, index) {
  * @returns {void}
  */
 photo.share = function (photoID, service) {
-	if (!photo.json.is_share_button_visible) {
-		return;
-	}
-
 	const url = photo.getViewLink(photoID);
 
 	switch (service) {
