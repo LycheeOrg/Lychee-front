@@ -673,7 +673,7 @@ photo.setProtectionPolicy = function (photoID) {
 			// Initialize values of detailed settings according to global
 			// configuration.
 			formElements.is_public.checked = photo.json.is_public !== 0;
-			formElements.grants_full_photo_access.checked = lychee.full_photo;
+			formElements.grants_full_photo_access.checked = lychee.grants_full_photo_access;
 			formElements.is_link_required.checked = lychee.public_photos_hidden;
 			formElements.grants_download.checked = lychee.grants_download;
 			formElements.is_password_required.checked = false;
