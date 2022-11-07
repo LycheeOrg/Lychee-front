@@ -550,9 +550,9 @@ photo.setStar = function (photoIDs, isStarred) {
 };
 
 /**
- * Edits the protection policies of a photo.
+ * Edits the protection policy of a photo.
  *
- * This method is a misnomer, it does not only set the policies, it also creates
+ * This method is a misnomer, it does not only set the policy, it also creates
  * and handles the edit dialog
  *
  * @param {string} photoID

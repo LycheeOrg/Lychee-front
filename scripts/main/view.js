@@ -180,7 +180,7 @@ view.album = {
 				return;
 			}
 
-			if (album.json.policies.is_nsfw && !lychee.nsfw_unlocked_albums.includes(album.json.id)) {
+			if (album.json.policy.is_nsfw && !lychee.nsfw_unlocked_albums.includes(album.json.id)) {
 				$("#sensitive_warning").show();
 			} else {
 				$("#sensitive_warning").hide();
@@ -678,8 +678,8 @@ view.album = {
 	public: function () {
 		$("#button_visibility_album, #button_sharing_album_users").removeClass("active--not-hidden active--hidden");
 
-		if (album.json.policies.is_public) {
-			if (album.json.policies.is_link_required) {
+		if (album.json.policy.is_public) {
+			if (album.json.policy.is_link_required) {
 				$("#button_visibility_album, #button_sharing_album_users").addClass("active--hidden");
 			} else {
 				$("#button_visibility_album, #button_sharing_album_users").addClass("active--not-hidden");
@@ -697,7 +697,7 @@ view.album = {
 	 * @returns {void}
 	 */
 	requiresLink: function () {
-		if (album.json.policies.is_link_required) sidebar.changeAttr("hidden", lychee.locale["ALBUM_SHR_YES"]);
+		if (album.json.policy.is_link_required) sidebar.changeAttr("hidden", lychee.locale["ALBUM_SHR_YES"]);
 		else sidebar.changeAttr("hidden", lychee.locale["ALBUM_SHR_NO"]);
 	},
 
@@ -705,7 +705,7 @@ view.album = {
 	 * @returns {void}
 	 */
 	nsfw: function () {
-		if (album.json.policies.is_nsfw) {
+		if (album.json.policy.is_nsfw) {
 			// Sensitive
 			$("#button_nsfw_album").addClass("active").attr("title", lychee.locale["ALBUM_UNMARK_NSFW"]);
 		} else {
@@ -718,7 +718,7 @@ view.album = {
 	 * @returns {void}
 	 */
 	downloadable: function () {
-		if (album.json.policies.grants_download) sidebar.changeAttr("downloadable", lychee.locale["ALBUM_SHR_YES"]);
+		if (album.json.policy.grants_download) sidebar.changeAttr("downloadable", lychee.locale["ALBUM_SHR_YES"]);
 		else sidebar.changeAttr("downloadable", lychee.locale["ALBUM_SHR_NO"]);
 	},
 
@@ -726,7 +726,7 @@ view.album = {
 	 * @returns {void}
 	 */
 	password: function () {
-		if (album.json.policies.is_password_required) sidebar.changeAttr("password", lychee.locale["ALBUM_SHR_YES"]);
+		if (album.json.policy.is_password_required) sidebar.changeAttr("password", lychee.locale["ALBUM_SHR_YES"]);
 		else sidebar.changeAttr("password", lychee.locale["ALBUM_SHR_NO"]);
 	},
 

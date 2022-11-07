@@ -92,7 +92,7 @@
  * @property {string}  [owner_name] optional, only shown in authenticated mode
  * @property {boolean} is_nsfw
  * @property {AlbumRightsDTO} rights
- * @property {AlbumProtectionPolicies} policies
+ * @property {AlbumProtectionPolicy} policy
  * @property {boolean} has_albums
  * @property {boolean} has_password
  * @property {?string} min_taken_at
@@ -114,7 +114,7 @@
  * @property {string}   [owner_name] optional, only shown in authenticated mode
  * @property {boolean} is_nsfw
  * @property {AlbumRightsDTO} rights
- * @property {AlbumProtectionPolicies} policies
+ * @property {AlbumProtectionPolicy} policy
  * @property {?string}  min_taken_at
  * @property {?string}  max_taken_at
  * @property {?SortingCriterion}  sorting
@@ -129,7 +129,7 @@
  * @property {Photo[]} [photos]
  * @property {?Thumb}  thumb
  * @property {AlbumRightsDTO} rights
- * @property {AlbumProtectionPolicies} policies
+ * @property {AlbumProtectionPolicy} policy
  */
 
 /**
@@ -378,9 +378,9 @@ const SmartAlbumID = Object.freeze({
  */
 
 /**
- * The JSON object for Policies on Albums
+ * The JSON object for Policy on Albums
  *
- * @typedef AlbumProtectionPolicies
+ * @typedef AlbumProtectionPolicy
  *
  * @property {is_nsfw} boolean
  * @property {boolean} is_public

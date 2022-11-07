@@ -921,12 +921,12 @@ album.setProtectionPolicy = function (albumID) {
 		basicModal.close();
 		albums.refresh();
 
-		album.json.policies.is_nsfw = data.is_nsfw;
-		album.json.policies.is_public = data.is_public;
-		album.json.policies.grants_full_photo_access = data.grants_full_photo_access;
-		album.json.policies.is_link_required = data.is_link_required;
-		album.json.policies.grants_download = data.grants_download;
-		album.json.policies.is_password_required = data.is_password_required;
+		album.json.policy.is_nsfw = data.is_nsfw;
+		album.json.policy.is_public = data.is_public;
+		album.json.policy.grants_full_photo_access = data.grants_full_photo_access;
+		album.json.policy.is_link_required = data.is_link_required;
+		album.json.policy.grants_download = data.grants_download;
+		album.json.policy.is_password_required = data.is_password_required;
 
 		// Set data and refresh view
 		if (visible.album()) {
@@ -939,13 +939,13 @@ album.setProtectionPolicy = function (albumID) {
 
 		const params = {
 			albumID: albumID,
-			grants_full_photo_access: album.json.policies.grants_full_photo_access,
-			is_public: album.json.policies.is_public,
-			is_nsfw: album.json.policies.is_nsfw,
-			is_link_required: album.json.policies.is_link_required,
-			grants_download: album.json.policies.grants_download,
+			grants_full_photo_access: album.json.policy.grants_full_photo_access,
+			is_public: album.json.policy.is_public,
+			is_nsfw: album.json.policy.is_nsfw,
+			is_link_required: album.json.policy.is_link_required,
+			grants_download: album.json.policy.grants_download,
 		};
-		if (album.json.policies.is_password_required) {
+		if (album.json.policy.is_password_required) {
 			if (data.password) {
 				// We send the password only if there's been a change; that way the
 				// server will keep the current password if it wasn't changed.
@@ -1044,17 +1044,17 @@ album.setProtectionPolicy = function (albumID) {
 			formElements.has_password,
 		];
 
-		if (album.json.policies.is_public) {
+		if (album.json.policy.is_public) {
 			tristateCheckboxes.forEach(function (checkbox) {
 				checkbox.parentElement.classList.remove("disabled");
 				checkbox.disabled = false;
 			});
 			// Initialize options based on album settings.
-			formElements.grants_full_photo_access.checked = album.json.policies.grants_full_photo_access;
-			formElements.is_link_required.checked = album.json.policies.is_link_required;
-			formElements.grants_download.checked = album.json.policies.grants_download;
-			formElements.is_password_required.checked = album.json.policies.is_password_required;
-			if (album.json.policies.is_password_required) {
+			formElements.grants_full_photo_access.checked = album.json.policy.grants_full_photo_access;
+			formElements.is_link_required.checked = album.json.policy.is_link_required;
+			formElements.grants_download.checked = album.json.policy.grants_download;
+			formElements.is_password_required.checked = album.json.policy.is_password_required;
+			if (album.json.policy.is_password_required) {
 				formElements.password.parentElement.classList.remove("hidden");
 			} else {
 				formElements.password.parentElement.classList.add("hidden");
@@ -1198,7 +1198,7 @@ album.shareUsers = function (albumID) {
  * @returns {void}
  */
 album.toggleNSFW = function () {
-	album.json.policies.is_nsfw = !album.json.policies.is_nsfw;
+	album.json.policy.is_nsfw = !album.json.policy.is_nsfw;
 
 	view.album.nsfw();
 
@@ -1206,7 +1206,7 @@ album.toggleNSFW = function () {
 		"Album::setNSFW",
 		{
 			albumID: album.json.id,
-			is_nsfw: album.json.policies.is_nsfw,
+			is_nsfw: album.json.policy.is_nsfw,
 		},
 		() => albums.refresh()
 	);
