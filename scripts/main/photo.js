@@ -1128,11 +1128,22 @@ photo.qrCode = function (photoID) {
 		return;
 	}
 
-	basicModal.show({
-		body: "<div class='qr-code-canvas'></div>",
-		classList: ["qr-code"],
-		readyCB: function (formElements, dialog) {
-			const qrcode = dialog.querySelector("div.qr-code-canvas");
+	// We need this indirection based on a resize observer, because the ready
+	// callback of the dialog is invoked _before_ the dialog is made visible
+	// in order to allow the ready callback to make initializations of
+	// form elements without causing flicker.
+	// However, for invisible elements `.clientWidth` returns zero, hence
+	// we cannot paint the QR code onto the canvas before it becomes visible.
+	const qrCodeCanvasObserver = (function () {
+		let width = 0;
+		return new ResizeObserver(function (entries, observer) {
+			const qrCodeCanvas = entries[0].target;
+			// Avoid infinite resize events due to clearing and repainting
+			// the same QR code on the canvas.
+			if (width === qrCodeCanvas.clientWidth) {
+				return;
+			}
+			width = qrCodeCanvas.clientWidth;
 			QrCreator.render(
 				{
 					text: photo.getViewLink(myPhoto.id),
@@ -1140,15 +1151,27 @@ photo.qrCode = function (photoID) {
 					ecLevel: "H",
 					fill: "#000000",
 					background: "#FFFFFF",
-					size: qrcode.clientWidth,
+					size: width,
 				},
-				qrcode
+				qrCodeCanvas
 			);
+		});
+	})();
+
+	basicModal.show({
+		body: "<canvas></canvas>",
+		classList: ["qr-code"],
+		readyCB: function (formElements, dialog) {
+			const qrCodeCanvas = dialog.querySelector("canvas");
+			qrCodeCanvasObserver.observe(qrCodeCanvas);
 		},
 		buttons: {
 			cancel: {
 				title: lychee.locale["CLOSE"],
-				fn: basicModal.close,
+				fn: function () {
+					qrCodeCanvasObserver.disconnect();
+					basicModal.close();
+				},
 			},
 		},
 	});
