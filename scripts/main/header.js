@@ -505,11 +505,13 @@ header.setMode = function (mode) {
 					!(photo.json.size_variants.original.url && photo.json.size_variants.original.url !== "")) ||
 				!lychee.enable_button_more
 			) {
-				buttonMore.hide();
-				tabindex.makeUnfocusable(buttonMore);
+				const e = $("#button_more")
+				e.hide();
+				tabindex.makeUnfocusable(e);
 			} else {
-				buttonMore.show();
-				tabindex.makeFocusable(buttonMore);
+				const e = $("#button_more")
+				e.show();
+				tabindex.makeFocusable(e);
 			}
 
 			// Hide buttons if needed
