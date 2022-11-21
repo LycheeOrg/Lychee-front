@@ -768,6 +768,71 @@ photo.setDescription = function (photoID) {
 };
 
 /**
+ * Edits the upload date of a photo.
+ *
+ * This method is a misnomer, it does not only set the description, it also creates and handles the edit dialog
+ *
+ * @param {string} photoID
+ * @returns {void}
+ */
+photo.setCreatedAt = function (photoID) {
+	/**
+	 * @param {{date: string}} data
+	 */
+	const action = function (data) {
+		basicModal.close();
+
+		const created_at = data.created_at ? data.created_at.concat(":", data.tz) : null;
+
+		if (visible.photo()) {
+			photo.json.created_at = created_at;
+			view.photo.uploaded();
+		}
+
+		api.post("Photo::setUploadDate", {
+			photoID: photoID,
+			date: created_at,
+		});
+	};
+
+	const setPhotoCreatedAtDialogBody = `
+		<p></p>
+		<form>
+			<div class="input-group stacked"><input class='text' name='created_at' type='datetime-local'
+			pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}'
+			>
+			<input name='tz' type='hidden'>
+			</div>
+		</form>`;
+
+	/**
+	 * @param {ModalDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initSetPhotoCreatedAtDialog = function (formElements, dialog) {
+		dialog.querySelector("p").textContent = lychee.locale["PHOTO_NEW_CREATED_AT"];
+		formElements.created_at.value = photo.json.created_at ? photo.json.created_at.slice(0, 16) : "";
+		formElements.tz.value = photo.json.created_at ? photo.json.created_at.slice(17) : "";
+	};
+
+	basicModal.show({
+		body: setPhotoCreatedAtDialogBody,
+		readyCB: initSetPhotoCreatedAtDialog,
+		buttons: {
+			action: {
+				title: lychee.locale["PHOTO_SET_CREATED_AT"],
+				fn: action,
+			},
+			cancel: {
+				title: lychee.locale["CANCEL"],
+				fn: basicModal.close,
+			},
+		},
+	});
+};
+
+/**
  * @param {string[]} photoIDs
  * @returns {void}
  */
