@@ -505,11 +505,11 @@ header.setMode = function (mode) {
 					!(photo.json.size_variants.original.url && photo.json.size_variants.original.url !== "")) ||
 				!lychee.enable_button_more
 			) {
-				const e = $("#button_more")
+				const e = $("#button_more");
 				e.hide();
 				tabindex.makeUnfocusable(e);
 			} else {
-				const e = $("#button_more")
+				const e = $("#button_more");
 				e.show();
 				tabindex.makeFocusable(e);
 			}
