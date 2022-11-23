@@ -735,7 +735,7 @@ photo.setDescription = function (photoID) {
 	};
 
 	const setPhotoDescriptionDialogBody = `
-		<p></p>
+		<p  id="ppp_dialog_description_expl"></p>
 		<form>
 			<div class="input-group stacked"><input class='text' name='description' type='text' maxlength='800'></div>
 		</form>`;
@@ -746,7 +746,7 @@ photo.setDescription = function (photoID) {
 	 * @returns {void}
 	 */
 	const initSetPhotoDescriptionDialog = function (formElements, dialog) {
-		dialog.querySelector("p").textContent = lychee.locale["PHOTO_NEW_DESCRIPTION"];
+		dialog.querySelector("p#ppp_dialog_description_expl").textContent = lychee.locale["PHOTO_NEW_DESCRIPTION"];
 		formElements.description.placeholder = lychee.locale["PHOTO_DESCRIPTION"];
 		formElements.description.value = photo.json.description ? photo.json.description : "";
 	};
@@ -796,7 +796,7 @@ photo.setCreatedAt = function (photoID) {
 	};
 
 	const setPhotoCreatedAtDialogBody = `
-		<p></p>
+		<p id="ppp_dialog_uploaddate_expl"></p>
 		<form>
 			<div class="input-group stacked"><input class='text' name='created_at' type='datetime-local'
 			pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}'
@@ -811,7 +811,7 @@ photo.setCreatedAt = function (photoID) {
 	 * @returns {void}
 	 */
 	const initSetPhotoCreatedAtDialog = function (formElements, dialog) {
-		dialog.querySelector("p").textContent = lychee.locale["PHOTO_NEW_CREATED_AT"];
+		dialog.querySelector("p#ppp_dialog_uploaddate_expl").textContent = lychee.locale["PHOTO_NEW_CREATED_AT"];
 		formElements.created_at.value = photo.json.created_at ? photo.json.created_at.slice(0, 16) : "";
 		formElements.tz.value = photo.json.created_at ? photo.json.created_at.slice(17) : "";
 	};
