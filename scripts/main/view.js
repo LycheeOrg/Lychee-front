@@ -856,6 +856,13 @@ view.photo = {
 	/**
 	 * @returns {void}
 	 */
+	uploaded: function () {
+		if (photo.json.init) sidebar.changeAttr("uploaded", photo.json.created_at ? lychee.locale.printDateTime(photo.json.created_at) : "");
+	},
+
+	/**
+	 * @returns {void}
+	 */
 	license: function () {
 		let license;
 
