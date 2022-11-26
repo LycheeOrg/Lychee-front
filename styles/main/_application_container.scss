@@ -1,0 +1,17 @@
+/**
+ * The application container is a child of the body and shares the vertical
+ * space of the body with the loading indicator.
+ * The body uses `dispay: flex` thus making the application container a flex
+ * item.
+ * The application container holds the left menu and the workbench container
+ * and aligns them horizontally in a row.
+ * The left menu has always its natural width (0 for a closed menu,
+ * specific width for an open menu), the width of the workbench
+ * container is flexible and uses the remaining width.
+ */
+body.mode-frame,
+body.mode-none {
+	#lychee_application_container {
+		display: none;
+	}
+}

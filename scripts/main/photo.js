@@ -44,7 +44,6 @@ photo.load = function (photoID, albumID, autoplay) {
 
 		view.photo.show();
 		view.photo.init(autoplay);
-		lychee.imageview.show();
 
 		if (!lychee.hide_content_during_imgview) {
 			setTimeout(() => {
@@ -205,26 +204,6 @@ photo.preloadNextPrev = function (photoID) {
 	if (photo.previous_photo_id) {
 		preload(photo.previous_photo_id);
 	}
-};
-
-/**
- * @param {number} [animationDuration=300]
- * @param {number} [pauseBetweenUpdated=10]
- * @returns {void}
- */
-photo.updateSizeLivePhotoDuringAnimation = function (animationDuration = 300, pauseBetweenUpdated = 10) {
-	// For the LivePhotoKit, we need to call the updateSize manually
-	// during CSS animations
-	//
-	const interval = setInterval(function () {
-		if (photo.isLivePhotoInitialized()) {
-			photo.livePhotosObject.updateSize();
-		}
-	}, pauseBetweenUpdated);
-
-	setTimeout(function () {
-		clearInterval(interval);
-	}, animationDuration);
 };
 
 /**
@@ -725,7 +704,7 @@ photo.setDescription = function (photoID) {
 	};
 
 	const setPhotoDescriptionDialogBody = `
-		<p></p>
+		<p  id="ppp_dialog_description_expl"></p>
 		<form>
 			<div class="input-group stacked"><input class='text' name='description' type='text' maxlength='800'></div>
 		</form>`;
@@ -736,7 +715,7 @@ photo.setDescription = function (photoID) {
 	 * @returns {void}
 	 */
 	const initSetPhotoDescriptionDialog = function (formElements, dialog) {
-		dialog.querySelector("p").textContent = lychee.locale["PHOTO_NEW_DESCRIPTION"];
+		dialog.querySelector("p#ppp_dialog_description_expl").textContent = lychee.locale["PHOTO_NEW_DESCRIPTION"];
 		formElements.description.placeholder = lychee.locale["PHOTO_DESCRIPTION"];
 		formElements.description.value = photo.json.description ? photo.json.description : "";
 	};
@@ -747,6 +726,71 @@ photo.setDescription = function (photoID) {
 		buttons: {
 			action: {
 				title: lychee.locale["PHOTO_SET_DESCRIPTION"],
+				fn: action,
+			},
+			cancel: {
+				title: lychee.locale["CANCEL"],
+				fn: basicModal.close,
+			},
+		},
+	});
+};
+
+/**
+ * Edits the upload date of a photo.
+ *
+ * This method is a misnomer, it does not only set the description, it also creates and handles the edit dialog
+ *
+ * @param {string} photoID
+ * @returns {void}
+ */
+photo.setCreatedAt = function (photoID) {
+	/**
+	 * @param {{date: string}} data
+	 */
+	const action = function (data) {
+		basicModal.close();
+
+		const created_at = data.created_at ? data.created_at.concat(":", data.tz) : null;
+
+		if (visible.photo()) {
+			photo.json.created_at = created_at;
+			view.photo.uploaded();
+		}
+
+		api.post("Photo::setUploadDate", {
+			photoID: photoID,
+			date: created_at,
+		});
+	};
+
+	const setPhotoCreatedAtDialogBody = `
+		<p id="ppp_dialog_uploaddate_expl"></p>
+		<form>
+			<div class="input-group stacked"><input class='text' name='created_at' type='datetime-local'
+			pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}'
+			>
+			<input name='tz' type='hidden'>
+			</div>
+		</form>`;
+
+	/**
+	 * @param {ModalDialogFormElements} formElements
+	 * @param {HTMLDivElement} dialog
+	 * @returns {void}
+	 */
+	const initSetPhotoCreatedAtDialog = function (formElements, dialog) {
+		dialog.querySelector("p#ppp_dialog_uploaddate_expl").textContent = lychee.locale["PHOTO_NEW_CREATED_AT"];
+		formElements.created_at.value = photo.json.created_at ? photo.json.created_at.slice(0, 16) : "";
+		formElements.tz.value = photo.json.created_at ? photo.json.created_at.slice(17) : "";
+	};
+
+	basicModal.show({
+		body: setPhotoCreatedAtDialogBody,
+		readyCB: initSetPhotoCreatedAtDialog,
+		buttons: {
+			action: {
+				title: lychee.locale["PHOTO_SET_CREATED_AT"],
 				fn: action,
 			},
 			cancel: {
@@ -1072,7 +1116,7 @@ photo.getArchive = function (photoIDs, kind = null) {
 			const sv = myPhoto.size_variants[variant];
 			if (sv) {
 				button.title = lychee.locale["DOWNLOAD"];
-				button.addEventListener(lychee.getEventName(), onClickOrTouch);
+				lychee.addClickOrTouchListener(button, onClickOrTouch);
 				button.lastElementChild.textContent =
 					lLabel + " (" + sv.width + "×" + sv.height + ", " + lychee.locale.printFilesizeLocalized(sv.filesize) + ")";
 			} else {
@@ -1083,7 +1127,7 @@ photo.getArchive = function (photoIDs, kind = null) {
 		const liveButton = dialog.querySelector('a[data-photo-kind="LIVEPHOTOVIDEO"]');
 		if (myPhoto.live_photo_url !== null) {
 			liveButton.title = lychee.locale["DOWNLOAD"];
-			liveButton.addEventListener(lychee.getEventName(), onClickOrTouch);
+			lychee.addClickOrTouchListener(liveButton, onClickOrTouch);
 			liveButton.lastElementChild.textContent = lychee.locale["PHOTO_LIVE_VIDEO"];
 		} else {
 			liveButton.remove();
@@ -1118,11 +1162,22 @@ photo.qrCode = function (photoID) {
 		return;
 	}
 
-	basicModal.show({
-		body: "<div class='qr-code-canvas'></div>",
-		classList: ["qr-code"],
-		readyCB: function (formElements, dialog) {
-			const qrcode = dialog.querySelector("div.qr-code-canvas");
+	// We need this indirection based on a resize observer, because the ready
+	// callback of the dialog is invoked _before_ the dialog is made visible
+	// in order to allow the ready callback to make initializations of
+	// form elements without causing flicker.
+	// However, for invisible elements `.clientWidth` returns zero, hence
+	// we cannot paint the QR code onto the canvas before it becomes visible.
+	const qrCodeCanvasObserver = (function () {
+		let width = 0;
+		return new ResizeObserver(function (entries, observer) {
+			const qrCodeCanvas = entries[0].target;
+			// Avoid infinite resize events due to clearing and repainting
+			// the same QR code on the canvas.
+			if (width === qrCodeCanvas.clientWidth) {
+				return;
+			}
+			width = qrCodeCanvas.clientWidth;
 			QrCreator.render(
 				{
 					text: photo.getViewLink(myPhoto.id),
@@ -1130,15 +1185,27 @@ photo.qrCode = function (photoID) {
 					ecLevel: "H",
 					fill: "#000000",
 					background: "#FFFFFF",
-					size: qrcode.clientWidth,
+					size: width,
 				},
-				qrcode
+				qrCodeCanvas
 			);
+		});
+	})();
+
+	basicModal.show({
+		body: "<canvas></canvas>",
+		classList: ["qr-code"],
+		readyCB: function (formElements, dialog) {
+			const qrCodeCanvas = dialog.querySelector("canvas");
+			qrCodeCanvasObserver.observe(qrCodeCanvas);
 		},
 		buttons: {
 			cancel: {
 				title: lychee.locale["CLOSE"],
-				fn: basicModal.close,
+				fn: function () {
+					qrCodeCanvasObserver.disconnect();
+					basicModal.close();
+				},
 			},
 		},
 	});
@@ -1242,9 +1309,7 @@ photo.showDirectLinks = function (photoID) {
 				.then(() => loadingBar.show("success", lychee.locale["URL_COPIED_TO_CLIPBOARD"]));
 			ev.stopPropagation();
 		};
-		dialog.querySelectorAll("a.button").forEach(function (a) {
-			a.addEventListener(lychee.getEventName(), onClickOrTouch);
-		});
+		dialog.querySelectorAll("a.button").forEach((a) => lychee.addClickOrTouchListener(a, onClickOrTouch));
 	};
 
 	basicModal.show({

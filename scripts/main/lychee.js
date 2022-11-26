@@ -3,7 +3,6 @@
  */
 
 const lychee = {
-	title: document.title,
 	/**
 	 * The version of the backend in human-readable, printable form, e.g. `'4.6.3'`.
 	 *
@@ -129,10 +128,95 @@ const lychee = {
 	nsfw_visible_saved: true,
 	nsfw_blur: false,
 	nsfw_warning: false,
+	/** @type {string} */
+	nsfw_banner_override: "",
 
 	album_subtitle_type: "oldstyle",
 
 	upload_processing_limit: 4,
+
+	/**
+	 * The URL to the Facebook page related to this site
+	 * @type {string}
+	 */
+	sm_facebook_url: "",
+	/**
+	 * The URL to the Flickr page related to this site
+	 * @type {string}
+	 */
+	sm_flickr_url: "",
+	/**
+	 * The URL to the Instagram page related to this site
+	 * @type {string}
+	 */
+	sm_instagram_url: "",
+	/**
+	 * The URL to the Twitter page related to this site
+	 * @type {string}
+	 */
+	sm_twitter_url: "",
+	/**
+	 * The URL to the YouTube channel related to this site
+	 * @type {string}
+	 */
+	sm_youtube_url: "",
+	/**
+	 * Indicates whether RSS feeds are enabled or not
+	 * @type {boolean}
+	 */
+	rss_enable: false,
+	/**
+	 * An array of RSS feeds provided by the site
+	 * @type {Feed[]}
+	 */
+	rss_feeds: [],
+	/**
+	 * The site title.
+	 * @type {string}
+	 */
+	site_title: "",
+	/**
+	 * The name of the site owner.
+	 * @type {string}
+	 */
+	site_owner: "",
+	/**
+	 * Begin of copyright.
+	 * @type {string}
+	 */
+	site_copyright_begin: "",
+	/**
+	 * End of copyright.
+	 * @type {string}
+	 */
+	site_copyright_end: "",
+
+	/**
+	 * Determines if social media links are shown in footer.
+	 * @type {boolean}
+	 */
+	footer_show_social_media: false,
+	/**
+	 * Determines if copyright notice is shown in footer.
+	 * @type {boolean}
+	 */
+	footer_show_copyright: false,
+	/**
+	 * An optional line of text to be shown in the footer.
+	 * @type {string}
+	 */
+	footer_additional_text: "",
+
+	/**
+	 * Determines whether frame mode is enabled or not
+	 * @type {boolean}
+	 */
+	mod_frame_enabled: false,
+	/**
+	 * Refresh rate in seconds for the frame mode.
+	 * @type {number}
+	 */
+	mod_frame_refresh: 30,
 
 	// this is device specific config, in this case default is Desktop.
 	header_auto_hide: true,
@@ -151,7 +235,6 @@ const lychee = {
 	enable_tabindex: false,
 	enable_contextmenu_header: true,
 	hide_content_during_imgview: false,
-	device_type: "desktop",
 
 	checkForUpdates: true,
 	/**
@@ -183,9 +266,9 @@ const lychee = {
 	dropbox: false,
 	dropboxKey: "",
 
-	content: $(".content"),
+	content: $("#lychee_view_content"),
 	imageview: $("#imageview"),
-	footer: $("#footer"),
+	footer: $("#lychee_footer"),
 
 	/** @type {Locale} */
 	locale: {},
@@ -258,8 +341,6 @@ lychee.aboutDialog = function () {
  * @returns {void}
  */
 lychee.init = function (isFirstInitialization = true) {
-	lychee.adjustContentHeight();
-
 	api.post(
 		"Session::init",
 		{},
@@ -332,6 +413,138 @@ lychee.parseInitializationData = function (data) {
 	if (lychee.user !== null || lychee.rights.settings.can_edit) {
 		lychee.parseProtectedInitializationData(data);
 	}
+
+	lychee.initHtmlHeader();
+	lychee.localizeStaticGuiElements();
+};
+
+/**
+ * Initializes the HTML header of the page according to the loaded
+ * configuration.
+ *
+ * This method is comparable to {@link lychee.setMetaData} except that this
+ * method sets data in the HTML header which does not change for each page
+ * but is static for the entire site.
+ */
+lychee.initHtmlHeader = function () {
+	// General Meta Data
+	document.querySelector('meta[name="author"]').content = lychee.site_owner;
+	document.querySelector('meta[name="publisher"]').content = lychee.site_owner;
+	// RSS feeds
+	if (lychee.rss_enable) {
+		const head = document.querySelector("head");
+		lychee.rss_feeds.forEach(function (feed) {
+			const link = document.createElement("link");
+			link.rel = "alternate";
+			link.type = feed.mimetype;
+			link.href = feed.url;
+			link.title = feed.title;
+			head.appendChild(link);
+		});
+	}
+};
+
+/**
+ * Applies the current `lychee.locale` to those GUI elements which are
+ * static part of the HTML.
+ *
+ * Note, `lychee.setMode` removes some elements (e.g. the input element
+ * for search) depending on the mode.
+ * Hence, we must take some precautions as some elements might be `null`.
+ * TODO: Fix that.
+ *
+ * @return {void}
+ */
+lychee.localizeStaticGuiElements = function () {
+	// Toolbars in the header
+	const tbPublic = document.querySelector("div#lychee_toolbar_public");
+	tbPublic.querySelector("a#button_signin").title = lychee.locale["SIGN_IN"];
+	const tbPublicSearch = tbPublic.querySelector("input.header__search");
+	if (tbPublicSearch instanceof HTMLInputElement) {
+		// See remark about `lychee.setMode` in the jsDoc comment of this method.
+		tbPublicSearch.placeholder = lychee.locale["SEARCH"];
+	}
+	tbPublic.querySelector("a.button--map-albums").title = lychee.locale["DISPLAY_FULL_MAP"];
+
+	const tbAlbums = document.querySelector("div#lychee_toolbar_albums");
+	tbAlbums.querySelector("a#button_settings").title = lychee.locale["SETTINGS"];
+	const tbAlbumsSearch = tbAlbums.querySelector("input.header__search");
+	if (tbAlbumsSearch instanceof HTMLInputElement) {
+		// See remark about `lychee.setMode` in the jsDoc comment of this method.
+		tbAlbumsSearch.placeholder = lychee.locale["SEARCH"];
+	}
+	tbAlbums.querySelector("a.button--map-albums").title = lychee.locale["DISPLAY_FULL_MAP"];
+	tbAlbums.querySelector("a.button_add").title = lychee.locale["ADD"];
+
+	const tbAlbum = document.querySelector("div#lychee_toolbar_album");
+	tbAlbum.querySelector("a#button_back_home").title = lychee.locale["CLOSE_ALBUM"];
+	tbAlbum.querySelector("a#button_visibility_album").title = lychee.locale["VISIBILITY_ALBUM"];
+	tbAlbum.querySelector("a#button_sharing_album_users").title = lychee.locale["SHARING_ALBUM_USERS"];
+	tbAlbum.querySelector("a#button_nsfw_album").title = lychee.locale["ALBUM_MARK_NSFW"];
+	tbAlbum.querySelector("a#button_share_album").title = lychee.locale["SHARE_ALBUM"];
+	tbAlbum.querySelector("a#button_archive").title = lychee.locale["DOWNLOAD_ALBUM"];
+	tbAlbum.querySelector("a#button_info_album").title = lychee.locale["ABOUT_ALBUM"];
+	tbAlbum.querySelector("a#button_map_album").title = lychee.locale["DISPLAY_FULL_MAP"];
+	tbAlbum.querySelector("a#button_move_album").title = lychee.locale["MOVE_ALBUM"];
+	tbAlbum.querySelector("a#button_trash_album").title = lychee.locale["DELETE_ALBUM"];
+	tbAlbum.querySelector("a#button_fs_album_enter").title = lychee.locale["FULLSCREEN_ENTER"];
+	tbAlbum.querySelector("a#button_fs_album_exit").title = lychee.locale["FULLSCREEN_EXIT"];
+	tbAlbum.querySelector("a.button_add").title = lychee.locale["ADD"];
+
+	const tbPhoto = document.querySelector("div#lychee_toolbar_photo");
+	tbPhoto.querySelector("a#button_back").title = lychee.locale["CLOSE_PHOTO"];
+	tbPhoto.querySelector("a#button_star").title = lychee.locale["STAR_PHOTO"];
+	tbPhoto.querySelector("a#button_visibility").title = lychee.locale["VISIBILITY_PHOTO"];
+	tbPhoto.querySelector("a#button_rotate_ccwise").title = lychee.locale["PHOTO_EDIT_ROTATECCWISE"];
+	tbPhoto.querySelector("a#button_rotate_cwise").title = lychee.locale["PHOTO_EDIT_ROTATECWISE"];
+	tbPhoto.querySelector("a#button_share").title = lychee.locale["SHARE_PHOTO"];
+	tbPhoto.querySelector("a#button_info").title = lychee.locale["ABOUT_PHOTO"];
+	tbPhoto.querySelector("a#button_map").title = lychee.locale["DISPLAY_FULL_MAP"];
+	tbPhoto.querySelector("a#button_move").title = lychee.locale["MOVE"];
+	tbPhoto.querySelector("a#button_trash").title = lychee.locale["DELETE"];
+	tbPhoto.querySelector("a#button_fs_enter").title = lychee.locale["FULLSCREEN_ENTER"];
+	tbPhoto.querySelector("a#button_fs_exit").title = lychee.locale["FULLSCREEN_EXIT"];
+	tbPhoto.querySelector("a#button_more").title = lychee.locale["MORE"];
+
+	const tbMap = document.querySelector("div#lychee_toolbar_map");
+	tbMap.querySelector("a#button_back_map").title = lychee.locale["CLOSE_MAP"];
+
+	const tbConfig = document.querySelector("div#lychee_toolbar_config");
+	tbConfig.querySelector("a#button_close_config").title = lychee.locale["CLOSE"];
+
+	// Sidebar
+	document.querySelector("#lychee_sidebar_header h1").textContent = lychee.locale["PHOTO_ABOUT"];
+
+	// NSFW Warning Banner
+	/** @type {HTMLDivElement} */
+	const nsfwBanner = document.querySelector("#sensitive_warning");
+	nsfwBanner.innerHTML = lychee.nsfw_banner_override ? lychee.nsfw_banner_override : lychee.locale["NSFW_BANNER"];
+
+	// Footer
+	const footer = document.querySelector("#lychee_footer");
+	footer.querySelector("p.home_copyright").textContent = lychee.footer_show_copyright
+		? sprintf(
+				lychee.locale["FOOTER_COPYRIGHT"],
+				lychee.site_owner,
+				lychee.site_copyright_begin === lychee.site_copyright_end
+					? lychee.site_copyright_begin
+					: lychee.site_copyright_begin + "–" + lychee.site_copyright_begin
+		  )
+		: "";
+	footer.querySelector("p.personal_text").textContent = lychee.footer_additional_text;
+	footer.querySelector("p.hosted_by a").textContent = lychee.locale["HOSTED_WITH_LYCHEE"];
+	/** @type {HTMLDivElement} */
+	const footerSocialMedia = footer.querySelector("div#home_socials");
+	if (lychee.footer_show_social_media) {
+		footerSocialMedia.style.display = null;
+		footerSocialMedia.querySelector("a#facebook").href = lychee.sm_facebook_url;
+		footerSocialMedia.querySelector("a#flickr").href = lychee.sm_flickr_url;
+		footerSocialMedia.querySelector("a#instagram").href = lychee.sm_instagram_url;
+		footerSocialMedia.querySelector("a#twitter").href = lychee.sm_twitter_url;
+		footerSocialMedia.querySelector("a#youtube").href = lychee.sm_youtube_url;
+	} else {
+		footerSocialMedia.style.display = "none";
+	}
 };
 
 /**
@@ -367,25 +580,47 @@ lychee.parsePublicInitializationData = function (data) {
 	lychee.nsfw_visible_saved = lychee.nsfw_visible;
 	lychee.nsfw_blur = data.config.nsfw_blur === "1";
 	lychee.nsfw_warning = data.config.nsfw_warning === "1";
+	lychee.nsfw_banner_override = data.config.nsfw_banner_override || "";
 
-	lychee.header_auto_hide = data.config_device.header_auto_hide;
-	lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
-	lychee.share_button_visible = data.config.share_button_visible === "1";
-	lychee.enable_button_visibility = data.config_device.enable_button_visibility;
-	lychee.enable_button_share = data.config_device.enable_button_share;
-	lychee.enable_button_archive = data.config_device.enable_button_archive;
-	lychee.enable_button_move = data.config_device.enable_button_move;
-	lychee.enable_button_trash = data.config_device.enable_button_trash;
-	lychee.enable_button_fullscreen = data.config_device.enable_button_fullscreen;
-	lychee.enable_button_download = data.config_device.enable_button_download;
-	lychee.enable_button_add = data.config_device.enable_button_add;
-	lychee.enable_button_more = data.config_device.enable_button_more;
-	lychee.enable_button_rotate = data.config_device.enable_button_rotate;
-	lychee.enable_close_tab_on_esc = data.config_device.enable_close_tab_on_esc;
-	lychee.enable_tabindex = data.config_device.enable_tabindex;
-	lychee.enable_contextmenu_header = data.config_device.enable_contextmenu_header;
-	lychee.hide_content_during_imgview = data.config_device.hide_content_during_imgview;
-	lychee.device_type = data.config_device.device_type || "desktop"; // we set default as Desktop
+	lychee.sm_facebook_url = data.config.sm_facebook_url;
+	lychee.sm_flickr_url = data.config.sm_flickr_url;
+	lychee.sm_instagram_url = data.config.sm_instagram_url;
+	lychee.sm_twitter_url = data.config.sm_twitter_url;
+	lychee.sm_youtube_url = data.config.sm_youtube_url;
+
+	lychee.rss_enable = data.config.rss_enable === "1";
+	lychee.rss_feeds = data.config.rss_feeds;
+
+	lychee.site_title = data.config.site_title;
+	lychee.site_owner = data.config.site_owner;
+	lychee.site_copyright_begin = data.config.site_copyright_begin;
+	lychee.site_copyright_end = data.config.site_copyright_end;
+
+	lychee.footer_show_social_media = data.config.footer_show_social_media === "1";
+	lychee.footer_show_copyright = data.config.footer_show_copyright === "1";
+	lychee.footer_additional_text = data.config.footer_additional_text;
+
+	lychee.mod_frame_enabled = data.config.mod_frame_enabled === "1";
+	lychee.mod_frame_refresh = Number.parseInt(data.config.mod_frame_refresh, 10) || 30;
+
+	const isTv = window.matchMedia("tv").matches;
+
+	lychee.header_auto_hide = !isTv;
+	lychee.active_focus_on_page_load = isTv;
+	lychee.enable_button_visibility = !isTv;
+	lychee.enable_button_share = !isTv;
+	lychee.enable_button_archive = !isTv;
+	lychee.enable_button_move = !isTv;
+	lychee.enable_button_trash = !isTv;
+	lychee.enable_button_fullscreen = !isTv;
+	lychee.enable_button_download = !isTv;
+	lychee.enable_button_add = !isTv;
+	lychee.enable_button_more = !isTv;
+	lychee.enable_button_rotate = !isTv;
+	lychee.enable_close_tab_on_esc = isTv;
+	lychee.enable_tabindex = isTv;
+	lychee.enable_contextmenu_header = !isTv;
+	lychee.hide_content_during_imgview = isTv;
 };
 
 /**
@@ -615,34 +850,78 @@ lychee.reloadIfLegacyIDs = function (albumID, photoID, autoplay) {
 
 /**
  * This is a "God method" that is used to load pretty much anything, based
- * on what's in the web browser's URL bar after the '#' character:
+ * on what's in the web browser's URL.
  *
- * (nothing) --> load root album, assign null to albumID and photoID
- * {albumID} --> load the album; albumID equals the given ID, photoID is null
- * {albumID}/{photoID} --> load album (if not already loaded) and then the
- *   corresponding photo, assign the respective values to albumID and photoID
- * map --> load the map of all albums
- * map/{albumID} --> load the map of the respective album
- * search/{term} --> load or go back to "search" album for the given term,
- *   assign 'search/{term}' as fictitious albumID and assign null to photoID
- * search/{term}/{photoID} --> load photo within fictitious search album,
- *   assign 'search/{term}' as fictitious albumID and assign the given ID to
- *   photoID
+ * Traditionally, Lychee has been using client-side navigation based on
+ * URL fragments (i.e. based on the part after the '#' character)
+ * Fragments can match one of the following cases:
+ *
+ *  - (nothing): load root album, assign `null` to `albumID` and `photoID`
+ *  - `{albumID}`: load the album; `albumID` equals the given ID, `photoID` is
+ *    null
+ *  - `{albumID}/{photoID}`: load album (if not already loaded) and then the
+ *    corresponding photo, assign the respective values to `albumID` and
+ *    `photoID`
+ *  - `map`: load the map of all albums
+ *  - `map/{albumID}`: load the map of the respective album
+ *  - `search/{term}`: load or go back to "search" album for the given term,
+ *     assign `search/{term}` as fictitious `albumID` and assign `null` to
+ *     `photoID`
+ *  - `search/{term}/{photoID}`: load photo within fictitious search album,
+ *     assign `search/{term}` as fictitious `albumID` and assign the given ID
+ *     to `photoID`
+ *  - `view/{photoID}`: load the photo in "view" mode, i.e. a special photo
+ *    view which displays the photo as standalone (not in an album carousel)
+ *    which assumes that the user is always unauthenticated.
+ *  - `frame`: shows random, starred photos in a kiosk mode
+ *
+ * Additionally, Lychee supports the following proper paths:
+ *
+ *  - `/view/{photoID}` and `/view?p={photoID}`: See `view/{photoID}` above
+ *    for the fragment-based approach
+ *  - `/frame`: See `frame` above for the fragment-based approach.
  *
  * @param {boolean} [autoplay=true]
  * @returns {void}
  */
 lychee.load = function (autoplay = true) {
-	let hash = document.location.hash.replace("#", "").split("/");
-	let albumID = hash[0];
-	if (albumID === SearchAlbumIDPrefix && hash.length > 1) {
-		albumID += "/" + hash[1];
+	let albumID = "";
+	let photoID = "";
+
+	const viewMatch = document.location.href.match(/\/view(?:\/|(\?p=))(?<photoID>[-_0-9A-Za-z]+)$/);
+	const hashMatch = document.location.hash.replace("#", "").split("/");
+
+	if (/\/frame\/?$/.test(document.location.href)) {
+		albumID = "frame";
+		photoID = "";
+	} else if (viewMatch !== null && viewMatch.groups.photoID) {
+		albumID = "view";
+		photoID = viewMatch.groups.photoID;
+	} else {
+		albumID = hashMatch[0];
+		if (albumID === SearchAlbumIDPrefix && hashMatch.length > 1) {
+			albumID += "/" + hashMatch[1];
+		}
+		photoID = hashMatch[album.isSearchID(albumID) ? 2 : 1];
 	}
-	let photoID = hash[album.isSearchID(albumID) ? 2 : 1];
 
 	contextMenu.close();
 	multiselect.close();
 	tabindex.reset();
+
+	// If Lychee is currently in frame or view mode, we need to re-initialize.
+	// Note, this is a temporary nasty hack.
+	// In an optimal world, we would simply call `lychee.setMode` to leave
+	// view or frame mode and to enter gallery or public mode.
+	// However, `lychee.setMode` does not support that direction (see comment
+	// here).
+	// Hence, in order to get back to a "full" mode, we need to re-initialize
+	// completely.
+	const bodyClasses = document.querySelector("body").classList;
+	if (bodyClasses.contains("mode-frame") || bodyClasses.contains("mode-view")) {
+		lychee.init(false);
+		return;
+	}
 
 	if (albumID && photoID) {
 		if (albumID === "map") {
@@ -655,6 +934,7 @@ lychee.load = function (autoplay = true) {
 			// show map
 			// albumID has been stored in photoID due to URL format #map/albumID
 			albumID = photoID;
+			photoID = null;
 
 			// Trash data
 			photo.json = null;
@@ -701,10 +981,19 @@ lychee.load = function (autoplay = true) {
 			};
 
 			// Load Photo
-			// If we don't have an album or the wrong album load the album
-			// first and let the album loader load the photo afterwards or
-			// load the photo directly.
-			if (lychee.content.html() === "" || album.json === null || album.json.id !== albumID) {
+			if (albumID === "view") {
+				// If the photo shall be displayed in "view" mode, delete
+				// any album which we possibly have and load the photo as
+				// if the parent album was inaccessible (even if a user is
+				// authenticated).
+				albumID = null;
+				album.refresh();
+				lychee.content.empty();
+				loadPhoto(false);
+			} else if (lychee.content.html() === "" || album.json === null || album.json.id !== albumID) {
+				// If we don't have an album or the wrong album load the album
+				// first and let the album loader load the photo afterwards or
+				// load the photo directly.
 				lychee.content.hide();
 				album.load(albumID, loadPhoto);
 			} else {
@@ -729,6 +1018,12 @@ lychee.load = function (autoplay = true) {
 			if (visible.sidebar()) sidebar.toggle(false);
 			mapview.open();
 			lychee.footer_hide();
+		} else if (albumID === "frame") {
+			if (lychee.mod_frame_enabled) {
+				frame.initAndStart();
+			} else {
+				loadingBar.show("error", "Frame mode disabled");
+			}
 		} else {
 			if (lychee.reloadIfLegacyIDs(albumID, photoID, autoplay)) {
 				return;
@@ -745,7 +1040,7 @@ lychee.load = function (autoplay = true) {
 			}
 			if (visible.mapview()) mapview.close();
 			if (visible.sidebar() && (album.isSmartID(albumID) || album.isSearchID(albumID))) sidebar.toggle(false);
-			$("#sensitive_warning").hide();
+			$("#sensitive_warning").removeClass("active");
 			if (album.json && albumID === album.json.id) {
 				if (album.isSearchID(albumID)) {
 					// We are probably coming back to the search results from
@@ -753,7 +1048,7 @@ lychee.load = function (autoplay = true) {
 					// regular album, it needs to be treated a little
 					// differently.
 					header.setMode("albums");
-					lychee.setTitle(lychee.locale["SEARCH_RESULTS"], false);
+					lychee.setMetaData(lychee.locale["SEARCH_RESULTS"]);
 				} else {
 					view.album.title();
 				}
@@ -764,7 +1059,7 @@ lychee.load = function (autoplay = true) {
 				view.album.content.restoreScroll();
 			} else if (album.isSearchID(albumID)) {
 				// Search has been triggered
-				let search_string = decodeURIComponent(hash[1]).trim();
+				let search_string = decodeURIComponent(hashMatch[1]).trim();
 
 				if (search_string === "") {
 					// do nothing on "only space" search strings
@@ -809,7 +1104,7 @@ lychee.load = function (autoplay = true) {
 			tabindex.makeUnfocusable(lychee.imageview);
 		}
 		if (visible.mapview()) mapview.close();
-		$("#sensitive_warning").hide();
+		$("#sensitive_warning").removeClass("active");
 		lychee.content.show();
 		lychee.footer_show();
 		albums.load();
@@ -817,32 +1112,67 @@ lychee.load = function (autoplay = true) {
 };
 
 /**
- * Sets the title of the browser window and the title shown in the header bar.
+ * Sets the title and various other meta for the current page.
  *
+ * The title is shown in the browser window and in the header bar.
  * The window title is prefixed by the value of the configuration setting
- * `lychee.title`.
- *
- * If both, the prefix `lychee.title` and the given title, are not empty,
+ * `lychee.site_title`.
+ * If both, the prefix `lychee.site_title` and the given title, are not empty,
  * they are seperated by an en-dash.
  *
- * @param {string} [title=""]
- * @param {boolean} [editable=false]
+ * The description is postfixed with `" – via Lychee"` if not empty.
+ *
+ * @param {string=""} title
+ * @param {boolean=false} isTitleEditable
+ * @param {string=""} description
+ * @param {string=""} photoUrl
  */
-lychee.setTitle = function (title = "", editable = false) {
-	document.title = lychee.title + (lychee.title && title ? " – " : "") + title;
-	header.setEditable(editable);
+lychee.setMetaData = function (title = "", isTitleEditable = false, description = "", photoUrl = "") {
+	const pageTitle = lychee.site_title + (lychee.site_title && title ? " – " : "") + title;
+	const pageDescription = description ? description + " – via Lychee" : "";
+
+	// General Meta Data
+	document.title = pageTitle;
+	document.querySelector('meta[name="description"]').content = pageDescription;
+
+	// Twitter Meta Data
+	document.querySelector('meta[name="twitter:title"]').content = pageTitle;
+	document.querySelector('meta[name="twitter:description"]').content = pageDescription;
+	document.querySelector('meta[name="twitter:image"]').content = photoUrl;
+
+	// OpenGraph Meta Data (e.g. used by Facebook)
+	document.querySelector('meta[property="og:title"]').content = pageTitle;
+	document.querySelector('meta[property="og:description"]').content = pageDescription;
+	document.querySelector('meta[property="og:image"]').content = photoUrl;
+	document.querySelector('meta[property="og:url"]').content = window.location.href;
+
+	header.setEditable(isTitleEditable);
 	header.setTitle(title);
 };
 
 /**
- * @param {string} mode - one out of: `public`, `view`, `logged_in`
+ * Sets the "view mode" of the application.
+ *
+ * Note, this method is asymmetric and therewith causes a major problem.
+ * It assumes that it is only called once and that the new mode is always
+ * more restrictive than the previous mode.
+ * This method only hides elements and unbinds events, but does not support
+ * to show elements and bind events.
+ * This method relies on {@link lychee.init} to have bound particular events
+ * which can be unbound here.
+ * TODO: Refactor this. There should be one (or several) methods to change modes, but each of the methods should be symmetric.
+ *
+ * TODO: FIX ME WITH NEW RIGHTS
+ *
+ * @param {string} mode - one out of: `public`, `view`, `logged_in`, `frame`
  */
 lychee.setMode = function (mode) {
-	// if (!lychee.rights.settings.can_edit || lychee.rights.user_management.can_edit_own_settings) {
-	// 	$("#button_settings_open").remove();
-	// }
-	if (!lychee.rights.root_album.can_upload) {
-		// $("#button_sharing").remove();
+	if (!lychee.rights.settings.can_edit || mode === "view" || mode === "frame") {
+		$("#button_settings_open").hide();
+	}
+
+	if (!lychee.rights.root_album.can_upload || mode === "view" || mode === "frame") {
+		$("#button_sharing").hide();
 
 		$(document)
 			.off("click", ".header__title--editable")
@@ -860,38 +1190,67 @@ lychee.setMode = function (mode) {
 			.unbind(["command+backspace", "ctrl+backspace"])
 			.unbind(["command+a", "ctrl+a"]);
 	}
-	// if (!lychee.rights.settings.can_edit) {
-	// 	$("#button_users, #button_logs, #button_diagnostics").remove();
-	// }
+	if (!lychee.rights.settings.can_edit || mode === "view" || mode === "frame") {
+		$("#button_users, #button_logs, #button_diagnostics").hide();
+	}
+
+	const bodyClasses = document.querySelector("body").classList;
 
 	if (mode === "logged_in") {
+		if (!bodyClasses.contains("mode-gallery")) {
+			bodyClasses.replace("mode-none", "mode-gallery");
+			bodyClasses.replace("mode-frame", "mode-gallery");
+			bodyClasses.replace("mode-view", "mode-gallery");
+		}
 		// After login the keyboard short-cuts to login by password (l) and
 		// by key (k) are not required anymore, so we unbind them.
 		Mousetrap.unbind(["l"]).unbind(["k"]);
 
 		// The code searches by class, so remove the other instance.
-		$(".header__search, .header__clear", ".header__toolbar--public").remove();
+		$(".header__search, .header__clear", "#lychee_toolbar_public").hide();
 
 		if (!lychee.editor_enabled) {
-			$("#button_rotate_cwise").remove();
-			$("#button_rotate_ccwise").remove();
+			$("#button_rotate_cwise").hide();
+			$("#button_rotate_ccwise").hide();
 		}
 		return;
-	} else {
-		$(".header__search, .header__clear", ".header__toolbar--albums").remove();
-		$("#button_rotate_cwise").remove();
-		$("#button_rotate_ccwise").remove();
 	}
+	$(".header__search, .header__clear", "#lychee_toolbar_albums").hide();
+	$("#button_rotate_cwise").hide();
+	$("#button_rotate_ccwise").hide();
 
-	$("#button_settings, .header__divider, .leftMenu").remove();
+	$("#button_settings, .header__divider, #lychee_left_menu_container").hide();
 
 	if (mode === "public") {
+		if (!bodyClasses.contains("mode-gallery")) {
+			bodyClasses.replace("mode-none", "mode-gallery");
+			bodyClasses.replace("mode-frame", "mode-gallery");
+			bodyClasses.replace("mode-view", "mode-gallery");
+		}
 		lychee.publicMode = true;
 	} else if (mode === "view") {
+		if (!bodyClasses.contains("mode-view")) {
+			bodyClasses.replace("mode-none", "mode-view");
+			bodyClasses.replace("mode-frame", "mode-view");
+			bodyClasses.replace("mode-gallery", "mode-view");
+		}
 		Mousetrap.unbind(["esc", "command+up"]);
 
-		$("#button_back, a#next, a#previous").remove();
-		$(".no_content").remove();
+		$("#button_back, a#next, a#previous").hide();
+		$(".no_content").hide();
+
+		lychee.publicMode = true;
+		lychee.viewMode = true;
+	} else if (mode === "frame") {
+		if (!bodyClasses.contains("mode-frame")) {
+			bodyClasses.replace("mode-none", "mode-frame");
+			bodyClasses.replace("mode-view", "mode-frame");
+			bodyClasses.replace("mode-gallery", "mode-frame");
+		}
+		Mousetrap.unbind(["esc", "command+up"]);
+
+		$("#button_back, a#next, a#previous").hide();
+		$(".no_content").hide();
 
 		lychee.publicMode = true;
 		lychee.viewMode = true;
@@ -967,16 +1326,6 @@ lychee.loadDropbox = function (callback) {
 		};
 		s.parentNode.insertBefore(g, s);
 	}
-};
-
-/**
- * @returns {string}
- */
-lychee.getEventName = function () {
-	if (lychee.device_type === "mobile") {
-		return "touchend";
-	}
-	return "click";
 };
 
 /**
@@ -1169,32 +1518,6 @@ lychee.footer_hide = function () {
 };
 
 /**
- * Sets the height of the content area.
- *
- * Because the height of the footer can vary, we need to set some
- * dimensions dynamically, at startup.
- *
- * @returns {void}
- */
-lychee.adjustContentHeight = function () {
-	if (lychee.footer.length > 0) {
-		lychee.content.css(
-			"min-height",
-			"calc(100vh - " +
-				lychee.content.css("padding-top") +
-				" - " +
-				lychee.content.css("padding-bottom") +
-				" - " +
-				lychee.footer.outerHeight() +
-				"px)"
-		);
-		$("#container").css("padding-bottom", lychee.footer.outerHeight());
-	} else {
-		lychee.content.css("min-height", "calc(100vh - " + lychee.content.css("padding-top") + " - " + lychee.content.css("padding-bottom") + ")");
-	}
-};
-
-/**
  * @returns {string}
  */
 lychee.getBaseUrl = function () {
@@ -1277,4 +1600,18 @@ lychee.leaveDrag = function (ev) {
  */
 lychee.endDrag = function (ev) {
 	$("div.album").removeClass("album__dragover");
+};
+
+/**
+ * Adds the given event listener to the event target for both a `"click"` and
+ * `"touchend"` event.
+ *
+ * @param {Element} eventTarget
+ * @param {EventListenerOrEventListenerObject} listener
+ * @param {boolean|AddEventListenerOptions} [options]
+ * @return {void}
+ */
+lychee.addClickOrTouchListener = function (eventTarget, listener, options) {
+	eventTarget.addEventListener("click", listener, options);
+	eventTarget.addEventListener("touchend", listener, options);
 };

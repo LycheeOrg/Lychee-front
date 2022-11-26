@@ -13,7 +13,10 @@
  * @param {XMLHttpRequest} jqXHR the jQuery XMLHttpRequest object, see {@link https://api.jquery.com/jQuery.ajax/#jqXHR}.
  * @param {Object} params the original JSON parameters of the request
  * @param {?LycheeException} lycheeException the Lychee exception
- * @returns {boolean}
+ * @returns {boolean} `true`, if the callback has already handled the error
+ *                     and does not want the API layer to handle the error any
+ *                     further (i.e. show an error flash);
+ *                     `false`, if the API layer should handle the error, too.
  */
 
 /**
@@ -74,7 +77,16 @@ api.hasSessionExpired = function (jqXHR, lycheeException) {
  * @param {Object} params
  * @param {?APISuccessCB} successCallback
  * @param {?APIProgressCB} responseProgressCB
- * @param {?APIErrorCB} errorCallback
+ * @param {?APIErrorCB} errorCallback         called if the request fails;
+ *                                            the callback should return `true`,
+ *                                            if the callback has already
+ *                                            handled the error and does not
+ *                                            want the API layer to handle the
+ *                                            error any further
+ *                                            (i.e. show an error flash),
+ *                                            the callback should return `false`,
+ *                                            if the API layer should handle
+ *                                            the error, too.
  * @returns {void}
  */
 api.post = function (fn, params, successCallback = null, responseProgressCB = null, errorCallback = null) {

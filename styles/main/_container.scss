@@ -1,0 +1,142 @@
+.vflex-container,
+.hflex-container,
+.vflex-item-stretch,
+.hflex-item-stretch,
+.vflex-item-rigid,
+.hflex-item-rigid {
+	/*
+	 * Relative positioning is required in order to make the element a
+	 * "positioned" element such that coordinates of children are relative to
+	 * this.
+	 */
+	position: relative;
+	/*
+	 * Content of all flex containers and items is clipped in both directions
+	 * by default.
+	 * (CSS default is "overflow").
+	 * Overflowing content is likely to interfere badly with other parts of
+	 * the layout in an undesired way.
+	 * Even if overflowing content accidentally did not disturb the layout,
+	 * it would be considered a programming error and by clipping the content
+	 * we are able to spot these issues more easily.
+	 * If content is expected to be larger than its parent (e.g. the
+	 * main view area), then the respective element has to explicitly
+	 * provide scrollbars by a CSS rule with higher specificity.
+	 */
+	overflow: clip;
+}
+
+.vflex-container,
+.hflex-container {
+	display: flex;
+	align-content: stretch;
+	gap: 0 0;
+}
+
+.vflex-container {
+	flex-direction: column;
+}
+
+.hflex-container {
+	flex-direction: row;
+}
+
+.vflex-item-stretch,
+.hflex-item-stretch {
+	flex: auto;
+}
+
+.hflex-item-stretch {
+	/**
+	 * Although the flex item is flexible in the horizontal direction, and
+	 * is allowed to grow **as well as shrink**, we must explicitly assign
+	 * a zero width to it and then let it grow.
+	 *
+	 * Firefox only considers the width of this item as a parent element,
+	 * if it has a "definite" size and Firefox uses an explicit defined
+	 * width to decide this.
+	 * If the size is not definite (i.e. keeping an implicit, `width: auto`),
+	 * then Firefox won't shrink the box below the natural size of its
+	 * children, even if the element as a parent box is scrollable and thus
+	 * _safely shrinkable_.
+	 *
+	 * However, with an explicitly set size (even if it is pointless),
+	 * the layout works as expected for Chromium-based browsers (Chrome,
+	 * modern Edge), Gecko-based browsers (Firefox) and Webkit-based browsers
+	 * (Safari, KDE Falkon, ...).
+	 *
+	 * It is unclear, whether Gecko or Chromium is wrong here or if it is
+	 * simply an under-specified oversight in the specs.
+	 * See:
+	 *
+	 *  - [On Cross Size Determination](https://www.w3.org/TR/css-flexbox-1/#cross-sizing)
+	 *  - [Definite and Indefinite Sizes](https://www.w3.org/TR/css-flexbox-1/#definite-sizes)
+	 *  - [Automatic Minimum Size of Flex Items](https://www.w3.org/TR/css-flexbox-1/#min-size-auto)
+	 *  - [Overflow Alignment: the safe and unsafe keywords and scroll safety limits](https://www.w3.org/TR/css-align-3/#overflow-values)
+	 *  - https://stackoverflow.com/a/74075987/2690527
+	 */
+	width: 0;
+	/*
+	 * We want all flex items to fill out their parents in the cross-direction.
+	 * Again, this is redundant to `align-content: stretch` of the parent
+	 * element, but we explicitly make this a _definite_ size.
+	 */
+	height: 100%;
+}
+
+.vflex-item-stretch {
+	/**
+	 * See long comments on `.flex-item-hstretch` on `width` and `height`
+	 * but with swapped roles.
+	 */
+	width: 100%;
+	height: 0;
+}
+
+.hflex-item-rigid,
+.vflex-item-rigid {
+	flex: none;
+}
+
+.hflex-item-rigid {
+	/*
+	 * For a rigid (horizontal) item the width shall be the natural width
+	 * of its child elements unless otherwise specified by a CSS rule with
+	 * higher specificity.
+	 */
+	width: auto;
+	/*
+	 * We want all flex items to fill out their parents in the cross-direction.
+	 * Again, this is redundant to `align-content: stretch` of the parent
+	 * element, but we explicitly make this a _definite_ size.
+	 */
+	height: 100%;
+}
+
+.vflex-item-rigid {
+	width: 100%;
+	height: auto;
+}
+
+/**
+ * An overlay container does not participate in the layout, but is absolutely
+ * positioned and covers its entire parent.
+ */
+.overlay-container {
+	position: absolute;
+	display: none;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: $colorAppBgFullMode;
+	transition: background-color 0.3s;
+
+	&.full {
+		cursor: none;
+	}
+
+	&.active {
+		display: unset;
+	}
+}
