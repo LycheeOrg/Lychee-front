@@ -1037,13 +1037,14 @@ album.setProtectionPolicy = function (albumID) {
 		 * @type {HTMLInputElement[]}
 		 */
 		const tristateCheckboxes = [
-			formElements.grants_full_photo,
-			formElements.requires_link,
-			formElements.is_downloadable,
-			formElements.is_share_button_visible,
-			formElements.has_password,
+			formElements.grants_full_photo_access,
+			formElements.is_link_required,
+			formElements.grants_download,
+			//formElements.is_share_button_visible,
+			formElements.is_password_required,
 		];
 
+		formElements.is_public.checked = album.json.policy.is_public;
 		if (album.json.policy.is_public) {
 			tristateCheckboxes.forEach(function (checkbox) {
 				checkbox.parentElement.classList.remove("disabled");
@@ -1068,7 +1069,7 @@ album.setProtectionPolicy = function (albumID) {
 			formElements.grants_full_photo_access.checked = lychee.grants_full_photo_access;
 			formElements.is_link_required.checked = false;
 			formElements.grants_download.checked = lychee.grants_download;
-			formElements.is_share_button_visible.checked = lychee.share_button_visible;
+			//formElements.is_share_button_visible.checked = lychee.share_button_visible;
 			formElements.is_password_required.checked = false;
 			formElements.password.parentElement.classList.add("hidden");
 		}
@@ -1080,7 +1081,7 @@ album.setProtectionPolicy = function (albumID) {
 			});
 		});
 
-		formElements.has_password.addEventListener("change", function () {
+		formElements.is_password_required.addEventListener("change", function () {
 			if (formElements.is_password_required.checked) {
 				formElements.password.parentElement.classList.remove("hidden");
 				formElements.password.focus();
