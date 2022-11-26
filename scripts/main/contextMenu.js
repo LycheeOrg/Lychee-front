@@ -707,10 +707,6 @@ contextMenu.move = function (IDs, e, callback, kind = "UNSORTED", display_root =
  * @returns {void}
  */
 contextMenu.sharePhoto = function (photoID, e) {
-	if (!photo.json.is_share_button_visible) {
-		return;
-	}
-
 	const iconClass = "ionicons";
 
 	const items = [
@@ -736,10 +732,6 @@ contextMenu.sharePhoto = function (photoID, e) {
  * @returns {void}
  */
 contextMenu.shareAlbum = function (albumID, e) {
-	if (!album.json.is_share_button_visible) {
-		return;
-	}
-
 	const iconClass = "ionicons";
 
 	const items = [

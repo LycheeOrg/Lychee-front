@@ -1229,10 +1229,6 @@ album.toggleNSFW = function () {
  * @returns {void}
  */
 album.share = function (service) {
-	if (album.json.hasOwnProperty("is_share_button_visible") && !album.json.is_share_button_visible) {
-		return;
-	}
-
 	const url = location.href;
 
 	switch (service) {
@@ -1252,10 +1248,6 @@ album.share = function (service) {
  * @returns {void}
  */
 album.qrCode = function () {
-	if (album.json.hasOwnProperty("is_share_button_visible") && !album.json.is_share_button_visible) {
-		return;
-	}
-
 	// We need this indirection based on a resize observer, because the ready
 	// callback of the dialog is invoked _before_ the dialog is made visible
 	// in order to allow the ready callback to make initializations of

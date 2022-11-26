@@ -139,7 +139,7 @@ search.find = function (term) {
 					$(window).scrollTop(0);
 				}, 0);
 			}
-			lychee.setTitle(lychee.locale["SEARCH_RESULTS"], false);
+			lychee.setMetaData(lychee.locale["SEARCH_RESULTS"]);
 		}, 300);
 	};
 

@@ -16,8 +16,12 @@ $colorPink: #ff82ee;
 $colorGreen: #00aa00;
 $colorYellow: #ffcc00;
 $colorOrange: #ff9900;
+$colorBlack: #000000;
+$colorDarkAnthracite: #1d1d1d;
 
 $colorDialogContainerBg: black(0.85);
+$colorAppBg: $colorDarkAnthracite;
+$colorAppBgFullMode: $colorBlack;
 $colorDialogBg: linear-gradient(to bottom, #444, #333);
 $colorDialogMainButtonFont: #999999;
 $colorDialogMainActionButtonFont: $colorBlue;
@@ -54,21 +58,25 @@ body {
 }
 
 body {
-	background-color: #1d1d1d;
+	background-color: $colorAppBg;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 12px;
 	-webkit-font-smoothing: antialiased;
 	-moz-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	&.view {
-		background-color: #0f0f0f;
-	}
 }
 
 div#container {
 	// If there is a footer, we will set padding-bottom to its height
 	// using JavaScript since the height of the footer can vary.
 	position: relative;
+}
+
+body.mode-frame,
+body.mode-none {
+	div#container {
+		display: none;
+	}
 }
 
 input,
@@ -95,6 +103,7 @@ textarea {
 // Files ------------------------------------------------------------------- //
 @import "animations";
 @import "content";
+@import "frame";
 @import "leftMenu";
 @import "basicContext.custom";
 @import "basicContext.extended";
@@ -119,6 +128,6 @@ textarea {
 @import "sharing";
 @import "multiselect";
 @import "justified_layout";
-@import "../page/footer";
 @import "footer";
 @import "social-footer";
+@import "tv";

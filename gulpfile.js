@@ -1,6 +1,7 @@
 let gulp = require("gulp"),
 	plugins = require("gulp-load-plugins")(),
 	cleanCSS = require("gulp-clean-css"),
+	chmod = require("gulp-chmod"),
 	del = require("del"),
 	sass = require("gulp-sass")(require("sass")),
 	paths = {};
@@ -12,78 +13,9 @@ const catchError = function (err) {
 	this.emit("end");
 };
 
-/* View ----------------------------------------- */
+/* Frontend ----------------------------------------- */
 
-paths.view = {
-	php: ["../view.php"],
-	js: [
-		"./scripts/api.js",
-		"./scripts/csrf_protection.js",
-		"./scripts/view/main.js",
-		"./scripts/main/build.js",
-		"./scripts/main/header.js",
-		"./scripts/main/visible.js",
-		"./scripts/main/sidebar.js",
-		"./scripts/main/mapview.js",
-		"./scripts/main/lychee_locale.js",
-		"./scripts/main/tabindex.js",
-		"./scripts/3rd-party/backend.js",
-	],
-	scripts: [
-		"node_modules/jquery/dist/jquery.min.js",
-		"node_modules/lazysizes/lazysizes.min.js",
-		"node_modules/sprintf-js/dist/sprintf.min.js",
-		"node_modules/@lychee-org/basiccontext/dist/basicContext.min.js",
-		"../dist/_view--javascript.js",
-	],
-	svg: ["./images/iconic.svg", "./images/ionicons.svg"],
-};
-
-gulp.task("view--js", function () {
-	const babel = plugins.babel({
-		presets: ["env"],
-	});
-
-	return gulp
-		.src(paths.view.js)
-		.pipe(plugins.concat("_view--javascript.js", { newLine: "\n" }))
-		.pipe(babel)
-		.on("error", catchError)
-		.pipe(gulp.dest("../dist/"));
-});
-
-gulp.task(
-	"view--scripts",
-	gulp.series("view--js", function () {
-		return (
-			gulp
-				.src(paths.view.scripts)
-				.pipe(plugins.concat("view.js", { newLine: "\n" }))
-				// .pipe(plugins.uglify())
-				.on("error", catchError)
-				.pipe(gulp.dest("../dist/"))
-		);
-	})
-);
-
-gulp.task("view--svg", function () {
-	return gulp
-		.src(paths.view.php, { allowEmpty: true })
-		.pipe(
-			plugins.inject(gulp.src(paths.view.svg), {
-				starttag: "<!-- inject:svg -->",
-				transform: function (filePath, _file) {
-					return _file.contents.toString("utf8");
-				},
-			})
-		)
-		.pipe(gulp.dest("../"));
-});
-
-/* Main ----------------------------------------- */
-
-paths.main = {
-	html: ["../index.html"],
+paths.frontend = {
 	js: ["./scripts/*.js", "./scripts/main/*.js", "./scripts/3rd-party/backend.js"],
 	scripts: [
 		"node_modules/jquery/dist/jquery.min.js",
@@ -101,9 +33,10 @@ paths.main = {
 		"node_modules/livephotoskit/livephotoskit.js",
 		"node_modules/qr-creator/dist/qr-creator.min.js",
 		"node_modules/sprintf-js/dist/sprintf.min.js",
+		"node_modules/stackblur-canvas/dist/stackblur.min.js",
 		"node_modules/@lychee-org/leaflet.photo/Leaflet.Photo.js",
 		"node_modules/@lychee-org/basiccontext/dist/basicContext.min.js",
-		"../dist/_main--javascript.js",
+		"../dist/_frontend--javascript.js",
 	],
 	scss: ["./styles/main/*.scss"],
 	styles: [
@@ -115,123 +48,68 @@ paths.main = {
 		"node_modules/leaflet.markercluster/dist/MarkerCluster.css",
 		"node_modules/@lychee-org/leaflet.photo/Leaflet.Photo.css",
 	],
+	html: "./html/frontend.html",
 	svg: ["./images/iconic.svg", "./images/ionicons.svg"],
 };
 
-gulp.task("main--js", function () {
+gulp.task("frontend--js", function () {
 	const babel = plugins.babel({
 		presets: ["env"],
 	});
 
 	return gulp
-		.src(paths.main.js)
-		.pipe(plugins.concat("_main--javascript.js", { newLine: "\n" }))
+		.src(paths.frontend.js)
+		.pipe(plugins.concat("_frontend--javascript.js", { newLine: "\n" }))
 		.pipe(babel)
+		.pipe(chmod({execute: false}))
 		.on("error", catchError)
 		.pipe(gulp.dest("../dist/"));
 });
 
 gulp.task(
-	"main--scripts",
-	gulp.series("main--js", function () {
-		return (
-			gulp
-				.src(paths.main.scripts)
-				.pipe(plugins.concat("main.js", { newLine: "\n" }))
-				// .pipe(plugins.uglify())
-				.on("error", catchError)
-				.pipe(gulp.dest("../dist/"))
-		);
+	"frontend--scripts",
+	gulp.series("frontend--js", function () {
+		return gulp
+			.src(paths.frontend.scripts)
+			.pipe(plugins.concat("frontend.js", { newLine: "\n" }))
+			.pipe(chmod({execute: false}))
+			.on("error", catchError)
+			.pipe(gulp.dest("../dist/"));
 	})
 );
 
-gulp.task("main--styles", function () {
+gulp.task("frontend--styles", function () {
 	return gulp
-		.src(paths.main.styles)
+		.src(paths.frontend.styles)
 		.pipe(sass().on("error", catchError))
-		.pipe(plugins.concat("main.css", { newLine: "\n" }))
+		.pipe(plugins.concat("frontend.css", { newLine: "\n" }))
 		.pipe(plugins.autoprefixer("last 4 versions", "> 5%"))
 		.pipe(cleanCSS({ level: 2 }))
+		.pipe(chmod({execute: false}))
 		.pipe(gulp.dest("../dist/"));
 });
 
-gulp.task("main--svg", function () {
+gulp.task("frontend--html", function () {
 	return gulp
-		.src(paths.main.html, { allowEmpty: true })
-		.pipe(
-			plugins.inject(gulp.src(paths.main.svg), {
+		.src(paths.frontend.html)
+		.pipe(plugins.inject(
+			gulp.src(paths.frontend.svg), {
 				starttag: "<!-- inject:svg -->",
 				transform: function (filePath, _file) {
 					return _file.contents.toString("utf8");
 				},
-			})
-		)
-		.pipe(gulp.dest("../"));
-});
-
-/* Frame -----------------------------------------  */
-
-paths.frame = {
-	js: ["./scripts/api.js", "./scripts/csrf_protection.js", "./scripts/frame/main.js", "./scripts/3rd-party/backend.js"],
-	scss: ["./styles/frame/*.scss"],
-	styles: ["./styles/frame/frame.scss"],
-	scripts: [
-		"node_modules/jquery/dist/jquery.min.js",
-		"node_modules/lazysizes/lazysizes.min.js",
-		"node_modules/stackblur-canvas/dist/stackblur.min.js",
-		"../dist/_frame--javascript.js",
-	],
-};
-
-gulp.task("frame--js", function () {
-	const babel = plugins.babel({
-		presets: ["env"],
-	});
-
-	return gulp
-		.src(paths.frame.js)
-		.pipe(plugins.concat("_frame--javascript.js", { newLine: "\n" }))
-		.pipe(babel)
+			}
+		))
+		.pipe(chmod({execute: false}))
 		.on("error", catchError)
 		.pipe(gulp.dest("../dist/"));
 });
-
-gulp.task("frame--styles", function () {
-	return gulp
-		.src(paths.frame.styles)
-		.pipe(sass().on("error", catchError))
-		.pipe(plugins.concat("frame.css", { newLine: "\n" }))
-		.pipe(plugins.autoprefixer("last 4 versions", "> 5%"))
-		.pipe(cleanCSS({ level: 2 }))
-		.pipe(gulp.dest("../dist/"));
-});
-
-gulp.task(
-	"frame--scripts",
-	gulp.series("frame--js", function () {
-		return (
-			gulp
-				.src(paths.frame.scripts)
-				.pipe(plugins.concat("frame.js", { newLine: "\n" }))
-				// .pipe(plugins.uglify())
-				.on("error", catchError)
-				.pipe(gulp.dest("../dist/"))
-		);
-	})
-);
 
 /* Landing -----------------------------------------  */
 
 paths.landing = {
 	js: ["./scripts/landing/*.js"],
 	scripts: ["node_modules/jquery/dist/jquery.min.js", "node_modules/lazysizes/lazysizes.min.js", "../dist/_landing--javascript.js"],
-	scss: [
-		"./styles/landing/*.scss",
-		"./styles/page/fonts.scss",
-		"./styles/page/menu.scss",
-		"./styles/page/social.scss",
-		"./styles/page/animate.scss",
-	],
 	styles: ["./styles/landing/landing.scss"],
 };
 
@@ -244,6 +122,7 @@ gulp.task("landing--js", function () {
 		.src(paths.landing.js)
 		.pipe(plugins.concat("_landing--javascript.js", { newLine: "\n" }))
 		.pipe(babel)
+		.pipe(chmod({execute: false}))
 		.on("error", catchError)
 		.pipe(gulp.dest("../dist/"));
 });
@@ -256,6 +135,7 @@ gulp.task(
 				.src(paths.landing.scripts)
 				.pipe(plugins.concat("landing.js", { newLine: "\n" }))
 				// .pipe(plugins.uglify())
+				.pipe(chmod({execute: false}))
 				.on("error", catchError)
 				.pipe(gulp.dest("../dist/"))
 		);
@@ -270,42 +150,9 @@ gulp.task("landing--styles", function () {
 			.pipe(plugins.concat("landing.css", { newLine: "\n" }))
 			.pipe(plugins.autoprefixer("last 4 versions", "> 5%"))
 			// .pipe(cleanCSS({level: 2}))
+			.pipe(chmod({execute: false}))
 			.pipe(gulp.dest("../dist/"))
 	);
-});
-
-/* Page -----------------------------------------  */
-
-paths.page = {
-	scss: ["./styles/page/*.scss", "./styles/page/*.scss"],
-	styles: ["./styles/page/page.scss"],
-};
-
-gulp.task("page--styles", function () {
-	return (
-		gulp
-			.src(paths.page.styles)
-			.pipe(sass().on("error", catchError))
-			.pipe(plugins.concat("page.css", { newLine: "\n" }))
-			.pipe(plugins.autoprefixer("last 4 versions", "> 5%"))
-			// .pipe(cleanCSS({level: 2}))
-			.pipe(gulp.dest("../dist/"))
-	);
-});
-
-/* Page -----------------------------------------  */
-
-paths.TVCSS = {
-	src: ["./styles/devices/TV.scss"],
-};
-
-gulp.task("TVCSS--styles", function () {
-	return gulp
-		.src(paths.TVCSS.src)
-		.on("error", catchError)
-		.pipe(plugins.concat("TV.css", { newLine: "\n" }))
-		.pipe(plugins.autoprefixer("last 4 versions", "> 5%"))
-		.pipe(gulp.dest("../dist/"));
 });
 
 /* Images ----------------------------------------- */
@@ -348,17 +195,11 @@ gulp.task(
 	"default",
 	gulp.series(
 		gulp.parallel(
-			"view--svg",
-			"view--scripts",
-			"main--svg",
-			"main--scripts",
-			"main--styles",
-			"frame--scripts",
-			"frame--styles",
+			"frontend--scripts",
+			"frontend--styles",
+			"frontend--html",
 			"landing--scripts",
 			"landing--styles",
-			"page--styles",
-			"TVCSS--styles",
 			"images--copy",
 			"leafletMarkerclusterMapFile--copy",
 			"leafletMarkerclusterSourceFiles--copy"
@@ -370,9 +211,8 @@ gulp.task(
 gulp.task(
 	"watch",
 	gulp.series("default", function () {
-		gulp.watch(paths.frame.js, gulp.series("frame--scripts"));
-		gulp.watch(paths.view.js, gulp.series("view--scripts"));
-		gulp.watch(paths.main.js, gulp.series("main--scripts"));
-		gulp.watch(paths.main.scss, gulp.series("main--styles"));
+		gulp.watch(paths.frontend.js, gulp.series("frontend--scripts"));
+		gulp.watch(paths.frontend.scss, gulp.series("frontend--styles"));
+		gulp.watch(paths.frontend.html, gulp.series("frontend--html"))
 	})
 );
