@@ -507,14 +507,15 @@ header.setMode = function (mode) {
 			// - empty (see contextMenu.photoMore)
 			// - not enabled
 			if (
-				!lychee.enable_button_more
-				|| !( //
-					album.isUploadable()
-					||(
-						photo.json &&
-						!photo.json.rights.can_download &&
-						!photo.json.rights.can_access_full_photo &&
-						!(photo.json.size_variants.original.url && photo.json.size_variants.original.url !== "")
+				!lychee.enable_button_more ||
+				!(
+					//
+					(
+						album.isUploadable() ||
+						(photo.json &&
+							!photo.json.rights.can_download &&
+							!photo.json.rights.can_access_full_photo &&
+							!(photo.json.size_variants.original.url && photo.json.size_variants.original.url !== ""))
 					)
 				)
 			) {
