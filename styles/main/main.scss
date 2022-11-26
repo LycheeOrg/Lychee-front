@@ -68,6 +68,13 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 }
 
+body.mode-frame,
+body.mode-none {
+	div#container {
+		display: none;
+	}
+}
+
 input,
 textarea {
 	-webkit-user-select: text !important;

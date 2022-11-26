@@ -39,3 +39,10 @@
 .hide_footer {
 	display: none;
 }
+
+body.mode-frame,
+body.mode-none {
+	div#footer {
+		display: none;
+	}
+}

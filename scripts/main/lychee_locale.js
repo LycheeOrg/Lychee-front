@@ -284,6 +284,8 @@ lychee.locale = {
 		"Because this photo is located in a public album, it inherits that album’s visibility settings.  Its current visibility is shown below for informational purposes only.",
 	PHOTO_EDIT_GLOBAL_SHARING_TEXT:
 		"The visibility of this photo can be fine-tuned using global Lychee settings. Its current visibility is shown below for informational purposes only.",
+	PHOTO_NEW_CREATED_AT: "Enter the upload date for this photo. mm/dd/yyyy, hh:mm [am/pm]",
+	PHOTO_SET_CREATED_AT: "Set upload date",
 
 	LOADING: "Loading",
 	ERROR: "Error",
