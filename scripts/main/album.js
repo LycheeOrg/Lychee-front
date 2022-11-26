@@ -1040,7 +1040,6 @@ album.setProtectionPolicy = function (albumID) {
 			formElements.grants_full_photo_access,
 			formElements.is_link_required,
 			formElements.grants_download,
-			//formElements.is_share_button_visible,
 			formElements.is_password_required,
 		];
 
@@ -1069,7 +1068,6 @@ album.setProtectionPolicy = function (albumID) {
 			formElements.grants_full_photo_access.checked = lychee.grants_full_photo_access;
 			formElements.is_link_required.checked = false;
 			formElements.grants_download.checked = lychee.grants_download;
-			//formElements.is_share_button_visible.checked = lychee.share_button_visible;
 			formElements.is_password_required.checked = false;
 			formElements.password.parentElement.classList.add("hidden");
 		}

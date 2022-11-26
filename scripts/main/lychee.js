@@ -21,8 +21,8 @@ const lychee = {
 
 	publicMode: false,
 	viewMode: false,
-	full_photo: true,
-	downloadable: false,
+	grants_full_photo_access: true,
+	grants_download: false,
 	public_photos_hidden: true,
 	share_button_visible: false,
 	/**
@@ -405,8 +405,8 @@ lychee.parseProtectedInitializationData = function (data) {
 	lychee.location_decoding = data.config.location_decoding === "1";
 	lychee.default_license = data.config.default_license || "none";
 	lychee.css = data.config.css || "";
-	lychee.full_photo = data.config.full_photo === "1";
-	lychee.downloadable = data.config.downloadable === "1";
+	lychee.grants_full_photo_access = data.config.grants_full_photo_access === "1";
+	lychee.grants_download = data.config.grants_download === "1";
 	lychee.public_photos_hidden = data.config.public_photos_hidden === "1";
 	lychee.delete_imported = data.config.delete_imported === "1";
 	lychee.import_via_symlink = data.config.import_via_symlink === "1";
