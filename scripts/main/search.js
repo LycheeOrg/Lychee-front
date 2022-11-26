@@ -113,7 +113,7 @@ search.find = function (term) {
 				: build.divider(albums_divider) + albumsData + build.divider(photos_divider) + photosData;
 
 		$(".no_content").remove();
-		lychee.animate($(".content"), "contentZoomOut");
+		lychee.animate(lychee.content, "contentZoomOut");
 
 		setTimeout(() => {
 			if (visible.photo()) view.photo.hide();
@@ -124,7 +124,7 @@ search.find = function (term) {
 
 			if (html === "") {
 				lychee.content.html("");
-				$("body").append(build.no_content("magnifying-glass"));
+				lychee.content.append(build.no_content("magnifying-glass"));
 			} else {
 				lychee.content.html(html);
 				// Here we exploit the layout method of an album although
@@ -136,7 +136,7 @@ search.find = function (term) {
 				setTimeout(function () {
 					view.album.content.justify();
 					lychee.animate(lychee.content, "contentZoomIn");
-					$(window).scrollTop(0);
+					$("#lychee_view_container").scrollTop(0);
 				}, 0);
 			}
 			lychee.setMetaData(lychee.locale["SEARCH_RESULTS"]);

@@ -44,7 +44,6 @@ photo.load = function (photoID, albumID, autoplay) {
 
 		view.photo.show();
 		view.photo.init(autoplay);
-		lychee.imageview.show();
 
 		if (!lychee.hide_content_during_imgview) {
 			setTimeout(() => {
@@ -205,26 +204,6 @@ photo.preloadNextPrev = function (photoID) {
 	if (photo.previous_photo_id) {
 		preload(photo.previous_photo_id);
 	}
-};
-
-/**
- * @param {number} [animationDuration=300]
- * @param {number} [pauseBetweenUpdated=10]
- * @returns {void}
- */
-photo.updateSizeLivePhotoDuringAnimation = function (animationDuration = 300, pauseBetweenUpdated = 10) {
-	// For the LivePhotoKit, we need to call the updateSize manually
-	// during CSS animations
-	//
-	const interval = setInterval(function () {
-		if (photo.isLivePhotoInitialized()) {
-			photo.livePhotosObject.updateSize();
-		}
-	}, pauseBetweenUpdated);
-
-	setTimeout(function () {
-		clearInterval(interval);
-	}, animationDuration);
 };
 
 /**

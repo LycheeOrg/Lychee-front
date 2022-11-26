@@ -1,25 +1,37 @@
-/* The side navigation menu */
-.leftMenu {
-	height: 100vh; /* 100% Full-height */
-	width: 0; /* 0 width - change this with JavaScript */
-	position: fixed; /* Stay in place */
-	z-index: 4; /* Stay on top */
-	top: 0; /* Stay at the top */
-	left: 0;
-	background-color: #111; /* Black*/
-	overflow-x: hidden; /* Disable horizontal scroll */
-	padding-top: 49px; /* Place content 49px from the top (same as menu bar height) */
-	transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+/*
+ * The side navigation menu
+ * The left menu is a child of the application container and shares the
+ * horizontal space of the application container with the workbench container.
+ * The application container uses `dispay: flex` thus making the left menu a
+ * flex item.
+ */
+#lychee_left_menu_container {
+	width: 0; /* per default, the left menu is closed */
+	background-color: #111;
+	padding-top: 49px; /* Place content 49px from the top (same as menu bar height); TODO: fix this magic number */
+	transition: width ease 0.5s 0s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+/**
+ * The width of actual menu must be the same as the width of the menu
+ * container if visible.
+ * The width of the actual menu must be constant all the time to avoid
+ * relayouting and re-wrapping of the child elements of the menu even
+ * if the container shrinks and grows.
+ */
+#lychee_left_menu_container.visible,
+#lychee_left_menu {
+	width: 250px;
 }
 
 /* The navigation menu links */
-.leftMenu a {
+#lychee_left_menu a {
 	padding: 8px 8px 8px 32px;
 	text-decoration: none;
 	font-size: 18px;
 	color: #818181;
 	display: block;
-	transition: 0.3s;
+	transition: 0.3s; // TODO: Find out which property is animated
 
 	&.linkMenu {
 		white-space: nowrap;
@@ -27,7 +39,7 @@
 }
 
 /* Position and style the close button (top right corner) */
-.leftMenu .closebtn {
+#lychee_left_menu .closebtn {
 	position: absolute;
 	top: 0;
 	right: 25px;
@@ -35,7 +47,7 @@
 	margin-left: 50px;
 }
 
-.leftMenu .closetxt {
+#lychee_left_menu .closetxt {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -47,7 +59,7 @@
 	width: 210px;
 }
 
-.leftMenu .iconic {
+#lychee_left_menu .iconic {
 	display: inline-block;
 	margin: 0 10px 0 1px;
 	width: 15px;
@@ -55,27 +67,24 @@
 	fill: #818181;
 }
 
-.leftMenu .iconic.ionicons {
+#lychee_left_menu .iconic.ionicons {
 	margin: 0 8px -2px 0;
 	width: 18px;
 	height: 18px;
 }
 
-.leftMenu__visible {
-	width: 250px;
-}
-
 // responsive web design for smaller screens
 @media only screen and (max-width: 567px), only screen and (max-width: 640px) and (orientation: portrait) {
 	// disable left menu on small devices and use context menu instead
-	.leftMenu {
+	#lychee_left_menu_container,
+	#lychee_left_menu {
 		display: none !important;
 	}
 }
 
 // restrict hover features to devices that support it
 @media (hover: hover) {
-	.leftMenu {
+	#lychee_left_menu {
 		.closetxt:hover {
 			color: #818181;
 		}
@@ -89,7 +98,7 @@
 
 // on touch devices increase space between entries
 @media (hover: none) {
-	.leftMenu a {
+	#lychee_left_menu a {
 		padding: 14px 8px 14px 32px;
 	}
 }

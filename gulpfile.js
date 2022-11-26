@@ -23,7 +23,6 @@ paths.frontend = {
 		"node_modules/mousetrap/mousetrap.min.js",
 		"node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js",
 		"node_modules/@lychee-org/basicmodal/dist/basicModal.min.js",
-		"node_modules/scroll-lock/dist/scroll-lock.min.js",
 		"node_modules/multiselect-two-sides/dist/js/multiselect.min.js",
 		"node_modules/justified-layout/dist/justified-layout.min.js",
 		"node_modules/leaflet/dist/leaflet.js",

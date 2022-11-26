@@ -34,7 +34,7 @@ const multiselect = {
 multiselect.position = null;
 
 multiselect.bind = function () {
-	$(".content").on("mousedown", (e) => {
+	$("#lychee_view_content").on("mousedown", (e) => {
 		if (e.which === 1) multiselect.show(e);
 	});
 
@@ -45,7 +45,7 @@ multiselect.bind = function () {
  * @returns {void}
  */
 multiselect.unbind = function () {
-	$(".content").off("mousedown");
+	$("#lychee_view_content").off("mousedown");
 };
 
 /**

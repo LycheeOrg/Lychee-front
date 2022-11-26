@@ -7,7 +7,7 @@
  * @property {jQuery} _dom
  */
 const leftMenu = {
-	_dom: $(".leftMenu"),
+	_dom: $("#lychee_left_menu_container"),
 };
 
 /**
@@ -49,7 +49,7 @@ leftMenu.build = function () {
 		<a class="linkMenu" id="button_update"  data-tabindex="-1">${build.iconic("timer")}${lychee.locale["UPDATE_AVAILABLE"]}</a>
 		`;
 	}
-	leftMenu._dom.html(html);
+	leftMenu.dom("#lychee_left_menu").html(html);
 };
 
 /** Set the width of the side navigation to 250px and the left margin of the page content to 250px
@@ -57,16 +57,12 @@ leftMenu.build = function () {
  * @returns {void}
  */
 leftMenu.open = function () {
-	leftMenu._dom.addClass("leftMenu__visible");
-	lychee.content.addClass("leftMenu__open");
-	lychee.footer.addClass("leftMenu__open");
-	header.dom(".header__title").addClass("leftMenu__open");
-	loadingBar.dom().addClass("leftMenu__open");
+	leftMenu.dom().addClass("visible");
 
 	// Make background unfocusable
 	tabindex.makeUnfocusable(header.dom());
 	tabindex.makeUnfocusable(lychee.content);
-	tabindex.makeFocusable(leftMenu._dom);
+	tabindex.makeFocusable(leftMenu.dom());
 	$("#button_signout").focus();
 
 	multiselect.unbind();
@@ -78,16 +74,11 @@ leftMenu.open = function () {
  * @returns {void}
  */
 leftMenu.close = function () {
-	leftMenu._dom.removeClass("leftMenu__visible");
-	lychee.content.removeClass("leftMenu__open");
-	lychee.footer.removeClass("leftMenu__open");
-	$(".content").removeClass("leftMenu__open");
-	header.dom(".header__title").removeClass("leftMenu__open");
-	loadingBar.dom().removeClass("leftMenu__open");
+	leftMenu.dom().removeClass("visible");
 
 	tabindex.makeFocusable(header.dom());
 	tabindex.makeFocusable(lychee.content);
-	tabindex.makeUnfocusable(leftMenu._dom);
+	tabindex.makeUnfocusable(leftMenu.dom());
 
 	multiselect.bind();
 	lychee.load();

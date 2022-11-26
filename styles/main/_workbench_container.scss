@@ -1,0 +1,15 @@
+/**
+ * The workbench shares horizontal space with the right sidebar.
+ * The anonymous outer container uses `dispay: flex` thus making the
+ * workbench a flex item.
+ * The workbench holds the the view container and the footer
+ * and aligns them vertically in a column.
+ * The footer has its natural height, the remaining vertical space is filled
+ * by the view container.
+ * However, view container may grow vertically as much its content requires.
+ * Hence, the workbench provides a scrollbar in vertical direction.
+ */
+#lychee_workbench_container {
+	// The workbench scrolls the view container together with the footer if
+	// required.
+}
