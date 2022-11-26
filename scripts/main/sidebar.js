@@ -52,6 +52,13 @@ sidebar.bind = function () {
 		});
 
 	sidebar
+		.dom("#edit_uploaded")
+		.off(eventName)
+		.on(eventName, function () {
+			if (visible.photo()) photo.setCreatedAt(photo.getID());
+		});
+
+	sidebar
 		.dom("#edit_showtags")
 		.off(eventName)
 		.on(eventName, function () {
@@ -277,7 +284,7 @@ sidebar.createStructure.photo = function (data) {
 		type: sidebar.types.DEFAULT,
 		rows: [
 			{ title: lychee.locale["PHOTO_TITLE"], kind: "title", value: data.title, editable },
-			{ title: lychee.locale["PHOTO_UPLOADED"], kind: "uploaded", value: lychee.locale.printDateTime(data.created_at) },
+			{ title: lychee.locale["PHOTO_UPLOADED"], kind: "uploaded", value: lychee.locale.printDateTime(data.created_at), editable },
 			{ title: lychee.locale["PHOTO_DESCRIPTION"], kind: "description", value: data.description ? data.description : "", editable },
 		],
 	};
