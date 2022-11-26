@@ -204,13 +204,13 @@ view.album = {
 			if (album.json.albums) {
 				album.json.albums.forEach(function (_album) {
 					albums.parse(_album);
-					albumsData += build.album(_album, !album.rights.can_edit);
+					albumsData += build.album(_album, !album.json.rights.can_edit);
 				});
 			}
 			if (album.json.photos) {
 				// Build photos
 				album.json.photos.forEach(function (_photo) {
-					photosData += build.photo(_photo, !album.rights.can_edit);
+					photosData += build.photo(_photo, !album.json.rights.can_edit);
 				});
 			}
 
