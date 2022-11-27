@@ -74,6 +74,7 @@ view.albums = {
 					albums.json.smart_albums.recent ||
 					albums.json.smart_albums.starred ||
 					albums.json.smart_albums.unsorted ||
+					albums.json.smart_albums.on_this_day ||
 					albums.json.tag_albums.length > 0)
 			) {
 				smartData = build.divider(lychee.locale["SMART_ALBUMS"]);
@@ -93,6 +94,10 @@ view.albums = {
 			if (albums.json.smart_albums.recent) {
 				albums.parse(albums.json.smart_albums.recent);
 				smartData += build.album(albums.json.smart_albums.recent);
+			}
+			if (albums.json.smart_albums.on_this_day) {
+				albums.parse(albums.json.smart_albums.on_this_day);
+				smartData += build.album(albums.json.smart_albums.on_this_day);
 			}
 
 			// Tag albums
@@ -196,6 +201,9 @@ view.album = {
 					break;
 				case SmartAlbumID.UNSORTED:
 					lychee.setMetaData(lychee.locale["UNSORTED"]);
+					break;
+				case SmartAlbumID.ON_THIS_DAY:
+					lychee.setMetaData(lychee.locale["ON_THIS_DAY"]);
 					break;
 				default:
 					if (album.json.init) sidebar.changeAttr("title", album.json.title);

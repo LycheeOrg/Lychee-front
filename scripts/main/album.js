@@ -12,7 +12,13 @@ const album = {
  * @returns {boolean}
  */
 album.isSmartID = function (id) {
-	return id === SmartAlbumID.UNSORTED || id === SmartAlbumID.STARRED || id === SmartAlbumID.PUBLIC || id === SmartAlbumID.RECENT;
+	return (
+		id === SmartAlbumID.UNSORTED ||
+		id === SmartAlbumID.STARRED ||
+		id === SmartAlbumID.PUBLIC ||
+		id === SmartAlbumID.RECENT ||
+		id === SmartAlbumID.ON_THIS_DAY
+	);
 };
 
 /**
