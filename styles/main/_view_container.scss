@@ -1,0 +1,14 @@
+/**
+ * The view container is a child of the workbench and shares the vertical
+ * space of workbench with the footer.
+ * The workbench uses `dispay: flex` thus making the view container a flex item.
+ * The view container holds the actual views.
+ */
+#lychee_view_container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	overflow: clip auto;
+}

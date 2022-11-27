@@ -7,7 +7,7 @@
  */
 let sidebar = {
 	/** @type {jQuery} */
-	_dom: $(".sidebar"),
+	_dom: $("#lychee_sidebar_container"),
 	types: {
 		DEFAULT: 0,
 		TAGS: 1,
@@ -33,7 +33,7 @@ sidebar.dom = function (selector) {
  * @returns {void}
  */
 sidebar.bind = function () {
-	const eventName = lychee.getEventName();
+	const eventName = "click touchend";
 
 	sidebar
 		.dom("#edit_title")
@@ -49,6 +49,13 @@ sidebar.bind = function () {
 		.on(eventName, function () {
 			if (visible.photo()) photo.setDescription(photo.getID());
 			else if (visible.album()) album.setDescription(album.getID());
+		});
+
+	sidebar
+		.dom("#edit_uploaded")
+		.off(eventName)
+		.on(eventName, function () {
+			if (visible.photo()) photo.setCreatedAt(photo.getID());
 		});
 
 	sidebar
@@ -135,12 +142,7 @@ sidebar.keepSidebarVisible = function () {
 sidebar.toggle = function (is_user_initiated) {
 	if (visible.sidebar() || visible.sidebarbutton()) {
 		header.dom(".button--info").toggleClass("active");
-		lychee.content.toggleClass("content--sidebar");
-		lychee.imageview.toggleClass("image--sidebar");
-		setTimeout(() => view.album.content.justify(), 0);
 		sidebar.dom().toggleClass("active");
-		if (photo.updateSizeLivePhotoDuringAnimation) photo.updateSizeLivePhotoDuringAnimation();
-
 		if (is_user_initiated) sessionStorage.setItem("keepSidebarVisible", visible.sidebar() ? "true" : "false");
 	}
 };
@@ -278,7 +280,7 @@ sidebar.createStructure.photo = function (data) {
 		type: sidebar.types.DEFAULT,
 		rows: [
 			{ title: lychee.locale["PHOTO_TITLE"], kind: "title", value: data.title, editable },
-			{ title: lychee.locale["PHOTO_UPLOADED"], kind: "uploaded", value: lychee.locale.printDateTime(data.created_at) },
+			{ title: lychee.locale["PHOTO_UPLOADED"], kind: "uploaded", value: lychee.locale.printDateTime(data.created_at), editable },
 			{ title: lychee.locale["PHOTO_DESCRIPTION"], kind: "description", value: data.description ? data.description : "", editable },
 		],
 	};

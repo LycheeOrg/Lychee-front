@@ -4,17 +4,17 @@
 
 const visible = {};
 
-/** @returns {boolean} */
+/**
+ * TODO: Whether the albums view is visible or not should not be determined based on the visibility of a toolbar, especially as this does not work for the photo view in full screen mode which makes this approach inconsistent.
+ * @returns {boolean}
+ */
 visible.albums = function () {
-	return (
-		!!header.dom(".header__toolbar--public").hasClass("header__toolbar--visible") ||
-		!!header.dom(".header__toolbar--albums").hasClass("header__toolbar--visible")
-	);
+	return !!header.dom("#lychee_toolbar_public").hasClass("visible") || !!header.dom("#lychee_toolbar_albums").hasClass("visible");
 };
 
 /** @returns {boolean} */
 visible.album = function () {
-	return !!header.dom(".header__toolbar--album").hasClass("header__toolbar--visible");
+	return !!header.dom("#lychee_toolbar_album").hasClass("visible");
 };
 
 /** @returns {boolean} */
@@ -24,12 +24,12 @@ visible.photo = function () {
 
 /** @returns {boolean} */
 visible.mapview = function () {
-	return $("#mapview.fadeIn").length > 0;
+	return $("#lychee_map_container.fadeIn").length > 0;
 };
 
 /** @returns {boolean} */
 visible.config = function () {
-	return !!header.dom(".header__toolbar--config").hasClass("header__toolbar--visible");
+	return !!header.dom("#lychee_toolbar_config").hasClass("visible");
 };
 
 /** @returns {boolean} */
@@ -49,7 +49,7 @@ visible.sidebarbutton = function () {
 
 /** @returns {boolean} */
 visible.header = function () {
-	return !header.dom().hasClass("header--hidden");
+	return !header.dom().hasClass("hidden");
 };
 
 /** @returns {boolean} */
@@ -64,5 +64,5 @@ visible.multiselect = function () {
 
 /** @returns {boolean} */
 visible.leftMenu = function () {
-	return !!leftMenu.dom().hasClass("leftMenu__visible");
+	return !!leftMenu.dom().hasClass("visible");
 };

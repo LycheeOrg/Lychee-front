@@ -15,8 +15,8 @@
 	"scripts": {
 		"start": "gulp watch",
 		"compile": "gulp",
-		"check-formatting": "prettier --check .",
-		"format": "prettier --write ."
+		"check-formatting": "prettier --check scripts/ styles/",
+		"format": "prettier --write scripts/ styles/"
 	},
 	"engines": {
 		"node": ">= 10"
@@ -36,7 +36,6 @@
 		"mousetrap": "^1.6.0",
 		"multiselect-two-sides": "^2.5.5",
 		"qr-creator": "^1.0.0",
-		"scroll-lock": "^2.1.2",
 		"sprintf-js": "^1.1.2",
 		"stackblur-canvas": "^2.5.0"
 	},
@@ -46,6 +45,7 @@
 		"gulp": "^4.0.0",
 		"gulp-autoprefixer": "^6.0.0",
 		"gulp-babel": "^6.1.2",
+		"gulp-chmod": "^3.0.0",
 		"gulp-clean-css": "^3.10.0",
 		"gulp-concat": "^2.6.1",
 		"gulp-inject": "^4.2.0",

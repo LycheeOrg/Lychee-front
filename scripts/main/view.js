@@ -2,7 +2,44 @@
  * @description Responsible to reflect data changes to the UI.
  */
 
-const view = {};
+const view = {
+	/** @type {ResizeObserver} */
+	resizeObserver: (function () {
+		/**
+		 * @type {HTMLDivElement}
+		 */
+		const viewContainer = document.getElementById("lychee_view_container");
+
+		const resizeHandler = (function () {
+			let viewContainerWidth = 0;
+
+			return function () {
+				// Avoid infinite loops
+				// The layout method `view.album.content.justify()` below will
+				// change the height of the container as the height depends on
+				// the amount of content.
+				// Hence, `view.album.content.justify()` re-triggers the
+				// event handler.
+				// However, we are only interested into changes of the width,
+				// which is independent of content but solely depends on
+				// window size.
+				// We bail out early if the width has not changed since last
+				// time.
+				if (viewContainer.clientWidth === viewContainerWidth) return;
+				viewContainerWidth = viewContainer.clientWidth;
+				view.album.content.justify();
+				if (photo.isLivePhotoInitialized()) {
+					photo.livePhotosObject.updateSize();
+				}
+			};
+		})();
+
+		const observer = new ResizeObserver(resizeHandler);
+		observer.observe(viewContainer);
+
+		return observer;
+	})(),
+};
 
 view.albums = {
 	/** @returns {void} */
@@ -16,9 +53,9 @@ view.albums = {
 	/** @returns {void} */
 	title: function () {
 		if (lychee.landing_page_enable) {
-			lychee.setTitle("", false);
+			lychee.setMetaData();
 		} else {
-			lychee.setTitle(lychee.locale["ALBUMS"], false);
+			lychee.setMetaData(lychee.locale["ALBUMS"]);
 		}
 	},
 
@@ -84,17 +121,13 @@ view.albums = {
 
 			if (smartData === "" && tagAlbumsData === "" && albumsData === "" && sharedData === "") {
 				lychee.content.html("");
-				$("body").append(build.no_content("eye"));
+				lychee.content.append(build.no_content("eye"));
 			} else {
 				lychee.content.html(smartData + tagAlbumsData + albumsData + sharedData);
 			}
 
 			album.apply_nsfw_filter();
-
-			// Restore scroll position
-			const urls = JSON.parse(localStorage.getItem("scroll"));
-			const urlWindow = window.location.href;
-			$(window).scrollTop(urls != null && urls[urlWindow] ? urls[urlWindow] : 0);
+			view.album.content.restoreScroll();
 		},
 
 		/**
@@ -153,20 +186,20 @@ view.album = {
 		if ((visible.album() || !album.json.init) && !visible.photo()) {
 			switch (album.getID()) {
 				case SmartAlbumID.STARRED:
-					lychee.setTitle(lychee.locale["STARRED"], true);
+					lychee.setMetaData(lychee.locale["STARRED"]);
 					break;
 				case SmartAlbumID.PUBLIC:
-					lychee.setTitle(lychee.locale["PUBLIC"], true);
+					lychee.setMetaData(lychee.locale["PUBLIC"]);
 					break;
 				case SmartAlbumID.RECENT:
-					lychee.setTitle(lychee.locale["RECENT"], true);
+					lychee.setMetaData(lychee.locale["RECENT"]);
 					break;
 				case SmartAlbumID.UNSORTED:
-					lychee.setTitle(lychee.locale["UNSORTED"], true);
+					lychee.setMetaData(lychee.locale["UNSORTED"]);
 					break;
 				default:
 					if (album.json.init) sidebar.changeAttr("title", album.json.title);
-					lychee.setTitle(album.json.title, true);
+					lychee.setMetaData(album.json.title, true, album.json.description);
 					break;
 			}
 		}
@@ -176,21 +209,21 @@ view.album = {
 		/** @returns {void} */
 		init: function () {
 			if (!lychee.nsfw_warning) {
-				$("#sensitive_warning").hide();
+				$("#sensitive_warning").removeClass("active");
 				return;
 			}
 
 			if (album.json.policy.is_nsfw && !lychee.nsfw_unlocked_albums.includes(album.json.id)) {
-				$("#sensitive_warning").show();
+				$("#sensitive_warning").addClass("active");
 			} else {
-				$("#sensitive_warning").hide();
+				$("#sensitive_warning").removeClass("active");
 			}
 		},
 
 		/** @returns {void} */
 		next: function () {
 			lychee.nsfw_unlocked_albums.push(album.json.id);
-			$("#sensitive_warning").hide();
+			$("#sensitive_warning").removeClass("active");
 		},
 	},
 
@@ -204,13 +237,13 @@ view.album = {
 			if (album.json.albums) {
 				album.json.albums.forEach(function (_album) {
 					albums.parse(_album);
-					albumsData += build.album(_album, !album.rights.can_edit);
+					albumsData += build.album(_album, !album.json.rights.can_edit);
 				});
 			}
 			if (album.json.photos) {
 				// Build photos
 				album.json.photos.forEach(function (_photo) {
-					photosData += build.photo(_photo, !album.rights.can_edit);
+					photosData += build.photo(_photo, !album.json.rights.can_edit);
 				});
 			}
 
@@ -248,7 +281,6 @@ view.album = {
 
 			setTimeout(function () {
 				view.album.content.justify();
-				view.album.content.restoreScroll();
 			}, 0);
 		},
 
@@ -257,7 +289,7 @@ view.album = {
 			// Restore scroll position
 			const urls = JSON.parse(localStorage.getItem("scroll"));
 			const urlWindow = window.location.href;
-			$(window).scrollTop(urls != null && urls[urlWindow] ? urls[urlWindow] : 0);
+			$("#lychee_view_container").scrollTop(urls != null && urls[urlWindow] ? urls[urlWindow] : 0);
 		},
 
 		/**
@@ -512,11 +544,7 @@ view.album = {
 					// is always visible and always has the correct width
 					// even for opened sidebars.
 					// TODO: Unconditionally use the width of the view container and remove this alternative width calculation after https://github.com/LycheeOrg/Lychee-front/pull/335 has been merged
-					containerWidth =
-						$(window).width() -
-						parseFloat(jqJustifiedLayout.css("margin-left")) -
-						parseFloat(jqJustifiedLayout.css("margin-right")) -
-						parseFloat($(".content").css("padding-right"));
+					containerWidth = $(window).width() - 2 * parseFloat(jqJustifiedLayout.css("margin"));
 				}
 				/** @type {number[]} */
 				const ratio = photos.map(function (_photo) {
@@ -576,11 +604,7 @@ view.album = {
 				let containerWidth = parseFloat(jqUnjustifiedLayout.width());
 				if (containerWidth === 0) {
 					// Triggered on Reload in photo view.
-					containerWidth =
-						$(window).width() -
-						parseFloat(jqUnjustifiedLayout.css("margin-left")) -
-						parseFloat(jqUnjustifiedLayout.css("margin-right")) -
-						parseFloat($(".content").css("padding-right"));
+					containerWidth = $(window).width() - 2 * parseFloat(jqUnjustifiedLayout.css("margin"));
 				}
 				/**
 				 * An album listing has potentially hundreds of photos, hence
@@ -633,6 +657,7 @@ view.album = {
 				// Show updated layout
 				jqUnjustifiedLayout.removeClass("laying-out");
 			}
+			view.album.content.restoreScroll();
 		},
 	},
 
@@ -738,7 +763,7 @@ view.album = {
 			const structure = sidebar.createStructure.album(album.json);
 			const html = sidebar.render(structure);
 
-			sidebar.dom(".sidebar__wrapper").html(html);
+			sidebar.dom("#lychee_sidebar_content").html(html);
 			sidebar.bind();
 		}
 	},
@@ -772,14 +797,6 @@ view.photo = {
 		header.setMode("photo");
 
 		if (!visible.photo()) {
-			// Make body not scrollable
-			// use bodyScrollLock package to enable locking on iOS
-			// Simple overflow: hidden not working on iOS Safari
-			// Only the info pane needs scrolling
-			// Touch event for swiping of photo still work
-
-			scrollLock.disablePageScroll($(".sidebar__wrapper").get());
-
 			// Fullscreen
 			let timeout = null;
 			$(document).bind("mousemove", function () {
@@ -797,6 +814,7 @@ view.photo = {
 			}
 
 			lychee.animate(lychee.imageview, "fadeIn");
+			lychee.imageview.addClass("active");
 		}
 	},
 
@@ -809,9 +827,6 @@ view.photo = {
 		lychee.content.removeClass("view");
 		header.setMode("album");
 
-		// Make body scrollable
-		scrollLock.enablePageScroll($(".sidebar__wrapper").get());
-
 		// Disable Fullscreen
 		$(document).unbind("mousemove");
 		if ($("video").length) {
@@ -820,8 +835,13 @@ view.photo = {
 
 		// Hide Photo
 		lychee.animate(lychee.imageview, "fadeOut");
+		// TODO: Reconsider the lines below
+		// The lines below are inconsistent to the corresponding code for
+		// the mapview (cp. `mapview.close()`).
+		// Here, we remove the `active` class after the animation has ended,
+		// in `mapview.close()` we remove that class immediately.
 		setTimeout(() => {
-			lychee.imageview.hide();
+			lychee.imageview.removeClass("active");
 			view.album.sidebar();
 		}, 300);
 	},
@@ -831,7 +851,8 @@ view.photo = {
 	 */
 	title: function () {
 		if (photo.json.init) sidebar.changeAttr("title", photo.json.title ? photo.json.title : "");
-		lychee.setTitle(photo.json.title ? photo.json.title : lychee.locale["UNTITLED"], true);
+		const photoUrl = photo.json.size_variants.medium ? photo.json.size_variants.medium.url : photo.json.size_variants.original.url;
+		lychee.setMetaData(photo.json.title ? photo.json.title : lychee.locale["UNTITLED"], true, photo.json.description, photoUrl);
 	},
 
 	/**
@@ -839,6 +860,13 @@ view.photo = {
 	 */
 	description: function () {
 		if (photo.json.init) sidebar.changeAttr("description", photo.json.description ? photo.json.description : "");
+	},
+
+	/**
+	 * @returns {void}
+	 */
+	uploaded: function () {
+		if (photo.json.init) sidebar.changeAttr("uploaded", photo.json.created_at ? lychee.locale.printDateTime(photo.json.created_at) : "");
 	},
 
 	/**
@@ -990,7 +1018,7 @@ view.photo = {
 		const html = sidebar.render(structure);
 		const has_location = !!(photo.json.latitude && photo.json.longitude);
 
-		sidebar.dom(".sidebar__wrapper").html(html);
+		sidebar.dom("#lychee_sidebar_content").html(html);
 		sidebar.bind();
 
 		if (has_location && lychee.map_display) {
@@ -1081,7 +1109,7 @@ view.settings = {
 	 * @returns {void}
 	 */
 	title: function () {
-		lychee.setTitle(lychee.locale["SETTINGS"], false);
+		lychee.setMetaData(lychee.locale["SETTINGS"]);
 	},
 
 	/**
@@ -1630,7 +1658,7 @@ view.full_settings = {
 	 * @returns {void}
 	 */
 	title: function () {
-		lychee.setTitle(lychee.locale["FULL_SETTINGS"], false);
+		lychee.setMetaData(lychee.locale["FULL_SETTINGS"]);
 	},
 
 	/**
@@ -1708,7 +1736,7 @@ view.notifications = {
 
 	/** @returns {void} */
 	title: function () {
-		lychee.setTitle(lychee.locale["NOTIFICATIONS"], false);
+		lychee.setMetaData(lychee.locale["NOTIFICATIONS"]);
 	},
 
 	/** @returns {void} */
@@ -1757,7 +1785,7 @@ view.users = {
 
 	/** @returns {void} */
 	title: function () {
-		lychee.setTitle(lychee.locale["USERS"], false);
+		lychee.setMetaData(lychee.locale["USERS"]);
 	},
 
 	/** @returns {void} */
@@ -1842,7 +1870,7 @@ view.sharing = {
 
 	/** @returns {void} */
 	title: function () {
-		lychee.setTitle(lychee.locale["SHARING"], false);
+		lychee.setMetaData(lychee.locale["SHARING"]);
 	},
 
 	/** @returns {void} */
@@ -1983,7 +2011,7 @@ view.logs = {
 
 	/** @returns {void} */
 	title: function () {
-		lychee.setTitle(lychee.locale["LOGS"], false);
+		lychee.setMetaData(lychee.locale["LOGS"]);
 	},
 
 	/** @returns {void} */
@@ -2082,7 +2110,7 @@ view.diagnostics = {
 
 	/** @returns {void} */
 	title: function () {
-		lychee.setTitle(lychee.locale["DIAGNOSTICS"], false);
+		lychee.setMetaData(lychee.locale["DIAGNOSTICS"]);
 	},
 
 	/**
@@ -2226,7 +2254,7 @@ view.update = {
 
 	/** @returns {void} */
 	title: function () {
-		lychee.setTitle(lychee.locale["UPDATE"], false);
+		lychee.setMetaData(lychee.locale["UPDATE"]);
 	},
 
 	/** @returns {void} */
@@ -2275,7 +2303,7 @@ view.u2f = {
 
 	/** @returns {void} */
 	title: function () {
-		lychee.setTitle(lychee.locale["U2F"], false);
+		lychee.setMetaData(lychee.locale["U2F"]);
 	},
 
 	/** @returns {void} */

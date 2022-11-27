@@ -276,71 +276,59 @@ const SmartAlbumID = Object.freeze({
  * @property {boolean} update_available
  * @property {Object.<string, string>} locale
  * @property {ConfigurationData} config
- * @property {DeviceConfiguration} config_device
+ */
+
+/**
+ * @typedef Feed
+ *
+ * @property {string} url
+ * @property {string} mimetype
+ * @property {string} title
  */
 
 /**
  * @typedef ConfigurationData
  *
  * @property {string}   album_subtitle_type
- * @property {string}   check_for_updates       - actually a boolean
+ * @property {string}   check_for_updates        - actually a boolean
  * @property {string}   [default_license]
- * @property {string}   [delete_imported]       - actually a boolean
- * @property {string}   downloadable            - actually a boolean
+ * @property {string}   [delete_imported]        - actually a boolean
+ * @property {string}   grants_download          - actually a boolean
  * @property {string}   [dropbox_key]
- * @property {string}   editor_enabled          - actually a boolean
- * @property {string}   full_photo              - actually a boolean
+ * @property {string}   editor_enabled           - actually a boolean
+ * @property {string}   rss_enable               - actually a boolean
+ * @property {Feed[]}   rss_feeds                - array of RSS feeds
+ * @property {string}   grants_full_photo_access - actually a boolean
  * @property {string}   image_overlay_type
- * @property {string}   landing_page_enable     - actually a boolean
+ * @property {string}   landing_page_enable      - actually a boolean
  * @property {string}   lang
  * @property {string[]} lang_available
- * @property {string}   layout                  - actually a number: `0`, `1` or `2`
+ * @property {string}   layout                   - actually a number: `0`, `1` or `2`
  * @property {string}   [location]
- * @property {string}   location_decoding       - actually a boolean
- * @property {string}   location_show           - actually a boolean
- * @property {string}   location_show_public    - actually a boolean
- * @property {string}   map_display             - actually a boolean
- * @property {string}   map_display_direction   - actually a boolean
- * @property {string}   map_display_public      - actually a boolean
- * @property {string}   map_include_subalbums   - actually a boolean
+ * @property {string}   location_decoding        - actually a boolean
+ * @property {string}   location_show            - actually a boolean
+ * @property {string}   location_show_public     - actually a boolean
+ * @property {string}   map_display              - actually a boolean
+ * @property {string}   map_display_direction    - actually a boolean
+ * @property {string}   map_display_public       - actually a boolean
+ * @property {string}   map_include_subalbums    - actually a boolean
  * @property {string}   map_provider
- * @property {string}   new_photos_notification - actually a boolean
- * @property {string}   nsfw_blur               - actually a boolean
- * @property {string}   nsfw_visible            - actually a boolean
- * @property {string}   nsfw_warning            - actually a boolean
- * @property {string}   nsfw_warning_admin      - actually a boolean
- * @property {string}   public_photos_hidden    - actually a boolean
- * @property {string}   public_search           - actually a boolean
- * @property {string}   share_button_visible    - actually a boolean
- * @property {string}   [skip_duplicates]       - actually a boolean
+ * @property {string}   new_photos_notification  - actually a boolean
+ * @property {string}   nsfw_blur                - actually a boolean
+ * @property {string}   nsfw_visible             - actually a boolean
+ * @property {string}   nsfw_warning             - actually a boolean
+ * @property {string}   nsfw_warning_admin       - actually a boolean
+ * @property {string}   nsfw_banner_override     - custom HTML instead of the default NSFW banner
+ * @property {string}   public_photos_hidden     - actually a boolean
+ * @property {string}   public_search            - actually a boolean
+ * @property {string}   share_button_visible     - actually a boolean
+ * @property {string}   [skip_duplicates]        - actually a boolean
  * @property {SortingCriterion} sorting_albums
  * @property {SortingCriterion} sorting_photos
- * @property {string}   swipe_tolerance_x       - actually a number
- * @property {string}   swipe_tolerance_y       - actually a number
- * @property {string}   upload_processing_limit - actually a number
- * @property {string}   version                 - a string of 6 digits without separating dots, i.e. version 4.6.3 is reported as `'040603'`
- */
-
-/**
- * @typedef DeviceConfiguration
- *
- * @property {string}  device_type
- * @property {boolean} header_auto_hide
- * @property {boolean} active_focus_on_page_load
- * @property {boolean} enable_button_visibility
- * @property {boolean} enable_button_share
- * @property {boolean} enable_button_archive
- * @property {boolean} enable_button_move
- * @property {boolean} enable_button_trash
- * @property {boolean} enable_button_fullscreen
- * @property {boolean} enable_button_download
- * @property {boolean} enable_button_add
- * @property {boolean} enable_button_more
- * @property {boolean} enable_button_rotate
- * @property {boolean} enable_close_tab_on_esc
- * @property {boolean} enable_contextmenu_header
- * @property {boolean} hide_content_during_imgview
- * @property {boolean} enable_tabindex
+ * @property {string}   swipe_tolerance_x        - actually a number
+ * @property {string}   swipe_tolerance_y        - actually a number
+ * @property {string}   upload_processing_limit  - actually a number
+ * @property {string}   version                  - a string of 6 digits without separating dots, i.e. version 4.6.3 is reported as `'040603'`
  */
 
 /**

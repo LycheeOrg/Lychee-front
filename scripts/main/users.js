@@ -26,7 +26,7 @@ users.update = function (params) {
 		delete params.password;
 	}
 
-	api.post("User::save", params, function () {
+	api.post("Users::save", params, function () {
 		loadingBar.show("success", lychee.locale["USER_UPDATED"]);
 		users.list(); // reload user list
 	});
@@ -51,7 +51,7 @@ users.create = function (params) {
 		return;
 	}
 
-	api.post("User::create", params, function () {
+	api.post("Users::create", params, function () {
 		loadingBar.show("success", lychee.locale["USER_CREATED"]);
 		users.list(); // reload user list
 	});
@@ -67,7 +67,7 @@ users.create = function (params) {
  * @returns {boolean}
  */
 users.delete = function (params) {
-	api.post("User::delete", params, function () {
+	api.post("Users::delete", params, function () {
 		loadingBar.show("success", lychee.locale["USER_DELETED"]);
 		users.list(); // reload user list
 	});
@@ -78,7 +78,7 @@ users.delete = function (params) {
  */
 users.list = function () {
 	api.post(
-		"User::list",
+		"Users::list",
 		{},
 		/** @param {UserDTO[]} data */
 		function (data) {

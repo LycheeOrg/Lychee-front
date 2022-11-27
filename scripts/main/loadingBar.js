@@ -6,7 +6,7 @@ const loadingBar = {
 	/** @type {?string} */
 	status: null,
 	/** @type {jQuery} */
-	_dom: $("#loading"),
+	_dom: $("#lychee_loading"),
 };
 
 /**
@@ -19,11 +19,11 @@ loadingBar.dom = function (selector) {
 };
 
 /**
- * @param {?string} status the status, either `null`, `"error"` or `"success"`
- * @param {?string} errorText the error text to show
+ * @param {?string} [status=null] the status, either `null`, `"error"` or `"success"`
+ * @param {?string} [errorText=null] the error text to show
  * @returns {void}
  */
-loadingBar.show = function (status, errorText) {
+loadingBar.show = function (status = null, errorText = null) {
 	if (status === "error") {
 		// Set status
 		loadingBar.status = "error";
@@ -32,22 +32,12 @@ loadingBar.show = function (status, errorText) {
 		if (errorText) errorText = errorText.replace("<br>", "");
 		if (!errorText) errorText = lychee.locale["ERROR_TEXT"];
 
-		// Move header down
-		if (visible.header()) header.dom().addClass("header--error");
-
-		// Also move down the dark background
-		if (basicModal.isVisible()) {
-			$(".basicModalContainer").addClass("basicModalContainer--error");
-			$(".basicModal").addClass("basicModal--error");
-		}
-
 		// Modify loading
 		loadingBar
 			.dom()
-			.removeClass("loading uploading error success")
+			.removeClass()
 			.html(`<h1>` + lychee.locale["ERROR"] + `: <span>${errorText}</span></h1>`)
-			.addClass(status)
-			.show();
+			.addClass(status);
 
 		// Set timeout
 		clearTimeout(loadingBar._timeout);
@@ -64,22 +54,12 @@ loadingBar.show = function (status, errorText) {
 		if (errorText) errorText = errorText.replace("<br>", "");
 		if (!errorText) errorText = lychee.locale["ERROR_TEXT"];
 
-		// Move header down
-		if (visible.header()) header.dom().addClass("header--error");
-
-		// Also move down the dark background
-		if (basicModal.isVisible()) {
-			$(".basicModalContainer").addClass("basicModalContainer--error");
-			$(".basicModal").addClass("basicModal--error");
-		}
-
 		// Modify loading
 		loadingBar
 			.dom()
-			.removeClass("loading uploading error success")
+			.removeClass()
 			.html(`<h1>` + lychee.locale["SUCCESS"] + `: <span>${errorText}</span></h1>`)
-			.addClass(status)
-			.show();
+			.addClass(status);
 
 		// Set timeout
 		clearTimeout(loadingBar._timeout);
@@ -95,11 +75,8 @@ loadingBar.show = function (status, errorText) {
 		// Set timeout
 		clearTimeout(loadingBar._timeout);
 		loadingBar._timeout = setTimeout(() => {
-			// Move header down
-			if (visible.header()) header.dom().addClass("header--loading");
-
 			// Modify loading
-			loadingBar.dom().removeClass("loading uploading error").html("").addClass("loading").show();
+			loadingBar.dom().removeClass().html("").addClass("loading");
 		}, 1000);
 	}
 };
@@ -113,14 +90,12 @@ loadingBar.hide = function (force) {
 		// Remove status
 		loadingBar.status = null;
 
-		// Move header up
-		header.dom().removeClass("header--error header--loading");
 		// Also move up the dark background
 		$(".basicModalContainer").removeClass("basicModalContainer--error");
 		$(".basicModal").removeClass("basicModal--error");
 
 		// Set timeout
 		clearTimeout(loadingBar._timeout);
-		setTimeout(() => loadingBar.dom().hide(), 300);
+		setTimeout(() => loadingBar.dom().removeClass(), 300);
 	}
 };
