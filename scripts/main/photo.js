@@ -1059,7 +1059,7 @@ photo.setLicense = function (photoID) {
 /**
  * @param {string[]} photoIDs
  * @param {?string} [kind=null] - the type of size variant; one out of
- *                                `"FULL"`, `"MEDIUM2X"`, `"MEDIUM"`,
+ *                                `"ORIGINAL"`, `"MEDIUM2X"`, `"MEDIUM"`,
  *                                `"SMALL2X"`, `"SMALL"`, `"THUMB2X"` or
  *                                `"THUMB"`,
  * @returns {void}
@@ -1076,7 +1076,7 @@ photo.getArchive = function (photoIDs, kind = null) {
 	const myPhoto = photo.json && photo.json.id === photoIDs[0] ? photo.json : album.getByID(photoIDs[0]);
 
 	const kind2VariantAndLocalizedLabel = {
-		FULL: ["original", lychee.locale["PHOTO_FULL"]],
+		ORIGINAL: ["original", lychee.locale["PHOTO_FULL"]],
 		MEDIUM2X: ["medium2x", lychee.locale["PHOTO_MEDIUM_HIDPI"]],
 		MEDIUM: ["medium", lychee.locale["PHOTO_MEDIUM"]],
 		SMALL2X: ["small2x", lychee.locale["PHOTO_SMALL_HIDPI"]],
