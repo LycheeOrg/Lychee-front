@@ -189,18 +189,20 @@
  * @property {?SmartAlbum} starred
  * @property {?SmartAlbum} public
  * @property {?SmartAlbum} recent
+ * @property {?SmartAlbum} on_this_day
  */
 
 /**
  * The IDs of the built-in, smart albums.
  *
- * @type {Readonly<{RECENT: string, STARRED: string, PUBLIC: string, UNSORTED: string}>}
+ * @type {Readonly<{RECENT: string, STARRED: string, PUBLIC: string, UNSORTED: string, ON_THIS_DAY: string}>}
  */
 const SmartAlbumID = Object.freeze({
 	UNSORTED: "unsorted",
 	STARRED: "starred",
 	PUBLIC: "public",
 	RECENT: "recent",
+	ON_THIS_DAY: "on_this_day",
 });
 
 /**

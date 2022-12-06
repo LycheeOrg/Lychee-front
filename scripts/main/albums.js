@@ -135,6 +135,10 @@ albums.localizeSmartAlbums = function (data) {
 	if (data.recent) {
 		data.recent.title = lychee.locale["RECENT"];
 	}
+
+	if (data.on_this_day) {
+		data.on_this_day.title = lychee.locale["ON_THIS_DAY"];
+	}
 };
 
 /**
@@ -254,6 +258,7 @@ albums.isEmpty = function () {
 			albums.isSmartAlbumEmpty(albums.json.smart_albums.recent) &&
 			albums.isSmartAlbumEmpty(albums.json.smart_albums.starred) &&
 			albums.isSmartAlbumEmpty(albums.json.smart_albums.unsorted) &&
+			albums.isSmartAlbumEmpty(albums.json.smart_albums.on_this_day) &&
 			albums.json.albums.length === 0 &&
 			albums.json.shared_albums.length === 0 &&
 			albums.json.tag_albums.length === 0)

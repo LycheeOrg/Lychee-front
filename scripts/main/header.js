@@ -344,7 +344,12 @@ header.setMode = function (mode) {
 				tabindex.makeUnfocusable(e);
 			}
 
-			if (albumID === SmartAlbumID.STARRED || albumID === SmartAlbumID.PUBLIC || albumID === SmartAlbumID.RECENT) {
+			if (
+				albumID === SmartAlbumID.STARRED ||
+				albumID === SmartAlbumID.PUBLIC ||
+				albumID === SmartAlbumID.RECENT ||
+				albumID === SmartAlbumID.ON_THIS_DAY
+			) {
 				$(
 					"#button_nsfw_album, #button_info_album, #button_trash_album, #button_visibility_album, #button_sharing_album_users, #button_move_album"
 				).hide();
