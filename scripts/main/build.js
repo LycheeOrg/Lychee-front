@@ -191,7 +191,7 @@ build.album = function (data, disabled = false) {
 		html += lychee.html`
 				<div class='subalbum_badge'>
 				<a class='badge badge--folder'>${build.iconic("folder")}`;
-		if (data.num_albums > 1) html += lychee.html`<span>${data.num_albums}</span>`;
+		if (lychee.show_num_albums && data.num_albums > 1) html += lychee.html`<span>${data.num_albums}</span>`;
 		html += lychee.html`</a>
 				</div>`;
 	}
