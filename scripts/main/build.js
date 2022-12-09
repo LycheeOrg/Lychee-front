@@ -187,10 +187,12 @@ build.album = function (data, disabled = false) {
 				`;
 	}
 
-	if ((data.albums && data.albums.length > 0) || data.has_albums) {
+	if ((data.albums && data.albums.length > 0) || data.num_albums > 0) {
 		html += lychee.html`
 				<div class='subalbum_badge'>
-					<a class='badge badge--folder'>${build.iconic("layers")}</a>
+				<a class='badge badge--folder'>${build.iconic("folder")}`;
+		if (data.num_albums > 1) html += lychee.html`<span>${data.num_albums}</span>`;
+		html += lychee.html`</a>
 				</div>`;
 	}
 

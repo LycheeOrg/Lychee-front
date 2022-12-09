@@ -253,8 +253,16 @@
 		background: none;
 		border: none;
 		.iconic {
-			width: 12px;
-			height: 12px;
+			filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.6));
+		}
+		span {
+			position: absolute;
+			right: 11px;
+			bottom: 8px;
+			color: #222;
+			font-weight: bold;
+			font-size: 8pt;
+			text-shadow: none;
 		}
 	}
 }
@@ -318,8 +326,12 @@
 			}
 			&--folder {
 				.iconic {
-					width: 8px;
-					height: 8px;
+					filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.6));
+				}
+				span {
+					right: 7px;
+					bottom: 4px;
+					font-size: 6pt;
 				}
 			}
 		}
@@ -369,9 +381,10 @@
 				height: 14px;
 			}
 			&--folder {
-				.iconic {
-					width: 9px;
-					height: 9px;
+				span {
+					right: 8px;
+					bottom: 5px;
+					font-size: 7pt;
 				}
 			}
 		}
@@ -420,9 +433,9 @@
 				height: 16px;
 			}
 			&--folder {
-				.iconic {
-					width: 10px;
-					height: 10px;
+				span {
+					right: 9px;
+					bottom: 6px;
 				}
 			}
 		}

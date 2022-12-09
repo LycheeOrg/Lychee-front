@@ -98,7 +98,7 @@
  * @property {boolean} grants_full_photo
  * @property {boolean} requires_link
  * @property {boolean} has_password
- * @property {boolean} has_albums
+ * @property {string} num_albums
  * @property {?string} min_taken_at
  * @property {?string} max_taken_at
  * @property {?SortingCriterion} sorting
