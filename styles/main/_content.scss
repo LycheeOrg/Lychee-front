@@ -329,9 +329,9 @@
 					filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.6));
 				}
 				span {
-					right: 7px;
-					bottom: 4px;
-					font-size: 6pt;
+					right: 4px;
+					bottom: 5px;
+					font-size: 5pt;
 				}
 			}
 		}
@@ -382,9 +382,9 @@
 			}
 			&--folder {
 				span {
-					right: 8px;
+					right: 5px;
 					bottom: 5px;
-					font-size: 7pt;
+					font-size: 6pt;
 				}
 			}
 		}
@@ -434,8 +434,9 @@
 			}
 			&--folder {
 				span {
-					right: 9px;
-					bottom: 6px;
+					right: 6px;
+					bottom: 7px;
+					font-size: 7pt;
 				}
 			}
 		}
