@@ -101,6 +101,9 @@ mapview.title = function (_albumID, _albumTitle) {
 		case SmartAlbumID.UNSORTED:
 			lychee.setMetaData(lychee.locale["UNSORTED"]);
 			break;
+		case SmartAlbumID.ON_THIS_DAY:
+			lychee.setMetaData(lychee.locale["ON_THIS_DAY"]);
+			break;
 		case null:
 			lychee.setMetaData(lychee.locale["ALBUMS"]);
 			break;

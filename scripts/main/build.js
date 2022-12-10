@@ -175,6 +175,7 @@ build.album = function (data, disabled = false) {
 					<a class='badge ${data.policy && data.policy.is_nsfw ? "badge--nsfw" : ""} icn-warning'>${build.iconic("warning")}</a>
 					<a class='badge ${data.id === SmartAlbumID.STARRED ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
 					<a class='badge ${data.id === SmartAlbumID.RECENT ? "badge--visible badge--list" : ""}'>${build.iconic("clock")}</a>
+					<a class='badge ${data.id === SmartAlbumID.ON_THIS_DAY ? "badge--tag badge--list" : ""}'>${build.iconic("calendar")}</a>
 					<a class='badge ${data.id === SmartAlbumID.PUBLIC || (data.policy && data.policy.is_public) ? "badge--visible" : ""} ${
 			data.policy && data.policy.is_link_required ? "badge--hidden" : "badge--not--hidden"
 		} icn-share'>${build.iconic("eye")}</a>
