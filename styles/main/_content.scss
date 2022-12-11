@@ -133,6 +133,54 @@
 		filter: blur(5px);
 	}
 }
+// Counters -------------------------------------------------------------- //
+.album .counters {
+	display: flex;
+	justify-content: flex-end;
+	font: bold 8pt sans-serif;
+	filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.75));
+	.folders,
+	.photos {
+		position: relative;
+		right: 6px;
+		color: #fff;
+	}
+	.folders {
+		top: 6px;
+		margin-left: 3px;
+		.iconic {
+			fill: #fff;
+			width: 17px;
+			height: 17px;
+		}
+		span {
+			position: absolute;
+			right: 2px;
+			// subalbum count needs to be positioned from the top because
+			// the photos badge can increase in size
+			top: 6px;
+			color: #222;
+		}
+	}
+	.photos {
+		top: 4px;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		aspect-ratio: 1;
+		text-align: end;
+		background-color: rgba(255, 0, 0, 0.8);
+		background-size: contain;
+		mask-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-.5 -.5 121 121' width='121' height='121'%3e%3cg %3e%3cpath d='M 60 0 L 70.00734 9.689696 L 82.96101 4.567228 L 88.4985 17.348984 L 102.42641 17.573593 L 102.65102 31.501502 L 115.43277 37.038994 L 110.3103 49.99266 L 120 60 L 110.3103 70.00734 L 115.43277 82.96101 L 102.65102 88.4985 L 102.42641 102.42641 L 88.4985 102.65102 L 82.96101 115.43277 L 70.00734 110.3103 L 60 120 L 49.99266 110.3103 L 37.038994 115.43277 L 31.501502 102.65102 L 17.573593 102.42641 L 17.348984 88.4985 L 4.567228 82.96101 L 9.689696 70.00734 L 0 60 L 9.689696 49.99266 L 4.567228 37.038994 L 17.348984 31.501502 L 17.573593 17.573593 L 31.501502 17.348984 L 37.038994 4.567228 L 49.99266 9.689696 Z' stroke='none' fill='black'/%3e%3c/g%3e%3c/svg%3e");
+		mask-size: 100%;
+		mask-repeat: no-repeat;
+		span {
+			min-width: 12px;
+			text-align: center;
+			padding: 1px 4px 0 4px;
+		}
+	}
+}
 // Overlay -------------------------------------------------------------- //
 .album .overlay,
 .photo .overlay {
@@ -189,7 +237,7 @@
 // Badge -------------------------------------------------------------- //
 .album .badges,
 .photo .badges {
-	position: relative;
+	position: absolute;
 	margin: -1px 0 0 6px;
 }
 .album .subalbum_badge {
@@ -246,16 +294,6 @@
 		fill: #fff;
 		width: 16px;
 		height: 16px;
-	}
-	&--folder {
-		display: inline-block;
-		box-shadow: none;
-		background: none;
-		border: none;
-		.iconic {
-			width: 12px;
-			height: 12px;
-		}
 	}
 }
 // Divider -------------------------------------------------------------- //
@@ -316,11 +354,32 @@
 				width: 12px;
 				height: 12px;
 			}
-			&--folder {
-				.iconic {
-					width: 8px;
-					height: 8px;
-				}
+		}
+	}
+	.album .counters {
+		font: bold 6pt sans-serif;
+		filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.75));
+		.folders,
+		.photos {
+			right: 4px;
+		}
+		.folders {
+			top: 4px;
+			margin-left: 3px;
+			.iconic {
+				width: 12px;
+				height: 12px;
+			}
+			span {
+				right: 2px;
+				top: 5px;
+			}
+		}
+		.photos {
+			top: 3px;
+			span {
+				min-width: 8px;
+				padding: 1px 3px 0;
 			}
 		}
 	}
@@ -368,11 +427,32 @@
 				width: 14px;
 				height: 14px;
 			}
-			&--folder {
-				.iconic {
-					width: 9px;
-					height: 9px;
-				}
+		}
+	}
+	.album .counters {
+		font: bold 7pt sans-serif;
+		filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.75));
+		.folders,
+		.photos {
+			right: 5px;
+		}
+		.folders {
+			top: 5px;
+			margin-left: 4px;
+			.iconic {
+				width: 14px;
+				height: 14px;
+			}
+			span {
+				right: 2px;
+				top: 5px;
+			}
+		}
+		.photos {
+			top: 4px;
+			span {
+				min-width: 10px;
+				padding: 0 3px;
 			}
 		}
 	}
@@ -419,11 +499,32 @@
 				width: 16px;
 				height: 16px;
 			}
-			&--folder {
-				.iconic {
-					width: 10px;
-					height: 10px;
-				}
+		}
+	}
+	.album .counters {
+		font: bold 7pt sans-serif;
+		filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.75));
+		.folders,
+		.photos {
+			right: 6px;
+		}
+		.folders {
+			top: 5px;
+			margin-left: 5px;
+			.iconic {
+				width: 15px;
+				height: 15px;
+			}
+			span {
+				right: 2px;
+				top: 5px;
+			}
+		}
+		.photos {
+			top: 4px;
+			span {
+				min-width: 12px;
+				padding: 0 3px;
 			}
 		}
 	}

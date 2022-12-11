@@ -187,14 +187,19 @@ build.album = function (data, disabled = false) {
 				`;
 	}
 
-	if ((data.albums && data.albums.length > 0) || data.has_albums) {
+	html += lychee.html`<div class='counters'>`;
+	if (lychee.show_num_photos && data.num_photos > 0) {
 		html += lychee.html`
-				<div class='subalbum_badge'>
-					<a class='badge badge--folder'>${build.iconic("layers")}</a>
-				</div>`;
+				<div class='photos'><span>${data.num_photos}</span></div>`;
 	}
 
-	html += "</div>";
+	if ((data.albums && data.albums.length > 0) || data.num_albums > 0) {
+		html += lychee.html`
+			<a class='folders'>${build.iconic("folder")}`;
+		if (lychee.show_num_albums && data.num_albums > 1) html += lychee.html`<span>${data.num_albums}</span>`;
+		html += lychee.html`</a>`;
+	}
+	html += "</div></div>"; // close 'counters' and 'album'
 
 	return html;
 };
