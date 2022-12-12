@@ -37,7 +37,7 @@ lychee.locale = {
 	SIGN_OUT: "Sign Out",
 	UPDATE_AVAILABLE: "Update available!",
 	MIGRATION_AVAILABLE: "Migration available!",
-	CHECK_FOR_UPDATE: "Check for updates",
+	CHECK_FOR_UPDATE: "CheckUpdate for updates",
 	DEFAULT_LICENSE: "Default license for new uploads:",
 	SET_LICENSE: "Set License",
 	SET_OVERLAY_TYPE: "Set Overlay",
