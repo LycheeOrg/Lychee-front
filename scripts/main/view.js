@@ -1006,7 +1006,7 @@ view.photo = {
 		if (nextPhotoInAlbum === null || lychee.viewMode === true) {
 			$nextArrow.hide();
 		} else {
-			// CheckUpdate if thumbUrl exists (for videos w/o ffmpeg, we add a play-icon)
+			// Check if thumbUrl exists (for videos w/o ffmpeg, we add a play-icon)
 			let thumbUrl = "img/placeholder.png";
 			if (nextPhotoInAlbum.size_variants.thumb !== null) {
 				thumbUrl = nextPhotoInAlbum.size_variants.thumb.url;
@@ -1019,7 +1019,7 @@ view.photo = {
 		if (prevPhotoInAlbum === null || lychee.viewMode === true) {
 			$previousArrow.hide();
 		} else {
-			// CheckUpdate if thumbUrl exists (for videos w/o ffmpeg, we add a play-icon)
+			// Check if thumbUrl exists (for videos w/o ffmpeg, we add a play-icon)
 			let thumbUrl = "img/placeholder.png";
 			if (prevPhotoInAlbum.size_variants.thumb !== null) {
 				thumbUrl = prevPhotoInAlbum.size_variants.thumb.url;
