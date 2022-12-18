@@ -10,7 +10,8 @@ div.basicModal.about-dialog div.basicModal__content {
 		color: $colorDialogEmphasizedFg;
 	}
 	p.update-status {
-		&.up-to-date {
+		&.up-to-date-release,
+		&.up-to-date-git {
 			display: none;
 		}
 	}
