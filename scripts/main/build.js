@@ -581,8 +581,10 @@ build.user = function (user) {
 			</label>
 			</span>
 			</p>
-			<a id="UserUpdate${user.id}"  class="basicModal__button basicModal__button_OK">Save</a>
-			<a id="UserDelete${user.id}"  class="basicModal__button basicModal__button_DEL">Delete</a>
+			<a id="UserUpdate${user.id}"  class="basicModal__button basicModal__button_OK ${user.id !== lychee.user.id ? "" : "basicModal__button_OK_no_DEL"}">${
+		lychee.locale["SAVE"]
+	}</a>
+			${user.id !== lychee.user.id ? `<a id="UserDelete${user.id}"  class="basicModal__button basicModal__button_DEL">${lychee.locale["DELETE"]}</a>` : ""}
 		</div>
 		`;
 };
