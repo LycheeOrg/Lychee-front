@@ -430,7 +430,7 @@ sidebar.createStructure.album = function (data) {
 	let isPublic = !!data.policy && data.policy.is_public ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
 	let requiresLink = !!data.policy && data.policy.is_link_required ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
 	let isDownloadable = !!data.policy && data.policy.grant_download ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
-	let hasPassword = data.has_password ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
+	let hasPassword = !!data.policy && data.policy.is_password_required ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
 	let license = "";
 	let sorting = "";
 

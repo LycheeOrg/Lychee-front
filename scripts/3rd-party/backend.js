@@ -102,7 +102,6 @@
  * @property {AlbumRightsDTO} rights
  * @property {AlbumProtectionPolicy} policy
  * @property {boolean} has_albums
- * @property {boolean} has_password
  * @property {?string} min_taken_at
  * @property {?string} max_taken_at
  * @property {?SortingCriterion} sorting

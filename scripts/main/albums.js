@@ -103,8 +103,7 @@ albums.parse = function (album) {
 	if (!album.thumb) {
 		album.thumb = {
 			id: "",
-			// TODO: FIX ME we need to expose that a password is required
-			thumb: album.has_password ? "img/password.svg" : "img/no_images.svg",
+			thumb: album.policy.is_password_required ? "img/password.svg" : "img/no_images.svg",
 			type: "image/svg+xml",
 			thumb2x: null,
 		};
