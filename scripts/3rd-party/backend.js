@@ -9,6 +9,14 @@
  */
 
 /**
+ * @typedef Version
+ *
+ * @property {int} major
+ * @property {int} minor
+ * @property {int} patch
+ */
+
+/**
  * @typedef Photo
  *
  * @property {string}       id
@@ -282,7 +290,7 @@ const SmartAlbumID = Object.freeze({
  *
  * @property {?User} user
  * @property {{is_admin: boolean, is_locked: boolean, may_upload: boolean}} rights
- * @property {number} update_json - version number of latest available update
+ * @property {boolean} update_json
  * @property {boolean} update_available
  * @property {Object.<string, string>} locale
  * @property {ConfigurationData} config
@@ -338,7 +346,7 @@ const SmartAlbumID = Object.freeze({
  * @property {string}   swipe_tolerance_x       - actually a number
  * @property {string}   swipe_tolerance_y       - actually a number
  * @property {string}   upload_processing_limit - actually a number
- * @property {string}   version                 - a string of 6 digits without separating dots, i.e. version 4.6.3 is reported as `'040603'`
+ * @property {?Version} version                 - Version number
  */
 
 /**
