@@ -750,7 +750,7 @@ contextMenu.shareAlbum = function (albumID, e) {
 			title: build.iconic("link-intact") + lychee.locale["DIRECT_LINK"],
 			fn: () => {
 				let url = lychee.getBaseUrl() + "r/" + albumID;
-				if (album.json.has_password) {
+				if (album.json.policy.is_password_required) {
 					// Copy the url with prefilled password param
 					url += "?password=";
 				}
