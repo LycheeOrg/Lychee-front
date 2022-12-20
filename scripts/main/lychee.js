@@ -1154,11 +1154,7 @@ lychee.setMetaData = function (title = "", isTitleEditable = false, description 
  * @param {string} mode - one out of: `public`, `view`, `logged_in`, `frame`
  */
 lychee.setMode = function (mode) {
-	if (
-		(!lychee.rights.settings.can_edit && !lychee.rights.user.can_edit)
-		|| mode === "view"
-		|| mode === "frame"
-		) {
+	if ((!lychee.rights.settings.can_edit && !lychee.rights.user.can_edit) || mode === "view" || mode === "frame") {
 		$("#button_settings_open").hide();
 	}
 
