@@ -193,10 +193,10 @@ build.album = function (data, disabled = false) {
 				<div class='photos'><span>${data.num_photos}</span></div>`;
 	}
 
-	if ((data.albums && data.albums.length > 0) || data.num_albums > 0) {
+	if ((data.albums && data.albums.length > 0) || data.num_subalbums > 0) {
 		html += lychee.html`
 			<a class='folders'>${build.iconic("folder")}`;
-		if (lychee.show_num_albums && data.num_albums > 1) html += lychee.html`<span>${data.num_albums}</span>`;
+		if (lychee.show_num_albums && data.num_subalbums > 1) html += lychee.html`<span>${data.num_subalbums}</span>`;
 		html += lychee.html`</a>`;
 	}
 	html += "</div></div>"; // close 'counters' and 'album'
