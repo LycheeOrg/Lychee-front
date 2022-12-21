@@ -1146,7 +1146,7 @@ lychee.setMetaData = function (title = "", isTitleEditable = false, description 
  * @param {string} mode - one out of: `public`, `view`, `logged_in`, `frame`
  */
 lychee.setMode = function (mode) {
-	if (!lychee.rights.settings.can_edit || mode === "view" || mode === "frame") {
+	if ((!lychee.rights.settings.can_edit && !lychee.rights.user.can_edit) || mode === "view" || mode === "frame") {
 		$("#button_settings_open").hide();
 	}
 
@@ -1169,8 +1169,14 @@ lychee.setMode = function (mode) {
 			.unbind(["command+backspace", "ctrl+backspace"])
 			.unbind(["command+a", "ctrl+a"]);
 	}
-	if (!lychee.rights.settings.can_edit || mode === "view" || mode === "frame") {
-		$("#button_users, #button_logs, #button_diagnostics").hide();
+	if (!lychee.rights.user_management.can_list || mode === "view" || mode === "frame") {
+		$("#button_users").hide();
+	}
+	if (!lychee.rights.settings.can_see_diagnostics || mode === "view" || mode === "frame") {
+		$("#button_diagnostics").hide();
+	}
+	if (!lychee.rights.settings.can_see_logs || mode === "view" || mode === "frame") {
+		$("#button_logs").hide();
 	}
 
 	const bodyClasses = document.querySelector("body").classList;
