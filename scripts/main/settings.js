@@ -72,7 +72,7 @@ settings.createLogin = function () {
 			password: data.password,
 		};
 
-		api.post("Settings::setLogin", params, successHandler, null, errorHandler);
+		api.post("User::updateLogin", params, successHandler, null, errorHandler);
 	};
 
 	const createLoginDialogBody = `
