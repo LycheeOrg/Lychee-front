@@ -410,11 +410,11 @@ sidebar.createStructure.photo = function (data) {
 	// Construct all parts of the structure
 	const structure_ret = [structure.basics, structure.image, structure.tags, structure.exif, structure.location];
 
-	if (!lychee.publicMode) {
-		structure_ret.push(structure.sharing);
-	}
 	if (license) {
 		structure_ret.push(structure.license);
+	}
+	if (!lychee.publicMode) {
+		structure_ret.push(structure.sharing);
 	}
 
 	return structure_ret;
@@ -518,11 +518,11 @@ sidebar.createStructure.album = function (data) {
 
 	// Construct all parts of the structure
 	let structure_ret = [structure.basics, structure.album];
-	if (!lychee.publicMode) {
-		structure_ret.push(structure.share);
-	}
 	if (license) {
 		structure_ret.push(structure.license);
+	}
+	if (!lychee.publicMode) {
+		structure_ret.push(structure.share);
 	}
 
 	return structure_ret;
