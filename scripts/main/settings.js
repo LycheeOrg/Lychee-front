@@ -72,7 +72,7 @@ settings.createLogin = function () {
 			password: data.password,
 		};
 
-		api.post("User::updateLogin", params, successHandler, null, errorHandler);
+		api.post("Settings::setLogin", params, successHandler, null, errorHandler);
 	};
 
 	const createLoginDialogBody = `
@@ -214,7 +214,7 @@ settings.changeLogin = function (params) {
 	}
 
 	api.post(
-		"Settings::updateLogin",
+		"User::updateLogin",
 		params,
 		/** @param {User} updatedUser */ function (updatedUser) {
 			$("input[name]").removeClass("error");
