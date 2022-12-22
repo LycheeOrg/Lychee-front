@@ -581,7 +581,7 @@ sidebar.render = function (structure) {
 			const rawValue = row.value;
 
 			// don't show rows which are empty and cannot be edited
-			if ((rawValue === "" || rawValue == null) && row.editable === false) {
+			if ((rawValue === "" || rawValue == null) && row.editable !== true) {
 				return;
 			}
 
