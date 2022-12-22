@@ -23,7 +23,7 @@
  * @property {string}       title
  * @property {?string}      description
  * @property {string[]}     tags
- * @property {number}       is_public
+ * @property {boolean}      is_public
  * @property {?string}      type
  * @property {?string}      iso
  * @property {?string}      aperture
