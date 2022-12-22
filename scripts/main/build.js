@@ -188,19 +188,31 @@ build.album = function (data, disabled = false) {
 	}
 
 	html += lychee.html`<div class='counters'>`;
-	if (lychee.show_num_photos && data.num_photos > 0) {
+	let debug = lychee.html`<div class='counters'>`;
+	if (lychee.show_decoration_num_photos && data.num_photos > 0) {
 		html += lychee.html`
 				<div class='photos'><span>${data.num_photos}</span></div>`;
+		debug += lychee.html`<div class='photos'><span>${data.num_photos}</span></div>`;
 	}
 
-	if ((data.albums && data.albums.length > 0) || data.num_subalbums > 0) {
+	if (lychee.show_decoration_subalbum && ((data.albums && data.albums.length > 0) || data.num_subalbums > 0)) {
 		html += lychee.html`
 			<a class='folders'>${build.iconic("folder")}`;
-		if (lychee.show_num_albums && data.num_subalbums > 1) html += lychee.html`<span>${data.num_subalbums}</span>`;
+		debug += lychee.html`<a class='folders'>${build.iconic("folder")}`;
+		if (lychee.show_decoration_num_subalbums && data.num_subalbums > 1) {
+			html += lychee.html`<span>${data.num_subalbums}</span>`;
+			debug += lychee.html`<span>${data.num_subalbums}</span>`;
+		}
 		html += lychee.html`</a>`;
+		debug += lychee.html`</a>`;
 	}
 	html += "</div></div>"; // close 'counters' and 'album'
-
+	debug += "</div></div>";
+	console.log(
+		"gugus: ",
+		debug,
+		lychee.html`subalbums ${lychee.show_decoration_num_subalbums} #: ${data.num_subalbums}, photos #: ${data.num_photos}`
+	);
 	return html;
 };
 
