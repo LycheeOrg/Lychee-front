@@ -145,6 +145,7 @@ const lychee = {
 	show_decoration_subalbum: true,
 	show_decoration_num_subalbums: false,
 	show_decoration_num_photos: false,
+	album_decoration_orientation: "row",
 
 	upload_processing_limit: 4,
 
@@ -583,6 +584,7 @@ lychee.parsePublicInitializationData = function (data) {
 			lychee.show_decoration_num_photos = false;
 			break;
 	}
+	lychee.album_decoration_orientation = data.config.album_decoration_orientation;
 	lychee.checkForUpdates = data.config.check_for_updates;
 	lychee.layout = Number.parseInt(data.config.layout, 10);
 	if (Number.isNaN(lychee.layout)) lychee.layout = 1;

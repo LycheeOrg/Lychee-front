@@ -142,7 +142,7 @@
 	flex-direction: row;
 	//	flex-direction: column;
 	justify-content: flex-end;
-	font: bold 8pt sans-serif;
+	font: bold 11px sans-serif;
 	filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.75));
 	.folders,
 	.photos {
@@ -162,7 +162,7 @@
 			right: 2px;
 			// subalbum count needs to be positioned from the top because
 			// the photos badge can increase in size
-			top: 7px;
+			top: 6px;
 			color: #222;
 		}
 	}

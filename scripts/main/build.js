@@ -187,7 +187,12 @@ build.album = function (data, disabled = false) {
 				`;
 	}
 
-	html += lychee.html`<div class='counters'>`;
+	if (lychee.show_decoration_num_photos && lychee.show_decoration_subalbum) {
+		// if both counters are shown orientation matters
+		html += lychee.html`<div class='counters' style='flex-direction: ${lychee.album_decoration_orientation}'>`;
+	} else {
+		html += lychee.html`<div class='counters'>`;
+	}
 	let debug = lychee.html`<div class='counters'>`;
 	if (lychee.show_decoration_num_photos && data.num_photos > 0) {
 		html += lychee.html`
