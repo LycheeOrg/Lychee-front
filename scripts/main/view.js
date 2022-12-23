@@ -81,19 +81,19 @@ view.albums = {
 			}
 			if (albums.json.smart_albums.unsorted) {
 				albums.parse(albums.json.smart_albums.unsorted);
-				smartData += build.album(albums.json.smart_albums.unsorted);
+				smartData += build.album(albums.json.smart_albums.unsorted, !lychee.rights.root_album.can_edit);
 			}
 			if (albums.json.smart_albums.public) {
 				albums.parse(albums.json.smart_albums.public);
-				smartData += build.album(albums.json.smart_albums.public);
+				smartData += build.album(albums.json.smart_albums.public, !lychee.rights.root_album.can_edit);
 			}
 			if (albums.json.smart_albums.starred) {
 				albums.parse(albums.json.smart_albums.starred);
-				smartData += build.album(albums.json.smart_albums.starred);
+				smartData += build.album(albums.json.smart_albums.starred, !lychee.rights.root_album.can_edit);
 			}
 			if (albums.json.smart_albums.recent) {
 				albums.parse(albums.json.smart_albums.recent);
-				smartData += build.album(albums.json.smart_albums.recent);
+				smartData += build.album(albums.json.smart_albums.recent, !lychee.rights.root_album.can_edit);
 			}
 			if (albums.json.smart_albums.on_this_day) {
 				albums.parse(albums.json.smart_albums.on_this_day);
@@ -103,14 +103,14 @@ view.albums = {
 			// Tag albums
 			tagAlbumsData += albums.json.tag_albums.reduce(function (html, tagAlbum) {
 				albums.parse(tagAlbum);
-				return html + build.album(tagAlbum);
+				return html + build.album(tagAlbum, !lychee.rights.root_album.can_edit);
 			}, "");
 
 			// Albums
 			if (lychee.publicMode === false && albums.json.albums.length > 0) albumsData = build.divider(lychee.locale["ALBUMS"]);
 			albumsData += albums.json.albums.reduce(function (html, album) {
 				albums.parse(album);
-				return html + build.album(album);
+				return html + build.album(album, !lychee.rights.root_album.can_edit);
 			}, "");
 
 			let current_owner = "";
@@ -121,7 +121,7 @@ view.albums = {
 					html += build.divider(album.owner_name);
 					current_owner = album.owner_name;
 				}
-				return html + build.album(album, !lychee.rights.is_admin);
+				return html + build.album(album, !lychee.rights.settings.can_edit);
 			}, "");
 
 			if (smartData === "" && tagAlbumsData === "" && albumsData === "" && sharedData === "") {
@@ -221,7 +221,7 @@ view.album = {
 				return;
 			}
 
-			if (album.json.is_nsfw && !lychee.nsfw_unlocked_albums.includes(album.json.id)) {
+			if (album.json.policy.is_nsfw && !lychee.nsfw_unlocked_albums.includes(album.json.id)) {
 				$("#sensitive_warning").addClass("active");
 			} else {
 				$("#sensitive_warning").removeClass("active");
@@ -245,13 +245,13 @@ view.album = {
 			if (album.json.albums) {
 				album.json.albums.forEach(function (_album) {
 					albums.parse(_album);
-					albumsData += build.album(_album, !album.isUploadable());
+					albumsData += build.album(_album, !album.json.rights.can_edit);
 				});
 			}
 			if (album.json.photos) {
 				// Build photos
 				album.json.photos.forEach(function (_photo) {
-					photosData += build.photo(_photo, !album.isUploadable());
+					photosData += build.photo(_photo, !album.json.rights.can_edit);
 				});
 			}
 
@@ -503,6 +503,8 @@ view.album = {
 		 * Hence, this method would better not be part of `view.album.content`,
 		 * because it is not exclusively used for an album.
 		 *
+		 * TODO: Livewire front-end will make this a pure CSS solution.
+		 *
 		 * @returns {void}
 		 */
 		justify: function () {
@@ -580,15 +582,9 @@ view.album = {
 					containerPadding: 0,
 					targetRowHeight: photoDefaultHeight,
 				});
-				// Temporarily hide the container such that not each
-				// modification of every photo triggers a UI update.
-				jqJustifiedLayout.addClass("laying-out");
-				// We must set the height of the `justified-layout` box
-				// explicitly, because all photos inside are positioned
-				// absolutely and hence do not contribute to the height of the
-				// `justified-layout` box automatically.
-				jqJustifiedLayout.css("height", layoutGeometry.containerHeight + "px");
-				jqPhotoElements.each(function (i) {
+				// if (lychee.rights.settings.can_edit) console.log(layoutGeometry);
+				$(".justified-layout").css("height", layoutGeometry.containerHeight + "px");
+				$(".justified-layout > div").each(function (i) {
 					if (!layoutGeometry.boxes[i]) {
 						// Race condition in search.find -- window content
 						// and `photos` can get out of sync as search
@@ -715,8 +711,8 @@ view.album = {
 	public: function () {
 		$("#button_visibility_album, #button_sharing_album_users").removeClass("active--not-hidden active--hidden");
 
-		if (album.json.is_public) {
-			if (album.json.requires_link) {
+		if (album.json.policy.is_public) {
+			if (album.json.policy.is_link_required) {
 				$("#button_visibility_album, #button_sharing_album_users").addClass("active--hidden");
 			} else {
 				$("#button_visibility_album, #button_sharing_album_users").addClass("active--not-hidden");
@@ -734,7 +730,7 @@ view.album = {
 	 * @returns {void}
 	 */
 	requiresLink: function () {
-		if (album.json.requires_link) sidebar.changeAttr("hidden", lychee.locale["ALBUM_SHR_YES"]);
+		if (album.json.policy.is_link_required) sidebar.changeAttr("hidden", lychee.locale["ALBUM_SHR_YES"]);
 		else sidebar.changeAttr("hidden", lychee.locale["ALBUM_SHR_NO"]);
 	},
 
@@ -742,7 +738,7 @@ view.album = {
 	 * @returns {void}
 	 */
 	nsfw: function () {
-		if (album.json.is_nsfw) {
+		if (album.json.policy.is_nsfw) {
 			// Sensitive
 			$("#button_nsfw_album").addClass("active").attr("title", lychee.locale["ALBUM_UNMARK_NSFW"]);
 		} else {
@@ -755,23 +751,15 @@ view.album = {
 	 * @returns {void}
 	 */
 	downloadable: function () {
-		if (album.json.is_downloadable) sidebar.changeAttr("downloadable", lychee.locale["ALBUM_SHR_YES"]);
+		if (album.json.policy.grants_download) sidebar.changeAttr("downloadable", lychee.locale["ALBUM_SHR_YES"]);
 		else sidebar.changeAttr("downloadable", lychee.locale["ALBUM_SHR_NO"]);
 	},
 
 	/**
 	 * @returns {void}
 	 */
-	shareButtonVisible: () => {
-		if (album.json.is_share_button_visible) sidebar.changeAttr("share_button_visible", lychee.locale["ALBUM_SHR_YES"]);
-		else sidebar.changeAttr("share_button_visible", lychee.locale["ALBUM_SHR_NO"]);
-	},
-
-	/**
-	 * @returns {void}
-	 */
 	password: function () {
-		if (album.json.has_password) sidebar.changeAttr("password", lychee.locale["ALBUM_SHR_YES"]);
+		if (album.json.policy.is_password_required) sidebar.changeAttr("password", lychee.locale["ALBUM_SHR_YES"]);
 		else sidebar.changeAttr("password", lychee.locale["ALBUM_SHR_NO"]);
 	},
 
@@ -932,14 +920,12 @@ view.photo = {
 	public: function () {
 		$("#button_visibility").removeClass("active--hidden active--not-hidden");
 
-		if (photo.json.is_public === 1 || photo.json.is_public === 2) {
-			// Photo public
-			if (photo.json.is_public === 1) {
-				$("#button_visibility").addClass("active--hidden");
-			} else {
-				$("#button_visibility").addClass("active--not-hidden");
-			}
-
+		if (photo.json.is_public === true) {
+			$("#button_visibility").addClass("active--hidden");
+			if (photo.json.init) sidebar.changeAttr("public", lychee.locale["PHOTO_SHR_YES"]);
+		} else if (photo.json.album_id !== null && album.json.policy.is_public === true) {
+			// part of a visible album
+			$("#button_visibility").addClass("active--not-hidden");
 			if (photo.json.init) sidebar.changeAttr("public", lychee.locale["PHOTO_SHR_YES"]);
 		} else {
 			// Photo private
@@ -1145,8 +1131,10 @@ view.settings = {
 		 */
 		init: function () {
 			view.settings.clearContent();
-			view.settings.content.setLogin();
-			if (lychee.rights.is_admin) {
+			if (lychee.rights.user.can_edit) {
+				view.settings.content.setLogin();
+			}
+			if (lychee.rights.settings.can_edit) {
 				view.settings.content.setSorting();
 				view.settings.content.setDropboxKey();
 				view.settings.content.setLang();
@@ -1824,13 +1812,13 @@ view.users = {
 
 			let html = `
 				<div class="users_view_line"><p>
-					<span class="text">username</span>
-					<span class="text">new password</span>
+					<span class="text">${lychee.locale["USERNAME"]}</span>
+					<span class="text">${lychee.locale["NEW_PASSWORD"]}</span>
 					<span class="text_icon" title="${lychee.locale["ALLOW_UPLOADS"]}">
 						${build.iconic("data-transfer-upload")}
 					</span>
-					<span class="text_icon" title="${lychee.locale["RESTRICTED_ACCOUNT"]}">
-						${build.iconic("lock-locked")}
+					<span class="text_icon" title="${lychee.locale["ALLOW_USER_SELF_EDIT"]}">
+						${build.iconic("lock-unlocked")}
 					</span>
 				</p></div>`;
 
@@ -1844,8 +1832,8 @@ view.users = {
 				if (_user.may_upload) {
 					$("#UserData" + _user.id + ' .choice input[name="may_upload"]').click();
 				}
-				if (_user.is_locked) {
-					$("#UserData" + _user.id + ' .choice input[name="is_locked"]').click();
+				if (_user.may_edit_own_settings) {
+					$("#UserData" + _user.id + ' .choice input[name="may_edit_own_settings"]').click();
 				}
 			});
 
@@ -1860,9 +1848,9 @@ view.users = {
 								<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
 							</label>
 						</span>
-						<span class="choice" title="${lychee.locale["RESTRICTED_ACCOUNT"]}">
+						<span class="choice" title="${lychee.locale["ALLOW_USER_SELF_EDIT"]}">
 							<label>
-								<input type="checkbox" name="is_locked" />
+								<input type="checkbox" name="may_edit_own_settings" />
 								<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
 							</label>
 						</span>
@@ -2034,7 +2022,9 @@ view.logs = {
 
 	/** @returns {void} */
 	clearContent: function () {
-		const html = lychee.html`
+		let html = "";
+		if (lychee.rights.settings.can_clear_logs) {
+			html += lychee.html`
 			<div class="clear_logs_update">
 				<a id="Clean_Noise" class="basicModal__button">
 					${lychee.locale["CLEAN_LOGS"]}
@@ -2042,7 +2032,9 @@ view.logs = {
 				<a id="Clear" class="basicModal__button">
 					${lychee.locale["CLEAR"]}
 				</a>
-			</div>
+			</div>`;
+		}
+		html += lychee.html`
 			<pre class="logs_diagnostics_view"></pre>`;
 		lychee.content.html(html);
 

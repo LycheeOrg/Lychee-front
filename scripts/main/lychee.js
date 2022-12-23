@@ -15,8 +15,8 @@ const lychee = {
 
 	publicMode: false,
 	viewMode: false,
-	full_photo: true,
-	downloadable: false,
+	grants_full_photo_access: true,
+	grants_download: false,
 	public_photos_hidden: true,
 	share_button_visible: false,
 	/**
@@ -26,24 +26,9 @@ const lychee = {
 	user: null,
 	/**
 	 * The rights granted by the backend
+	 * @type {?GlobalRightsDTO}
 	 */
-	rights: {
-		/**
-		 * Backend grants admin rights
-		 * @type boolean
-		 */
-		is_admin: false,
-		/**
-		 * Backend grants upload rights
-		 * @type boolean
-		 */
-		may_upload: false,
-		/**
-		 * Backend considers the user to be locked
-		 * @type boolean
-		 */
-		is_locked: false,
-	},
+	rights: null,
 	/**
 	 * Values:
 	 *
@@ -355,7 +340,7 @@ lychee.init = function (isFirstInitialization = true) {
 		function (data) {
 			lychee.parseInitializationData(data);
 
-			if (data.user !== null || data.rights.is_admin) {
+			if (data.user !== null || data.rights.settings.can_edit) {
 				// Authenticated or no admin is registered
 				leftMenu.build();
 				leftMenu.bind();
@@ -367,7 +352,7 @@ lychee.init = function (isFirstInitialization = true) {
 				// In particular it is completely insane to build the UI as if the admin user was successfully authenticated.
 				// This might leak confidential photos to anybody if the DB is filled
 				// with photos and the admin password reset to `null`.
-				if (data.user === null && data.rights.is_admin) settings.createLogin();
+				if (data.user === null && data.rights.user.can_edit) settings.createLogin();
 			} else {
 				lychee.setMode("public");
 			}
@@ -403,7 +388,7 @@ lychee.parseInitializationData = function (data) {
 	}
 
 	lychee.parsePublicInitializationData(data);
-	if (lychee.user !== null || lychee.rights.is_admin) {
+	if (lychee.user !== null || lychee.rights.settings.can_edit) {
 		lychee.parseProtectedInitializationData(data);
 	}
 
@@ -633,10 +618,9 @@ lychee.parseProtectedInitializationData = function (data) {
 	lychee.location_decoding = data.config.location_decoding === "1";
 	lychee.default_license = data.config.default_license || "none";
 	lychee.css = data.config.css || "";
-	lychee.full_photo = data.config.full_photo === "1";
-	lychee.downloadable = data.config.downloadable === "1";
+	lychee.grants_full_photo_access = data.config.grants_full_photo_access === "1";
+	lychee.grants_download = data.config.grants_download === "1";
 	lychee.public_photos_hidden = data.config.public_photos_hidden === "1";
-	lychee.share_button_visible = data.config.share_button_visible === "1";
 	lychee.delete_imported = data.config.delete_imported === "1";
 	lychee.import_via_symlink = data.config.import_via_symlink === "1";
 	lychee.skip_duplicates = data.config.skip_duplicates === "1";
@@ -1165,13 +1149,16 @@ lychee.setMetaData = function (title = "", isTitleEditable = false, description 
  * which can be unbound here.
  * TODO: Refactor this. There should be one (or several) methods to change modes, but each of the methods should be symmetric.
  *
+ * TODO: FIX ME WITH NEW RIGHTS
+ *
  * @param {string} mode - one out of: `public`, `view`, `logged_in`, `frame`
  */
 lychee.setMode = function (mode) {
-	if (lychee.rights.is_locked || mode === "view" || mode === "frame") {
+	if ((!lychee.rights.settings.can_edit && !lychee.rights.user.can_edit) || mode === "view" || mode === "frame") {
 		$("#button_settings_open").hide();
 	}
-	if (!lychee.rights.may_upload || mode === "view" || mode === "frame") {
+
+	if (!lychee.rights.root_album.can_upload || mode === "view" || mode === "frame") {
 		$("#button_sharing").hide();
 
 		$(document)
@@ -1190,8 +1177,14 @@ lychee.setMode = function (mode) {
 			.unbind(["command+backspace", "ctrl+backspace"])
 			.unbind(["command+a", "ctrl+a"]);
 	}
-	if (!lychee.rights.is_admin || mode === "view" || mode === "frame") {
-		$("#button_users, #button_logs, #button_diagnostics").hide();
+	if (!lychee.rights.user_management.can_list || mode === "view" || mode === "frame") {
+		$("#button_users").hide();
+	}
+	if (!lychee.rights.settings.can_see_diagnostics || mode === "view" || mode === "frame") {
+		$("#button_diagnostics").hide();
+	}
+	if (!lychee.rights.settings.can_see_logs || mode === "view" || mode === "frame") {
+		$("#button_logs").hide();
 	}
 
 	const bodyClasses = document.querySelector("body").classList;

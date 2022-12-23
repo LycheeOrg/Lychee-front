@@ -542,26 +542,20 @@ photo.setProtectionPolicy = function (photoID) {
 	 * @param {{is_public: boolean}} data
 	 */
 	const action = function (data) {
-		/**
-		 * Note: `newIsPublic` must be `0` or `1` and no boolean, because
-		 * `photo.is_public` is an integer between `0` and `2`.
-		 */
-		const newIsPublic = data.is_public ? 1 : 0;
-
-		if (newIsPublic !== photo.json.is_public) {
+		if (data.is_public !== photo.json.is_public) {
 			if (visible.photo()) {
-				photo.json.is_public = newIsPublic;
+				photo.json.is_public = data.is_public;
 				view.photo.public();
 			}
 
-			album.getByID(photoID).is_public = newIsPublic;
+			album.getByID(photoID).is_public = data.is_public;
 			view.album.content.public(photoID);
 
 			albums.refresh();
 
 			api.post("Photo::setPublic", {
 				photoID: photoID,
-				is_public: newIsPublic !== 0,
+				is_public: data.is_public,
 			});
 		}
 
@@ -579,27 +573,22 @@ photo.setProtectionPolicy = function (photoID) {
 			<p id="ppp_dialog_global_expl"></p>
 			<div class='input-group compact-inverse disabled'>
 				<label for="ppp_dialog_full_photo_check"></label>
-				<input type='checkbox' id='ppp_dialog_full_photo_check' name='grants_full_photo' disabled="disabled" />
+				<input type='checkbox' id='ppp_dialog_full_photo_check' name='grants_full_photo_access' disabled="disabled" />
 				<p></p>
 			</div>
 			<div class='input-group compact-inverse disabled'>
 				<label for="ppp_dialog_link_check"></label>
-				<input type='checkbox' id='ppp_dialog_link_check' name='requires_link' disabled="disabled" />
+				<input type='checkbox' id='ppp_dialog_link_check' name='is_link_required' disabled="disabled" />
 				<p></p>
 			</div>
 			<div class='input-group compact-inverse disabled'>
 				<label for="ppp_dialog_downloadable_check"></label>
-				<input type='checkbox' id='ppp_dialog_downloadable_check' name='is_downloadable' disabled="disabled" />
-				<p></p>
-			</div>
-			<div class='input-group compact-inverse disabled'>
-				<label for="ppp_dialog_share_check"></label>
-				<input type='checkbox' id='ppp_dialog_share_check' name='is_share_button_visible' disabled="disabled" />
+				<input type='checkbox' id='ppp_dialog_downloadable_check' name='grants_download' disabled="disabled" />
 				<p></p>
 			</div>
 			<div class='input-group compact-inverse disabled'>
 				<label for="ppp_dialog_password_check"></label>
-				<input type='checkbox' id='ppp_dialog_password_check' name='has_password' disabled="disabled">
+				<input type='checkbox' id='ppp_dialog_password_check' name='is_password_required' disabled="disabled">
 				<p></p>
 			</div>
 		</form>`;
@@ -607,11 +596,10 @@ photo.setProtectionPolicy = function (photoID) {
 	/**
 	 * @typedef PhotoProtectionPolicyDialogFormElements
 	 * @property {HTMLInputElement} is_public
-	 * @property {HTMLInputElement} grants_full_photo
-	 * @property {HTMLInputElement} requires_link
-	 * @property {HTMLInputElement} is_downloadable
-	 * @property {HTMLInputElement} is_share_button_visible
-	 * @property {HTMLInputElement} has_password
+	 * @property {HTMLInputElement} grants_full_photo_access
+	 * @property {HTMLInputElement} is_link_required
+	 * @property {HTMLInputElement} grants_download
+	 * @property {HTMLInputElement} is_password_required
 	 */
 
 	/**
@@ -622,50 +610,57 @@ photo.setProtectionPolicy = function (photoID) {
 	const initPhotoProtectionPolicyDialog = function (formElements, dialog) {
 		formElements.is_public.previousElementSibling.textContent = lychee.locale["PHOTO_PUBLIC"];
 		formElements.is_public.nextElementSibling.textContent = lychee.locale["PHOTO_PUBLIC_EXPL"];
-		formElements.grants_full_photo.previousElementSibling.textContent = lychee.locale["PHOTO_FULL"];
-		formElements.grants_full_photo.nextElementSibling.textContent = lychee.locale["PHOTO_FULL_EXPL"];
-		formElements.requires_link.previousElementSibling.textContent = lychee.locale["PHOTO_HIDDEN"];
-		formElements.requires_link.nextElementSibling.textContent = lychee.locale["PHOTO_HIDDEN_EXPL"];
-		formElements.is_downloadable.previousElementSibling.textContent = lychee.locale["PHOTO_DOWNLOADABLE"];
-		formElements.is_downloadable.nextElementSibling.textContent = lychee.locale["PHOTO_DOWNLOADABLE_EXPL"];
-		formElements.is_share_button_visible.previousElementSibling.textContent = lychee.locale["PHOTO_SHARE_BUTTON_VISIBLE"];
-		formElements.is_share_button_visible.nextElementSibling.textContent = lychee.locale["PHOTO_SHARE_BUTTON_VISIBLE_EXPL"];
-		formElements.has_password.previousElementSibling.textContent = lychee.locale["PHOTO_PASSWORD_PROT"];
-		formElements.has_password.nextElementSibling.textContent = lychee.locale["PHOTO_PASSWORD_PROT_EXPL"];
+		formElements.grants_full_photo_access.previousElementSibling.textContent = lychee.locale["PHOTO_FULL"];
+		formElements.grants_full_photo_access.nextElementSibling.textContent = lychee.locale["PHOTO_FULL_EXPL"];
+		formElements.is_link_required.previousElementSibling.textContent = lychee.locale["PHOTO_HIDDEN"];
+		formElements.is_link_required.nextElementSibling.textContent = lychee.locale["PHOTO_HIDDEN_EXPL"];
+		formElements.grants_download.previousElementSibling.textContent = lychee.locale["PHOTO_DOWNLOADABLE"];
+		formElements.grants_download.nextElementSibling.textContent = lychee.locale["PHOTO_DOWNLOADABLE_EXPL"];
+		formElements.is_password_required.previousElementSibling.textContent = lychee.locale["PHOTO_PASSWORD_PROT"];
+		formElements.is_password_required.nextElementSibling.textContent = lychee.locale["PHOTO_PASSWORD_PROT_EXPL"];
 
-		if (photo.json.is_public === 2) {
+		if (photo.json.album_id === null) {
+			// No album
+
+			dialog.querySelector("p#ppp_dialog_no_edit_expl").remove();
+			dialog.querySelector("p#ppp_dialog_global_expl").textContent = lychee.locale["PHOTO_EDIT_GLOBAL_SHARING_TEXT"];
+			// Initialize values of detailed settings according to global
+			// configuration.
+			formElements.is_public.checked = photo.json.is_public;
+			formElements.grants_full_photo_access.checked = lychee.grants_full_photo_access;
+			formElements.is_link_required.checked = lychee.public_photos_hidden;
+			formElements.grants_download.checked = lychee.grants_download;
+			formElements.is_password_required.checked = false;
+		} else if (album.json && album.json.policy.is_public === false) {
+			// Private album
+
+			dialog.querySelector("p#ppp_dialog_no_edit_expl").remove();
+			dialog.querySelector("p#ppp_dialog_global_expl").textContent = lychee.locale["PHOTO_EDIT_GLOBAL_SHARING_TEXT"];
+			// Initialize values of detailed settings according to global
+			// configuration.
+			formElements.is_public.checked = photo.json.is_public;
+			formElements.grants_full_photo_access.checked = lychee.grants_full_photo_access;
+			formElements.is_link_required.checked = lychee.public_photos_hidden;
+			formElements.grants_download.checked = lychee.grants_download;
+			formElements.is_password_required.checked = false;
+		} else {
 			// Public album.
 			dialog.querySelector("p#ppp_dialog_no_edit_expl").textContent = lychee.locale["PHOTO_NO_EDIT_SHARING_TEXT"];
 			dialog.querySelector("p#ppp_dialog_global_expl").remove();
 			// Initialize values of detailed settings according to album
 			// settings and hide action button as we can't actually change
 			// anything.
-			formElements.is_public.checked = true;
 			formElements.is_public.disabled = true;
+			formElements.is_public.checked = album.json.policy.is_public;
 			formElements.is_public.parentElement.classList.add("disabled");
-			if (album.json) {
-				formElements.grants_full_photo.checked = album.json.grants_full_photo;
-				// Photos in public albums are never hidden as such.  It's the
-				// album that's hidden.  Or is that distinction irrelevant to end
-				// users?
-				formElements.requires_link.checked = false;
-				formElements.is_downloadable.checked = album.json.is_downloadable;
-				formElements.is_share_button_visible.checked = album.json.is_share_button_visible;
-				formElements.has_password.checked = album.json.has_password;
-			}
+			formElements.grants_full_photo_access.checked = album.json.policy.grants_full_photo_access;
+			// Photos in public albums are never hidden as such.  It's the
+			// album that's hidden.  Or is that distinction irrelevant to end
+			// users?
+			formElements.is_link_required.checked = album.json.policy.is_link_required;
+			formElements.grants_download.checked = album.json.policy.grants_download;
+			formElements.is_password_required.checked = album.json.policy.is_password_required;
 			basicModal.hideActionButton();
-		} else {
-			// Private album
-			dialog.querySelector("p#ppp_dialog_no_edit_expl").remove();
-			dialog.querySelector("p#ppp_dialog_global_expl").textContent = lychee.locale["PHOTO_EDIT_GLOBAL_SHARING_TEXT"];
-			// Initialize values of detailed settings according to global
-			// configuration.
-			formElements.is_public.checked = photo.json.is_public !== 0;
-			formElements.grants_full_photo.checked = lychee.full_photo;
-			formElements.requires_link.checked = lychee.public_photos_hidden;
-			formElements.is_downloadable.checked = lychee.downloadable;
-			formElements.is_share_button_visible.checked = lychee.share_button_visible;
-			formElements.has_password.checked = false;
 		}
 	};
 
@@ -940,6 +935,10 @@ photo.deleteTag = function (photoID, index) {
  * @returns {void}
  */
 photo.share = function (photoID, service) {
+	if (!lychee.share_button_visible) {
+		return;
+	}
+
 	const url = photo.getViewLink(photoID);
 
 	switch (service) {
