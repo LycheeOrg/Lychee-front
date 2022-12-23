@@ -60,7 +60,7 @@ gulp.task("frontend--js", function () {
 		.src(paths.frontend.js)
 		.pipe(plugins.concat("_frontend--javascript.js", { newLine: "\n" }))
 		.pipe(babel)
-		.pipe(chmod({execute: false}))
+		.pipe(chmod({ execute: false }))
 		.on("error", catchError)
 		.pipe(gulp.dest("../dist/"));
 });
@@ -71,7 +71,7 @@ gulp.task(
 		return gulp
 			.src(paths.frontend.scripts)
 			.pipe(plugins.concat("frontend.js", { newLine: "\n" }))
-			.pipe(chmod({execute: false}))
+			.pipe(chmod({ execute: false }))
 			.on("error", catchError)
 			.pipe(gulp.dest("../dist/"));
 	})
@@ -84,22 +84,22 @@ gulp.task("frontend--styles", function () {
 		.pipe(plugins.concat("frontend.css", { newLine: "\n" }))
 		.pipe(plugins.autoprefixer("last 4 versions", "> 5%"))
 		.pipe(cleanCSS({ level: 2 }))
-		.pipe(chmod({execute: false}))
+		.pipe(chmod({ execute: false }))
 		.pipe(gulp.dest("../dist/"));
 });
 
 gulp.task("frontend--html", function () {
 	return gulp
 		.src(paths.frontend.html)
-		.pipe(plugins.inject(
-			gulp.src(paths.frontend.svg), {
+		.pipe(
+			plugins.inject(gulp.src(paths.frontend.svg), {
 				starttag: "<!-- inject:svg -->",
 				transform: function (filePath, _file) {
 					return _file.contents.toString("utf8");
 				},
-			}
-		))
-		.pipe(chmod({execute: false}))
+			})
+		)
+		.pipe(chmod({ execute: false }))
 		.on("error", catchError)
 		.pipe(gulp.dest("../dist/"));
 });
@@ -121,7 +121,7 @@ gulp.task("landing--js", function () {
 		.src(paths.landing.js)
 		.pipe(plugins.concat("_landing--javascript.js", { newLine: "\n" }))
 		.pipe(babel)
-		.pipe(chmod({execute: false}))
+		.pipe(chmod({ execute: false }))
 		.on("error", catchError)
 		.pipe(gulp.dest("../dist/"));
 });
@@ -134,7 +134,7 @@ gulp.task(
 				.src(paths.landing.scripts)
 				.pipe(plugins.concat("landing.js", { newLine: "\n" }))
 				// .pipe(plugins.uglify())
-				.pipe(chmod({execute: false}))
+				.pipe(chmod({ execute: false }))
 				.on("error", catchError)
 				.pipe(gulp.dest("../dist/"))
 		);
@@ -149,7 +149,7 @@ gulp.task("landing--styles", function () {
 			.pipe(plugins.concat("landing.css", { newLine: "\n" }))
 			.pipe(plugins.autoprefixer("last 4 versions", "> 5%"))
 			// .pipe(cleanCSS({level: 2}))
-			.pipe(chmod({execute: false}))
+			.pipe(chmod({ execute: false }))
 			.pipe(gulp.dest("../dist/"))
 	);
 });
@@ -164,24 +164,6 @@ gulp.task("images--copy", function () {
 	return gulp.src(paths.images.src).on("error", catchError).pipe(gulp.dest("../img"));
 });
 
-/* leaflet.markercluster.js.map ----------------------------------------- */
-
-paths.leafletMarkerclusterMapFile = {
-	src: ["./node_modules/leaflet.markercluster/dist/leaflet.markercluster.js.map"],
-};
-
-gulp.task("leafletMarkerclusterMapFile--copy", function () {
-	return gulp.src(paths.leafletMarkerclusterMapFile.src).on("error", catchError).pipe(gulp.dest("../dist"));
-});
-
-paths.leafletMarkerclusterSourceFiles = {
-	src: ["./node_modules/leaflet.markercluster/src/*.js"],
-};
-
-gulp.task("leafletMarkerclusterSourceFiles--copy", function () {
-	return gulp.src(paths.leafletMarkerclusterSourceFiles.src).on("error", catchError).pipe(gulp.dest("../src"));
-});
-
 /* Clean ----------------------------------------- */
 
 gulp.task("clean", function () {
@@ -193,16 +175,7 @@ gulp.task("clean", function () {
 gulp.task(
 	"default",
 	gulp.series(
-		gulp.parallel(
-			"frontend--scripts",
-			"frontend--styles",
-			"frontend--html",
-			"landing--scripts",
-			"landing--styles",
-			"images--copy",
-			"leafletMarkerclusterMapFile--copy",
-			"leafletMarkerclusterSourceFiles--copy"
-		),
+		gulp.parallel("frontend--scripts", "frontend--styles", "frontend--html", "landing--scripts", "landing--styles", "images--copy"),
 		"clean"
 	)
 );
@@ -212,6 +185,6 @@ gulp.task(
 	gulp.series("default", function () {
 		gulp.watch(paths.frontend.js, gulp.series("frontend--scripts"));
 		gulp.watch(paths.frontend.scss, gulp.series("frontend--styles"));
-		gulp.watch(paths.frontend.html, gulp.series("frontend--html"))
+		gulp.watch(paths.frontend.html, gulp.series("frontend--html"));
 	})
 );
