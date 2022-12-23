@@ -1812,8 +1812,8 @@ view.users = {
 
 			let html = `
 				<div class="users_view_line"><p>
-					<span class="text">username</span>
-					<span class="text">new password</span>
+					<span class="text">${lychee.locale["USERNAME"]}</span>
+					<span class="text">${lychee.locale["NEW_PASSWORD"]}</span>
 					<span class="text_icon" title="${lychee.locale["ALLOW_UPLOADS"]}">
 						${build.iconic("data-transfer-upload")}
 					</span>
