@@ -188,7 +188,7 @@ build.album = function (data, disabled = false) {
 	}
 
 	switch ((data.num_subalbums > 0 ? 2 : 0) + (data.num_photos > 0 ? 1 : 0)) {
-		case 0: // no decorations
+		case 0: // no badges
 			break;
 		case 1: // photos only
 			html += lychee.html`
