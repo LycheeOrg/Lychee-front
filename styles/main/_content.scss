@@ -12,6 +12,7 @@
 	display: flex;
 	flex-wrap: wrap;
 	align-content: flex-start;
+	padding-bottom: 16px;
 	-webkit-overflow-scrolling: touch;
 	// Animations -------------------------------------------------------------- //
 	&.contentZoomIn .album,
