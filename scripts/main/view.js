@@ -920,14 +920,12 @@ view.photo = {
 	public: function () {
 		$("#button_visibility").removeClass("active--hidden active--not-hidden");
 
-		if (photo.json.is_public === 1 || photo.json.is_public === 2) {
-			// Photo public
-			if (photo.json.is_public === 1) {
-				$("#button_visibility").addClass("active--hidden");
-			} else {
-				$("#button_visibility").addClass("active--not-hidden");
-			}
-
+		if (photo.json.is_public === true) {
+			$("#button_visibility").addClass("active--hidden");
+			if (photo.json.init) sidebar.changeAttr("public", lychee.locale["PHOTO_SHR_YES"]);
+		} else if (photo.json.album_id !== null && album.json.policy.is_public === true) {
+			// part of a visible album
+			$("#button_visibility").addClass("active--not-hidden");
 			if (photo.json.init) sidebar.changeAttr("public", lychee.locale["PHOTO_SHR_YES"]);
 		} else {
 			// Photo private

@@ -112,7 +112,7 @@ settings.changeLogin = function (params) {
 	}
 
 	api.post(
-		"Settings::updateLogin",
+		"User::updateLogin",
 		params,
 		/** @param {User} updatedUser */ function (updatedUser) {
 			$("input[name]").removeClass("error");
