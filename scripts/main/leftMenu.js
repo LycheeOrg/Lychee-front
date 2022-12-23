@@ -20,9 +20,7 @@ leftMenu.dom = function (selector) {
 };
 
 /**
- * Note: on mobile we use a context menu instead; please make sure that
- * contextMenu.config is kept in sync with any changes here!
- *
+ * Build left menu
  * @returns {void}
  */
 leftMenu.build = function () {
