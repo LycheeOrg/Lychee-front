@@ -271,7 +271,7 @@ header.setMode = function (mode) {
 				tabindex.makeUnfocusable(e);
 			}
 
-			if (lychee.enable_button_add && lychee.rights.may_upload) {
+			if (lychee.enable_button_add && lychee.rights.root_album.can_upload) {
 				const e = $(".button_add", "#lychee_toolbar_albums");
 				e.show();
 				tabindex.makeFocusable(e);
@@ -295,7 +295,7 @@ header.setMode = function (mode) {
 			if (
 				!album.json ||
 				(album.json.photos.length === 0 && album.json.albums && album.json.albums.length === 0) ||
-				(!album.isUploadable() && !album.json.is_downloadable)
+				!album.json.rights.can_download
 			) {
 				const e = $("#button_archive");
 				e.hide();
@@ -307,8 +307,7 @@ header.setMode = function (mode) {
 			}
 
 			if (
-				album.json &&
-				album.json.is_share_button_visible === false &&
+				!lychee.is_share_button_visible &&
 				// The owner of an album (or the admin) shall always see
 				// the share button and be unaffected by the settings of
 				// the album
@@ -472,6 +471,16 @@ header.setMode = function (mode) {
 				tabindex.makeUnfocusable(e);
 			}
 
+			if (!lychee.share_button_visible) {
+				const e = $("#button_share");
+				e.hide();
+				tabindex.makeUnfocusable(e);
+			} else {
+				const e = $("#button_share");
+				e.show();
+				tabindex.makeFocusable(e);
+			}
+
 			if (lychee.enable_button_trash && album.isUploadable()) {
 				const e = $("#button_trash");
 				e.show();
@@ -494,12 +503,17 @@ header.setMode = function (mode) {
 			// - empty (see contextMenu.photoMore)
 			// - not enabled
 			if (
-				(!(
-					album.isUploadable() ||
-					(photo.json.hasOwnProperty("is_downloadable") ? photo.json.is_downloadable : album.json && album.json.is_downloadable)
-				) &&
-					!(photo.json.size_variants.original.url && photo.json.size_variants.original.url !== "")) ||
-				!lychee.enable_button_more
+				!lychee.enable_button_more ||
+				!(
+					//
+					(
+						album.isUploadable() ||
+						(photo.json &&
+							!photo.json.rights.can_download &&
+							!photo.json.rights.can_access_full_photo &&
+							!(photo.json.size_variants.original.url && photo.json.size_variants.original.url !== ""))
+					)
+				)
 			) {
 				const e = $("#button_more");
 				e.hide();

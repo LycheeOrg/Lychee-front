@@ -230,7 +230,8 @@ sidebar.secondsToHMS = function (d) {
 sidebar.createStructure.photo = function (data) {
 	if (!data) return [];
 
-	let editable = typeof album !== "undefined" ? album.isUploadable() : false;
+	let editable = data.rights.can_edit;
+
 	let hasExif = !!data.taken_at || !!data.make || !!data.model || !!data.shutter || !!data.aperture || !!data.focal || !!data.iso;
 	// Attributes for geo-position are nullable floats.
 	// The geo-position 0°00'00'', 0°00'00'' at zero altitude is very unlikely
@@ -427,13 +428,12 @@ sidebar.createStructure.photo = function (data) {
 sidebar.createStructure.album = function (data) {
 	if (!data) return [];
 
-	let editable = album.isUploadable();
+	let editable = data.rights.can_edit;
 	let structure = {};
-	let isPublic = data.is_public ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
-	let requiresLink = data.requires_link ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
-	let isDownloadable = data.is_downloadable ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
-	let isShareButtonVisible = data.is_share_button_visible ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
-	let hasPassword = data.has_password ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
+	let isPublic = !!data.policy && data.policy.is_public ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
+	let requiresLink = !!data.policy && data.policy.is_link_required ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
+	let isDownloadable = !!data.policy && data.policy.grant_download ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
+	let hasPassword = !!data.policy && data.policy.is_password_required ? lychee.locale["ALBUM_SHR_YES"] : lychee.locale["ALBUM_SHR_NO"];
 	let license = "";
 	let sorting = "";
 
@@ -501,7 +501,6 @@ sidebar.createStructure.album = function (data) {
 			{ title: lychee.locale["ALBUM_PUBLIC"], kind: "public", value: isPublic },
 			{ title: lychee.locale["ALBUM_HIDDEN"], kind: "hidden", value: requiresLink },
 			{ title: lychee.locale["ALBUM_DOWNLOADABLE"], kind: "downloadable", value: isDownloadable },
-			{ title: lychee.locale["ALBUM_SHARE_BUTTON_VISIBLE"], kind: "share_button_visible", value: isShareButtonVisible },
 			{ title: lychee.locale["ALBUM_PASSWORD"], kind: "password", value: hasPassword },
 		],
 	};

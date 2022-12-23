@@ -26,24 +26,47 @@ leftMenu.dom = function (selector) {
 leftMenu.build = function () {
 	let html = lychee.html`
 		<a class="linkMenu" id="button_settings_close" data-tabindex="-1">${build.iconic("chevron-left")}${lychee.locale["CLOSE"]}</a>
-		<a class="linkMenu" id="button_settings_open" data-tabindex="-1"><svg class="iconic"><use xlink:href="#cog"></use></svg>${
-			lychee.locale["SETTINGS"]
-		}</a>`;
+	`;
+
+	if (lychee.rights.settings.can_edit || lychee.rights.user.can_edit) {
+		html += lychee.html`
+		<a class="linkMenu" id="button_settings_open" data-tabindex="-1"><svg class="iconic"><use xlink:href="#cog"></use></svg>${lychee.locale["SETTINGS"]}</a>
+		`;
+	}
 	if (lychee.new_photos_notification) {
 		html += lychee.html`
 		<a class="linkMenu" id="button_notifications" data-tabindex="-1">${build.iconic("bell")}${lychee.locale["NOTIFICATIONS"]} </a>
 		`;
 	}
-	html += lychee.html`
+	if (lychee.rights.user_management.can_edit) {
+		html += lychee.html`
 		<a class="linkMenu" id="button_users" data-tabindex="-1">${build.iconic("person")}${lychee.locale["USERS"]} </a>
+		`;
+	}
+	if (lychee.rights.user.can_use_2fa) {
+		html += lychee.html`
 		<a class="linkMenu" id="button_u2f" data-tabindex="-1">${build.iconic("key")}${lychee.locale["U2F"]} </a>
-		<a class="linkMenu" id="button_sharing" data-tabindex="-1">${build.iconic("cloud")}${lychee.locale["SHARING"]}</a>`;
-	html += lychee.html`
+		`;
+	}
+	if (lychee.rights.root_album.can_upload) {
+		html += lychee.html`
+		<a class="linkMenu" id="button_sharing" data-tabindex="-1">${build.iconic("cloud")}${lychee.locale["SHARING"]}</a>
+		`;
+	}
+	if (lychee.rights.settings.can_see_logs) {
+		html += lychee.html`
 		<a class="linkMenu" id="button_logs" data-tabindex="-1">${build.iconic("align-left")}${lychee.locale["LOGS"]}</a>
+		`;
+	}
+	if (lychee.rights.settings.can_see_diagnostics) {
+		html += lychee.html`
 		<a class="linkMenu" id="button_diagnostics" data-tabindex="-1">${build.iconic("wrench")}${lychee.locale["DIAGNOSTICS"]}</a>
+		`;
+	}
+	html += lychee.html`
 		<a class="linkMenu" id="button_about" data-tabindex="-1">${build.iconic("info")}${lychee.locale["ABOUT_LYCHEE"]}</a>
 		<a class="linkMenu" id="button_signout" data-tabindex="21">${build.iconic("account-logout")}${lychee.locale["SIGN_OUT"]}</a>`;
-	if (lychee.update_available) {
+	if (lychee.rights.settings.can_update && lychee.update_available) {
 		html += lychee.html`
 		<a class="linkMenu" id="button_update"  data-tabindex="-1">${build.iconic("timer")}${lychee.locale["UPDATE_AVAILABLE"]}</a>
 		`;

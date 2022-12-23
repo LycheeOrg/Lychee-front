@@ -107,7 +107,7 @@ build.album = function (data, disabled = false) {
 	//   Whether the child album supports the drop event depends on the type
 	//   of the album (i.e. it must not be a smart or tag album), but also
 	//   on the ownership of the album.
-	const disableDragDrop = !album.isUploadable() || disabled || album.isSmartID(data.id) || data.is_tag_album;
+	const disableDragDrop = !data.rights.can_edit || disabled || album.isSmartID(data.id) || data.is_tag_album;
 	let subtitle = formattedCreationTs;
 
 	// check setting album_subtitle_type:
@@ -145,9 +145,9 @@ build.album = function (data, disabled = false) {
 	}
 
 	let html = lychee.html`
-			<div class='album ${disabled ? `disabled` : ``} ${data.is_nsfw && lychee.nsfw_blur ? `blurred` : ``}'
+			<div class='album ${disabled ? `disabled` : ``} ${data.policy.is_nsfw && lychee.nsfw_blur ? `blurred` : ``}'
 				data-id='${data.id}'
-				data-nsfw='${data.is_nsfw ? `1` : `0`}'
+				data-nsfw='${data.policy.is_nsfw ? `1` : `0`}'
 				data-tabindex='${tabindex.get_next_tab_index()}'
 				draggable='${disableDragDrop ? "false" : "true"}'
 				${
@@ -168,19 +168,19 @@ build.album = function (data, disabled = false) {
 				</div>
 			`;
 
-	if (album.isUploadable() && !disabled) {
+	if (data.rights.can_edit && !disabled) {
 		let isCover = album.json && album.json.cover_id && data.thumb.id === album.json.cover_id;
 		html += lychee.html`
 				<div class='badges'>
-					<a class='badge ${data.is_nsfw ? "badge--nsfw" : ""} icn-warning'>${build.iconic("warning")}</a>
+					<a class='badge ${data.policy && data.policy.is_nsfw ? "badge--nsfw" : ""} icn-warning'>${build.iconic("warning")}</a>
 					<a class='badge ${data.id === SmartAlbumID.STARRED ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
 					<a class='badge ${data.id === SmartAlbumID.RECENT ? "badge--visible badge--list" : ""}'>${build.iconic("clock")}</a>
 					<a class='badge ${data.id === SmartAlbumID.ON_THIS_DAY ? "badge--tag badge--list" : ""}'>${build.iconic("calendar")}</a>
-					<a class='badge ${data.id === SmartAlbumID.PUBLIC || data.is_public ? "badge--visible" : ""} ${
-			data.requires_link ? "badge--hidden" : "badge--not--hidden"
+					<a class='badge ${data.id === SmartAlbumID.PUBLIC || (data.policy && data.policy.is_public) ? "badge--visible" : ""} ${
+			data.policy && data.policy.is_link_required ? "badge--hidden" : "badge--not--hidden"
 		} icn-share'>${build.iconic("eye")}</a>
 					<a class='badge ${data.id === SmartAlbumID.UNSORTED ? "badge--visible" : ""}'>${build.iconic("list")}</a>
-					<a class='badge ${data.has_password ? "badge--visible" : ""}'>${build.iconic("lock-locked")}</a>
+					<a class='badge ${data.policy && data.policy.is_password_required ? "badge--visible" : ""}'>${build.iconic("lock-unlocked")}</a>
 					<a class='badge ${data.is_tag_album ? "badge--tag" : ""}'>${build.iconic("tag")}</a>
 					<a class='badge ${isCover ? "badge--cover" : ""} icn-cover'>${build.iconic("folder-cover")}</a>
 				</div>
@@ -328,7 +328,9 @@ build.photo = function (data, disabled = false) {
 		html += lychee.html`
 				<div class='badges'>
 				<a class='badge ${data.is_starred ? "badge--star" : ""} icn-star'>${build.iconic("star")}</a>
-				<a class='badge ${data.is_public && album.json && !album.json.is_public ? "badge--visible badge--hidden" : ""} icn-share'>${build.iconic("eye")}</a>
+				<a class='badge ${
+					data.is_public && album.json && album.json.policy && !album.json.policy.is_public ? "badge--visible badge--hidden" : ""
+				} icn-share'>${build.iconic("eye")}</a>
 				<a class='badge ${isCover ? "badge--cover" : ""} icn-cover'>${build.iconic("folder-cover")}</a>
 				</div>
 				`;
@@ -572,9 +574,9 @@ build.user = function (user) {
 			<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
 			</label>
 			</span>
-			<span class="choice" title="${lychee.locale["RESTRICTED_ACCOUNT"]}">
+			<span class="choice" title="${lychee.locale["ALLOW_USER_SELF_EDIT"]}">
 			<label>
-			<input type="checkbox" name="is_locked" />
+			<input type="checkbox" name="may_edit_own_settings" />
 			<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
 			</label>
 			</span>
@@ -594,18 +596,6 @@ build.u2f = function (credential) {
 			<p id="CredentialData${credential.id}">
 			<input name="id" type="hidden" inputmode="string" value="${credential.id}" />
 			<span class="text">${credential.id.slice(0, 30)}</span>
-			<!--- <span class="choice" title="Allow uploads">
-			<label>
-			<input type="checkbox" name="may_upload" />
-			<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
-			</label>
-			</span>
-			<span class="choice" title="Restricted account">
-			<label>
-			<input type="checkbox" name="is_locked" />
-			<span class="checkbox"><svg class="iconic "><use xlink:href="#check"></use></svg></span>
-			</label>
-			</span>--->
 			</p>
 			<a id="CredentialDelete${credential.id}"  class="basicModal__button basicModal__button_DEL">Delete</a>
 		</div>
