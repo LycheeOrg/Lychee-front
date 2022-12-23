@@ -187,37 +187,29 @@ build.album = function (data, disabled = false) {
 				`;
 	}
 
-	if (lychee.show_decoration_num_photos && lychee.show_decoration_subalbum) {
-		// if both counters are shown orientation matters
-		html += lychee.html`<div class='counters' style='flex-direction: ${lychee.album_decoration_orientation}'>`;
-	} else {
-		html += lychee.html`<div class='counters'>`;
+	switch ((data.num_subalbums > 0 ? 2 : 0) + (data.num_photos > 0 ? 1 : 0)) {
+		case 0: // no decorations
+			break;
+		case 1: // photos only
+			html += lychee.html`
+				<div class='counters'><div class='photos'><span>${data.num_photos}</span></div></div>`;
+			break;
+		case 2: // sub-albums only
+			html += lychee.html`
+				<div class='counters'><a class='folders'>${build.iconic("folder")}`;
+			if (data.num_subalbums > 1) html += lychee.html`<span>${data.num_subalbums}</span>`;
+			html += lychee.html`</a></div>`;
+			break;
+		case 3: // sub-albums and photos
+			html += lychee.html`
+				<div class='counters' style='flex-direction: ${lychee.album_decoration_orientation}'><div class='photos'><span>${
+				data.num_photos
+			}</span></div><a class='folders'>${build.iconic("folder")}`;
+			if (data.num_subalbums > 1) html += lychee.html`<span>${data.num_subalbums}</span>`;
+			html += lychee.html`</a></div>`;
 	}
-	let debug = lychee.html`<div class='counters'>`;
-	if (lychee.show_decoration_num_photos && data.num_photos > 0) {
-		html += lychee.html`
-				<div class='photos'><span>${data.num_photos}</span></div>`;
-		debug += lychee.html`<div class='photos'><span>${data.num_photos}</span></div>`;
-	}
+	html += "</div>"; // close 'album'
 
-	if (lychee.show_decoration_subalbum && ((data.albums && data.albums.length > 0) || data.num_subalbums > 0)) {
-		html += lychee.html`
-			<a class='folders'>${build.iconic("folder")}`;
-		debug += lychee.html`<a class='folders'>${build.iconic("folder")}`;
-		if (lychee.show_decoration_num_subalbums && data.num_subalbums > 1) {
-			html += lychee.html`<span>${data.num_subalbums}</span>`;
-			debug += lychee.html`<span>${data.num_subalbums}</span>`;
-		}
-		html += lychee.html`</a>`;
-		debug += lychee.html`</a>`;
-	}
-	html += "</div></div>"; // close 'counters' and 'album'
-	debug += "</div></div>";
-	console.log(
-		"gugus: ",
-		debug,
-		lychee.html`subalbums ${lychee.show_decoration_num_subalbums} #: ${data.num_subalbums}, photos #: ${data.num_photos}`
-	);
 	return html;
 };
 
