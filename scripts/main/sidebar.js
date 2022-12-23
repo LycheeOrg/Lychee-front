@@ -408,8 +408,11 @@ sidebar.createStructure.photo = function (data) {
 	}
 
 	// Construct all parts of the structure
-	const structure_ret = [structure.basics, structure.image, structure.tags, structure.exif, structure.location, structure.license];
+	const structure_ret = [structure.basics, structure.image, structure.tags, structure.exif, structure.location];
 
+	if (license) {
+		structure_ret.push(structure.license);
+	}
 	if (!lychee.publicMode) {
 		structure_ret.push(structure.sharing);
 	}
@@ -514,7 +517,10 @@ sidebar.createStructure.album = function (data) {
 	};
 
 	// Construct all parts of the structure
-	let structure_ret = [structure.basics, structure.album, structure.license];
+	let structure_ret = [structure.basics, structure.album];
+	if (license) {
+		structure_ret.push(structure.license);
+	}
 	if (!lychee.publicMode) {
 		structure_ret.push(structure.share);
 	}
@@ -575,7 +581,7 @@ sidebar.render = function (structure) {
 			const rawValue = row.value;
 
 			// don't show rows which are empty and cannot be edited
-			if ((rawValue === "" || rawValue == null) && row.editable === false) {
+			if ((rawValue === "" || rawValue == null) && row.editable !== true) {
 				return;
 			}
 
