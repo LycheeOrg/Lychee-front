@@ -56,16 +56,7 @@ header.bind = function () {
 
 	header.dom("#button_signin").on(eventName, lychee.loginDialog);
 	header.dom("#button_settings").on(eventName, function (e) {
-		// Querying the CSS of an element is highly inefficient.
-		// Instead, we should use the same media query here as in the CSS.
-		// TODO: Fix this.
-		//if ($("#lychee_left_menu_container").css("display") === "none") {
-		// left menu disabled on small screens
-		//	contextMenu.config(e);
-		//} else {
-		// standard left menu
 		leftMenu.open();
-		//}
 	});
 	header.dom("#button_close_config").on(eventName, function () {
 		tabindex.makeFocusable(header.dom());
