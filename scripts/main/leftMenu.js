@@ -27,9 +27,10 @@ leftMenu.dom = function (selector) {
  */
 leftMenu.build = function () {
 	let html = lychee.html`
-		<a id="text_settings_close" class="closetxt" data-tabindex="-1">${lychee.locale["CLOSE"]}</a>
-		<a id="button_settings_close" class="closebtn" data-tabindex="20">&times;</a>
-		<a class="linkMenu" id="button_settings_open" data-tabindex="-1"><svg class="iconic"><use xlink:href="#cog"></use></svg>${lychee.locale["SETTINGS"]}</a>`;
+		<a class="linkMenu" id="button_settings_close" data-tabindex="-1">${build.iconic("chevron-left")}${lychee.locale["CLOSE"]}</a>
+		<a class="linkMenu" id="button_settings_open" data-tabindex="-1"><svg class="iconic"><use xlink:href="#cog"></use></svg>${
+			lychee.locale["SETTINGS"]
+		}</a>`;
 	if (lychee.new_photos_notification) {
 		html += lychee.html`
 		<a class="linkMenu" id="button_notifications" data-tabindex="-1">${build.iconic("bell")}${lychee.locale["NOTIFICATIONS"]} </a>
@@ -85,15 +86,32 @@ leftMenu.close = function () {
 };
 
 /**
+ * Close the menu if it's in responsive mode.
+ *
+ * @returns {void}
+ */
+leftMenu.closeIfResponsive = function () {
+	if (window.matchMedia("only screen and (max-width: 567px), only screen and (max-width: 640px) and (orientation: portrait)").matches) {
+		leftMenu.dom().removeClass("visible");
+
+		tabindex.makeFocusable(header.dom());
+		tabindex.makeFocusable(lychee.content);
+		tabindex.makeUnfocusable(leftMenu.dom());
+	}
+};
+
+/**
  * @returns {void}
  */
 leftMenu.bind = function () {
 	// Event Name
-	const eventName = "click touchend";
+	const eventName = "click";
 
 	leftMenu.dom("#button_settings_close").on(eventName, leftMenu.close);
-	leftMenu.dom("#text_settings_close").on(eventName, leftMenu.close);
-	leftMenu.dom("#button_settings_open").on(eventName, settings.open);
+	leftMenu.dom("#button_settings_open").on(eventName, () => {
+		leftMenu.closeIfResponsive();
+		settings.open();
+	});
 	leftMenu.dom("#button_signout").on(eventName, lychee.logout);
 	leftMenu.dom("#button_logs").on(eventName, leftMenu.Logs);
 	leftMenu.dom("#button_diagnostics").on(eventName, leftMenu.Diagnostics);
@@ -109,6 +127,7 @@ leftMenu.bind = function () {
  * @returns {void}
  */
 leftMenu.Logs = function () {
+	leftMenu.closeIfResponsive();
 	view.logs.init();
 };
 
@@ -116,6 +135,7 @@ leftMenu.Logs = function () {
  * @returns {void}
  */
 leftMenu.Diagnostics = function () {
+	leftMenu.closeIfResponsive();
 	view.diagnostics.init();
 };
 
@@ -123,6 +143,7 @@ leftMenu.Diagnostics = function () {
  * @returns {void}
  */
 leftMenu.Update = function () {
+	leftMenu.closeIfResponsive();
 	view.update.init();
 };
 
@@ -130,6 +151,7 @@ leftMenu.Update = function () {
  * @returns {void}
  */
 leftMenu.Notifications = function () {
+	leftMenu.closeIfResponsive();
 	notifications.load();
 };
 
@@ -137,6 +159,7 @@ leftMenu.Notifications = function () {
  * @returns {void}
  */
 leftMenu.Users = function () {
+	leftMenu.closeIfResponsive();
 	users.list();
 };
 
@@ -144,6 +167,7 @@ leftMenu.Users = function () {
  * @returns {void}
  */
 leftMenu.u2f = function () {
+	leftMenu.closeIfResponsive();
 	u2f.list();
 };
 
@@ -151,5 +175,6 @@ leftMenu.u2f = function () {
  * @returns {void}
  */
 leftMenu.Sharing = function () {
+	leftMenu.closeIfResponsive();
 	sharing.list();
 };

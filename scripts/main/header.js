@@ -24,7 +24,7 @@ header.dom = function (selector) {
  */
 header.bind = function () {
 	// Event Name
-	const eventName = "click touchend";
+	const eventName = "click";
 
 	header.dom(".header__title").on(eventName, function (e) {
 		if ($(this).hasClass("header__title--editable") === false) return false;
@@ -59,13 +59,13 @@ header.bind = function () {
 		// Querying the CSS of an element is highly inefficient.
 		// Instead, we should use the same media query here as in the CSS.
 		// TODO: Fix this.
-		if ($("#lychee_left_menu_container").css("display") === "none") {
-			// left menu disabled on small screens
-			contextMenu.config(e);
-		} else {
-			// standard left menu
-			leftMenu.open();
-		}
+		//if ($("#lychee_left_menu_container").css("display") === "none") {
+		// left menu disabled on small screens
+		//	contextMenu.config(e);
+		//} else {
+		// standard left menu
+		leftMenu.open();
+		//}
 	});
 	header.dom("#button_close_config").on(eventName, function () {
 		tabindex.makeFocusable(header.dom());

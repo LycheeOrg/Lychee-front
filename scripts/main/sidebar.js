@@ -33,7 +33,7 @@ sidebar.dom = function (selector) {
  * @returns {void}
  */
 sidebar.bind = function () {
-	const eventName = "click touchend";
+	const eventName = "click";
 
 	sidebar
 		.dom("#edit_title")
