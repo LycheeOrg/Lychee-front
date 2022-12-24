@@ -8,8 +8,10 @@
 #lychee_left_menu_container {
 	width: 0; /* per default, the left menu is closed */
 	background-color: #111;
-	padding-top: 49px; /* Place content 49px from the top (same as menu bar height); TODO: fix this magic number */
+	padding-top: 16px; /* Place content 16px from the top (same as menu bar height) */
 	transition: width ease 0.5s 0s; /* 0.5 second transition effect to slide in the sidenav */
+	height: 100%;
+	z-index: 998;
 }
 
 /**
@@ -31,32 +33,11 @@
 	font-size: 18px;
 	color: #818181;
 	display: block;
-	transition: 0.3s; // TODO: Find out which property is animated
+	cursor: pointer;
 
 	&.linkMenu {
 		white-space: nowrap;
 	}
-}
-
-/* Position and style the close button (top right corner) */
-#lychee_left_menu .closebtn {
-	position: absolute;
-	top: 0;
-	right: 25px;
-	font-size: 36px;
-	margin-left: 50px;
-}
-
-#lychee_left_menu .closetxt {
-	position: absolute;
-	top: 0;
-	left: 0;
-	font-size: 24px;
-	height: 28px;
-	padding-top: 16px;
-	color: #111;
-	display: inline-block;
-	width: 210px;
 }
 
 #lychee_left_menu .iconic {
@@ -78,17 +59,18 @@
 	// disable left menu on small devices and use context menu instead
 	#lychee_left_menu_container,
 	#lychee_left_menu {
-		display: none !important;
+		position: absolute;
+		left: 0;
+	}
+
+	#lychee_left_menu_container.visible {
+		width: 100%;
 	}
 }
 
 // restrict hover features to devices that support it
 @media (hover: hover) {
 	#lychee_left_menu {
-		.closetxt:hover {
-			color: #818181;
-		}
-
 		/* When you mouse over the navigation links, change their color */
 		a:hover {
 			color: #f1f1f1;
