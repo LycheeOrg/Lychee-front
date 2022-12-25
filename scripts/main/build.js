@@ -187,26 +187,26 @@ build.album = function (data, disabled = false) {
 				`;
 	}
 
-	switch ((data.num_subalbums > 0 ? 2 : 0) + (data.num_photos > 0 ? 1 : 0)) {
-		case 0: // no badges
-			break;
-		case 1: // photos only
-			html += lychee.html`
-				<div class='counters'><div class='photos'><span>${data.num_photos}</span></div></div>`;
-			break;
-		case 2: // sub-albums only
-			html += lychee.html`
-				<div class='counters'><a class='folders'>${build.iconic("folder")}`;
-			if (data.num_subalbums > 1) html += lychee.html`<span>${data.num_subalbums}</span>`;
-			html += lychee.html`</a></div>`;
-			break;
-		case 3: // sub-albums and photos
+	if (data.num_subalbums > 0) {
+		if (data.num_photos > 0) {
+			// add counts for sub-albums and photos
 			html += lychee.html`
 				<div class='counters' style='flex-direction: ${lychee.album_decoration_orientation}'><div class='photos'><span>${
 				data.num_photos
 			}</span></div><a class='folders'>${build.iconic("folder")}`;
 			if (data.num_subalbums > 1) html += lychee.html`<span>${data.num_subalbums}</span>`;
 			html += lychee.html`</a></div>`;
+		} else {
+			// add counts for sub-albums only
+			html += lychee.html`
+				<div class='counters'><a class='folders'>${build.iconic("folder")}`;
+			if (data.num_subalbums > 1) html += lychee.html`<span>${data.num_subalbums}</span>`;
+			html += lychee.html`</a></div>`;
+		}
+	} else if (data.num_photos > 0) {
+		// add counts for photos only
+		html += lychee.html`
+				<div class='counters'><div class='photos'><span>${data.num_photos}</span></div></div>`;
 	}
 	html += "</div>"; // close 'album'
 
