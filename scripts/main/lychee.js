@@ -347,14 +347,6 @@ lychee.init = function (isFirstInitialization = true) {
 				leftMenu.build();
 				leftMenu.bind();
 				lychee.setMode("logged_in");
-
-				// Show dialog to create admin account, if no user is
-				// authenticated but admin rights are granted.
-				// TODO: Refactor the whole logic, i.e. the initial user should be created as part of the installation routine.
-				// In particular it is completely insane to build the UI as if the admin user was successfully authenticated.
-				// This might leak confidential photos to anybody if the DB is filled
-				// with photos and the admin password reset to `null`.
-				if (data.user === null && data.rights.user.can_edit) settings.createLogin();
 			} else {
 				lychee.setMode("public");
 			}
