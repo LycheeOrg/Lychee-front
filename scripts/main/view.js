@@ -1155,6 +1155,11 @@ view.settings = {
 		 * @returns {void}
 		 */
 		setLogin: function () {
+			let username_type = "hidden";
+			if (lychee.allow_username_change) {
+				username_type = "text";
+			}
+
 			const msg = lychee.html`
 			<div class="setLogin">
 			<form>
@@ -1162,7 +1167,7 @@ view.settings = {
 				  <input name='oldPassword' class='text' type='password' placeholder='$${lychee.locale["PASSWORD_CURRENT"]}' value=''>
 			  </p>
 			  <p>$${lychee.locale["PASSWORD_TEXT"]}
-				  <input name='username' class='text' type='text' placeholder='$${lychee.locale["LOGIN_USERNAME"]}' value=''>
+				  <input name='username' class='text' type='$${username_type}' placeholder='$${lychee.locale["LOGIN_USERNAME"]}' value=''>
 				  <input name='password' class='text' type='password' placeholder='$${lychee.locale["LOGIN_PASSWORD"]}' value=''>
 				  <input name='confirm' class='text' type='password' placeholder='$${lychee.locale["LOGIN_PASSWORD_CONFIRM"]}' value=''>
 			  </p>
