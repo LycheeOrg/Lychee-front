@@ -131,6 +131,12 @@ const lychee = {
 	upload_processing_limit: 4,
 
 	/**
+	 * Allow users to change their username
+	 * @type {boolean}
+	 */
+	allow_username_change: true,
+
+	/**
 	 * The URL to the Facebook page related to this site
 	 * @type {string}
 	 */
@@ -526,6 +532,7 @@ lychee.localizeStaticGuiElements = function () {
  * @returns {void}
  */
 lychee.parsePublicInitializationData = function (data) {
+	lychee.allow_username_change = data.config.allow_username_change === "1";
 	lychee.sorting_photos = data.config.sorting_photos;
 	lychee.sorting_albums = data.config.sorting_albums;
 	lychee.album_subtitle_type = data.config.album_subtitle_type || "oldstyle";
