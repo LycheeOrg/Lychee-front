@@ -95,6 +95,10 @@ settings.bind = function (inputSelector, formSelector, settingClickCB) {
  * @returns {void}
  */
 settings.changeLogin = function (params) {
+	if (params.username === '') {
+		params.username = null;
+	}
+
 	if (params.password.length < 1) {
 		loadingBar.show("error", lychee.locale["ERROR_EMPTY_PASSWORD"]);
 		$("input[name=password]").addClass("error");
