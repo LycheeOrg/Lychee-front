@@ -299,6 +299,7 @@ const SmartAlbumID = Object.freeze({
  * @typedef ConfigurationData
  *
  * @property {string}   album_subtitle_type
+ * @property {string}   allow_username_change    - actually a boolean
  * @property {string}   check_for_updates        - actually a boolean
  * @property {string}   [default_license]
  * @property {string}   [delete_imported]        - actually a boolean
