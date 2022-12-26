@@ -455,7 +455,7 @@ contextMenu.photoMulti = function (photoIDs, e) {
 			},
 		},
 		{ title: build.iconic("trash") + lychee.locale["DELETE_ALL"], fn: () => photo.delete(photoIDs) },
-		{ title: build.iconic("cloud-download") + lychee.locale["DOWNLOAD_ALL"], fn: () => photo.getArchive(photoIDs, "FULL") },
+		{ title: build.iconic("cloud-download") + lychee.locale["DOWNLOAD_ALL"], fn: () => photo.getArchive(photoIDs, "ORIGINAL") },
 	];
 
 	basicContext.show(items, e.originalEvent, contextMenu.close);
