@@ -138,10 +138,10 @@
 .album .counters {
 	position: absolute;
 	right: 8px;
-	top: 2px;
+	top: 8px;
 	display: flex;
 	flex-direction: row;
-	//	flex-direction: column;
+	gap: 4px 8px;
 	justify-content: flex-end;
 	text-align: right;
 	font: bold 11px sans-serif;
@@ -150,10 +150,8 @@
 	.photos {
 		position: relative;
 		color: #fff;
-		right: -2px;
 	}
 	.folders {
-		margin-top: 6px;
 		.iconic {
 			fill: #fff;
 			width: 17px;
@@ -172,16 +170,16 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: space-around;
+		right: -2px;
 		aspect-ratio: 1;
 		text-align: end;
-		margin-top: 4px;
 		background-color: rgba(255, 0, 0, 0.8);
 		background-size: contain;
 		mask-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-.5 -.5 121 121' width='121' height='121'%3e%3cg %3e%3cpath d='M 60 0 L 70.00734 9.689696 L 82.96101 4.567228 L 88.4985 17.348984 L 102.42641 17.573593 L 102.65102 31.501502 L 115.43277 37.038994 L 110.3103 49.99266 L 120 60 L 110.3103 70.00734 L 115.43277 82.96101 L 102.65102 88.4985 L 102.42641 102.42641 L 88.4985 102.65102 L 82.96101 115.43277 L 70.00734 110.3103 L 60 120 L 49.99266 110.3103 L 37.038994 115.43277 L 31.501502 102.65102 L 17.573593 102.42641 L 17.348984 88.4985 L 4.567228 82.96101 L 9.689696 70.00734 L 0 60 L 9.689696 49.99266 L 4.567228 37.038994 L 17.348984 31.501502 L 17.573593 17.573593 L 31.501502 17.348984 L 37.038994 4.567228 L 49.99266 9.689696 Z' stroke='none' fill='black'/%3e%3c/g%3e%3c/svg%3e");
 		mask-size: 100%;
 		mask-repeat: no-repeat;
 		span {
-			min-width: 12px;
+			min-width: 13px;
 			text-align: center;
 			margin: 3px;
 		}
@@ -365,10 +363,9 @@
 	.album .counters {
 		filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.75));
 		font: bold 7px sans-serif;
-		.folders,
-		.photos {
-			margin-top: 3px;
-		}
+		gap: 2px 4px;
+		right: 6px;
+		top: 4px;
 		.folders {
 			.iconic {
 				width: 11px;
@@ -383,9 +380,9 @@
 		}
 		.photos {
 			span {
-				min-width: 8px;
+				min-width: 9px;
 				text-align: center;
-				margin: 1px;
+				margin: 2px;
 			}
 		}
 	}
@@ -438,10 +435,9 @@
 	.album .counters {
 		filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.75));
 		font: bold 8px sans-serif;
-		.folders,
-		.photos {
-			margin-top: 3px;
-		}
+		gap: 3px 6px;
+		right: 6px;
+		top: 4px;
 		.folders {
 			.iconic {
 				width: 13px;
@@ -456,9 +452,9 @@
 		}
 		.photos {
 			span {
-				min-width: 14px;
+				min-width: 10px;
 				text-align: center;
-				margin: 1px;
+				margin: 2px;
 			}
 		}
 	}
@@ -510,10 +506,9 @@
 	.album .counters {
 		filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.75));
 		font: bold 9px sans-serif;
-		.folders,
-		.photos {
-			margin-top: 4px;
-		}
+		gap: 4px 8px;
+		right: 7px;
+		top: 5px;
 		.folders {
 			.iconic {
 				width: 15px;
@@ -528,7 +523,7 @@
 		}
 		.photos {
 			span {
-				min-width: 14px;
+				min-width: 12px;
 				text-align: center;
 				margin: 2px;
 			}

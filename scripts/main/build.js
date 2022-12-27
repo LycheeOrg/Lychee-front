@@ -187,26 +187,36 @@ build.album = function (data, disabled = false) {
 				`;
 	}
 
-	if (data.num_subalbums > 0) {
-		if (data.num_photos > 0) {
-			// add counts for sub-albums and photos
+	let albumcount = data.num_subalbums;
+
+	switch (lychee.album_decoration) {
+		case "none": // no decorations
+			break;
+		case "photo": // photos only
 			html += lychee.html`
-				<div class='counters' style='flex-direction: ${lychee.album_decoration_orientation}'><div class='photos'><span>${
-				data.num_photos
-			}</span></div><a class='folders'>${build.iconic("folder")}`;
-			if (data.num_subalbums > 1) html += lychee.html`<span>${data.num_subalbums}</span>`;
-			html += lychee.html`</a></div>`;
-		} else {
-			// add counts for sub-albums only
-			html += lychee.html`
-				<div class='counters'><a class='folders'>${build.iconic("folder")}`;
-			if (data.num_subalbums > 1) html += lychee.html`<span>${data.num_subalbums}</span>`;
-			html += lychee.html`</a></div>`;
-		}
-	} else if (data.num_photos > 0) {
-		// add counts for photos only
-		html += lychee.html`
 				<div class='counters'><div class='photos'><span>${data.num_photos}</span></div></div>`;
+			break;
+		case "original": // sub-albums only and only marker without count
+			albumcount = Math.min(albumcount, 1);
+		// no break;
+		case "album": // sub-albums only
+			if (albumcount > 0) {
+				html += lychee.html`<div class='counters'><a class='folders'>${build.iconic("folder")}`;
+				if (albumcount > 1) html += lychee.html`<span>${albumcount}</span>`;
+				html += lychee.html`</a></div>`;
+			}
+			break;
+		case "all": // sub-albums and photos
+			if (albumcount > 0 || data.num_photos > 0) {
+				html += lychee.html`
+					<div class='counters' style='flex-direction: ${lychee.album_decoration_orientation}'>`;
+				if (data.num_photos > 0) html += lychee.html`<div class='photos'><span>${data.num_photos}</span></div>`;
+				if (albumcount > 0) {
+					html += lychee.html`<a class='folders'>${build.iconic("folder")}`;
+					if (albumcount > 1) html += lychee.html`<span>${albumcount}</span>`;
+				}
+				html += lychee.html`</a></div>`;
+			}
 	}
 	html += "</div>"; // close 'album'
 
