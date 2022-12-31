@@ -504,7 +504,7 @@ lychee.localizeStaticGuiElements = function () {
 				lychee.site_owner,
 				lychee.site_copyright_begin === lychee.site_copyright_end
 					? lychee.site_copyright_begin
-					: lychee.site_copyright_begin + "–" + lychee.site_copyright_begin
+					: lychee.site_copyright_begin + "–" + lychee.site_copyright_end
 		  )
 		: "";
 	footer.querySelector("p.personal_text").textContent = lychee.footer_additional_text;
