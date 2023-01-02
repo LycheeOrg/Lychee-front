@@ -173,19 +173,27 @@
 		}
 		span {
 			position: absolute;
-			right: 3px;
-			// subalbum count needs to be positioned from the top because
-			// the photos badge can increase in size
-			top: 4px;
+			bottom: 0;
 			color: #222;
-			background-color: #fff;
-			min-width: 10px;
+			padding-right: 1px;
+			padding-left: 1px;
+		}
+	}
+
+	.folders {
+		span {
+			right: 0;
+			line-height: 0.9;
 		}
 	}
 
 	.photos {
 		span {
-			right: 5px;
+			right: 4px;
+			min-width: 10px;
+			background-color: #fff;
+			padding-top: 1px;
+			line-height: 1;
 		}
 	}
 }
@@ -364,29 +372,35 @@
 			}
 		}
 	}
-	.album .counters {
+	.album .album_counters {
 		filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.75));
 		font: bold 7px sans-serif;
-		gap: 2px 4px;
-		right: 6px;
-		top: 4px;
-		.folders {
+		gap: 2px 2px;
+		right: 3px;
+		top: 3px;
+	
+		.layers {
+			position: relative;
+			padding: 3px 2px;
+	
+			.iconic {
+				fill: #fff;
+				width: 8px;
+				height: 8px;
+			}
+		}
+		.folders, .photos {
 			.iconic {
 				width: 11px;
 				height: 11px;
 			}
-			span {
-				right: 1px;
-				// subalbum count needs to be positioned from the top because
-				// the photos badge can increase in size
-				top: 4px;
-			}
 		}
 		.photos {
 			span {
-				min-width: 9px;
-				text-align: center;
-				margin: 2px;
+				right: 3px;
+				min-width: 5px;
+				line-height: 0.9;
+				padding-top: 2px;
 			}
 		}
 	}
@@ -436,29 +450,34 @@
 			}
 		}
 	}
-	.album .counters {
+	.album .album_counters {
 		filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.75));
 		font: bold 8px sans-serif;
-		gap: 3px 6px;
-		right: 6px;
+		gap: 3px 3px;
+		right: 4px;
 		top: 4px;
-		.folders {
+	
+		.layers {
+			position: relative;
+			padding: 3px 2px;
+	
+			.iconic {
+				fill: #fff;
+				width: 9px;
+				height: 9px;
+			}
+		}
+		.folders, .photos {
 			.iconic {
 				width: 13px;
 				height: 13px;
 			}
-			span {
-				right: 1px;
-				// subalbum count needs to be positioned from the top because
-				// the photos badge can increase in size
-				top: 5px;
-			}
 		}
 		.photos {
 			span {
-				min-width: 10px;
-				text-align: center;
-				margin: 2px;
+				right: 3px;
+				min-width: 8px;
+				padding-top: 2px;
 			}
 		}
 	}
@@ -507,29 +526,39 @@
 			}
 		}
 	}
-	.album .counters {
+	.album .album_counters {
 		filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.75));
 		font: bold 9px sans-serif;
-		gap: 4px 8px;
-		right: 7px;
-		top: 5px;
-		.folders {
+		gap: 4px 4px;
+		right: 6px;
+		top: 6px;
+	
+		.layers {
+			position: relative;
+			padding: 3px 2px;
+	
+			.iconic {
+				fill: #fff;
+				width: 11px;
+				height: 11px;
+			}
+		}
+		.folders, .photos {
 			.iconic {
 				width: 15px;
 				height: 15px;
 			}
+		}
+		.folders {
 			span {
-				right: 2px;
-				// subalbum count needs to be positioned from the top because
-				// the photos badge can increase in size
-				top: 6px;
+				line-height: 1;
 			}
 		}
 		.photos {
 			span {
-				min-width: 12px;
-				text-align: center;
-				margin: 2px;
+				right: 3px;
+				min-width: 10px;
+				padding-top: 2px;
 			}
 		}
 	}

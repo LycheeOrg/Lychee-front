@@ -231,7 +231,7 @@ build.album = function (data, disabled = false) {
 					html += lychee.html`
 							<a class='photos'>${build.iconic("puzzle-piece")}
 								<span>${data.num_photos}</span>
-							<a>`;
+							</a>`;
 				}
 				if (albumcount > 0) {
 					html += lychee.html`
