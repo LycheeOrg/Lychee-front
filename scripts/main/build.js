@@ -215,7 +215,8 @@ build.album = function (data, disabled = false) {
 				html += lychee.html`
 					<div class='album_counters'>
 						<a class='folders'>${build.iconic("folder")}`;
-				if (albumcount > 1) html += lychee.html`
+				if (albumcount > 1)
+					html += lychee.html`
 						<span>${albumcount}</span>`;
 				html += lychee.html`
 						</a>
@@ -226,8 +227,7 @@ build.album = function (data, disabled = false) {
 			if (albumcount > 0 || data.num_photos > 0) {
 				html += lychee.html`
 					<div class='album_counters' style='flex-direction: ${lychee.album_decoration_orientation}'>`;
-				if (data.num_photos > 0)
-				{
+				if (data.num_photos > 0) {
 					html += lychee.html`
 							<a class='photos'>${build.iconic("puzzle-piece")}
 								<span>${data.num_photos}</span>
@@ -236,7 +236,8 @@ build.album = function (data, disabled = false) {
 				if (albumcount > 0) {
 					html += lychee.html`
 						<a class='folders'>${build.iconic("folder")}`;
-					if (albumcount > 1) html += lychee.html`
+					if (albumcount > 1)
+						html += lychee.html`
 							<span>${albumcount}</span>`;
 					html += lychee.html`
 						</a>`;
