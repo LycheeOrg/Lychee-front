@@ -22,6 +22,7 @@
 		"node": ">= 10"
 	},
 	"dependencies": {
+		"@babel/preset-env": "^7.20.2",
 		"@lychee-org/basiccontext": "^4.0.0",
 		"@lychee-org/basicmodal": "^4.0.1",
 		"@lychee-org/leaflet.photo": "^1.0.0",
