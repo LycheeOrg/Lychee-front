@@ -194,28 +194,55 @@ build.album = function (data, disabled = false) {
 			break;
 		case "photo": // photos only
 			html += lychee.html`
-				<div class='counters'><div class='photos'><span>${data.num_photos}</span></div></div>`;
+				<div class='album_counters'>
+					<div class='photos'>
+						<a class='photos'>${build.iconic("puzzle-piece")}
+						<span>${data.num_photos}</span>
+						</a>
+					</div>
+				</div>`;
 			break;
-		case "original": // sub-albums only and only marker without count
-			albumcount = Math.min(albumcount, 1);
-		// no break;
+		case "layers": // sub-albums only and only marker without count (as in old v4 behaviour)
+			if (albumcount > 0) {
+				html += lychee.html`
+					<div class='album_counters'>
+						<a class='layers'>${build.iconic("layers")}</a>
+					</div>`;
+			}
+			break;
 		case "album": // sub-albums only
 			if (albumcount > 0) {
-				html += lychee.html`<div class='counters'><a class='folders'>${build.iconic("folder")}`;
-				if (albumcount > 1) html += lychee.html`<span>${albumcount}</span>`;
-				html += lychee.html`</a></div>`;
+				html += lychee.html`
+					<div class='album_counters'>
+						<a class='folders'>${build.iconic("folder")}`;
+				if (albumcount > 1) html += lychee.html`
+						<span>${albumcount}</span>`;
+				html += lychee.html`
+						</a>
+					</div>`;
 			}
 			break;
 		case "all": // sub-albums and photos
 			if (albumcount > 0 || data.num_photos > 0) {
 				html += lychee.html`
-					<div class='counters' style='flex-direction: ${lychee.album_decoration_orientation}'>`;
-				if (data.num_photos > 0) html += lychee.html`<div class='photos'><span>${data.num_photos}</span></div>`;
-				if (albumcount > 0) {
-					html += lychee.html`<a class='folders'>${build.iconic("folder")}`;
-					if (albumcount > 1) html += lychee.html`<span>${albumcount}</span>`;
+					<div class='album_counters' style='flex-direction: ${lychee.album_decoration_orientation}'>`;
+				if (data.num_photos > 0)
+				{
+					html += lychee.html`
+							<a class='photos'>${build.iconic("puzzle-piece")}
+								<span>${data.num_photos}</span>
+							<a>`;
 				}
-				html += lychee.html`</a></div>`;
+				if (albumcount > 0) {
+					html += lychee.html`
+						<a class='folders'>${build.iconic("folder")}`;
+					if (albumcount > 1) html += lychee.html`
+							<span>${albumcount}</span>`;
+					html += lychee.html`
+						</a>`;
+				}
+				html += lychee.html`
+					</div>`;
 			}
 	}
 	html += "</div>"; // close 'album'

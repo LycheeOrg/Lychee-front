@@ -1452,7 +1452,7 @@ view.settings = {
 			<span class="select" style="width:270px">
 				<select name="album_decoration" id="AlbumDecorationType">
 					<option value="none">${lychee.locale["ALBUM_DECORATION_NONE"]}</option>
-					<option value="original">${lychee.locale["ALBUM_DECORATION_ORIGINAL"]}</option>
+					<option value="layers">${lychee.locale["ALBUM_DECORATION_ORIGINAL"]}</option>
 					<option value="album">${lychee.locale["ALBUM_DECORATION_ALBUM"]}</option>
 					<option value="photo">${lychee.locale["ALBUM_DECORATION_PHOTO"]}</option>
 					<option value="all">${lychee.locale["ALBUM_DECORATION_ALL"]}</option>
@@ -1475,7 +1475,7 @@ view.settings = {
 
 			$(".settings_view").append(msg);
 
-			$("select#AlbumDecorationType").val(!lychee.album_decoration ? "original" : lychee.album_decoration);
+			$("select#AlbumDecorationType").val(!lychee.album_decoration ? "layers" : lychee.album_decoration);
 			$("select#AlbumDecorationOrientation").val(!lychee.album_decoration_orientation ? "row" : lychee.album_decoration_orientation);
 			settings.bind("#basicModal__action_set_album_decoration", ".setAlbumDecoration", settings.setAlbumDecoration);
 		},
