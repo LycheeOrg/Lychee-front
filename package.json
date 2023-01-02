@@ -40,11 +40,12 @@
 		"stackblur-canvas": "^2.5.0"
 	},
 	"devDependencies": {
-		"babel-preset-env": "^1.7.0",
+		"@babel/core": "^7.20.7",
+		"@babel/preset-env": "^7.20.2",
 		"del": "^5.1.0",
 		"gulp": "^4.0.0",
 		"gulp-autoprefixer": "^6.0.0",
-		"gulp-babel": "^6.1.2",
+		"gulp-babel": "^8.0.0",
 		"gulp-chmod": "^3.0.0",
 		"gulp-clean-css": "^3.10.0",
 		"gulp-concat": "^2.6.1",

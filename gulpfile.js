@@ -53,7 +53,7 @@ paths.frontend = {
 
 gulp.task("frontend--js", function () {
 	const babel = plugins.babel({
-		presets: ["env"],
+		presets: ["@babel/preset-env"],
 	});
 
 	return gulp
@@ -114,7 +114,7 @@ paths.landing = {
 
 gulp.task("landing--js", function () {
 	const babel = plugins.babel({
-		presets: ["env"],
+		presets: ["@babel/preset-env"],
 	});
 
 	return gulp
