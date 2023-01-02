@@ -22,7 +22,6 @@
 		"node": ">= 10"
 	},
 	"dependencies": {
-		"@babel/preset-env": "^7.20.2",
 		"@lychee-org/basiccontext": "^4.0.0",
 		"@lychee-org/basicmodal": "^4.0.1",
 		"@lychee-org/leaflet.photo": "^1.0.0",
@@ -41,6 +40,7 @@
 		"stackblur-canvas": "^2.5.0"
 	},
 	"devDependencies": {
+		"@babel/preset-env": "^7.20.2",
 		"babel-preset-env": "^1.7.0",
 		"del": "^5.1.0",
 		"gulp": "^4.0.0",
