@@ -203,6 +203,19 @@ settings.changePublicSearch = function (params) {
  * @param {SettingsFormData} params
  * @returns {void}
  */
+settings.setAlbumDecoration = function (params) {
+	api.post("Settings::setAlbumDecoration", params, function () {
+		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_ALBUM_DECORATION"]);
+		albums.refresh();
+		lychee.album_decoration = params.album_decoration;
+		lychee.album_decoration_orientation = params.album_decoration_orientation;
+	});
+};
+
+/**
+ * @param {SettingsFormData} params
+ * @returns {void}
+ */
 settings.setOverlayType = function (params) {
 	api.post("Settings::setOverlayType", params, function () {
 		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_IMAGE_OVERLAY"]);

@@ -101,7 +101,8 @@
  * @property {boolean} is_nsfw
  * @property {AlbumRightsDTO} rights
  * @property {AlbumProtectionPolicy} policy
- * @property {boolean} has_albums
+ * @property {boolean} num_albums
+ * @property {boolean} num_photos
  * @property {?string} min_taken_at
  * @property {?string} max_taken_at
  * @property {?SortingCriterion} sorting
@@ -298,6 +299,8 @@ const SmartAlbumID = Object.freeze({
 /**
  * @typedef ConfigurationData
  *
+ * @property {string}   album_decoration
+ * @property {string}   album_decoration_orientation
  * @property {string}   album_subtitle_type
  * @property {string}   allow_username_change    - actually a boolean
  * @property {string}   check_for_updates        - actually a boolean

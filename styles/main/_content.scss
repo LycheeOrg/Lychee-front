@@ -134,6 +134,69 @@
 		filter: blur(5px);
 	}
 }
+// Counters -------------------------------------------------------------- //
+.album .album_counters {
+	position: absolute;
+	right: 8px;
+	top: 8px;
+	display: flex;
+	flex-direction: row;
+	gap: 4px 4px;
+	justify-content: flex-end;
+	text-align: right;
+	font: bold 10px sans-serif;
+	filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.75));
+
+	.layers {
+		position: relative;
+		padding: 6px 4px;
+
+		.iconic {
+			fill: #fff;
+			width: 12px;
+			height: 12px;
+		}
+	}
+
+	.folders,
+	.photos {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		text-align: end;
+
+		.iconic {
+			fill: #fff;
+			width: 15px;
+			height: 15px;
+		}
+		span {
+			position: absolute;
+			bottom: 0;
+			color: #222;
+			padding-right: 1px;
+			padding-left: 1px;
+		}
+	}
+
+	.folders {
+		span {
+			right: 0;
+			line-height: 0.9;
+		}
+	}
+
+	.photos {
+		span {
+			right: 4px;
+			min-width: 10px;
+			background-color: #fff;
+			padding-top: 1px;
+			line-height: 1;
+		}
+	}
+}
 // Overlay -------------------------------------------------------------- //
 .album .overlay,
 .photo .overlay {
@@ -190,7 +253,7 @@
 // Badge -------------------------------------------------------------- //
 .album .badges,
 .photo .badges {
-	position: relative;
+	position: absolute;
 	margin: -1px 0 0 6px;
 }
 .album .subalbum_badge {
@@ -247,16 +310,6 @@
 		fill: #fff;
 		width: 16px;
 		height: 16px;
-	}
-	&--folder {
-		display: inline-block;
-		box-shadow: none;
-		background: none;
-		border: none;
-		.iconic {
-			width: 12px;
-			height: 12px;
-		}
 	}
 }
 // Divider -------------------------------------------------------------- //
@@ -317,11 +370,38 @@
 				width: 12px;
 				height: 12px;
 			}
-			&--folder {
-				.iconic {
-					width: 8px;
-					height: 8px;
-				}
+		}
+	}
+	.album .album_counters {
+		filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.75));
+		font: bold 7px sans-serif;
+		gap: 2px 2px;
+		right: 3px;
+		top: 3px;
+
+		.layers {
+			position: relative;
+			padding: 3px 2px;
+
+			.iconic {
+				fill: #fff;
+				width: 8px;
+				height: 8px;
+			}
+		}
+		.folders,
+		.photos {
+			.iconic {
+				width: 11px;
+				height: 11px;
+			}
+		}
+		.photos {
+			span {
+				right: 3px;
+				min-width: 5px;
+				line-height: 0.9;
+				padding-top: 2px;
 			}
 		}
 	}
@@ -369,11 +449,37 @@
 				width: 14px;
 				height: 14px;
 			}
-			&--folder {
-				.iconic {
-					width: 9px;
-					height: 9px;
-				}
+		}
+	}
+	.album .album_counters {
+		filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.75));
+		font: bold 8px sans-serif;
+		gap: 3px 3px;
+		right: 4px;
+		top: 4px;
+
+		.layers {
+			position: relative;
+			padding: 3px 2px;
+
+			.iconic {
+				fill: #fff;
+				width: 9px;
+				height: 9px;
+			}
+		}
+		.folders,
+		.photos {
+			.iconic {
+				width: 13px;
+				height: 13px;
+			}
+		}
+		.photos {
+			span {
+				right: 3px;
+				min-width: 8px;
+				padding-top: 2px;
 			}
 		}
 	}
@@ -420,11 +526,42 @@
 				width: 16px;
 				height: 16px;
 			}
-			&--folder {
-				.iconic {
-					width: 10px;
-					height: 10px;
-				}
+		}
+	}
+	.album .album_counters {
+		filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.75));
+		font: bold 9px sans-serif;
+		gap: 4px 4px;
+		right: 6px;
+		top: 6px;
+
+		.layers {
+			position: relative;
+			padding: 3px 2px;
+
+			.iconic {
+				fill: #fff;
+				width: 11px;
+				height: 11px;
+			}
+		}
+		.folders,
+		.photos {
+			.iconic {
+				width: 15px;
+				height: 15px;
+			}
+		}
+		.folders {
+			span {
+				line-height: 1;
+			}
+		}
+		.photos {
+			span {
+				right: 3px;
+				min-width: 10px;
+				padding-top: 2px;
 			}
 		}
 	}

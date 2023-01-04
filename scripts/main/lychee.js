@@ -127,6 +127,8 @@ const lychee = {
 	nsfw_banner_override: "",
 
 	album_subtitle_type: "oldstyle",
+	album_decoration: "layers",
+	album_decoration_orientation: "row",
 
 	upload_processing_limit: 4,
 
@@ -536,6 +538,8 @@ lychee.parsePublicInitializationData = function (data) {
 	lychee.sorting_photos = data.config.sorting_photos;
 	lychee.sorting_albums = data.config.sorting_albums;
 	lychee.album_subtitle_type = data.config.album_subtitle_type || "oldstyle";
+	lychee.album_decoration = data.config.album_decoration || "layers";
+	lychee.album_decoration_orientation = data.config.album_decoration_orientation || "row";
 	lychee.checkForUpdates = data.config.check_for_updates;
 	lychee.layout = Number.parseInt(data.config.layout, 10);
 	if (Number.isNaN(lychee.layout)) lychee.layout = 1;

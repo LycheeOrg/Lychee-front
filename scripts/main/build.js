@@ -187,14 +187,66 @@ build.album = function (data, disabled = false) {
 				`;
 	}
 
-	if ((data.albums && data.albums.length > 0) || data.has_albums) {
-		html += lychee.html`
-				<div class='subalbum_badge'>
-					<a class='badge badge--folder'>${build.iconic("layers")}</a>
-				</div>`;
-	}
+	let albumcount = data.num_subalbums;
 
-	html += "</div>";
+	switch (lychee.album_decoration) {
+		case "none": // no decorations
+			break;
+		case "photo": // photos only
+			html += lychee.html`
+				<div class='album_counters'>
+					<div class='photos'>
+						<a class='photos'>${build.iconic("puzzle-piece")}
+						<span>${data.num_photos}</span>
+						</a>
+					</div>
+				</div>`;
+			break;
+		case "layers": // sub-albums only and only marker without count (as in old v4 behaviour)
+			if (albumcount > 0) {
+				html += lychee.html`
+					<div class='album_counters'>
+						<a class='layers'>${build.iconic("layers")}</a>
+					</div>`;
+			}
+			break;
+		case "album": // sub-albums only
+			if (albumcount > 0) {
+				html += lychee.html`
+					<div class='album_counters'>
+						<a class='folders'>${build.iconic("folder")}`;
+				if (albumcount > 1)
+					html += lychee.html`
+						<span>${albumcount}</span>`;
+				html += lychee.html`
+						</a>
+					</div>`;
+			}
+			break;
+		case "all": // sub-albums and photos
+			if (albumcount > 0 || data.num_photos > 0) {
+				html += lychee.html`
+					<div class='album_counters' style='flex-direction: ${lychee.album_decoration_orientation}'>`;
+				if (data.num_photos > 0) {
+					html += lychee.html`
+							<a class='photos'>${build.iconic("puzzle-piece")}
+								<span>${data.num_photos}</span>
+							</a>`;
+				}
+				if (albumcount > 0) {
+					html += lychee.html`
+						<a class='folders'>${build.iconic("folder")}`;
+					if (albumcount > 1)
+						html += lychee.html`
+							<span>${albumcount}</span>`;
+					html += lychee.html`
+						</a>`;
+				}
+				html += lychee.html`
+					</div>`;
+			}
+	}
+	html += "</div>"; // close 'album'
 
 	return html;
 };

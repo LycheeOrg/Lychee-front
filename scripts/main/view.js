@@ -1141,6 +1141,7 @@ view.settings = {
 				view.settings.content.setDefaultLicense();
 				view.settings.content.setLayout();
 				view.settings.content.setPublicSearch();
+				view.settings.content.setAlbumDecoration();
 				view.settings.content.setOverlayType();
 				view.settings.content.setMapDisplay();
 				view.settings.content.setNSFWVisible();
@@ -1440,6 +1441,44 @@ view.settings = {
 			settings.bind("#NSFWVisible", ".setNSFWVisible", settings.changeNSFWVisible);
 		},
 		// TODO: extend to the other settings.
+
+		/**
+		 * @returns {void}
+		 */
+		setAlbumDecoration: function () {
+			let msg = `
+			<div class="setAlbumDecoration">
+			<p>${lychee.locale["ALBUM_DECORATION"]}
+			<span class="select" style="width:270px">
+				<select name="album_decoration" id="AlbumDecorationType">
+					<option value="none">${lychee.locale["ALBUM_DECORATION_NONE"]}</option>
+					<option value="layers">${lychee.locale["ALBUM_DECORATION_ORIGINAL"]}</option>
+					<option value="album">${lychee.locale["ALBUM_DECORATION_ALBUM"]}</option>
+					<option value="photo">${lychee.locale["ALBUM_DECORATION_PHOTO"]}</option>
+					<option value="all">${lychee.locale["ALBUM_DECORATION_ALL"]}</option>
+				</select>
+			</span>
+			<p>${lychee.locale["ALBUM_DECORATION_ORIENTATION"]}
+			<span class="select" style="width:270px">
+				<select name="album_decoration_orientation" id="AlbumDecorationOrientation">
+					<option value="row">${lychee.locale["ALBUM_DECORATION_ORIENTATION_ROW"]}</option>
+					<option value="row-reverse">${lychee.locale["ALBUM_DECORATION_ORIENTATION_ROW_REVERSE"]}</option>
+					<option value="column">${lychee.locale["ALBUM_DECORATION_ORIENTATION_COLUMN"]}</option>
+					<option value="column-reverse">${lychee.locale["ALBUM_DECORATION_ORIENTATION_COLUMN_REVERSE"]}</option>
+				</select>
+			</span>
+			<div class="basicModal__buttons">
+				<a id="basicModal__action_set_album_decoration" class="basicModal__button">${lychee.locale["SET_ALBUM_DECORATION"]}</a>
+			</div>
+			</div>
+			`;
+
+			$(".settings_view").append(msg);
+
+			$("select#AlbumDecorationType").val(!lychee.album_decoration ? "layers" : lychee.album_decoration);
+			$("select#AlbumDecorationOrientation").val(!lychee.album_decoration_orientation ? "row" : lychee.album_decoration_orientation);
+			settings.bind("#basicModal__action_set_album_decoration", ".setAlbumDecoration", settings.setAlbumDecoration);
+		},
 
 		/**
 		 * @returns {void}
