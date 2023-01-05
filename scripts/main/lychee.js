@@ -627,6 +627,7 @@ lychee.parseProtectedInitializationData = function (data) {
 	lychee.delete_imported = data.config.delete_imported === "1";
 	lychee.import_via_symlink = data.config.import_via_symlink === "1";
 	lychee.skip_duplicates = data.config.skip_duplicates === "1";
+	lychee.share_button_visible = data.config.share_button_visible === "1";
 	lychee.editor_enabled = data.config.editor_enabled === "1";
 	lychee.new_photos_notification = data.config.new_photos_notification === "1";
 	lychee.upload_processing_limit = Number.parseInt(data.config.upload_processing_limit, 10) || 4;
