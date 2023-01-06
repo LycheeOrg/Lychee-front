@@ -1,5 +1,17 @@
 // Extended Theme -------------------------------------------------------------- //
+#addMenu {
+	// positioning of add menu in upper right corner
+	top: 48px !important;
+	left: unset !important;
+	right: 4px;
+}
+
 .basicContext {
+	&__data {
+		// make room for icon
+		padding-left: 40px;
+	}
+
 	&__data .cover {
 		position: absolute;
 		background-color: #222;
@@ -14,7 +26,8 @@
 
 	&__data .iconic {
 		display: inline-block;
-		margin: 0 10px 0 1px;
+		// shift icon into the margin
+		margin: 0 10px 0 -22px;
 		width: 11px;
 		height: 10px;
 		fill: white(1);

@@ -5,6 +5,10 @@
 const contextMenu = {};
 
 /**
+ * Note, the 'Add' menu in the upper right corner is effectively
+ * a 'More...' menu (at least on small screens). More importantly,
+ * it is not a context menu (even though it uses the same code).
+ *
  * @param {jQuery.Event} e
  */
 contextMenu.add = function (e) {
@@ -89,7 +93,13 @@ contextMenu.add = function (e) {
 		}
 	}
 
-	basicContext.show(items, e.originalEvent);
+	basicContext.show(items, e.originalEvent, null, () => {
+		// use callback of basicContext to add an id and use CSS
+		// formatting to override hardcoded positioning of the
+		// menu based on mouse/tap location and more.
+		let menu = document.querySelector(".basicContext");
+		menu.setAttribute("id", "addMenu");
+	});
 
 	upload.notify();
 };
