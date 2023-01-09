@@ -306,14 +306,7 @@ header.setMode = function (mode) {
 				tabindex.makeFocusable(e);
 			}
 
-			if (
-				!lychee.is_share_button_visible &&
-				// The owner of an album (or the admin) shall always see
-				// the share button and be unaffected by the settings of
-				// the album
-				(lychee.user === null || lychee.user.username !== album.json.owner_name) &&
-				!lychee.rights.is_admin
-			) {
+			if (!lychee.share_button_visible) {
 				const e = $("#button_share_album");
 				e.hide();
 				tabindex.makeUnfocusable(e);
@@ -418,7 +411,7 @@ header.setMode = function (mode) {
 				const e = $("#button_visibility_album", "#button_sharing_album_users", "#lychee_toolbar_album");
 				e.remove();
 			}
-			if (!lychee.enable_button_share) {
+			if (!lychee.enable_button_share || !lychee.share_button_visible) {
 				const e = $("#button_share_album", "#lychee_toolbar_album");
 				e.remove();
 			}
