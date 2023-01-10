@@ -1041,14 +1041,13 @@ lychee.load = function (autoplay = true) {
 					header.setMode("albums");
 					lychee.setMetaData(lychee.locale["SEARCH_RESULTS"]);
 				} else {
-					view.album.title();
+					album.load(albumID);
 				}
 				lychee.content.show();
 				tabindex.makeFocusable(lychee.content, true);
 				// If the album was loaded in the background (when content is
 				// hidden), scrolling may not have worked.
 				view.album.content.restoreScroll();
-				album.load(albumID);
 			} else if (album.isSearchID(albumID)) {
 				// Search has been triggered
 				let search_string = decodeURIComponent(hashMatch[1]).trim();
