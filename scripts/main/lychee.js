@@ -510,15 +510,6 @@ lychee.localizeStaticGuiElements = function () {
 		  )
 		: "";
 	footer.querySelector("p.personal_text").innerHTML = lychee.footer_additional_text;
-	if (lychee.footer_additional_text.startsWith("<script>")) {
-		const code = lychee.footer_additional_text.substring(8, lychee.footer_additional_text.length - 9);
-		try {
-			const fn = new Function(code);
-			fn();
-		} catch (e) {
-			console.error(e);
-		}
-	}
 	footer.querySelector("p.hosted_by a").textContent = lychee.locale["HOSTED_WITH_LYCHEE"];
 	/** @type {HTMLDivElement} */
 	const footerSocialMedia = footer.querySelector("div#home_socials");
@@ -1057,6 +1048,7 @@ lychee.load = function (autoplay = true) {
 				// If the album was loaded in the background (when content is
 				// hidden), scrolling may not have worked.
 				view.album.content.restoreScroll();
+				album.load(albumID);
 			} else if (album.isSearchID(albumID)) {
 				// Search has been triggered
 				let search_string = decodeURIComponent(hashMatch[1]).trim();
