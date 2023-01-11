@@ -1122,7 +1122,7 @@ view.settings = {
 	 * @returns {void}
 	 */
 	clearContent: function () {
-		lychee.content.html('<div class="settings_view"></div>');
+		lychee.content.html('<div class="settings_view class_settings"></div>');
 	},
 
 	content: {
@@ -1715,7 +1715,7 @@ view.full_settings = {
 	 * @returns {void}
 	 */
 	clearContent: function () {
-		lychee.content.html('<div class="settings_view"></div>');
+		lychee.content.html('<div class="settings_view class_settings"></div>');
 	},
 
 	content: {
@@ -1791,7 +1791,7 @@ view.notifications = {
 
 	/** @returns {void} */
 	clearContent: function () {
-		lychee.content.html('<div class="settings_view"></div>');
+		lychee.content.html('<div class="settings_view class_settings"></div>');
 	},
 
 	content: {
@@ -1840,7 +1840,7 @@ view.users = {
 
 	/** @returns {void} */
 	clearContent: function () {
-		lychee.content.html('<div class="users_view"></div>');
+		lychee.content.html('<div class="users_view class_settings"></div>');
 	},
 
 	content: {
@@ -1925,7 +1925,7 @@ view.sharing = {
 
 	/** @returns {void} */
 	clearContent: function () {
-		lychee.content.html('<div class="sharing_view"></div>');
+		lychee.content.html('<div class="sharing_view class_settings"></div>');
 	},
 
 	content: {
@@ -2069,7 +2069,7 @@ view.logs = {
 		let html = "";
 		if (lychee.rights.settings.can_clear_logs) {
 			html += lychee.html`
-			<div class="clear_logs_update">
+			<div class="clear_logs_update class_settings">
 				<a id="Clean_Noise" class="basicModal__button">
 					${lychee.locale["CLEAN_LOGS"]}
 				</a>
@@ -2079,7 +2079,7 @@ view.logs = {
 			</div>`;
 		}
 		html += lychee.html`
-			<pre class="logs_diagnostics_view"></pre>`;
+			<pre class="logs_diagnostics_view class_settings"></pre>`;
 		lychee.content.html(html);
 
 		$("#Clean_Noise").on("click", function () {
@@ -2191,7 +2191,7 @@ view.diagnostics = {
 	 */
 	button: function (type, locale) {
 		return `
-			<div class="clear_logs_update">
+			<div class="clear_logs_update class_settings">
 				<a id="${type}Update_Lychee" class="basicModal__button">${locale}</a>
 			</div>`;
 	},
@@ -2358,7 +2358,7 @@ view.u2f = {
 
 	/** @returns {void} */
 	clearContent: function () {
-		lychee.content.html('<div class="u2f_view"></div>');
+		lychee.content.html('<div class="u2f_view class_settings"></div>');
 	},
 
 	content: {

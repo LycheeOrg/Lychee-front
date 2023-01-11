@@ -1034,14 +1034,23 @@ lychee.load = function (autoplay = true) {
 			$("#sensitive_warning").removeClass("active");
 			if (album.json && albumID === album.json.id) {
 				if (album.isSearchID(albumID)) {
-					// We are probably coming back to the search results from
-					// viewing an image.  Because search results is not a
-					// regular album, it needs to be treated a little
-					// differently.
-					header.setMode("albums");
-					lychee.setMetaData(lychee.locale["SEARCH_RESULTS"]);
+					if ($(".class_settings").length > 0) {
+						search.reset();
+						history.back();
+					} else {
+						// We are probably coming back to the search results from
+						// viewing an image.  Because search results is not a
+						// regular album, it needs to be treated a little
+						// differently.
+						header.setMode("albums");
+						lychee.setMetaData(lychee.locale["SEARCH_RESULTS"]);
+					}
 				} else {
-					album.load(albumID);
+					if ($(".class_settings").length > 0) {
+						album.load(albumID);
+					} else {
+						view.album.title();
+					}
 				}
 				lychee.content.show();
 				tabindex.makeFocusable(lychee.content, true);
