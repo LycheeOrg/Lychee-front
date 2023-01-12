@@ -1034,7 +1034,7 @@ lychee.load = function (autoplay = true) {
 			$("#sensitive_warning").removeClass("active");
 			if (album.json && albumID === album.json.id) {
 				if (album.isSearchID(albumID)) {
-					if ($(".class_settings").length > 0) {
+					if ($(".settings_view, .users_view, .sharing_view, .logs_diagnostics_view, .u2f_view").length > 0) {
 						search.reset();
 						history.back();
 					} else {
@@ -1046,7 +1046,7 @@ lychee.load = function (autoplay = true) {
 						lychee.setMetaData(lychee.locale["SEARCH_RESULTS"]);
 					}
 				} else {
-					if ($(".class_settings").length > 0) {
+					if ($(".settings_view, .users_view, .sharing_view, .logs_diagnostics_view, .u2f_view").length > 0) {
 						album.load(albumID);
 					} else {
 						view.album.title();
