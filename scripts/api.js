@@ -183,3 +183,43 @@ api.getCSS = function (url, callback) {
 		error: errorHandler,
 	});
 };
+
+/**
+ *
+ * @param {string} url
+ * @param {APISuccessCB} callback
+ * @returns {void}
+ */
+api.getJS = function (url, callback) {
+	loadingBar.show();
+
+	/**
+	 * The success handler
+	 * @param {Object} data the decoded JSON object of the response
+	 */
+	const successHandler = (data) => {
+		setTimeout(loadingBar.hide, 100);
+
+		callback(data);
+	};
+
+	/**
+	 * The error handler
+	 * @param {XMLHttpRequest} jqXHR the jQuery XMLHttpRequest object, see {@link https://api.jquery.com/jQuery.ajax/#jqXHR}.
+	 */
+	const errorHandler = (jqXHR) => {
+		api.onError(jqXHR, {}, null);
+	};
+
+	$.ajax({
+		type: "GET",
+		url: url,
+		data: {},
+		dataType: "text",
+		headers: {
+			"X-XSRF-TOKEN": csrf.getCSRFCookieValue(),
+		},
+		success: successHandler,
+		error: errorHandler,
+	});
+};
