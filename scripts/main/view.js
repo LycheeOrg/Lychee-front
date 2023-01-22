@@ -1692,7 +1692,9 @@ view.settings = {
 
 			$(".settings_view").append(msg);
 
-			api.getJS("dist/custom.js", function (data) {
+			let js_addr = $($("script")[5]).attr("src");
+
+			api.getJS(js_addr, function (data) {
 				$("#js").html(data);
 			});
 
