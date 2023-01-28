@@ -534,7 +534,7 @@ header.setMode = function (mode) {
 				const e = $("#button_visibility", "#lychee_toolbar_photo");
 				e.show();
 			}
-			if (!lychee.enable_button_share) {
+			if (!lychee.enable_button_share || !lychee.share_button_visible) {
 				const e = $("#button_share", "#lychee_toolbar_photo");
 				e.hide();
 			} else {
