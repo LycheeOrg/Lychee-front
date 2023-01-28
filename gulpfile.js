@@ -165,6 +165,25 @@ gulp.task("images--copy", function () {
 	return gulp.src(paths.images.src).on("error", catchError).pipe(gulp.dest("../img"));
 });
 
+/* WebAuthn ----------------------------------------- */
+paths.webauthn = {
+	js: ["./scripts/3rd-party/WebAuthn.js"],
+};
+
+gulp.task("webauthn--js", function () {
+	const babel = plugins.babel({
+		presets: ["@babel/preset-env"],
+	});
+
+	return gulp
+		.src(paths.webauthn.js)
+		.pipe(plugins.concat("WebAuthn.js", { newLine: "\n" }))
+		.pipe(babel)
+		.pipe(chmod({ execute: false }))
+		.on("error", catchError)
+		.pipe(gulp.dest("../dist/"));
+});
+
 /* Clean ----------------------------------------- */
 
 gulp.task("clean", function () {
@@ -176,7 +195,7 @@ gulp.task("clean", function () {
 gulp.task(
 	"default",
 	gulp.series(
-		gulp.parallel("frontend--scripts", "frontend--styles", "frontend--html", "landing--scripts", "landing--styles", "images--copy"),
+		gulp.parallel("frontend--scripts", "frontend--styles", "frontend--html", "landing--scripts", "landing--styles", "webauthn--js", "images--copy"),
 		"clean"
 	)
 );
