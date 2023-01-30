@@ -753,7 +753,7 @@ lychee.logout = function () {
  * @returns {void}
  */
 lychee.goto = function (url = null, autoplay = true) {
-	url = "#" + (url !== null ? url : "");
+	url = "gallery#" + (url !== null ? url : "");
 	history.pushState({ autoplay: autoplay }, null, url);
 	lychee.load(autoplay);
 };
