@@ -35,6 +35,7 @@ paths.frontend = {
 		"node_modules/stackblur-canvas/dist/stackblur.min.js",
 		"node_modules/@lychee-org/leaflet.photo/Leaflet.Photo.js",
 		"node_modules/@lychee-org/basiccontext/dist/basicContext.min.js",
+		"node_modules/resize-observer-polyfill/dist/ResizeObserver.js",
 		"../dist/_frontend--javascript.js",
 	],
 	scss: ["./styles/main/*.scss"],
