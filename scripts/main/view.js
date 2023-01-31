@@ -1670,7 +1670,7 @@ view.settings = {
 
 			let css_addr = $($("link")[1]).attr("href");
 
-			api.getCSS(css_addr, function (data) {
+			api.getRawContent(css_addr, function (data) {
 				$("#css").html(data);
 			});
 
@@ -1694,7 +1694,7 @@ view.settings = {
 
 			let js_addr = $("script[src]:last").attr("src");
 
-			api.getJS(js_addr, function (data) {
+			api.getRawContent(js_addr, function (data) {
 				$("#js").html(data);
 			});
 
