@@ -363,6 +363,19 @@ settings.changeCSS = function () {
 };
 
 /**
+ * @returns {void}
+ */
+settings.changeJS = function () {
+	const params = {
+		js: $("#js").val(),
+	};
+	api.post("Settings::setJS", params, function () {
+		lychee.js = params.js;
+		loadingBar.show("success", lychee.locale["SETTINGS_SUCCESS_JS"]);
+	});
+};
+
+/**
  * @param {SettingsFormData} params
  * @returns {void}
  */

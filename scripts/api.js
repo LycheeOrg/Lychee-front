@@ -145,12 +145,13 @@ api.post = function (fn, params, successCallback = null, responseProgressCB = nu
 };
 
 /**
+ * Given a URL return the text raw content of the file.
  *
  * @param {string} url
  * @param {APISuccessCB} callback
  * @returns {void}
  */
-api.getCSS = function (url, callback) {
+api.getRawContent = function (url, callback) {
 	loadingBar.show();
 
 	/**

@@ -36,6 +36,7 @@
 		"mousetrap": "^1.6.0",
 		"multiselect-two-sides": "^2.5.5",
 		"qr-creator": "^1.0.0",
+		"resize-observer-polyfill": "^1.5.1",
 		"sprintf-js": "^1.1.2",
 		"stackblur-canvas": "^2.5.0"
 	},

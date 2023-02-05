@@ -1147,6 +1147,7 @@ view.settings = {
 				view.settings.content.setNSFWVisible();
 				view.settings.content.setNotification();
 				view.settings.content.setCSS();
+				view.settings.content.setJS();
 				view.settings.content.moreButton();
 			}
 		},
@@ -1669,7 +1670,7 @@ view.settings = {
 
 			let css_addr = $($("link")[1]).attr("href");
 
-			api.getCSS(css_addr, function (data) {
+			api.getRawContent(css_addr, function (data) {
 				$("#css").html(data);
 			});
 
@@ -1679,9 +1680,33 @@ view.settings = {
 		/**
 		 * @returns {void}
 		 */
+		setJS: function () {
+			const msg = `
+			<div class="setJS">
+			<p>${lychee.locale["JS_TEXT"]}</p>
+			<textarea id="js"></textarea>
+			<div class="basicModal__buttons">
+				<a id="basicModal__action_set_js" class="basicModal__button">${lychee.locale["JS_TITLE"]}</a>
+			</div>
+			</div>`;
+
+			$(".settings_view").append(msg);
+
+			let js_addr = $("script[src]:last").attr("src");
+
+			api.getRawContent(js_addr, function (data) {
+				$("#js").html(data);
+			});
+
+			settings.bind("#basicModal__action_set_js", ".setJS", settings.changeJS);
+		},
+
+		/**
+		 * @returns {void}
+		 */
 		moreButton: function () {
 			const msg = lychee.html`
-			<div class="setCSS">
+			<div class="setJS">
 				<a id="basicModal__action_more" class="basicModal__button basicModal__button_MORE">${lychee.locale["MORE"]}</a>
 			</div>
 			`;
