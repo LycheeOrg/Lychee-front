@@ -502,7 +502,7 @@ header.setMode = function (mode) {
 					(
 						album.isUploadable() ||
 						(photo.json &&
-							(photo.json.rights.can_download || photo.json.rights.can_access_full_photo && photo.json.size_variants.original.url))
+							(photo.json.rights.can_download || (photo.json.rights.can_access_full_photo && photo.json.size_variants.original.url)))
 					)
 				)
 			) {
