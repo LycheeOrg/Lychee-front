@@ -54,8 +54,7 @@
 		"gulp-load-plugins": "^1.5.0",
 		"gulp-sass": "^5.1.0",
 		"gulp-uglify": "^3.0.2",
-		"npm": "^8.19.2",
-		"prettier": "2.2.1",
+		"prettier": "^2.8.3",
 		"sass": "^1.51.0",
 		"uglify-js": "^3.12.4"
 	}
