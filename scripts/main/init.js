@@ -412,7 +412,7 @@ $(document).ready(function () {
 	 */
 	const rememberScrollPage = function () {
 		if ((visible.albums() && !visible.search()) || visible.album()) {
-			let urls = JSON.parse(localStorage.getItem("scroll"));
+			let urls = JSON.parse(sessionStorage.getItem("scroll"));
 			if (urls == null || urls.length < 1) {
 				urls = {};
 			}
@@ -426,7 +426,7 @@ $(document).ready(function () {
 				delete urls[urlWindow];
 			}
 
-			localStorage.setItem("scroll", JSON.stringify(urls));
+			sessionStorage.setItem("scroll", JSON.stringify(urls));
 		}
 	};
 

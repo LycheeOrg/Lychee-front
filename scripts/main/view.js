@@ -295,7 +295,7 @@ view.album = {
 		/** @returns {void} */
 		restoreScroll: function () {
 			// Restore scroll position
-			const urls = JSON.parse(localStorage.getItem("scroll"));
+			const urls = JSON.parse(sessionStorage.getItem("scroll"));
 			const urlWindow = window.location.href;
 			$("#lychee_view_container").scrollTop(urls != null && urls[urlWindow] ? urls[urlWindow] : 0);
 		},
