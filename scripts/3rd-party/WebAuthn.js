@@ -29,10 +29,10 @@ class WebAuthn {
 	 * @type {{registerOptions: string, register: string, loginOptions: string, login: string, }}
 	 */
 	#routes = {
-		registerOptions: "WebAuthn/register/options",
-		register: "WebAuthn/register",
-		loginOptions: "WebAuthn/login/options",
-		login: "WebAuthn/login",
+		registerOptions: "webauthn/register/options",
+		register: "webauthn/register",
+		loginOptions: "webauthn/login/options",
+		login: "webauthn/login",
 	};
 
 	/**
@@ -156,7 +156,9 @@ class WebAuthn {
 	 * @returns {Promise<Response>}
 	 */
 	#fetch(data, route, headers = {}) {
-		return fetch(route, {
+		const url = new URL(route, window.location.origin).href;
+
+		return fetch(url, {
 			method: "POST",
 			credentials: this.#includeCredentials ? "include" : "same-origin",
 			redirect: "error",
@@ -234,6 +236,8 @@ class WebAuthn {
 				});
 			});
 
+		console.log(publicKey);
+
 		return publicKey;
 	}
 
@@ -300,6 +304,7 @@ class WebAuthn {
 		const publicKeyCredential = this.#parseOutgoingCredentials(credentials);
 
 		Object.assign(publicKeyCredential, response);
+		Object.assign(publicKeyCredential, request);
 
 		return await this.#fetch(publicKeyCredential, this.#routes.register).then(WebAuthn.#handleResponse);
 	}
@@ -321,6 +326,8 @@ class WebAuthn {
 		const publicKeyCredential = this.#parseOutgoingCredentials(credentials);
 
 		Object.assign(publicKeyCredential, response);
+
+		console.log(publicKeyCredential);
 
 		return await this.#fetch(publicKeyCredential, this.#routes.login, response).then(WebAuthn.#handleResponse);
 	}
