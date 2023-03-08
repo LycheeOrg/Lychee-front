@@ -16,7 +16,12 @@ const catchError = function (err) {
 /* Frontend ----------------------------------------- */
 
 paths.frontend = {
-	js: ["./scripts/*.js", "./scripts/main/*.js", "./scripts/3rd-party/backend.js"],
+	js: [
+		"./scripts/*.js",
+		"./scripts/main/*.js",
+		"./scripts/3rd-party/backend.js",
+		"./scripts/3rd-party/WebAuthn.js",
+	],
 	scripts: [
 		"node_modules/jquery/dist/jquery.min.js",
 		"node_modules/lazysizes/lazysizes.min.js",
