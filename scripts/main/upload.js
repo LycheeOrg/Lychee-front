@@ -422,6 +422,7 @@ upload.start = {
 			// string `""`. Form data falsely converts the value `null` to the
 			// literal string `"null"`.
 			formData.append("albumID", albumID ? albumID : "");
+			formData.append("fileLastModifiedTime", files[fileIdx].lastModified);
 			formData.append("file", files[fileIdx]);
 
 			// We must not use the `onload` event of the `XMLHttpRequestUpload`
