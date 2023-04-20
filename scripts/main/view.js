@@ -1145,6 +1145,9 @@ view.settings = {
 				view.settings.content.setOverlayType();
 				view.settings.content.setMapDisplay();
 				view.settings.content.setNSFWVisible();
+				view.settings.content.setRecentPublic();
+				view.settings.content.setStarredPublic();
+				view.settings.content.setOnThisDayPublic();
 				view.settings.content.setNotification();
 				view.settings.content.setCSS();
 				view.settings.content.setJS();
@@ -1442,6 +1445,76 @@ view.settings = {
 			settings.bind("#NSFWVisible", ".setNSFWVisible", settings.changeNSFWVisible);
 		},
 		// TODO: extend to the other settings.
+
+		/**
+		 * @returns {void}
+		 */
+		setRecentPublic: function () {
+			let msg = `
+			<div class="setRecentPublic">
+			<p>${lychee.locale["SETTING_RECENT_PUBLIC_TEXT"]}
+			<label class="switch">
+			  <input id="RecentPublic" type="checkbox" name="is_public">
+			  <span class="slider round"></span>
+			</label></p>
+			<input type="hidden" name="albumID" value="recent" />
+			</div>
+			`;
+
+			$(".settings_view").append(msg);
+			console.log(lychee.smart_album_visibilty);
+			if (lychee.smart_album_visibilty.recent === true) {
+				$("#RecentPublic").click();
+			}
+
+			settings.bind("#RecentPublic", ".setRecentPublic", settings.changeSmartAlbumVisibility);
+		},
+
+		/**
+		 * @returns {void}
+		 */
+		setStarredPublic: function () {
+			let msg = `
+			<div class="setStarredPublic">
+			<p>${lychee.locale["SETTING_STARRED_PUBLIC_TEXT"]}
+			<label class="switch">
+			  <input id="StarredPublic" type="checkbox" name="is_public">
+			  <span class="slider round"></span>
+			</label></p>
+			<input type="hidden" name="albumID" value="starred" />
+			</div>
+			`;
+
+			$(".settings_view").append(msg);
+			if (lychee.smart_album_visibilty.starred) {
+				$("#StarredPublic").click();
+			}
+
+			settings.bind("#StarredPublic", ".setStarredPublic", settings.changeSmartAlbumVisibility);
+		},
+
+		/**
+		 * @returns {void}
+		 */
+		setOnThisDayPublic: function () {
+			let msg = `
+			<div class="setOnThisDayPublic">
+			<p>${lychee.locale["SETTING_ONTHISDAY_PUBLIC_TEXT"]}
+			<label class="switch">
+			  <input id="OnThisDayPublic" type="checkbox" name="is_public">
+			  <span class="slider round"></span>
+			</label></p>
+			<input type="hidden" name="albumID" value="on_this_day" />
+			</div>
+			`;
+
+			$(".settings_view").append(msg);
+			if (lychee.smart_album_visibilty.on_this_day) {
+				$("#OnThisDayPublic").click();
+			}
+
+			settings.bind("#OnThisDayPublic", ".setOnThisDayPublic", settings.changeSmartAlbumVisibility);
+		},
 
 		/**
 		 * @returns {void}
