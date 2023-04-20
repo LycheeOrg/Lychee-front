@@ -306,15 +306,12 @@ settings.changeNSFWVisible = function (params) {
  * @returns {void}
  */
 settings.changeSmartAlbumVisibility = function (params) {
-	api.post("Settings::setSmartAlbumVisibility",
-		params, function () {
-		loadingBar.show("success",
-		lychee.locale["SUCCESS"]);
+	api.post("Settings::setSmartAlbumVisibility", params, function () {
+		loadingBar.show("success", lychee.locale["SUCCESS"]);
 		const albumId = params.albumID;
 		lychee.smart_album_visibilty[albumId] = params.is_public;
 	});
 };
-
 
 //TODO : later
 // lychee.nsfw_blur = (data.config.nsfw_blur && data.config.nsfw_blur === '1') || false;

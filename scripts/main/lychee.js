@@ -636,7 +636,7 @@ lychee.parseProtectedInitializationData = function (data) {
 	lychee.editor_enabled = data.config.editor_enabled;
 	lychee.new_photos_notification = data.config.new_photos_notification;
 	lychee.upload_processing_limit = Number.parseInt(data.config.upload_processing_limit, 10) || 4;
-	lychee.	smart_album_visibilty = data.config.	smart_album_visibilty;
+	lychee.smart_album_visibilty = data.config.smart_album_visibilty;
 };
 
 /**
