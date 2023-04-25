@@ -529,7 +529,8 @@ settings.openTokenDialog = function () {
 		disableTokenButton.title = lychee.locale["DISABLE_TOKEN_TOOLTIP"];
 		tokenInputElement = formElements.token;
 		tokenInputElement.placeholder = lychee.locale["TOKEN_WAIT"];
-		tokenInputElement.labels[0].textContent = "Token";
+		// console.log(tokenInputElement)
+		tokenInputElement.labels.textContent = "Token";
 		tokenInputElement.blur();
 
 		updateTokenDialog();
