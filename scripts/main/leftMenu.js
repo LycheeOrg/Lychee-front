@@ -149,7 +149,7 @@ leftMenu.bind = function () {
  */
 leftMenu.Logs = function () {
 	leftMenu.closeIfResponsive();
-	window.open("/log-viewer");
+	window.open("/Logs");
 };
 
 /**
