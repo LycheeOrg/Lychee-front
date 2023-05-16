@@ -1217,7 +1217,6 @@ view.settings = {
 								<option value='created_at'>${lychee.locale["SORT_ALBUM_SELECT_1"]}</option>
 								<option value='title'>${lychee.locale["SORT_ALBUM_SELECT_2"]}</option>
 								<option value='description'>${lychee.locale["SORT_ALBUM_SELECT_3"]}</option>
-								<option value='is_public'>${lychee.locale["SORT_ALBUM_SELECT_4"]}</option>
 								<option value='max_taken_at'>${lychee.locale["SORT_ALBUM_SELECT_5"]}</option>
 								<option value='min_taken_at'>${lychee.locale["SORT_ALBUM_SELECT_6"]}</option>
 							</select>
