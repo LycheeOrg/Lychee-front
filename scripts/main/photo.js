@@ -987,7 +987,7 @@ photo.setLicense = function (photoID) {
 
 	const setPhotoLicenseDialogBody = `
 		<form><div class="input-group compact">
-			<label for="photo_license_dialog_license_select"></label>
+			<label for="photo_license_dialog_license_select">${lychee.locale["PHOTO_LICENSE"]}</label>
 			<div class="select"><select name="license" id="photo_license_dialog_license_select">
 				<option value="none"></option>
 				<option value="reserved"></option>
@@ -1032,7 +1032,6 @@ photo.setLicense = function (photoID) {
 	 * @returns {void}
 	 */
 	const initSetPhotoLicenseDialog = function (formElements, dialog) {
-		formElements.license.labels[0].textContent = lychee.locale["PHOTO_LICENSE"];
 		formElements.license.item(0).textContent = lychee.locale["PHOTO_LICENSE_NONE"];
 		formElements.license.item(1).textContent = lychee.locale["PHOTO_RESERVED"];
 		formElements.license.value = photo.json.license === "" ? "none" : photo.json.license;
