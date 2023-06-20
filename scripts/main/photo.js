@@ -1032,7 +1032,7 @@ photo.setLicense = function (photoID) {
 	 * @returns {void}
 	 */
 	const initSetPhotoLicenseDialog = function (formElements, dialog) {
-		formElements.license.labels[0].textContent = lychee.locale["PHOTO_LICENSE"];
+		dialog.querySelector("label").textContent = lychee.locale["PHOTO_LICENSE"];
 		formElements.license.item(0).textContent = lychee.locale["PHOTO_LICENSE_NONE"];
 		formElements.license.item(1).textContent = lychee.locale["PHOTO_RESERVED"];
 		formElements.license.value = photo.json.license === "" ? "none" : photo.json.license;
