@@ -797,7 +797,7 @@ album.setLicense = function (albumID) {
 	 * @returns {void}
 	 */
 	const initSetAlbumLicenseDialog = function (formElements, dialog) {
-		formElements.license.labels[0].textContent = lychee.locale["ALBUM_LICENSE"];
+		dialog.querySelector("label").textContent = lychee.locale["ALBUM_LICENSE"];
 		formElements.license.item(0).textContent = lychee.locale["ALBUM_LICENSE_NONE"];
 		formElements.license.item(1).textContent = lychee.locale["ALBUM_RESERVED"];
 		formElements.license.value = album.json.license === "" ? "none" : album.json.license;
