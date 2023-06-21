@@ -897,7 +897,7 @@ lychee.load = function (autoplay = true) {
 	} else {
 		albumID = hashMatch[0];
 		if (albumID === SearchAlbumIDPrefix && hashMatch.length > 1) {
-			albumID += "/" + hashMatch[1];
+			albumID += "/" + decodeURIComponent(hashMatch[1]);
 		}
 		photoID = hashMatch[album.isSearchID(albumID) ? 2 : 1];
 	}
