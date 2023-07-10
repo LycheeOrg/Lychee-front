@@ -20,29 +20,29 @@ const map_provider_layer_attribution = {
 	 * @type {MapProvider}
 	 */
 	"OpenStreetMap.org": {
-		layer: "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
-		attribution: `&copy; <a href="https://osm.org/copyright">${lychee.locale["OSM_CONTRIBUTORS"]}</a>`,
+		layer: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+		attribution: `&copy; <a href="https://openstreetmap.org/copyright">${lychee.locale["OSM_CONTRIBUTORS"]}</a>`,
 	},
 	/**
 	 * @type {MapProvider}
 	 */
 	"OpenStreetMap.de": {
 		layer: "https://tile.openstreetmap.de/{z}/{x}/{y}.png ",
-		attribution: `&copy; <a href="https://osm.org/copyright">${lychee.locale["OSM_CONTRIBUTORS"]}</a>`,
+		attribution: `&copy; <a href="https://openstreetmap.org/copyright">${lychee.locale["OSM_CONTRIBUTORS"]}</a>`,
 	},
 	/**
 	 * @type {MapProvider}
 	 */
 	"OpenStreetMap.fr": {
 		layer: "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png ",
-		attribution: `&copy; <a href="https://osm.org/copyright">${lychee.locale["OSM_CONTRIBUTORS"]}</a>`,
+		attribution: `&copy; <a href="https://openstreetmap.org/copyright">${lychee.locale["OSM_CONTRIBUTORS"]}</a>`,
 	},
 	/**
 	 * @type {MapProvider}
 	 */
 	RRZE: {
 		layer: "https://{s}.osm.rrze.fau.de/osmhd/{z}/{x}/{y}.png",
-		attribution: `&copy; <a href="https://osm.org/copyright">${lychee.locale["OSM_CONTRIBUTORS"]}</a>`,
+		attribution: `&copy; <a href="https://openstreetmap.org/copyright">${lychee.locale["OSM_CONTRIBUTORS"]}</a>`,
 	},
 };
 
