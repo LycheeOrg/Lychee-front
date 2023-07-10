@@ -27,7 +27,7 @@ const map_provider_layer_attribution = {
 	 * @type {MapProvider}
 	 */
 	"OpenStreetMap.de": {
-		layer: "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png ",
+		layer: "https://tile.openstreetmap.de/{z}/{x}/{y}.png ",
 		attribution: `&copy; <a href="https://osm.org/copyright">${lychee.locale["OSM_CONTRIBUTORS"]}</a>`,
 	},
 	/**
