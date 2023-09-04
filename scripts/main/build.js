@@ -193,14 +193,16 @@ build.album = function (data, disabled = false) {
 		case "none": // no decorations
 			break;
 		case "photo": // photos only
-			html += lychee.html`
-				<div class='album_counters'>
-					<div class='photos'>
-						<a class='photos'>${build.iconic("puzzle-piece")}
-						<span>${data.num_photos}</span>
-						</a>
-					</div>
-				</div>`;
+			if (data.num_photos > 0) {
+				html += lychee.html`
+					<div class='album_counters'>
+						<div class='photos'>
+							<a class='photos'>${build.iconic("puzzle-piece")}
+							<span>${data.num_photos}</span>
+							</a>
+						</div>
+					</div>`;
+			}
 			break;
 		case "layers": // sub-albums only and only marker without count (as in old v4 behaviour)
 			if (albumcount > 0) {
