@@ -32,13 +32,13 @@ const lychee = {
 	/**
 	 * Values:
 	 *
-	 *  - `0`: Use default, "square" layout.
-	 *  - `1`: Use Flickr-like "justified" layout.
-	 *  - `2`: Use Google-like "unjustified" layout
+	 *  - `square`: Use default, "square" layout.
+	 *  - `justified`: Use Flickr-like "justified" layout.
+	 *  - `unjustified`: Use Google-like "unjustified" layout
 	 *
-	 * @type {number}
+	 * @type {string}
 	 */
-	layout: 1,
+	layout: "justified",
 	/**
 	 * Display search in public mode.
 	 * @type {boolean}
@@ -546,8 +546,7 @@ lychee.parsePublicInitializationData = function (data) {
 	lychee.album_decoration = data.config.album_decoration || "layers";
 	lychee.album_decoration_orientation = data.config.album_decoration_orientation || "row";
 	lychee.checkForUpdates = data.config.check_for_updates;
-	lychee.layout = Number.parseInt(data.config.layout, 10);
-	if (Number.isNaN(lychee.layout)) lychee.layout = 1;
+	lychee.layout = data.config.layout || "justified";
 	lychee.landing_page_enable = data.config.landing_page_enable;
 	lychee.public_search = data.config.public_search;
 	lychee.image_overlay_type = data.config.image_overlay_type || "exif";

@@ -256,7 +256,7 @@ view.album = {
 			}
 
 			if (photosData !== "") {
-				if (lychee.layout === 1) {
+				if (lychee.layout === "justified") {
 					// The CSS class 'laying-out' prevents the DIV from being
 					// rendered.
 					// The CSS class will eventually be removed by the
@@ -269,7 +269,7 @@ view.album = {
 					// the correct width of the container.
 					// TODO: Re-add the CSS class `laying-out` here after https://github.com/LycheeOrg/Lychee-front/pull/335 has been merged.
 					photosData = '<div class="justified-layout">' + photosData + "</div>";
-				} else if (lychee.layout === 2) {
+				} else if (lychee.layout === "unjustified") {
 					photosData = '<div class="unjustified-layout">' + photosData + "</div>";
 				}
 			}
@@ -380,7 +380,7 @@ view.album = {
 				srcset = "";
 
 			// This mimicks the structure of build.photo
-			if (lychee.layout === 0) {
+			if (lychee.layout === "square") {
 				src = data.size_variants.thumb.url;
 				if (data.size_variants.thumb2x !== null) {
 					srcset = `${data.size_variants.thumb2x.url} 2x`;
@@ -516,7 +516,7 @@ view.album = {
 			 */
 			const photos = album.json.photos;
 
-			if (lychee.layout === 1) {
+			if (lychee.layout === "justified") {
 				/** @type {jQuery} */
 				const jqJustifiedLayout = $(".justified-layout");
 				let containerWidth = parseFloat(jqJustifiedLayout.width());
@@ -606,7 +606,7 @@ view.album = {
 				});
 				// Show updated layout
 				jqJustifiedLayout.removeClass("laying-out");
-			} else if (lychee.layout === 2) {
+			} else if (lychee.layout === "unjustified") {
 				/** @type {jQuery} */
 				const jqUnjustifiedLayout = $(".unjustified-layout");
 				let containerWidth = parseFloat(jqUnjustifiedLayout.width());
@@ -1383,9 +1383,9 @@ view.settings = {
 			<p>${lychee.locale["LAYOUT_TYPE"]}
 			<span class="select" style="width:270px">
 				<select name="layout" id="layout">
-					<option value="0">${lychee.locale["LAYOUT_SQUARES"]}</option>
-					<option value="1">${lychee.locale["LAYOUT_JUSTIFIED"]}</option>
-					<option value="2">${lychee.locale["LAYOUT_UNJUSTIFIED"]}</option>
+					<option value="square">${lychee.locale["LAYOUT_SQUARES"]}</option>
+					<option value="justified">${lychee.locale["LAYOUT_JUSTIFIED"]}</option>
+					<option value="unjustified">${lychee.locale["LAYOUT_UNJUSTIFIED"]}</option>
 				</select>
 			</span>
 			</p>
