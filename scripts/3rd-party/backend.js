@@ -316,7 +316,7 @@ const SmartAlbumID = Object.freeze({
  * @property {string}   landing_page_enable      - actually a boolean
  * @property {string}   lang
  * @property {string[]} lang_available
- * @property {string}   layout                   - actually a number: `0`, `1` or `2`
+ * @property {string}   layout                   - actually a number: `square`, `justified` or `unjustified`
  * @property {string}   [location]
  * @property {string}   location_decoding        - actually a boolean
  * @property {string}   location_show            - actually a boolean

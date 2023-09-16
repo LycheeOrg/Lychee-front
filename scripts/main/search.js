@@ -90,9 +90,9 @@ search.find = function (term) {
 		if (albumsData !== "") albums_divider += " (" + (search.json.tag_albums.length + search.json.albums.length) + ")";
 		if (photosData !== "") {
 			photos_divider += " (" + search.json.photos.length + ")";
-			if (lychee.layout === 1) {
+			if (lychee.layout === "justified") {
 				photosData = '<div class="justified-layout">' + photosData + "</div>";
-			} else if (lychee.layout === 2) {
+			} else if (lychee.layout === "unjustified") {
 				photosData = '<div class="unjustified-layout">' + photosData + "</div>";
 			}
 		}

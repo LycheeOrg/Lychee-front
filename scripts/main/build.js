@@ -287,7 +287,7 @@ build.photo = function (data, disabled = false) {
 				lychee.locale["PHOTO_THUMBNAIL"]
 			}' data-overlay='false' draggable='false' data-tabindex='${tabindex.get_next_tab_index()}'></span>`;
 		}
-	} else if (lychee.layout === 0) {
+	} else if (lychee.layout === 'square') {
 		if (data.size_variants.thumb2x !== null) {
 			thumb2x = data.size_variants.thumb2x.url;
 		}
