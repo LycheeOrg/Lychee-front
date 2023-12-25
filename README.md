@@ -1,5 +1,7 @@
 # Lychee-front
 
+## With the release of Lychee v5 we moved to a full TALL stack (Tailwind, Alpine, Livewire, Laravel). As a consequence this repository is now READ ONLY.
+
 **This repository contains the source of the JS frontend in order to allow its use with different backends.**
 
 [![Build Status](https://github.com/LycheeOrg/Lychee-front/workflows/Node.js%20CI/badge.svg?branch=master)](https://github.com/LycheeOrg/Lychee-front/actions?query=workflow%3A%22Node.js+CI%22)
